@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<TableLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
@@ -14,13 +15,12 @@
         >
 
         <ImageView
-            android:id="@+id/imageView_logo"
-            android:layout_gravity="center"
-            android:layout_span="2"
+            android:id="@+id/imageView_logo_team"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_launcher_foreground"
-            />
+            android:layout_gravity="center"
+            android:layout_span="2"
+            android:src="@drawable/ic_launcher_foreground" />
     </TableRow>
 
     <TableRow
@@ -31,10 +31,10 @@
 
 
         <Button
-            android:id="@+id/button_tarea_equipo"
+            android:id="@+id/button_tabla_tareas_equipo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tarea de Equipo" />
+            android:text="Tabla de Tareas de Equipo" />
     </TableRow>
 
     <TableRow
@@ -43,9 +43,10 @@
         android:gravity="center">
 
         <Button
-            android:id="@+id/button_tarea_personal"
+            android:id="@+id/button_vista_tareas_equipo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tarea Personal" />
+            android:text="Vista Rápida de Tareas de Equipo" />
     </TableRow>
+
 </TableLayout>
