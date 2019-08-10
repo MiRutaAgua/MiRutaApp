@@ -36,6 +36,7 @@ public class Screen_Table_Team extends Activity{
     private Intent intent_open_screen_unity_counter;
     private Intent intent_open_screen_battery_counter;
 
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.screen_table_team);
