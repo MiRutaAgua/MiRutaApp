@@ -5,12 +5,27 @@ android:layout_height="match_parent">
 
 
     <TextView
+        android:id="@+id/textView_screen_table_team"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Pantalla Lista de Contadores"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:gravity="center"
-        android:id="@+id/textView_screen_table_team"
+        android:text="Pantalla Lista de Contadores" />
+
+    <TextView
+        android:layout_marginTop="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:gravity="center"
+        android:text="Tabla Equipo"
+        android:textSize="25dp"
         />
+
 
     <ListView
         android:layout_marginTop="60dp"
