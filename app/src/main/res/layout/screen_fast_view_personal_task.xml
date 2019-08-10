@@ -13,16 +13,16 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Pantalla Vista Rapida de Tareas de Equipo"
+            android:text="Pantalla Vista Rapida de Tareas de Operario"
             android:layout_gravity="center"
-            android:id="@+id/textView_screen_fast_view_team_task"
+            android:id="@+id/textView_screen_fast_view_personal_task"
             />
 
     </TableRow>
 
     <ImageView
         android:layout_marginTop="30dp"
-        android:id="@+id/imageView_logo_team"
+        android:id="@+id/imageView_logo_personal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -34,7 +34,7 @@
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/listView_contadores_screen_fast_view_team_task"
+        android:id="@+id/listView_contadores_screen_fast_view_personal_task"
         android:padding="20dp"
         >
 

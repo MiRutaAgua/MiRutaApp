@@ -4,10 +4,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:gravity="center">
+    android:gravity="top"
+    >
 
 
     <TableRow
+        android:gravity="center"
+        android:padding="10dp"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pantalla Tareas de Operario"
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/textView_screen_personal_task"
+            />
+    </TableRow>
+
+    <TableRow
+        android:layout_marginTop="50dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
@@ -24,6 +39,7 @@
     </TableRow>
 
     <TableRow
+
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
@@ -31,22 +47,27 @@
 
 
         <Button
-            android:id="@+id/button_tabla_tareas_operario"
+            android:id="@+id/button_tabla_tareas_operarios_screen_personal_task"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tabla de Tareas de Operario" />
+            android:text="Tabla de Tareas de Operario"
+            android:textSize="15dp"
+            />
     </TableRow>
 
     <TableRow
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center">
-
+        android:gravity="center"
+        android:layout_marginTop="20dip"
+        >
         <Button
-            android:id="@+id/button_vista_rapida_tareas_operario"
+            android:id="@+id/button_vista_rapida_tareas_operario_screen_personal_task"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Vista Rápida de Tareas de Operario" />
+            android:text="Vista Rápida de Tareas de Operario"
+            android:textSize="15dp"
+            />
     </TableRow>
 
 </TableLayout>

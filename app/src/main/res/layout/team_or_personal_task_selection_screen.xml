@@ -3,14 +3,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:gravity="center">
+    android:gravity="top">
 
+    <TableRow
+        android:gravity="center"
+        android:padding="10dp"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pantalla Tareas"
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/textView_screen_task"
+            />
+    </TableRow>
 
     <TableRow
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
         android:padding="1dp"
+        android:layout_marginTop="50dp"
         >
 
         <ImageView
@@ -34,10 +47,13 @@
             android:id="@+id/button_tarea_equipo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tarea de Equipo" />
+            android:text="Tarea de Equipo"
+            android:textSize="18sp"
+            />
     </TableRow>
 
     <TableRow
+        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center">
@@ -46,6 +62,8 @@
             android:id="@+id/button_tarea_personal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tarea Personal" />
+            android:text="Tarea Personal"
+            android:textSize="18sp"
+            />
     </TableRow>
 </TableLayout>

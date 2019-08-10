@@ -21,32 +21,35 @@
         </activity>
 
         <activity android:name=".Screen_Login_Activity">
-
         </activity>
 
         <activity android:name=".team_or_personal_task_selection_screen_Activity">
-
         </activity>
 
-<<<<<<< HEAD
         <activity android:name=".Screen_Table_Team">
-
         </activity>
 
         <activity android:name=".Screen_Unity_Counter">
-
         </activity>
 
         <activity android:name=".Screen_Battery_counter">
-=======
-        <activity android:name=".personal_task_screen_Activity">
+        </activity>
 
+        <activity android:name=".personal_task_screen_Activity">
         </activity>
 
         <activity android:name=".team_task_screen_Activity">
->>>>>>> master
-
         </activity>
+
+        <activity android:name=".Screen_Table_Personal">
+        </activity>
+
+        <activity android:name=".Screen_Fast_View_Team_Task">
+        </activity>
+
+        <activity android:name=".Screen_Fast_View_Personal_Task">
+        </activity>
+
 
     </application>
 
