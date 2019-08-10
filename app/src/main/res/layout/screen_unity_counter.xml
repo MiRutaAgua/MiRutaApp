@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TableRow
+        android:layout_marginTop="20dp"
+        android:gravity="left"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="61dp"
+            android:layout_marginLeft="20dp"
+            android:layout_weight="1"
+            android:src="@mipmap/ic_launcher" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="120dp"
+            android:text="Modo Batería"
+            android:id="@+id/button_modo_bateria_screen_unity_counter"
+            />
+    </TableRow>
+
+
+    <TableRow
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ejecutar Tarea"
+            android:id="@+id/button_ejecutat_tarea_screen_unity_counter"
+            />
+    </TableRow>
+
+
+    <TableRow
+        android:layout_marginTop="5dp"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Abandonado Ausente"
+            android:id="@+id/button_abandonado_ausente_screen_unity_counter"
+            />
+    </TableRow>
+
+
+    <TableRow
+        android:layout_marginTop="5dp"
+        android:gravity="center"
+        >
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Incidencia"
+            android:id="@+id/button_incidencia_screen_unity_counter"
+            /></TableRow>
+
+
+    <TableRow
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <TextView
+            android:layout_weight="1"
+            android:textSize="15sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Direccion:                "
+            android:layout_gravity="left"
+            android:layout_marginLeft="20dp"
+
+            />
+
+        <TextView
+            android:layout_marginRight="20dp"
+            android:id="@+id/textView_direccion_screen_unity_counter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:textSize="15sp"
+            android:text="Calle 136 #4903 /Ave 49 y Ave 51" />
+    </TableRow>
+
+
+    <TableRow
+        android:layout_marginTop="5dp"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <TextView
+            android:layout_weight="1"
+            android:textSize="15sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Datos específicos:    "
+            android:layout_gravity="left"
+            android:layout_marginLeft="20dp"
+            />
+
+        <TextView
+            android:layout_marginRight="20dp"
+            android:id="@+id/textView_datos_especificos_screen_unity_counter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:textSize="15sp"
+            android:text="El garaje tiene una puerta verde y suelen salir a las 8:00" />
+    </TableRow>
+
+
+    <TableRow
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <TextView
+            android:textSize="15sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Datos Contador:"
+            android:layout_gravity="center"
+            />
+    </TableRow>
+
+
+    <TableRow
+
+        android:layout_marginTop="5dp"
+        android:gravity="center">
+
+        <TableLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+            >
+
+            <TableRow>
+                    <TextView
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:text="Serie: "
+                        android:textSize="12sp" />
+                    <TextView
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:text=" C11FA 666666"
+                        android:textSize="12sp"
+                        />
+            </TableRow>
+
+            <TableRow>
+                <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="Lectura: "
+                    android:textSize="12sp" />
+                <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text=" 1347 m3"
+                    android:textSize="12sp"
+                    />
+            </TableRow>
+
+            <TableRow>
+                <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="Calibre: "
+                    android:textSize="12sp" />
+                <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text=" Calibre 20-190"
+                    android:textSize="12sp"
+                    />
+            </TableRow>
+
+            <TableRow>
+                <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="Ubicacion: "
+                    android:textSize="12sp" />
+                <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text=" Fregadera"
+                    android:textSize="12sp"
+                    />
+            </TableRow>
+
+            <TableRow>
+                <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="Acceso: "
+                    android:textSize="12sp" />
+                <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text=" Garaje"
+                    android:textSize="12sp"
+                    />
+            </TableRow>
+
+        </TableLayout>
+
+        <ImageButton
+            android:layout_marginRight="20dp"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_launcher"
+            android:maxHeight="40dp"
+            android:maxWidth="20dp"
+            />
+    </TableRow
+>
+
+</TableLayout>
