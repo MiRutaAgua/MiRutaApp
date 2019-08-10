@@ -2,8 +2,10 @@ package com.example.luisreyes.proyecto_aguas;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,6 +21,7 @@ public class Screen_Login_Activity extends Activity {
     private EditText lineEdit_nombre_de_operario;
     private EditText lineEdit_clave_de_acceso;
     private Button button_login;
+    private Intent intent_open_next_screen;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -31,11 +34,18 @@ public class Screen_Login_Activity extends Activity {
         lineEdit_clave_de_acceso    = (EditText) findViewById(R.id.editText_Clave_Acceso_screen_login);
         button_login                = (Button) findViewById(R.id.button_login_screen_login);
 
+        intent_open_next_screen = new Intent(this, team_or_personal_task_selection_screen_Activity.class);
+
         button_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                textView_nombre_de_pantalla.setText("Boton apretado");
+                if(!(TextUtils.isEmpty(lineEdit_nombre_de_operario.getText())) && !(TextUtils.isEmpty(lineEdit_clave_de_acceso.getText())))
+//                    textView_nombre_de_pantalla.setText("Boton apretado");
+                    startActivity(intent_open_next_screen);
+
+                else
+                    textView_nombre_de_pantalla.setText("Introduzca el nombre de usuario y contraseña.");
             }
         });
     }
