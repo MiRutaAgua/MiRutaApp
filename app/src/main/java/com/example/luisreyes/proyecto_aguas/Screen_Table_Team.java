@@ -6,5 +6,5 @@ package com.example.luisreyes.proyecto_aguas;
 
 public class Screen_Table_Team {
 
-    
+
 }
