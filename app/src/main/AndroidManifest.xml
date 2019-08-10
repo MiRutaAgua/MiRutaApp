@@ -28,6 +28,7 @@
 
         </activity>
 
+<<<<<<< HEAD
         <activity android:name=".Screen_Table_Team">
 
         </activity>
@@ -37,6 +38,13 @@
         </activity>
 
         <activity android:name=".Screen_Battery_counter">
+=======
+        <activity android:name=".personal_task_screen_Activity">
+
+        </activity>
+
+        <activity android:name=".team_task_screen_Activity">
+>>>>>>> master
 
         </activity>
 
