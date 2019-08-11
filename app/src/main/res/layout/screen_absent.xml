@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TableRow
+        android:gravity="center"
+        android:padding="10dp"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pantalla Ausente"
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/textView_screen_team_task"
+            />
+    </TableRow>
+
+    <TableRow
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        >
+
+        <ImageView
+            android:id="@+id/imageView_logo_screen_incidence"
+            android:layout_width="70dp"
+            android:layout_height="45dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_launcher_foreground" />
+    </TableRow>
+
+    <TableRow
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tocado en puerta"
+            android:layout_gravity="center"
+            android:textSize="16dp"
+            />
+
+        <CheckBox />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Dejado nota de aviso"
+            android:layout_gravity="center"
+            android:textSize="16dp"
+            />
+
+        <CheckBox />
+
+    </TableRow>
+
+
+    <TableRow
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        >
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Teléfonos:    "
+            android:layout_gravity="center"
+            android:textSize="18dp"
+            />
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="No contesta                   "
+            android:layout_gravity="center"
+            android:textSize="12dp"
+            />
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="N. Incorrecto              "
+            android:layout_gravity="center"
+            android:textSize="12dp"
+            />
+
+    </TableRow>
+
+
+
+    <TableRow
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        >
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="636489090    "
+            android:layout_gravity="center"
+            android:textSize="16dp"
+            />
+        <CheckBox
+            android:layout_weight="1"
+            android:layout_marginLeft="20dp"
+            />
+        <CheckBox
+            android:layout_weight="1"
+            android:layout_marginLeft="20dp"
+            />
+    </TableRow>
+
+    <TableRow
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        >
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="636489090    "
+            android:layout_gravity="center"
+            android:textSize="16dp"
+            />
+        <CheckBox
+            android:layout_weight="1"
+            android:layout_marginLeft="20dp"/>
+        <CheckBox
+            android:layout_weight="1"
+            android:layout_marginLeft="20dp"/>
+    </TableRow>
+
+    <TableRow
+        android:gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="CITAS" />
+    </TableRow>
+    <TableLayout
+        android:gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        >
+        <TableRow
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Día"
+                android:layout_gravity="center"
+                android:textSize="16dp"
+                />
+            <TextView
+                android:layout_marginLeft="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Lunes 21  de Marzo del 2019" />
+        </TableRow>
+
+        <TableRow
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hora"
+                android:layout_gravity="center"
+                android:textSize="16dp"
+                />
+            <TextView
+                android:layout_marginLeft="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Entre las 12:00 y las 12:30" />
+        </TableRow>
+
+
+
+    </TableLayout>
+
+    <TableRow
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Observaciones"
+            android:layout_gravity="center"
+            android:textSize="16dp"
+            />
+    </TableRow>
+
+    <TextView
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Este vecino saldra al trabajo solo para el cambio del contador y estará esperando fuera de casa"
+        android:layout_gravity="center"
+        android:textSize="16dp"
+        />
+
+    <TableRow
+        android:gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        >
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Geolocalizar"
+            android:id="@+id/button_geolocalizar_screen_incidence"
+            />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Guardar Datos"
+            android:id="@+id/button_firma_del_cliente_screen_incidence"
+            />
+    </TableRow>
+
+</TableLayout>

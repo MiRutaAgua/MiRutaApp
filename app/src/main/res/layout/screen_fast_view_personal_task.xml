@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.luisreyes.proyecto_aguas.MainActivity">
+    tools:context="com.example.alejandro.proyecto_aguas_ver_001.Screen_Fast_View_Personal_Task">
 
     <TableRow
         android:gravity="center"

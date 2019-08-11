@@ -13,18 +13,8 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="61dp"
-            android:layout_marginLeft="20dp"
             android:layout_weight="1"
-            android:src="@mipmap/ic_launcher" />
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginRight="20dp"
-            android:layout_marginLeft="120dp"
-            android:text="Modo Unitario"
-            android:id="@+id/button_modo_unitario_screen_unity_counter"
-            />
+            android:src="@drawable/ic_launcher_foreground" />
     </TableRow>
 
 
@@ -39,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Ejecutar Tarea"
-            android:id="@+id/button_ejecutat_tarea_screen_unity_counter"
+            android:id="@+id/button_ejecutar_tarea_screen_battery_counter"
             />
     </TableRow>
 
@@ -54,7 +44,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Incidencia"
-            android:id="@+id/button_incidencia_screen_unity_counter"
+            android:id="@+id/button_incidencia_screen_battery_counter"
             /></TableRow>
 
 
@@ -236,6 +226,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Reajustar Datos de Ubicacion"
+                    android:id="@+id/button_reajustar_ubicacion_screen_battery_counter"
                     />
             </TableRow>
 

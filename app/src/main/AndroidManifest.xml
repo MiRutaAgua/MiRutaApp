@@ -50,6 +50,24 @@
         <activity android:name=".Screen_Fast_View_Personal_Task">
         </activity>
 
+        <activity android:name=".Screen_Incidence">
+        </activity>
+
+        <activity android:name=".Screen_Incidence_Summary">
+        </activity>
+
+        <activity android:name=".Screen_Absent">
+        </activity>
+
+        <activity android:name=".Screen_Execute_Task">
+        </activity>
+
+        <activity android:name=".Screen_Validate">
+        </activity>
+
+        <activity android:name=".Screen_Battery_Intake_Asignation">
+        </activity>
+
 
     </application>
 

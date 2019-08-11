@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TableLayout
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        >
+        <TableRow
+            android:gravity="center"
+            android:padding="10dp"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pantalla Ejecutar Tarea"
+                android:layout_gravity="center_horizontal"
+                android:id="@+id/textView_screen_exec_task"
+                />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+
+            >
+
+            <ImageView
+                android:id="@+id/imageView_logo_screen_login"
+                android:layout_width="75dp"
+                android:layout_height="67dp"
+                android:layout_gravity="center"
+                android:layout_span="2"
+                android:src="@drawable/ic_launcher_foreground" />
+        </TableRow>
+
+        <TableRow
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_marginTop="5dip">
+
+
+            <Button
+                android:id="@+id/button_instalation_photo_screen_exec_task"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Foto de Instalación"
+                android:textSize="15dp"
+                />
+        </TableRow>
+
+        <TableRow
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_marginTop="5dip">
+
+
+            <Button
+                android:id="@+id/button_read_photo_screen_exec_task"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Foto Lectura"
+                android:textSize="15dp"
+                />
+        </TableRow>
+
+        <TableRow
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_marginTop="5dip">
+
+
+            <Button
+                android:id="@+id/button_serial_number_photo_screen_exec_task"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Foto número de serie"
+                android:textSize="15dp"
+                />
+        </TableRow>
+
+        <TableRow
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_marginTop="5dip">
+
+
+            <Button
+                android:id="@+id/button_scan_serial_number_screen_exec_task"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Escaneo Nueva Serie"
+                android:textSize="15dp"
+                />
+        </TableRow>
+
+        <TableRow
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_marginTop="5dip">
+
+
+            <Button
+                android:id="@+id/button_scan_module_screen_exec_task"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Escaneo de Módulo"
+                android:textSize="15dp"
+                />
+        </TableRow>
+
+        <TableRow
+            android:gravity="center"
+            android:padding="10dp"
+            android:layout_width="wrap_content"
+            android:layout_marginRight="10dp"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="13mm   Altair   115mm"
+                android:layout_gravity="center"
+                android:id="@+id/textView_name_screen_exec_task"
+                />
+
+        </TableRow>
+
+        <TableRow
+            android:gravity="left"
+            android:padding="10dp"
+
+            android:layout_marginRight="10dp"
+            android:layout_width="wrap_content"
+
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Teléfonos:"
+                android:layout_gravity="center"
+                android:id="@+id/textView_phones_screen_exec_task"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="944666666, 66666666"
+                android:layout_gravity="left"
+                android:id="@+id/textView_phone1_screen_exec_task"
+                />
+        </TableRow>
+
+        <TableRow
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_marginTop="5dip">
+
+
+            <Button
+                android:id="@+id/button_observations_screen_exec_task"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Observaciones"
+                android:textSize="15dp"
+                />
+        </TableRow>
+        <TableRow
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_marginTop="5dip">
+
+
+            <Button
+                android:id="@+id/button_final_instalation_photo_screen_exec_task"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Foto final Instalación"
+                android:textSize="15dp"
+                />
+        </TableRow>
+
+        <TableRow
+
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_marginTop="5dip">
+
+
+            <Button
+                android:id="@+id/button_geolocalization_screen_exec_task"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="geolocalización"
+                android:textSize="15dp"
+                />
+        </TableRow>
+        <TableRow
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_marginTop="5dip">
+
+
+            <Button
+                android:id="@+id/button_validate_screen_exec_task"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Validar"
+                android:textSize="15dp"
+                />
+            <Button
+                android:id="@+id/button_guardar_datos_screen_exec_task"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Guardar Datos"
+                android:textSize="15dp"
+                />
+        </TableRow>
+
+    </TableLayout>
+</ScrollView>

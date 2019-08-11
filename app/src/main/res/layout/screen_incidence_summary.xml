@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        >
+
+        <TableRow
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            >
+
+            <TextView
+                android:text="Camino Angel de la Guarda, 13 1dch"
+                android:textSize="18dp"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+        </TableRow>
+
+        <TableRow
+            android:layout_marginTop="40dp"
+            android:gravity="center"
+            >
+
+            <TextView
+                android:text="Foto 1"
+                android:textSize="18dp"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            >
+            <ImageView
+
+                android:src="@drawable/ic_launcher_background"
+                />
+        </TableRow>
+
+        <TableRow
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            >
+
+            <TextView
+                android:text="Foto 2"
+                android:textSize="18dp"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            >
+            <ImageView
+
+                android:src="@drawable/ic_launcher_background"
+                />
+        </TableRow>
+
+        <TableRow
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            >
+
+            <TextView
+                android:text="Foto 3"
+                android:textSize="18dp"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+
+        </TableRow>
+
+        <TableRow
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        >
+        <ImageView
+
+            android:src="@drawable/ic_launcher_background"
+            />
+    </TableRow>
+
+        <TableRow
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_marginRight="50dp"
+            android:layout_marginLeft="50dp"
+            >
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Lectura"
+                android:gravity="center"
+                android:textSize="18dp" />
+            <EditText
+
+                android:id="@+id/editText_lectura_de_contador_screen_incidence_summary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                 />
+        </TableRow>
+
+        <TableRow
+            android:layout_marginTop="40dp"
+            android:gravity="center"
+            >
+            <TextView
+                android:text="Observaciones"
+                android:textSize="18dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                />
+
+        </TableRow>
+        <TableRow
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            >
+            <TextView
+                android:text="Contador Mal Ubicado"
+                android:textSize="15dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="40dp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            >
+            <TextView
+                android:text="Firma"
+                android:textSize="15dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+
+                />
+            <ImageView
+
+                android:src="@drawable/ic_launcher_background"
+                />
+        </TableRow>
+
+        <TableRow
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:padding="1dp"
+            android:layout_weight="1"
+            >
+            <Button
+                android:text="Compartir"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                />
+        </TableRow>
+
+        <TableRow
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:padding="1dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            >
+            <Button
+                android:text="Cerrar Tarea"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                />
+
+        </TableRow>
+
+    </TableLayout>
+</ScrollView>

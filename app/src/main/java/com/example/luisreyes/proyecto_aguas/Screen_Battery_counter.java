@@ -12,24 +12,56 @@ import android.widget.Button;
 
 public class Screen_Battery_counter extends Activity {
 
-    private Button button_modo_unity;
+    private Button button_reajustar_ubicacion;
 
-    private Intent intent_open_unity_counter;
+    private Button button_incidence_screen_battery_counter;
+
+    private Button button_ejecutar_tarea_screen_battery_counter;
+
+    private Intent intent_open_screen_battery_intake_asignation;
+
+    private Intent intent_open_screen_incidence;
+
+    private Intent intent_open_screen_exec_task;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.screen_battery_counter);
 
-        intent_open_unity_counter = new Intent(this, Screen_Unity_Counter.class);
+        intent_open_screen_battery_intake_asignation = new Intent(this, Screen_Battery_Intake_Asignation.class);
 
-        button_modo_unity = (Button)findViewById(R.id.button_modo_unitario_screen_unity_counter);
+        intent_open_screen_exec_task = new Intent(this, Screen_Execute_Task.class);
 
-        button_modo_unity.setOnClickListener(new View.OnClickListener() {
+        intent_open_screen_incidence = new Intent(this, Screen_Incidence.class);
+
+        button_reajustar_ubicacion = (Button)findViewById(R.id.button_reajustar_ubicacion_screen_battery_counter);
+
+        button_ejecutar_tarea_screen_battery_counter = (Button)findViewById(R.id.button_ejecutar_tarea_screen_battery_counter);
+
+        button_incidence_screen_battery_counter = (Button)findViewById(R.id.button_incidencia_screen_battery_counter);
+
+        button_ejecutar_tarea_screen_battery_counter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                startActivity(intent_open_unity_counter);
+                startActivity(intent_open_screen_exec_task);
+            }
+        });
+
+        button_reajustar_ubicacion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                startActivity(intent_open_screen_battery_intake_asignation);
+            }
+        });
+
+        button_incidence_screen_battery_counter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                startActivity(intent_open_screen_incidence);
             }
         });
     }
