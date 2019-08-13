@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Created by luis.reyes on 10/08/2019.
@@ -45,7 +46,7 @@ public class Screen_Login_Activity extends Activity {
                     startActivity(intent_open_next_screen);
 
                 else
-                    textView_nombre_de_pantalla.setText("Introduzca el nombre de usuario y contraseña.");
+                    Toast.makeText(Screen_Login_Activity.this, "Inserte nombre de Usuario y contraseña", Toast.LENGTH_SHORT).show();
             }
         });
     }
