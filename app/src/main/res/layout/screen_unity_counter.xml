@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center"
+    >
 
-    <TableRow
-        android:layout_marginTop="20dp"
-        android:gravity="left"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp"
+        android:gravity="left"
         >
 
         <ImageView
@@ -25,14 +30,15 @@
             android:text="Modo Batería"
             android:id="@+id/button_modo_bateria_screen_unity_counter"
             />
-    </TableRow>
+    </LinearLayout>
 
 
-    <TableRow
-        android:layout_marginTop="10dp"
-        android:gravity="center"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
         >
 
         <Button
@@ -41,14 +47,15 @@
             android:text="Ejecutar Tarea"
             android:id="@+id/button_ejecutar_tarea_screen_unity_counter"
             />
-    </TableRow>
+    </LinearLayout>
 
 
-    <TableRow
-        android:layout_marginTop="5dp"
-        android:gravity="center"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="5dp"
+        android:gravity="center"
         >
         <Button
             android:layout_width="wrap_content"
@@ -56,10 +63,13 @@
             android:text="Abandonado Ausente"
             android:id="@+id/button_abandonado_ausente_screen_unity_counter"
             />
-    </TableRow>
+    </LinearLayout>
 
 
-    <TableRow
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:layout_marginTop="5dp"
         android:gravity="center"
         >
@@ -68,14 +78,15 @@
             android:layout_height="wrap_content"
             android:text="Incidencia"
             android:id="@+id/button_incidencia_screen_unity_counter"
-            /></TableRow>
+            /></LinearLayout>
 
 
-    <TableRow
-        android:layout_marginTop="20dp"
-        android:gravity="center"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
         >
         <TextView
             android:layout_weight="1"
@@ -96,14 +107,15 @@
             android:layout_weight="3"
             android:textSize="15sp"
             android:text="Calle 136 #4903 /Ave 49 y Ave 51" />
-    </TableRow>
+    </LinearLayout>
 
 
-    <TableRow
-        android:layout_marginTop="5dp"
-        android:gravity="center"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="5dp"
+        android:gravity="center"
         >
         <TextView
             android:layout_weight="1"
@@ -111,6 +123,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Datos específicos:    "
+            android:padding="16dp"
             android:layout_gravity="left"
             android:layout_marginLeft="20dp"
             />
@@ -123,14 +136,15 @@
             android:layout_weight="3"
             android:textSize="15sp"
             android:text="El garaje tiene una puerta verde y suelen salir a las 8:00" />
-    </TableRow>
+    </LinearLayout>
 
 
-    <TableRow
-        android:layout_marginTop="10dp"
-        android:gravity="center"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
         >
 
         <TextView
@@ -140,21 +154,27 @@
             android:text="Datos Contador:"
             android:layout_gravity="center"
             />
-    </TableRow>
+    </LinearLayout>
 
 
-    <TableRow
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:layout_marginTop="5dp"
         android:gravity="center">
 
-        <TableLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
                 android:layout_marginLeft="20dp"
             >
 
-            <TableRow>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
                     <TextView
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
@@ -166,9 +186,12 @@
                         android:text=" C11FA 666666"
                         android:textSize="12sp"
                         />
-            </TableRow>
+            </LinearLayout>
 
-            <TableRow>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
                 <TextView
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
@@ -180,9 +203,12 @@
                     android:text=" 1347 m3"
                     android:textSize="12sp"
                     />
-            </TableRow>
+            </LinearLayout>
 
-            <TableRow>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
                 <TextView
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
@@ -194,9 +220,12 @@
                     android:text=" Calibre 20-190"
                     android:textSize="12sp"
                     />
-            </TableRow>
+            </LinearLayout>
 
-            <TableRow>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
                 <TextView
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
@@ -208,9 +237,12 @@
                     android:text=" Fregadera"
                     android:textSize="12sp"
                     />
-            </TableRow>
+            </LinearLayout>
 
-            <TableRow>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
                 <TextView
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
@@ -222,9 +254,9 @@
                     android:text=" Garaje"
                     android:textSize="12sp"
                     />
-            </TableRow>
+            </LinearLayout>
 
-        </TableLayout>
+        </LinearLayout>
 
         <ImageButton
             android:layout_marginRight="20dp"
@@ -235,7 +267,7 @@
             android:maxHeight="40dp"
             android:maxWidth="20dp"
             />
-    </TableRow
+    </LinearLayout
 >
 
-</TableLayout>
+</LinearLayout>

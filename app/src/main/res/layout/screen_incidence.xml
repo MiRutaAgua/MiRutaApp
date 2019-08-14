@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
 
-    <TableRow
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:gravity="center"
         android:padding="10dp"
         >
@@ -14,13 +24,14 @@
             android:layout_gravity="center_horizontal"
             android:id="@+id/textView_screen_team_task"
             />
-    </TableRow>
+    </LinearLayout>
 
-    <TableRow
+    <LinearLayout
 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="left"
+        android:orientation="horizontal"
+        android:gravity="center"
         >
 
         <ImageView
@@ -29,13 +40,15 @@
             android:layout_height="45dp"
             android:layout_gravity="center"
             android:src="@drawable/ic_launcher_foreground" />
-    </TableRow>
+    </LinearLayout>
 
-    <TableRow
+    <LinearLayout
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center">
+        android:orientation="horizontal"
+        android:gravity="center"
+        >
 
     <TextView
         android:layout_width="wrap_content"
@@ -45,12 +58,14 @@
         android:textSize="16dp"
         />
 
-    </TableRow>
+    </LinearLayout>
 
-    <TableRow
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center">
+        android:orientation="horizontal"
+        android:gravity="center"
+        >
 
         <Spinner
             android:layout_height="wrap_content"
@@ -59,13 +74,14 @@
             >
         </Spinner>
 
-    </TableRow>
+    </LinearLayout>
 
 
-    <TableRow
+    <LinearLayout
         android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:gravity="center"
         >
         <Button
@@ -74,24 +90,39 @@
             android:text="Contador mal ubicado"
             android:layout_gravity="center"
             />
-    </TableRow>
+    </LinearLayout>
 
-    <TableRow
+    <LinearLayout
         android:layout_marginTop="20dp"
 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:gravity="center"
         >
 
-        <TableLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            >
 
-            <TableRow
-
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
                 >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    >
 
                 <TextView
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginLeft="20dp"
@@ -104,36 +135,38 @@
                     android:layout_gravity="center"
                     android:layout_marginLeft="40dp"
                     android:text="Modificar" />
-            </TableRow>
+            </LinearLayout>
 
-            <TableRow
-
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
                 >
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="left"
+                    android:layout_gravity="center"
                     android:text="636489090"
                     android:textSize="16dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="left"
+                    android:layout_gravity="center"
                     android:text="636489090"
                     android:textSize="16dp" />
-            </TableRow>
+            </LinearLayout>
 
-        </TableLayout>
+        </LinearLayout>
 
 
-    </TableRow>
-
-    <TableRow
-        android:gravity="center"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
         android:layout_marginTop="10dp"
         >
 
@@ -142,11 +175,12 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="Foto 1" />
-    </TableRow>
-    <TableRow
-        android:gravity="center"
-        android:layout_width="wrap_content"
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
 
         >
 
@@ -155,12 +189,13 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="Foto 2" />
-    </TableRow>
+    </LinearLayout>
 
-    <TableRow
-        android:gravity="center"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
 
         >
 
@@ -169,13 +204,13 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="Foto 3" />
-    </TableRow>
+    </LinearLayout>
 
 
-    <TableRow
-        android:gravity="center"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:layout_marginTop="20dp"
         >
 
@@ -187,12 +222,12 @@
             android:id="@+id/button_geolocalizar_screen_incidence"
             />
 
-    </TableRow>
+    </LinearLayout>
 
-    <TableRow
-        android:gravity="center"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
 
         >
 
@@ -203,8 +238,10 @@
             android:text="Firma cliente"
             android:id="@+id/button_firma_del_cliente_screen_incidence"
             />
-    </TableRow>
+    </LinearLayout>
 
+        </LinearLayout>
 
-
-</TableLayout>
+</LinearLayout>
+</LinearLayout>
+</ScrollView>

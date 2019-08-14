@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_gravity="center"
     tools:context="com.example.luisreyes.proyecto_aguas.MainActivity">
 
-    <TableRow
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:gravity="center"
         >
         <TextView
@@ -18,10 +23,13 @@
             android:id="@+id/textView_screen_main"
         />
 
-    </TableRow>
+    </LinearLayout>
 
 
-    <TableRow
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:layout_marginTop="100dp"
         android:gravity="center"
         >
@@ -38,9 +46,9 @@
             app:layout_constraintTop_toTopOf="parent"
             android:contentDescription="Icono_de_Aplicacion"
             />
-    </TableRow>
+    </LinearLayout>
 
 
 
 
-</TableLayout>
+</LinearLayout>

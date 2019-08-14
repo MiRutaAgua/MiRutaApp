@@ -102,7 +102,7 @@
         android:gravity="center"
         >
         <TextView
-            android:layout_weight=""
+            android:layout_weight="20"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="Teléfonos:"
@@ -186,11 +186,13 @@
 
 
     </LinearLayout>
-    <TableRow
+
+    <LinearLayout
         android:gravity="center"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
+        android:orientation="horizontal"
         >
 
         <TextView
@@ -198,16 +200,21 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="CITAS" />
-    </TableRow>
-    <TableLayout
+    </LinearLayout>
+
+    <LinearLayout
         android:gravity="center"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
 
         >
-        <TableRow
+        <LinearLayout
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
             >
             <TextView
                 android:layout_width="wrap_content"
@@ -222,11 +229,14 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="Lunes 21  de Marzo del 2019" />
-        </TableRow>
+        </LinearLayout>
 
-        <TableRow
+        <LinearLayout
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
             >
             <TextView
                 android:layout_width="wrap_content"
@@ -241,15 +251,16 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="Entre las 12:00 y las 12:30" />
-        </TableRow>
+        </LinearLayout>
 
 
-
-    </TableLayout>
-
-    <TableRow
+    <LinearLayout
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+
         >
         <TextView
             android:layout_width="wrap_content"
@@ -258,8 +269,16 @@
             android:layout_gravity="center"
             android:textSize="16dp"
             />
-    </TableRow>
+    </LinearLayout>
 
+    <LinearLayout
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+
+        >
     <TextView
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
@@ -269,10 +288,13 @@
         android:layout_gravity="center"
         android:textSize="16dp"
         />
+    </LinearLayout>
 
-    <TableRow
+
+
+    <LinearLayout
         android:gravity="center"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         >
@@ -291,6 +313,8 @@
             android:text="Guardar Datos"
             android:id="@+id/button_firma_del_cliente_screen_incidence"
             />
-    </TableRow>
+    </LinearLayout>
+
+    </LinearLayout>
 
 </LinearLayout>

@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_gravity="center">
 
-    <TableRow
+    <LinearLayout
         android:layout_marginTop="20dp"
         android:gravity="left"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         >
 
         <ImageView
@@ -15,14 +19,15 @@
             android:layout_height="61dp"
             android:layout_weight="1"
             android:src="@drawable/ic_launcher_foreground" />
-    </TableRow>
+    </LinearLayout>
 
 
-    <TableRow
+    <LinearLayout
         android:layout_marginTop="10dp"
         android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         >
 
         <Button
@@ -31,28 +36,32 @@
             android:text="Ejecutar Tarea"
             android:id="@+id/button_ejecutar_tarea_screen_battery_counter"
             />
-    </TableRow>
+    </LinearLayout>
 
 
 
 
-    <TableRow
+    <LinearLayout
         android:layout_marginTop="5dp"
         android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
         >
         <Button
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Incidencia"
             android:id="@+id/button_incidencia_screen_battery_counter"
-            /></TableRow>
+            /></LinearLayout>
 
 
-    <TableRow
+    <LinearLayout
         android:layout_marginTop="20dp"
         android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         >
         <TextView
             android:layout_weight="1"
@@ -73,14 +82,15 @@
             android:layout_weight="3"
             android:textSize="15sp"
             android:text="Calle 136 #4903 /Ave 49 y Ave 51" />
-    </TableRow>
+    </LinearLayout>
 
 
-    <TableRow
+    <LinearLayout
         android:layout_marginTop="5dp"
         android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         >
         <TextView
             android:layout_weight="1"
@@ -90,6 +100,7 @@
             android:text="Datos específicos:     "
             android:layout_gravity="left"
             android:layout_marginLeft="20dp"
+            android:padding="16dp"
             />
 
         <TextView
@@ -100,7 +111,7 @@
             android:layout_weight="3"
             android:textSize="15sp"
             android:text="El garaje tiene una puerta verde y suelen salir a las 8:00" />
-    </TableRow>
+    </LinearLayout>
 
 
 
@@ -235,4 +246,4 @@
     </TableRow
         >
 
-</TableLayout>
+</LinearLayout>
