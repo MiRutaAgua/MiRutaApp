@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.luisreyes.proyecto_aguas">
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <application
         android:allowBackup="true"
@@ -9,66 +12,31 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <activity
-            android:name=".MainActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
-
-        <activity android:name=".Screen_Login_Activity">
-        </activity>
-
-        <activity android:name=".team_or_personal_task_selection_screen_Activity">
-        </activity>
-
-        <activity android:name=".Screen_Table_Team">
-        </activity>
-
-        <activity android:name=".Screen_Unity_Counter">
-        </activity>
-
-        <activity android:name=".Screen_Battery_counter">
-        </activity>
-
-        <activity android:name=".personal_task_screen_Activity">
-        </activity>
-
-        <activity android:name=".team_task_screen_Activity">
-        </activity>
-
-        <activity android:name=".Screen_Table_Personal">
-        </activity>
-
-        <activity android:name=".Screen_Fast_View_Team_Task">
-        </activity>
-
-        <activity android:name=".Screen_Fast_View_Personal_Task">
-        </activity>
-
-        <activity android:name=".Screen_Incidence">
-        </activity>
-
-        <activity android:name=".Screen_Incidence_Summary">
-        </activity>
-
-        <activity android:name=".Screen_Absent">
-        </activity>
-
-        <activity android:name=".Screen_Execute_Task">
-        </activity>
-
-        <activity android:name=".Screen_Validate">
-        </activity>
-
-        <activity android:name=".Screen_Battery_Intake_Asignation">
-        </activity>
-
-
+        <activity android:name=".Screen_Login_Activity"></activity>
+        <activity android:name=".team_or_personal_task_selection_screen_Activity"></activity>
+        <activity android:name=".Screen_Table_Team"></activity>
+        <activity android:name=".Screen_Unity_Counter"></activity>
+        <activity android:name=".Screen_Battery_counter"></activity>
+        <activity android:name=".personal_task_screen_Activity"></activity>
+        <activity android:name=".team_task_screen_Activity"></activity>
+        <activity android:name=".Screen_Table_Personal"></activity>
+        <activity android:name=".Screen_Fast_View_Team_Task"></activity>
+        <activity android:name=".Screen_Fast_View_Personal_Task"></activity>
+        <activity android:name=".Screen_Incidence"></activity>
+        <activity android:name=".Screen_Incidence_Summary"></activity>
+        <activity android:name=".Screen_Absent"></activity>
+        <activity android:name=".Screen_Execute_Task"></activity>
+        <activity android:name=".Screen_Validate"></activity>
+        <activity android:name=".Screen_Battery_Intake_Asignation"></activity>
+        <activity android:name=".lector"></activity>
+        <activity android:name=".Screen_Draw_Canvas"></activity>
     </application>
 
 </manifest>

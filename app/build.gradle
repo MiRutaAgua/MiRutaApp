@@ -16,6 +16,19 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    compileOptions {
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
+
+    }
+
+    lintOptions {
+        checkReleaseBuilds false
+
+        abortOnError false
+    }
+
 }
 
 dependencies {
@@ -28,4 +41,6 @@ dependencies {
 //noinspection GradleDependency
     implementation 'com.android.support:design:26.0.0-alpha1'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation project(':core')
+    implementation project(':core-3.3.3')
 }
