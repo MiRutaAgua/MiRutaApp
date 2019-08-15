@@ -68,13 +68,18 @@
                 android:layout_weight="1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_launcher_background" />
+                android:src="@drawable/ic_launcher_background"
+                android:scaleType="centerCrop"
+                android:id="@+id/imageView_foto_antes_instalacion_screen_validate"
+                />
 
             <ImageView
                 android:layout_weight="1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_launcher_background"
+                android:scaleType="centerCrop"
+                android:id="@+id/imageView_foto_final_instalacion_screen_validate"
                 />
         </LinearLayout>
 
@@ -118,6 +123,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_launcher_background"
+                android:scaleType="centerCrop"
+                android:id="@+id/imageView_foto_numero_serie_screen_validate"
                 />
         </LinearLayout>
 
@@ -244,9 +251,11 @@
                 android:layout_weight="1"
                 android:text="Firma                        "
                 android:textSize="15dp" />
-            <ImageView
+            <ImageButton
                 android:layout_weight="1"
+                android:scaleType="centerCrop"
                 android:src="@drawable/ic_launcher_background"
+                android:id="@+id/imageButton_firma_cliente_screen_validate"
                 />
         </LinearLayout>
 
