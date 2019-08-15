@@ -8,6 +8,7 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -15,6 +16,8 @@ import android.widget.Toast;
  */
 
 public class Screen_Execute_Task extends Activity {
+
+    private  TextView textView_serial_number_result;
 
     private Button button_canvas_screen_exec_task;
 
@@ -48,6 +51,13 @@ public class Screen_Execute_Task extends Activity {
         setContentView(R.layout.screen_execute_task);
 
         intent_open_screen_validate = new Intent(this, Screen_Validate.class);
+
+        String result = getIntent().getStringExtra("result");
+        String serial_number_result = "";
+        serial_number_result = serial_number_result + result;
+
+        textView_serial_number_result = (TextView)findViewById(R.id.textView_serial_number_screen_exec_task);
+        textView_serial_number_result.setText(serial_number_result);
 
         button_instalation_photo_screen_exec_task = (Button)findViewById(R.id.button_instalation_photo_screen_exec_task);
         button_read_photo_screen_exec_task = (Button)findViewById(R.id.button_read_photo_screen_exec_task);

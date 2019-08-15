@@ -73,8 +73,9 @@ public class lector extends AppCompatActivity implements ZXingScannerView.Result
 
        // Log.i("QR_response>>",rawResult.getText());
 
-            Intent intent=new Intent(lector.this,Screen_Execute_Task.class);
-            startActivity(intent);
+            Intent intent_open_screen_exec_task =new Intent(lector.this,Screen_Execute_Task.class);
+            intent_open_screen_exec_task.putExtra("result", rawResult.getText().toString());
+            startActivity(intent_open_screen_exec_task);
             finish();
 
 

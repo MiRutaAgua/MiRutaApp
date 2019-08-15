@@ -146,7 +146,7 @@
                 android:layout_height="wrap_content"
                 android:text="13mm   Altair   115mm"
                 android:layout_gravity="center"
-                android:id="@+id/textView_name_screen_exec_task"
+                android:id="@+id/textView_serial_number_screen_exec_task"
                 />
 
         </LinearLayout>
