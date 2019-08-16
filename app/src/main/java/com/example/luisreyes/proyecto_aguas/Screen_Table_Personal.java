@@ -63,10 +63,12 @@ public class Screen_Table_Personal extends Activity{
                 if(i < 4){
 
                     startActivity(intent_open_screen_unity_counter);
+                    finish();
                 }
                 else{
 
                     startActivity(intent_open_screen_battery_counter);
+                    finish();
                 }
             }
         });

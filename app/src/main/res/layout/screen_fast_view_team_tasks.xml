@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:layout_gravity="center"
-    tools:context="com.example.alejandro.proyecto_aguas_ver_001.Screen_Fast_View_Team_Task">
+    tools:context="com.example.luisreyes.proyecto_aguas.Screen_Fast_View_Team_Task">
 
     <LinearLayout
         android:layout_width="match_parent"

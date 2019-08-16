@@ -36,7 +36,6 @@
             android:orientation="horizontal"
             android:layout_marginTop="40dp"
             android:gravity="center"
-            android:padding="1dp"
             >
 
             <TextView
@@ -88,22 +87,24 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginTop="30dp"
-            android:gravity="left"
+            android:layout_gravity="center"
             >
 
             <TextView
-                android:text="Numero de serie   "
+                android:text="Numero de serie"
                 android:textSize="18dp"
                 android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="80dp"
                 />
             <TextView
-                android:text="F27337                                  "
+                android:text="F27337"
                 android:textSize="18dp"
                 android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
                 />
 
         </LinearLayout>

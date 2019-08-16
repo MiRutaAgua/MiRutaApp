@@ -37,6 +37,7 @@
         <activity android:name=".Screen_Battery_Intake_Asignation"></activity>
         <activity android:name=".lector"></activity>
         <activity android:name=".Screen_Draw_Canvas"></activity>
+        <activity android:name=".Screen_Validate_Battery_Intake_Asignation"></activity>
     </application>
 
 </manifest>

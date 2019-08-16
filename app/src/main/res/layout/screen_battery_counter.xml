@@ -1,249 +1,286 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:layout_gravity="center">
-
+    >
     <LinearLayout
-        android:layout_marginTop="20dp"
-        android:gravity="left"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="vertical"
+        android:layout_gravity="center"
         >
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="61dp"
-            android:layout_weight="1"
-            android:src="@drawable/ic_launcher_foreground" />
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_marginTop="10dp"
-        android:gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
-
-        <Button
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Ejecutar Tarea"
-            android:id="@+id/button_ejecutar_tarea_screen_battery_counter"
-            />
-    </LinearLayout>
+            android:orientation="horizontal"
+            >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_launcher_foreground" />
+        </LinearLayout>
 
 
-
-
-    <LinearLayout
-        android:layout_marginTop="5dp"
-        android:gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
-        <Button
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Incidencia"
-            android:id="@+id/button_incidencia_screen_battery_counter"
-            /></LinearLayout>
+            android:orientation="horizontal"
+            >
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ejecutar Tarea"
+                android:id="@+id/button_ejecutar_tarea_screen_battery_counter"
+                />
+        </LinearLayout>
 
 
-    <LinearLayout
-        android:layout_marginTop="20dp"
-        android:gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
-        <TextView
-            android:layout_weight="1"
-            android:textSize="15sp"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Direccion:                 "
-            android:layout_gravity="left"
-            android:layout_marginLeft="20dp"
+            android:orientation="horizontal"
+            >
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Incidencia"
+                android:id="@+id/button_incidencia_screen_battery_counter"
+                /></LinearLayout>
 
-            />
 
-        <TextView
-            android:layout_marginRight="20dp"
-            android:id="@+id/textView_direccion_screen_unity_counter"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:textSize="15sp"
-            android:text="Calle 136 #4903 /Ave 49 y Ave 51" />
-    </LinearLayout>
+            android:orientation="horizontal"
+            >
+            <TextView
+                android:textSize="15sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Direccion:                 "
+                android:layout_gravity="left"
+                android:layout_marginLeft="20dp"
+
+                />
+
+            <TextView
+                android:layout_marginRight="20dp"
+                android:id="@+id/textView_direccion_screen_unity_counter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:textSize="15sp"
+                android:text="Calle 136 #4903 /Ave 49 y Ave 51" />
+        </LinearLayout>
 
 
-    <LinearLayout
-        android:layout_marginTop="5dp"
-        android:gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
-        <TextView
-            android:layout_weight="1"
-            android:textSize="15sp"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Datos específicos:     "
-            android:layout_gravity="left"
-            android:layout_marginLeft="20dp"
-            android:padding="16dp"
-            />
-
-        <TextView
-            android:layout_marginRight="20dp"
-            android:id="@+id/textView_datos_especificos_screen_unity_counter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:textSize="15sp"
-            android:text="El garaje tiene una puerta verde y suelen salir a las 8:00" />
-    </LinearLayout>
-
-
-
-
-
-    <TableRow
-
-        android:layout_marginTop="20dp"
-        android:gravity="center">
-
-        <TableLayout
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
+            android:orientation="horizontal"
             android:gravity="center"
             >
-            <TableRow
+            <TextView
+                android:layout_weight="1"
+                android:textSize="15sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Datos específicos:     "
+                android:layout_gravity="left"
+                android:layout_marginLeft="20dp"
+                android:padding="16dp"
+                />
+
+            <TextView
+                android:layout_marginRight="20dp"
+                android:id="@+id/textView_datos_especificos_screen_unity_counter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:textSize="15sp"
+                android:text="El garaje tiene una puerta verde y suelen salir a las 8:00" />
+        </LinearLayout>
+
+
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="20dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
                 android:gravity="center"
+                android:layout_marginLeft="20dp"
+
                 >
-                <TextView
-                    android:textSize="15sp"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Datos Contador:"
+                    android:orientation="horizontal"
                     android:gravity="center"
-                    />
-            </TableRow>
+                    >
+                    <TextView
+                        android:textSize="15sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Datos Contador:"
+                        android:gravity="center"
+                        />
+                </LinearLayout>
 
-            <TableRow
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    >
+                    <TextView
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:text="Serie:"
+                        android:textSize="12sp" />
+                    <TextView
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:text="C11FA 666666"
+                        android:textSize="12sp"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    >
+                    <TextView
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:text="Lectura:"
+                        android:textSize="12sp" />
+                    <TextView
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:text="1347 m3"
+                        android:textSize="12sp"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    >
+                    <TextView
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:text="Calibre:"
+                        android:textSize="12sp" />
+                    <TextView
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:text="Calibre 20-190"
+                        android:textSize="12sp"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    >
+                    <ImageButton
+                        android:layout_marginRight="20dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/ic_launcher"
+                        android:maxHeight="40dp"
+                        android:maxWidth="20dp"
+                        />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+
                 >
-                <TextView
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:text="Serie:"
-                    android:textSize="12sp" />
-                <TextView
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:text="C11FA 666666"
-                    android:textSize="12sp"
-                    />
-            </TableRow>
-
-            <TableRow>
-                <TextView
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:text="Lectura:"
-                    android:textSize="12sp" />
-                <TextView
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:text="1347 m3"
-                    android:textSize="12sp"
-                    />
-            </TableRow>
-
-            <TableRow>
-                <TextView
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:text="Calibre:"
-                    android:textSize="12sp" />
-                <TextView
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:text="Calibre 20-190"
-                    android:textSize="12sp"
-                    />
-            </TableRow>
-
-            <TableRow>
-                <ImageButton
+                    android:orientation="horizontal"
                     android:layout_marginRight="20dp"
-                    android:layout_weight="1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@mipmap/ic_launcher"
-                    android:maxHeight="40dp"
-                    android:maxWidth="20dp"
-                    />
-            </TableRow>
-
-
-
-        </TableLayout>
-
-        <TableLayout
-            android:layout_weight="1"
-            >
-            <TableRow
-                android:layout_marginRight="20dp"
-                android:gravity="center">
-                <TextView
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:text="Ubicacion en
+                    android:gravity="center">
+                    <TextView
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:text="Ubicacion en
       Batería"
-                    android:textSize="15sp"
-                    android:layout_gravity="center"
-                    />
-            </TableRow>
+                        android:textSize="15sp"
+                        android:layout_gravity="center"
+                        />
+                </LinearLayout>
 
-            <TableRow
-                android:layout_marginRight="20dp"
-                android:gravity="center">
-                <TextView
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:text="F1-T1"
-                    android:layout_gravity="center"
-                    android:textSize="12sp"
-                    />
-            </TableRow>
-
-            <TableRow
-                android:gravity="center">
-                <Button
-                    android:layout_marginLeft="20dp"
+                    android:orientation="horizontal"
                     android:layout_marginRight="20dp"
-                    android:layout_weight="1"
-                    android:layout_width="wrap_content"
+                    android:gravity="center"
+                    >
+                    <TextView
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:text="F1-T1"
+                        android:layout_gravity="center"
+                        android:textSize="12sp"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Reajustar Datos de Ubicacion"
-                    android:id="@+id/button_reajustar_ubicacion_screen_battery_counter"
-                    />
-            </TableRow>
+                    android:orientation="horizontal"
+                    android:gravity="center">
+                    <Button
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_weight="1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Reajustar Datos de Ubicacion"
+                        android:id="@+id/button_reajustar_ubicacion_screen_battery_counter"
+                        />
+                </LinearLayout>
 
-        </TableLayout>
+            </LinearLayout>
 
-    </TableRow
-        >
-
-</LinearLayout>
+        </LinearLayout>
+</ScrollView>

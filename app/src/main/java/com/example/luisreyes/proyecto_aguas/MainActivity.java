@@ -43,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
 
                 textView_pantalla_principal.setText("Finished");
                 startActivity(intent_open_screen_login);
-                finish();
             }
         }.start();
     }

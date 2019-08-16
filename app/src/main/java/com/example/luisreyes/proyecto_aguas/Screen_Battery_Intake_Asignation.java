@@ -21,7 +21,7 @@ public class Screen_Battery_Intake_Asignation extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.screen_battery_intake_asignation);
 
-        intent_open_screen_validate_battery_intake_asignation = new Intent(this, screen_validate_battery_intake_asignation.class);
+        intent_open_screen_validate_battery_intake_asignation = new Intent(Screen_Battery_Intake_Asignation.this, Screen_Validate_Battery_Intake_Asignation.class);
 
         button_validar = (Button)findViewById(R.id.button_validate_screen_battery_intake);
 

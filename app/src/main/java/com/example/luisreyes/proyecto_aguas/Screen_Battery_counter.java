@@ -46,7 +46,6 @@ public class Screen_Battery_counter extends Activity {
             public void onClick(View view) {
 
                 startActivity(intent_open_screen_exec_task);
-                finish();
             }
         });
 

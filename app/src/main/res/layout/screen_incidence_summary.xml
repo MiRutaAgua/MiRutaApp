@@ -77,6 +77,7 @@
                 android:layout_height="wrap_content"
                 />
 
+
         </LinearLayout>
 
         <LinearLayout
@@ -196,24 +197,27 @@
             android:layout_marginRight="20dp"
             android:layout_marginTop="40dp"
             android:gravity="center"
-            android:layout_gravity="center"
+            android:layout_weight="1"
             >
+
             <TextView
-                android:text="Firma"
-                android:textSize="15dp"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="36dp"
                 android:layout_gravity="center"
-
-                />
-            <ImageView
-
+                android:layout_weight="1"
+                android:text="Firma                        "
+                android:textSize="15dp" />
+            <ImageButton
+                android:layout_weight="1"
+                android:scaleType="centerCrop"
                 android:src="@drawable/ic_launcher_background"
-                />
+                android:id="@+id/imageButton_firma_cliente_screen_validate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginTop="10dp"
@@ -243,6 +247,7 @@
                 />
 
         </LinearLayout>
+
 
     </LinearLayout>
 </ScrollView>

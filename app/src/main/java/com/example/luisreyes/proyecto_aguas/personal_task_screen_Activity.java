@@ -44,6 +44,7 @@ public class personal_task_screen_Activity extends Activity {
             public void onClick(View view) {
 
                 startActivity(intent_open_table_personal_fast_view);
+                finish();
             }
         });
 

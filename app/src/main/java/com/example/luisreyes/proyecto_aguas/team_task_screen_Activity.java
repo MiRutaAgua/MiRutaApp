@@ -39,6 +39,7 @@ public class team_task_screen_Activity extends Activity {
             public void onClick(View view) {
 
                 startActivity(intent_open_table_team);
+                finish();
             }
         });
 
@@ -47,6 +48,7 @@ public class team_task_screen_Activity extends Activity {
             public void onClick(View view) {
 
                 startActivity(intent_open_fast_view_team_tasks);
+                finish();
             }
         });
     }

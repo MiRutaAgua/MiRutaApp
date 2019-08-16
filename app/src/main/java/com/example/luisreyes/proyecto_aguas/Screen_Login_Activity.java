@@ -41,12 +41,13 @@ public class Screen_Login_Activity extends Activity {
             @Override
             public void onClick(View view) {
 
-                if(!(TextUtils.isEmpty(lineEdit_nombre_de_operario.getText())) && !(TextUtils.isEmpty(lineEdit_clave_de_acceso.getText())))
-//                    textView_nombre_de_pantalla.setText("Boton apretado");
+                if(!(TextUtils.isEmpty(lineEdit_nombre_de_operario.getText())) && !(TextUtils.isEmpty(lineEdit_clave_de_acceso.getText()))) {
                     startActivity(intent_open_next_screen);
-
-                else
+                    finish();
+                }
+                else {
                     Toast.makeText(Screen_Login_Activity.this, "Inserte nombre de Usuario y contraseña", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
