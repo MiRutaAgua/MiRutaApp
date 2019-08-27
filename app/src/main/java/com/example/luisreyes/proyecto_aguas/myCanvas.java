@@ -26,10 +26,13 @@ public class myCanvas extends  View {
         paint = new Paint();
         path = new Path();
         paint.setAntiAlias(true);
-        paint.setColor(Color.RED);
+        paint.setColor(Color.BLUE);
         paint.setStrokeJoin(Paint.Join.ROUND);
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(5f);
+
+        setDrawingCacheEnabled(true);
+        setBackgroundColor(Color.WHITE);
     }
 
     @Override
@@ -64,4 +67,5 @@ public class myCanvas extends  View {
 
         return true;
     }
+
 }

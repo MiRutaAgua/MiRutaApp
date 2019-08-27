@@ -1,7 +1,11 @@
 package com.example.luisreyes.proyecto_aguas;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.CountDownTimer;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -43,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
                 textView_pantalla_principal.setText("Finished");
                 startActivity(intent_open_screen_login);
+                finish();
             }
         }.start();
     }

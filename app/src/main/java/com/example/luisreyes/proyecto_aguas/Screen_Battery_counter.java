@@ -2,9 +2,11 @@ package com.example.luisreyes.proyecto_aguas;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 /**
  * Created by luis.reyes on 10/08/2019.
@@ -12,11 +14,11 @@ import android.widget.Button;
 
 public class Screen_Battery_counter extends Activity {
 
-    private Button button_reajustar_ubicacion;
+    private ImageView button_reajustar_ubicacion;
 
-    private Button button_incidence_screen_battery_counter;
+    private ImageView button_incidence_screen_battery_counter;
 
-    private Button button_ejecutar_tarea_screen_battery_counter;
+    private ImageView button_ejecutar_tarea_screen_battery_counter;
 
     private Intent intent_open_screen_battery_intake_asignation;
 
@@ -35,11 +37,11 @@ public class Screen_Battery_counter extends Activity {
 
         intent_open_screen_incidence = new Intent(this, Screen_Incidence.class);
 
-        button_reajustar_ubicacion = (Button)findViewById(R.id.button_reajustar_ubicacion_screen_battery_counter);
+        button_reajustar_ubicacion = (ImageView)findViewById(R.id.button_reajustar_ubicacion_screen_battery_counter);
 
-        button_ejecutar_tarea_screen_battery_counter = (Button)findViewById(R.id.button_ejecutar_tarea_screen_battery_counter);
+        button_ejecutar_tarea_screen_battery_counter = (ImageView)findViewById(R.id.button_ejecutar_tarea_screen_battery_counter);
 
-        button_incidence_screen_battery_counter = (Button)findViewById(R.id.button_incidencia_screen_battery_counter);
+        button_incidence_screen_battery_counter = (ImageView)findViewById(R.id.button_incidencia_screen_battery_counter);
 
         button_ejecutar_tarea_screen_battery_counter.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,7 +56,6 @@ public class Screen_Battery_counter extends Activity {
             public void onClick(View view) {
 
                 startActivity(intent_open_screen_battery_intake_asignation);
-                finish();
             }
         });
 
@@ -63,7 +64,6 @@ public class Screen_Battery_counter extends Activity {
             public void onClick(View view) {
 
                 startActivity(intent_open_screen_incidence);
-                finish();
             }
         });
     }

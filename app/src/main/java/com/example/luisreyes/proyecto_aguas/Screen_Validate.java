@@ -3,7 +3,9 @@ package com.example.luisreyes.proyecto_aguas;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -25,7 +27,7 @@ public class Screen_Validate extends Activity {
 
     Intent intent_open_screen_client_sign;
 
-    ImageButton imageButton_firma_cliente_screen_validate;
+    ImageView imageButton_firma_cliente_screen_validate;
 
     Bitmap foto_antes_intalacion_bitmap;
     Bitmap foto_lectura_bitmap;
@@ -40,13 +42,11 @@ public class Screen_Validate extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.screen_validate);
 
-        intent_open_screen_client_sign = new Intent(this, Screen_Draw_Canvas.class);
-
         foto_instalacion_screen_exec_task         = (ImageView)findViewById(R.id.imageView_foto_antes_instalacion_screen_validate);
         foto_final_instalacion_screen_exec_task   = (ImageView)findViewById(R.id.imageView_foto_final_instalacion_screen_validate);
         foto_numero_de_serie_screen_exec_task     = (ImageView)findViewById(R.id.imageView_foto_numero_serie_screen_validate);
 
-        imageButton_firma_cliente_screen_validate = (ImageButton)findViewById(R.id.imageButton_firma_cliente_screen_validate);
+        imageButton_firma_cliente_screen_validate = (ImageView)findViewById(R.id.imageButton_firma_cliente_screen_validate);
 
         foto_antes_intalacion_bitmap = (Bitmap)getIntent().getExtras().get("foto_antes_instalacion");
         foto_lectura_bitmap = (Bitmap)getIntent().getExtras().get("foto_lectura");
@@ -57,10 +57,35 @@ public class Screen_Validate extends Activity {
         foto_final_instalacion_screen_exec_task.setImageBitmap(foto_despues_intalacion_bitmap);
         foto_numero_de_serie_screen_exec_task.setImageBitmap(foto_numero_serie_bitmap);
 
+        foto_instalacion_screen_exec_task.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent_zoom_photo = new Intent(Screen_Validate.this, Screen_Zoom_Photo.class);
+                intent_zoom_photo.putExtra("zooming_photo", foto_antes_intalacion_bitmap);
+                startActivity(intent_zoom_photo);
+            }
+        });
+        foto_numero_de_serie_screen_exec_task.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent_zoom_photo = new Intent(Screen_Validate.this, Screen_Zoom_Photo.class);
+                intent_zoom_photo.putExtra("zooming_photo", foto_numero_serie_bitmap);
+                startActivity(intent_zoom_photo);
+            }
+        });
+        foto_final_instalacion_screen_exec_task.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent_zoom_photo = new Intent(Screen_Validate.this, Screen_Zoom_Photo.class);
+                intent_zoom_photo.putExtra("zooming_photo", foto_despues_intalacion_bitmap);
+                startActivity(intent_zoom_photo);
+            }
+        });
+
         imageButton_firma_cliente_screen_validate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                intent_open_screen_client_sign = new Intent(Screen_Validate.this, Screen_Draw_Canvas.class);
                 startActivityForResult(intent_open_screen_client_sign, CANVAS_REQUEST);
             }
         });
@@ -72,13 +97,18 @@ public class Screen_Validate extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if(requestCode == CANVAS_REQUEST){
-            bitmap_firma_cliente = (Bitmap)data.getExtras().get("firma_cliente");
-            int result = data.getIntExtra("result", 0);
-
-            String res = String.valueOf(result);
+            String firma = data.getStringExtra("firma_cliente");
+            //int result = data.getIntExtra("result", 0);
+            //String res = String.valueOf(result);
+            bitmap_firma_cliente = getImageFromString(firma);
             imageButton_firma_cliente_screen_validate.setImageBitmap(bitmap_firma_cliente);
-            Toast.makeText(Screen_Validate.this, "Resultado ok: " + res, Toast.LENGTH_LONG).show();
-
+            //Toast.makeText(Screen_Validate.this, "Resultado ok: " + res, Toast.LENGTH_LONG).show();
         }
+    }
+
+    public static Bitmap getImageFromString(String stringImage){
+        byte[] decodeString = Base64.decode(stringImage, Base64.DEFAULT);
+        Bitmap decodeImage = BitmapFactory.decodeByteArray(decodeString, 0, decodeString.length);
+        return decodeImage;
     }
 }

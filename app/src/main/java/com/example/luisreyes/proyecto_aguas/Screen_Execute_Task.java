@@ -19,14 +19,18 @@ public class Screen_Execute_Task extends Activity {
 
     private  TextView textView_serial_number_result;
 
-    private Button button_canvas_screen_exec_task;
+    private ImageView button_canvas_screen_exec_task;
 
-    private Button button_scan_serial_number_screen_exec_task;
+    private ImageView button_scan_serial_number_screen_exec_task;
 
-    private Button button_instalation_photo_screen_exec_task;
-    private Button button_read_photo_screen_exec_task;
-    private Button button_serial_number_photo_screen_exec_task;
-    private Button button_after_instalation_photo_screen_exec_task;
+    private ImageView button_scan_module_screen_exec_task;
+
+    private ImageView button_validate_screen_exec_task;
+
+    private ImageView button_instalation_photo_screen_exec_task;
+    private ImageView button_read_photo_screen_exec_task;
+    private ImageView button_serial_number_photo_screen_exec_task;
+    private ImageView button_after_instalation_photo_screen_exec_task;
 
     private static final int CAM_REQUEST_INST_PHOTO = 1313;
     private static final int CAM_REQUEST_READ_PHOTO = 1314;
@@ -38,7 +42,7 @@ public class Screen_Execute_Task extends Activity {
 
     private Intent intent_open_scan_screen_lector;
 
-    private Button button_validate_screen_exec_task;
+
 
     Bitmap bitmap_foto_antes_instalacion;
     Bitmap bitmap_foto_lectura;
@@ -59,14 +63,15 @@ public class Screen_Execute_Task extends Activity {
         textView_serial_number_result = (TextView)findViewById(R.id.textView_serial_number_screen_exec_task);
         textView_serial_number_result.setText(serial_number_result);
 
-        button_instalation_photo_screen_exec_task = (Button)findViewById(R.id.button_instalation_photo_screen_exec_task);
-        button_read_photo_screen_exec_task = (Button)findViewById(R.id.button_read_photo_screen_exec_task);
-        button_serial_number_photo_screen_exec_task = (Button)findViewById(R.id.button_serial_number_photo_screen_exec_task);
-        button_after_instalation_photo_screen_exec_task = (Button)findViewById(R.id.button_final_instalation_photo_screen_exec_task);
+        button_instalation_photo_screen_exec_task = (ImageView)findViewById(R.id.button_instalation_photo_screen_exec_task);
+        button_read_photo_screen_exec_task = (ImageView)findViewById(R.id.button_read_photo_screen_exec_task);
+        button_serial_number_photo_screen_exec_task = (ImageView)findViewById(R.id.button_serial_number_photo_screen_exec_task);
+        button_after_instalation_photo_screen_exec_task = (ImageView)findViewById(R.id.button_final_instalation_photo_screen_exec_task);
 
-        button_scan_serial_number_screen_exec_task= (Button)findViewById(R.id.button_scan_serial_number_screen_exec_task);
+        button_scan_serial_number_screen_exec_task= (ImageView)findViewById(R.id.button_scan_serial_number_screen_exec_task);
+        button_scan_module_screen_exec_task= (ImageView)findViewById(R.id.button_scan_module_screen_exec_task);
 
-        button_validate_screen_exec_task          = (Button)findViewById(R.id.button_validate_screen_exec_task);
+        button_validate_screen_exec_task          = (ImageView)findViewById(R.id.button_validate_screen_exec_task);
 
         button_validate_screen_exec_task.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,7 +90,7 @@ public class Screen_Execute_Task extends Activity {
             public void onClick(View view) {
                 intent_open_scan_screen_lector = new Intent(Screen_Execute_Task.this, lector.class);
                 startActivity(intent_open_scan_screen_lector);
-                finish();
+                textView_serial_number_result.setVisibility(View.VISIBLE);
             }
         });
 

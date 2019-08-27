@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 /**
  * Created by luis.reyes on 10/08/2019.
@@ -20,13 +21,13 @@ public class Screen_Unity_Counter extends Activity{
 
     private Intent intent_open_screen_absent;
 
-    private Button button_modo_battery;
+    private ImageView button_modo_battery;
 
-    private Button button_incidence_screen_unity_counter;
+    private ImageView button_incidence_screen_unity_counter;
 
-    private Button button_absent_screen_unity_counter;
+    private ImageView button_absent_screen_unity_counter;
 
-    private Button button_exec_task_screen_unity_counter;
+    private ImageView button_exec_task_screen_unity_counter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,13 +42,13 @@ public class Screen_Unity_Counter extends Activity{
 
         intent_open_screen_absent = new Intent(this, Screen_Absent.class);
 
-        button_modo_battery = (Button)findViewById(R.id.button_modo_bateria_screen_unity_counter);
+        button_modo_battery = (ImageView) findViewById(R.id.button_modo_bateria_screen_unity_counter);
 
-        button_incidence_screen_unity_counter = (Button)findViewById(R.id.button_incidencia_screen_unity_counter);
+        button_incidence_screen_unity_counter = (ImageView)findViewById(R.id.button_incidencia_screen_unity_counter);
 
-        button_absent_screen_unity_counter = (Button)findViewById(R.id.button_abandonado_ausente_screen_unity_counter);
+        button_absent_screen_unity_counter = (ImageView)findViewById(R.id.button_abandonado_ausente_screen_unity_counter);
 
-        button_exec_task_screen_unity_counter = (Button)findViewById(R.id.button_ejecutar_tarea_screen_unity_counter);
+        button_exec_task_screen_unity_counter = (ImageView)findViewById(R.id.button_ejecutar_tarea_screen_unity_counter);
 
         button_modo_battery.setOnClickListener(new View.OnClickListener() {
             @Override

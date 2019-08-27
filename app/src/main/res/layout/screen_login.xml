@@ -20,6 +20,7 @@
             android:text="Pantalla Login"
             android:layout_gravity="center_horizontal"
             android:id="@+id/textView_Nombre_de_Pantalla"
+            android:visibility="invisible"
             />
     </LinearLayout>
 
@@ -29,17 +30,15 @@
         android:orientation="horizontal"
         android:gravity="center"
         android:padding="1dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="40dp"
         >
 
         <ImageView
             android:id="@+id/imageView_logo_screen_login"
+            android:layout_width="204dp"
+            android:layout_height="180dp"
             android:layout_gravity="center"
-            android:layout_span="2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_launcher_foreground"
-            />
+            android:src="@drawable/screen_login_bienvenido_icon" />
     </LinearLayout>
 
     <LinearLayout
@@ -49,17 +48,20 @@
         android:gravity="center"
         android:padding="10dp"
         android:layout_marginTop="40dip"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
         >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Nombre de Operario"
-            android:textSize="16sp"
-            />
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="48dp"
+            android:src="@drawable/screen_login_nombre_operario_icon"
+            android:text="Nombre de Operario" />
         <EditText
+            android:hint="Nombre de Operario"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dip"
+            android:layout_marginLeft="10dip"
             android:layout_weight="1"
             android:id="@+id/editText_Nombre_Operario_screen_login"
             />
@@ -72,20 +74,23 @@
         android:orientation="horizontal"
         android:gravity="center"
         android:padding="10dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
         >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="46dp"
+            android:src="@drawable/screen_login_clave_acceso_icon"
             android:text="Clave de Acceso"
-            android:padding="14dp"
-            android:textSize="16sp"
 
             />
 
         <EditText
+            android:hint="Clave de Acceso"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dip"
+            android:layout_marginLeft="10dip"
             android:layout_weight="1"
             android:id="@+id/editText_Clave_Acceso_screen_login"
             />
@@ -95,18 +100,30 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_marginTop="20dp"
         android:gravity="center"
-        android:layout_marginTop="20dip"
-        >
+        android:orientation="horizontal">
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Login"
+        <ImageView
             android:id="@+id/button_login_screen_login"
-            android:textSize="18sp"
-            />
+            android:layout_width="240dp"
+            android:layout_height="60dp"
+            android:src="@drawable/screen_login_entrar" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/button_register_screen_login"
+            android:layout_width="240dp"
+            android:layout_height="60dp"
+            android:src="@drawable/screen_login_registrar"
+            android:visibility="invisible"/>
     </LinearLayout>
 
 
