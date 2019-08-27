@@ -4,10 +4,10 @@
       <root url="jar://D:/programas/ANDROIDSTUDIO/Sdk/Sdk/extras/android/m2repository/com/android/support/support-annotations/26.0.0-alpha1/support-annotations-26.0.0-alpha1.jar!/" />
     </CLASSES>
     <JAVADOC>
-      <root url="jar://G:/QT_Trabajo/ANDROIDSTUDIO/Sdk/Sdk/extras/android/m2repository/com/android/support/support-annotations/26.0.0-alpha1/support-annotations-26.0.0-alpha1-javadoc.jar!/" />
+      <root url="jar://D:/programas/ANDROIDSTUDIO/Sdk/Sdk/extras/android/m2repository/com/android/support/support-annotations/26.0.0-alpha1/support-annotations-26.0.0-alpha1-javadoc.jar!/" />
     </JAVADOC>
     <SOURCES>
-      <root url="jar://G:/QT_Trabajo/ANDROIDSTUDIO/Sdk/Sdk/extras/android/m2repository/com/android/support/support-annotations/26.0.0-alpha1/support-annotations-26.0.0-alpha1-sources.jar!/" />
+      <root url="jar://D:/programas/ANDROIDSTUDIO/Sdk/Sdk/extras/android/m2repository/com/android/support/support-annotations/26.0.0-alpha1/support-annotations-26.0.0-alpha1-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

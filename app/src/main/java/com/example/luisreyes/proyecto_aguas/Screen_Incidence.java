@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ public class Screen_Incidence extends Activity {
 
     private Intent intent_open_incidence_summary;
 
-    private Button button_firma_del_cliente_screen_incidence;
+    private ImageView button_firma_del_cliente_screen_incidence;
 
     private ArrayList<String> lista_desplegable;
 
@@ -32,7 +33,7 @@ public class Screen_Incidence extends Activity {
 
         intent_open_incidence_summary = new Intent(this, Screen_Incidence_Summary.class);
 
-        button_firma_del_cliente_screen_incidence = (Button)findViewById(R.id.button_firma_del_cliente_screen_incidence);
+        button_firma_del_cliente_screen_incidence = (ImageView)findViewById(R.id.button_firma_del_cliente_screen_incidence);
 
         spinner_lista_de_mal_ubicacion = (Spinner)findViewById(R.id.spinner_instalacion_incorrecta);
 

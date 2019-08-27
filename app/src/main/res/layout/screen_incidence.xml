@@ -16,34 +16,18 @@
         android:orientation="horizontal"
         android:gravity="center"
         android:padding="10dp"
+        android:layout_marginTop="20dp"
         >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Pantalla Incidencias"
-            android:layout_gravity="center_horizontal"
-            android:id="@+id/textView_screen_team_task"
-            />
-    </LinearLayout>
-
-    <LinearLayout
-
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
-        >
-
         <ImageView
-            android:id="@+id/imageView_logo_screen_incidence"
-            android:layout_width="70dp"
-            android:layout_height="45dp"
+            android:id="@+id/label_incidencias_screen_incidence"
+            android:layout_width="140dp"
+            android:layout_height="30dp"
             android:layout_gravity="center"
-            android:src="@drawable/ic_launcher_foreground" />
+            android:src="@drawable/screen_incidence_incidencias" />
     </LinearLayout>
 
     <LinearLayout
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -54,8 +38,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Instalación Incorrecta"
+        android:textStyle="bold"
         android:layout_gravity="center"
         android:textSize="16dp"
+
         />
 
     </LinearLayout>
@@ -71,6 +57,8 @@
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:id="@+id/spinner_instalacion_incorrecta"
+            android:layout_marginLeft="60dp"
+            android:layout_marginRight="60dp"
             >
         </Spinner>
 
@@ -78,19 +66,105 @@
 
 
     <LinearLayout
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="30dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
         >
-        <Button
+        <ImageView
+            android:id="@+id/button_contador_mal_ubicado_screen_incidence"
+            android:layout_width="266dp"
+            android:layout_height="50dp"
+            android:src="@drawable/screen_incidence_contador_mal_ubicado" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        >
+        <ImageView
+            android:id="@+id/button_modificar_screen_incidence"
+            android:layout_width="266dp"
+            android:layout_height="50dp"
+            android:src="@drawable/screen_incidence_modificar" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="20dp"
+        >
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Contador mal ubicado"
-            android:layout_gravity="center"
-            />
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_marginRight="70dp"
+            >
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Foto 1" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Foto 2" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Foto 3" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Teléfonos:"
+                android:textStyle="bold"
+                android:textSize="18dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="636489090"
+                android:textSize="16dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="636489090"
+                android:textSize="16dp" />
+
+
+
+        </LinearLayout>
+
+
     </LinearLayout>
+
+
 
     <LinearLayout
         android:layout_marginTop="20dp"
@@ -109,32 +183,17 @@
             >
 
             <LinearLayout
+                android:layout_marginTop="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
+                android:orientation="horizontal"
                 android:gravity="center"
                 >
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center"
-                    >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="20dp"
-                    android:text="Teléfonos:"
-                    android:textSize="18dp" />
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="40dp"
-                    android:text="Modificar" />
+                <ImageView
+                    android:id="@+id/button_geolocalizar_screen_incidence"
+                    android:layout_width="266dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/screen_incidence_geolocalizar" />
             </LinearLayout>
 
             <LinearLayout
@@ -143,102 +202,12 @@
                 android:orientation="horizontal"
                 android:gravity="center"
                 >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="636489090"
-                    android:textSize="16dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="636489090"
-                    android:textSize="16dp" />
+                <ImageView
+                    android:id="@+id/button_firma_del_cliente_screen_incidence"
+                    android:layout_width="266dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/screen_incidence_firma_del_cliente" />
             </LinearLayout>
-
-        </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:layout_marginTop="10dp"
-        >
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Foto 1" />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
-
-        >
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Foto 2" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
-
-        >
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Foto 3" />
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="20dp"
-        >
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Geolocalizar"
-            android:id="@+id/button_geolocalizar_screen_incidence"
-            />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-
-        >
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Firma cliente"
-            android:id="@+id/button_firma_del_cliente_screen_incidence"
-            />
-    </LinearLayout>
 
         </LinearLayout>
 

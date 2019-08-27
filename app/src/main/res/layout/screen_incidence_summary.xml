@@ -21,6 +21,7 @@
 
             <TextView
                 android:text="Camino Angel de la Guarda, 13 1dch"
+                android:textStyle="bold"
                 android:textSize="18dp"
                 android:layout_gravity="center"
                 android:layout_width="wrap_content"
@@ -42,22 +43,13 @@
                 android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="100dp"
                 />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="10dp"
-            android:gravity="center"
-            >
             <ImageView
 
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:src="@drawable/ic_launcher_background"
+                android:layout_height="80dp"
+                android:layout_width="80dp"
+                android:src="@drawable/screen_incidence_sumary_foto"
                 />
         </LinearLayout>
 
@@ -65,7 +57,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="20dp"
             android:gravity="center"
             >
 
@@ -75,23 +67,13 @@
                 android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="100dp"
                 />
-
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="10dp"
-            android:gravity="center"
-            >
             <ImageView
 
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:src="@drawable/ic_launcher_background"
+                android:layout_height="80dp"
+                android:layout_width="80dp"
+                android:src="@drawable/screen_incidence_sumary_foto"
                 />
         </LinearLayout>
 
@@ -99,7 +81,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="20dp"
             android:gravity="center"
             >
 
@@ -109,50 +91,41 @@
                 android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="100dp"
                 />
+            <ImageView
 
+                android:layout_height="80dp"
+                android:layout_width="80dp"
+                android:src="@drawable/screen_incidence_sumary_foto"
+                />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="10dp"
-            android:gravity="center"
-        >
-        <ImageView
-
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:src="@drawable/ic_launcher_background"
-            />
-    </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="30dp"
             android:gravity="center"
             android:layout_gravity="center"
-            android:layout_marginRight="50dp"
-            android:layout_marginLeft="50dp"
+
             >
 
             <TextView
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:text="Lectura"
+                android:textStyle="bold"
                 android:gravity="center"
+                android:layout_marginRight="100dp"
                 android:textSize="18dp" />
             <EditText
 
                 android:id="@+id/editText_lectura_de_contador_screen_incidence_summary"
+                android:minWidth="80dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                  />
         </LinearLayout>
 
@@ -165,6 +138,7 @@
             >
             <TextView
                 android:text="Observaciones"
+                android:textStyle="bold"
                 android:textSize="18dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -192,11 +166,10 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
+            android:orientation="vertical"
             android:layout_marginTop="40dp"
             android:gravity="center"
+            android:layout_gravity="center"
             android:layout_weight="1"
             >
 
@@ -204,48 +177,37 @@
                 android:layout_width="wrap_content"
                 android:layout_height="36dp"
                 android:layout_gravity="center"
-                android:layout_weight="1"
-                android:text="Firma                        "
-                android:textSize="15dp" />
-            <ImageButton
-                android:layout_weight="1"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_launcher_background"
+                android:gravity="center"
+                android:text="Firma"
+                android:textStyle="bold"
+                android:textSize="18dp" />
+
+            <ImageView
                 android:id="@+id/imageButton_firma_cliente_screen_validate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_width="125dp"
+                android:layout_height="120dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/screen_incidence_sumary_espacio_para_firma" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="10dp"
             android:gravity="center"
-            android:padding="1dp"
-            android:layout_weight="1"
-            >
-            <Button
-                android:text="Compartir"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                />
-        </LinearLayout>
-
-        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="10dp"
-            android:gravity="center"
-            android:padding="1dp"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical"
             >
-            <Button
-                android:text="Cerrar Tarea"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
 
+            <ImageView
+                android:id="@+id/button_button_compartir_screen_incidence_sumary"
+                android:layout_width="266dp"
+                android:layout_height="50dp"
+                android:src="@drawable/screen_incidence_sumary_compartir" />
+            <ImageView
+                android:id="@+id/button_cerrar_tarea_screen_incidence_sumary"
+                android:layout_width="266dp"
+                android:layout_height="50dp"
+                android:src="@drawable/screen_incidence_sumary_cerrar_tarea" />
         </LinearLayout>
 
 

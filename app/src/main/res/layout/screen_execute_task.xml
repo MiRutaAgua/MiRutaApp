@@ -181,6 +181,7 @@
                 android:textSize="16dp"
                 android:layout_gravity="center"
                 android:id="@+id/textView_phones_screen_exec_task"
+                android:textStyle="bold"
                 />
 
             <TextView
@@ -190,7 +191,9 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="20dp"
                 android:textSize="15dp"
-                android:text="944666666       666666666" />
+                android:text="944666666       666666666"
+
+                />
         </LinearLayout>
 
         <LinearLayout

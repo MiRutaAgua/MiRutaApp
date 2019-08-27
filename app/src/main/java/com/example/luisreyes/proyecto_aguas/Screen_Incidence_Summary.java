@@ -3,9 +3,12 @@ package com.example.luisreyes.proyecto_aguas;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 /**
@@ -14,7 +17,7 @@ import android.widget.Toast;
 
 public class Screen_Incidence_Summary extends Activity {
 
-    private ImageButton firma_cliente;
+    private ImageView firma_cliente;
     private Intent intent_open_screen_client_sign;
     private static final int CANVAS_REQUEST = 3331;
     private Bitmap bitmap_firma_cliente;
@@ -25,7 +28,7 @@ public class Screen_Incidence_Summary extends Activity {
         setContentView(R.layout.screen_incidence_summary);
 
         intent_open_screen_client_sign = new Intent(this, Screen_Draw_Canvas.class);
-        firma_cliente = (ImageButton)findViewById(R.id.imageButton_firma_cliente_screen_validate);
+        firma_cliente = (ImageView)findViewById(R.id.imageButton_firma_cliente_screen_validate);
 
         firma_cliente.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -41,13 +44,18 @@ public class Screen_Incidence_Summary extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if(requestCode == CANVAS_REQUEST){
-            bitmap_firma_cliente = (Bitmap)data.getExtras().get("firma_cliente");
-            int result = data.getIntExtra("result", 0);
-
-            String res = String.valueOf(result);
+            String firma = data.getStringExtra("firma_cliente");
+            //int result = data.getIntExtra("result", 0);
+            //String res = String.valueOf(result);
+            bitmap_firma_cliente = getImageFromString(firma);
             firma_cliente.setImageBitmap(bitmap_firma_cliente);
-            Toast.makeText(Screen_Incidence_Summary.this, "Resultado ok: " + res, Toast.LENGTH_LONG).show();
-
+            //Toast.makeText(Screen_Validate.this, "Resultado ok: " + res, Toast.LENGTH_LONG).show();
         }
+    }
+
+    public static Bitmap getImageFromString(String stringImage){
+        byte[] decodeString = Base64.decode(stringImage, Base64.DEFAULT);
+        Bitmap decodeImage = BitmapFactory.decodeByteArray(decodeString, 0, decodeString.length);
+        return decodeImage;
     }
 }
