@@ -21,8 +21,8 @@
             >
 
             <TextView
-
                 android:text="Camino Angel de la Guarda, 13 1dch"
+                android:textStyle="bold"
                 android:textSize="18dp"
                 android:layout_gravity="center"
                 android:layout_width="wrap_content"
@@ -37,100 +37,113 @@
             android:layout_marginTop="40dp"
             android:gravity="center"
             >
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                >
+                <TextView
+                    android:text="Foto Antes"
+                    android:textSize="18dp"
+                    android:textStyle="bold"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+                <ImageView
 
-            <TextView
-                android:text="Foto Antes       "
-                android:textSize="18dp"
-                android:layout_gravity="center"
+                    android:layout_height="80dp"
+                    android:layout_width="80dp"
+                    android:src="@drawable/screen_validate_imagen"
+                    android:id="@+id/imageView_foto_antes_instalacion_screen_validate"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                />
-            <TextView
-                android:text="Foto Final       "
-                android:textSize="18dp"
-                android:layout_gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_marginLeft="70dp"
+                >
+
+                <TextView
+                    android:text="Foto Final"
+                    android:textSize="18dp"
+                    android:textStyle="bold"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+
+                <ImageView
+
+                    android:layout_height="80dp"
+                    android:layout_width="80dp"
+                    android:src="@drawable/screen_validate_imagen"
+                    android:id="@+id/imageView_foto_final_instalacion_screen_validate"
+                    />
+            </LinearLayout>
+
+
+
         </LinearLayout>
+
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="70dp"
             android:gravity="center"
-
-            >
-
-            <ImageView
-                android:layout_weight="1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_launcher_background" 
-				android:id="@+id/imageView_foto_antes_instalacion_screen_validate"
-				/>
-
-            <ImageView
-                android:layout_weight="1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_launcher_background"
-				android:id="@+id/imageView_foto_final_instalacion_screen_validate"
-                />
-        </LinearLayout>
-
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="30dp"
             android:layout_gravity="center"
             >
 
-            <TextView
-                android:text="Numero de serie"
-                android:textSize="18dp"
-                android:layout_gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="80dp"
-                />
-            <TextView
-                android:text="F27337"
-                android:textSize="18dp"
-                android:layout_gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="10dp"
-            android:gravity="center"
-            >
-
             <ImageView
 
+                android:layout_height="80dp"
+                android:layout_width="80dp"
+                android:src="@drawable/screen_validate_imagen"
                 android:id="@+id/imageView_foto_numero_serie_screen_validate"
+                />
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_launcher_background"
-                />
+                android:orientation="vertical"
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
+                >
+
+                <TextView
+                    android:text="Número de serie"
+                    android:textSize="18dp"
+                    android:textStyle="bold"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    />
+                <TextView
+                    android:text="F27337"
+                    android:textSize="18dp"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    />
+
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="70dp"
             android:gravity="center"
             android:layout_gravity="center"
 
@@ -142,6 +155,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="Lectura última"
+                android:textStyle="bold"
                 android:textSize="18dp"
                 />
             <EditText
@@ -157,7 +171,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="10dp"
+
             android:gravity="center"
             android:layout_gravity="center"
             >
@@ -167,6 +181,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Lectura Actual"
+                android:textStyle="bold"
                 android:gravity="center"
                 android:textSize="18dp" />
             <EditText
@@ -189,6 +204,7 @@
             >
             <TextView
                 android:text="Número de serie nuevo"
+                android:textStyle="bold"
                 android:textSize="18sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -201,7 +217,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="10dp"
+
             android:gravity="center"
             >
             <TextView
@@ -222,13 +238,22 @@
             android:gravity="center"
             >
             <TextView
-                android:text="CALIBRE 15mm"
+                android:text="CALIBRE:"
                 android:textSize="15dp"
+                android:textStyle="bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 />
-
+            <TextView
+                android:layout_marginLeft="10dp"
+                android:text="15mm"
+                android:textSize="15dp"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                />
         </LinearLayout>
 
         <LinearLayout
@@ -263,39 +288,27 @@
                 android:id="@+id/imageButton_firma_cliente_screen_validate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/screen_unity_counter_imagen" />
+                android:src="@drawable/screen_validate_espacio_para_firma" />
         </LinearLayout>
 
         <LinearLayout
+            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="40dp"
-            android:gravity="center_horizontal"
-            android:padding="1dp"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical"
             >
-            <Button
-                android:text="Compartir"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                />
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="10dp"
-            android:gravity="center_horizontal"
-            android:paddingBottom="30dp"
-            >
-            <Button
-                android:text="Cerrar Terea"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                />
-
+            <ImageView
+                android:id="@+id/button_compartir_screen_validate"
+                android:layout_width="266dp"
+                android:layout_height="50dp"
+                android:src="@drawable/screen_validate_compartir" />
+            <ImageView
+                android:id="@+id/button_cerrar_tarea_screen_validate"
+                android:layout_width="266dp"
+                android:layout_height="50dp"
+                android:src="@drawable/screen_validate_cerrar_tarea" />
         </LinearLayout>
 
     </LinearLayout>

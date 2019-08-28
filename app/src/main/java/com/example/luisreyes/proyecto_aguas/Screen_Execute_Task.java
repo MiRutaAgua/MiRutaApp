@@ -3,6 +3,7 @@ package com.example.luisreyes.proyecto_aguas;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
@@ -44,10 +45,10 @@ public class Screen_Execute_Task extends Activity {
 
 
 
-    Bitmap bitmap_foto_antes_instalacion;
-    Bitmap bitmap_foto_lectura;
-    Bitmap bitmap_foto_numero_serie;
-    Bitmap bitmap_foto_despues_instalacion;
+    Bitmap bitmap_foto_antes_instalacion = null;
+    Bitmap bitmap_foto_lectura = null;
+    Bitmap bitmap_foto_numero_serie = null;
+    Bitmap bitmap_foto_despues_instalacion = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,9 +74,15 @@ public class Screen_Execute_Task extends Activity {
 
         button_validate_screen_exec_task          = (ImageView)findViewById(R.id.button_validate_screen_exec_task);
 
+//        ImageView mainImage = new ImageView(this);
+//        mainImage.setImageResource(R.drawable.screen_exec_task_imagen);
+//        BitmapDrawable bitmap = (BitmapDrawable) mainImage.getDrawable();
+//        bitmap_foto_antes_instalacion = bitmap.getBitmap();
+
         button_validate_screen_exec_task.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 intent_open_screen_validate.putExtra("foto_antes_instalacion", bitmap_foto_antes_instalacion);
                 intent_open_screen_validate.putExtra("foto_lectura", bitmap_foto_lectura);
                 intent_open_screen_validate.putExtra("foto_numero_serie_instalacion", bitmap_foto_numero_serie);

@@ -48,14 +48,21 @@ public class Screen_Validate extends Activity {
 
         imageButton_firma_cliente_screen_validate = (ImageView)findViewById(R.id.imageButton_firma_cliente_screen_validate);
 
+
         foto_antes_intalacion_bitmap = (Bitmap)getIntent().getExtras().get("foto_antes_instalacion");
         foto_lectura_bitmap = (Bitmap)getIntent().getExtras().get("foto_lectura");
         foto_numero_serie_bitmap = (Bitmap)getIntent().getExtras().get("foto_numero_serie_instalacion");
         foto_despues_intalacion_bitmap = (Bitmap)getIntent().getExtras().get("foto_despues_instalacion");
 
-        foto_instalacion_screen_exec_task.setImageBitmap(foto_antes_intalacion_bitmap);
-        foto_final_instalacion_screen_exec_task.setImageBitmap(foto_despues_intalacion_bitmap);
-        foto_numero_de_serie_screen_exec_task.setImageBitmap(foto_numero_serie_bitmap);
+        if(foto_antes_intalacion_bitmap != null) {
+            foto_instalacion_screen_exec_task.setImageBitmap(foto_antes_intalacion_bitmap);
+        }
+        if(foto_despues_intalacion_bitmap != null) {
+            foto_final_instalacion_screen_exec_task.setImageBitmap(foto_despues_intalacion_bitmap);
+        }
+        if(foto_numero_serie_bitmap != null) {
+            foto_numero_de_serie_screen_exec_task.setImageBitmap(foto_numero_serie_bitmap);
+        }
 
         foto_instalacion_screen_exec_task.setOnClickListener(new View.OnClickListener() {
             @Override

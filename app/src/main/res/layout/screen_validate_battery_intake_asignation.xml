@@ -24,6 +24,7 @@ android:layout_height="match_parent">
 
             android:text="Camino Angel de la Guarda, 13 1dch"
             android:textSize="18dp"
+            android:textStyle="bold"
             android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -42,6 +43,7 @@ android:layout_height="match_parent">
         <TextView
             android:text="Foto Instalación"
             android:textSize="18dp"
+            android:textStyle="bold"
             android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -59,9 +61,11 @@ android:layout_height="match_parent">
         >
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_launcher_background" />
+
+            android:layout_height="80dp"
+            android:layout_width="80dp"
+            android:src="@drawable/screen_validate_battery_intake_asignation_imagen"
+            />
 
     </LinearLayout>
 
@@ -78,6 +82,7 @@ android:layout_height="match_parent">
         <TextView
             android:text="Foto Lectura"
             android:textSize="18dp"
+            android:textStyle="bold"
             android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -90,17 +95,17 @@ android:layout_height="match_parent">
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginTop="10dp"
-        android:gravity="left"
+        android:gravity="center"
         >
 
         <ImageView
 
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left"
+            android:layout_height="80dp"
+            android:layout_width="80dp"
+            android:src="@drawable/screen_validate_battery_intake_asignation_imagen"
+            android:layout_gravity="center"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
-            android:src="@drawable/ic_launcher_background"
             />
         <LinearLayout
             android:layout_width="wrap_content"
@@ -196,6 +201,7 @@ android:layout_height="match_parent">
             android:gravity="center"
             android:text="Foto Número de Serie"
             android:textSize="18dp"
+            android:textStyle="bold"
             />
 
     </LinearLayout>
@@ -204,16 +210,16 @@ android:layout_height="match_parent">
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="10dp"
-        android:layout_gravity="left"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
         >
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:src="@drawable/ic_launcher_background"
-            android:layout_marginLeft="30dp"
+            android:layout_height="80dp"
+            android:layout_width="80dp"
+            android:src="@drawable/screen_validate_battery_intake_asignation_imagen"
+            android:layout_gravity="center"
+
             />
 
         <TextView
@@ -231,15 +237,15 @@ android:layout_height="match_parent">
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="20dp"
-        android:gravity="left"
+        android:layout_marginTop="50dp"
+        android:gravity="center"
         >
         <TextView
             android:text="Ubicación F1-T1"
             android:textSize="18sp"
+            android:textStyle="bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="42dp"
             android:layout_gravity="left"
             />
 
@@ -255,6 +261,7 @@ android:layout_height="match_parent">
         <TextView
             android:text="Llaves nuevas, se entra con maestras"
             android:textSize="18sp"
+            android:textStyle="bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -266,14 +273,15 @@ android:layout_height="match_parent">
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="30dp"
         android:gravity="center"
+        android:paddingBottom="20dp"
         >
-        <Button
-            android:text="Guardar Datos Previos al Cambio"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            />
+        <ImageView
+            android:id="@+id/button_screen_validate_battery_intake_asignation"
+            android:layout_width="266dp"
+            android:layout_height="50dp"
+            android:src="@drawable/screen_validate_battery_intake_asgnation_boton" />
 
     </LinearLayout>
 

@@ -51,14 +51,15 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
+        android:layout_marginTop="20dp"
         >
 
         <Spinner
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:id="@+id/spinner_instalacion_incorrecta"
-            android:layout_marginLeft="60dp"
-            android:layout_marginRight="60dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
             >
         </Spinner>
 
@@ -66,7 +67,7 @@
 
 
     <LinearLayout
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="40dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -97,7 +98,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="30dp"
         >
 
         <LinearLayout
@@ -105,26 +106,26 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center"
-            android:layout_marginRight="70dp"
+            android:layout_marginRight="50dp"
             >
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <ImageView
+                android:layout_width="130dp"
+                android:layout_height="54dp"
                 android:layout_gravity="center"
-                android:text="Foto 1" />
+                android:src="@drawable/screen_incidence_foto1" />
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <ImageView
+                android:layout_width="130dp"
+                android:layout_height="54dp"
                 android:layout_gravity="center"
-                android:text="Foto 2" />
+                android:src="@drawable/screen_incidence_foto2" />
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <ImageView
+                android:layout_width="130dp"
+                android:layout_height="54dp"
                 android:layout_gravity="center"
-                android:text="Foto 3" />
+                android:src="@drawable/screen_incidence_foto3" />
 
         </LinearLayout>
 
