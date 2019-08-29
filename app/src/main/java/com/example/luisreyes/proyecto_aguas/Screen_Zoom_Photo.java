@@ -24,7 +24,7 @@ public class Screen_Zoom_Photo extends Activity{
     ScaleGestureDetector SGD;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.screen_zoom_photo);
 

@@ -291,6 +291,12 @@ android:layout_marginLeft="39dp"
                 android:layout_width="278dp"
                 android:layout_height="150dp"
                 android:src="@drawable/screen_validate_firma_imagen" />
+
+            <ImageView
+                android:id="@+id/imageButton_editar_firma_cliente_screen_validate"
+                android:layout_width="278dp"
+                android:layout_height="150dp"
+                android:src="@drawable/screen_validate_firma_imagen" />
         </LinearLayout>
 
         <LinearLayout

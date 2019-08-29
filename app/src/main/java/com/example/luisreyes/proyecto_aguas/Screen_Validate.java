@@ -25,16 +25,16 @@ public class Screen_Validate extends Activity {
 
     ImageView foto_numero_de_serie_screen_exec_task;
 
-    Intent intent_open_screen_client_sign;
-
     ImageView imageButton_firma_cliente_screen_validate;
+
+    ImageView imageButton_editar_firma_cliente_screen_validate;
 
     Bitmap foto_antes_intalacion_bitmap;
     Bitmap foto_lectura_bitmap;
     Bitmap foto_numero_serie_bitmap;
     Bitmap foto_despues_intalacion_bitmap;
 
-    Bitmap bitmap_firma_cliente;
+    Bitmap bitmap_firma_cliente = null;
 
 
     @Override
@@ -47,6 +47,7 @@ public class Screen_Validate extends Activity {
         foto_numero_de_serie_screen_exec_task     = (ImageView)findViewById(R.id.imageView_foto_numero_serie_screen_validate);
 
         imageButton_firma_cliente_screen_validate = (ImageView)findViewById(R.id.imageButton_firma_cliente_screen_validate);
+        imageButton_editar_firma_cliente_screen_validate = (ImageView)findViewById(R.id.imageButton_editar_firma_cliente_screen_validate);
 
 
         foto_antes_intalacion_bitmap = (Bitmap)getIntent().getExtras().get("foto_antes_instalacion");
@@ -89,11 +90,22 @@ public class Screen_Validate extends Activity {
             }
         });
 
+        imageButton_editar_firma_cliente_screen_validate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent_open_screen_client_sign = new Intent(Screen_Validate.this, Screen_Draw_Canvas.class);
+                startActivityForResult(intent_open_screen_client_sign, CANVAS_REQUEST);
+            }
+        });
+
         imageButton_firma_cliente_screen_validate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                intent_open_screen_client_sign = new Intent(Screen_Validate.this, Screen_Draw_Canvas.class);
-                startActivityForResult(intent_open_screen_client_sign, CANVAS_REQUEST);
+                Intent intent_zoom_photo = new Intent(Screen_Validate.this, Screen_Zoom_Photo.class);
+                if(bitmap_firma_cliente != null) {
+                    intent_zoom_photo.putExtra("zooming_photo", bitmap_firma_cliente);
+                    startActivity(intent_zoom_photo);
+                }
             }
         });
 
