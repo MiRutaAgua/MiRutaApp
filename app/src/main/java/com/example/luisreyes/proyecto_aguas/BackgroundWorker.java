@@ -1,0 +1,283 @@
+package com.example.luisreyes.proyecto_aguas;
+
+import android.app.AlertDialog;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
+import android.util.Base64;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+/**
+ * Created by Alejandro on 19/08/2019.
+ */
+
+public class BackgroundWorker extends AsyncTask<String, Void, String> {
+
+    Context context;
+
+    AlertDialog alertDialog;
+
+    JSONObject operario = new JSONObject();
+
+    boolean return_image = false;
+    BackgroundWorker(Context ctx){
+
+        context = ctx;
+    }
+    @Override
+    protected String doInBackground(String... params) {
+        String type = params[0];
+
+        String login_url;
+        String register_url;
+        String change_foto_url;
+        String get_operarios_url;
+        String get_user_data_url;
+
+        if(Screen_Login_Activity.isOnline){
+
+             login_url = "https://server26194.webcindario.com/login_operarios.php";
+             register_url = "https://server26194.webcindario.com/register_operario.php";
+             change_foto_url = "https://server26194.webcindario.com/change_foto.php";
+             get_operarios_url = "https://server26194.webcindario.com/get_operarios.php";
+             get_user_data_url = "https://server26194.webcindario.com/get_one_operario.php";
+        }
+        else {
+             login_url = "http://192.168.137.50/login_operarios.php";
+             register_url = "http://192.168.137.50/register_operario.php";
+             change_foto_url = "http://192.168.137.50/change_foto.php";
+             get_operarios_url = "http://192.168.137.50/get_operarios.php";
+             get_user_data_url = "http://192.168.137.50/get_one_operario.php";
+        }
+
+        try {
+            operario.put("nombre", "Ale");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        if(type.equals("login")) try {
+
+            return_image = false;
+            ArrayList<String> keys = new ArrayList<String>();
+            keys.add("user_name");
+            keys.add("password");
+            ArrayList<String> values = new ArrayList<String>();
+            for (int i = 0; i < keys.size(); i++) {
+                values.add(params[i+1]);
+            }
+            ArrayList<String> result = post_Output_Info(keys, values, login_url, true, true);
+            return result.get(1);
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        else if (type.equals("get_user_data")){
+
+            try{
+                return_image = false;
+                ArrayList<String> keys = new ArrayList<String>();
+                keys.add("user_name");
+                ArrayList<String> values = new ArrayList<String>();
+                for (int i = 0; i < keys.size(); i++) {
+                    values.add(params[i+1]);
+                }
+                ArrayList<String> result = post_Output_Info(keys, values, get_user_data_url, true, true);
+                String return_string = "";
+                for(int n =0 ; n < result.size() ; n++) {
+                    try {
+                        JSONArray jsonArray = new JSONArray(result.get(n));
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            operario = jsonArray.getJSONObject(i);
+                            return_string += operario.getString("nombre")+" "+operario.getString("apellidos");
+                            return_string += "\n";
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                return return_string;
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (ProtocolException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }else if (type.equals("get_operarios")){
+
+            try{
+                return_image = false;
+                ArrayList<String> keys = new ArrayList<String>();
+                ArrayList<String> values = new ArrayList<String>();
+
+                ArrayList<String> result = post_Output_Info(keys, values, get_operarios_url, false, true);
+
+                String return_string = "";
+                for(int n =0 ; n < result.size() ; n++) {
+                    try {
+                        JSONArray jsonArray = new JSONArray(result.get(n));
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                            return_string += jsonObject.getString("nombre")+" "+jsonObject.getString("apellidos");
+                            return_string += "\n";
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                return return_string;
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (ProtocolException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }else if(type.equals("change_foto")){
+
+            try {
+                return_image = true;
+                ArrayList<String> keys = new ArrayList<String>();
+                keys.add("user_name");
+                keys.add("password");
+                keys.add("image");
+                ArrayList<String> values = new ArrayList<String>();
+                for (int i = 0; i < keys.size(); i++) {
+                    values.add(params[i+1]);
+                }
+                ArrayList<String> result = post_Output_Info(keys, values, change_foto_url, true, true);
+                return result.toString();
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (ProtocolException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }else  if(type.equals("register")){
+
+            try {
+                return_image = false;
+                ArrayList<String> keys = new ArrayList<String>();
+                keys.add("name");
+                keys.add("surname");
+                keys.add("age");
+                keys.add("phone");
+                keys.add("user_name");
+                keys.add("password");
+                keys.add("image");
+                ArrayList<String> values = new ArrayList<String>();
+                for (int i = 0; i < keys.size(); i++) {
+                    values.add(params[i+1]);
+                }
+                ArrayList<String> result = post_Output_Info(keys, values, register_url, true, true);
+                return result.get(1);
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (ProtocolException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    public ArrayList<String> post_Output_Info(ArrayList<String> keys, ArrayList<String> values, String url_string, boolean post, boolean read)
+            throws IOException {
+
+        URL url = new URL(url_string);
+        HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
+        ArrayList<String> result = new ArrayList<String>();
+
+        if(post) {
+            boolean first_iteration = true;
+            String post_String="";
+
+            for(int i=0; i< keys.size(); i++){
+                if(!first_iteration){
+                    post_String+="&";
+                }
+                first_iteration=false;
+                post_String = post_String + URLEncoder.encode(keys.get(i), "UTF-8")+"="+URLEncoder.encode(values.get(i), "UTF-8");
+            }
+            httpURLConnection.setRequestMethod("POST");
+            httpURLConnection.setDoOutput(true);
+            httpURLConnection.setDoInput(true);
+
+            OutputStream outputStream = httpURLConnection.getOutputStream();
+            BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
+            bufferedWriter.write(post_String);
+            bufferedWriter.flush();
+            bufferedWriter.close();
+            outputStream.close();
+        }
+        if(read) {
+            InputStream inputStream = httpURLConnection.getInputStream();
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
+            String line;
+
+            while ((line = bufferedReader.readLine()) != null) {
+                result.add(line);
+            }
+            bufferedReader.close();
+            inputStream.close();
+            httpURLConnection.disconnect();
+        }
+        return result;
+    }
+    @Override
+    protected void onPreExecute() {
+        //super.onPreExecute();
+        alertDialog = new AlertDialog.Builder(context).create();
+        alertDialog.setTitle("Login Status");
+    }
+
+    @Override
+    protected void onPostExecute(String result) {
+        //super.onPostExecute(s);
+        if(return_image) {
+            byte[] decodeString = Base64.decode(result, Base64.DEFAULT);
+            Bitmap decodeImage = BitmapFactory.decodeByteArray(decodeString, 0, decodeString.length);
+            //MainActivity.result_Photo.setImageBitmap(decodeImage);
+        }
+        alertDialog.setMessage(result);
+        alertDialog.show();
+    }
+
+    @Override
+    protected void onProgressUpdate(Void... values) {
+        super.onProgressUpdate(values);
+    }
+}

@@ -29,6 +29,8 @@ public class Screen_Login_Activity extends Activity {
     private ImageView button_login;
     private Intent intent_open_next_screen;
 
+    public static boolean isOnline = false;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
 
