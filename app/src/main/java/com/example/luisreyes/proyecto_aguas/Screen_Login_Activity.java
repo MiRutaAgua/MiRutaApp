@@ -32,7 +32,7 @@ public class Screen_Login_Activity extends Activity {
     public static boolean isOnline = false;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.screen_login);
