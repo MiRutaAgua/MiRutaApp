@@ -58,11 +58,11 @@ public class Screen_Execute_Task extends Activity {
         intent_open_screen_validate = new Intent(this, Screen_Validate.class);
 
         String result = getIntent().getStringExtra("result");
-        String serial_number_result = "";
-        serial_number_result = serial_number_result + result;
 
         textView_serial_number_result = (TextView)findViewById(R.id.textView_serial_number_screen_exec_task);
-        textView_serial_number_result.setText(serial_number_result);
+        if(result != null) {
+            textView_serial_number_result.setText(result);
+        }
 
         button_instalation_photo_screen_exec_task = (ImageView)findViewById(R.id.button_instalation_photo_screen_exec_task);
         button_read_photo_screen_exec_task = (ImageView)findViewById(R.id.button_read_photo_screen_exec_task);

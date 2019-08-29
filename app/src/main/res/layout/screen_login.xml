@@ -107,14 +107,13 @@
         <ImageView
             android:id="@+id/button_login_screen_login"
             android:layout_width="240dp"
-            android:layout_height="60dp"
+            android:layout_height="40dp"
             android:src="@drawable/screen_login_entrar" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:gravity="center"
         android:orientation="horizontal">
 
@@ -123,7 +122,7 @@
             android:layout_width="240dp"
             android:layout_height="60dp"
             android:src="@drawable/screen_login_registrar"
-            android:visibility="invisible"/>
+            />
     </LinearLayout>
 
 

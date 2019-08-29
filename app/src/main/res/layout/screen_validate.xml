@@ -41,20 +41,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:gravity="center"
+                android:gravity="left"
                 >
                 <TextView
                     android:text="Foto Antes"
                     android:textSize="18dp"
-                    android:textStyle="bold"
-                    android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingBottom="10dp"
                     />
                 <ImageView
 
-                    android:layout_height="80dp"
-                    android:layout_width="80dp"
+                    android:layout_height="100dp"
+                    android:layout_width="100dp"
                     android:src="@drawable/screen_validate_imagen"
                     android:id="@+id/imageView_foto_antes_instalacion_screen_validate"
                     />
@@ -65,23 +64,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:gravity="center"
+                android:gravity="left"
                 android:layout_marginLeft="70dp"
                 >
 
                 <TextView
                     android:text="Foto Final"
                     android:textSize="18dp"
-                    android:textStyle="bold"
-                    android:layout_gravity="center"
+android:paddingBottom="10dp"
+                    android:layout_gravity="left"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     />
 
                 <ImageView
 
-                    android:layout_height="80dp"
-                    android:layout_width="80dp"
+                    android:layout_height="100dp"
+                    android:layout_width="100dp"
                     android:src="@drawable/screen_validate_imagen"
                     android:id="@+id/imageView_foto_final_instalacion_screen_validate"
                     />
@@ -97,31 +96,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="70dp"
+            android:layout_marginTop="30dp"
             android:gravity="center"
             android:layout_gravity="center"
             >
 
-            <ImageView
-
-                android:layout_height="80dp"
-                android:layout_width="80dp"
-                android:src="@drawable/screen_validate_imagen"
-                android:id="@+id/imageView_foto_numero_serie_screen_validate"
-                />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_gravity="center"
-                android:layout_marginLeft="20dp"
+                android:paddingBottom="60dp"
                 >
 
                 <TextView
                     android:text="Número de serie"
                     android:textSize="18dp"
-                    android:textStyle="bold"
+
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -130,22 +122,30 @@
                 <TextView
                     android:text="F27337"
                     android:textSize="18dp"
-                    android:layout_gravity="center"
+                    android:layout_gravity="left"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
 
                     />
 
             </LinearLayout>
+
+            <ImageView
+android:layout_marginLeft="39dp"
+                android:layout_height="100dp"
+                android:layout_width="100dp"
+                android:src="@drawable/screen_validate_imagen"
+                android:id="@+id/imageView_foto_numero_serie_screen_validate"
+                />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="70dp"
-            android:gravity="center"
             android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:orientation="horizontal"
 
             >
 
@@ -155,16 +155,17 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="Lectura última"
-                android:textStyle="bold"
                 android:textSize="18dp"
+                android:paddingTop="15dp"
                 />
-            <EditText
 
+            <EditText
                 android:id="@+id/editText_lectura_ultima_de_contador_screen_incidence_summary"
-                android:layout_width="wrap_content"
+                android:layout_width="138dp"
                 android:layout_height="wrap_content"
-                android:text="3420"
-                />
+                android:layout_marginLeft="20dp"
+                android:gravity="center"
+                android:text="3420" />
         </LinearLayout>
 
         <LinearLayout
@@ -181,17 +182,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Lectura Actual"
-                android:textStyle="bold"
                 android:gravity="center"
-                android:textSize="18dp" />
-            <EditText
-
-                android:id="@+id/editText_lectura_actual_de_contador_screen_incidence_summary"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:text="3445"
+                android:textSize="18dp"
+                android:paddingTop="15dp"
                 />
+
+            <EditText
+                android:id="@+id/editText_lectura_actual_de_contador_screen_incidence_summary"
+                android:layout_width="136dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:gravity="center"
+                android:text="3445" />
         </LinearLayout>
 
 
@@ -200,15 +202,16 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginTop="40dp"
-            android:gravity="center"
+            android:gravity="left"
+
             >
             <TextView
                 android:text="Número de serie nuevo"
-                android:textStyle="bold"
                 android:textSize="18sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_gravity="left"
+                android:layout_marginLeft="45dp"
                 />
 
         </LinearLayout>
@@ -218,14 +221,15 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
 
-            android:gravity="center"
+            android:gravity="left"
             >
             <TextView
                 android:text="H19UA133065"
                 android:textSize="18sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_gravity="left"
+                android:layout_marginLeft="45dp"
                 />
 
         </LinearLayout>
@@ -235,21 +239,21 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginTop="10dp"
-            android:gravity="center"
+            android:gravity="left"
             >
             <TextView
                 android:text="CALIBRE:"
                 android:textSize="15dp"
-                android:textStyle="bold"
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginLeft="45dp"
                 />
             <TextView
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="20dp"
                 android:text="15mm"
                 android:textSize="15dp"
-                android:textStyle="bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -260,35 +264,33 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="40dp"
-            android:gravity="center"
-            android:layout_gravity="center"
+            android:layout_marginTop="30dp"
+            android:gravity="left"
+            android:layout_gravity="left"
             >
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
+                android:layout_gravity="left"
+                android:gravity="left"
                 android:text="Firma"
                 android:textStyle="bold"
-                android:textSize="20dp" />
+                android:textSize="20dp"
+                android:layout_marginLeft="45dp"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="117dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="horizontal">
 
             <ImageView
                 android:id="@+id/imageButton_firma_cliente_screen_validate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/screen_validate_espacio_para_firma" />
+                android:layout_width="278dp"
+                android:layout_height="150dp"
+                android:src="@drawable/screen_validate_firma_imagen" />
         </LinearLayout>
 
         <LinearLayout

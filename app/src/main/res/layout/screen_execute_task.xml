@@ -122,10 +122,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="13mm   Altair   115mm"
+                android:text="        "
                 android:layout_gravity="center"
                 android:id="@+id/textView_serial_number_screen_exec_task"
-                android:visibility="invisible"
                 />
 
         </LinearLayout>
@@ -170,9 +169,9 @@
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:orientation="horizontal"
-            android:gravity="center"
-            android:padding="10dp"
-
+            android:gravity="left"
+            android:paddingBottom="10dp"
+android:layout_marginLeft="80dp"
             >
             <TextView
                 android:layout_width="wrap_content"
@@ -182,18 +181,35 @@
                 android:layout_gravity="center"
                 android:id="@+id/textView_phones_screen_exec_task"
                 android:textStyle="bold"
+                android:paddingBottom="20dp"
                 />
 
-            <TextView
-                android:id="@+id/textView_phone1_screen_exec_task"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="20dp"
-                android:textSize="15dp"
-                android:text="944666666       666666666"
+                android:orientation="vertical"
+                >
+                <TextView
+                    android:id="@+id/textView_phone1_screen_exec_task"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="20dp"
+                    android:textSize="15dp"
+                    android:text="94466666"
 
-                />
+                    />
+                <TextView
+                    android:id="@+id/textView_phone2_screen_exec_task"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="20dp"
+                    android:textSize="15dp"
+                    android:text="66666666"
+
+                    />
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout

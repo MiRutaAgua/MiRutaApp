@@ -84,7 +84,7 @@
         android:orientation="horizontal"
         android:layout_marginTop="40dp"
         android:gravity="center"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="25dp"
         android:layout_marginRight="20dp"
         >
         <TextView
@@ -115,7 +115,7 @@
         android:orientation="horizontal"
         android:layout_marginTop="20dp"
         android:gravity="center"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="25dp"
         android:layout_marginRight="30dp"
         >
         <TextView
@@ -155,7 +155,7 @@
             android:layout_height="wrap_content"
             android:text="Datos Contador:"
             android:layout_gravity="left"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="25dp"
             />
     </LinearLayout>
 
@@ -166,7 +166,7 @@
         android:orientation="horizontal"
         android:layout_marginTop="5dp"
         android:gravity="center"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="25dp"
         android:layout_marginRight="20dp"
         >
 

@@ -43,7 +43,7 @@ android:layout_height="match_parent">
         <TextView
             android:text="Foto Instalación"
             android:textSize="18dp"
-            android:textStyle="bold"
+
             android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -62,8 +62,8 @@ android:layout_height="match_parent">
 
         <ImageView
 
-            android:layout_height="80dp"
-            android:layout_width="80dp"
+            android:layout_height="100dp"
+            android:layout_width="100dp"
             android:src="@drawable/screen_validate_battery_intake_asignation_imagen"
             />
 
@@ -76,14 +76,15 @@ android:layout_height="match_parent">
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginTop="30dp"
-        android:gravity="center"
+        android:gravity="left"
+        android:layout_marginLeft="144dp"
         >
 
         <TextView
             android:text="Foto Lectura"
             android:textSize="18dp"
-            android:textStyle="bold"
-            android:layout_gravity="center"
+
+            android:layout_gravity="left"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             />
@@ -95,22 +96,17 @@ android:layout_height="match_parent">
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginTop="10dp"
-        android:gravity="center"
+        android:gravity="left"
+        android:layout_marginLeft="30dp"
         >
 
-        <ImageView
 
-            android:layout_height="80dp"
-            android:layout_width="80dp"
-            android:src="@drawable/screen_validate_battery_intake_asignation_imagen"
-            android:layout_gravity="center"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
-            />
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:gravity="left"
+            android:layout_gravity="left"
             >
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -132,20 +128,23 @@ android:layout_height="match_parent">
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:layout_marginTop="10dp"
+                    android:layout_gravity="left"
+                    android:gravity="left"
                     >
 
                     <TextView
                         android:text="Lectura Anterior"
-                        android:textSize="12dp"
-                        android:layout_gravity="center"
+                        android:textSize="14dp"
+                        android:layout_gravity="left"
+                        android:gravity="left"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="10dp"
                         />
 
                     <TextView
                         android:text="320 M3"
                         android:textSize="14dp"
+                        android:layout_marginLeft="8dp"
                         android:layout_gravity="center"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -161,11 +160,11 @@ android:layout_height="match_parent">
 
                 <TextView
                     android:text="Lectura Última"
-                    android:textSize="12dp"
-                    android:layout_gravity="center"
+                    android:textSize="14dp"
+                    android:layout_gravity="left"
+                    android:gravity="left"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="14dp"
                     />
 
                 <TextView
@@ -174,6 +173,7 @@ android:layout_height="match_parent">
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="18dp"
                     />
 
             </LinearLayout>
@@ -182,54 +182,63 @@ android:layout_height="match_parent">
 
 
         </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="30dp"
-        android:gravity="center"
-        android:layout_gravity="center"
-
-        >
-
-        <TextView
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="Foto Número de Serie"
-            android:textSize="18dp"
-            android:textStyle="bold"
-            />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="20dp"
-        android:gravity="center"
-        >
 
         <ImageView
-            android:layout_height="80dp"
-            android:layout_width="80dp"
+
+            android:layout_height="100dp"
+            android:layout_width="100dp"
             android:src="@drawable/screen_validate_battery_intake_asignation_imagen"
             android:layout_gravity="center"
-
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="30dp"
             />
+    </LinearLayout>
 
-        <TextView
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="left"
+        android:layout_marginLeft="30dp"
+        android:orientation="horizontal">
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="C13FA247970"
-            android:gravity="center"
-            android:layout_marginLeft="30dp"
-            android:textSize="18dp" />
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:paddingBottom="60dp"
+            >
 
+            <TextView
+                android:text="Número de serie"
+                android:textSize="18dp"
+
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                />
+            <TextView
+                android:text="F27337"
+                android:textSize="18dp"
+                android:layout_gravity="left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                />
+
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="40dp"
+            android:src="@drawable/screen_validate_battery_intake_asignation_imagen"
+
+            />
     </LinearLayout>
 
 
@@ -238,12 +247,12 @@ android:layout_height="match_parent">
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginTop="50dp"
-        android:gravity="center"
+        android:gravity="left"
+        android:layout_marginLeft="30dp"
         >
         <TextView
             android:text="Ubicación F1-T1"
             android:textSize="18sp"
-            android:textStyle="bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
@@ -254,18 +263,17 @@ android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_marginLeft="30dp"
         android:layout_marginTop="20dp"
-        android:gravity="center"
-        >
+        android:gravity="left"
+        android:orientation="horizontal">
+
         <TextView
-            android:text="Llaves nuevas, se entra con maestras"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_width="wrap_content"
+            android:layout_width="269dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            />
+            android:layout_gravity="left"
+            android:text="Llaves nuevas, se entra con maestras"
+            android:textSize="18sp" />
 
     </LinearLayout>
 

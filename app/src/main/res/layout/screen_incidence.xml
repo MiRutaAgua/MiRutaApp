@@ -142,7 +142,8 @@
                 android:layout_gravity="center"
                 android:text="Teléfonos:"
                 android:textStyle="bold"
-                android:textSize="18dp" />
+                android:textSize="18dp"
+                android:paddingBottom="10dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
