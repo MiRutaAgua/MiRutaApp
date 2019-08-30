@@ -24,8 +24,10 @@ public class Screen_User_Data extends Activity implements TaskCompleted{
     ImageView button_continuar;
     CircleImageView circlImageView_photo;
     TextView nombre, telefono;
-    String nombre_usuario;
+    String nombre_operario;
     String clave;
+    String usuario;
+    String apellidos;
 
     private static final int CAM_REQUEST_USER_PHOTO = 1319;
 
@@ -48,10 +50,13 @@ public class Screen_User_Data extends Activity implements TaskCompleted{
             Bitmap bitmap = Screen_Validate.getImageFromString(foto_usuario);
             circlImageView_photo.setImageBitmap(bitmap);
 
-            nombre_usuario = json_usuario.getString("nombre");
-            clave = json_usuario.getString("apellidos");
+            nombre_operario = json_usuario.getString("nombre");
+            apellidos = json_usuario.getString("apellidos");
+            usuario = json_usuario.getString("usuario");
+            clave = json_usuario.getString("clave");
 
-            nombre.setText(nombre_usuario + " "+clave);
+
+            nombre.setText(nombre_operario + " "+ apellidos);
             telefono.setText(json_usuario.getString("telefonos"));
 
         } catch (JSONException e) {
@@ -84,8 +89,9 @@ public class Screen_User_Data extends Activity implements TaskCompleted{
             Bitmap foto_nueva = (Bitmap) data.getExtras().get("data");
             circlImageView_photo.setImageBitmap(foto_nueva);
             //capture_Photo.setImageBitmap(bitmap);
+            Toast.makeText(Screen_User_Data.this,usuario+" "+clave, Toast.LENGTH_LONG).show();
 
-            String username = nombre_usuario;
+            String username = usuario;
             String password = clave;
 
             String image = Screen_Register_Operario.getStringImage(foto_nueva);
@@ -98,19 +104,20 @@ public class Screen_User_Data extends Activity implements TaskCompleted{
 
     @Override
     public void onTaskComplete(String type, String result) throws JSONException {
+
         if(type == "change_foto"){
             if(result == null){
                 Toast.makeText(Screen_User_Data.this,"No hay conexion a Internet, no se pudo cambiar foto", Toast.LENGTH_LONG).show();
             }
             else {
                 Toast.makeText(Screen_User_Data.this, "Cambiando foto", Toast.LENGTH_SHORT).show();
-                String username = nombre_usuario;
-                //String password = lineEdit_clave_de_acceso.getText().toString();
-
-                String type_script = "get_user_data";
-
-                BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_User_Data.this);
-                backgroundWorker.execute(type_script, username);
+//                String username = usuario;
+//                //String password = lineEdit_clave_de_acceso.getText().toString();
+//
+//                String type_script = "get_user_data";
+//
+//                BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_User_Data.this);
+//                backgroundWorker.execute(type_script, username);
             }
         }else if(type == "get_user_data"){
 

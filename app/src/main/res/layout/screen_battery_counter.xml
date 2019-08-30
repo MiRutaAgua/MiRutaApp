@@ -9,6 +9,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_gravity="center"
+        android:gravity="center"
         >
 
         <LinearLayout
@@ -256,8 +257,37 @@
             android:src="@drawable/screen_unity_counter_imagen" />
 
         </LinearLayout>
+
         <LinearLayout
-            android:layout_marginTop="40dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="30dp"
+            android:gravity="left"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="20dp"
+            >
+
+            <TextView
+                android:textSize="15sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ubicación en Batería:"
+                android:layout_gravity="left"
+                android:layout_marginLeft="20dp"
+                />
+            <TextView
+                android:textSize="15sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sin Datos"
+                android:layout_gravity="left"
+                android:layout_marginLeft="20dp"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="10dp"
             android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

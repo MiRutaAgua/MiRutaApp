@@ -37,7 +37,7 @@ public class Screen_Fast_View_Personal_Task extends Activity {
 
         lista_contadores = new ArrayList<String>();
 
-        lista_contadores.add("CAMBIO DE CONTADOR");
+        lista_contadores.add("Resumen de Tareas de Operario");
         lista_contadores.add("40 DN 13 mm");
         lista_contadores.add("10 DN 15 mm");
         lista_contadores.add("5 DN 20 mm");
