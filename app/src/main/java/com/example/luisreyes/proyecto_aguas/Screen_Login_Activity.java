@@ -17,6 +17,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Created by luis.reyes on 10/08/2019.
  */
@@ -27,7 +30,6 @@ public class Screen_Login_Activity extends Activity implements TaskCompleted{
     private EditText lineEdit_nombre_de_operario;
     private EditText lineEdit_clave_de_acceso;
     private ImageView button_login, button_register;
-    private Intent intent_open_next_screen;
 
     public static boolean isOnline = true;
 
@@ -60,13 +62,17 @@ public class Screen_Login_Activity extends Activity implements TaskCompleted{
             @Override
             public void onClick(View view) {
 
-                String username = lineEdit_nombre_de_operario.getText().toString();
-                String password = lineEdit_clave_de_acceso.getText().toString();
+                if (!(TextUtils.isEmpty(lineEdit_nombre_de_operario.getText())) && !(TextUtils.isEmpty(lineEdit_clave_de_acceso.getText()))) {
+                    String username = lineEdit_nombre_de_operario.getText().toString();
+                    String password = lineEdit_clave_de_acceso.getText().toString();
 
 
-                String type = "login";
-                BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Login_Activity.this);
-                backgroundWorker.execute(type, username, password);
+                    String type = "login";
+                    BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Login_Activity.this);
+                    backgroundWorker.execute(type, username, password);
+                }else{
+                    Toast.makeText(Screen_Login_Activity.this, "Inserte nombre de usuario y contraseña", Toast.LENGTH_SHORT).show();
+                }
 
 
             }
@@ -75,23 +81,41 @@ public class Screen_Login_Activity extends Activity implements TaskCompleted{
 
 
     @Override
-    public void onTaskComplete(String result) {
+    public void onTaskComplete(String type, String result){
 
-        if(result == null){
-            Toast.makeText(this,"No hay conexion a Internet", Toast.LENGTH_LONG).show();
-        }
-        else {
-            if (result.contains("not success")) {
-                Toast.makeText(Screen_Login_Activity.this, "Incorrecto nombre de usuario o contraseña", Toast.LENGTH_SHORT).show();
-            } else {
-                if (!(TextUtils.isEmpty(lineEdit_nombre_de_operario.getText())) && !(TextUtils.isEmpty(lineEdit_clave_de_acceso.getText()))) {
-                    intent_open_next_screen = new Intent(Screen_Login_Activity.this, team_or_personal_task_selection_screen_Activity.class);
-                    startActivity(intent_open_next_screen);
+        if(type == "login"){
+            if(result == null){
+                Toast.makeText(this,"No hay conexion a Internet", Toast.LENGTH_LONG).show();
+            }
+            else {
+                if (result.contains("not success")) {
+                    Toast.makeText(Screen_Login_Activity.this, "Incorrecto nombre de usuario o contraseña", Toast.LENGTH_SHORT).show();
+
                 } else {
                     Toast.makeText(Screen_Login_Activity.this, "Bienvenido", Toast.LENGTH_SHORT).show();
+
+                    String username = lineEdit_nombre_de_operario.getText().toString();
+                    //String password = lineEdit_clave_de_acceso.getText().toString();
+
+                    String type_script = "get_user_data";
+
+                    BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Login_Activity.this);
+                    backgroundWorker.execute(type_script, username);
                 }
             }
+
+        }else if(type == "get_user_data"){
+
+            if(result == null){
+                Toast.makeText(this,"No hay conexion a Internet", Toast.LENGTH_LONG).show();
+            }
+            else {
+                Intent intent_open_next_screen = new Intent(Screen_Login_Activity.this, Screen_User_Data.class);
+                intent_open_next_screen.putExtra("foto_usuario", result);
+                startActivity(intent_open_next_screen);
+            }
         }
+
         //Toast.makeText(this,"The result is " + result, Toast.LENGTH_LONG).show();
     }
 }

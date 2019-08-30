@@ -64,6 +64,8 @@
             android:layout_marginLeft="10dip"
             android:layout_weight="1"
             android:id="@+id/editText_Nombre_Operario_screen_login"
+            android:inputType="text"
+            android:imeOptions="actionNext"
             />
     </LinearLayout>
 
@@ -93,6 +95,9 @@
             android:layout_marginLeft="10dip"
             android:layout_weight="1"
             android:id="@+id/editText_Clave_Acceso_screen_login"
+            android:inputType="textPassword"
+            android:imeOptions="actionDone"
+            android:fontFamily="sans-serif"
             />
     </LinearLayout>
 

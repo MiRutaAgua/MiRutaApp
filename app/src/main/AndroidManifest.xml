@@ -41,6 +41,8 @@
         <activity android:name=".Screen_Draw_Canvas"></activity>
         <activity android:name=".Screen_Validate_Battery_Intake_Asignation"></activity>
         <activity android:name=".Screen_Zoom_Photo"></activity>
+        <activity android:name=".Screen_Register_Operario"></activity>
+        <activity android:name=".Screen_User_Data"></activity>
     </application>
 
 </manifest>

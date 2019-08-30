@@ -41,6 +41,8 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
 
     private TaskCompleted mCallback;
 
+    String type_script;
+
     boolean return_image = false;
     BackgroundWorker(Context ctx){
         context = ctx;
@@ -49,6 +51,7 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
     @Override
     protected String doInBackground(String... params) {
         String type = params[0];
+        type_script = type;
 
         String login_url;
         String register_url;
@@ -114,8 +117,9 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
                         JSONArray jsonArray = new JSONArray(result.get(n));
                         for (int i = 0; i < jsonArray.length(); i++) {
                             operario = jsonArray.getJSONObject(i);
-                            return_string += operario.getString("nombre")+" "+operario.getString("apellidos");
-                            return_string += "\n";
+//                            return_string += operario.getString("nombre")+" "+operario.getString("apellidos");
+//                            return_string += "\n";
+                            return_string = operario.toString();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -263,13 +267,18 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
     protected void onPreExecute() {
         //super.onPreExecute();
         alertDialog = new AlertDialog.Builder(context).create();
-        alertDialog.setTitle("Login Status");
+        alertDialog.setTitle("Connecting...");
     }
 
     @Override
     protected void onPostExecute(String result) {
         //super.onPostExecute(s);
-        mCallback.onTaskComplete(result);
+
+        try {
+            mCallback.onTaskComplete(type_script, result);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

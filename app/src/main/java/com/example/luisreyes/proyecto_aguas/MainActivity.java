@@ -22,7 +22,7 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
 
     private TextView textView_pantalla_principal;
-    private static final long START_TIME_IN_MILLIS = 2000;
+    private static final long START_TIME_IN_MILLIS = 5000;
     private CountDownTimer countDowntimer_delay_showing_logo;
 
     private long delay_in_Millis = START_TIME_IN_MILLIS;
@@ -38,9 +38,9 @@ public class MainActivity extends AppCompatActivity {
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         myToolbar.setBackgroundColor(Color.TRANSPARENT);
 
-//        setSupportActionBar(myToolbar);
-//        getSupportActionBar().setIcon(getDrawable(R.mipmap.icon_toolbar_round));
-//        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        setSupportActionBar(myToolbar);
+        getSupportActionBar().setIcon(getDrawable(R.drawable.toolbar_icon));
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         textView_pantalla_principal = (TextView) findViewById(R.id.textView_screen_main);
         startTimer();
