@@ -5,11 +5,14 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,6 +22,8 @@ import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
 
 /**
  * Created by luis.reyes on 10/08/2019.
@@ -81,7 +86,7 @@ public class Screen_Login_Activity extends Activity implements TaskCompleted{
 
 
     @Override
-    public void onTaskComplete(String type, String result){
+    public void onTaskComplete(String type, String result) throws JSONException {
 
         if(type == "login"){
             if(result == null){
@@ -95,7 +100,6 @@ public class Screen_Login_Activity extends Activity implements TaskCompleted{
                     Toast.makeText(Screen_Login_Activity.this, "Bienvenido", Toast.LENGTH_SHORT).show();
 
                     String username = lineEdit_nombre_de_operario.getText().toString();
-                    //String password = lineEdit_clave_de_acceso.getText().toString();
 
                     String type_script = "get_user_data";
 
@@ -115,7 +119,6 @@ public class Screen_Login_Activity extends Activity implements TaskCompleted{
                 startActivity(intent_open_next_screen);
             }
         }
-
-        //Toast.makeText(this,"The result is " + result, Toast.LENGTH_LONG).show();
     }
+
 }
