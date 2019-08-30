@@ -22,7 +22,7 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
 
     private TextView textView_pantalla_principal;
-    private static final long START_TIME_IN_MILLIS = 5000;
+    private static final long START_TIME_IN_MILLIS = 2000;
     private CountDownTimer countDowntimer_delay_showing_logo;
 
     private long delay_in_Millis = START_TIME_IN_MILLIS;
