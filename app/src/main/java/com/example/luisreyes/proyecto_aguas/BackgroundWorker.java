@@ -39,10 +39,12 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
 
     JSONObject operario = new JSONObject();
 
+    private TaskCompleted mCallback;
+
     boolean return_image = false;
     BackgroundWorker(Context ctx){
-
         context = ctx;
+        this.mCallback = (TaskCompleted)ctx;
     }
     @Override
     protected String doInBackground(String... params) {
@@ -267,13 +269,7 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String result) {
         //super.onPostExecute(s);
-        if(return_image) {
-            byte[] decodeString = Base64.decode(result, Base64.DEFAULT);
-            Bitmap decodeImage = BitmapFactory.decodeByteArray(decodeString, 0, decodeString.length);
-            //MainActivity.result_Photo.setImageBitmap(decodeImage);
-        }
-        alertDialog.setMessage(result);
-        alertDialog.show();
+        mCallback.onTaskComplete(result);
     }
 
     @Override

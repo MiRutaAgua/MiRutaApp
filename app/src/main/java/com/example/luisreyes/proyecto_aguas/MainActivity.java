@@ -3,7 +3,10 @@ package com.example.luisreyes.proyecto_aguas;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.CountDownTimer;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -26,13 +29,18 @@ public class MainActivity extends AppCompatActivity {
 
     private Intent intent_open_screen_login;
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        myToolbar.setBackgroundColor(Color.TRANSPARENT);
+
         setSupportActionBar(myToolbar);
+
+        getSupportActionBar().setIcon(getDrawable(R.drawable.toolbar_icon));
 
         textView_pantalla_principal = (TextView) findViewById(R.id.textView_screen_main);
         startTimer();

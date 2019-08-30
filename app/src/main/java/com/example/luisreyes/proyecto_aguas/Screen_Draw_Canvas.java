@@ -63,5 +63,4 @@ public class Screen_Draw_Canvas extends Activity {
         String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
         return encodedImage;
     }
-
 }

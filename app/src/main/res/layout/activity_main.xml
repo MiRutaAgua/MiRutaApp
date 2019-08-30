@@ -9,15 +9,9 @@
     android:layout_gravity="center"
     tools:context="com.example.luisreyes.proyecto_aguas.MainActivity">
 
-    <android.support.v7.widget.Toolbar
+    <include layout = "@layout/toolbar"
         android:id="@+id/my_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@android:color/white"
-        android:elevation="4dp"
-        app:title="@string/app_name"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+        />
 
     <LinearLayout
         android:layout_width="match_parent"

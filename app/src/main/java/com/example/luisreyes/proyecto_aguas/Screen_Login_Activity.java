@@ -21,7 +21,7 @@ import android.widget.Toast;
  * Created by luis.reyes on 10/08/2019.
  */
 
-public class Screen_Login_Activity extends Activity {
+public class Screen_Login_Activity extends Activity implements TaskCompleted{
 
     private TextView textView_nombre_de_pantalla;
     private EditText lineEdit_nombre_de_operario;
@@ -29,7 +29,7 @@ public class Screen_Login_Activity extends Activity {
     private ImageView button_login;
     private Intent intent_open_next_screen;
 
-    public static boolean isOnline = false;
+    public static boolean isOnline = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,15 +52,30 @@ public class Screen_Login_Activity extends Activity {
             @Override
             public void onClick(View view) {
 
-                if(!(TextUtils.isEmpty(lineEdit_nombre_de_operario.getText())) && !(TextUtils.isEmpty(lineEdit_clave_de_acceso.getText()))) {
-                    startActivity(intent_open_next_screen);
-                }
-                else {
-                    Toast.makeText(Screen_Login_Activity.this, "Inserte nombre de Usuario y contraseña", Toast.LENGTH_SHORT).show();
-                }
+                String username = lineEdit_nombre_de_operario.getText().toString();
+                String password = lineEdit_clave_de_acceso.getText().toString();
+
+
+                String type = "login";
+                BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Login_Activity.this);
+                backgroundWorker.execute(type, username, password);
+
+
             }
         });
     }
 
 
+    @Override
+    public void onTaskComplete(String result) {
+
+        Toast.makeText(this,"The result is " + result, Toast.LENGTH_LONG).show();
+
+        if(!(TextUtils.isEmpty(lineEdit_nombre_de_operario.getText())) && !(TextUtils.isEmpty(lineEdit_clave_de_acceso.getText()))) {
+            startActivity(intent_open_next_screen);
+        }
+        else {
+            Toast.makeText(Screen_Login_Activity.this, "Inserte nombre de Usuario y contraseña", Toast.LENGTH_SHORT).show();
+        }
+    }
 }
