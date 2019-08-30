@@ -26,7 +26,7 @@ public class Screen_Login_Activity extends Activity implements TaskCompleted{
     private TextView textView_nombre_de_pantalla;
     private EditText lineEdit_nombre_de_operario;
     private EditText lineEdit_clave_de_acceso;
-    private ImageView button_login;
+    private ImageView button_login, button_register;
     private Intent intent_open_next_screen;
 
     public static boolean isOnline = true;
@@ -45,8 +45,16 @@ public class Screen_Login_Activity extends Activity implements TaskCompleted{
         lineEdit_nombre_de_operario = (EditText) findViewById(R.id.editText_Nombre_Operario_screen_login);
         lineEdit_clave_de_acceso    = (EditText) findViewById(R.id.editText_Clave_Acceso_screen_login);
         button_login                = (ImageView) findViewById(R.id.button_login_screen_login);
+        button_register             = (ImageView) findViewById(R.id.button_register_screen_login);
 
-        intent_open_next_screen = new Intent(this, team_or_personal_task_selection_screen_Activity.class);
+        button_register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent_open_register_screen = new Intent(Screen_Login_Activity.this, Screen_Register_Operario.class);
+                startActivity(intent_open_register_screen);
+            }
+        });
+
 
         button_login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,13 +77,21 @@ public class Screen_Login_Activity extends Activity implements TaskCompleted{
     @Override
     public void onTaskComplete(String result) {
 
-        Toast.makeText(this,"The result is " + result, Toast.LENGTH_LONG).show();
-
-        if(!(TextUtils.isEmpty(lineEdit_nombre_de_operario.getText())) && !(TextUtils.isEmpty(lineEdit_clave_de_acceso.getText()))) {
-            startActivity(intent_open_next_screen);
+        if(result == null){
+            Toast.makeText(this,"No hay conexion a Internet", Toast.LENGTH_LONG).show();
         }
         else {
-            Toast.makeText(Screen_Login_Activity.this, "Inserte nombre de Usuario y contraseña", Toast.LENGTH_SHORT).show();
+            if (result.contains("not success")) {
+                Toast.makeText(Screen_Login_Activity.this, "Incorrecto nombre de usuario o contraseña", Toast.LENGTH_SHORT).show();
+            } else {
+                if (!(TextUtils.isEmpty(lineEdit_nombre_de_operario.getText())) && !(TextUtils.isEmpty(lineEdit_clave_de_acceso.getText()))) {
+                    intent_open_next_screen = new Intent(Screen_Login_Activity.this, team_or_personal_task_selection_screen_Activity.class);
+                    startActivity(intent_open_next_screen);
+                } else {
+                    Toast.makeText(Screen_Login_Activity.this, "Bienvenido", Toast.LENGTH_SHORT).show();
+                }
+            }
         }
+        //Toast.makeText(this,"The result is " + result, Toast.LENGTH_LONG).show();
     }
 }

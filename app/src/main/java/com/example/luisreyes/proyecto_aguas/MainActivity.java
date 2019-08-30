@@ -38,9 +38,9 @@ public class MainActivity extends AppCompatActivity {
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         myToolbar.setBackgroundColor(Color.TRANSPARENT);
 
-        setSupportActionBar(myToolbar);
-
-        getSupportActionBar().setIcon(getDrawable(R.drawable.toolbar_icon));
+//        setSupportActionBar(myToolbar);
+//        getSupportActionBar().setIcon(getDrawable(R.mipmap.icon_toolbar_round));
+//        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         textView_pantalla_principal = (TextView) findViewById(R.id.textView_screen_main);
         startTimer();

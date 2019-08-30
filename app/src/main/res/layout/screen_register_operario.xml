@@ -8,10 +8,12 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        >
 
         <EditText
-            android:layout_width="match_parent"
+            android:layout_width="340dp"
             android:layout_height="wrap_content"
             android:id="@+id/editText_screen_register_operario_etNombre"
             android:hint="Name"
@@ -21,10 +23,12 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        >
 
         <EditText
-            android:layout_width="match_parent"
+            android:layout_width="340dp"
             android:layout_height="wrap_content"
             android:id="@+id/editText_screen_register_operario_etApellidos"
             android:hint="Apellidos"/>
@@ -32,10 +36,12 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        >
 
         <EditText
-            android:layout_width="match_parent"
+            android:layout_width="340dp"
             android:layout_height="wrap_content"
             android:id="@+id/editText_screen_register_operario_etEdad"
             android:hint="Edad"/>
@@ -43,10 +49,12 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        >
 
         <EditText
-            android:layout_width="match_parent"
+            android:layout_width="340dp"
             android:layout_height="wrap_content"
             android:id="@+id/editText_screen_register_operario_etTelefono"
             android:hint="Telefono"/>
@@ -54,10 +62,12 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        >
 
         <EditText
-            android:layout_width="match_parent"
+            android:layout_width="340dp"
             android:layout_height="wrap_content"
             android:id="@+id/editText_screen_register_operario_etUsuario"
             android:hint="Nombre de Usuario"/>
@@ -67,42 +77,15 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        >
 
         <EditText
-            android:layout_width="match_parent"
+            android:layout_width="340dp"
             android:layout_height="wrap_content"
             android:id="@+id/editText_screen_register_operario_etClave"
             android:hint="Contraseña"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/button_screen_register_operario_register"
-            android:text="Register"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:layout_marginTop="20dp"
-
-        >
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="foto"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:id="@+id/button_screen_register_operario_foto"/>
     </LinearLayout>
 
     <LinearLayout
@@ -114,18 +97,33 @@
         >
 
         <ImageView
+            android:id="@+id/button_screen_register_operario_foto"
+            android:layout_width="141dp"
+            android:layout_height="68dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:src="@drawable/screen_register_operario_foto" />
+
+        <ImageView
 
             android:id="@+id/imageView_screen_register_operario_foto"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_launcher_background"
-            />
+            android:layout_width="132dp"
+            android:layout_height="160dp"
+            android:layout_marginLeft="60dp"
+            android:src="@drawable/screen_validate_imagen" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        >
+
         <ImageView
-            android:layout_marginLeft="20dp"
-            android:id="@+id/imageView_screen_register_operario_foto_result"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_launcher_background"
-            />
+            android:layout_width="340dp"
+            android:layout_height="80dp"
+            android:id="@+id/button_screen_register_operario_register"
+            android:src="@drawable/screen_register_operario_registrar"/>
     </LinearLayout>
 </LinearLayout>

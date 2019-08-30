@@ -20,7 +20,7 @@ import java.io.ByteArrayOutputStream;
 public class Screen_Register_Operario extends Activity {
 
     EditText etname, etapellidos, etedad, etTelefonos, etuser_name, etclave;
-    Button button_register, button_foto;
+    ImageView button_register, button_foto;
 
     private static final int CAM_REQUEST_PHOTO = 1313;
     Bitmap bitmap_foto;
@@ -31,7 +31,7 @@ public class Screen_Register_Operario extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.screen_register_operario);
 
-        button_register = (Button)findViewById(R.id.button_screen_register_operario_register);
+        button_register = (ImageView)findViewById(R.id.button_screen_register_operario_register);
 
         etname = (EditText)findViewById(R.id.editText_screen_register_operario_etNombre);
         etapellidos = (EditText)findViewById(R.id.editText_screen_register_operario_etApellidos);
@@ -39,8 +39,7 @@ public class Screen_Register_Operario extends Activity {
         etTelefonos = (EditText)findViewById(R.id.editText_screen_register_operario_etTelefono);
         etuser_name = (EditText)findViewById(R.id.editText_screen_register_operario_etUsuario);
         etclave= (EditText)findViewById(R.id.editText_screen_register_operario_etClave);
-        button_foto = (Button) findViewById(R.id.button_screen_register_operario_foto);
-        capture_Photo = (ImageView) findViewById(R.id.imageView_screen_register_operario_foto_result);
+        button_foto = (ImageView) findViewById(R.id.button_screen_register_operario_foto);
 
 
         button_foto.setOnClickListener(new View.OnClickListener() {
