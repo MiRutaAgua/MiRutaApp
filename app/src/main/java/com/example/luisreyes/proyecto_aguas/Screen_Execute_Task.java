@@ -1,24 +1,22 @@
 package com.example.luisreyes.proyecto_aguas;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 /**
  * Created by Alejandro on 11/08/2019.
  */
 
-public class Screen_Execute_Task extends Activity {
+public class Screen_Execute_Task extends AppCompatActivity implements Dialog.DialogListener {
 
-    private  TextView textView_serial_number_result;
+    private  TextView textView_serial_number_result, telefonos, telefono1;
 
     private ImageView button_canvas_screen_exec_task;
 
@@ -64,6 +62,8 @@ public class Screen_Execute_Task extends Activity {
             textView_serial_number_result.setText(result);
         }
 
+        telefonos = (TextView) findViewById(R.id.textView_phones_screen_exec_task);
+        telefono1 = (TextView) findViewById(R.id.textView_phone1_screen_exec_task);
         button_instalation_photo_screen_exec_task = (ImageView)findViewById(R.id.button_instalation_photo_screen_exec_task);
         button_read_photo_screen_exec_task = (ImageView)findViewById(R.id.button_read_photo_screen_exec_task);
         button_serial_number_photo_screen_exec_task = (ImageView)findViewById(R.id.button_serial_number_photo_screen_exec_task);
@@ -72,6 +72,18 @@ public class Screen_Execute_Task extends Activity {
         button_scan_serial_number_screen_exec_task= (ImageView)findViewById(R.id.button_scan_serial_number_screen_exec_task);
         button_scan_module_screen_exec_task= (ImageView)findViewById(R.id.button_scan_module_screen_exec_task);
 
+        telefonos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openDialog("Telefonos","547076...");
+            }
+        });
+        telefono1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openDialog("Telefonos","547076...");
+            }
+        });
         button_validate_screen_exec_task          = (ImageView)findViewById(R.id.button_validate_screen_exec_task);
 
 //        ImageView mainImage = new ImageView(this);
@@ -159,4 +171,16 @@ public class Screen_Execute_Task extends Activity {
 
     }
 
+    public void openDialog(String title, String hint){
+        Dialog dialog = new Dialog();
+        dialog.setTitleAndHint(title, hint);
+        dialog.show(getSupportFragmentManager(), "Telefonos");
+    }
+
+    @Override
+    public void pasarTexto(String telefonos) {
+        if(!(TextUtils.isEmpty(telefonos))){
+              telefono1.setText(telefonos);
+         }
+    }
 }

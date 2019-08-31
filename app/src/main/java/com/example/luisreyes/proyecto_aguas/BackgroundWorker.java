@@ -38,6 +38,7 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
     AlertDialog alertDialog;
 
     JSONObject operario = new JSONObject();
+    JSONObject tarea = new JSONObject();
 
     private TaskCompleted mCallback;
 
@@ -58,28 +59,44 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
         String change_foto_url;
         String get_operarios_url;
         String get_user_data_url;
+        String get_one_tarea_url;
+        String get_tareas_url;
+        String test_conection_url;
 
         if(Screen_Login_Activity.isOnline){
 
-             login_url = "https://server26194.webcindario.com/login_operarios.php";
-             register_url = "https://server26194.webcindario.com/register_operario.php";
-             change_foto_url = "https://server26194.webcindario.com/change_foto.php";
-             get_operarios_url = "https://server26194.webcindario.com/get_operarios.php";
-             get_user_data_url = "https://server26194.webcindario.com/get_one_operario.php";
+//             login_url = "https://server26194.webcindario.com/login_operarios.php";  //https://hosting.miarroba.com/webftp.php?id=1875467#!path=%2Fweb
+//             register_url = "https://server26194.webcindario.com/register_operario.php";
+//             change_foto_url = "https://server26194.webcindario.com/change_foto.php";
+//             get_operarios_url = "https://server26194.webcindario.com/get_operarios.php";
+//             get_user_data_url = "https://server26194.webcindario.com/get_one_operario.php";
+//             test_conection_url = "https://server26194.webcindario.com/test_database.php";
+
+            login_url = "https://server26194.000webhostapp.com/login_operarios.php";  //https://files.000webhost.com/
+            register_url = "https://server26194.000webhostapp.com/register_operario.php";
+            change_foto_url = "https://server26194.000webhostapp.com/change_foto.php";
+            get_operarios_url = "https://server26194.000webhostapp.com/get_operarios.php";
+            get_user_data_url = "https://server26194.000webhostapp.com/get_one_operario.php";
+            get_one_tarea_url = "https://server26194.000webhostapp.com/get_one_tarea.php";
+            get_tareas_url = "https://server26194.000webhostapp.com/get_tareas.php";
+            test_conection_url = "https://server26194.000webhostapp.com/test_database.php";
         }
         else {
-             login_url = "http://192.168.137.50/login_operarios.php";
-             register_url = "http://192.168.137.50/register_operario.php";
-             change_foto_url = "http://192.168.137.50/change_foto.php";
-             get_operarios_url = "http://192.168.137.50/get_operarios.php";
-             get_user_data_url = "http://192.168.137.50/get_one_operario.php";
+            login_url = "http://192.168.137.50/login_operarios.php";
+            register_url = "http://192.168.137.50/register_operario.php";
+            change_foto_url = "http://192.168.137.50/change_foto.php";
+            get_operarios_url = "http://192.168.137.50/get_operarios.php";
+            get_user_data_url = "http://192.168.137.50/get_one_operario.php";
+
+            get_one_tarea_url = "https://192.168.137.50/get_one_tarea.php";
+            get_tareas_url = "http://192.168.137.50/get_tareas.php";
         }
 
-        try {
-            operario.put("nombre", "Ale");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            operario.put("nombre", "Ale");
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
         if(type.equals("login")) try {
 
             return_image = false;
@@ -99,8 +116,73 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        }
-        else if (type.equals("get_user_data")){
+        }else if (type.equals("get_one_tarea")){
+
+            try{
+                return_image = false;
+                ArrayList<String> keys = new ArrayList<String>();
+                keys.add("numero_serie_contador");
+                ArrayList<String> values = new ArrayList<String>();
+                for (int i = 0; i < keys.size(); i++) {
+                    values.add(params[i+1]);
+                }
+                ArrayList<String> result = post_Output_Info(keys, values, get_one_tarea_url, true, true);
+                String return_string = "";
+                for(int n =0 ; n < result.size() ; n++) {
+                    try {
+                        JSONArray jsonArray = new JSONArray(result.get(n));
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            tarea  = jsonArray.getJSONObject(i);
+                            return_string = tarea.toString();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                return return_string;
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (ProtocolException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }else if (type.equals("get_tareas")){
+
+            try{
+                return_image = false;
+                ArrayList<String> keys = new ArrayList<String>();
+                ArrayList<String> values = new ArrayList<String>();
+
+                ArrayList<String> result = post_Output_Info(keys, values, get_tareas_url, false, true);
+
+                String return_string = "";
+                for(int n =0 ; n < result.size() ; n++) {
+                    try {
+                        JSONArray jsonArray = new JSONArray(result.get(n));
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                            return_string += jsonObject.toString();
+                            //return_string += jsonObject.getString("poblacion")+" "+jsonObject.getString("calle");
+                            return_string += "\n$$$$$";
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                return return_string;
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (ProtocolException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }else if (type.equals("get_user_data")){
 
             try{
                 return_image = false;

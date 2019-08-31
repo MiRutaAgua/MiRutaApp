@@ -3,6 +3,7 @@ package com.example.luisreyes.proyecto_aguas;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDialogFragment;
 import android.view.LayoutInflater;
@@ -15,9 +16,12 @@ import android.widget.EditText;
 
 public class Dialog extends AppCompatDialogFragment {
 
-    EditText editText_observaciones;
+    public EditText editText_observaciones;
     private DialogListener listener;
+    AlertDialog.Builder builder;
 
+    private static String hint="";
+    private static String title="";
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -30,12 +34,12 @@ public class Dialog extends AppCompatDialogFragment {
 
     @Override
     public android.app.Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder = new AlertDialog.Builder(getActivity());
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.layout_dialog, null);
         builder.setView(view)
-                .setTitle("Observaciones")
+                .setTitle(title)
                 .setNegativeButton("cancelar", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -52,11 +56,17 @@ public class Dialog extends AppCompatDialogFragment {
                 });
 
         editText_observaciones = view.findViewById(R.id.edit_usename_layout_dialog);
+        editText_observaciones.setHint(hint);
         return  builder.create();
     }
 
     public interface DialogListener{
 
         void pasarTexto(String observaciones);
+    }
+
+    public void setTitleAndHint(String title_tag, String hint_tag){
+        hint = hint_tag;
+        title = title_tag;
     }
 }

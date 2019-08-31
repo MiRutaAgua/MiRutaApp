@@ -38,6 +38,9 @@ public class Screen_Login_Activity extends Activity implements TaskCompleted{
     private EditText lineEdit_clave_de_acceso;
     private ImageView button_login, button_register;
 
+    public static JSONObject tarea_JSON;
+    public static JSONObject operario_JSON;
+
     public static boolean isOnline = true;
 
     @Override
@@ -45,6 +48,9 @@ public class Screen_Login_Activity extends Activity implements TaskCompleted{
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.screen_login);
+
+        tarea_JSON = new JSONObject();
+        operario_JSON = new JSONObject();
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -134,7 +140,7 @@ public class Screen_Login_Activity extends Activity implements TaskCompleted{
             }
             else {
                 Intent intent_open_next_screen = new Intent(Screen_Login_Activity.this, Screen_User_Data.class);
-                intent_open_next_screen.putExtra("foto_usuario", result);
+                intent_open_next_screen.putExtra("usuario", result);
                 startActivity(intent_open_next_screen);
             }
         }

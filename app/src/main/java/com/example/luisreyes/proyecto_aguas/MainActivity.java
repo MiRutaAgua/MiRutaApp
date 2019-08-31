@@ -35,12 +35,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        myToolbar.setBackgroundColor(Color.TRANSPARENT);
-
-        setSupportActionBar(myToolbar);
-        getSupportActionBar().setIcon(getDrawable(R.drawable.toolbar_icon));
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+//        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+//        myToolbar.setBackgroundColor(Color.TRANSPARENT);
+//
+//        setSupportActionBar(myToolbar);
+//        getSupportActionBar().setIcon(getDrawable(R.drawable.toolbar_icon));
+//        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         textView_pantalla_principal = (TextView) findViewById(R.id.textView_screen_main);
         startTimer();

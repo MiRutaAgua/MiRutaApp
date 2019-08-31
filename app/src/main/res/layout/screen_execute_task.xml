@@ -190,25 +190,17 @@ android:layout_marginLeft="80dp"
                 android:orientation="vertical"
                 >
                 <TextView
+                    android:paddingTop="1dp"
                     android:id="@+id/textView_phone1_screen_exec_task"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left"
                     android:layout_marginLeft="20dp"
                     android:textSize="15dp"
-                    android:text="94466666"
+                    android:text="94466666  66666666"
 
                     />
-                <TextView
-                    android:id="@+id/textView_phone2_screen_exec_task"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="left"
-                    android:layout_marginLeft="20dp"
-                    android:textSize="15dp"
-                    android:text="66666666"
 
-                    />
             </LinearLayout>
         </LinearLayout>
 

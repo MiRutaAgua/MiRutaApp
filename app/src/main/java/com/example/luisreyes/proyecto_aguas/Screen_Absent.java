@@ -3,11 +3,14 @@ package com.example.luisreyes.proyecto_aguas;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -42,7 +45,26 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
         hora_cita = (TextView)findViewById(R.id.textView_screen_absent_hora_cita);
         observaciones_text = (TextView)findViewById(R.id.textView_screen_absent_Observaciones);
 
-        //checkBox_incorrecto_telefono1.setOnCheckedChangeListener(new );
+        checkBox_incorrecto_telefono1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if(isChecked){
+                    telefono1.setTextColor(Color.RED);
+                }else{
+                    telefono1.setTextColor(Color.BLACK);
+                }
+            }
+        });
+        checkBox_incorrecto_telefono2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if(isChecked){
+                    telefono2.setTextColor(Color.RED);
+                }else{
+                    telefono2.setTextColor(Color.BLACK);
+                }
+            }
+        });
 
 
         fecha_cita.setOnClickListener(new View.OnClickListener() {
@@ -68,7 +90,8 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
     public void openDialog(){
 
         Dialog dialog = new Dialog();
-        dialog.show(getSupportFragmentManager(), "Dialogo Observaciones");
+        dialog.setTitleAndHint("Observaciones", "Observaciones");
+        dialog.show(getSupportFragmentManager(), "Observaciones");
     }
     @Override
     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
@@ -113,7 +136,8 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
 
     @Override
     public void pasarTexto(String observaciones) {
-
-        observaciones_text.setText(observaciones);
+        if(!(TextUtils.isEmpty(observaciones))){
+            observaciones_text.setText(observaciones);
+        }
     }
 }

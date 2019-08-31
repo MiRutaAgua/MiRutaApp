@@ -2,7 +2,8 @@
 <LinearLayout
 xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
 android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    >
 
 
     <TextView
@@ -14,19 +15,24 @@ android:layout_height="match_parent"
         android:layout_alignParentTop="true"
         android:gravity="center"
         android:text="Pantalla Lista de Contadores de Equipo"
-        android:visibility="invisible"/>
+        android:visibility="gone"/>
 
-    <TextView
-        android:layout_marginTop="20dp"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:gravity="center"
-        android:text="Tabla Equipo"
-        android:textSize="25dp"
-        />
+        android:gravity="left">
+        <ImageView
+            android:layout_marginTop="20dp"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:gravity="center"
+            android:layout_marginLeft="80dp"
+            android:src="@drawable/screen_table_team_icon"     />
+    </LinearLayout>
+
 
 
     <EditText
@@ -35,7 +41,7 @@ android:layout_height="match_parent"
         android:layout_height="wrap_content"
         android:hint="filtrar"
         android:layout_marginLeft="10dp"
-
+        android:id="@+id/editText_screen_table_team_filter"
         />
 
     <ListView

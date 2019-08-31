@@ -3,9 +3,12 @@ package com.example.luisreyes.proyecto_aguas;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -18,7 +21,8 @@ import java.util.ArrayList;
 public class Screen_Table_Personal extends Activity{
 
     private ListView lista_de_contadores_screen_table_personal;
-
+    private EditText editText_filter;
+    private ArrayAdapter arrayAdapter;
     private TextView textView_screen_table_personal;
 
     private ArrayList<String> lista_contadores;
@@ -36,6 +40,7 @@ public class Screen_Table_Personal extends Activity{
 
         lista_de_contadores_screen_table_personal = (ListView) findViewById(R.id.listView_contadores_screen_table_personal);
         textView_screen_table_personal           = (TextView) findViewById(R.id.textView_screen_table_personal);
+        editText_filter                       = (EditText) findViewById(R.id.editText_screen_table_personal_filter);
 
 
         lista_contadores = new ArrayList<String>();
@@ -50,7 +55,7 @@ public class Screen_Table_Personal extends Activity{
         lista_contadores.add("IBERIA    33    5   dh   CITA LUNES 1-1-19 A LAS 9:00     VIVIENDAS   9085285    PABLO DAVALOS");
 
 
-        ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, lista_contadores);
+        arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, lista_contadores);
 
         lista_de_contadores_screen_table_personal.setAdapter(arrayAdapter);
 
@@ -70,6 +75,24 @@ public class Screen_Table_Personal extends Activity{
                     startActivity(intent_open_screen_battery_counter);
                     finish();
                 }
+            }
+        });
+
+        editText_filter.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                (Screen_Table_Personal.this).arrayAdapter.getFilter().filter(charSequence);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
             }
         });
     }

@@ -3,11 +3,18 @@ package com.example.luisreyes.proyecto_aguas;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -15,10 +22,11 @@ import java.util.ArrayList;
  * Created by luis.reyes on 10/08/2019.
  */
 
-public class Screen_Table_Team extends Activity{
+public class Screen_Table_Team extends Activity implements TaskCompleted{
 
     private ListView lista_de_contadores_screen_table_team;
-
+    private ArrayAdapter arrayAdapter;
+    private EditText editText_filter;
     private  TextView textView_screen_table_team;
     String[] lista_contadores_ = {
             "IBERIA    10    1   ii   CITA LUNES 1-1-19 A LAS 9:00     VIVIENDAS   4597611    PIO FELIPE",
@@ -46,7 +54,7 @@ public class Screen_Table_Team extends Activity{
 
         lista_de_contadores_screen_table_team = (ListView) findViewById(R.id.listView_contadores_screen_table_view);
         textView_screen_table_team            = (TextView) findViewById(R.id.textView_screen_table_team);
-
+        editText_filter                       = (EditText) findViewById(R.id.editText_screen_table_team_filter);
 
         lista_contadores = new ArrayList<String>();
 
@@ -60,7 +68,7 @@ public class Screen_Table_Team extends Activity{
         lista_contadores.add("IBERIA    33    5   dh   CITA LUNES 1-1-19 A LAS 9:00     VIVIENDAS   9085285    PABLO DAVALOS");
 
 
-        ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, lista_contadores);
+        arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, lista_contadores);
 
         lista_de_contadores_screen_table_team.setAdapter(arrayAdapter);
 
@@ -68,7 +76,7 @@ public class Screen_Table_Team extends Activity{
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                textView_screen_table_team.setText(lista_contadores.get(i));
+                //textView_screen_table_team.setText(lista_contadores.get(i));
 
                 if(i < 4){
 
@@ -82,5 +90,94 @@ public class Screen_Table_Team extends Activity{
                 }
             }
         });
+
+        editText_filter.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                (Screen_Table_Team.this).arrayAdapter.getFilter().filter(charSequence);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        Toast.makeText(Screen_Table_Team.this, "Buscando Tareas", Toast.LENGTH_SHORT).show();
+
+
+        //String type_script = "get_one_tarea";
+        String type_script = "get_tareas";
+        String numero_serie_contador = "123456";
+
+        BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Table_Team.this);
+        //backgroundWorker.execute(type_script, numero_serie_contador);
+        backgroundWorker.execute(type_script);
+    }
+
+    @Override
+    public void onTaskComplete(String type, String result) throws JSONException {
+
+        if(type == "get_one_tarea"){
+            if(result == null){
+                Toast.makeText(Screen_Table_Team.this, "No hay conexion a Internet", Toast.LENGTH_SHORT).show();
+            }
+            else {
+
+                JSONObject json_tarea = new JSONObject(result);
+
+                //Screen_Login_Activity.tarea_JSON = json_tarea;
+
+                String poblacion = json_tarea.getString("poblacion");
+                Toast.makeText(Screen_Table_Team.this, "Tarea obtenida correctamente -> "+poblacion, Toast.LENGTH_LONG).show();
+
+
+            }
+        }else if(type == "get_tareas"){
+            if(result == null){
+                Toast.makeText(Screen_Table_Team.this, "No hay conexion a Internet", Toast.LENGTH_LONG).show();
+            }
+            else {
+
+                String calle="";
+                String split_string = "\n$$$$$";
+                String [] lista_tareas_json = result.split(split_string);
+
+                for(int i =0; i < lista_tareas_json.length; i++){
+                    JSONObject json_tarea = new JSONObject(lista_tareas_json[i]);
+
+                    //Screen_Login_Activity.tarea_JSON = json_tarea;
+
+                    calle = json_tarea.getString("poblacion");
+                }
+                Toast.makeText(Screen_Table_Team.this, "Cantidad de tareas -> "+String.valueOf(lista_tareas_json.length)+"\n\nTareas todas obtenidas correctamente "+calle, Toast.LENGTH_LONG).show();
+            }
+        }
+        else if(type == "get_operarios"){
+            if(result == null){
+                Toast.makeText(Screen_Table_Team.this, "No hay conexion a Internet", Toast.LENGTH_LONG).show();
+            }
+            else {
+                String calle="";
+                String split_string = "\n$$$$$";
+                String [] lista_tareas_json = result.split(split_string);
+
+                for(int i =0; i < lista_tareas_json.length; i++){
+                    JSONObject json_tarea = new JSONObject(lista_tareas_json[i]);
+
+                    //Screen_Login_Activity.tarea_JSON = json_tarea;
+
+                    calle = json_tarea.getString("poblacion");
+                }
+
+                Toast.makeText(Screen_Table_Team.this, "Cantidad de operarios -> "+String.valueOf(lista_tareas_json.length)+" \nOperarios todos obtenidos correctamente "+calle, Toast.LENGTH_LONG).show();
+            }
+        }
     }
 }

@@ -14,19 +14,23 @@
         android:layout_alignParentTop="true"
         android:gravity="center"
         android:text="Pantalla Lista de Contadores de Operario"
-        android:visibility="invisible"/>
+        android:visibility="gone"/>
 
-    <TextView
-        android:layout_marginTop="20dp"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:gravity="center"
-        android:text="Tabla Operario"
-        android:textSize="25dp"
-        />
+        android:gravity="left">
+        <ImageView
+            android:layout_marginTop="20dp"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:gravity="center"
+            android:layout_marginLeft="70dp"
+            android:src="@drawable/screen_table_personal_icon"     />
+    </LinearLayout>
 
     <EditText
         android:layout_marginTop="20dp"
@@ -34,7 +38,7 @@
         android:layout_height="wrap_content"
         android:hint="filtrar"
         android:layout_marginLeft="10dp"
-
+        android:id="@+id/editText_screen_table_personal_filter"
         />
 
     <ListView

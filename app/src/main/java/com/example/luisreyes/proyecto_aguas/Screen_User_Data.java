@@ -41,10 +41,13 @@ public class Screen_User_Data extends Activity implements TaskCompleted{
         nombre = (TextView)findViewById(R.id.textView_screen_user_data_nombre);
         telefono = (TextView)findViewById(R.id.textView_screen_user_data_telefono);
 
-        String json_usuario_string = getIntent().getStringExtra("foto_usuario");
+        String json_usuario_string = getIntent().getStringExtra("usuario");
         try {
 
+
             JSONObject json_usuario = new JSONObject(json_usuario_string);
+
+            Screen_Login_Activity.operario_JSON = json_usuario;
 
             String foto_usuario = json_usuario.getString("foto");
             Bitmap bitmap = Screen_Validate.getImageFromString(foto_usuario);
@@ -58,6 +61,8 @@ public class Screen_User_Data extends Activity implements TaskCompleted{
 
             nombre.setText(nombre_operario + " "+ apellidos);
             telefono.setText(json_usuario.getString("telefonos"));
+
+            //Toast.makeText(Screen_User_Data.this, Screen_Login_Activity.operario_JSON.getString("apellidos"), Toast.LENGTH_LONG).show();
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -76,6 +81,7 @@ public class Screen_User_Data extends Activity implements TaskCompleted{
             public void onClick(View view) {
                 Intent intent_open_next_screen = new Intent(Screen_User_Data.this, team_or_personal_task_selection_screen_Activity.class);
                 startActivity(intent_open_next_screen);
+                finish();
             }
         });
     }
