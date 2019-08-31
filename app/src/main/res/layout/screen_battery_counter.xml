@@ -83,13 +83,14 @@
             />
 
         <TextView
-            android:layout_marginRight="20dp"
             android:id="@+id/textView_direccion_screen_unity_counter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
             android:layout_weight="3"
-            android:textSize="15sp"
-            android:text="Calle 136 #4903 /Ave 49 y Ave 51" />
+            android:fontFamily="sans-serif"
+            android:text="Calle 136 #4903 /Ave 49 y Ave 51"
+            android:textSize="15sp" />
     </LinearLayout>
 
 

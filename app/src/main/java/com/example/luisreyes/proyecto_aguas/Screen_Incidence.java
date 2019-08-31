@@ -56,7 +56,6 @@ public class Screen_Incidence extends Activity {
             public void onClick(View view) {
 
                 startActivity(intent_open_incidence_summary);
-                finish();
             }
         });
     }

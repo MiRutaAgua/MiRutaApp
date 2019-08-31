@@ -170,50 +170,17 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
         }else if(type.equals("change_foto")){
 
             try {
-//                return_image = true;
-//                ArrayList<String> keys = new ArrayList<String>();
-//                keys.add("user_name");
-//                keys.add("password");
-//                keys.add("image");
-//                ArrayList<String> values = new ArrayList<String>();
-//                for (int i = 0; i < keys.size(); i++) {
-//                    values.add(params[i+1]);
-//                }
-//                ArrayList<String> result = post_Output_Info(keys, values, change_foto_url, true, true);
-//                return result.toString();
                 return_image = true;
-                String user_name = params[1];
-                String password = params[2];
-                String image = params[3];
-
-                URL url = new URL(change_foto_url);
-                HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
-                httpURLConnection.setRequestMethod("POST");
-                httpURLConnection.setDoOutput(true);
-                httpURLConnection.setDoInput(true);
-
-                OutputStream outputStream = httpURLConnection.getOutputStream();
-                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
-                String post_data = URLEncoder.encode("user_name", "UTF-8")+"="+URLEncoder.encode(user_name, "UTF-8")+"&"
-                        +URLEncoder.encode("password", "UTF-8")+"="+URLEncoder.encode(password, "UTF-8")+"&"
-                        +URLEncoder.encode("image", "UTF-8")+"="+URLEncoder.encode(image, "UTF-8");
-                bufferedWriter.write(post_data);
-                bufferedWriter.flush();
-                bufferedWriter.close();
-                outputStream.close();
-
-                InputStream inputStream = httpURLConnection.getInputStream();
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
-                String result = "";
-                String line;
-                while((line = bufferedReader.readLine())!= null){
-                    result += line;
+                ArrayList<String> keys = new ArrayList<String>();
+                keys.add("user_name");
+                keys.add("password");
+                keys.add("image");
+                ArrayList<String> values = new ArrayList<String>();
+                for (int i = 0; i < keys.size(); i++) {
+                    values.add(params[i+1]);
                 }
-                bufferedReader.close();
-                inputStream.close();
-                httpURLConnection.disconnect();
-
-                return result;
+                ArrayList<String> result = post_Output_Info(keys, values, change_foto_url, true, true);
+                return result.toString();
 
             } catch (MalformedURLException e) {
                 e.printStackTrace();

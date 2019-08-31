@@ -140,6 +140,7 @@
                     android:text="636489090"
                     android:layout_gravity="center"
                     android:textSize="16dp"
+                    android:id="@+id/textView_screen_absent_telefono1"
                     />
                 <CheckBox
                     android:layout_width="wrap_content"
@@ -150,6 +151,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:id="@+id/checkbox_screen_absent_N_incorrecto1"
                     />
             </LinearLayout>
 
@@ -168,6 +170,7 @@
                     android:text="636489090"
                     android:layout_gravity="center"
                     android:textSize="16dp"
+                    android:id="@+id/textView_screen_absent_telefono2"
                     />
                 <CheckBox
                     android:layout_width="wrap_content"
@@ -178,6 +181,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:id="@+id/checkbox_screen_absent_N_incorrecto2"
                     />
             </LinearLayout>
 
@@ -227,7 +231,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="Lunes 21  de Marzo del 2019" />
+                    android:text="Lunes 21  de Marzo del 2019"
+                    android:id="@+id/textView_screen_absent_fecha_cita"
+                    />
             </LinearLayout>
 
             <LinearLayout
@@ -238,7 +244,7 @@
                 android:orientation="horizontal"
                 >
                 <TextView
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="3dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Hora"
@@ -250,8 +256,9 @@
                     android:layout_marginLeft="20dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="Entre las 12:00 y las 12:30" />
+                    android:layout_gravity="bottom"
+                    android:text="Entre las 12:00 y las 12:30"
+                    android:id="@+id/textView_screen_absent_hora_cita"/>
             </LinearLayout>
 
 
@@ -289,6 +296,7 @@
                     android:text="Este vecino saldra al trabajo solo para el cambio del contador y estará esperando fuera de casa"
                     android:layout_gravity="center"
                     android:textSize="16dp"
+                    android:id="@+id/textView_screen_absent_Observaciones"
                     />
             </LinearLayout>
 

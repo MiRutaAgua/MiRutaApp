@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Proyecto_Aguas</string>
+    <string name="yes_spanish" value = "SI"></string>
+    <string name="no_spanish" value = "NO"></string>
 </resources>

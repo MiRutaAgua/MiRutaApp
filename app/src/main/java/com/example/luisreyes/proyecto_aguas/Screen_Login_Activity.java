@@ -3,6 +3,8 @@ package com.example.luisreyes.proyecto_aguas;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -90,7 +92,23 @@ public class Screen_Login_Activity extends Activity implements TaskCompleted{
 
         if(type == "login"){
             if(result == null){
-                Toast.makeText(this,"No hay conexion a Internet", Toast.LENGTH_LONG).show();
+                //Toast.makeText(this,"No hay conexion a Internet, se procedera con datos desactualizados", Toast.LENGTH_LONG).show();
+                new AlertDialog.Builder(this)
+                        .setTitle("Sin Internet")
+                        .setMessage("¿Desea proseguir con datos desactualizados?")
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                Intent intent_open_next_screen = new Intent(Screen_Login_Activity.this, team_or_personal_task_selection_screen_Activity.class);
+                                startActivity(intent_open_next_screen);
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                            }
+                        }).show();
             }
             else {
                 if (result.contains("not success")) {
@@ -112,6 +130,7 @@ public class Screen_Login_Activity extends Activity implements TaskCompleted{
 
             if(result == null){
                 Toast.makeText(this,"No hay conexion a Internet", Toast.LENGTH_LONG).show();
+
             }
             else {
                 Intent intent_open_next_screen = new Intent(Screen_Login_Activity.this, Screen_User_Data.class);
