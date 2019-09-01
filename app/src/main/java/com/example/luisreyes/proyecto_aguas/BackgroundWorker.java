@@ -156,17 +156,17 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
                 ArrayList<String> keys = new ArrayList<String>();
                 ArrayList<String> values = new ArrayList<String>();
 
-                ArrayList<String> result = post_Output_Info(keys, values, get_tareas_url, false, true);
+                Screen_Table_Team.lista_tareas = post_Output_Info(keys, values, get_tareas_url, false, true);
 
                 String return_string = "";
-                for(int n =0 ; n < result.size() ; n++) {
+                for(int n =0 ; n < Screen_Table_Team.lista_tareas.size() ; n++) {
                     try {
-                        JSONArray jsonArray = new JSONArray(result.get(n));
+                        JSONArray jsonArray = new JSONArray(Screen_Table_Team.lista_tareas.get(n));
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
                             return_string += jsonObject.toString();
                             //return_string += jsonObject.getString("poblacion")+" "+jsonObject.getString("calle");
-                            return_string += "\n$$$$$";
+                            return_string += "\n";
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

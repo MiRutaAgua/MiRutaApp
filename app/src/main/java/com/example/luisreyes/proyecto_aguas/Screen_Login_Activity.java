@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -40,6 +41,7 @@ public class Screen_Login_Activity extends Activity implements TaskCompleted{
 
     public static JSONObject tarea_JSON;
     public static JSONObject operario_JSON;
+
 
     public static boolean isOnline = true;
 

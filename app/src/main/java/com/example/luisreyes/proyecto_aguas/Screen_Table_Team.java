@@ -13,6 +13,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -27,6 +28,7 @@ public class Screen_Table_Team extends Activity implements TaskCompleted{
     private ListView lista_de_contadores_screen_table_team;
     private ArrayAdapter arrayAdapter;
     private EditText editText_filter;
+    public static ArrayList<String> lista_tareas;
     private  TextView textView_screen_table_team;
     String[] lista_contadores_ = {
             "IBERIA    10    1   ii   CITA LUNES 1-1-19 A LAS 9:00     VIVIENDAS   4597611    PIO FELIPE",
@@ -79,14 +81,10 @@ public class Screen_Table_Team extends Activity implements TaskCompleted{
                 //textView_screen_table_team.setText(lista_contadores.get(i));
 
                 if(i < 4){
-
                     startActivity(intent_open_screen_unity_counter);
-                    finish();
                 }
                 else{
-
                     startActivity(intent_open_screen_battery_counter);
-                    finish();
                 }
             }
         });
@@ -144,39 +142,33 @@ public class Screen_Table_Team extends Activity implements TaskCompleted{
                 Toast.makeText(Screen_Table_Team.this, "No hay conexion a Internet", Toast.LENGTH_LONG).show();
             }
             else {
+                lista_contadores.clear();
+                arrayAdapter.clear();
 
-                String calle="";
-                String split_string = "\n$$$$$";
-                String [] lista_tareas_json = result.split(split_string);
-
-                for(int i =0; i < lista_tareas_json.length; i++){
-                    JSONObject json_tarea = new JSONObject(lista_tareas_json[i]);
-
-                    //Screen_Login_Activity.tarea_JSON = json_tarea;
-
-                    calle = json_tarea.getString("poblacion");
-                }
-                Toast.makeText(Screen_Table_Team.this, "Cantidad de tareas -> "+String.valueOf(lista_tareas_json.length)+"\n\nTareas todas obtenidas correctamente "+calle, Toast.LENGTH_LONG).show();
-            }
-        }
-        else if(type == "get_operarios"){
-            if(result == null){
-                Toast.makeText(Screen_Table_Team.this, "No hay conexion a Internet", Toast.LENGTH_LONG).show();
-            }
-            else {
-                String calle="";
-                String split_string = "\n$$$$$";
-                String [] lista_tareas_json = result.split(split_string);
-
-                for(int i =0; i < lista_tareas_json.length; i++){
-                    JSONObject json_tarea = new JSONObject(lista_tareas_json[i]);
-
-                    //Screen_Login_Activity.tarea_JSON = json_tarea;
-
-                    calle = json_tarea.getString("poblacion");
+                String string="";
+                for(int n =0 ; n < Screen_Table_Team.lista_tareas.size() ; n++) {
+                    try {
+                        JSONArray jsonArray = new JSONArray(Screen_Table_Team.lista_tareas.get(n));
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                            lista_contadores.add(jsonObject.getString("poblacion")+"   "
+                                    +jsonObject.getString("calle").replace("\n", "")+"  "
+                                    +jsonObject.getString("numero_edificio").replace("\n", "")
+                                    +jsonObject.getString("letra_edificio").replace("\n", "")+"  "
+                                    +jsonObject.getString("piso").replace("\n", "")+"  "
+                                    +jsonObject.getString("mano").replace("\n", "")+"\n"
+                                    +jsonObject.getString("nuevo_citas").replace("\n", "")+"\n"
+                                    +jsonObject.getString("nombre_cliente").replace("\n", ""));
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
 
-                Toast.makeText(Screen_Table_Team.this, "Cantidad de operarios -> "+String.valueOf(lista_tareas_json.length)+" \nOperarios todos obtenidos correctamente "+calle, Toast.LENGTH_LONG).show();
+                arrayAdapter = new ArrayAdapter(Screen_Table_Team.this, android.R.layout.simple_list_item_1, lista_contadores);
+                lista_de_contadores_screen_table_team.setAdapter(arrayAdapter);
+
+                Toast.makeText(Screen_Table_Team.this,"Resultado "+ string, Toast.LENGTH_LONG).show();
             }
         }
     }
