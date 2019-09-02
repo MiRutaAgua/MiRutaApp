@@ -72,7 +72,7 @@ public class Screen_Table_Team extends Activity implements TaskCompleted{
 
         arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, lista_contadores);
 
-        lista_de_contadores_screen_table_team.setAdapter(arrayAdapter);
+        //lista_de_contadores_screen_table_team.setAdapter(arrayAdapter);
 
         lista_de_contadores_screen_table_team.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -80,12 +80,46 @@ public class Screen_Table_Team extends Activity implements TaskCompleted{
 
                 //textView_screen_table_team.setText(lista_contadores.get(i));
 
-                if(i < 4){
-                    startActivity(intent_open_screen_unity_counter);
+
+                String n_tarea ="";
+                for(int n =0 ; n < Screen_Table_Team.lista_tareas.size() ; n++) {
+                    try {
+                        JSONArray jsonArray = new JSONArray(Screen_Table_Team.lista_tareas.get(n));
+                        for (int c = 0; c < jsonArray.length(); c++) {
+                            JSONObject jsonObject = jsonArray.getJSONObject(c);
+                            if(c==i) {
+                                Screen_Login_Activity.tarea_JSON = jsonObject;
+                                n_tarea = (Screen_Login_Activity.tarea_JSON.getString("poblacion") + "   "
+                                        + Screen_Login_Activity.tarea_JSON.getString("calle").replace("\n", "") + "  "
+                                        + Screen_Login_Activity.tarea_JSON.getString("numero_edificio").replace("\n", "")
+                                        + Screen_Login_Activity.tarea_JSON.getString("letra_edificio").replace("\n", "") + "  "
+                                        + Screen_Login_Activity.tarea_JSON.getString("piso").replace("\n", "") + "  "
+                                        + Screen_Login_Activity.tarea_JSON.getString("mano").replace("\n", "") + "\n"
+                                        + Screen_Login_Activity.tarea_JSON.getString("nuevo_citas").replace("\n", "") + "\n"
+                                        + Screen_Login_Activity.tarea_JSON.getString("nombre_cliente").replace("\n", ""));
+                            }
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
-                else{
-                    startActivity(intent_open_screen_battery_counter);
+                //Toast.makeText(Screen_Table_Team.this, "Tarea ->\n"+n_tarea, Toast.LENGTH_SHORT).show();
+                try {
+                    String acceso = Screen_Login_Activity.tarea_JSON.getString("acceso");
+                    acceso = acceso.replace("\n", "");
+                    acceso = acceso.replace(" ", "");
+                    Toast.makeText(Screen_Table_Team.this, "Acceso -> \n"+acceso, Toast.LENGTH_SHORT).show();
+                    if(acceso.contains("BAT")) {
+                        startActivity(intent_open_screen_battery_counter);
+                    }
+                    else{
+                        startActivity(intent_open_screen_unity_counter);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
+
+
             }
         });
 
@@ -168,7 +202,7 @@ public class Screen_Table_Team extends Activity implements TaskCompleted{
                 arrayAdapter = new ArrayAdapter(Screen_Table_Team.this, android.R.layout.simple_list_item_1, lista_contadores);
                 lista_de_contadores_screen_table_team.setAdapter(arrayAdapter);
 
-                Toast.makeText(Screen_Table_Team.this,"Resultado "+ string, Toast.LENGTH_LONG).show();
+                Toast.makeText(Screen_Table_Team.this,"Tareas descargadas ", Toast.LENGTH_LONG).show();
             }
         }
     }

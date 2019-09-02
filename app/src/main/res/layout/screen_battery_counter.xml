@@ -83,7 +83,7 @@
             />
 
         <TextView
-            android:id="@+id/textView_direccion_screen_unity_counter"
+            android:id="@+id/textView_direccion_screen_battery_counter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="20dp"
@@ -115,7 +115,7 @@
             />
 
         <TextView
-            android:id="@+id/textView_datos_especificos_screen_unity_counter"
+            android:id="@+id/textView_datos_especificos_screen_battery_counter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="3"
@@ -173,6 +173,7 @@
                     android:text="Serie: "
                     android:textSize="12sp" />
                 <TextView
+                    android:id="@+id/textView_screen_battery_counter_serie"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
                     android:text=" C11FA 666666"
@@ -190,6 +191,7 @@
                     android:text="Lectura: "
                     android:textSize="12sp" />
                 <TextView
+                    android:id="@+id/textView_screen_battery_counter_lectura"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
                     android:text=" 1347 m3"
@@ -207,6 +209,7 @@
                     android:text="Calibre: "
                     android:textSize="12sp" />
                 <TextView
+                    android:id="@+id/textView_screen_battery_counter_calibre"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
                     android:text=" Calibre 20-190"
@@ -224,6 +227,7 @@
                     android:text="Ubicacion: "
                     android:textSize="12sp" />
                 <TextView
+                    android:id="@+id/textView_screen_battery_counter_ubicacion"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
                     android:text=" Fregadera"
@@ -241,6 +245,7 @@
                     android:text="Acceso: "
                     android:textSize="12sp" />
                 <TextView
+                    android:id="@+id/textView_screen_battery_counter_acceso"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
                     android:text=" Garaje"
@@ -278,6 +283,7 @@
                 android:layout_marginLeft="20dp"
                 />
             <TextView
+                android:id="@+id/textView_screen_battery_counter_ubicacion_bateria"
                 android:textSize="15sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

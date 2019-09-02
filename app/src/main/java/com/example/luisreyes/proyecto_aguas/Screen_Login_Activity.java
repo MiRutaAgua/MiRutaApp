@@ -42,6 +42,7 @@ public class Screen_Login_Activity extends Activity implements TaskCompleted{
     public static JSONObject tarea_JSON;
     public static JSONObject operario_JSON;
 
+    boolean login_press = false;
 
     public static boolean isOnline = true;
 
@@ -77,18 +78,22 @@ public class Screen_Login_Activity extends Activity implements TaskCompleted{
             @Override
             public void onClick(View view) {
 
-                if (!(TextUtils.isEmpty(lineEdit_nombre_de_operario.getText())) && !(TextUtils.isEmpty(lineEdit_clave_de_acceso.getText()))) {
-                    String username = lineEdit_nombre_de_operario.getText().toString();
-                    String password = lineEdit_clave_de_acceso.getText().toString();
-
-
-                    String type = "login";
-                    BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Login_Activity.this);
-                    backgroundWorker.execute(type, username, password);
-                }else{
-                    Toast.makeText(Screen_Login_Activity.this, "Inserte nombre de usuario y contraseña", Toast.LENGTH_SHORT).show();
+                if(login_press) {
                 }
+                else{
+                    if (!(TextUtils.isEmpty(lineEdit_nombre_de_operario.getText())) && !(TextUtils.isEmpty(lineEdit_clave_de_acceso.getText()))) {
+                        login_press= true;
+                        String username = lineEdit_nombre_de_operario.getText().toString();
+                        String password = lineEdit_clave_de_acceso.getText().toString();
 
+                        Toast.makeText(Screen_Login_Activity.this, "Comprobando informacion", Toast.LENGTH_LONG).show();
+                        String type = "login";
+                        BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Login_Activity.this);
+                        backgroundWorker.execute(type, username, password);
+                    } else {
+                        Toast.makeText(Screen_Login_Activity.this, "Inserte nombre de usuario y contraseña", Toast.LENGTH_SHORT).show();
+                    }
+                }
 
             }
         });
@@ -99,6 +104,7 @@ public class Screen_Login_Activity extends Activity implements TaskCompleted{
     public void onTaskComplete(String type, String result) throws JSONException {
 
         if(type == "login"){
+            login_press = false;
             if(result == null){
                 //Toast.makeText(this,"No hay conexion a Internet, se procedera con datos desactualizados", Toast.LENGTH_LONG).show();
                 new AlertDialog.Builder(this)
