@@ -65,21 +65,23 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
 
         if(Screen_Login_Activity.isOnline){
 
-//             login_url = "https://server26194.webcindario.com/login_operarios.php";  //https://hosting.miarroba.com/webftp.php?id=1875467#!path=%2Fweb
-//             register_url = "https://server26194.webcindario.com/register_operario.php";
-//             change_foto_url = "https://server26194.webcindario.com/change_foto.php";
-//             get_operarios_url = "https://server26194.webcindario.com/get_operarios.php";
-//             get_user_data_url = "https://server26194.webcindario.com/get_one_operario.php";
-//             test_conection_url = "https://server26194.webcindario.com/test_database.php";
+             login_url = "https://server26194.webcindario.com/login_operarios.php";  //https://hosting.miarroba.com/webftp.php?id=1875467#!path=%2Fweb
+             register_url = "https://server26194.webcindario.com/register_operario.php";
+             change_foto_url = "https://server26194.webcindario.com/change_foto.php";
+             get_operarios_url = "https://server26194.webcindario.com/get_operarios.php";
+             get_user_data_url = "https://server26194.webcindario.com/get_one_operario.php";
+             get_one_tarea_url = "https://server26194.webcindario.com/get_one_tarea.php";
+             get_tareas_url = "https://server26194.webcindario.com/get_tareas.php";
+             test_conection_url = "https://server26194.webcindario.com/test_database.php";
 
-            login_url = "https://server26194.000webhostapp.com/login_operarios.php";  //https://files.000webhost.com/
-            register_url = "https://server26194.000webhostapp.com/register_operario.php";
-            change_foto_url = "https://server26194.000webhostapp.com/change_foto.php";
-            get_operarios_url = "https://server26194.000webhostapp.com/get_operarios.php";
-            get_user_data_url = "https://server26194.000webhostapp.com/get_one_operario.php";
-            get_one_tarea_url = "https://server26194.000webhostapp.com/get_one_tarea.php";
-            get_tareas_url = "https://server26194.000webhostapp.com/get_tareas.php";
-            test_conection_url = "https://server26194.000webhostapp.com/test_database.php";
+//            login_url = "https://server26194.000webhostapp.com/login_operarios.php";  //https://files.000webhost.com/
+//            register_url = "https://server26194.000webhostapp.com/register_operario.php";
+//            change_foto_url = "https://server26194.000webhostapp.com/change_foto.php";
+//            get_operarios_url = "https://server26194.000webhostapp.com/get_operarios.php";
+//            get_user_data_url = "https://server26194.000webhostapp.com/get_one_operario.php";
+//            get_one_tarea_url = "https://server26194.000webhostapp.com/get_one_tarea.php";
+//            get_tareas_url = "https://server26194.000webhostapp.com/get_tareas.php";
+//            test_conection_url = "https://server26194.000webhostapp.com/test_database.php";
         }
         else {
             login_url = "http://192.168.137.50/login_operarios.php";
