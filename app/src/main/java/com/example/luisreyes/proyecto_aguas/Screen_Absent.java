@@ -14,6 +14,9 @@ import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
+
+import org.json.JSONException;
 
 import java.text.DateFormat;
 import java.util.Calendar;
@@ -135,8 +138,12 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
     }
 
     @Override
-    public void pasarTexto(String observaciones) {
+    public void pasarTexto(String observaciones) throws JSONException {
         if(!(TextUtils.isEmpty(observaciones))){
+          
+            Screen_Login_Activity.tarea_JSON.put("observaciones", observaciones);
+            Toast.makeText(Screen_Absent.this, Screen_Login_Activity.tarea_JSON.toString(), Toast.LENGTH_LONG).show();
+
             observaciones_text.setText(observaciones);
         }
     }

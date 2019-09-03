@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 
+import org.json.JSONException;
+
 /**
  * Created by luis.reyes on 30/08/2019.
  */
@@ -51,7 +53,11 @@ public class Dialog extends AppCompatDialogFragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         String observaciones_string = editText_observaciones.getText().toString();
-                        listener.pasarTexto(observaciones_string);
+                        try {
+                            listener.pasarTexto(observaciones_string);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
 
@@ -62,7 +68,7 @@ public class Dialog extends AppCompatDialogFragment {
 
     public interface DialogListener{
 
-        void pasarTexto(String observaciones);
+        void pasarTexto(String observaciones) throws JSONException;
     }
 
     public void setTitleAndHint(String title_tag, String hint_tag){

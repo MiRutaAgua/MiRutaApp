@@ -61,6 +61,7 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
         String get_user_data_url;
         String get_one_tarea_url;
         String get_tareas_url;
+        String update_tarea_url;
         String test_conection_url;
 
         if(Screen_Login_Activity.isOnline){
@@ -88,8 +89,10 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
             get_operarios_url = "http://192.168.137.50/get_operarios.php";
             get_user_data_url = "http://192.168.137.50/get_one_operario.php";
 
-            get_one_tarea_url = "https://192.168.137.50/get_one_tarea.php";
+            get_one_tarea_url = "http://192.168.137.50/get_one_tarea.php";
             get_tareas_url = "http://192.168.137.50/get_tareas.php";
+
+            update_tarea_url = "http://192.168.137.50/probando_json.php";
         }
 
 //        try {
@@ -116,7 +119,28 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        }else if (type.equals("get_one_tarea")){
+        }
+        else if(type.equals("update_tarea")) try {
+
+            return_image = false;
+            ArrayList<String> keys = new ArrayList<String>();
+            keys.add("user_name");
+            keys.add("password");
+            ArrayList<String> values = new ArrayList<String>();
+            for (int i = 0; i < keys.size(); i++) {
+                values.add(params[i+1]);
+            }
+            ArrayList<String> result = post_Output_Info(keys, values, login_url, true, true);
+            return result.get(1);
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        else if (type.equals("get_one_tarea")){
 
             try{
                 return_image = false;

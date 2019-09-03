@@ -44,7 +44,7 @@ public class Screen_Login_Activity extends Activity implements TaskCompleted{
 
     boolean login_press = false;
 
-    public static boolean isOnline = true;
+    public static boolean isOnline = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

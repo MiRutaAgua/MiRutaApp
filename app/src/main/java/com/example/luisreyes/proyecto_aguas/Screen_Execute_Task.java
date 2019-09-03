@@ -9,6 +9,9 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.json.JSONException;
 
 /**
  * Created by Alejandro on 11/08/2019.
@@ -178,9 +181,12 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
     }
 
     @Override
-    public void pasarTexto(String telefonos) {
+    public void pasarTexto(String telefonos) throws JSONException {
         if(!(TextUtils.isEmpty(telefonos))){
-              telefono1.setText(telefonos);
+            Screen_Login_Activity.tarea_JSON.put("telefonos", telefonos);
+            Toast.makeText(Screen_Execute_Task.this, Screen_Login_Activity.tarea_JSON.toString(), Toast.LENGTH_LONG).show();
+
+            telefono1.setText(telefonos);
          }
     }
 }
