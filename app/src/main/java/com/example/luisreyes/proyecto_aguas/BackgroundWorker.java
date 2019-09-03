@@ -66,14 +66,15 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
 
         if(Screen_Login_Activity.isOnline){
 
-             login_url = "https://server26194.webcindario.com/login_operarios.php";  //https://hosting.miarroba.com/webftp.php?id=1875467#!path=%2Fweb
-             register_url = "https://server26194.webcindario.com/register_operario.php";
-             change_foto_url = "https://server26194.webcindario.com/change_foto.php";
-             get_operarios_url = "https://server26194.webcindario.com/get_operarios.php";
-             get_user_data_url = "https://server26194.webcindario.com/get_one_operario.php";
-             get_one_tarea_url = "https://server26194.webcindario.com/get_one_tarea.php";
-             get_tareas_url = "https://server26194.webcindario.com/get_tareas.php";
-             test_conection_url = "https://server26194.webcindario.com/test_database.php";
+            login_url = "https://server26194.webcindario.com/login_operarios.php";  //https://hosting.miarroba.com/webftp.php?id=1875467#!path=%2Fweb
+            register_url = "https://server26194.webcindario.com/register_operario.php";
+            change_foto_url = "https://server26194.webcindario.com/change_foto.php";
+            get_operarios_url = "https://server26194.webcindario.com/get_operarios.php";
+            get_user_data_url = "https://server26194.webcindario.com/get_one_operario.php";
+            get_one_tarea_url = "https://server26194.webcindario.com/get_one_tarea.php";
+            get_tareas_url = "https://server26194.webcindario.com/get_tareas.php";
+            test_conection_url = "https://server26194.webcindario.com/test_database.php";
+            update_tarea_url = "http://server26194.webcindario.com/probando_json.php";
 
 //            login_url = "https://server26194.000webhostapp.com/login_operarios.php";  //https://files.000webhost.com/
 //            register_url = "https://server26194.000webhostapp.com/register_operario.php";
@@ -82,6 +83,8 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
 //            get_user_data_url = "https://server26194.000webhostapp.com/get_one_operario.php";
 //            get_one_tarea_url = "https://server26194.000webhostapp.com/get_one_tarea.php";
 //            get_tareas_url = "https://server26194.000webhostapp.com/get_tareas.php";
+//            update_tarea_url = "http://server26194.000webhostapp.com/probando_json.php";
+
 //            test_conection_url = "https://server26194.000webhostapp.com/test_database.php";
         }
         else {
@@ -122,26 +125,47 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        else if(type.equals("update_tarea")) try {
+        else if(type.equals("update_tarea")){
 
-            return_image = false;
-            ArrayList<String> keys = new ArrayList<String>();
-            keys.add("user_name");
-            keys.add("password");
-            ArrayList<String> values = new ArrayList<String>();
-            for (int i = 0; i < keys.size(); i++) {
-                values.add(params[i+1]);
+            String tareas = String.valueOf(Screen_Login_Activity.tarea_JSON);
+            URL url = null;
+            try {
+                url = new URL(update_tarea_url);
+
+                HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
+
+                httpURLConnection.setDoOutput(true);
+                httpURLConnection.setDoInput(true);
+                httpURLConnection.setRequestProperty("Content-Type", "application/json;charset=utf-8");
+                OutputStream outputStream = null;
+
+                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
+                bufferedWriter.write(tareas);
+                bufferedWriter.close();
+                outputStream.close();
+
+                InputStream inputStream = httpURLConnection.getInputStream();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
+                String line;
+                String result="";
+                while ((line = bufferedReader.readLine()) != null) {
+                    result+=(line);
+                }
+                bufferedReader.close();
+                inputStream.close();
+                httpURLConnection.disconnect();
+
+                return result;
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
             }
-            ArrayList<String> result = post_Output_Info(keys, values, login_url, true, true);
-            return result.get(1);
-
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (ProtocolException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+            catch (ProtocolException e) {
+                e.printStackTrace();
+            }catch (IOException e) {
+                e.printStackTrace();
+            }
         }
+
         else if (type.equals("get_one_tarea")){
 
             try{
