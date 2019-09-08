@@ -5,23 +5,9 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:gravity="center">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:padding="10dp"
-        >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Pantalla Tareas"
-            android:layout_gravity="center_horizontal"
-            android:id="@+id/textView_screen_task"
-            android:visibility="invisible"
-            />
-    </LinearLayout>
+    <include layout = "@layout/toolbar"
+        android:id="@+id/my_toolbar"
+        />
 
     <LinearLayout
         android:layout_width="wrap_content"

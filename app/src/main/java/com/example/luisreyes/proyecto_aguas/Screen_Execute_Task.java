@@ -5,6 +5,8 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -19,9 +21,7 @@ import org.json.JSONException;
 
 public class Screen_Execute_Task extends AppCompatActivity implements Dialog.DialogListener {
 
-    private  TextView textView_serial_number_result, telefonos, telefono1;
-
-    private ImageView button_canvas_screen_exec_task;
+    private  TextView textView_serial_number_result, telefonos, telefono1, telefono2;
 
     private ImageView button_scan_serial_number_screen_exec_task;
 
@@ -39,12 +39,9 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
     private static final int CAM_REQUEST_SN_PHOTO = 1315;
     private static final int CAM_REQUEST_AFT_INT_PHOTO = 1316;
 
-
     private Intent intent_open_screen_validate;
 
     private Intent intent_open_scan_screen_lector;
-
-
 
     Bitmap bitmap_foto_antes_instalacion = null;
     Bitmap bitmap_foto_lectura = null;
@@ -67,6 +64,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
 
         telefonos = (TextView) findViewById(R.id.textView_phones_screen_exec_task);
         telefono1 = (TextView) findViewById(R.id.textView_phone1_screen_exec_task);
+        telefono2 = (TextView) findViewById(R.id.textView_phone2_screen_exec_task);
         button_instalation_photo_screen_exec_task = (ImageView)findViewById(R.id.button_instalation_photo_screen_exec_task);
         button_read_photo_screen_exec_task = (ImageView)findViewById(R.id.button_read_photo_screen_exec_task);
         button_serial_number_photo_screen_exec_task = (ImageView)findViewById(R.id.button_serial_number_photo_screen_exec_task);
@@ -78,13 +76,19 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         telefonos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openDialog("Telefonos","547076...");
+                openDialog("Telefono1","547076...");
             }
         });
         telefono1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openDialog("Telefonos","547076...");
+                openDialog("Telefono 1","547076...");
+            }
+        });
+        telefono2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openDialog("Telefono 2","547076...");
             }
         });
         button_validate_screen_exec_task          = (ImageView)findViewById(R.id.button_validate_screen_exec_task);
@@ -98,6 +102,42 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
             @Override
             public void onClick(View view) {
 
+                if(bitmap_foto_antes_instalacion != null){
+                    String foto_antes_instalacion = Screen_Register_Operario.getStringImage(bitmap_foto_antes_instalacion);
+                    try {
+                        Screen_Login_Activity.tarea_JSON.put("foto_antes_instalacion",foto_antes_instalacion);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Toast.makeText(Screen_Execute_Task.this, "No pudo guardar foto_antes_instalacion", Toast.LENGTH_LONG).show();
+                    }
+                }
+                if(bitmap_foto_lectura != null){
+                    String foto_lectura = Screen_Register_Operario.getStringImage(bitmap_foto_lectura);
+                    try {
+                        Screen_Login_Activity.tarea_JSON.put("foto_lectura",foto_lectura);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Toast.makeText(Screen_Execute_Task.this, "No pudo guardar foto_lectura", Toast.LENGTH_LONG).show();
+                    }
+                }
+                if(bitmap_foto_numero_serie != null){
+                    String foto_numero_serie = Screen_Register_Operario.getStringImage(bitmap_foto_numero_serie);
+                    try {
+                        Screen_Login_Activity.tarea_JSON.put("foto_numero_serie",foto_numero_serie);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Toast.makeText(Screen_Execute_Task.this, "No pudo guardar foto_numero_serie", Toast.LENGTH_LONG).show();
+                    }
+                }
+                if(bitmap_foto_despues_instalacion != null){
+                    String foto_despues_instalacion= Screen_Register_Operario.getStringImage(bitmap_foto_despues_instalacion);
+                    try {
+                        Screen_Login_Activity.tarea_JSON.put("foto_despues_instalacion", foto_despues_instalacion);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Toast.makeText(Screen_Execute_Task.this, "No pudo guardar foto_despues_instalacion", Toast.LENGTH_LONG).show();
+                    }
+                }
                 intent_open_screen_validate.putExtra("foto_antes_instalacion", bitmap_foto_antes_instalacion);
                 intent_open_screen_validate.putExtra("foto_lectura", bitmap_foto_lectura);
                 intent_open_screen_validate.putExtra("foto_numero_serie_instalacion", bitmap_foto_numero_serie);

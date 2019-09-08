@@ -32,14 +32,29 @@
             android:src="@drawable/screen_table_personal_icon"     />
     </LinearLayout>
 
-    <EditText
-        android:layout_marginTop="20dp"
-        android:layout_width="150dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="filtrar"
-        android:layout_marginLeft="10dp"
-        android:id="@+id/editText_screen_table_personal_filter"
-        />
+        android:gravity="left">
+        <EditText
+            android:layout_marginTop="20dp"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:hint="filtrar"
+            android:layout_marginLeft="10dp"
+            android:id="@+id/editText_screen_table_personal_filter"
+            />
+        <Spinner
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:id="@+id/spinner_filtrar_tareas_screen_table_team"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:paddingTop="20dp"
+            android:layout_marginTop="35dp"
+            >
+        </Spinner>
+    </LinearLayout>
 
     <ListView
         android:layout_marginTop="1dp"

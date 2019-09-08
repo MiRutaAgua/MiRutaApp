@@ -113,6 +113,8 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginLeft="12dp"
+                        android:id="@+id/editText_bateria_screen_battery_intake_asignation"
+                        android:inputType="number"
                         />
                 </LinearLayout>
 
@@ -134,10 +136,12 @@
                         />
 
                     <EditText
+                        android:inputType="number"
                         android:layout_width="40dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginLeft="46dp"
+                        android:id="@+id/editText_fila_screen_battery_intake_asignation"
                         />
 
                 </LinearLayout>
@@ -160,10 +164,12 @@
                         />
 
                     <EditText
+                        android:inputType="number"
                         android:layout_width="40dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginLeft="2dp"
+                        android:id="@+id/editText_columna_screen_battery_intake_asignation"
                         />
 
                 </LinearLayout>

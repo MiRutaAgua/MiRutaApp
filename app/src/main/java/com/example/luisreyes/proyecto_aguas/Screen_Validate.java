@@ -27,7 +27,7 @@ public class Screen_Validate extends Activity {
 
     ImageView imageButton_firma_cliente_screen_validate;
 
-    ImageView imageButton_editar_firma_cliente_screen_validate;
+    ImageView imageButton_editar_firma_cliente_screen_validate, imageView_screen_validate_cerrar_tarea;
 
     Bitmap foto_antes_intalacion_bitmap;
     Bitmap foto_lectura_bitmap;
@@ -42,6 +42,7 @@ public class Screen_Validate extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.screen_validate);
 
+        imageView_screen_validate_cerrar_tarea    = (ImageView)findViewById(R.id.button_cerrar_tarea_screen_validate);
         foto_instalacion_screen_exec_task         = (ImageView)findViewById(R.id.imageView_foto_antes_instalacion_screen_validate);
         foto_final_instalacion_screen_exec_task   = (ImageView)findViewById(R.id.imageView_foto_final_instalacion_screen_validate);
         foto_numero_de_serie_screen_exec_task     = (ImageView)findViewById(R.id.imageView_foto_numero_serie_screen_validate);
@@ -54,6 +55,13 @@ public class Screen_Validate extends Activity {
         foto_lectura_bitmap = (Bitmap)getIntent().getExtras().get("foto_lectura");
         foto_numero_serie_bitmap = (Bitmap)getIntent().getExtras().get("foto_numero_serie_instalacion");
         foto_despues_intalacion_bitmap = (Bitmap)getIntent().getExtras().get("foto_despues_instalacion");
+
+        imageView_screen_validate_cerrar_tarea.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ////aqui va la actualizacion de la tarea;
+            }
+        });
 
         if(foto_antes_intalacion_bitmap != null) {
             foto_instalacion_screen_exec_task.setImageBitmap(foto_antes_intalacion_bitmap);
@@ -69,7 +77,8 @@ public class Screen_Validate extends Activity {
             @Override
             public void onClick(View view) {
                 Intent intent_zoom_photo = new Intent(Screen_Validate.this, Screen_Zoom_Photo.class);
-                intent_zoom_photo.putExtra("zooming_photo", foto_antes_intalacion_bitmap);
+                String foto = Screen_Register_Operario.getStringImage(foto_antes_intalacion_bitmap);
+                intent_zoom_photo.putExtra("zooming_photo", foto);
                 startActivity(intent_zoom_photo);
             }
         });
@@ -77,7 +86,8 @@ public class Screen_Validate extends Activity {
             @Override
             public void onClick(View view) {
                 Intent intent_zoom_photo = new Intent(Screen_Validate.this, Screen_Zoom_Photo.class);
-                intent_zoom_photo.putExtra("zooming_photo", foto_numero_serie_bitmap);
+                String foto = Screen_Register_Operario.getStringImage(foto_numero_serie_bitmap);
+                intent_zoom_photo.putExtra("zooming_photo", foto);
                 startActivity(intent_zoom_photo);
             }
         });
@@ -85,7 +95,8 @@ public class Screen_Validate extends Activity {
             @Override
             public void onClick(View view) {
                 Intent intent_zoom_photo = new Intent(Screen_Validate.this, Screen_Zoom_Photo.class);
-                intent_zoom_photo.putExtra("zooming_photo", foto_despues_intalacion_bitmap);
+                String foto = Screen_Register_Operario.getStringImage(foto_despues_intalacion_bitmap);
+                intent_zoom_photo.putExtra("zooming_photo", foto);
                 startActivity(intent_zoom_photo);
             }
         });
@@ -103,7 +114,8 @@ public class Screen_Validate extends Activity {
             public void onClick(View view) {
                 Intent intent_zoom_photo = new Intent(Screen_Validate.this, Screen_Zoom_Photo.class);
                 if(bitmap_firma_cliente != null) {
-                    intent_zoom_photo.putExtra("zooming_photo", bitmap_firma_cliente);
+                    String foto = Screen_Register_Operario.getStringImage(bitmap_firma_cliente);
+                    intent_zoom_photo.putExtra("zooming_photo", foto);
                     startActivity(intent_zoom_photo);
                 }
             }

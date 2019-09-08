@@ -28,7 +28,9 @@ public class Screen_Zoom_Photo extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.screen_zoom_photo);
 
-        bitmap_photo = (Bitmap)getIntent().getExtras().get("zooming_photo");
+        String foto = getIntent().getStringExtra("zooming_photo");
+
+        bitmap_photo = Screen_Register_Operario.getImageFromString(foto);
 
         imageView_photo = (ImageView)findViewById(R.id.imageView_screen_zoom_photo);
 

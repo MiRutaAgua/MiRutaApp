@@ -66,18 +66,21 @@
             >
 
             <ImageView
+                android:id="@+id/imageView_foto1_screen_incidence"
                 android:layout_width="130dp"
                 android:layout_height="54dp"
                 android:layout_gravity="center"
                 android:src="@drawable/screen_incidence_foto1" />
 
             <ImageView
+                android:id="@+id/imageView_foto2_screen_incidence"
                 android:layout_width="130dp"
                 android:layout_height="54dp"
                 android:layout_gravity="center"
                 android:src="@drawable/screen_incidence_foto2" />
 
             <ImageView
+                android:id="@+id/imageView_foto3_screen_incidence"
                 android:layout_width="130dp"
                 android:layout_height="54dp"
                 android:layout_gravity="center"
@@ -93,6 +96,7 @@
             >
 
             <TextView
+                android:id="@+id/textView_telefonos_screen_incidence"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -102,6 +106,7 @@
                 android:paddingBottom="10dp"/>
 
             <TextView
+                android:id="@+id/textView_telefono1_screen_incidence"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -109,6 +114,7 @@
                 android:textSize="16dp" />
 
             <TextView
+                android:id="@+id/textView_telefono2_screen_incidence"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

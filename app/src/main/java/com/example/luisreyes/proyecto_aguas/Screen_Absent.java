@@ -1,21 +1,30 @@
 package com.example.luisreyes.proyecto_aguas;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-
 import org.json.JSONException;
 
 import java.text.DateFormat;
@@ -25,7 +34,7 @@ import java.util.Calendar;
  * Created by Alejandro on 11/08/2019.
  */
 
-public class Screen_Absent extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, Dialog.DialogListener{
+public class Screen_Absent extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, Dialog.DialogListener, TaskCompleted{
 
     private TextView telefono1;
     private TextView telefono2;
@@ -35,11 +44,18 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
     private String time_label_string = "";
     int time_picker_repeat=0;
     TextView fecha_cita, hora_cita;
+    private ImageView button_guardar_datos_screen_absent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.screen_absent);
 
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CALL_PHONE}, 1);
+        }
+
+        button_guardar_datos_screen_absent= (ImageView)findViewById(R.id.button_guardar_datos_screen_absent);
         telefono1 = (TextView)findViewById(R.id.textView_screen_absent_telefono1);
         telefono2 = (TextView)findViewById(R.id.textView_screen_absent_telefono2);
         checkBox_incorrecto_telefono1 = (CheckBox)findViewById(R.id.checkbox_screen_absent_N_incorrecto1);
@@ -48,6 +64,59 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
         hora_cita = (TextView)findViewById(R.id.textView_screen_absent_hora_cita);
         observaciones_text = (TextView)findViewById(R.id.textView_screen_absent_Observaciones);
 
+        button_guardar_datos_screen_absent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(Screen_Absent.this, "Guardando datos", Toast.LENGTH_LONG).show();
+
+                String type = "update_tarea";
+                BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Absent.this);
+                backgroundWorker.execute(type);
+            }
+        });
+        telefono1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PhoneCallListener phoneListener = new PhoneCallListener();
+                TelephonyManager telephonyManager = (TelephonyManager) Screen_Absent.this
+                        .getSystemService(Context.TELEPHONY_SERVICE);
+                telephonyManager.listen(phoneListener,
+                        PhoneStateListener.LISTEN_CALL_STATE);
+
+                Intent callIntent = new Intent(Intent.ACTION_CALL);
+                callIntent.setData(Uri.parse("tel:"+ telefono1.getText().toString()));
+
+                if (ActivityCompat.checkSelfPermission(Screen_Absent.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    return;
+                }
+                startActivity(callIntent);
+            }
+        });
+        telefono2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PhoneCallListener phoneListener = new PhoneCallListener();
+                TelephonyManager telephonyManager = (TelephonyManager) Screen_Absent.this
+                        .getSystemService(Context.TELEPHONY_SERVICE);
+                telephonyManager.listen(phoneListener,
+                        PhoneStateListener.LISTEN_CALL_STATE);
+
+                Intent callIntent = new Intent(Intent.ACTION_CALL);
+                callIntent.setData(Uri.parse("tel:"+ telefono2.getText().toString()));
+
+                if (ActivityCompat.checkSelfPermission(Screen_Absent.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                    return;
+                }
+                startActivity(callIntent);
+            }
+        });
         checkBox_incorrecto_telefono1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
@@ -119,6 +188,14 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
         }
         else{
             time_label_string += " y las "+hour+":"+minutes;
+
+            //Aqui termina de poner la hora y la fhecha
+            try {
+                Screen_Login_Activity.tarea_JSON.put("nuevo_citas", fecha_cita.getText().toString()+"\n"+hora_cita.getText().toString());
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Toast.makeText(Screen_Absent.this, "No se pudo agregar nueva cita", Toast.LENGTH_LONG).show();
+            }
         }
 
         hora_cita.setText(time_label_string);
@@ -145,6 +222,24 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
             Toast.makeText(Screen_Absent.this, Screen_Login_Activity.tarea_JSON.toString(), Toast.LENGTH_LONG).show();
 
             observaciones_text.setText(observaciones);
+        }
+    }
+
+    @Override
+    public void onTaskComplete(String type, String result) throws JSONException {
+
+        if(type == "update_tarea"){
+            if(result == null){
+                Toast.makeText(this,"No hay conexion a Internet, no se pudo guardar tarea. Intente de nuevo con conexion", Toast.LENGTH_LONG).show();
+            }
+            else {
+                if (result.contains("not success")) {
+                    Toast.makeText(Screen_Absent.this, "No se pudo insertar correctamente, problemas con el servidor", Toast.LENGTH_SHORT).show();
+
+                }else {
+                    Toast.makeText(Screen_Absent.this, "Guardada tarea correctamente\n", Toast.LENGTH_SHORT).show();
+                }
+            }
         }
     }
 }

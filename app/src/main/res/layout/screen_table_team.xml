@@ -35,14 +35,29 @@ android:layout_height="match_parent"
 
 
 
-    <EditText
-        android:layout_marginTop="20dp"
-        android:layout_width="150dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="filtrar"
-        android:layout_marginLeft="10dp"
-        android:id="@+id/editText_screen_table_team_filter"
-        />
+        android:gravity="left">
+        <EditText
+            android:layout_marginTop="20dp"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:hint="filtrar"
+            android:layout_marginLeft="10dp"
+            android:id="@+id/editText_screen_table_team_filter"
+            />
+
+        <Spinner
+            android:id="@+id/spinner_filtrar_tareas_screen_table_team"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="25dp"
+            ></Spinner>
+    </LinearLayout>
+
 
     <ListView
         android:layout_marginTop="1dp"

@@ -3,6 +3,7 @@ package com.example.luisreyes.proyecto_aguas;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -105,6 +106,11 @@ public class Screen_Register_Operario extends Activity implements TaskCompleted{
         });
     }
 
+    public static Bitmap getImageFromString(String stringImage){
+        byte[] decodeString = Base64.decode(stringImage, Base64.DEFAULT);
+        Bitmap decodeImage = BitmapFactory.decodeByteArray(decodeString, 0, decodeString.length);
+        return decodeImage;
+    }
     public static String getStringImage(Bitmap bmp){
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);

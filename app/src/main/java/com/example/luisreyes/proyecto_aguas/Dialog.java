@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDialogFragment;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -24,6 +25,8 @@ public class Dialog extends AppCompatDialogFragment {
 
     private static String hint="";
     private static String title="";
+    private static int inputType;
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -63,6 +66,7 @@ public class Dialog extends AppCompatDialogFragment {
 
         editText_observaciones = view.findViewById(R.id.edit_usename_layout_dialog);
         editText_observaciones.setHint(hint);
+        editText_observaciones.setInputType(inputType);
         return  builder.create();
     }
 
@@ -74,5 +78,13 @@ public class Dialog extends AppCompatDialogFragment {
     public void setTitleAndHint(String title_tag, String hint_tag){
         hint = hint_tag;
         title = title_tag;
+        if(title_tag.contains("telefono") || title_tag.contains("Tel")){
+            inputType = InputType.TYPE_CLASS_PHONE;
+        }else{
+            inputType = InputType.TYPE_CLASS_TEXT;
+        }
+    }
+    public static String getTitle(){
+        return title;
     }
 }

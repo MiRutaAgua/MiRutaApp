@@ -4,11 +4,14 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -43,8 +46,9 @@ public class Screen_Login_Activity extends Activity implements TaskCompleted{
     public static JSONObject operario_JSON;
 
     boolean login_press = false;
+    public static boolean register_press = false;
 
-    public static boolean isOnline = false;
+    public static boolean isOnline = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,11 +63,13 @@ public class Screen_Login_Activity extends Activity implements TaskCompleted{
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 1);
         }
+
         textView_nombre_de_pantalla = (TextView) findViewById(R.id.textView_Nombre_de_Pantalla);
         lineEdit_nombre_de_operario = (EditText) findViewById(R.id.editText_Nombre_Operario_screen_login);
         lineEdit_clave_de_acceso    = (EditText) findViewById(R.id.editText_Clave_Acceso_screen_login);
         button_login                = (ImageView) findViewById(R.id.button_login_screen_login);
         button_register             = (ImageView) findViewById(R.id.button_register_screen_login);
+
 
         button_register.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,7 +92,7 @@ public class Screen_Login_Activity extends Activity implements TaskCompleted{
                         String username = lineEdit_nombre_de_operario.getText().toString();
                         String password = lineEdit_clave_de_acceso.getText().toString();
 
-                        Toast.makeText(Screen_Login_Activity.this, "Comprobando informacion", Toast.LENGTH_LONG).show();
+                        Toast.makeText(Screen_Login_Activity.this, "Comprobando informacion", Toast.LENGTH_SHORT).show();
                         String type = "login";
                         BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Login_Activity.this);
                         backgroundWorker.execute(type, username, password);
@@ -154,4 +160,18 @@ public class Screen_Login_Activity extends Activity implements TaskCompleted{
         }
     }
 
+    public boolean checkConection(){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_NETWORK_STATE}, 1);
+        }
+        ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+            //we are connected to a network
+            return true;
+        }
+        else
+            return false;
+    }
 }

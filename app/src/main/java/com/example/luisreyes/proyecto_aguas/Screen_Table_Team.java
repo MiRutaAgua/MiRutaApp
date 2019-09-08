@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +31,9 @@ public class Screen_Table_Team extends Activity implements TaskCompleted{
     private EditText editText_filter;
     public static ArrayList<String> lista_tareas;
     private  TextView textView_screen_table_team;
+    Spinner spinner_filtro_tareas;
+    ArrayList<String> lista_desplegable;
+
     String[] lista_contadores_ = {
             "IBERIA    10    1   ii   CITA LUNES 1-1-19 A LAS 9:00     VIVIENDAS   4597611    PIO FELIPE",
             "IBERIA    18    3   iz   CITA LUNES 1-1-19 A LAS 9:15     VIVIENDAS   1111692    TELESFORCE",
@@ -57,6 +61,14 @@ public class Screen_Table_Team extends Activity implements TaskCompleted{
         lista_de_contadores_screen_table_team = (ListView) findViewById(R.id.listView_contadores_screen_table_view);
         textView_screen_table_team            = (TextView) findViewById(R.id.textView_screen_table_team);
         editText_filter                       = (EditText) findViewById(R.id.editText_screen_table_team_filter);
+
+        spinner_filtro_tareas = (Spinner)findViewById(R.id.spinner_filtrar_tareas_screen_table_team);
+        lista_desplegable = new ArrayList<String>();
+        lista_desplegable.add("DIRECCION");
+        lista_desplegable.add("TAREAS");
+        lista_desplegable.add("CITAS");
+        ArrayAdapter arrayAdapter_spinner = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista_desplegable);
+        spinner_filtro_tareas.setAdapter(arrayAdapter_spinner);
 
         lista_contadores = new ArrayList<String>();
 

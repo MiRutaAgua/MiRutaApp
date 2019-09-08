@@ -16,7 +16,7 @@ import android.widget.TextView;
 public class Screen_Unity_Counter extends Activity{
 
     private  Intent intent_open_screen_incidence;
-    private Intent intent_open_battery_counter;
+    private Intent intent_open_battery_intake_asignation;
 
     private Intent intent_open_screen_exec_task;
 
@@ -39,7 +39,7 @@ public class Screen_Unity_Counter extends Activity{
 
         intent_open_screen_exec_task = new Intent(this, Screen_Execute_Task.class);
 
-        intent_open_battery_counter = new Intent(this, Screen_Battery_counter.class);
+        intent_open_battery_intake_asignation = new Intent(this, Screen_Battery_Intake_Asignation.class);
 
         intent_open_screen_incidence = new Intent(this, Screen_Incidence.class);
 
@@ -82,7 +82,7 @@ public class Screen_Unity_Counter extends Activity{
             @Override
             public void onClick(View view) {
 
-                startActivity(intent_open_battery_counter);
+                startActivity(intent_open_battery_intake_asignation);
             }
         });
 

@@ -18,6 +18,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
@@ -74,7 +75,7 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
             get_one_tarea_url = "https://server26194.webcindario.com/get_one_tarea.php";
             get_tareas_url = "https://server26194.webcindario.com/get_tareas.php";
             test_conection_url = "https://server26194.webcindario.com/test_database.php";
-            update_tarea_url = "http://server26194.webcindario.com/probando_json.php";
+            update_tarea_url = "http://server26194.webcindario.com/update_tarea.php";
 
 //            login_url = "https://server26194.000webhostapp.com/login_operarios.php";  //https://files.000webhost.com/
 //            register_url = "https://server26194.000webhostapp.com/register_operario.php";
@@ -83,8 +84,7 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
 //            get_user_data_url = "https://server26194.000webhostapp.com/get_one_operario.php";
 //            get_one_tarea_url = "https://server26194.000webhostapp.com/get_one_tarea.php";
 //            get_tareas_url = "https://server26194.000webhostapp.com/get_tareas.php";
-//            update_tarea_url = "http://server26194.000webhostapp.com/probando_json.php";
-
+//            update_tarea_url = "http://server26194.000webhostapp.com/update_tarea.php";
 //            test_conection_url = "https://server26194.000webhostapp.com/test_database.php";
         }
         else {
@@ -127,22 +127,21 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
         }
         else if(type.equals("update_tarea")){
 
-            String tareas = String.valueOf(Screen_Login_Activity.tarea_JSON);
-            URL url = null;
+            String tarea_post = String.valueOf(Screen_Login_Activity.tarea_JSON);
             try {
-                url = new URL(update_tarea_url);
 
+                URL url = new URL(update_tarea_url);
                 HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
-
+                httpURLConnection.setRequestMethod("POST");
                 httpURLConnection.setDoOutput(true);
                 httpURLConnection.setDoInput(true);
-                httpURLConnection.setRequestProperty("Content-Type", "application/json;charset=utf-8");
-                OutputStream outputStream = null;
+                httpURLConnection.setRequestProperty("Content-Type", "application/json");
+                httpURLConnection.setRequestProperty("Accept", "application/json");
 
-                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
-                bufferedWriter.write(tareas);
+                Writer bufferedWriter = new BufferedWriter(new OutputStreamWriter(httpURLConnection.getOutputStream(), "UTF-8"));
+                bufferedWriter.write(tarea_post);
+                // bufferedWriter.flush();
                 bufferedWriter.close();
-                outputStream.close();
 
                 InputStream inputStream = httpURLConnection.getInputStream();
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
