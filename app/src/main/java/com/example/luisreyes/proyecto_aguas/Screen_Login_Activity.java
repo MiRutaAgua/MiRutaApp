@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -30,6 +31,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 
 /**
  * Created by luis.reyes on 10/08/2019.
@@ -44,11 +46,16 @@ public class Screen_Login_Activity extends Activity implements TaskCompleted{
 
     public static JSONObject tarea_JSON;
     public static JSONObject operario_JSON;
+    public static ArrayList<String> lista_operarios = new ArrayList<>();
+    DBoperariosController dBoperariosController = new DBoperariosController(this);
 
     boolean login_press = false;
     public static boolean register_press = false;
 
     public static boolean isOnline = true;
+    public static boolean isOnline_temp = true; ///cambiar todas las ocurrencias de esta variable por isOnline
+
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +78,34 @@ public class Screen_Login_Activity extends Activity implements TaskCompleted{
         button_register             = (ImageView) findViewById(R.id.button_register_screen_login);
 
 
+        try {
+            operario_JSON.put("id", 1);
+            operario_JSON.put("nombre", "unknow");
+            operario_JSON.put("apellidos", "unknow");
+            operario_JSON.put("edad", 0);
+            operario_JSON.put("telefonos", "000000");
+            operario_JSON.put("usuario", "user");
+            operario_JSON.put("clave", "password");
+            operario_JSON.put("tareas", "0");
+            operario_JSON.put("foto", "null");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        dBoperariosController.setJsonOperario(operario_JSON);
+
+        if(checkConection()){
+            isOnline_temp = true;
+            showRingDialog("Actualizando informacion de operarios");
+            String type = "get_operarios";
+            BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Login_Activity.this);
+            backgroundWorker.execute(type);
+        }
+        else{
+            isOnline_temp = false;
+            Toast.makeText(this,"No hay conexion a Internet", Toast.LENGTH_LONG).show();
+        }
         button_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -78,7 +113,6 @@ public class Screen_Login_Activity extends Activity implements TaskCompleted{
                 startActivity(intent_open_register_screen);
             }
         });
-
 
         button_login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,13 +123,34 @@ public class Screen_Login_Activity extends Activity implements TaskCompleted{
                 else{
                     if (!(TextUtils.isEmpty(lineEdit_nombre_de_operario.getText())) && !(TextUtils.isEmpty(lineEdit_clave_de_acceso.getText()))) {
                         login_press= true;
-                        String username = lineEdit_nombre_de_operario.getText().toString();
-                        String password = lineEdit_clave_de_acceso.getText().toString();
+                        if(isOnline_temp) {
+                            String username = lineEdit_nombre_de_operario.getText().toString();
+                            String password = lineEdit_clave_de_acceso.getText().toString();
 
-                        Toast.makeText(Screen_Login_Activity.this, "Comprobando informacion", Toast.LENGTH_SHORT).show();
-                        String type = "login";
-                        BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Login_Activity.this);
-                        backgroundWorker.execute(type, username, password);
+                            //Toast.makeText(Screen_Login_Activity.this, "Comprobando informacion", Toast.LENGTH_SHORT).show();
+                            String type = "login";
+                            BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Login_Activity.this);
+                            backgroundWorker.execute(type, username, password);
+                        }else{
+                            //Toast.makeText(Screen_Login_Activity.this, "Comprobando informacion", Toast.LENGTH_SHORT).show();
+                            try {
+                                String json_user = dBoperariosController.get_one_operario_from_Database(lineEdit_nombre_de_operario.getText().toString());
+                                operario_JSON = new JSONObject(json_user);
+                                //Toast.makeText(Screen_Login_Activity.this, operario_JSON.getString("clave"), Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(Screen_Login_Activity.this, lineEdit_clave_de_acceso.getText().toString(), Toast.LENGTH_SHORT).show();
+                                if(operario_JSON.getString("clave").equals(lineEdit_clave_de_acceso.getText().toString())){
+                                    Intent intent_open_next_screen = new Intent(Screen_Login_Activity.this, Screen_User_Data.class);
+                                    intent_open_next_screen.putExtra("usuario", json_user);
+                                    startActivity(intent_open_next_screen);
+                                }else{
+                                    Toast.makeText(Screen_Login_Activity.this, "Incorrecto nombre de usuario o contraseña", Toast.LENGTH_SHORT).show();
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                Toast.makeText(Screen_Login_Activity.this, "Error accediendo a base de datos SQLite", Toast.LENGTH_SHORT).show();
+                            }
+                            login_press= false;
+                        }
                     } else {
                         Toast.makeText(Screen_Login_Activity.this, "Inserte nombre de usuario y contraseña", Toast.LENGTH_SHORT).show();
                     }
@@ -157,6 +212,43 @@ public class Screen_Login_Activity extends Activity implements TaskCompleted{
                 intent_open_next_screen.putExtra("usuario", result);
                 startActivity(intent_open_next_screen);
             }
+        }else if(type == "get_operarios"){
+
+            hideRingDialog();
+
+            if(result == null){
+                Toast.makeText(this,"No se pudo establecer conexión con el servidor", Toast.LENGTH_LONG).show();
+            }
+            else {
+                //Toast.makeText(this,result, Toast.LENGTH_LONG).show();
+                Toast.makeText(this,"Informacion de Operarios actualizada correctamente", Toast.LENGTH_LONG).show();
+
+                ArrayList<String> lista_contadores = new ArrayList<>();
+                for(int n =0 ; n < lista_operarios.size() ; n++) {
+                    try {
+                        JSONArray jsonArray = new JSONArray(lista_operarios.get(n));
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                            //jsonObject.put("foto", jsonObject.getString("foto"));
+                            String result_update = dBoperariosController.updateOperario(jsonObject, "usuario");
+
+                            lista_contadores.add(jsonObject.getString("id") + "   "
+                                    + jsonObject.getString("nombre").replace("\n", "") + "  "
+                                    + jsonObject.getString("apellidos").replace("\n", "")
+                                    + jsonObject.getString("edad").replace("\n", "") + "  "
+                                    + jsonObject.getString("telefonos").replace("\n", "") + "  "
+                                    + jsonObject.getString("usuario").replace("\n", "") + "\n"
+                                    + jsonObject.getString("clave").replace("\n", "") + "\n"
+                                    + jsonObject.getString("foto").replace("\n", "")+"\n"
+                                    + jsonObject.getString("tareas").replace("\n", ""));
+                        }
+
+                        Toast.makeText(Screen_Login_Activity.this, lista_contadores.toString(), Toast.LENGTH_LONG).show();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
         }
     }
 
@@ -174,4 +266,14 @@ public class Screen_Login_Activity extends Activity implements TaskCompleted{
         else
             return false;
     }
+
+    private void showRingDialog(String text){
+        progressDialog = ProgressDialog.show(Screen_Login_Activity.this, "Espere", text, true);
+        progressDialog.setCancelable(true);
+    }
+    private void hideRingDialog(){
+        progressDialog.dismiss();
+    }
+
+
 }

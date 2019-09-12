@@ -1,6 +1,7 @@
 package com.example.luisreyes.proyecto_aguas;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -50,6 +51,7 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
         context = ctx;
         this.mCallback = (TaskCompleted)ctx;
     }
+
     @Override
     protected String doInBackground(String... params) {
         String type = params[0];
@@ -256,6 +258,7 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
                         e.printStackTrace();
                     }
                 }
+
                 return return_string;
 
             } catch (MalformedURLException e) {
@@ -273,12 +276,12 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
                 ArrayList<String> keys = new ArrayList<String>();
                 ArrayList<String> values = new ArrayList<String>();
 
-                ArrayList<String> result = post_Output_Info(keys, values, get_operarios_url, false, true);
+                Screen_Login_Activity.lista_operarios = post_Output_Info(keys, values, get_operarios_url, false, true);
 
                 String return_string = "";
-                for(int n =0 ; n < result.size() ; n++) {
+                for(int n =0 ; n < Screen_Login_Activity.lista_operarios.size() ; n++) {
                     try {
-                        JSONArray jsonArray = new JSONArray(result.get(n));
+                        JSONArray jsonArray = new JSONArray(Screen_Login_Activity.lista_operarios.get(n));
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
                             return_string += jsonObject.getString("nombre")+" "+jsonObject.getString("apellidos");
