@@ -9,7 +9,13 @@ import android.database.sqlite.SQLiteOpenHelper;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Iterator;
 
 /**
@@ -19,13 +25,14 @@ import java.util.Iterator;
 public class DBoperariosController extends SQLiteOpenHelper {
 
     public static final String database_name = "Database.db";
+    public static String database_path;
 
     JSONObject jsonOperarioType = new JSONObject();
 
     String table_name = "operarios";
 
     public DBoperariosController(Context applicationContext){
-        super(applicationContext, database_name, null, 8);
+        super(applicationContext, database_name, null, 9);
 
         try {
             jsonOperarioType.put("id", 1);
@@ -36,6 +43,7 @@ public class DBoperariosController extends SQLiteOpenHelper {
             jsonOperarioType.put("usuario", "user");
             jsonOperarioType.put("clave", "password");
             jsonOperarioType.put("tareas", "0");
+            jsonOperarioType.put("date_time_modified", "0");
             jsonOperarioType.put("foto", "null");
 
         } catch (JSONException e) {
@@ -47,17 +55,21 @@ public class DBoperariosController extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
 
 
+        //database_path = sqLiteDatabase.getPath();
         //sqLiteDatabase = SQLiteDatabase.openOrCreateDatabase("database_name", null);
-        sqLiteDatabase.execSQL("Create table if not exists "+table_name+" (id integer primary key autoincrement," +
-                " nombre TEXT, " +
-                "apellidos TEXT, " +
-                "edad INTEGER, " +
-                "telefonos TEXT, " +
-                "usuario TEXT, " +
-                "clave TEXT, " +
-                "tareas TEXT, " +
-                "foto TEXT" +
-                ")");
+        if(sqLiteDatabase != null) {
+            sqLiteDatabase.execSQL("Create table if not exists " + table_name + " (id integer primary key autoincrement," +
+                    " nombre TEXT, " +
+                    "apellidos TEXT, " +
+                    "edad INTEGER, " +
+                    "telefonos TEXT, " +
+                    "usuario TEXT, " +
+                    "clave TEXT, " +
+                    "tareas TEXT, " +
+                    "date_time_modified TEXT, " +
+                    "foto TEXT" +
+                    ")");
+        }
     }
 
     @Override
@@ -230,12 +242,15 @@ public class DBoperariosController extends SQLiteOpenHelper {
                 for (int n = 0; n < keys.size(); n++) {
                     jsonOperarioType.put(keys.get(n), c.getString(n));
                 }
+                c.close();
                 return jsonOperarioType.toString();
             }else{
+                c.close();
                 return "null";
             }
         } catch (JSONException e) {
             e.printStackTrace();
+            c.close();
             return "null";
         }
     }
@@ -260,12 +275,15 @@ public class DBoperariosController extends SQLiteOpenHelper {
                 for (int n = 0; n < keys.size(); n++) {
                     jsonOperarioType.put(keys.get(n), c.getString(n));
                 }
+                c.close();
                 return jsonOperarioType.toString();
             }else{
+                c.close();
                 return "null";
             }
         } catch (JSONException e) {
             e.printStackTrace();
+            c.close();
             return "null";
         }
     }
@@ -296,7 +314,61 @@ public class DBoperariosController extends SQLiteOpenHelper {
 
             rows.add(jsonOperarioType.toString());
         }
+        c.close();
         return rows;
+    }
+
+    public boolean checkForTableExists(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String sql = "SELECT name FROM sqlite_master WHERE type='table' AND name='" + table_name + "'";
+        Cursor mCursor = db.rawQuery(sql, null);
+        if (mCursor.getCount() > 0) {
+            return true;
+        }
+        mCursor.close();
+        return false;
+    }
+
+
+    public boolean databasefileExists(Context context, String filename) {
+        File file = context.getDatabasePath(filename);
+        if(file == null || !file.exists()) {
+            return false;
+        }
+        return true;
+    }
+
+    public int countTableOperarios(){
+
+        int operarios_count = 0;
+        SQLiteDatabase database = this.getReadableDatabase();
+        String sql = "SELECT COUNT(*) FROM "+table_name;
+        Cursor cursor = database.rawQuery(sql, null);
+
+        if(cursor.getCount() > 0){
+            cursor.moveToFirst();
+            operarios_count = cursor.getInt(0);
+        }
+        cursor.close();
+        return operarios_count;
+    }
+
+    public static String getStringFromFechaHora(Date date){
+        //date = Calendar.getInstance().getTime();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        String strDate = dateFormat.format(date);
+        return strDate;
+    }
+
+    public static Date getFechaHoraFromString(String fechaHora_String){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        Date date_time = null;
+        try {
+            date_time = sdf.parse(fechaHora_String);
+            return date_time;
+        } catch (ParseException ex) {
+            return date_time;
+        }
     }
 }
 

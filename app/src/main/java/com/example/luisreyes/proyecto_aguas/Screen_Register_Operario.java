@@ -1,13 +1,17 @@
 package com.example.luisreyes.proyecto_aguas;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.view.View;
@@ -20,6 +24,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.util.Date;
 
 /**
  * Created by luis.reyes on 29/08/2019.
@@ -46,6 +51,11 @@ public class Screen_Register_Operario extends Activity implements TaskCompleted{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.screen_register_operario);
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 1);
+        }
 
         button_register = (ImageView)findViewById(R.id.button_screen_register_operario_register);
 
@@ -84,14 +94,14 @@ public class Screen_Register_Operario extends Activity implements TaskCompleted{
                     telefonos = etTelefonos.getText().toString();
                     username_reg = etuser_name.getText().toString();
                     password_reg = etclave.getText().toString();
-
+                    String fecha_hora = DBoperariosController.getStringFromFechaHora(new Date());
                     String image = getStringImage(bitmap_foto);
 
                     capture_Photo.setImageDrawable(getDrawable(R.drawable.screen_exec_task_imagen));
 
                     String type = "register";
                     BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Register_Operario.this);
-                    backgroundWorker.execute(type, name, surname, age, telefonos, username_reg, password_reg, image);
+                    backgroundWorker.execute(type, name, surname, age, telefonos, username_reg, password_reg, image, fecha_hora);
                 }else {
 
                     if(!photo_taken){

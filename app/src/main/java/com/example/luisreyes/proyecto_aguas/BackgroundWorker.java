@@ -26,6 +26,7 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -65,10 +66,12 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
         String get_one_tarea_url;
         String get_tareas_url;
         String update_tarea_url;
+        String update_operario_url;
         String test_conection_url;
 
         if(Screen_Login_Activity.isOnline){
 
+            ///Importante el https en vez de http
             login_url = "https://server26194.webcindario.com/login_operarios.php";  //https://hosting.miarroba.com/webftp.php?id=1875467#!path=%2Fweb
             register_url = "https://server26194.webcindario.com/register_operario.php";
             change_foto_url = "https://server26194.webcindario.com/change_foto.php";
@@ -77,7 +80,8 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
             get_one_tarea_url = "https://server26194.webcindario.com/get_one_tarea.php";
             get_tareas_url = "https://server26194.webcindario.com/get_tareas.php";
             test_conection_url = "https://server26194.webcindario.com/test_database.php";
-            update_tarea_url = "http://server26194.webcindario.com/update_tarea.php";
+            update_tarea_url = "https://server26194.webcindario.com/update_tarea.php";
+            update_operario_url = "https://server26194.webcindario.com/update_operario.php";
 
 //            login_url = "https://server26194.000webhostapp.com/login_operarios.php";  //https://files.000webhost.com/
 //            register_url = "https://server26194.000webhostapp.com/register_operario.php";
@@ -100,6 +104,7 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
             get_tareas_url = "http://192.168.137.50/get_tareas.php";
 
             update_tarea_url = "http://192.168.137.50/probando_json.php";
+            update_operario_url = "http://192.168.137.50/update_operario.php";
         }
 
 //        try {
@@ -126,6 +131,46 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        else if(type.equals("update_operario")){
+
+            //////Pasarle los valores de los keys a esta operario (se hace en la clase que llama a esta)-----------------------------------------------------------------------------------------------------
+            String operario_post = String.valueOf(Screen_Login_Activity.operario_JSON);
+            try {
+
+                URL url = new URL(update_operario_url);
+                HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setDoOutput(true);
+                httpURLConnection.setDoInput(true);
+                httpURLConnection.setRequestProperty("Content-Type", "application/json");
+                httpURLConnection.setRequestProperty("Accept", "application/json");
+
+                Writer bufferedWriter = new BufferedWriter(new OutputStreamWriter(httpURLConnection.getOutputStream(), "UTF-8"));
+                bufferedWriter.write(operario_post);
+                // bufferedWriter.flush();
+                bufferedWriter.close();
+
+                InputStream inputStream = httpURLConnection.getInputStream();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
+                String line;
+                String result="";
+                while ((line = bufferedReader.readLine()) != null) {
+                    result+=(line);
+                }
+                bufferedReader.close();
+                inputStream.close();
+                httpURLConnection.disconnect();
+
+                return result;
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            catch (ProtocolException e) {
+                e.printStackTrace();
+            }catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         else if(type.equals("update_tarea")){
 
@@ -336,10 +381,13 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
                 keys.add("user_name");
                 keys.add("password");
                 keys.add("image");
+                keys.add("date_time_modified");
+
                 ArrayList<String> values = new ArrayList<String>();
                 for (int i = 0; i < keys.size(); i++) {
                     values.add(params[i+1]);
                 }
+
                 ArrayList<String> result = post_Output_Info(keys, values, register_url, true, true);
                 return result.get(1);
 
