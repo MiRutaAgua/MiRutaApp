@@ -80,7 +80,6 @@ public class Screen_Register_Operario extends Activity implements TaskCompleted{
             @Override
             public void onClick(View view) {
 
-
                 if (photo_taken && !(TextUtils.isEmpty(etname.getText()))
                         && !(TextUtils.isEmpty(etapellidos.getText()))
                         && !(TextUtils.isEmpty(etedad.getText()))
@@ -88,20 +87,24 @@ public class Screen_Register_Operario extends Activity implements TaskCompleted{
                         && !(TextUtils.isEmpty(etuser_name.getText()))
                         && !(TextUtils.isEmpty(etclave.getText()))) {
 
-                    name = etname.getText().toString();
-                    surname = etapellidos.getText().toString();
-                    age = etedad.getText().toString();
-                    telefonos = etTelefonos.getText().toString();
                     username_reg = etuser_name.getText().toString();
-                    password_reg = etclave.getText().toString();
-                    String fecha_hora = DBoperariosController.getStringFromFechaHora(new Date());
-                    String image = getStringImage(bitmap_foto);
+                    if(!Screen_Login_Activity.lista_usuarios.contains(username_reg)) {
 
-                    capture_Photo.setImageDrawable(getDrawable(R.drawable.screen_exec_task_imagen));
+                        name = etname.getText().toString();
+                        surname = etapellidos.getText().toString();
+                        age = etedad.getText().toString();
+                        telefonos = etTelefonos.getText().toString();
+                        password_reg = etclave.getText().toString();
+                        String fecha_hora = DBoperariosController.getStringFromFechaHora(new Date());
+                        String image = getStringImage(bitmap_foto);
+                        capture_Photo.setImageDrawable(getDrawable(R.drawable.screen_exec_task_imagen));
 
-                    String type = "register";
-                    BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Register_Operario.this);
-                    backgroundWorker.execute(type, name, surname, age, telefonos, username_reg, password_reg, image, fecha_hora);
+                        String type = "register";
+                        BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Register_Operario.this);
+                        backgroundWorker.execute(type, name, surname, age, telefonos, username_reg, password_reg, image, fecha_hora);
+                    }else{
+                        Toast.makeText(Screen_Register_Operario.this, "El usuario "+username_reg+" ya está registrado", Toast.LENGTH_LONG).show();
+                    }
                 }else {
 
                     if(!photo_taken){

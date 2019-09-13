@@ -32,7 +32,7 @@ public class DBoperariosController extends SQLiteOpenHelper {
     String table_name = "operarios";
 
     public DBoperariosController(Context applicationContext){
-        super(applicationContext, database_name, null, 9);
+        super(applicationContext, database_name, null, 10);
 
         try {
             jsonOperarioType.put("id", 1);
@@ -124,7 +124,8 @@ public class DBoperariosController extends SQLiteOpenHelper {
 
         //database.update(table_name, contentValues, "id = "+id, null);
         database.update(table_name, contentValues, key+" = ?", new String[]{key_value});
-        return contentValues.toString();
+        //return contentValues.toString();
+        return key_value;
     }
 
     public String updateOperario(JSONObject json) throws JSONException {
