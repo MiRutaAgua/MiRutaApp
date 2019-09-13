@@ -32,7 +32,7 @@ public class Screen_Incidence_Summary extends Activity implements TaskCompleted{
     private ImageView firma_cliente, foto1, foto2, foto3, cerrar_tarea, compartir;
     private Intent intent_open_screen_client_sign;
     private static final int CANVAS_REQUEST = 3331;
-    private Bitmap bitmap_firma_cliente;
+    private Bitmap bitmap_firma_cliente = null;
     private TextView observaciones_incidence, nombre_y_tarea;
     private EditText lectura;
 
@@ -107,12 +107,14 @@ public class Screen_Incidence_Summary extends Activity implements TaskCompleted{
                         Toast.makeText(Screen_Incidence_Summary.this, "no se pudo cambiar lectura de contador", Toast.LENGTH_LONG).show();
                     }
                 }
-                try {
-                    String firma = Screen_Register_Operario.getStringImage(bitmap_firma_cliente);
-                    Screen_Login_Activity.tarea_JSON.put("firma_cliente", firma);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(Screen_Incidence_Summary.this, "no se pudo cambiar firma de cliente", Toast.LENGTH_LONG).show();
+                if(bitmap_firma_cliente!=null) {
+                    try {
+                        String firma = Screen_Register_Operario.getStringImage(bitmap_firma_cliente);
+                        Screen_Login_Activity.tarea_JSON.put("firma_cliente", firma);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Toast.makeText(Screen_Incidence_Summary.this, "no se pudo cambiar firma de cliente", Toast.LENGTH_LONG).show();
+                    }
                 }
                 String type = "update_tarea";
                 BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Incidence_Summary.this);

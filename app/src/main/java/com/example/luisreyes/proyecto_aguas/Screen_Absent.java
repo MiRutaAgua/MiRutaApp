@@ -29,6 +29,7 @@ import org.json.JSONException;
 
 import java.text.DateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by Alejandro on 11/08/2019.
@@ -41,6 +42,10 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
     private TextView observaciones_text;
     private CheckBox checkBox_incorrecto_telefono1;
     private CheckBox checkBox_incorrecto_telefono2;
+    private CheckBox checkbox_tocado_en_puerta_screen_absent;
+    private CheckBox checkbox_nota_de_aviso_screen_absent;
+    private CheckBox checkbox_no_contesta_1_screen_absent;
+    private CheckBox checkbox_no_contesta_2_screen_absent;
     private String time_label_string = "";
     int time_picker_repeat=0;
     TextView fecha_cita, hora_cita;
@@ -60,14 +65,111 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
         telefono2 = (TextView)findViewById(R.id.textView_screen_absent_telefono2);
         checkBox_incorrecto_telefono1 = (CheckBox)findViewById(R.id.checkbox_screen_absent_N_incorrecto1);
         checkBox_incorrecto_telefono2 = (CheckBox)findViewById(R.id.checkbox_screen_absent_N_incorrecto2);
+        checkbox_tocado_en_puerta_screen_absent = (CheckBox)findViewById(R.id.checkbox_tocado_en_puerta_screen_absent);
+        checkbox_nota_de_aviso_screen_absent = (CheckBox)findViewById(R.id.checkbox_nota_de_aviso_screen_absent);
+        checkbox_no_contesta_1_screen_absent = (CheckBox)findViewById(R.id.checkbox_no_contesta_1_screen_absent);
+        checkbox_no_contesta_2_screen_absent = (CheckBox)findViewById(R.id.checkbox_no_contesta_2_screen_absent);
         fecha_cita = (TextView)findViewById(R.id.textView_screen_absent_fecha_cita);
         hora_cita = (TextView)findViewById(R.id.textView_screen_absent_hora_cita);
         observaciones_text = (TextView)findViewById(R.id.textView_screen_absent_Observaciones);
+
+        try {
+            String cita = Screen_Login_Activity.tarea_JSON.getString("nuevo_citas");
+            fecha_cita.setText(cita.split("\n")[0]);
+            hora_cita.setText(cita.split("\n")[1]);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Toast.makeText(Screen_Absent.this, "No se pudo obtener datos de cita anterior", Toast.LENGTH_LONG).show();
+        }
+
+        try {
+            String telefonos_datos = Screen_Login_Activity.tarea_JSON.getString("telefonos_cliente");
+            if(telefonos_datos.contains("TEL1_INCORRECTO")){
+                checkBox_incorrecto_telefono1.setChecked(true);
+            }
+            if(telefonos_datos.contains("TEL2_INCORRECTO")){
+                checkBox_incorrecto_telefono2.setChecked(true);
+            }
+            if(telefonos_datos.contains("TEL1_NO_CONTESTA")){
+                checkbox_no_contesta_1_screen_absent.setChecked(true);
+            }
+            if(telefonos_datos.contains("TEL2_NO_CONTESTA")){
+                checkbox_no_contesta_2_screen_absent.setChecked(true);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Toast.makeText(Screen_Absent.this, "No se pudo obtener datos de telefonos", Toast.LENGTH_LONG).show();
+        }
+        try {
+            String telefono1_string = Screen_Login_Activity.tarea_JSON.getString("telefono1");
+            String telefono2_string = Screen_Login_Activity.tarea_JSON.getString("telefono2");
+            telefono1.setText(telefono1_string);
+            telefono2.setText(telefono2_string);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Toast.makeText(Screen_Absent.this, "No se pudo obtener numeros telefono", Toast.LENGTH_LONG).show();
+        }
+        try {
+            String observaciones_string = Screen_Login_Activity.tarea_JSON.getString("observaciones");
+            observaciones_text.setText(observaciones_string);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Toast.makeText(Screen_Absent.this, "No se pudo obtener observaciones", Toast.LENGTH_LONG).show();
+        }
 
         button_guardar_datos_screen_absent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(Screen_Absent.this, "Guardando datos", Toast.LENGTH_LONG).show();
+
+                if(checkbox_tocado_en_puerta_screen_absent.isChecked()) {
+                    try {
+                        Screen_Login_Activity.tarea_JSON.put("fechas_tocado_puerta", DBoperariosController.getStringFromFechaHora(new Date())
+                                +"\n"+ Screen_Login_Activity.tarea_JSON.getString("fechas_tocado_puerta"));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if(checkbox_nota_de_aviso_screen_absent.isChecked()) {
+                    try {
+                        Screen_Login_Activity.tarea_JSON.put("fechas_nota_aviso", DBoperariosController.getStringFromFechaHora(new Date())
+                                +"\n"+ Screen_Login_Activity.tarea_JSON.getString("fechas_nota_aviso"));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if(checkBox_incorrecto_telefono1.isChecked()) {
+                    try {
+                        if(!Screen_Login_Activity.tarea_JSON.getString("telefonos_cliente").contains("TEL1_INCORRECTO"))
+                        Screen_Login_Activity.tarea_JSON.put("telefonos_cliente", "TEL1_INCORRECTO" + "\n"+Screen_Login_Activity.tarea_JSON.getString("telefonos_cliente"));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if(checkBox_incorrecto_telefono2.isChecked()) {
+                    try {
+                        if(!Screen_Login_Activity.tarea_JSON.getString("telefonos_cliente").contains("TEL2_INCORRECTO"))
+                            Screen_Login_Activity.tarea_JSON.put("telefonos_cliente", "TEL2_INCORRECTO" + "\n"+Screen_Login_Activity.tarea_JSON.getString("telefonos_cliente"));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if(checkbox_no_contesta_1_screen_absent.isChecked()) {
+                    try {
+                        if(!Screen_Login_Activity.tarea_JSON.getString("telefonos_cliente").contains("TEL1_NO_CONTESTA"))
+                            Screen_Login_Activity.tarea_JSON.put("telefonos_cliente", "TEL1_NO_CONTESTA" + "\n"+Screen_Login_Activity.tarea_JSON.getString("telefonos_cliente"));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if(checkbox_no_contesta_2_screen_absent.isChecked()) {
+                    try {
+                        if(!Screen_Login_Activity.tarea_JSON.getString("telefonos_cliente").contains("TEL2_NO_CONTESTA"))
+                            Screen_Login_Activity.tarea_JSON.put("telefonos_cliente", "TEL2_NO_CONTESTA" + "\n"+Screen_Login_Activity.tarea_JSON.getString("telefonos_cliente"));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
 
                 String type = "update_tarea";
                 BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Absent.this);
@@ -219,7 +321,7 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
         if(!(TextUtils.isEmpty(observaciones))){
           
             Screen_Login_Activity.tarea_JSON.put("observaciones", observaciones);
-            Toast.makeText(Screen_Absent.this, Screen_Login_Activity.tarea_JSON.toString(), Toast.LENGTH_LONG).show();
+            //Toast.makeText(Screen_Absent.this, Screen_Login_Activity.tarea_JSON.toString(), Toast.LENGTH_LONG).show();
 
             observaciones_text.setText(observaciones);
         }

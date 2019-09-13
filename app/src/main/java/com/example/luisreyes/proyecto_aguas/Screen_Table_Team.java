@@ -19,6 +19,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by luis.reyes on 10/08/2019.
@@ -26,6 +27,7 @@ import java.util.ArrayList;
 
 public class Screen_Table_Team extends Activity implements TaskCompleted{
 
+    DBtareasController dBtareasController = new DBtareasController(this);
     private ListView lista_de_contadores_screen_table_team;
     private ArrayAdapter arrayAdapter;
     private EditText editText_filter;
@@ -191,12 +193,75 @@ public class Screen_Table_Team extends Activity implements TaskCompleted{
                 lista_contadores.clear();
                 arrayAdapter.clear();
 
+                boolean insertar_todas = false;
+                int lite_count=dBtareasController.countTableTareas();
+                int tareas_actualizadas_count=0;
+                String date_string="";
+                if(lite_count < 1){
+                    insertar_todas= true;
+                }
+
                 String string="";
                 for(int n =0 ; n < Screen_Table_Team.lista_tareas.size() ; n++) {
                     try {
                         JSONArray jsonArray = new JSONArray(Screen_Table_Team.lista_tareas.get(n));
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                            if (insertar_todas) {
+                                dBtareasController.insertTarea(jsonObject);
+                            }
+
+                            else {
+                                if (!dBtareasController.checkIfTareaExists(jsonObject.getString("numero_serie_contador"))) {
+                                    Toast.makeText(Screen_Table_Team.this, "MySQL tarea: "+jsonObject.getString("numero_serie_contador")+" insertada", Toast.LENGTH_LONG).show();
+                                    dBtareasController.insertTarea(jsonObject);
+                                }
+                                else {
+                                    Date date_MySQL = dBtareasController.getFechaHoraFromString(jsonObject.getString("date_time_modified").replace("\n", ""));
+                                    JSONObject jsonObject_Lite = new JSONObject(dBtareasController.get_one_tarea_from_Database(jsonObject.getString("numero_serie_contador")));
+                                    Date date_SQLite = dBtareasController.getFechaHoraFromString((jsonObject_Lite.getString("date_time_modified").replace("\n", "")));
+
+                                    if (date_SQLite == null) {
+                                        if (date_MySQL != null) {
+                                            dBtareasController.updateTarea(jsonObject, "numero_serie_contador");
+                                        } else {
+                                            Toast.makeText(Screen_Table_Team.this, "Fechas ambas nulas", Toast.LENGTH_LONG).show();
+                                        }
+
+                                    } else if (date_MySQL == null) {
+                                        if (date_SQLite != null) {
+//                                            //aqui actualizar MySQL con la DB SQLite
+//                                            date_string+=jsonObject_Lite.getString("numero_serie_contador");
+//                                            Toast.makeText(Screen_Table_Team.this, "MySQL tareas actualizadas: "+date_string, Toast.LENGTH_LONG).show();
+                                            String type_script = "update_tarea";
+                                            BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Table_Team.this);
+                                            Screen_Login_Activity.tarea_JSON = jsonObject_Lite;
+                                            backgroundWorker.execute(type_script);
+                                        } else {
+                                            Toast.makeText(Screen_Table_Team.this, "Fechas ambas nulas", Toast.LENGTH_LONG).show();
+                                        }
+                                    } else { //si ninguna de la dos son nulas
+
+                                        if (date_MySQL.after(date_SQLite)) {//MySQL mas actualizada
+                                            dBtareasController.updateTarea(jsonObject, "numero_serie_contador");
+                                            tareas_actualizadas_count++;
+                                            Toast.makeText(Screen_Table_Team.this, "tarea actualizadas: "+String.valueOf(tareas_actualizadas_count), Toast.LENGTH_LONG).show();
+
+                                        } else if (date_MySQL.before(date_SQLite)) {//SQLite mas actualizada
+                                            //aqui actualizar MySQL con la DB SQLite
+                                            //Toast.makeText(MainActivity.this, "MySQL tarea: "+jsonObject.getString("numero_serie_contador")+" desactualizado", Toast.LENGTH_SHORT).show();
+//                                            date_string+=jsonObject_Lite.getString("numero_serie_contador");
+//                                            Toast.makeText(Screen_Table_Team.this, "MySQL tareas actualizadas: "+date_string, Toast.LENGTH_LONG).show();
+                                            String type_script = "update_tarea";
+                                            BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Table_Team.this);
+                                            Screen_Login_Activity.tarea_JSON = jsonObject_Lite;
+                                            backgroundWorker.execute(type_script);
+                                        }
+                                    }
+                                }
+                            }
+
                             lista_contadores.add(jsonObject.getString("poblacion")+"   "
                                     +jsonObject.getString("calle").replace("\n", "")+"  "
                                     +jsonObject.getString("numero_edificio").replace("\n", "")
@@ -208,6 +273,7 @@ public class Screen_Table_Team extends Activity implements TaskCompleted{
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
+                        Toast.makeText(Screen_Table_Team.this,e.toString(), Toast.LENGTH_LONG).show();
                     }
                 }
 

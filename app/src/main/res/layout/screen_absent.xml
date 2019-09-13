@@ -45,6 +45,7 @@
                 />
 
             <CheckBox
+                android:id="@+id/checkbox_tocado_en_puerta_screen_absent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="22dp"
@@ -68,6 +69,7 @@
                 />
 
             <CheckBox
+                android:id="@+id/checkbox_nota_de_aviso_screen_absent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 />
@@ -143,6 +145,7 @@
                     android:id="@+id/textView_screen_absent_telefono1"
                     />
                 <CheckBox
+                    android:id="@+id/checkbox_no_contesta_1_screen_absent"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -173,6 +176,7 @@
                     android:id="@+id/textView_screen_absent_telefono2"
                     />
                 <CheckBox
+                    android:id="@+id/checkbox_no_contesta_2_screen_absent"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

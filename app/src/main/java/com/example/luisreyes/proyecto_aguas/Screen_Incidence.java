@@ -41,6 +41,10 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
     private ImageView button_photo2;
     private ImageView button_photo3;
 
+    private ImageView photo1;
+    private ImageView photo2;
+    private ImageView photo3;
+
     private static final int CAM_REQUEST_1_PHOTO = 1333;
     private static final int CAM_REQUEST_2_PHOTO = 1334;
     private static final int CAM_REQUEST_3_PHOTO = 1335;
@@ -65,6 +69,30 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
         button_photo1 = (ImageView) findViewById(R.id.imageView_foto1_screen_incidence);
         button_photo2 = (ImageView) findViewById(R.id.imageView_foto2_screen_incidence);
         button_photo3 = (ImageView) findViewById(R.id.imageView_foto3_screen_incidence);
+
+        photo1 = (ImageView) findViewById(R.id.imageView_foto1_image_screen_incidence);
+        photo2 = (ImageView) findViewById(R.id.imageView_foto2_image_screen_incidence);
+        photo3 = (ImageView) findViewById(R.id.imageView_foto3_image_screen_incidence);
+
+        lista_desplegable = new ArrayList<String>();
+        lista_desplegable.add("INSTALACIÓN EN MAL ESTADO");
+        lista_desplegable.add("INSTALACIÓN INCORRECTA");
+        lista_desplegable.add("NO SE LOCALIZA CONTADOR");
+        lista_desplegable.add("PENDIENTE DE SOLUCIONAR");
+        lista_desplegable.add("NO QUIERE CAMBIAR");
+        lista_desplegable.add("NO HAY ACCESO");
+        ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista_desplegable);
+        spinner_lista_de_mal_ubicacion.setAdapter(arrayAdapter);
+
+        try {
+            String telefono1_string = Screen_Login_Activity.tarea_JSON.getString("telefono1");
+            String telefono2_string = Screen_Login_Activity.tarea_JSON.getString("telefono2");
+            telefono1.setText(telefono1_string);
+            telefono2.setText(telefono2_string);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Toast.makeText(Screen_Incidence.this, "No se pudo obtener numeros telefono", Toast.LENGTH_LONG).show();
+        }
 
         button_photo1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -148,20 +176,6 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
             }
         });
 
-        lista_desplegable = new ArrayList<String>();
-
-        lista_desplegable.add("INSTALACIÓN EN MAL ESTADO");
-        lista_desplegable.add("INSTALACIÓN INCORRECTA");
-        lista_desplegable.add("NO SE LOCALIZA CONTADOR");
-        lista_desplegable.add("PENDIENTE DE SOLUCIONAR");
-        lista_desplegable.add("NO QUIERE CAMBIAR");
-        lista_desplegable.add("NO HAY ACCESO");
-
-
-        ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista_desplegable);
-
-        spinner_lista_de_mal_ubicacion.setAdapter(arrayAdapter);
-
     }
 
     public void openDialog(String tel){
@@ -176,10 +190,10 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
 
         if(!(TextUtils.isEmpty(telefono))){
             if(Dialog.getTitle() == "telefono1"){
-                Screen_Login_Activity.tarea_JSON.put("telefonos", telefono+"\n" + telefono2.getText().toString());
+                Screen_Login_Activity.tarea_JSON.put("telefono1", telefono1.getText().toString());
                 telefono1.setText((CharSequence) telefono);
             }else if(Dialog.getTitle() == "telefono2"){
-                Screen_Login_Activity.tarea_JSON.put("telefonos", telefono1.getText().toString()+"\n"+telefono);
+                Screen_Login_Activity.tarea_JSON.put("telefono2", telefono2.getText().toString());
                 telefono2.setText((CharSequence) telefono);
             }
         }
@@ -191,14 +205,20 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
 
         if(requestCode == CAM_REQUEST_1_PHOTO){
             bitmap_foto1 = (Bitmap)data.getExtras().get("data");
+            photo1.setVisibility(View.VISIBLE);
+            photo1.setImageBitmap(bitmap_foto1);
             //capture_Photo.setImageBitmap(bitmap);
         }
         if(requestCode == CAM_REQUEST_2_PHOTO){
             bitmap_foto2 = (Bitmap)data.getExtras().get("data");
+            photo2.setVisibility(View.VISIBLE);
+            photo2.setImageBitmap(bitmap_foto2);
             //capture_Photo.setImageBitmap(bitmap);
         }
         if(requestCode == CAM_REQUEST_3_PHOTO){
             bitmap_foto3 = (Bitmap)data.getExtras().get("data");
+            photo3.setVisibility(View.VISIBLE);
+            photo3.setImageBitmap(bitmap_foto3);
             //capture_Photo.setImageBitmap(bitmap);
         }
     }

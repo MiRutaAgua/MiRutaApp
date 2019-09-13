@@ -49,6 +49,7 @@ public class Screen_Login_Activity extends Activity implements TaskCompleted{
     public static JSONObject operario_JSON;
     public static ArrayList<String> lista_operarios = new ArrayList<>();
     DBoperariosController dBoperariosController = new DBoperariosController(this);
+    //DBtareasController dBtareasController = new DBtareasController(this);
 
     boolean login_press = false;
     public static boolean register_press = false;
@@ -96,6 +97,7 @@ public class Screen_Login_Activity extends Activity implements TaskCompleted{
         }
 
 
+
         if(checkConection()){
             isOnline_temp = true;
             showRingDialog("Actualizando informacion de operarios");
@@ -107,6 +109,9 @@ public class Screen_Login_Activity extends Activity implements TaskCompleted{
             isOnline_temp = false;
             Toast.makeText(this,"No hay conexion a Internet", Toast.LENGTH_LONG).show();
         }
+
+        //Toast.makeText(this, String.valueOf(dBtareasController.countTableTareas()), Toast.LENGTH_LONG).show();
+
         button_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

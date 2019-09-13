@@ -34,6 +34,7 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
     ImageView button_guardar_datos_screen_validate_battery_intake_asignation;
 
     TextView numero_serie, numero_serie_nuevo, lectura_ultima, lectura_anterior, observaciones, ubicacion;
+    String current_tag;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,9 +54,16 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
         observaciones.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openDialog();
+                openDialog("observaciones");
             }
         });
+        numero_serie_nuevo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openDialog("Número de Serie");
+            }
+        });
+
         button_guardar_datos_screen_validate_battery_intake_asignation = (ImageView)findViewById(R.id.button_guardar_datos_screen_validate_battery_intake_asignation);
         button_guardar_datos_screen_validate_battery_intake_asignation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,19 +135,31 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
             }
         });
     }
-    public void openDialog(){
-
+    public void openDialog(String tag){
+        current_tag = tag;
         Dialog dialog = new Dialog();
-        dialog.setTitleAndHint("Observaciones", "Observaciones");
-        dialog.show(getSupportFragmentManager(), "Observaciones");
+        dialog.setTitleAndHint(tag, tag);
+        dialog.show(getSupportFragmentManager(), tag);
     }
 
     @Override
-    public void pasarTexto(String observaciones_string) throws JSONException {
-        if(!(TextUtils.isEmpty(observaciones_string))){
+    public void pasarTexto(String wrote_string) throws JSONException {
 
-            Screen_Login_Activity.tarea_JSON.put("observaciones", observaciones_string);
-            observaciones.setText(observaciones_string);
+        if(current_tag.contains("observaciones")) {
+            if (!(TextUtils.isEmpty(wrote_string))) {
+
+                Screen_Login_Activity.tarea_JSON.put("observaciones", wrote_string);
+                observaciones.setText(wrote_string);
+            }
+        }else if(current_tag.contains("Número de Serie")){
+            if (!(TextUtils.isEmpty(wrote_string))) {
+
+                Screen_Login_Activity.tarea_JSON.put("numero_serie_contador", wrote_string);
+                numero_serie_nuevo.setText(wrote_string);
+            }
+
+        }else if(current_tag.contains("Lectura")){
+
         }
     }
 

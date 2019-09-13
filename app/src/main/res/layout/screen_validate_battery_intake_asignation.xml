@@ -217,11 +217,9 @@ android:layout_height="match_parent">
             <TextView
                 android:text="Número de serie"
                 android:textSize="18dp"
-
                 android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
                 />
             <TextView
                 android:id="@+id/textView_foto_numero_serie_nuevo_screen_validate_battery_intake_asignation"
@@ -230,7 +228,8 @@ android:layout_height="match_parent">
                 android:layout_gravity="left"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
+                android:paddingTop="5dp"
+                android:paddingBottom="25dp"
                 />
 
         </LinearLayout>
@@ -242,7 +241,6 @@ android:layout_height="match_parent">
             android:layout_gravity="center"
             android:layout_marginLeft="40dp"
             android:src="@drawable/screen_validate_battery_intake_asignation_imagen"
-
             />
     </LinearLayout>
 
@@ -301,8 +299,8 @@ android:layout_height="match_parent">
         >
         <ImageView
             android:id="@+id/button_guardar_datos_screen_validate_battery_intake_asignation"
-            android:layout_width="266dp"
-            android:layout_height="50dp"
+            android:layout_width="280dp"
+            android:layout_height="60dp"
             android:src="@drawable/screen_validate_battery_intake_asgnation_boton" />
 
     </LinearLayout>
