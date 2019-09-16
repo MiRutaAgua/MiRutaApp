@@ -1,11 +1,15 @@
 package com.example.luisreyes.proyecto_aguas;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -36,6 +40,10 @@ public class Screen_User_Data extends Activity implements TaskCompleted{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.screen_user_data);
 
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 1);
+        }
         button_continuar = (ImageView)findViewById(R.id.button_screen_user_data_continuar);
         circlImageView_photo = (CircleImageView)findViewById(R.id.circleImageView_screen_user_data_photo);
         nombre = (TextView)findViewById(R.id.textView_screen_user_data_nombre);
@@ -81,7 +89,7 @@ public class Screen_User_Data extends Activity implements TaskCompleted{
             public void onClick(View view) {
                 Intent intent_open_next_screen = new Intent(Screen_User_Data.this, team_or_personal_task_selection_screen_Activity.class);
                 startActivity(intent_open_next_screen);
-                finish();
+                //finish();
             }
         });
     }

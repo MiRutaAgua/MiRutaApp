@@ -26,14 +26,11 @@ public class DBoperariosController extends SQLiteOpenHelper {
 
     public static final String database_name = "Database.db";
     public static String database_path;
-
     JSONObject jsonOperarioType = new JSONObject();
-
     public static final String table_name = "operarios";
 
     public DBoperariosController(Context applicationContext){
         super(applicationContext, database_name, null, MainActivity.DB_VERSION);
-
         try {
             jsonOperarioType.put("id", 1);
             jsonOperarioType.put("nombre", "unknow");
@@ -45,7 +42,6 @@ public class DBoperariosController extends SQLiteOpenHelper {
             jsonOperarioType.put("tareas", "0");
             jsonOperarioType.put("date_time_modified", "0");
             jsonOperarioType.put("foto", "null");
-
         } catch (JSONException e) {
             e.printStackTrace();
         }

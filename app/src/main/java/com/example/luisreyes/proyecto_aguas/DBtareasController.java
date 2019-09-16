@@ -23,16 +23,13 @@ import java.util.Iterator;
 
 public class DBtareasController extends SQLiteOpenHelper {
 
-    public static final String database_name = "Database.db";
+    public static final String database_name = "Database_Tareas.db";
     public static String database_path;
-
     JSONObject jsonTareaType = new JSONObject();
-
-    public static final String table_name = "tabla_tareas";
+    public static final String table_name = "tareas";
 
     public DBtareasController(Context applicationContext){
         super(applicationContext, database_name, null,  MainActivity.DB_VERSION);
-
         try {
             jsonTareaType.put("id", 1);
             jsonTareaType.put("poblacion", "unknow");
@@ -86,7 +83,6 @@ public class DBtareasController extends SQLiteOpenHelper {
             e.printStackTrace();
         }
     }
-
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         if(sqLiteDatabase != null) {
