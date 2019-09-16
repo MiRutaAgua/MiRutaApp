@@ -22,12 +22,19 @@ public class Screen_Draw_Canvas extends Activity {
 
     myCanvas canvas;
     private Bitmap bitmap_firma;
+
+    private static final int CANVAS_REQUEST_INC_SUMMARY = 3331;
+    private static final int CANVAS_REQUEST_VALIDATE = 3333;
+    private int caller;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         canvas = new myCanvas(this, null);
         setContentView(canvas);
+
+        caller = getIntent().getIntExtra("class_caller", 0);
     }
+
 
     @Override
     public void onBackPressed() {
@@ -38,10 +45,18 @@ public class Screen_Draw_Canvas extends Activity {
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Intent resultIntent = new Intent(Screen_Draw_Canvas.this, Screen_Validate.class);
+                        Intent resultIntent = new Intent();
+                        if(caller==CANVAS_REQUEST_VALIDATE) {
+                            resultIntent = new Intent(Screen_Draw_Canvas.this, Screen_Validate.class);
+                        }else if(caller==CANVAS_REQUEST_INC_SUMMARY) {
+                            resultIntent = new Intent(Screen_Draw_Canvas.this, Screen_Incidence_Summary.class);
+                        }
                         int result = 3;
                         bitmap_firma = (Bitmap)canvas.getDrawingCache();
-                        String img_compress = getStringImage(bitmap_firma);
+                        String img_compress="null";
+                        if(bitmap_firma!=null) {
+                            img_compress = getStringImage(bitmap_firma);
+                        }
                         resultIntent.putExtra("firma_cliente", img_compress);
                         //resultIntent.putExtra("result", result);
                         setResult(RESULT_OK, resultIntent);
@@ -51,6 +66,18 @@ public class Screen_Draw_Canvas extends Activity {
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        Intent resultIntent = new Intent();
+                        if(caller==CANVAS_REQUEST_VALIDATE) {
+                            resultIntent = new Intent(Screen_Draw_Canvas.this, Screen_Validate.class);
+                        }else if(caller==CANVAS_REQUEST_INC_SUMMARY) {
+                            resultIntent = new Intent(Screen_Draw_Canvas.this, Screen_Incidence_Summary.class);
+                        }
+                        int result = 3;
+                        bitmap_firma = null;
+                        String img_compress="null";
+                        resultIntent.putExtra("firma_cliente", img_compress);
+                        //resultIntent.putExtra("result", result);
+                        setResult(RESULT_OK, resultIntent);
                         finish();
                     }
                 }).show();

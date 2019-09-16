@@ -2,6 +2,7 @@ package com.example.luisreyes.proyecto_aguas;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -15,6 +16,8 @@ import android.widget.Toast;
 
 import org.json.JSONException;
 import org.w3c.dom.Text;
+
+import java.util.Date;
 
 /**
  * Created by jorge.perez on 8/16/2019.
@@ -33,8 +36,10 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
 
     ImageView button_guardar_datos_screen_validate_battery_intake_asignation;
 
-    TextView numero_serie, numero_serie_nuevo, lectura_ultima, lectura_anterior, observaciones, ubicacion;
+    TextView numero_serie, numero_serie_nuevo, lectura_ultima, label_lectura_ultima, lectura_anterior, observaciones, ubicacion;
     String current_tag;
+    private ProgressDialog progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,12 +50,25 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
         foto_numero_de_serie = (ImageView)findViewById(R.id.imageView_foto_numero_serie_screen_validate_battery_intake_asignation);
 
         numero_serie       = (TextView) findViewById(R.id.textView_numero_serie_screen_validate_battery_intake_asignation);
-        numero_serie_nuevo = (TextView)findViewById(R.id.textView_foto_numero_serie_nuevo_screen_validate_battery_intake_asignation);
+        numero_serie_nuevo = (TextView)findViewById(R.id.textView_numero_serie_nuevo_screen_validate_battery_intake_asignation);
+        label_lectura_ultima     = (TextView)findViewById(R.id.textView_lectura_ultima_screen_validate_battery_intake_asignation);
         lectura_ultima     = (TextView)findViewById(R.id.textView_lectura_ultima_value_screen_validate_battery_intake_asignation);
         lectura_anterior     = (TextView)findViewById(R.id.textView_lectura_anterior_value_screen_validate_battery_intake_asignation);
         observaciones     = (TextView)findViewById(R.id.textView_observaciones_screen_validate_battery_intake_asignation);
         ubicacion     = (TextView)findViewById(R.id.textView_ubicacion_screen_validate_battery_intake_asignation);
 
+        label_lectura_ultima.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openDialog("Lectura");
+            }
+        });
+        lectura_ultima.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openDialog("Lectura");
+            }
+        });
         observaciones.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -68,8 +86,12 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
         button_guardar_datos_screen_validate_battery_intake_asignation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Toast.makeText(Screen_Validate_Battery_Intake_Asignation.this, "Guardando datos", Toast.LENGTH_LONG).show();
+                try {
+                    Screen_Login_Activity.tarea_JSON.put("date_time_modified", DBtareasController.getStringFromFechaHora(new Date()));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                showRingDialog("Guardando datos");
 
                 String type = "update_tarea";
                 BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Validate_Battery_Intake_Asignation.this);
@@ -160,6 +182,8 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
 
         }else if(current_tag.contains("Lectura")){
 
+            Screen_Login_Activity.tarea_JSON.put("lectura_actual", wrote_string);
+            lectura_ultima.setText(wrote_string);
         }
     }
 
@@ -182,5 +206,12 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
             }
 
         }
+    }
+    private void showRingDialog(String text){
+        progressDialog = ProgressDialog.show(Screen_Validate_Battery_Intake_Asignation.this, "Espere", text, true);
+        progressDialog.setCancelable(true);
+    }
+    private void hideRingDialog(){
+        progressDialog.dismiss();
     }
 }

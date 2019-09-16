@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_gravity="center"
+    android:gravity="top">
+
+    <include layout = "@layout/toolbar"
+        android:id="@+id/my_toolbar"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_marginTop="60dp"
+        >
+
+        <com.example.luisreyes.proyecto_aguas.CircleImageView
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+
+            android:layout_centerInParent="true"
+            android:src="@drawable/screen_user_data_photo"
+            app:civ_border="true"
+            app:civ_border_color="@color/colorBlueAppRuta"
+            app:civ_border_width="1dp"
+            app:civ_shadow="true"
+            app:civ_shadow_color="@color/colorBlueAppRuta"
+            app:civ_shadow_radius="10"
+            android:id="@+id/circleImageView_screen_user_data_photo"
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_marginLeft="60dp"
+        android:layout_marginRight="60dp"
+        android:layout_marginTop="20dp"
+
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView_screen_user_data_nombre"
+                android:text="Nombre"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="10dp"
+            >
+
+            <TextView
+                android:text="Teléfono"
+                android:textSize="18dp"
+                android:id="@+id/textView_screen_user_data_telefono"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_marginTop="30dp"
+        >
+
+        <ImageView
+            android:layout_width="264dp"
+            android:layout_height="60dp"
+            android:src="@drawable/screen_user_data_continuar"
+            android:id="@+id/button_screen_user_data_continuar"
+            />
+    </LinearLayout>
+
+</LinearLayout>

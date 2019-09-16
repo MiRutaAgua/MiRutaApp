@@ -25,17 +25,15 @@
             android:text="Pantalla Principal"
             android:layout_gravity="center"
             android:id="@+id/textView_screen_main"
-            android:visibility="invisible"
+            android:visibility="gone"
         />
 
     </LinearLayout>
-
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="100dp"
         android:gravity="center"
         >
 
@@ -44,7 +42,7 @@
             android:layout_width="212dp"
 
 
-            android:layout_height="match_parent"
+            android:layout_height="400dp"
             android:contentDescription="Icono_de_Aplicacion"
             android:src="@drawable/app_icon_ruta"
             app:layout_constraintBottom_toBottomOf="parent"

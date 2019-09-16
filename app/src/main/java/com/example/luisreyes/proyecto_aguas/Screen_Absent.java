@@ -49,6 +49,7 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
     private String time_label_string = "";
     int time_picker_repeat=0;
     TextView fecha_cita, hora_cita;
+    String fecha_hora_cita="";
     private ImageView button_guardar_datos_screen_absent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,8 +76,10 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
 
         try {
             String cita = Screen_Login_Activity.tarea_JSON.getString("nuevo_citas");
-            fecha_cita.setText(cita.split("\n")[0]);
-            hora_cita.setText(cita.split("\n")[1]);
+            if(!TextUtils.isEmpty(cita)) {
+                fecha_cita.setText(cita.split("\n")[0]);
+                hora_cita.setText(cita.split("\n")[1]);
+            }
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(Screen_Absent.this, "No se pudo obtener datos de cita anterior", Toast.LENGTH_LONG).show();
@@ -84,17 +87,19 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
 
         try {
             String telefonos_datos = Screen_Login_Activity.tarea_JSON.getString("telefonos_cliente");
-            if(telefonos_datos.contains("TEL1_INCORRECTO")){
-                checkBox_incorrecto_telefono1.setChecked(true);
-            }
-            if(telefonos_datos.contains("TEL2_INCORRECTO")){
-                checkBox_incorrecto_telefono2.setChecked(true);
-            }
-            if(telefonos_datos.contains("TEL1_NO_CONTESTA")){
-                checkbox_no_contesta_1_screen_absent.setChecked(true);
-            }
-            if(telefonos_datos.contains("TEL2_NO_CONTESTA")){
-                checkbox_no_contesta_2_screen_absent.setChecked(true);
+            if(!TextUtils.isEmpty(telefonos_datos)) {
+                if (telefonos_datos.contains("TEL1_INCORRECTO")) {
+                    checkBox_incorrecto_telefono1.setChecked(true);
+                }
+                if (telefonos_datos.contains("TEL2_INCORRECTO")) {
+                    checkBox_incorrecto_telefono2.setChecked(true);
+                }
+                if (telefonos_datos.contains("TEL1_NO_CONTESTA")) {
+                    checkbox_no_contesta_1_screen_absent.setChecked(true);
+                }
+                if (telefonos_datos.contains("TEL2_NO_CONTESTA")) {
+                    checkbox_no_contesta_2_screen_absent.setChecked(true);
+                }
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -103,15 +108,21 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
         try {
             String telefono1_string = Screen_Login_Activity.tarea_JSON.getString("telefono1");
             String telefono2_string = Screen_Login_Activity.tarea_JSON.getString("telefono2");
-            telefono1.setText(telefono1_string);
-            telefono2.setText(telefono2_string);
+            if(!TextUtils.isEmpty(telefono1_string)) {
+                telefono1.setText(telefono1_string);
+            }
+            if(!TextUtils.isEmpty(telefono2_string)) {
+                telefono2.setText(telefono2_string);
+            }
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(Screen_Absent.this, "No se pudo obtener numeros telefono", Toast.LENGTH_LONG).show();
         }
         try {
             String observaciones_string = Screen_Login_Activity.tarea_JSON.getString("observaciones");
-            observaciones_text.setText(observaciones_string);
+            if(!TextUtils.isEmpty(observaciones_string)) {
+                observaciones_text.setText(observaciones_string);
+            }
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(Screen_Absent.this, "No se pudo obtener observaciones", Toast.LENGTH_LONG).show();
@@ -122,6 +133,11 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
             public void onClick(View view) {
                 Toast.makeText(Screen_Absent.this, "Guardando datos", Toast.LENGTH_LONG).show();
 
+                try {
+                    Screen_Login_Activity.tarea_JSON.put("date_time_modified", DBtareasController.getStringFromFechaHora(new Date()));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 if(checkbox_tocado_en_puerta_screen_absent.isChecked()) {
                     try {
                         Screen_Login_Activity.tarea_JSON.put("fechas_tocado_puerta", DBoperariosController.getStringFromFechaHora(new Date())
@@ -274,6 +290,19 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
         c.set(Calendar.YEAR, year);
         c.set(Calendar.MONTH, month);
         c.set(Calendar.DAY_OF_MONTH, day);
+
+        String mes="";
+        String dia="";
+        if(month+1 < 10){
+            mes+="0";
+        }
+        if(day < 10){
+            dia+="0";
+        }
+        mes += String.valueOf(month+1);
+        dia += String.valueOf(day);
+        fecha_hora_cita = String.valueOf(year)+"-"+mes+"-"+dia+" ";
+
         String currentDate = DateFormat.getDateInstance(DateFormat.FULL).format(c.getTime());
 
         fecha_cita.setText(currentDate);
@@ -286,14 +315,38 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
     public void onTimeSet(TimePicker timePicker, int hour, int minutes) {
 
         if(time_picker_repeat ==0){
-            time_label_string = "Entre las "+hour+":"+minutes;
+
+            String hora="";
+            String minutos="";
+            if(hour < 10){
+                hora+="0";
+            }
+            if(minutes < 10){
+                minutos+="0";
+            }
+            hora += String.valueOf(hour);
+            minutos += String.valueOf(minutes);
+            fecha_hora_cita+=hora+":"+minutos+":00";
+            time_label_string = "Entre las "+hora+":"+minutos;
         }
         else{
-            time_label_string += " y las "+hour+":"+minutes;
+            String hora="";
+            String minutos="";
+            if(hour < 10){
+                hora+="0";
+            }
+            if(minutes < 10){
+                minutos+="0";
+            }
+            hora += String.valueOf(hour);
+            minutos += String.valueOf(minutes);
+            time_label_string += " y las "+hora+":"+minutos;
 
+            Toast.makeText(Screen_Absent.this, fecha_hora_cita, Toast.LENGTH_LONG).show();
             //Aqui termina de poner la hora y la fhecha
             try {
-                Screen_Login_Activity.tarea_JSON.put("nuevo_citas", fecha_cita.getText().toString()+"\n"+hora_cita.getText().toString());
+                Screen_Login_Activity.tarea_JSON.put("nuevo_citas", fecha_cita.getText().toString()+"\n"+time_label_string);
+                Screen_Login_Activity.tarea_JSON.put("fecha_hora_cita", fecha_hora_cita);
             } catch (JSONException e) {
                 e.printStackTrace();
                 Toast.makeText(Screen_Absent.this, "No se pudo agregar nueva cita", Toast.LENGTH_LONG).show();

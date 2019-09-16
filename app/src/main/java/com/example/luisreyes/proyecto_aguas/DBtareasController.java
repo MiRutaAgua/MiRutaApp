@@ -28,10 +28,10 @@ public class DBtareasController extends SQLiteOpenHelper {
 
     JSONObject jsonTareaType = new JSONObject();
 
-    String table_name = "tabla_tareas";
+    public static final String table_name = "tabla_tareas";
 
     public DBtareasController(Context applicationContext){
-        super(applicationContext, database_name, null, 10);
+        super(applicationContext, database_name, null,  MainActivity.DB_VERSION);
 
         try {
             jsonTareaType.put("id", 1);
@@ -59,6 +59,7 @@ public class DBtareasController extends SQLiteOpenHelper {
             jsonTareaType.put("acceso", "unknow");
             jsonTareaType.put("resultado", "unknow");
             jsonTareaType.put("nuevo_citas", "unknow");
+            jsonTareaType.put("fecha_hora_cita", "unknow");
             jsonTareaType.put("fecha_de_cambio", "unknow");
             jsonTareaType.put("zona", "unknow");
             jsonTareaType.put("ruta", "unknow");
@@ -114,6 +115,7 @@ public class DBtareasController extends SQLiteOpenHelper {
                     "acceso TEXT, " +
                     "resultado TEXT, " +
                     "nuevo_citas TEXT, " +
+                    "fecha_hora_cita TEXT, " +
                     "fecha_de_cambio TEXT, " +
                     "zona TEXT, " +
                     "ruta TEXT, " +

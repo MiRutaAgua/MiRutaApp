@@ -69,7 +69,7 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
         String update_operario_url;
         String test_conection_url;
 
-        if(Screen_Login_Activity.isOnline){
+        if(Screen_Login_Activity.server_online_or_wamp){
 
             ///Importante el https en vez de http
             login_url = "https://server26194.webcindario.com/login_operarios.php";  //https://hosting.miarroba.com/webftp.php?id=1875467#!path=%2Fweb
@@ -91,6 +91,7 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
 //            get_one_tarea_url = "https://server26194.000webhostapp.com/get_one_tarea.php";
 //            get_tareas_url = "https://server26194.000webhostapp.com/get_tareas.php";
 //            update_tarea_url = "http://server26194.000webhostapp.com/update_tarea.php";
+//            update_operario_url = "https://server26194.000webhostapp.com/update_operario.php";
 //            test_conection_url = "https://server26194.000webhostapp.com/test_database.php";
         }
         else {
@@ -103,7 +104,7 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
             get_one_tarea_url = "http://192.168.137.50/get_one_tarea.php";
             get_tareas_url = "http://192.168.137.50/get_tareas.php";
 
-            update_tarea_url = "http://192.168.137.50/probando_json.php";
+            update_tarea_url = "http://192.168.137.50/update_tarea.php";
             update_operario_url = "http://192.168.137.50/update_operario.php";
         }
 

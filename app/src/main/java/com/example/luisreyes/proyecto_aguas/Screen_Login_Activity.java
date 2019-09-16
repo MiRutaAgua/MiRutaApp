@@ -49,13 +49,15 @@ public class Screen_Login_Activity extends Activity implements TaskCompleted{
     public static JSONObject operario_JSON;
     public static ArrayList<String> lista_operarios = new ArrayList<>();
     public static ArrayList<String> lista_usuarios = new ArrayList<>();
+    ArrayList<String> usuarios_to_update = new ArrayList<>();
+    public static String currentUser = "";
     DBoperariosController dBoperariosController = new DBoperariosController(this);
 
     boolean login_press = false;
     public static boolean register_press = false;
 
-    public static boolean isOnline = true;
-    public static boolean isOnline_temp = true; ///cambiar todas las ocurrencias de esta variable por isOnline
+    public static boolean server_online_or_wamp = true;
+    public static boolean isOnline = true; ///cambiar todas las ocurrencias de esta variable por isOnline
 
     private ProgressDialog progressDialog;
 
@@ -99,22 +101,30 @@ public class Screen_Login_Activity extends Activity implements TaskCompleted{
 
 
         if(checkConection()){
-            isOnline_temp = true;
+            isOnline = true;
             showRingDialog("Actualizando informacion de operarios");
             String type = "get_operarios";
             BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Login_Activity.this);
             backgroundWorker.execute(type);
         }
         else{
-            isOnline_temp = false;
+            isOnline = false;
             Toast.makeText(this,"No hay conexion a Internet", Toast.LENGTH_LONG).show();
         }
 
         button_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent_open_register_screen = new Intent(Screen_Login_Activity.this, Screen_Register_Operario.class);
-                startActivity(intent_open_register_screen);
+                if(checkConection()){
+                    isOnline = true;
+                    Intent intent_open_register_screen = new Intent(Screen_Login_Activity.this, Screen_Register_Operario.class);
+                    startActivity(intent_open_register_screen);
+                }
+                else{
+                    isOnline = false;
+                    Toast.makeText(Screen_Login_Activity.this,"No puede registrarse sin conexion a Internet", Toast.LENGTH_LONG).show();
+                }
+
             }
         });
 
@@ -127,7 +137,7 @@ public class Screen_Login_Activity extends Activity implements TaskCompleted{
                 else{
                     if (!(TextUtils.isEmpty(lineEdit_nombre_de_operario.getText())) && !(TextUtils.isEmpty(lineEdit_clave_de_acceso.getText()))) {
                         login_press= true;
-                        if(isOnline_temp) {
+                        if(isOnline) {
                             String username = lineEdit_nombre_de_operario.getText().toString();
                             String password = lineEdit_clave_de_acceso.getText().toString();
 
@@ -152,7 +162,17 @@ public class Screen_Login_Activity extends Activity implements TaskCompleted{
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
-                                Toast.makeText(Screen_Login_Activity.this, "Error accediendo a base de datos SQLite", Toast.LENGTH_SHORT).show();
+                                if(!dBoperariosController.databasefileExists(Screen_Login_Activity.this)){
+                                    Toast.makeText(Screen_Login_Activity.this, "No se encuentra base de datos SQLite: "+DBoperariosController.database_name, Toast.LENGTH_SHORT).show();
+                                }
+                                else if(!dBoperariosController.checkForTableExists()){
+                                    Toast.makeText(Screen_Login_Activity.this, "No se encuentra tabla SQLite: "+DBoperariosController.table_name, Toast.LENGTH_SHORT).show();
+                                }
+                                else if(dBoperariosController.countTableOperarios() < 1){
+                                    Toast.makeText(Screen_Login_Activity.this, "Está vacia la tabla SQLite: "+DBoperariosController.table_name+"\nConéctese a Internet para descargarlos", Toast.LENGTH_SHORT).show();
+                                }else {
+                                    Toast.makeText(Screen_Login_Activity.this, "Error accediendo a base de datos SQLite.\nError -> " + e.toString(), Toast.LENGTH_SHORT).show();
+                                }
                             }
                             login_press= false;
                         }
@@ -170,7 +190,7 @@ public class Screen_Login_Activity extends Activity implements TaskCompleted{
     public void onTaskComplete(String type, String result) throws JSONException {
 
         if(type == "login"){
-            login_press = false;
+
             if(result == null){
                 //Toast.makeText(this,"No hay conexion a Internet, se procedera con datos desactualizados", Toast.LENGTH_LONG).show();
                 new AlertDialog.Builder(this)
@@ -189,6 +209,7 @@ public class Screen_Login_Activity extends Activity implements TaskCompleted{
 
                             }
                         }).show();
+                login_press = false;
             }
             else {
                 if (result.contains("not success")) {
@@ -204,25 +225,25 @@ public class Screen_Login_Activity extends Activity implements TaskCompleted{
                     BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Login_Activity.this);
                     backgroundWorker.execute(type_script, username);
                 }
+
             }
 
         }else if(type == "get_user_data"){
-
             if(result == null){
                 Toast.makeText(this,"No hay conexion a Internet", Toast.LENGTH_LONG).show();
-
+                login_press = false;
             }
             else {
                 Intent intent_open_next_screen = new Intent(Screen_Login_Activity.this, Screen_User_Data.class);
                 intent_open_next_screen.putExtra("usuario", result);
                 startActivity(intent_open_next_screen);
+                login_press = false;
             }
         }else if(type == "get_operarios"){
 
-            hideRingDialog();
-
             if(result == null){
                 Toast.makeText(this,"No se pudo establecer conexión con el servidor", Toast.LENGTH_LONG).show();
+                hideRingDialog();
             }
             else {
                 Toast.makeText(this,"Informacion de Operarios actualizada correctamente", Toast.LENGTH_LONG).show();
@@ -260,10 +281,7 @@ public class Screen_Login_Activity extends Activity implements TaskCompleted{
                                     } else if (date_MySQL == null) {
                                         if (date_SQLite != null) {
                                             //aqui actualizar MySQL con la DB SQLite
-                                            String type_script = "update_operario";
-                                            BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Login_Activity.this);
-                                            operario_JSON = jsonObject_Lite;
-                                            backgroundWorker.execute(type_script);
+                                            usuarios_to_update.add(jsonObject_Lite.getString("usuario"));
                                         } else {
                                             Toast.makeText(Screen_Login_Activity.this, "Fechas ambas nulas", Toast.LENGTH_SHORT).show();
                                         }
@@ -274,10 +292,7 @@ public class Screen_Login_Activity extends Activity implements TaskCompleted{
 
                                         } else if (date_MySQL.before(date_SQLite)) {//SQLite mas actualizada
                                             //aqui actualizar MySQL con la DB SQLite
-                                            String type_script = "update_operario";
-                                            BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Login_Activity.this);
-                                            operario_JSON = jsonObject_Lite;
-                                            backgroundWorker.execute(type_script);
+                                            usuarios_to_update.add(jsonObject_Lite.getString("usuario"));
                                         }
                                     }
                                 }
@@ -288,7 +303,32 @@ public class Screen_Login_Activity extends Activity implements TaskCompleted{
                         e.printStackTrace();
                     }
                 }
+                updateOperarioInMySQL();
+                hideRingDialog();
+                //Toast.makeText(this,usuarios_to_update.toString()+"\n", Toast.LENGTH_LONG).show();
             }
+        }else if(type == "update_operario"){
+            if(result == null){
+                Toast.makeText(this,"No se pudo establecer conexión con el servidor", Toast.LENGTH_LONG).show();
+            }
+            else {
+                updateOperarioInMySQL();
+            }
+        }
+    }
+
+    public void updateOperarioInMySQL() throws JSONException {
+        if(usuarios_to_update.isEmpty()){
+            return;
+        }
+        else {
+            JSONObject jsonObject_Lite = new JSONObject(dBoperariosController.get_one_operario_from_Database(
+                    usuarios_to_update.get(usuarios_to_update.size() - 1)));
+            usuarios_to_update.remove(usuarios_to_update.size() - 1);
+            String type_script = "update_operario";
+            BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Login_Activity.this);
+            operario_JSON = jsonObject_Lite;
+            backgroundWorker.execute(type_script);
         }
     }
 

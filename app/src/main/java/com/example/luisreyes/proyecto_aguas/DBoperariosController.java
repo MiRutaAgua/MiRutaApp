@@ -29,10 +29,10 @@ public class DBoperariosController extends SQLiteOpenHelper {
 
     JSONObject jsonOperarioType = new JSONObject();
 
-    String table_name = "operarios";
+    public static final String table_name = "operarios";
 
     public DBoperariosController(Context applicationContext){
-        super(applicationContext, database_name, null, 10);
+        super(applicationContext, database_name, null, MainActivity.DB_VERSION);
 
         try {
             jsonOperarioType.put("id", 1);
@@ -331,8 +331,8 @@ public class DBoperariosController extends SQLiteOpenHelper {
     }
 
 
-    public boolean databasefileExists(Context context, String filename) {
-        File file = context.getDatabasePath(filename);
+    public boolean databasefileExists(Context context) {
+        File file = context.getDatabasePath(database_name);
         if(file == null || !file.exists()) {
             return false;
         }

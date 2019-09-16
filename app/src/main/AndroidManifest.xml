@@ -15,9 +15,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher_app_miruta"
+        android:icon="@mipmap/app_logo"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_app_miruta_round"
+        android:roundIcon="@mipmap/app_logo_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
 
@@ -38,72 +38,117 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!--<activity android:name=".Screen_Login_Activity"-->
+            <!--android:configChanges="orientation"-->
+            <!--android:screenOrientation="portrait"></activity>-->
+        <!--<activity android:name=".team_or_personal_task_selection_screen_Activity"-->
+            <!--android:configChanges="orientation"-->
+            <!--android:screenOrientation="portrait"></activity>-->
+        <!--<activity android:name=".Screen_Table_Team"-->
+            <!--android:configChanges="orientation"-->
+            <!--android:screenOrientation="portrait"></activity>-->
+        <!--<activity android:name=".Screen_Unity_Counter"-->
+            <!--android:configChanges="orientation"-->
+            <!--android:screenOrientation="portrait"></activity>-->
+        <!--<activity android:name=".Screen_Battery_counter"-->
+            <!--android:configChanges="orientation"-->
+            <!--android:screenOrientation="portrait"></activity>-->
+        <!--<activity android:name=".personal_task_screen_Activity"-->
+            <!--android:configChanges="orientation"-->
+            <!--android:screenOrientation="portrait"></activity>-->
+        <!--<activity android:name=".team_task_screen_Activity"-->
+            <!--android:configChanges="orientation"-->
+            <!--android:screenOrientation="portrait"></activity>-->
+        <!--<activity android:name=".Screen_Table_Personal"-->
+            <!--android:configChanges="orientation"-->
+            <!--android:screenOrientation="portrait"></activity>-->
+        <!--<activity android:name=".Screen_Fast_View_Team_Task"-->
+            <!--android:configChanges="orientation"-->
+            <!--android:screenOrientation="portrait"></activity>-->
+        <!--<activity android:name=".Screen_Fast_View_Personal_Task"-->
+            <!--android:configChanges="orientation"-->
+            <!--android:screenOrientation="portrait"></activity>-->
+        <!--<activity android:name=".Screen_Incidence"-->
+            <!--android:configChanges="orientation"-->
+            <!--android:screenOrientation="portrait"></activity>-->
+        <!--<activity android:name=".Screen_Incidence_Summary"-->
+            <!--android:configChanges="orientation"-->
+            <!--android:screenOrientation="portrait"></activity>-->
+        <!--<activity android:name=".Screen_Absent"-->
+            <!--android:configChanges="orientation"-->
+            <!--android:screenOrientation="portrait"></activity>-->
+        <!--<activity android:name=".Screen_Execute_Task"-->
+            <!--android:configChanges="orientation"-->
+            <!--android:screenOrientation="portrait"></activity>-->
+        <!--<activity android:name=".Screen_Validate"-->
+            <!--android:configChanges="orientation"-->
+            <!--android:screenOrientation="portrait"></activity>-->
+        <!--<activity android:name=".Screen_Battery_Intake_Asignation"-->
+            <!--android:configChanges="orientation"-->
+            <!--android:screenOrientation="portrait"></activity>-->
+        <!--<activity android:name=".lector"-->
+            <!--android:configChanges="orientation"-->
+            <!--android:screenOrientation="portrait"></activity>-->
+        <!--<activity android:name=".Screen_Draw_Canvas"-->
+            <!--android:configChanges="orientation"-->
+            <!--android:screenOrientation="portrait"></activity>-->
+        <!--<activity android:name=".Screen_Validate_Battery_Intake_Asignation"-->
+            <!--android:configChanges="orientation"-->
+            <!--android:screenOrientation="portrait"></activity>-->
+        <!--<activity android:name=".Screen_Zoom_Photo"-->
+            <!--android:configChanges="orientation"-->
+            <!--android:screenOrientation="portrait"></activity>-->
+        <!--<activity android:name=".Screen_Register_Operario"-->
+            <!--android:configChanges="orientation"-->
+            <!--android:screenOrientation="portrait"></activity>-->
+        <!--<activity android:name=".Screen_User_Data"-->
+            <!--android:configChanges="orientation"-->
+            <!--android:screenOrientation="portrait"></activity>-->
+
         <activity android:name=".Screen_Login_Activity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"></activity>
+           ></activity>
         <activity android:name=".team_or_personal_task_selection_screen_Activity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"></activity>
+            ></activity>
         <activity android:name=".Screen_Table_Team"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"></activity>
+            ></activity>
         <activity android:name=".Screen_Unity_Counter"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"></activity>
+            ></activity>
         <activity android:name=".Screen_Battery_counter"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"></activity>
+            ></activity>
         <activity android:name=".personal_task_screen_Activity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"></activity>
+           ></activity>
         <activity android:name=".team_task_screen_Activity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"></activity>
+           ></activity>
         <activity android:name=".Screen_Table_Personal"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"></activity>
+            ></activity>
         <activity android:name=".Screen_Fast_View_Team_Task"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"></activity>
+            ></activity>
         <activity android:name=".Screen_Fast_View_Personal_Task"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"></activity>
+            ></activity>
         <activity android:name=".Screen_Incidence"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"></activity>
+            ></activity>
         <activity android:name=".Screen_Incidence_Summary"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"></activity>
+            ></activity>
         <activity android:name=".Screen_Absent"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"></activity>
+            ></activity>
         <activity android:name=".Screen_Execute_Task"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"></activity>
+           ></activity>
         <activity android:name=".Screen_Validate"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"></activity>
+            ></activity>
         <activity android:name=".Screen_Battery_Intake_Asignation"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"></activity>
+            ></activity>
         <activity android:name=".lector"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"></activity>
+            ></activity>
         <activity android:name=".Screen_Draw_Canvas"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"></activity>
+            ></activity>
         <activity android:name=".Screen_Validate_Battery_Intake_Asignation"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"></activity>
+            ></activity>
         <activity android:name=".Screen_Zoom_Photo"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"></activity>
+            ></activity>
         <activity android:name=".Screen_Register_Operario"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"></activity>
+            ></activity>
         <activity android:name=".Screen_User_Data"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"></activity>
+            ></activity>
     </application>
 
 </manifest>
