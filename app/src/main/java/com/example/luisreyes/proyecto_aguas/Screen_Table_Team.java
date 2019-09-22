@@ -6,11 +6,16 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -35,9 +40,8 @@ import java.util.Date;
  * Created by luis.reyes on 10/08/2019.
  */
 
-public class Screen_Table_Team extends Activity implements TaskCompleted{
+public class Screen_Table_Team extends AppCompatActivity implements TaskCompleted{
 
-    public static DBtareasController dBtareasController;
     private ListView lista_de_contadores_screen_table_team;
     private ArrayAdapter arrayAdapter;
     private EditText editText_filter;
@@ -57,14 +61,20 @@ public class Screen_Table_Team extends Activity implements TaskCompleted{
     private Intent intent_open_screen_unity_counter;
     private Intent intent_open_screen_battery_counter;
     private ArrayList<String> tareas_to_update;
-    private int lite_count;
+    private int lite_count = -10;
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.screen_table_team);
 
-        dBtareasController = new DBtareasController(this);
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        myToolbar.setBackgroundColor(Color.TRANSPARENT);
+
+        setSupportActionBar(myToolbar);
+        getSupportActionBar().setIcon(getDrawable(R.drawable.toolbar_image));
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         intent_open_screen_battery_counter = new Intent(this, Screen_Battery_counter.class);
         intent_open_screen_unity_counter = new Intent(this, Screen_Unity_Counter.class);
@@ -116,9 +126,9 @@ public class Screen_Table_Team extends Activity implements TaskCompleted{
                     }
                 }
                 else {
-                    for (int n = 0; n < dBtareasController.countTableTareas(); n++) {
+                    for (int n = 1; n <= team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas(); n++) {
                         try {
-                            JSONObject jsonObject = new JSONObject(dBtareasController.get_one_tarea_from_Database(n));
+                            JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.dBtareasController.get_one_tarea_from_Database(n));
                             if (jsonObject.getString("numero_serie_contador").replace("\n", "").equals(lista_ordenada_de_tareas.get(i).getContador())) {
                                 Screen_Login_Activity.tarea_JSON = jsonObject;
                             }
@@ -212,12 +222,12 @@ public class Screen_Table_Team extends Activity implements TaskCompleted{
             Screen_Login_Activity.isOnline = false;
             Toast.makeText(this,"No hay conexion a Internet, Cargando tareas desactualizadas de Base de datos", Toast.LENGTH_LONG).show();
 
-            if(dBtareasController.databasefileExists(this)){
-                if(dBtareasController.checkForTableExists()){
+            if(team_or_personal_task_selection_screen_Activity.dBtareasController.databasefileExists(this)){
+                if(team_or_personal_task_selection_screen_Activity.dBtareasController.checkForTableExists()){
                     lista_ordenada_de_tareas.clear();
-                    for (int i = 1; i <= dBtareasController.countTableTareas(); i++) {
+                    for (int i = 1; i <= team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas(); i++) {
                         try {
-                            JSONObject jsonObject = new JSONObject(dBtareasController.get_one_tarea_from_Database(i));
+                            JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.dBtareasController.get_one_tarea_from_Database(i));
                             String dir = jsonObject.getString("poblacion")+", "
                                     +jsonObject.getString("calle").replace("\n", "")+", "
                                     +jsonObject.getString("numero_edificio").replace("\n", "")
@@ -314,14 +324,15 @@ public class Screen_Table_Team extends Activity implements TaskCompleted{
                 arrayAdapter.clear();
 
                 boolean insertar_todas = false;
-                lite_count=dBtareasController.countTableTareas();
-                int tareas_actualizadas_count=0;
-                String date_string="";
-                if(lite_count < 1){
-                    insertar_todas= true;
-                }
+                if(team_or_personal_task_selection_screen_Activity.dBtareasController.checkForTableExists()) {
+                    lite_count = team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas();
+                    Toast.makeText(Screen_Table_Team.this, "Existe", Toast.LENGTH_LONG).show();
 
-                String string="";
+                    if(lite_count < 1){
+                        insertar_todas= true;
+                        Toast.makeText(Screen_Table_Team.this, "Insertando todas", Toast.LENGTH_LONG).show();
+                    }
+                }
                 for(int n =0 ; n < Screen_Table_Team.lista_tareas.size() ; n++) {
                     try {
                         JSONArray jsonArray = new JSONArray(Screen_Table_Team.lista_tareas.get(n));
@@ -329,29 +340,28 @@ public class Screen_Table_Team extends Activity implements TaskCompleted{
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
 
                             if (insertar_todas) {
-                                dBtareasController.insertTarea(jsonObject);
+                                team_or_personal_task_selection_screen_Activity.dBtareasController.insertTarea(jsonObject);
                             }
-
-                            else {
-                                if (!dBtareasController.checkIfTareaExists(jsonObject.getString("numero_serie_contador"))) {
+                            else if(lite_count != -10) {
+                                if (!team_or_personal_task_selection_screen_Activity.dBtareasController.checkIfTareaExists(jsonObject.getString("numero_serie_contador"))) {
                                     Toast.makeText(Screen_Table_Team.this, "MySQL tarea: "+jsonObject.getString("numero_serie_contador")+" insertada", Toast.LENGTH_LONG).show();
-                                    dBtareasController.insertTarea(jsonObject);
+                                    team_or_personal_task_selection_screen_Activity.dBtareasController.insertTarea(jsonObject);
                                 }
                                 else {
                                     String date_MySQL_string = jsonObject.getString("date_time_modified").replace("\n", "");
                                     Date date_MySQL=null;
                                     if(!TextUtils.isEmpty(date_MySQL_string)){
-                                        date_MySQL = dBtareasController.getFechaHoraFromString(date_MySQL_string);
+                                        date_MySQL = team_or_personal_task_selection_screen_Activity.dBtareasController.getFechaHoraFromString(date_MySQL_string);
                                     }
-                                    JSONObject jsonObject_Lite = new JSONObject(dBtareasController.get_one_tarea_from_Database(jsonObject.getString("numero_serie_contador").replace("\n", "")));
+                                    JSONObject jsonObject_Lite = new JSONObject(team_or_personal_task_selection_screen_Activity.dBtareasController.get_one_tarea_from_Database(jsonObject.getString("numero_serie_contador").replace("\n", "")));
                                     String date_SQLite_string = jsonObject_Lite.getString("date_time_modified").replace("\n", "");
                                     Date date_SQLite = null;
                                     if(!TextUtils.isEmpty(date_SQLite_string)){
-                                        date_SQLite = dBtareasController.getFechaHoraFromString(date_SQLite_string);
+                                        date_SQLite = team_or_personal_task_selection_screen_Activity.dBtareasController.getFechaHoraFromString(date_SQLite_string);
                                     }
                                     if (date_SQLite == null) {
                                         if (date_MySQL != null) {
-                                            dBtareasController.updateTarea(jsonObject, "numero_serie_contador");
+                                            team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea(jsonObject, "numero_serie_contador");
                                         } else {
                                             Toast.makeText(Screen_Table_Team.this, "Fechas ambas nulas", Toast.LENGTH_LONG).show();
                                         }
@@ -366,8 +376,8 @@ public class Screen_Table_Team extends Activity implements TaskCompleted{
                                     } else { //si ninguna de la dos son nulas
 
                                         if (date_MySQL.after(date_SQLite)) {//MySQL mas actualizada
-                                            dBtareasController.updateTarea(jsonObject, "numero_serie_contador");
-                                            tareas_actualizadas_count++;
+                                            team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea(jsonObject, "numero_serie_contador");
+
                                             //Toast.makeText(Screen_Table_Team.this, "tarea actualizadas: "+String.valueOf(tareas_actualizadas_count), Toast.LENGTH_LONG).show();
 
                                         } else if (date_MySQL.before(date_SQLite)) {//SQLite mas actualizada
@@ -463,7 +473,7 @@ public class Screen_Table_Team extends Activity implements TaskCompleted{
             return;
         }
         else {
-            JSONObject jsonObject_Lite = new JSONObject(dBtareasController.get_one_tarea_from_Database(
+            JSONObject jsonObject_Lite = new JSONObject(team_or_personal_task_selection_screen_Activity.dBtareasController.get_one_tarea_from_Database(
                     tareas_to_update.get(tareas_to_update.size() - 1)));
             tareas_to_update.remove(tareas_to_update.size() - 1);
             String type_script = "update_tarea";

@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Intent intent_open_screen_login;
 
-    public static int DB_VERSION = 18;
+    public static int DB_VERSION = 26;
     public static int COMPRESS_QUALITY = 50;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)

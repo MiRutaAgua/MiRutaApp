@@ -1,6 +1,7 @@
 package com.example.luisreyes.proyecto_aguas;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
@@ -21,6 +22,8 @@ import android.widget.Toast;
 
 public class team_or_personal_task_selection_screen_Activity extends AppCompatActivity {
 
+    public static DBtareasController dBtareasController;
+
     private ImageView imageView_logo;
     private ImageView button_tarea_equipo;
     private ImageView button_tarea_personal;
@@ -28,12 +31,17 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
     private Intent team_task_screen;
     private Intent personal_task_screen;
 
+    static Context context;
+    public static Context get_Context(){
+        return context;
+    }
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.team_or_personal_task_selection_screen);
 
+        context = this;
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         myToolbar.setBackgroundColor(Color.TRANSPARENT);
 
@@ -41,7 +49,15 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
         getSupportActionBar().setIcon(getDrawable(R.drawable.toolbar_image));
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
+        dBtareasController = new DBtareasController(this);
 
+        if(dBtareasController.databasefileExists(this)&& dBtareasController.checkForTableExists()){
+            Toast.makeText(team_or_personal_task_selection_screen_Activity.this, "Existe: "+String.valueOf(dBtareasController.countTableTareas()), Toast.LENGTH_SHORT).show();
+        }
+
+        else{
+            Toast.makeText(team_or_personal_task_selection_screen_Activity.this, "No existe", Toast.LENGTH_SHORT).show();
+        }
         imageView_logo = (ImageView) findViewById(R.id.imageView_logo);
         button_tarea_equipo = (ImageView) findViewById(R.id.button_tarea_equipo);
         button_tarea_personal = (ImageView) findViewById(R.id.button_tarea_personal);
