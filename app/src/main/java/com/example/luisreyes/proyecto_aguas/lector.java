@@ -79,4 +79,9 @@ public class lector extends AppCompatActivity implements ZXingScannerView.Result
         finish();
 
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
 }

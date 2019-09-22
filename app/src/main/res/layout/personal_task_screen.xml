@@ -8,27 +8,15 @@
     android:orientation="vertical"
     >
 
+    <include layout = "@layout/toolbar"
+        android:id="@+id/my_toolbar"
+        />
 
-    <LinearLayout
-        android:gravity="center"
-        android:layout_marginTop="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Pantalla Tareas de Operario"
-            android:id="@+id/textView_screen_personal_task"
-            android:visibility="invisible"
-            />
-    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="192dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="30dp"
         android:gravity="center"
         android:orientation="horizontal"
         android:padding="1dp"

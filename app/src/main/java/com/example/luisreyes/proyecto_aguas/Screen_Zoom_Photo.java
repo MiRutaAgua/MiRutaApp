@@ -3,12 +3,17 @@ package com.example.luisreyes.proyecto_aguas;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.FloatRange;
 import android.support.annotation.Nullable;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.widget.ImageView;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Created by Alejandro on 27/08/2019.
@@ -30,7 +35,7 @@ public class Screen_Zoom_Photo extends Activity{
 
         String foto = getIntent().getStringExtra("zooming_photo");
 
-        bitmap_photo = Screen_Register_Operario.getImageFromString(foto);
+        bitmap_photo = getPhotoUserLocal(foto);
 
         imageView_photo = (ImageView)findViewById(R.id.imageView_screen_zoom_photo);
 
@@ -55,6 +60,26 @@ public class Screen_Zoom_Photo extends Activity{
         }
     }
 
+    public Bitmap getPhotoUserLocal(String path){
+        File file = new File(path);
+        if(file.exists()) {
+            Bitmap bitmap = null;
+            try {
+                bitmap = MediaStore.Images.Media
+                        .getBitmap(this.getContentResolver(), Uri.fromFile(file));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            if (bitmap != null) {
+                return bitmap;
+            } else {
+                return null;
+            }
+        }else{
+            return null;
+        }
+    }
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 

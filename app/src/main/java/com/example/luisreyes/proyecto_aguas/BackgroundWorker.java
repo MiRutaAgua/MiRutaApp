@@ -68,63 +68,78 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
         String update_tarea_url;
         String update_operario_url;
         String test_conection_url;
+        String upload_image_url;
+        String upload_user_image_url;
+        String download_image_url;
+        String download_user_image_url;
 
         if(Screen_Login_Activity.server_online_or_wamp){
 
-            ///Importante el https en vez de http
-            login_url = "https://server26194.webcindario.com/login_operarios.php";  //https://hosting.miarroba.com/webftp.php?id=1875467#!path=%2Fweb
-            register_url = "https://server26194.webcindario.com/register_operario.php";
-            change_foto_url = "https://server26194.webcindario.com/change_foto.php";
-            get_operarios_url = "https://server26194.webcindario.com/get_operarios.php";
-            get_user_data_url = "https://server26194.webcindario.com/get_one_operario.php";
-            get_one_tarea_url = "https://server26194.webcindario.com/get_one_tarea.php";
-            get_tareas_url = "https://server26194.webcindario.com/get_tareas.php";
-            test_conection_url = "https://server26194.webcindario.com/test_database.php";
-            update_tarea_url = "https://server26194.webcindario.com/update_tarea.php";
-            update_operario_url = "https://server26194.webcindario.com/update_operario.php";
+//            ///Importante el https en vez de http
+//            login_url = "https://server26194.webcindario.com/login_operarios.php";  //https://hosting.miarroba.com/webftp.php?id=1875467#!path=%2Fweb
+//            register_url = "https://server26194.webcindario.com/register_operario.php";
+//            change_foto_url = "https://server26194.webcindario.com/change_foto.php";
+//            get_operarios_url = "https://server26194.webcindario.com/get_operarios.php";
+//            get_user_data_url = "https://server26194.webcindario.com/get_one_operario.php";
+//            get_one_tarea_url = "https://server26194.webcindario.com/get_one_tarea.php";
+//            get_tareas_url = "https://server26194.webcindario.com/get_tareas.php";
+//            test_conection_url = "https://server26194.webcindario.com/test_database.php";
+//            update_tarea_url = "https://server26194.webcindario.com/update_tarea.php";
+//            update_operario_url = "https://server26194.webcindario.com/update_operario.php";
+//            upload_image_url = "https://server26194.webcindario.com/upload_image.php";
+//            download_image_url = "https://server26194.webcindario.com/download_image.php";
+//            download_user_image_url = "https://server26194.webcindario.com/download_user_image.php";
+//            upload_user_image_url = "https://server26194.webcindario.com/upload_user_image.php";
 
-//            login_url = "https://server26194.000webhostapp.com/login_operarios.php";  //https://files.000webhost.com/
-//            register_url = "https://server26194.000webhostapp.com/register_operario.php";
-//            change_foto_url = "https://server26194.000webhostapp.com/change_foto.php";
-//            get_operarios_url = "https://server26194.000webhostapp.com/get_operarios.php";
-//            get_user_data_url = "https://server26194.000webhostapp.com/get_one_operario.php";
-//            get_one_tarea_url = "https://server26194.000webhostapp.com/get_one_tarea.php";
-//            get_tareas_url = "https://server26194.000webhostapp.com/get_tareas.php";
-//            update_tarea_url = "http://server26194.000webhostapp.com/update_tarea.php";
-//            update_operario_url = "https://server26194.000webhostapp.com/update_operario.php";
-//            test_conection_url = "https://server26194.000webhostapp.com/test_database.php";
+            login_url = "https://server26194.000webhostapp.com/login_operarios.php";  //https://files.000webhost.com/
+            register_url = "https://server26194.000webhostapp.com/register_operario.php";
+            change_foto_url = "https://server26194.000webhostapp.com/change_foto.php";
+            get_operarios_url = "https://server26194.000webhostapp.com/get_operarios.php";
+            get_user_data_url = "https://server26194.000webhostapp.com/get_one_operario.php";
+            get_one_tarea_url = "https://server26194.000webhostapp.com/get_one_tarea.php";
+            get_tareas_url = "https://server26194.000webhostapp.com/get_tareas.php";
+            update_tarea_url = "http://server26194.000webhostapp.com/update_tarea.php";
+            update_operario_url = "https://server26194.000webhostapp.com/update_operario.php";
+            test_conection_url = "https://server26194.000webhostapp.com/test_database.php";
+            upload_image_url = "https://server26194.000webhostapp.com/upload_image.php";
+            download_image_url = "https://server26194.000webhostapp.com/download_image.php";
+            download_user_image_url = "https://server26194.000webhostapp.com/download_user_image.php";
+            upload_user_image_url = "https://server26194.000webhostapp.com/upload_user_image.php";
         }
         else {
 
             //Para PC de Trabjo ojo cambiar esto entre
-            login_url = "http://192.168.21.125/login_operarios.php";
-            register_url = "http://192.168.21.125/register_operario.php";
-            change_foto_url = "http://192.168.21.125/change_foto.php";
-            get_operarios_url = "http://192.168.21.125/get_operarios.php";
-            get_user_data_url = "http://192.168.21.125/get_one_operario.php";
-            get_one_tarea_url = "http://192.168.21.125/get_one_tarea.php";
-            get_tareas_url = "http://192.168.21.125/get_tareas.php";
-            update_tarea_url = "http://192.168.21.125/update_tarea.php";
-            update_operario_url = "http://192.168.21.125/update_operario.php";
+//            login_url = "http://192.168.21.125/login_operarios.php";
+//            register_url = "http://192.168.21.125/register_operario.php";
+//            change_foto_url = "http://192.168.21.125/change_foto.php";
+//            get_operarios_url = "http://192.168.21.125/get_operarios.php";
+//            get_user_data_url = "http://192.168.21.125/get_one_operario.php";
+//            get_one_tarea_url = "http://192.168.21.125/get_one_tarea.php";
+//            get_tareas_url = "http://192.168.21.125/get_tareas.php";
+//            update_tarea_url = "http://192.168.21.125/update_tarea.php";
+//            update_operario_url = "http://192.168.21.125/update_operario.php";
+//            upload_image_url = "http://192.168.21.125/upload_image.php";
+//            download_image_url = "http://192.168.21.125/download_image.php";
+//            download_user_image_url = "http://192.168.21.125/download_user_image.php";
+//            upload_user_image_url = "http://192.168.21.125/upload_user_image.php";
             //Mi PC en casa
-//            login_url = "http://192.168.137.50/login_operarios.php";
-//            register_url = "http://192.168.137.50/register_operario.php";
-//            change_foto_url = "http://192.168.137.50/change_foto.php";
-//            get_operarios_url = "http://192.168.137.50/get_operarios.php";
-//            get_user_data_url = "http://192.168.137.50/get_one_operario.php";
-//            get_one_tarea_url = "http://192.168.137.50/get_one_tarea.php";
-//            get_tareas_url = "http://192.168.137.50/get_tareas.php";
-//            update_tarea_url = "http://192.168.137.50/update_tarea.php";
-//            update_operario_url = "http://192.168.137.50/update_operario.php";
+            login_url = "http://192.168.137.50/login_operarios.php";
+            register_url = "http://192.168.137.50/register_operario.php";
+            change_foto_url = "http://192.168.137.50/change_foto.php";
+            get_operarios_url = "http://192.168.137.50/get_operarios.php";
+            get_user_data_url = "http://192.168.137.50/get_one_operario.php";
+            get_one_tarea_url = "http://192.168.137.50/get_one_tarea.php";
+            get_tareas_url = "http://192.168.137.50/get_tareas.php";
+            update_tarea_url = "http://192.168.137.50/update_tarea.php";
+            update_operario_url = "http://192.168.137.50/update_operario.php";
+            upload_image_url = "http://192.168.137.50/upload_image.php";
+            download_image_url = "http://192.168.137.50/download_image.php";
+            download_user_image_url = "http://192.168.137.50/download_user_image.php";
+            upload_user_image_url = "http://192.168.137.50/upload_user_image.php";
         }
 
-//        try {
-//            operario.put("nombre", "Ale");
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-        if(type.equals("login")) try {
 
+        if(type.equals("login")) try {
             return_image = false;
             ArrayList<String> keys = new ArrayList<String>();
             keys.add("user_name");
@@ -142,6 +157,92 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        else if(type.equals("upload_image")){
+            try {
+                return_image = false;
+                ArrayList<String> keys = new ArrayList<String>();
+                keys.add("foto");
+                keys.add("nombre");
+                ArrayList<String> values = new ArrayList<String>();
+                for (int i = 0; i < keys.size(); i++) {
+                    values.add(params[i+1]);
+                }
+                ArrayList<String> result = post_Output_Info(keys, values, upload_image_url, true, true);
+                return result.get(1);
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            catch (ProtocolException e) {
+                e.printStackTrace();
+            }catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        else if(type.equals("upload_user_image")){
+            try {
+                return_image = false;
+                ArrayList<String> keys = new ArrayList<String>();
+                keys.add("foto");
+                keys.add("user_name");
+                ArrayList<String> values = new ArrayList<String>();
+                for (int i = 0; i < keys.size(); i++) {
+                    values.add(params[i+1]);
+                }
+                ArrayList<String> result = post_Output_Info(keys, values, upload_user_image_url, true, true);
+                return result.get(1);
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            catch (ProtocolException e) {
+                e.printStackTrace();
+            }catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        else if(type.equals("download_image")){
+            try {
+                return_image = false;
+                ArrayList<String> keys = new ArrayList<String>();
+                keys.add("nombre");
+                ArrayList<String> values = new ArrayList<String>();
+                for (int i = 0; i < keys.size(); i++) {
+                    values.add(params[i+1]);
+                }
+                ArrayList<String> result = post_Output_Info(keys, values, download_image_url,true, true);
+                return result.get(1);
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            catch (ProtocolException e) {
+                e.printStackTrace();
+            }catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        else if(type.equals("download_user_image")){
+            try {
+                return_image = false;
+                ArrayList<String> keys = new ArrayList<String>();
+                keys.add("user_name");
+                ArrayList<String> values = new ArrayList<String>();
+                for (int i = 0; i < keys.size(); i++) {
+                    values.add(params[i+1]);
+                }
+                ArrayList<String> result = post_Output_Info(keys, values, download_user_image_url,true, true);
+                return result.get(1);
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            catch (ProtocolException e) {
+                e.printStackTrace();
+            }catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         else if(type.equals("update_operario")){
 
@@ -365,6 +466,7 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
                 keys.add("user_name");
                 keys.add("password");
                 keys.add("image");
+                keys.add("date_time_modified");
                 ArrayList<String> values = new ArrayList<String>();
                 for (int i = 0; i < keys.size(); i++) {
                     values.add(params[i+1]);

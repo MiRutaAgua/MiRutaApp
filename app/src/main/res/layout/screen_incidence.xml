@@ -6,11 +6,14 @@
     >
 <LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_gravity="center"
+    android:layout_gravity="top"
+    android:paddingBottom="30dp"
     >
-
+    <include layout = "@layout/toolbar"
+        android:id="@+id/my_toolbar"
+        />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -90,7 +93,7 @@
 
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center"
@@ -106,7 +109,7 @@
                 android:src="@drawable/screen_incidence_foto1" />
             <ImageView
                 android:id="@+id/imageView_foto1_image_screen_incidence"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:src="@drawable/screen_unity_counter_imagen"
@@ -120,11 +123,12 @@
                 android:src="@drawable/screen_incidence_foto2" />
             <ImageView
                 android:id="@+id/imageView_foto2_image_screen_incidence"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:src="@drawable/screen_unity_counter_imagen"
-                android:visibility="gone"/>
+                android:visibility="gone"
+                />
 
             <ImageView
                 android:id="@+id/imageView_foto3_screen_incidence"
@@ -134,7 +138,7 @@
                 android:src="@drawable/screen_incidence_foto3" />
             <ImageView
                 android:id="@+id/imageView_foto3_image_screen_incidence"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:src="@drawable/screen_unity_counter_imagen"

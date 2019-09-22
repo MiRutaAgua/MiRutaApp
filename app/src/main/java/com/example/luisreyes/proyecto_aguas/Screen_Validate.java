@@ -5,8 +5,14 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.view.View;
@@ -18,6 +24,9 @@ import android.widget.Toast;
 
 import org.json.JSONException;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -45,12 +54,24 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
     private String current_tag;
     private ProgressDialog progressDialog;
     private TextView nombre_y_tarea;
+    private ArrayList<String> images_files;
+    private ArrayList<String> images_files_names;
 
-
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.screen_validate);
+
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        myToolbar.setBackgroundColor(Color.TRANSPARENT);
+
+        setSupportActionBar(myToolbar);
+        getSupportActionBar().setIcon(getDrawable(R.drawable.toolbar_image));
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        images_files = new ArrayList<>();
+        images_files_names = new ArrayList<>();
 
         lectura_ultima_et    = (EditText)findViewById(R.id.editText_lectura_ultima_de_contador_screen_incidence_summary);
         lectura_actual_et    = (EditText)findViewById(R.id.editText_lectura_actual_de_contador_screen_incidence_summary);
@@ -100,36 +121,19 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
             e.printStackTrace();
             Toast.makeText(Screen_Validate.this, "no se pudo obtener calibre_toma", Toast.LENGTH_LONG).show();
         }
-        try {
-            foto_antes_intalacion_bitmap = Screen_Register_Operario.getImageFromString(
-                    Screen_Login_Activity.tarea_JSON.getString("foto_antes_instalacion"));
-            if(foto_antes_intalacion_bitmap != null) {
-                foto_instalacion_screen_exec_task.setImageBitmap(foto_antes_intalacion_bitmap);
-            }
-        } catch (JSONException e) {
-                    e.printStackTrace();
-            Toast.makeText(Screen_Validate.this, "no se pudo obtener foto_antes_intalacion", Toast.LENGTH_LONG).show();
-        }
-        try {
-            foto_numero_serie_bitmap = Screen_Register_Operario.getImageFromString(
-                    Screen_Login_Activity.tarea_JSON.getString("foto_numero_serie"));
-            if(foto_numero_serie_bitmap != null) {
-                foto_numero_de_serie_screen_exec_task.setImageBitmap(foto_numero_serie_bitmap);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-            Toast.makeText(Screen_Validate.this, "no se pudo obtener foto_numero_serie", Toast.LENGTH_LONG).show();
-        }
-        try {
-            foto_despues_intalacion_bitmap = Screen_Register_Operario.getImageFromString(
-                    Screen_Login_Activity.tarea_JSON.getString("foto_despues_instalacion"));
-            if(foto_despues_intalacion_bitmap != null) {
-                foto_final_instalacion_screen_exec_task.setImageBitmap(foto_despues_intalacion_bitmap);
-            }
 
-        } catch (JSONException e) {
-            e.printStackTrace();
-            Toast.makeText(Screen_Validate.this, "no se pudo obtener foto_despues_instalacion", Toast.LENGTH_LONG).show();
+        foto_antes_intalacion_bitmap = getPhotoUserLocal(Screen_Execute_Task.mCurrentPhotoPath_foto_antes);
+        if(foto_antes_intalacion_bitmap != null) {
+            foto_instalacion_screen_exec_task.setImageBitmap(foto_antes_intalacion_bitmap);
+        }
+        foto_numero_serie_bitmap = getPhotoUserLocal(Screen_Execute_Task.mCurrentPhotoPath_foto_serie);
+        if(foto_numero_serie_bitmap != null) {
+            foto_numero_de_serie_screen_exec_task.setImageBitmap(foto_numero_serie_bitmap);
+        }
+
+        foto_despues_intalacion_bitmap = getPhotoUserLocal(Screen_Execute_Task.mCurrentPhotoPath_foto_despues);
+        if(foto_despues_intalacion_bitmap != null) {
+            foto_final_instalacion_screen_exec_task.setImageBitmap(foto_despues_intalacion_bitmap);
         }
         try {
             bitmap_firma_cliente = Screen_Register_Operario.getImageFromString(
@@ -143,14 +147,16 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
             Toast.makeText(Screen_Validate.this, "no se pudo obtener foto_despues_instalacion", Toast.LENGTH_LONG).show();
         }
 
-        try {
-            foto_lectura_bitmap = Screen_Register_Operario.getImageFromString(
-                    Screen_Login_Activity.tarea_JSON.getString("foto_lectura"));
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-            Toast.makeText(Screen_Validate.this, "no se pudo obtener foto_lectura", Toast.LENGTH_LONG).show();
-        }
+        foto_lectura_bitmap = getPhotoUserLocal(Screen_Execute_Task.mCurrentPhotoPath_foto_lectura);
+//        try {
+//            foto_lectura_bitmap = Screen_Register_Operario.getImageFromString(
+//                    Screen_Login_Activity.tarea_JSON.getString("foto_lectura"));
+//
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//            Toast.makeText(Screen_Validate.this, "no se pudo obtener foto_lectura", Toast.LENGTH_LONG).show();
+//        }
+        Screen_Execute_Task.hideRingDialog();
 
         numero_serie_nuevo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -273,6 +279,28 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
 
     }
 
+    public void uploadPhotos(){
+        if(images_files.isEmpty()){
+            hideRingDialog();
+            Toast.makeText(Screen_Validate.this, "Actualizada tarea correctamente\n", Toast.LENGTH_LONG).show();
+            Intent intent_open_battery_counter = new Intent(Screen_Validate.this, team_or_personal_task_selection_screen_Activity.class);
+            startActivity(intent_open_battery_counter);
+            Screen_Validate.this.finish();
+            return;
+        }
+        else {
+            String file_name = null, image_file;
+
+            file_name = images_files_names.get(images_files.size() - 1);
+            images_files_names.remove(images_files.size() - 1);
+            image_file = images_files.get(images_files.size() - 1);
+            images_files.remove(images_files.size() - 1);
+            String type = "upload_image";
+            BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Validate.this);
+            backgroundWorker.execute(type, Screen_Register_Operario.getStringImage(getPhotoUserLocal(image_file)), file_name);
+
+        }
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -307,10 +335,32 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                     Toast.makeText(Screen_Validate.this, "No se pudo insertar correctamente, problemas con el servidor", Toast.LENGTH_LONG).show();
 
                 }else {
-                    Toast.makeText(Screen_Validate.this, "Actualizada tarea correctamente\n", Toast.LENGTH_LONG).show();
-                    Intent intent_open_battery_counter = new Intent(Screen_Validate.this, team_or_personal_task_selection_screen_Activity.class);
-                    startActivity(intent_open_battery_counter);
+                    images_files.add(Screen_Execute_Task.mCurrentPhotoPath_foto_antes);
+                    images_files.add(Screen_Execute_Task.mCurrentPhotoPath_foto_lectura);
+                    images_files.add(Screen_Execute_Task.mCurrentPhotoPath_foto_serie);
+                    images_files.add(Screen_Execute_Task.mCurrentPhotoPath_foto_despues);
+                    String contador=null;
+                    try {
+                        contador = Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    images_files_names.add(contador+"_foto_antes_instalacion.jpg");
+                    images_files_names.add(contador+"_foto_numero_serie.jpg");
+                    images_files_names.add(contador+"_foto_lectura.jpg");
+                    images_files_names.add(contador+"_foto_despues_instalacion.jpg");
+                    showRingDialog("Subiedo fotos");
+                    uploadPhotos();
                 }
+            }
+        }else if(type == "upload_image"){
+            if(result == null){
+                Toast.makeText(this,"No se puede acceder al servidor, no se subio imagen", Toast.LENGTH_LONG).show();
+            }
+            else {
+                Toast.makeText(Screen_Validate.this, "Imagen subida", Toast.LENGTH_SHORT).show();
+                uploadPhotos();
+                //showRingDialog("Validando registro...");
             }
         }
     }
@@ -346,4 +396,25 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
         progressDialog.dismiss();
     }
 
+
+    public Bitmap getPhotoUserLocal(String path){
+        File file = new File(path);
+        if(file.exists()) {
+            Bitmap bitmap = null;
+            try {
+                bitmap = MediaStore.Images.Media
+                        .getBitmap(this.getContentResolver(), Uri.fromFile(file));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            if (bitmap != null) {
+                return bitmap;
+            } else {
+                return null;
+            }
+        }else{
+            return null;
+        }
+    }
 }

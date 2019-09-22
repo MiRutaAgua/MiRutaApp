@@ -3,13 +3,16 @@ package com.example.luisreyes.proyecto_aguas;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.support.v7.widget.Toolbar;
+import android.widget.Toast;
 
 
 /**
@@ -25,6 +28,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
     private Intent team_task_screen;
     private Intent personal_task_screen;
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +40,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
         setSupportActionBar(myToolbar);
         getSupportActionBar().setIcon(getDrawable(R.drawable.toolbar_image));
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+
 
         imageView_logo = (ImageView) findViewById(R.id.imageView_logo);
         button_tarea_equipo = (ImageView) findViewById(R.id.button_tarea_equipo);

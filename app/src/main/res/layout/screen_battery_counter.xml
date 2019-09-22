@@ -2,19 +2,20 @@
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     >
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_gravity="center"
-        android:gravity="center"
+        android:layout_gravity="top"
+        android:gravity="top"
         >
-
+        <include layout = "@layout/toolbar"
+            android:id="@+id/my_toolbar"
+            />
         <LinearLayout
-            android:paddingTop="30dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="20dp"
             android:gravity="center"
             android:layout_gravity="center"
             android:layout_width="match_parent"
@@ -150,7 +151,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginTop="5dp"
-        android:gravity="center"
+        android:gravity="left"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="20dp"
         >
@@ -255,16 +256,19 @@
 
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/imageView_screen_battery_counter_imagen"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_marginRight="20dp"
-            android:layout_weight="1"
-            android:src="@drawable/screen_unity_counter_imagen" />
-
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+            <ImageView
+                android:id="@+id/imageView_screen_battery_counter_imagen"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/screen_unity_counter_imagen" />
+        </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

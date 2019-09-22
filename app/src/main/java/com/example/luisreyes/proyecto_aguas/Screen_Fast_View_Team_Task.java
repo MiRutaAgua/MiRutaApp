@@ -1,7 +1,12 @@
 package com.example.luisreyes.proyecto_aguas;
 
 import android.app.Activity;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -12,7 +17,7 @@ import java.util.ArrayList;
  * Created by luis.reyes on 10/08/2019.
  */
 
-public class Screen_Fast_View_Team_Task  extends Activity{
+public class Screen_Fast_View_Team_Task  extends AppCompatActivity{
 
     private ListView lista_de_contadores_screen_table_team;
 
@@ -29,10 +34,18 @@ public class Screen_Fast_View_Team_Task  extends Activity{
 
     private ArrayList<String> lista_contadores;
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.screen_fast_view_team_tasks);
+
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        myToolbar.setBackgroundColor(Color.TRANSPARENT);
+
+        setSupportActionBar(myToolbar);
+        getSupportActionBar().setIcon(getDrawable(R.drawable.toolbar_image));
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         lista_de_contadores_screen_table_team = (ListView) findViewById(R.id.listView_contadores_screen_fast_view_team_task);
 

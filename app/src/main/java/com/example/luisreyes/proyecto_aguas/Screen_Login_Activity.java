@@ -51,12 +51,12 @@ public class Screen_Login_Activity extends Activity implements TaskCompleted{
     public static ArrayList<String> lista_usuarios = new ArrayList<>();
     ArrayList<String> usuarios_to_update = new ArrayList<>();
     public static String currentUser = "";
-    DBoperariosController dBoperariosController = new DBoperariosController(this);
+    public static DBoperariosController dBoperariosController;
 
     boolean login_press = false;
     public static boolean register_press = false;
 
-    public static boolean server_online_or_wamp = true;
+    public static boolean server_online_or_wamp = false;
     public static boolean isOnline = true; ///cambiar todas las ocurrencias de esta variable por isOnline
 
     private ProgressDialog progressDialog;
@@ -67,6 +67,14 @@ public class Screen_Login_Activity extends Activity implements TaskCompleted{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.screen_login);
 
+        dBoperariosController = new DBoperariosController(this);
+
+        if(dBoperariosController.databasefileExists(this)&& dBoperariosController.checkForTableExists()){
+            Toast.makeText(Screen_Login_Activity.this, "Existe: "+String.valueOf(dBoperariosController.countTableOperarios()), Toast.LENGTH_SHORT).show();
+        }
+        else{
+            Toast.makeText(Screen_Login_Activity.this, "Existe: No existe", Toast.LENGTH_SHORT).show();
+        }
         tarea_JSON = new JSONObject();
         operario_JSON = new JSONObject();
 
@@ -136,12 +144,13 @@ public class Screen_Login_Activity extends Activity implements TaskCompleted{
                 }
                 else{
                     if (!(TextUtils.isEmpty(lineEdit_nombre_de_operario.getText())) && !(TextUtils.isEmpty(lineEdit_clave_de_acceso.getText()))) {
-                        login_press= true;
+                        isOnline = checkConection();
+                        login_press = true;
                         if(isOnline) {
                             String username = lineEdit_nombre_de_operario.getText().toString();
                             String password = lineEdit_clave_de_acceso.getText().toString();
 
-                            //Toast.makeText(Screen_Login_Activity.this, "Comprobando informacion", Toast.LENGTH_SHORT).show();
+                            showRingDialog("Comprobando informacion");
                             String type = "login";
                             BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Login_Activity.this);
                             backgroundWorker.execute(type, username, password);
@@ -190,7 +199,7 @@ public class Screen_Login_Activity extends Activity implements TaskCompleted{
     public void onTaskComplete(String type, String result) throws JSONException {
 
         if(type == "login"){
-
+            hideRingDialog();
             if(result == null){
                 //Toast.makeText(this,"No hay conexion a Internet, se procedera con datos desactualizados", Toast.LENGTH_LONG).show();
                 new AlertDialog.Builder(this)

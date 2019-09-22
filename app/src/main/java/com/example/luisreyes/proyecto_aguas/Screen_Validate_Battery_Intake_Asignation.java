@@ -6,8 +6,14 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -17,6 +23,9 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.w3c.dom.Text;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -33,17 +42,29 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
     Bitmap foto_antes_intalacion_bitmap = null;
     Bitmap foto_lectura_bitmap= null;
     Bitmap foto_numero_serie_bitmap= null;
-
+    private ArrayList<String> images_files;
+    private ArrayList<String> images_files_names;
     ImageView button_guardar_datos_screen_validate_battery_intake_asignation;
 
     TextView numero_serie, numero_serie_nuevo, lectura_ultima, label_lectura_ultima, lectura_anterior, observaciones, ubicacion;
     String current_tag;
     private ProgressDialog progressDialog;
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.screen_validate_battery_intake_asignation);
+
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        myToolbar.setBackgroundColor(Color.TRANSPARENT);
+
+        setSupportActionBar(myToolbar);
+        getSupportActionBar().setIcon(getDrawable(R.drawable.toolbar_image));
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        images_files = new ArrayList<>();
+        images_files_names = new ArrayList<>();
 
         foto_instalacion = (ImageView)findViewById(R.id.imageView_foto_instalacion_screen_validate_battery_intake_asignation);
         foto_lectura = (ImageView)findViewById(R.id.imageView_foto_lectura_screen_validate_battery_intake_asignation);
@@ -103,10 +124,20 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
 
 
         try {
-            foto_antes_intalacion_bitmap = Screen_Register_Operario.getImageFromString(Screen_Login_Activity.tarea_JSON.getString("foto_antes_instalacion"));
-            foto_lectura_bitmap = Screen_Register_Operario.getImageFromString(Screen_Login_Activity.tarea_JSON.getString("foto_lectura"));
-            foto_numero_serie_bitmap = Screen_Register_Operario.getImageFromString(Screen_Login_Activity.tarea_JSON.getString("foto_numero_serie"));
 
+            foto_antes_intalacion_bitmap = getPhotoUserLocal(Screen_Battery_Intake_Asignation.mCurrentPhotoPath_foto_antes);
+            if(foto_antes_intalacion_bitmap != null) {
+                foto_instalacion.setImageBitmap(foto_antes_intalacion_bitmap);
+            }
+            foto_numero_serie_bitmap = getPhotoUserLocal(Screen_Battery_Intake_Asignation.mCurrentPhotoPath_foto_serie);
+            if(foto_numero_serie_bitmap != null) {
+                foto_numero_de_serie.setImageBitmap(foto_numero_serie_bitmap);
+            }
+
+            foto_lectura_bitmap = getPhotoUserLocal(Screen_Battery_Intake_Asignation.mCurrentPhotoPath_foto_lectura);
+            if(foto_lectura_bitmap != null) {
+                foto_lectura.setImageBitmap(foto_lectura_bitmap);
+            }
             numero_serie.setText(Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador"));
             lectura_anterior.setText(Screen_Login_Activity.tarea_JSON.getString("lectura_ultima"));
             lectura_ultima.setText(Screen_Login_Activity.tarea_JSON.getString("lectura_actual"));
@@ -114,15 +145,6 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
             observaciones.setText(Screen_Login_Activity.tarea_JSON.getString("observaciones"));
             ubicacion.setText(Screen_Login_Activity.tarea_JSON.getString("ubicacion_en_bateria"));
 
-            if(foto_antes_intalacion_bitmap != null) {
-                foto_instalacion.setImageBitmap(foto_antes_intalacion_bitmap);
-            }
-            if(foto_lectura_bitmap != null) {
-                foto_lectura.setImageBitmap(foto_lectura_bitmap);
-            }
-            if(foto_numero_serie_bitmap != null) {
-                foto_numero_de_serie.setImageBitmap(foto_numero_serie_bitmap);
-            }
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -133,7 +155,7 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Intent intent_zoom_photo = new Intent(Screen_Validate_Battery_Intake_Asignation.this, Screen_Zoom_Photo.class);
-                String foto = Screen_Register_Operario.getStringImage(foto_antes_intalacion_bitmap);
+                String foto = Screen_Battery_Intake_Asignation.mCurrentPhotoPath_foto_antes;
                 intent_zoom_photo.putExtra("zooming_photo", foto);
                 startActivity(intent_zoom_photo);
             }
@@ -142,7 +164,7 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Intent intent_zoom_photo = new Intent(Screen_Validate_Battery_Intake_Asignation.this, Screen_Zoom_Photo.class);
-                String foto = Screen_Register_Operario.getStringImage(foto_numero_serie_bitmap);
+                String foto = Screen_Battery_Intake_Asignation.mCurrentPhotoPath_foto_serie;
                 intent_zoom_photo.putExtra("zooming_photo", foto);
                 startActivity(intent_zoom_photo);
             }
@@ -151,11 +173,32 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Intent intent_zoom_photo = new Intent(Screen_Validate_Battery_Intake_Asignation.this, Screen_Zoom_Photo.class);
-                String foto = Screen_Register_Operario.getStringImage(foto_lectura_bitmap);
+                String foto = Screen_Battery_Intake_Asignation.mCurrentPhotoPath_foto_lectura;
                 intent_zoom_photo.putExtra("zooming_photo", foto);
                 startActivity(intent_zoom_photo);
             }
         });
+    }
+
+    public Bitmap getPhotoUserLocal(String path){
+        File file = new File(path);
+        if(file.exists()) {
+            Bitmap bitmap = null;
+            try {
+                bitmap = MediaStore.Images.Media
+                        .getBitmap(this.getContentResolver(), Uri.fromFile(file));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            if (bitmap != null) {
+                return bitmap;
+            } else {
+                return null;
+            }
+        }else{
+            return null;
+        }
     }
     public void openDialog(String tag){
         current_tag = tag;
@@ -199,11 +242,54 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
                     Toast.makeText(Screen_Validate_Battery_Intake_Asignation.this, "No se pudo insertar correctamente, problemas con el servidor", Toast.LENGTH_SHORT).show();
 
                 }else {
-                    Toast.makeText(Screen_Validate_Battery_Intake_Asignation.this, "Actualizada tarea correctamente\n", Toast.LENGTH_SHORT).show();
-                    Intent intent_open_battery_counter = new Intent(Screen_Validate_Battery_Intake_Asignation.this, Screen_Battery_counter.class);
-                    startActivity(intent_open_battery_counter);
+                    images_files.add(Screen_Battery_Intake_Asignation.mCurrentPhotoPath_foto_antes);
+                    images_files.add(Screen_Battery_Intake_Asignation.mCurrentPhotoPath_foto_lectura);
+                    images_files.add(Screen_Battery_Intake_Asignation.mCurrentPhotoPath_foto_serie);
+                    String contador=null;
+                    try {
+                        contador = Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    images_files_names.add(contador+"_foto_antes_instalacion.jpg");
+                    images_files_names.add(contador+"_foto_numero_serie.jpg");
+                    images_files_names.add(contador+"_foto_lectura.jpg");
+                    showRingDialog("Subiedo fotos");
+                    uploadPhotos();
+
                 }
             }
+        }
+        else if(type == "upload_image"){
+            if(result == null){
+                Toast.makeText(this,"No se puede acceder al servidor, no se subio imagen", Toast.LENGTH_LONG).show();
+            }
+            else {
+                Toast.makeText(Screen_Validate_Battery_Intake_Asignation.this, "Imagen subida", Toast.LENGTH_SHORT).show();
+                uploadPhotos();
+                //showRingDialog("Validando registro...");
+            }
+        }
+    }
+    public void uploadPhotos(){
+        if(images_files.isEmpty()){
+            hideRingDialog();
+            Toast.makeText(Screen_Validate_Battery_Intake_Asignation.this, "Actualizada tarea correctamente\n", Toast.LENGTH_SHORT).show();
+            Intent intent_open_battery_counter = new Intent(Screen_Validate_Battery_Intake_Asignation.this, Screen_Battery_counter.class);
+            startActivity(intent_open_battery_counter);
+            Screen_Validate_Battery_Intake_Asignation.this.finish();
+            return;
+        }
+        else {
+            String file_name = null, image_file;
+
+            file_name = images_files_names.get(images_files.size() - 1);
+            images_files_names.remove(images_files.size() - 1);
+            image_file = images_files.get(images_files.size() - 1);
+            images_files.remove(images_files.size() - 1);
+            String type = "upload_image";
+            BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Validate_Battery_Intake_Asignation.this);
+            backgroundWorker.execute(type, Screen_Register_Operario.getStringImage(getPhotoUserLocal(image_file)), file_name);
 
         }
     }

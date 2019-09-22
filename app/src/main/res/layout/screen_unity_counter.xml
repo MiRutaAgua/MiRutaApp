@@ -8,6 +8,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center"
+        android:paddingBottom="60dp"
         >
 
         <include layout = "@layout/toolbar"
@@ -173,10 +174,9 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginTop="5dp"
-            android:gravity="center"
+            android:gravity="left"
             android:layout_marginLeft="25dp"
             android:layout_marginRight="20dp"
-            android:paddingBottom="60dp"
             >
 
             <LinearLayout
@@ -279,12 +279,17 @@
 
             </LinearLayout>
 
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
             <ImageView
                 android:id="@+id/imageView_screen_unity_counter_imagen"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_marginRight="20dp"
-                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="500dp"
                 android:src="@drawable/screen_unity_counter_imagen" />
         </LinearLayout>
 

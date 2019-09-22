@@ -2,16 +2,24 @@ package com.example.luisreyes.proyecto_aguas;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.view.View;
@@ -22,28 +30,42 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
  * Created by Alejandro on 11/08/2019.
  */
 
-public class Screen_Incidence_Summary extends Activity implements TaskCompleted{
+public class Screen_Incidence_Summary extends AppCompatActivity implements TaskCompleted{
 
     private ImageView firma_cliente, foto1, foto2, foto3, cerrar_tarea, compartir;
-    private Intent intent_open_screen_client_sign;
+
     private static final int CANVAS_REQUEST_INC_SUMMARY = 3331;
     private Bitmap bitmap_firma_cliente = null;
     private TextView observaciones_incidence, nombre_y_tarea;
     private EditText lectura;
+    private ProgressDialog progressDialog;
+    private ArrayList<String> images_files;
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.screen_incidence_summary);
 
-        intent_open_screen_client_sign = new Intent(this, Screen_Draw_Canvas.class);
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        myToolbar.setBackgroundColor(Color.TRANSPARENT);
+
+        setSupportActionBar(myToolbar);
+        getSupportActionBar().setIcon(getDrawable(R.drawable.toolbar_image));
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        images_files = new ArrayList<>();
         firma_cliente = (ImageView)findViewById(R.id.imageButton_firma_cliente_screen_validate);
         foto1 = (ImageView)findViewById(R.id.imageView_foto1_screen_incidence_summary);
         foto2 = (ImageView)findViewById(R.id.imageView_foto2_screen_incidence_summary);
@@ -61,22 +83,24 @@ public class Screen_Incidence_Summary extends Activity implements TaskCompleted{
             Toast.makeText(Screen_Incidence_Summary.this, "no se pudo obtener nombre de cliente", Toast.LENGTH_LONG).show();
         }
         try {
-            foto1.setImageBitmap(Screen_Register_Operario.getImageFromString(Screen_Login_Activity.tarea_JSON.getString("foto_incidencia_1")));
+            Toast.makeText(Screen_Incidence_Summary.this, Screen_Login_Activity.tarea_JSON.getString("foto_incidencia_1"), Toast.LENGTH_LONG).show();
         } catch (JSONException e) {
             e.printStackTrace();
-            Toast.makeText(Screen_Incidence_Summary.this, "no se pudo obtener foto incidencia 1", Toast.LENGTH_LONG).show();
         }
-        try {
-            foto2.setImageBitmap(Screen_Register_Operario.getImageFromString(Screen_Login_Activity.tarea_JSON.getString("foto_incidencia_2")));
-        } catch (JSONException e) {
-            e.printStackTrace();
-            Toast.makeText(Screen_Incidence_Summary.this, "no se pudo obtener foto incidencia 2", Toast.LENGTH_LONG).show();
+        Bitmap bitmap = getPhotoUserLocal(Screen_Incidence.mCurrentPhotoPath_incidencia_1);
+        if(bitmap!=null){
+            foto1.setVisibility(View.VISIBLE);
+            foto1.setImageBitmap(bitmap);
         }
-        try {
-            foto3.setImageBitmap(Screen_Register_Operario.getImageFromString(Screen_Login_Activity.tarea_JSON.getString("foto_incidencia_3")));
-        } catch (JSONException e) {
-            e.printStackTrace();
-            Toast.makeText(Screen_Incidence_Summary.this, "no se pudo obtener foto incidencia 3", Toast.LENGTH_LONG).show();
+        bitmap = getPhotoUserLocal(Screen_Incidence.mCurrentPhotoPath_incidencia_2);
+        if(bitmap!=null){
+            foto2.setVisibility(View.VISIBLE);
+            foto2.setImageBitmap(bitmap);
+        }
+        bitmap = getPhotoUserLocal(Screen_Incidence.mCurrentPhotoPath_incidencia_3);
+        if(bitmap!=null){
+            foto3.setVisibility(View.VISIBLE);
+            foto3.setImageBitmap(bitmap);
         }
         try {
             observaciones_incidence.setText(Screen_Login_Activity.tarea_JSON.getString("incidencia"));
@@ -109,6 +133,7 @@ public class Screen_Incidence_Summary extends Activity implements TaskCompleted{
         firma_cliente.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent_open_screen_client_sign = new Intent(Screen_Incidence_Summary.this, Screen_Draw_Canvas.class);
                 intent_open_screen_client_sign.putExtra("class_caller", CANVAS_REQUEST_INC_SUMMARY);
                 startActivityForResult(intent_open_screen_client_sign, CANVAS_REQUEST_INC_SUMMARY);
             }
@@ -182,16 +207,53 @@ public class Screen_Incidence_Summary extends Activity implements TaskCompleted{
                         Toast.makeText(Screen_Incidence_Summary.this, "No se pudo insertar correctamente, problemas con el servidor de la base de datos", Toast.LENGTH_SHORT).show();
 
                     } else {
-                        Toast.makeText(Screen_Incidence_Summary.this, "Actualizada tarea correctamente", Toast.LENGTH_SHORT).show();
-                        Intent intent_open_task_or_personal_screen = new Intent(Screen_Incidence_Summary.this, team_or_personal_task_selection_screen_Activity.class);
-                        startActivity(intent_open_task_or_personal_screen);
-                        Screen_Incidence_Summary.this.finish();
+                        images_files.clear();
+                        images_files.add(Screen_Incidence.mCurrentPhotoPath_incidencia_1);
+                        images_files.add(Screen_Incidence.mCurrentPhotoPath_incidencia_2);
+                        images_files.add(Screen_Incidence.mCurrentPhotoPath_incidencia_3);
+
+                        showRingDialog("Subiendo foto...");
+                        uploadPhotos();
                     }
                 }
+            }
+        }else if(type == "upload_image"){
+            if(result == null){
+                Toast.makeText(this,"No se puede acceder al servidor, no se subio imagen", Toast.LENGTH_LONG).show();
+            }
+            else {
+                Toast.makeText(Screen_Incidence_Summary.this, "Imagen subida", Toast.LENGTH_SHORT).show();
+                uploadPhotos();
+                //showRingDialog("Validando registro...");
             }
         }
     }
 
+
+    public void uploadPhotos(){
+        if(images_files.isEmpty()){
+            hideRingDialog();
+            Toast.makeText(Screen_Incidence_Summary.this, "Actualizada tarea correctamente", Toast.LENGTH_SHORT).show();
+            Intent intent_open_task_or_personal_screen = new Intent(Screen_Incidence_Summary.this, team_or_personal_task_selection_screen_Activity.class);
+            startActivity(intent_open_task_or_personal_screen);
+            Screen_Incidence_Summary.this.finish();
+            return;
+        }
+        else {
+            String file_name = null, image_file;
+
+            try {
+                file_name = Screen_Login_Activity.tarea_JSON.getString("foto_incidencia_"+String.valueOf(images_files.size()));
+                image_file = images_files.get(images_files.size() - 1);
+                images_files.remove(images_files.size() - 1);
+                String type = "upload_image";
+                BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Incidence_Summary.this);
+                backgroundWorker.execute(type, Screen_Register_Operario.getStringImage(getPhotoUserLocal(image_file)), file_name);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
     public boolean checkConection(){
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -205,5 +267,33 @@ public class Screen_Incidence_Summary extends Activity implements TaskCompleted{
         }
         else
             return false;
+    }
+
+    public Bitmap getPhotoUserLocal(String path){
+        File file = new File(path);
+        if(file.exists()) {
+            Bitmap bitmap = null;
+            try {
+                bitmap = MediaStore.Images.Media
+                        .getBitmap(this.getContentResolver(), Uri.fromFile(file));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            if (bitmap != null) {
+                return bitmap;
+            } else {
+                return null;
+            }
+        }else{
+            return null;
+        }
+    }
+    private void showRingDialog(String text){
+        progressDialog = ProgressDialog.show(Screen_Incidence_Summary.this, "Espere", text, true);
+        progressDialog.setCancelable(true);
+    }
+    private void hideRingDialog(){
+        progressDialog.dismiss();
     }
 }

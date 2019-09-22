@@ -8,10 +8,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_gravity="center"
-        android:gravity="center"
+        android:layout_gravity="top"
+        android:gravity="top"
         >
-
+        <include layout = "@layout/toolbar"
+            android:id="@+id/my_toolbar"
+            />
         <LinearLayout
             android:gravity="center"
             android:padding="10dp"
@@ -32,7 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:layout_marginTop="20dp"
             >
 
@@ -42,21 +44,30 @@
                 android:layout_width="266dp"
                 android:layout_height="50dp"
                 android:src="@drawable/screen_battery_intake_asignation_foto_instalacion" />
-
+            <ImageView
+                android:id="@+id/imageView_foto_instalacion_screen_battery_intake_asignation"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:src="@drawable/screen_validate_battery_intake_asignation_imagen"
+                />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:orientation="horizontal">
-
-
+            android:orientation="vertical">
             <ImageView
                 android:id="@+id/button_foto_lectura_screen_battery_intake_asignation"
                 android:layout_width="266dp"
                 android:layout_height="50dp"
                 android:src="@drawable/screen_battery_intake_asignation_foto_lectura" />
+            <ImageView
+                android:id="@+id/imageView_foto_lectura_screen_battery_intake_asignation"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:src="@drawable/screen_validate_battery_intake_asignation_imagen"
+                />
         </LinearLayout>
 
         <LinearLayout
@@ -64,13 +75,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             >
             <ImageView
                 android:id="@+id/button_foto_numero_serie_screen_battery_intake_asignation"
                 android:layout_width="266dp"
                 android:layout_height="50dp"
                 android:src="@drawable/screen_battery_intake_asignation_foto_numero_de_serie" />
+            <ImageView
+                android:id="@+id/imageView_foto_numero_serie_screen_battery_intake_asignation"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:src="@drawable/screen_validate_battery_intake_asignation_imagen"
+                />
         </LinearLayout>
 
         <LinearLayout

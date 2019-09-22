@@ -9,11 +9,14 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
@@ -51,6 +54,7 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
     TextView fecha_cita, hora_cita;
     String fecha_hora_cita="";
     private ImageView button_guardar_datos_screen_absent;
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +64,13 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CALL_PHONE}, 1);
         }
+
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        myToolbar.setBackgroundColor(Color.TRANSPARENT);
+
+        setSupportActionBar(myToolbar);
+        getSupportActionBar().setIcon(getDrawable(R.drawable.toolbar_image));
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         button_guardar_datos_screen_absent= (ImageView)findViewById(R.id.button_guardar_datos_screen_absent);
         telefono1 = (TextView)findViewById(R.id.textView_screen_absent_telefono1);
@@ -342,7 +353,7 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
             minutos += String.valueOf(minutes);
             time_label_string += " y las "+hora+":"+minutos;
 
-            Toast.makeText(Screen_Absent.this, fecha_hora_cita, Toast.LENGTH_LONG).show();
+            //Toast.makeText(Screen_Absent.this, fecha_hora_cita, Toast.LENGTH_LONG).show();
             //Aqui termina de poner la hora y la fhecha
             try {
                 Screen_Login_Activity.tarea_JSON.put("nuevo_citas", fecha_cita.getText().toString()+"\n"+time_label_string);

@@ -37,7 +37,7 @@ import java.util.Date;
 
 public class Screen_Table_Team extends Activity implements TaskCompleted{
 
-    DBtareasController dBtareasController;
+    public static DBtareasController dBtareasController;
     private ListView lista_de_contadores_screen_table_team;
     private ArrayAdapter arrayAdapter;
     private EditText editText_filter;
@@ -215,7 +215,7 @@ public class Screen_Table_Team extends Activity implements TaskCompleted{
             if(dBtareasController.databasefileExists(this)){
                 if(dBtareasController.checkForTableExists()){
                     lista_ordenada_de_tareas.clear();
-                    for (int i = 0; i < dBtareasController.countTableTareas(); i++) {
+                    for (int i = 1; i <= dBtareasController.countTableTareas(); i++) {
                         try {
                             JSONObject jsonObject = new JSONObject(dBtareasController.get_one_tarea_from_Database(i));
                             String dir = jsonObject.getString("poblacion")+", "
@@ -239,6 +239,7 @@ public class Screen_Table_Team extends Activity implements TaskCompleted{
                             String fecha_cita = jsonObject.getString("fecha_hora_cita").replace("\n", "");
                             MyCounter contador = new MyCounter();
                             contador.setDateTime(DBtareasController.getFechaHoraFromString(fecha_cita));
+                            contador.setNumero_serie_contador(numero_serie_contador);
                             contador.setContador(numero_serie_contador);
                             contador.setAnno_contador(anno_contador);
                             contador.setCalibre(calibre);

@@ -2,7 +2,12 @@ package com.example.luisreyes.proyecto_aguas;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -11,7 +16,7 @@ import android.widget.ImageView;
  * Created by jorge.perez on 8/10/2019.
  */
 
-public class team_task_screen_Activity extends Activity {
+public class team_task_screen_Activity extends AppCompatActivity {
 
     private ImageView imageView_logo_team;
     private ImageView button_tabla_tareas_equipo;
@@ -21,10 +26,18 @@ public class team_task_screen_Activity extends Activity {
     private Intent intent_open_table_team;
     private Intent intent_open_fast_view_team_tasks;
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.team_task_screen);
+
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        myToolbar.setBackgroundColor(Color.TRANSPARENT);
+
+        setSupportActionBar(myToolbar);
+        getSupportActionBar().setIcon(getDrawable(R.drawable.toolbar_image));
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         intent_open_table_team = new Intent(this, Screen_Table_Team.class);
 

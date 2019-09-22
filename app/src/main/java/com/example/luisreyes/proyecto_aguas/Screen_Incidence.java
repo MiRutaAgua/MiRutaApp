@@ -5,11 +5,18 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -21,6 +28,9 @@ import android.widget.Toast;
 
 import org.json.JSONException;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -45,18 +55,29 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
     private ImageView photo2;
     private ImageView photo3;
 
-    private static final int CAM_REQUEST_1_PHOTO = 1333;
-    private static final int CAM_REQUEST_2_PHOTO = 1334;
-    private static final int CAM_REQUEST_3_PHOTO = 1335;
+    private static final int CAM_REQUEST_1_PHOTO_FULL_SIZE = 1433;
+    private static final int CAM_REQUEST_2_PHOTO_FULL_SIZE = 1434;
+    private static final int CAM_REQUEST_3_PHOTO_FULL_SIZE = 1435;
 
-    Bitmap bitmap_foto1 = null;
-    Bitmap bitmap_foto2 = null;
-    Bitmap bitmap_foto3 = null;
+//    Bitmap bitmap_foto1 = null;
+//    Bitmap bitmap_foto2 = null;
+//    Bitmap bitmap_foto3 = null;
+    public static String mCurrentPhotoPath_incidencia_1 = "";
+    public static String mCurrentPhotoPath_incidencia_2 = "";
+    public static String mCurrentPhotoPath_incidencia_3 = "";
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.screen_incidence);
+
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        myToolbar.setBackgroundColor(Color.TRANSPARENT);
+
+        setSupportActionBar(myToolbar);
+        getSupportActionBar().setIcon(getDrawable(R.drawable.toolbar_image));
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         button_geolocalizar_screen_incidence = (ImageView)findViewById(R.id.button_geolocalizar_screen_incidence);
 
@@ -97,25 +118,30 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
         button_photo1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Intent intent_camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent_camera, CAM_REQUEST_1_PHOTO);
+                try {
+                    dispatchTakePictureIntent(CAM_REQUEST_1_PHOTO_FULL_SIZE);
+                } catch (JSONException e) {
+                }
             }
         });
         button_photo2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Intent intent_camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent_camera, CAM_REQUEST_2_PHOTO);
+                try {
+                    dispatchTakePictureIntent(CAM_REQUEST_2_PHOTO_FULL_SIZE);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
         button_photo3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Intent intent_camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent_camera, CAM_REQUEST_3_PHOTO);
+                try {
+                    dispatchTakePictureIntent(CAM_REQUEST_3_PHOTO_FULL_SIZE);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -152,19 +178,6 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
 
                 try {
                     Screen_Login_Activity.tarea_JSON.put("incidencia", spinner_lista_de_mal_ubicacion.getSelectedItem().toString());
-
-                    if(bitmap_foto1!=null) {
-                        String foto1_String = Screen_Register_Operario.getStringImage(bitmap_foto1);
-                        Screen_Login_Activity.tarea_JSON.put("foto_incidencia_1", foto1_String);
-                    }
-                    if(bitmap_foto2!=null) {
-                        String foto2_String = Screen_Register_Operario.getStringImage(bitmap_foto2);
-                        Screen_Login_Activity.tarea_JSON.put("foto_incidencia_2", foto2_String);
-                    }
-                    if(bitmap_foto3!=null) {
-                        String foto3_String = Screen_Register_Operario.getStringImage(bitmap_foto3);
-                        Screen_Login_Activity.tarea_JSON.put("foto_incidencia_3", foto3_String);
-                    }
                 }catch (JSONException e) {
                     e.printStackTrace();
                     Toast.makeText(Screen_Incidence.this, "No se pudo insetar texto incidencia en JSON tarea", Toast.LENGTH_LONG).show();
@@ -203,23 +216,160 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == CAM_REQUEST_1_PHOTO){
-            bitmap_foto1 = (Bitmap)data.getExtras().get("data");
+        if(requestCode == CAM_REQUEST_1_PHOTO_FULL_SIZE){
             photo1.setVisibility(View.VISIBLE);
-            photo1.setImageBitmap(bitmap_foto1);
-            //capture_Photo.setImageBitmap(bitmap);
+            photo1.setImageBitmap(getPhotoUserLocal(mCurrentPhotoPath_incidencia_1));
+            mCurrentPhotoPath_incidencia_1 = saveBitmapImage(getPhotoUserLocal(mCurrentPhotoPath_incidencia_1), "foto_incidencia_1");
         }
-        if(requestCode == CAM_REQUEST_2_PHOTO){
-            bitmap_foto2 = (Bitmap)data.getExtras().get("data");
+        if(requestCode == CAM_REQUEST_2_PHOTO_FULL_SIZE){
             photo2.setVisibility(View.VISIBLE);
-            photo2.setImageBitmap(bitmap_foto2);
+            photo2.setImageBitmap(getPhotoUserLocal(mCurrentPhotoPath_incidencia_2));
+            mCurrentPhotoPath_incidencia_2 =saveBitmapImage(getPhotoUserLocal(mCurrentPhotoPath_incidencia_2), "foto_incidencia_2");
             //capture_Photo.setImageBitmap(bitmap);
         }
-        if(requestCode == CAM_REQUEST_3_PHOTO){
-            bitmap_foto3 = (Bitmap)data.getExtras().get("data");
+        if(requestCode == CAM_REQUEST_3_PHOTO_FULL_SIZE){
             photo3.setVisibility(View.VISIBLE);
-            photo3.setImageBitmap(bitmap_foto3);
-            //capture_Photo.setImageBitmap(bitmap);
+            photo3.setImageBitmap(getPhotoUserLocal(mCurrentPhotoPath_incidencia_3));
+            mCurrentPhotoPath_incidencia_3 =saveBitmapImage(getPhotoUserLocal(mCurrentPhotoPath_incidencia_3), "foto_incidencia_3");
+
         }
+    }
+
+    private void dispatchTakePictureIntent(int request) throws JSONException {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                if(request == CAM_REQUEST_1_PHOTO_FULL_SIZE){
+                    photoFile = createImageFile("foto_incidencia_1");
+                }
+                else if(request == CAM_REQUEST_2_PHOTO_FULL_SIZE){
+                    photoFile = createImageFile("foto_incidencia_2");
+                }
+                else if(request == CAM_REQUEST_3_PHOTO_FULL_SIZE){
+                    photoFile = createImageFile("foto_incidencia_3");
+                }
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+                Toast.makeText(this, "No se pudo crear el archivo", Toast.LENGTH_LONG).show();
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        "com.example.luisreyes.proyecto_aguas.fileprovider",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, request);
+            }
+        }
+    }
+
+    private File createImageFile(String incidencia_X) throws IOException, JSONException {
+        // Create an image file name
+
+        String imageFileName = null;
+        String image = Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador")+"_"+incidencia_X;
+        File image_file=null;
+        File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas");
+        if (!storageDir.exists()) {
+            storageDir.mkdirs();
+        }
+
+        File[] files = storageDir.listFiles();
+        for(int i=0; i< files.length;i++){
+            if(files[i].getName().contains(image)){
+                files[i].delete();
+            }
+        }
+
+        image_file = File.createTempFile(
+                image,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        if(incidencia_X.contains("1")){
+            mCurrentPhotoPath_incidencia_1 = image_file.getAbsolutePath();
+        }
+        else if(incidencia_X.contains("2")){
+            mCurrentPhotoPath_incidencia_2 = image_file.getAbsolutePath();
+        }
+        else if(incidencia_X.contains("3")){
+            mCurrentPhotoPath_incidencia_3 = image_file.getAbsolutePath();
+        }
+        //etname.setText(image);
+        return image_file;
+    }
+
+    public Bitmap getPhotoUserLocal(String path){
+        File file = new File(path);
+        if(file.exists()) {
+            Bitmap bitmap = null;
+            try {
+                bitmap = MediaStore.Images.Media
+                        .getBitmap(this.getContentResolver(), Uri.fromFile(file));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            if (bitmap != null) {
+                return bitmap;
+            } else {
+                return null;
+            }
+        }else{
+            return null;
+        }
+    }
+    private String saveBitmapImage(Bitmap bitmap, String key){
+        try {
+            String file_full_name = Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador")+"_"+key;
+            //Toast.makeText(Screen_Incidence.this,"archivo: "+file_full_name, Toast.LENGTH_LONG).show();
+
+            File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas");
+            if (!myDir.exists()) {
+                myDir.mkdirs();
+            }
+            else{
+                File[] files = myDir.listFiles();
+                for(int i=0; i< files.length; i++){
+                    if(files[i].getName().contains(file_full_name)){
+                        files[i].delete();
+                    }
+                }
+            }
+            file_full_name+=".jpg";
+            File file = new File(myDir, file_full_name);
+            if (file.exists())
+                file.delete();
+            try {
+                FileOutputStream out = new FileOutputStream(file);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                out.flush();
+                out.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            Screen_Login_Activity.tarea_JSON.put(key, file_full_name);
+//            if(Screen_Table_Team.dBtareasController != null){
+//                if(Screen_Table_Team.dBtareasController.databasefileExists(this) && Screen_Table_Team.dBtareasController.checkForTableExists())
+//                {///ve porque no entra aqui
+//                    Screen_Table_Team.dBtareasController.updateTarea( Screen_Login_Activity.tarea_JSON);
+//                }
+//            }
+//            else if(Screen_Table_Personal.dBtareasController != null){
+//                if(Screen_Table_Personal.dBtareasController.databasefileExists(this) && Screen_Table_Personal.dBtareasController.checkForTableExists())
+//                {
+//                    Screen_Table_Personal.dBtareasController.updateTarea(Screen_Login_Activity.tarea_JSON);
+//                }
+//            }
+            return file.getAbsolutePath();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

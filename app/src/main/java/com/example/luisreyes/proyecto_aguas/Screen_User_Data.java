@@ -2,14 +2,27 @@ package com.example.luisreyes.proyecto_aguas;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -19,11 +32,17 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+
 /**
  * Created by luis.reyes on 30/08/2019.
  */
 
-public class Screen_User_Data extends Activity implements TaskCompleted{
+public class Screen_User_Data extends AppCompatActivity implements TaskCompleted{
 
     ImageView button_continuar;
     CircleImageView circlImageView_photo;
@@ -32,9 +51,15 @@ public class Screen_User_Data extends Activity implements TaskCompleted{
     String clave;
     String usuario;
     String apellidos;
+    String image;
+    Bitmap bitmap_user_photo=null;
 
-    private static final int CAM_REQUEST_USER_PHOTO = 1319;
+    private static final int CAM_REQUEST_USER_PHOTO = 1219;
+    private static final int REQUEST_TAKE_PHOTO_FULL_SIZE = 1220;
+    private ProgressDialog progressDialog;
+    private String mCurrentPhotoPath;
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +69,14 @@ public class Screen_User_Data extends Activity implements TaskCompleted{
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 1);
         }
+
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        myToolbar.setBackgroundColor(Color.TRANSPARENT);
+
+        setSupportActionBar(myToolbar);
+        getSupportActionBar().setIcon(getDrawable(R.drawable.toolbar_image));
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
         button_continuar = (ImageView)findViewById(R.id.button_screen_user_data_continuar);
         circlImageView_photo = (CircleImageView)findViewById(R.id.circleImageView_screen_user_data_photo);
         nombre = (TextView)findViewById(R.id.textView_screen_user_data_nombre);
@@ -57,20 +90,34 @@ public class Screen_User_Data extends Activity implements TaskCompleted{
 
             Screen_Login_Activity.operario_JSON = json_usuario;
 
-            String foto_usuario = json_usuario.getString("foto");
-            Bitmap bitmap = Screen_Validate.getImageFromString(foto_usuario);
-            circlImageView_photo.setImageBitmap(bitmap);
+
+            //Bitmap bitmap = Screen_Validate.getImageFromString(foto_usuario);
+            //circlImageView_photo.setImageBitmap(bitmap);/////////////////////**************************************************************************************
 
             nombre_operario = json_usuario.getString("nombre");
             apellidos = json_usuario.getString("apellidos");
             usuario = json_usuario.getString("usuario");
             clave = json_usuario.getString("clave");
-
-
+            image = json_usuario.getString("foto");
             nombre.setText(nombre_operario + " "+ apellidos);
             telefono.setText(json_usuario.getString("telefonos"));
 
-            //Toast.makeText(Screen_User_Data.this, Screen_Login_Activity.operario_JSON.getString("apellidos"), Toast.LENGTH_LONG).show();
+            if(checkConection()) {
+                showRingDialog("Cargado informacion de operario...");
+
+                String type_script = "download_user_image";
+                BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_User_Data.this);
+                backgroundWorker.execute(type_script, usuario);
+            }else{
+                if(Screen_Login_Activity.dBoperariosController.databasefileExists(this) && Screen_Login_Activity.dBoperariosController.checkForTableExists()) {
+                    //Toast.makeText(Screen_User_Data.this,"Existe y no esta vacia", Toast.LENGTH_LONG).show();
+                    String user = Screen_Login_Activity.dBoperariosController.get_one_operario_from_Database(usuario);
+                    JSONObject jsonObject = new JSONObject(user);
+                    String user_foto = jsonObject.getString("foto");
+                    Toast.makeText(Screen_User_Data.this, user_foto, Toast.LENGTH_LONG).show();
+                    circlImageView_photo.setImageBitmap(getPhotoUserLocal(getSimilarFile(user_foto)));
+                }
+            }
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -79,8 +126,9 @@ public class Screen_User_Data extends Activity implements TaskCompleted{
         circlImageView_photo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent_camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent_camera, CAM_REQUEST_USER_PHOTO);
+                dispatchTakePictureIntent();
+//                Intent intent_camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                startActivityForResult(intent_camera, CAM_REQUEST_USER_PHOTO);
             }
         });
 
@@ -89,11 +137,24 @@ public class Screen_User_Data extends Activity implements TaskCompleted{
             public void onClick(View view) {
                 Intent intent_open_next_screen = new Intent(Screen_User_Data.this, team_or_personal_task_selection_screen_Activity.class);
                 startActivity(intent_open_next_screen);
-                //finish();
+                finish();
             }
         });
     }
 
+    public String getSimilarFile(String file_name){
+        File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_operarios");
+        if (!storageDir.exists()) {
+            storageDir.mkdirs();
+        }
+        File[] files = storageDir.listFiles();
+        for(int i=0; i< files.length;i++) {
+            if (files[i].getName().contains(file_name)) {
+                return storageDir +"/" + files[i].getName();
+            }
+        }
+        return null;
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -103,14 +164,29 @@ public class Screen_User_Data extends Activity implements TaskCompleted{
             Bitmap foto_nueva = (Bitmap) data.getExtras().get("data");
             circlImageView_photo.setImageBitmap(foto_nueva);
 
-            Toast.makeText(Screen_User_Data.this,usuario+" "+clave, Toast.LENGTH_LONG).show();
+            saveBitmapImage(foto_nueva, usuario);
 
             String image = Screen_Register_Operario.getStringImage(foto_nueva);
+            String date_time_modified = DBoperariosController.getStringFromFechaHora(new Date());
 
             String type = "change_foto";
-
             BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_User_Data.this);
-            backgroundWorker.execute(type, usuario, clave, image);
+            backgroundWorker.execute(type, usuario, clave, image, date_time_modified);
+        }
+        if(requestCode == REQUEST_TAKE_PHOTO_FULL_SIZE){
+            if (resultCode == RESULT_OK) {
+                File file = new File(mCurrentPhotoPath);
+                bitmap_user_photo = null;
+                bitmap_user_photo = getPhotoUserLocal(mCurrentPhotoPath);
+                circlImageView_photo.setImageBitmap(bitmap_user_photo);
+                if (bitmap_user_photo != null) {
+                    showRingDialog("Cambiando foto...");
+                    //Toast.makeText(this, "Imagen ok", Toast.LENGTH_LONG).show();
+                    String type = "upload_user_image";
+                    BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_User_Data.this);
+                    backgroundWorker.execute(type, Screen_Register_Operario.getStringImage(bitmap_user_photo), usuario);
+                }
+            }
         }
     }
 
@@ -126,25 +202,42 @@ public class Screen_User_Data extends Activity implements TaskCompleted{
             }
         }else if(type == "change_foto"){
             if(result == null){
-                Toast.makeText(Screen_User_Data.this,"No hay conexion a Internet, no se pudo cambiar foto", Toast.LENGTH_LONG).show();
+                Toast.makeText(Screen_User_Data.this,"No se pudo acceder al servidor, no se pudo cambiar foto", Toast.LENGTH_LONG).show();
+            }
+            else if(result.contains("not success")){
+                Toast.makeText(Screen_User_Data.this,"Error de script, no se pudo cambiar foto "+result, Toast.LENGTH_LONG).show();
             }
             else {
-                Toast.makeText(Screen_User_Data.this, "Cambiando foto", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(Screen_User_Data.this, "Cambiando foto", Toast.LENGTH_SHORT).show();
                 String username = usuario;
 
-                String type_script = "get_user_data";
-
+                String type_script = "download_user_image";
                 BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_User_Data.this);
                 backgroundWorker.execute(type_script, username);
             }
-        }else if(type == "get_user_data"){
-
+        }
+        else if(type == "upload_user_image"){
+            hideRingDialog();
             if(result == null){
-                Toast.makeText(this,"No hay conexion a Internet", Toast.LENGTH_LONG).show();
+                Toast.makeText(this,"No se puede acceder al servidor, no se subio imagen", Toast.LENGTH_LONG).show();
             }
             else {
-                Toast.makeText(Screen_User_Data.this, "Foto cambiada", Toast.LENGTH_SHORT).show();
-                setFotoUsuarioFromJSONString(result);
+                Toast.makeText(Screen_User_Data.this, "Imagen "+ image+" subida", Toast.LENGTH_SHORT).show();
+                //showRingDialog("Validando registro...");
+            }
+        }
+        else if(type == "download_user_image") {
+            hideRingDialog();
+            if (result == null) {
+                Toast.makeText(this, "No se puede acceder al servidor, no se obtuvo foto", Toast.LENGTH_LONG).show();
+            }
+            else if(result.contains("not success")){
+                Toast.makeText(Screen_User_Data.this,"Error de script, no se pudo obtener foto "+result, Toast.LENGTH_LONG).show();
+            }
+            else {
+
+                circlImageView_photo.setImageBitmap(Screen_Register_Operario.getImageFromString(result));
+                saveBitmapImage(Screen_Register_Operario.getImageFromString(result), usuario);
             }
         }
     }
@@ -155,5 +248,126 @@ public class Screen_User_Data extends Activity implements TaskCompleted{
         String foto_usuario = json_usuario.getString("foto");
         Bitmap bitmap = Screen_Validate.getImageFromString(foto_usuario);
         circlImageView_photo.setImageBitmap(bitmap);
+    }
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+                Toast.makeText(this, "No se pudo crear el archivo", Toast.LENGTH_LONG).show();
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        "com.example.luisreyes.proyecto_aguas.fileprovider",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO_FULL_SIZE);
+            }
+        }
+    }
+
+    private void saveBitmapImage(Bitmap bitmap, String file_name){
+        file_name = "operario_"+file_name;
+
+        File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_operarios");
+        if (!myDir.exists()) {
+            myDir.mkdirs();
+        }
+        else{
+            File[] files = myDir.listFiles();
+            //ArrayList<String> names = new ArrayList<>();
+            for(int i=0; i< files.length; i++){
+                //names.add(files[i].getName());
+                if(files[i].getName().contains(file_name)){
+                    files[i].delete();
+                }
+            }
+            //Toast.makeText(Screen_User_Data.this, names.toString(), Toast.LENGTH_SHORT).show();
+        }
+        file_name+=".jpg";
+        File file = new File(myDir, file_name);
+        if (file.exists())
+            file.delete();
+        try {
+            FileOutputStream out = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+            out.flush();
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+
+        String imageFileName = null;
+        image = "operario_"+usuario.toString();
+        File image_file=null;
+        File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_operarios");
+        if (!storageDir.exists()) {
+            storageDir.mkdirs();
+        }
+        image_file = File.createTempFile(
+                image,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = image_file.getAbsolutePath();
+        //etname.setText(image);
+        return image_file;
+    }
+
+    public Bitmap getPhotoUserLocal(String path){
+        File file = new File(path);
+        if(file.exists()) {
+            Bitmap bitmap = null;
+            try {
+                bitmap = MediaStore.Images.Media
+                        .getBitmap(this.getContentResolver(), Uri.fromFile(file));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            if (bitmap != null) {
+                return bitmap;
+            } else {
+                return null;
+            }
+        }else{
+            return null;
+        }
+    }
+
+    public boolean checkConection(){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_NETWORK_STATE}, 1);
+        }
+        ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+            //we are connected to a network
+            return true;
+        }
+        else
+            return false;
+    }
+
+    private void showRingDialog(String text){
+        progressDialog = ProgressDialog.show(Screen_User_Data.this, "Espere", text, true);
+        progressDialog.setCancelable(true);
+    }
+    private void hideRingDialog(){
+        progressDialog.dismiss();
     }
 }
