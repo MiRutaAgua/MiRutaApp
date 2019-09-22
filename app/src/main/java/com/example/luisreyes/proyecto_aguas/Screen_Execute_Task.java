@@ -403,7 +403,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                 file.delete();
             try {
                 FileOutputStream out = new FileOutputStream(file);
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, MainActivity.COMPRESS_QUALITY, out);
                 out.flush();
                 out.close();
             } catch (Exception e) {

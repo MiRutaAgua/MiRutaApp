@@ -297,7 +297,7 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
             file.delete();
         try {
             FileOutputStream out = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, MainActivity.COMPRESS_QUALITY, out);
             out.flush();
             out.close();
         } catch (Exception e) {

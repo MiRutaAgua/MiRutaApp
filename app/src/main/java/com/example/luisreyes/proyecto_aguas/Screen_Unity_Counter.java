@@ -157,7 +157,7 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
             file.delete();
         try {
             FileOutputStream out = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, MainActivity.COMPRESS_QUALITY, out);
             out.flush();
             out.close();
         } catch (Exception e) {
