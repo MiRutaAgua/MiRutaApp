@@ -175,8 +175,12 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
         button_compartir_screen_validate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                showRingDialog("Creando PDF...");
+                if(bitmap1_no_nulo)
                 bitmap = loadBitmapFromView(llScroll, llScroll.getWidth(), llScroll.getHeight());
+                if(bitmap2_no_nulo)
                 bitmap2 = loadBitmapFromView(llScroll_2, llScroll_2.getWidth(), llScroll_2.getHeight());
+                if(bitmap3_no_nulo)
                 bitmap3 = loadBitmapFromView(llScroll_3, llScroll_3.getWidth(), llScroll_3.getHeight());
                 bitmap4 = loadBitmapFromView(llScroll_4, llScroll_4.getWidth(), llScroll_4.getHeight());
                 createPdf();
@@ -334,56 +338,18 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
 
         int convertHighet = (int) hight, convertWidth = (int) width;
 
-        int page_count = 1;
+        int page_count = 0;
 //        Resources mResources = getResources();
 //        Bitmap bitmap = BitmapFactory.decodeResource(mResources, R.drawable.screenshot);
 
         PdfDocument document = new PdfDocument();
-//        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(convertWidth, convertHighet, 1).create();
-//        PdfDocument.PageInfo pageInfo2 = new PdfDocument.PageInfo.Builder(convertWidth, convertHighet, 2).create();
-//        PdfDocument.PageInfo pageInfo3 = new PdfDocument.PageInfo.Builder(convertWidth, convertHighet, 3).create();
-//        PdfDocument.PageInfo pageInfo4 = new PdfDocument.PageInfo.Builder(convertWidth, convertHighet, 4).create();
-
-//        PdfDocument.Page page = document.startPage(pageInfo);
-//        Canvas canvas = page.getCanvas();
-//        Paint paint = new Paint();
-//        canvas.drawPaint(paint);
-//        bitmap = Bitmap.createScaledBitmap(bitmap, convertWidth, convertHighet, true);
-//        paint.setColor(Color.BLUE);
-//        canvas.drawBitmap(bitmap, 0, 0 , null);
-//        document.finishPage(page);
-        document = setContentPDF(document, bitmap, convertWidth, convertHighet, 1);
-        //////////////////////////////////////////////////////////////////////////////////////////////
-//        PdfDocument.Page page2 = document.startPage(pageInfo2);
-//        canvas = page2.getCanvas();
-//        canvas.drawPaint(paint);
-//        bitmap2 = Bitmap.createScaledBitmap(bitmap2, convertWidth, convertHighet, true);
-//        paint.setColor(Color.BLUE);
-//        canvas.drawBitmap(bitmap2, 0, 0 , null);
-//        document.finishPage(page2);
-        document = setContentPDF(document, bitmap2, convertWidth, convertHighet, 2);
-        //////////////////////////////////////////////////////////////////////////////////////////////
-
-        //////////////////////////////////////////////////////////////////////////////////////////////
-//        PdfDocument.Page page3 = document.startPage(pageInfo3);
-//        canvas = page3.getCanvas();
-//        canvas.drawPaint(paint);
-//        bitmap3 = Bitmap.createScaledBitmap(bitmap3, convertWidth, convertHighet, true);
-//        paint.setColor(Color.BLUE);
-//        canvas.drawBitmap(bitmap3, 0, 0 , null);
-//        document.finishPage(page3);
-        document = setContentPDF(document, bitmap3, convertWidth, convertHighet, 3);
-        //////////////////////////////////////////////////////////////////////////////////////////////
-
-        //////////////////////////////////////////////////////////////////////////////////////////////
-//        PdfDocument.Page page4 = document.startPage(pageInfo4);
-//        canvas = page4.getCanvas();
-//        canvas.drawPaint(paint);
-//        bitmap4 = Bitmap.createScaledBitmap(bitmap4, convertWidth, convertHighet, true);
-//        paint.setColor(Color.BLUE);
-//        canvas.drawBitmap(bitmap4, 0, 0 , null);
-//        document.finishPage(page4);
-        document = setContentPDF(document, bitmap4, convertWidth, convertHighet, 4);
+        if(bitmap1_no_nulo)
+        document = setContentPDF(document, bitmap, convertWidth, convertHighet, ++page_count);
+        if(bitmap2_no_nulo)
+        document = setContentPDF(document, bitmap2, convertWidth, convertHighet, ++page_count);
+        if(bitmap3_no_nulo)
+        document = setContentPDF(document, bitmap3, convertWidth, convertHighet, ++page_count);
+        document = setContentPDF(document, bitmap4, convertWidth, convertHighet, ++page_count);
         //////////////////////////////////////////////////////////////////////////////////////////////
         // write the document content
         String targetPdf = getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)+"/"+pdfName+".pdf";
@@ -394,13 +360,14 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
 
         } catch (IOException e) {
             e.printStackTrace();
-            Toast.makeText(this, "Something wrong: " + e.toString(), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "No pudo crearse: " + e.toString(), Toast.LENGTH_LONG).show();
         }
 
         // close the document
         document.close();
 
-        Toast.makeText(this, "PDF of Scroll is created!!!", Toast.LENGTH_SHORT).show();
+        hideRingDialog();
+        Toast.makeText(this, "PDF creado correctamente", Toast.LENGTH_SHORT).show();
 
 //        Intent intent = new Intent(Intent.ACTION_SEND ,Uri.parse("mailto:")); // it's not ACTION_SEND
 //        intent.setType("text/plain");
