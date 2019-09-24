@@ -175,20 +175,26 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
         }
         if(requestCode == REQUEST_TAKE_PHOTO_FULL_SIZE){
             if (resultCode == RESULT_OK) {
-                File file = new File(mCurrentPhotoPath);
-                bitmap_user_photo = null;
-                bitmap_user_photo = getPhotoUserLocal(mCurrentPhotoPath);
-                circlImageView_photo.setImageBitmap(bitmap_user_photo);
-                if (bitmap_user_photo != null) {
-                    showRingDialog("Cambiando foto...");
-                    //Toast.makeText(this, "Imagen ok", Toast.LENGTH_LONG).show();
-                    String type = "upload_user_image";
-                    BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_User_Data.this);
-                    backgroundWorker.execute(type, Screen_Register_Operario.getStringImage(bitmap_user_photo), usuario);
+                try {
+                    saveBitmapImage(getPhotoUserLocal(mCurrentPhotoPath), "operario_"+Screen_Login_Activity.operario_JSON.getString("usuario"));
+                    File file = new File(mCurrentPhotoPath);
+                    bitmap_user_photo = null;
+                    bitmap_user_photo = getPhotoUserLocal(mCurrentPhotoPath);
+                    circlImageView_photo.setImageBitmap(bitmap_user_photo);
+                    if (bitmap_user_photo != null) {
+                        showRingDialog("Cambiando foto...");
+                        //Toast.makeText(this, "Imagen ok", Toast.LENGTH_LONG).show();
+                        String type = "upload_user_image";
+                        BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_User_Data.this);
+                        backgroundWorker.execute(type, Screen_Register_Operario.getStringImage(bitmap_user_photo), usuario);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
         }
     }
+
 
     @Override
     public void onTaskComplete(String type, String result) throws JSONException {

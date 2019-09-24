@@ -73,11 +73,6 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
 
     private Intent intent_open_scan_screen_lector;
 
-    Bitmap bitmap_foto_antes_instalacion = null;
-    Bitmap bitmap_foto_lectura = null;
-    Bitmap bitmap_foto_numero_serie = null;
-    Bitmap bitmap_foto_despues_instalacion = null;
-
     public static ProgressDialog progressDialog;
     public static String mCurrentPhotoPath_foto_antes = "";
     public static String mCurrentPhotoPath_foto_lectura= "";
@@ -357,24 +352,28 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
             }
 
             if (requestCode == CAM_REQUEST_INST_PHOTO) {
-                bitmap_foto_antes_instalacion = getPhotoUserLocal(mCurrentPhotoPath_foto_antes);
-                instalation_photo_screen_exec_task.setImageBitmap(bitmap_foto_antes_instalacion);
                 mCurrentPhotoPath_foto_antes = saveBitmapImage(getPhotoUserLocal(mCurrentPhotoPath_foto_antes), "foto_antes_instalacion");
+                Bitmap bitmap_foto_antes_instalacion = getPhotoUserLocal(mCurrentPhotoPath_foto_antes);
+                instalation_photo_screen_exec_task.setVisibility(View.VISIBLE);
+                instalation_photo_screen_exec_task.setImageBitmap(bitmap_foto_antes_instalacion);
             }
             if (requestCode == CAM_REQUEST_READ_PHOTO) {
-                bitmap_foto_lectura = getPhotoUserLocal(mCurrentPhotoPath_foto_lectura);
-                read_photo_screen_exec_task.setImageBitmap(bitmap_foto_lectura);
                 mCurrentPhotoPath_foto_lectura = saveBitmapImage(getPhotoUserLocal(mCurrentPhotoPath_foto_lectura), "foto_lectura");
+                Bitmap bitmap_foto_lectura = getPhotoUserLocal(mCurrentPhotoPath_foto_lectura);
+                read_photo_screen_exec_task.setVisibility(View.VISIBLE);
+                read_photo_screen_exec_task.setImageBitmap(bitmap_foto_lectura);
             }
             if (requestCode == CAM_REQUEST_SN_PHOTO) {
-                bitmap_foto_numero_serie = getPhotoUserLocal(mCurrentPhotoPath_foto_serie);
-                serial_number_photo_screen_exec_task.setImageBitmap(bitmap_foto_numero_serie);
                 mCurrentPhotoPath_foto_serie = saveBitmapImage(getPhotoUserLocal(mCurrentPhotoPath_foto_serie), "foto_numero_serie");
+                Bitmap bitmap_foto_numero_serie = getPhotoUserLocal(mCurrentPhotoPath_foto_serie);
+                serial_number_photo_screen_exec_task.setVisibility(View.VISIBLE);
+                serial_number_photo_screen_exec_task.setImageBitmap(bitmap_foto_numero_serie);
             }
             if (requestCode == CAM_REQUEST_AFT_INT_PHOTO) {
-                bitmap_foto_despues_instalacion = getPhotoUserLocal(mCurrentPhotoPath_foto_despues);
-                after_instalation_photo_screen_exec_task.setImageBitmap(bitmap_foto_despues_instalacion);
                 mCurrentPhotoPath_foto_despues = saveBitmapImage(getPhotoUserLocal(mCurrentPhotoPath_foto_despues), "foto_despues_instalacion");
+                Bitmap bitmap_foto_despues_instalacion = getPhotoUserLocal(mCurrentPhotoPath_foto_despues);
+                after_instalation_photo_screen_exec_task.setVisibility(View.VISIBLE);
+                after_instalation_photo_screen_exec_task.setImageBitmap(bitmap_foto_despues_instalacion);
             }
         }
 

@@ -2,29 +2,38 @@ package com.example.luisreyes.proyecto_aguas;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Base64;
+import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -37,20 +46,22 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
 
     private static final int CANVAS_REQUEST_VALIDATE = 3333;
 
-    ImageView foto_instalacion_screen_exec_task;
-    ImageView foto_final_instalacion_screen_exec_task;
-    ImageView foto_numero_de_serie_screen_exec_task;
-    ImageView imageButton_firma_cliente_screen_validate;
-    ImageView imageButton_editar_firma_cliente_screen_validate, imageView_screen_validate_cerrar_tarea;
+    private ImageView foto_instalacion_screen_exec_task;
+    private ImageView foto_final_instalacion_screen_exec_task;
+    private ImageView foto_numero_de_serie_screen_exec_task;
+    private ImageView imageButton_firma_cliente_screen_validate, button_compartir_screen_validate;
+    private LinearLayout llScroll;
+    private LinearLayout llScroll_2;
+    private LinearLayout llScroll_3;
+    private LinearLayout llScroll_4;
+    boolean bitmap1_no_nulo = false, bitmap2_no_nulo = false,bitmap3_no_nulo = false,bitmap4_no_nulo = true;
+    private static final String pdfName = "pdf_validar";
+    private ImageView imageButton_editar_firma_cliente_screen_validate, imageView_screen_validate_cerrar_tarea;
     private EditText lectura_ultima_et, lectura_actual_et;
     private TextView textView_calibre_label_screen_validate,numero_serie_nuevo_label, numero_serie_nuevo, textView_calibre_screen_validate,textView_numero_serie_viejo_label,textView_numero_serie_viejo;
 
-    Bitmap foto_antes_intalacion_bitmap;
-    Bitmap foto_lectura_bitmap;
-    Bitmap foto_numero_serie_bitmap;
-    Bitmap foto_despues_intalacion_bitmap;
 
-    Bitmap bitmap_firma_cliente = null;
+    private Bitmap bitmap_firma_cliente = null, bitmap = null,  bitmap2 = null,bitmap3 = null,bitmap4 = null;
     private String current_tag;
     private ProgressDialog progressDialog;
     private TextView nombre_y_tarea;
@@ -72,7 +83,11 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
 
         images_files = new ArrayList<>();
         images_files_names = new ArrayList<>();
-
+        llScroll = (LinearLayout)findViewById(R.id.linearLayout_screen_validate);
+        llScroll_2 = (LinearLayout)findViewById(R.id.linearLayout_screen_validate_2);
+        llScroll_3 = (LinearLayout)findViewById(R.id.linearLayout_screen_validate_3);
+        llScroll_4 = (LinearLayout)findViewById(R.id.linearLayout_screen_validate_4);
+        button_compartir_screen_validate  = (ImageView)findViewById(R.id.button_compartir_screen_validate);
         lectura_ultima_et    = (EditText)findViewById(R.id.editText_lectura_ultima_de_contador_screen_incidence_summary);
         lectura_actual_et    = (EditText)findViewById(R.id.editText_lectura_actual_de_contador_screen_incidence_summary);
         numero_serie_nuevo_label    = (TextView)findViewById(R.id.textView_numero_serie_nuevo_label_screen_validate);
@@ -91,6 +106,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
         imageButton_editar_firma_cliente_screen_validate = (ImageView)findViewById(R.id.imageButton_editar_firma_cliente_screen_validate);
 
         nombre_y_tarea = (TextView) findViewById(R.id.textView_nombre_cliente_y_tarea_screen_validate);
+
         try {
             nombre_y_tarea.setText(Screen_Login_Activity.tarea_JSON.getString("nombre_cliente").replace("\n", "")+", "+Screen_Login_Activity.tarea_JSON.getString("calibre_toma"));
         } catch (JSONException e) {
@@ -122,21 +138,27 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
             Toast.makeText(Screen_Validate.this, "no se pudo obtener calibre_toma", Toast.LENGTH_LONG).show();
         }
 
-        foto_antes_intalacion_bitmap = getPhotoUserLocal(Screen_Execute_Task.mCurrentPhotoPath_foto_antes);
+        Bitmap foto_antes_intalacion_bitmap = getPhotoUserLocal(Screen_Execute_Task.mCurrentPhotoPath_foto_antes);
         if(foto_antes_intalacion_bitmap != null) {
+            bitmap1_no_nulo = true;
+            foto_instalacion_screen_exec_task.setVisibility(View.VISIBLE);
             foto_instalacion_screen_exec_task.setImageBitmap(foto_antes_intalacion_bitmap);
         }
-        foto_numero_serie_bitmap = getPhotoUserLocal(Screen_Execute_Task.mCurrentPhotoPath_foto_serie);
+        Bitmap foto_numero_serie_bitmap = getPhotoUserLocal(Screen_Execute_Task.mCurrentPhotoPath_foto_serie);
         if(foto_numero_serie_bitmap != null) {
+            bitmap3_no_nulo = true;
+            foto_numero_de_serie_screen_exec_task.setVisibility(View.VISIBLE);
             foto_numero_de_serie_screen_exec_task.setImageBitmap(foto_numero_serie_bitmap);
         }
 
-        foto_despues_intalacion_bitmap = getPhotoUserLocal(Screen_Execute_Task.mCurrentPhotoPath_foto_despues);
+        Bitmap foto_despues_intalacion_bitmap = getPhotoUserLocal(Screen_Execute_Task.mCurrentPhotoPath_foto_despues);
         if(foto_despues_intalacion_bitmap != null) {
+            bitmap2_no_nulo = true;
+            foto_final_instalacion_screen_exec_task.setVisibility(View.VISIBLE);
             foto_final_instalacion_screen_exec_task.setImageBitmap(foto_despues_intalacion_bitmap);
         }
         try {
-            bitmap_firma_cliente = Screen_Register_Operario.getImageFromString(
+            Bitmap bitmap_firma_cliente = Screen_Register_Operario.getImageFromString(
                     Screen_Login_Activity.tarea_JSON.getString("firma_cliente"));
             if(bitmap_firma_cliente != null) {
                 imageButton_firma_cliente_screen_validate.setImageBitmap(bitmap_firma_cliente);
@@ -146,17 +168,20 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
             e.printStackTrace();
             Toast.makeText(Screen_Validate.this, "no se pudo obtener foto_despues_instalacion", Toast.LENGTH_LONG).show();
         }
-
-        foto_lectura_bitmap = getPhotoUserLocal(Screen_Execute_Task.mCurrentPhotoPath_foto_lectura);
-//        try {
-//            foto_lectura_bitmap = Screen_Register_Operario.getImageFromString(
-//                    Screen_Login_Activity.tarea_JSON.getString("foto_lectura"));
-//
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//            Toast.makeText(Screen_Validate.this, "no se pudo obtener foto_lectura", Toast.LENGTH_LONG).show();
-//        }
+        Bitmap foto_lectura_bitmap = getPhotoUserLocal(Screen_Execute_Task.mCurrentPhotoPath_foto_lectura);
         Screen_Execute_Task.hideRingDialog();
+
+
+        button_compartir_screen_validate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                bitmap = loadBitmapFromView(llScroll, llScroll.getWidth(), llScroll.getHeight());
+                bitmap2 = loadBitmapFromView(llScroll_2, llScroll_2.getWidth(), llScroll_2.getHeight());
+                bitmap3 = loadBitmapFromView(llScroll_3, llScroll_3.getWidth(), llScroll_3.getHeight());
+                bitmap4 = loadBitmapFromView(llScroll_4, llScroll_4.getWidth(), llScroll_4.getHeight());
+                createPdf();
+            }
+        });
 
         numero_serie_nuevo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -233,7 +258,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
             @Override
             public void onClick(View view) {
                 Intent intent_zoom_photo = new Intent(Screen_Validate.this, Screen_Zoom_Photo.class);
-                String foto = Screen_Register_Operario.getStringImage(foto_antes_intalacion_bitmap);
+                String foto = Screen_Execute_Task.mCurrentPhotoPath_foto_antes;
                 intent_zoom_photo.putExtra("zooming_photo", foto);
                 startActivity(intent_zoom_photo);
             }
@@ -242,7 +267,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
             @Override
             public void onClick(View view) {
                 Intent intent_zoom_photo = new Intent(Screen_Validate.this, Screen_Zoom_Photo.class);
-                String foto = Screen_Register_Operario.getStringImage(foto_numero_serie_bitmap);
+                String foto = Screen_Execute_Task.mCurrentPhotoPath_foto_serie;
                 intent_zoom_photo.putExtra("zooming_photo", foto);
                 startActivity(intent_zoom_photo);
             }
@@ -251,7 +276,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
             @Override
             public void onClick(View view) {
                 Intent intent_zoom_photo = new Intent(Screen_Validate.this, Screen_Zoom_Photo.class);
-                String foto = Screen_Register_Operario.getStringImage(foto_despues_intalacion_bitmap);
+                String foto = Screen_Execute_Task.mCurrentPhotoPath_foto_despues;
                 intent_zoom_photo.putExtra("zooming_photo", foto);
                 startActivity(intent_zoom_photo);
             }
@@ -279,6 +304,113 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
 
     }
 
+    public static Bitmap loadBitmapFromView(View v, int width, int height) {
+        v.setBackgroundColor(Color.WHITE);
+        Bitmap b = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas c = new Canvas(b);
+        v.draw(c);
+
+        return b;
+    }
+    private PdfDocument setContentPDF(PdfDocument document, Bitmap bitmap, int w, int h, int page_count){
+        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(w, h, page_count).create();
+        PdfDocument.Page page = document.startPage(pageInfo);
+        Canvas canvas = page.getCanvas();
+        Paint paint = new Paint();
+        canvas.drawPaint(paint);
+        bitmap = Bitmap.createScaledBitmap(bitmap, w, h, true);
+        paint.setColor(Color.BLUE);
+        canvas.drawBitmap(bitmap, 0, 0 , null);
+        document.finishPage(page);
+        return document;
+    }
+    private void createPdf(){
+        WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+        //  Display display = wm.getDefaultDisplay();
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        this.getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        float hight = displaymetrics.heightPixels ;
+        float width = displaymetrics.widthPixels ;
+
+        int convertHighet = (int) hight, convertWidth = (int) width;
+
+        int page_count = 1;
+//        Resources mResources = getResources();
+//        Bitmap bitmap = BitmapFactory.decodeResource(mResources, R.drawable.screenshot);
+
+        PdfDocument document = new PdfDocument();
+//        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(convertWidth, convertHighet, 1).create();
+//        PdfDocument.PageInfo pageInfo2 = new PdfDocument.PageInfo.Builder(convertWidth, convertHighet, 2).create();
+//        PdfDocument.PageInfo pageInfo3 = new PdfDocument.PageInfo.Builder(convertWidth, convertHighet, 3).create();
+//        PdfDocument.PageInfo pageInfo4 = new PdfDocument.PageInfo.Builder(convertWidth, convertHighet, 4).create();
+
+//        PdfDocument.Page page = document.startPage(pageInfo);
+//        Canvas canvas = page.getCanvas();
+//        Paint paint = new Paint();
+//        canvas.drawPaint(paint);
+//        bitmap = Bitmap.createScaledBitmap(bitmap, convertWidth, convertHighet, true);
+//        paint.setColor(Color.BLUE);
+//        canvas.drawBitmap(bitmap, 0, 0 , null);
+//        document.finishPage(page);
+        document = setContentPDF(document, bitmap, convertWidth, convertHighet, 1);
+        //////////////////////////////////////////////////////////////////////////////////////////////
+//        PdfDocument.Page page2 = document.startPage(pageInfo2);
+//        canvas = page2.getCanvas();
+//        canvas.drawPaint(paint);
+//        bitmap2 = Bitmap.createScaledBitmap(bitmap2, convertWidth, convertHighet, true);
+//        paint.setColor(Color.BLUE);
+//        canvas.drawBitmap(bitmap2, 0, 0 , null);
+//        document.finishPage(page2);
+        document = setContentPDF(document, bitmap2, convertWidth, convertHighet, 2);
+        //////////////////////////////////////////////////////////////////////////////////////////////
+
+        //////////////////////////////////////////////////////////////////////////////////////////////
+//        PdfDocument.Page page3 = document.startPage(pageInfo3);
+//        canvas = page3.getCanvas();
+//        canvas.drawPaint(paint);
+//        bitmap3 = Bitmap.createScaledBitmap(bitmap3, convertWidth, convertHighet, true);
+//        paint.setColor(Color.BLUE);
+//        canvas.drawBitmap(bitmap3, 0, 0 , null);
+//        document.finishPage(page3);
+        document = setContentPDF(document, bitmap3, convertWidth, convertHighet, 3);
+        //////////////////////////////////////////////////////////////////////////////////////////////
+
+        //////////////////////////////////////////////////////////////////////////////////////////////
+//        PdfDocument.Page page4 = document.startPage(pageInfo4);
+//        canvas = page4.getCanvas();
+//        canvas.drawPaint(paint);
+//        bitmap4 = Bitmap.createScaledBitmap(bitmap4, convertWidth, convertHighet, true);
+//        paint.setColor(Color.BLUE);
+//        canvas.drawBitmap(bitmap4, 0, 0 , null);
+//        document.finishPage(page4);
+        document = setContentPDF(document, bitmap4, convertWidth, convertHighet, 4);
+        //////////////////////////////////////////////////////////////////////////////////////////////
+        // write the document content
+        String targetPdf = getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)+"/"+pdfName+".pdf";
+        File filePath;
+        filePath = new File(targetPdf);
+        try {
+            document.writeTo(new FileOutputStream(filePath));
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Something wrong: " + e.toString(), Toast.LENGTH_LONG).show();
+        }
+
+        // close the document
+        document.close();
+
+        Toast.makeText(this, "PDF of Scroll is created!!!", Toast.LENGTH_SHORT).show();
+
+//        Intent intent = new Intent(Intent.ACTION_SEND ,Uri.parse("mailto:")); // it's not ACTION_SEND
+//        intent.setType("text/plain");
+//        intent.putExtra(Intent.EXTRA_SUBJECT, "Card Set ");
+//        intent.putExtra(Intent.EXTRA_TEXT, "");
+//        intent.putExtra(Intent.EXTRA_STREAM,Uri.fromFile(filePath));
+//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // this will make such that when user returns to your app, your app is displayed, instead of the email app.
+//        startActivity(intent);
+        //openGeneratedPDF();
+    }
     public void uploadPhotos(){
         if(images_files.isEmpty()){
             hideRingDialog();

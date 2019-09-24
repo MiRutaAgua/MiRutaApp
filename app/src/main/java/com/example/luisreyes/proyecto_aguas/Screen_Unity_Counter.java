@@ -109,15 +109,14 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
         button_absent_screen_unity_counter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 Intent intent_open_screen_absent = new Intent(Screen_Unity_Counter.this, Screen_Absent.class);
+                startActivity(intent_open_screen_absent);
             }
         });
 
         button_exec_task_screen_unity_counter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 Intent intent_open_screen_exec_task = new Intent(Screen_Unity_Counter.this, Screen_Execute_Task.class);
                 startActivity(intent_open_screen_exec_task);
             }

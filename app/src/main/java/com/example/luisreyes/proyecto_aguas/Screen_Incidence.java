@@ -59,9 +59,6 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
     private static final int CAM_REQUEST_2_PHOTO_FULL_SIZE = 1434;
     private static final int CAM_REQUEST_3_PHOTO_FULL_SIZE = 1435;
 
-//    Bitmap bitmap_foto1 = null;
-//    Bitmap bitmap_foto2 = null;
-//    Bitmap bitmap_foto3 = null;
     public static String mCurrentPhotoPath_incidencia_1 = "";
     public static String mCurrentPhotoPath_incidencia_2 = "";
     public static String mCurrentPhotoPath_incidencia_3 = "";
@@ -217,21 +214,19 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
         super.onActivityResult(requestCode, resultCode, data);
 
         if(requestCode == CAM_REQUEST_1_PHOTO_FULL_SIZE){
+            mCurrentPhotoPath_incidencia_1 = saveBitmapImage(getPhotoUserLocal(mCurrentPhotoPath_incidencia_1), "foto_incidencia_1");
             photo1.setVisibility(View.VISIBLE);
             photo1.setImageBitmap(getPhotoUserLocal(mCurrentPhotoPath_incidencia_1));
-            mCurrentPhotoPath_incidencia_1 = saveBitmapImage(getPhotoUserLocal(mCurrentPhotoPath_incidencia_1), "foto_incidencia_1");
         }
         if(requestCode == CAM_REQUEST_2_PHOTO_FULL_SIZE){
+            mCurrentPhotoPath_incidencia_2 =saveBitmapImage(getPhotoUserLocal(mCurrentPhotoPath_incidencia_2), "foto_incidencia_2");
             photo2.setVisibility(View.VISIBLE);
             photo2.setImageBitmap(getPhotoUserLocal(mCurrentPhotoPath_incidencia_2));
-            mCurrentPhotoPath_incidencia_2 =saveBitmapImage(getPhotoUserLocal(mCurrentPhotoPath_incidencia_2), "foto_incidencia_2");
-            //capture_Photo.setImageBitmap(bitmap);
         }
         if(requestCode == CAM_REQUEST_3_PHOTO_FULL_SIZE){
+            mCurrentPhotoPath_incidencia_3 =saveBitmapImage(getPhotoUserLocal(mCurrentPhotoPath_incidencia_3), "foto_incidencia_3");
             photo3.setVisibility(View.VISIBLE);
             photo3.setImageBitmap(getPhotoUserLocal(mCurrentPhotoPath_incidencia_3));
-            mCurrentPhotoPath_incidencia_3 =saveBitmapImage(getPhotoUserLocal(mCurrentPhotoPath_incidencia_3), "foto_incidencia_3");
-
         }
     }
 

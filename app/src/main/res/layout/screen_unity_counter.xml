@@ -84,8 +84,22 @@
                 android:id="@+id/button_incidencia_screen_unity_counter"
                 android:layout_width="265dp"
                 android:layout_height="50dp"
-                android:src="@drawable/screen_unity_counter_incidencia" /></LinearLayout>
+                android:src="@drawable/screen_unity_counter_incidencia" />
+        </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            >
+            <ImageView
+                android:layout_width="266dp"
+                android:layout_height="50dp"
+                android:src="@drawable/screen_counter_trazar_ruta"
+                android:id="@+id/button_trazar_ruta_screen_unity_counter"
+                />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -284,12 +298,12 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="500dp"
             android:layout_marginTop="10dp">
             <ImageView
                 android:id="@+id/imageView_screen_unity_counter_imagen"
                 android:layout_width="match_parent"
-                android:layout_height="500dp"
+                android:layout_height="450dp"
                 android:src="@drawable/screen_unity_counter_imagen" />
         </LinearLayout>
 

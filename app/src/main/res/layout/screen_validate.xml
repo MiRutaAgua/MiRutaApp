@@ -16,59 +16,69 @@
             />
 
         <LinearLayout
+            android:id="@+id/linearLayout_screen_validate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="20dp"
-            android:gravity="center"
-            android:layout_gravity="center"
-            >
-
-            <TextView
-                android:id="@+id/textView_nombre_cliente_y_tarea_screen_validate"
-                android:text="Camino Angel de la Guarda, 13 1dch"
-                android:textStyle="bold"
-                android:textSize="18dp"
-                android:layout_gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="40dp"
+            android:orientation="vertical"
             android:gravity="center"
             >
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp"
                 android:gravity="center"
+                android:layout_gravity="center"
                 >
                 <TextView
-                    android:text="Foto Antes"
+                    android:id="@+id/textView_nombre_cliente_y_tarea_screen_validate"
+                    android:text="Camino Angel de la Guarda, 13 1dch"
+                    android:textStyle="bold"
                     android:textSize="18dp"
+                    android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="10dp"
                     />
-                <ImageView
+            </LinearLayout>
 
-                    android:layout_height="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="40dp"
+                android:gravity="center"
+                >
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:src="@drawable/screen_validate_imagen"
-                    android:id="@+id/imageView_foto_antes_instalacion_screen_validate"
-                    />
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    >
+                    <TextView
+                        android:text="Foto Antes"
+                        android:textSize="18dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="10dp"
+                        android:gravity="center"
+                        />
+                    <ImageView
+
+                        android:layout_height="500dp"
+                        android:layout_width="match_parent"
+                        android:src="@drawable/screen_validate_imagen"
+                        android:id="@+id/imageView_foto_antes_instalacion_screen_validate"
+                        android:visibility="gone"
+                        />
+
+                </LinearLayout>
 
             </LinearLayout>
 
         </LinearLayout>
 
-
         <LinearLayout
+            android:id="@+id/linearLayout_screen_validate_2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -87,14 +97,15 @@
                 />
 
             <ImageView
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent"
-                android:src="@drawable/screen_validate_imagen"
                 android:id="@+id/imageView_foto_final_instalacion_screen_validate"
-                />
+                android:layout_width="match_parent"
+                android:layout_height="500dp"
+                android:src="@drawable/screen_validate_imagen"
+                android:visibility="gone"/>
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linearLayout_screen_validate_3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -111,11 +122,11 @@
                 android:textSize="18dp"
                 />
             <ImageView
-                android:layout_height="wrap_content"
+                android:layout_height="500dp"
                 android:layout_width="match_parent"
                 android:src="@drawable/screen_validate_imagen"
                 android:id="@+id/imageView_foto_numero_serie_screen_validate"
-                />
+                android:visibility="gone"/>
             <TextView
                 android:id="@+id/textView_numero_serie_viejo"
                 android:layout_width="wrap_content"
@@ -126,155 +137,165 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linearLayout_screen_validate_4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="20dp"
-            android:gravity="center"
-            android:orientation="horizontal"
-
-            >
-
-            <TextView
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Lectura última"
-                android:textSize="18dp"
-                android:paddingTop="15dp"
-                />
-
-            <EditText
-                android:id="@+id/editText_lectura_ultima_de_contador_screen_incidence_summary"
-                android:layout_width="138dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:gravity="center"
-                android:text="3420" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-
-            android:gravity="center"
-            android:layout_gravity="center"
-            >
-
-            <TextView
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Lectura Actual"
-                android:gravity="center"
-                android:textSize="18dp"
-                android:paddingTop="15dp"
-                />
-
-            <EditText
-                android:id="@+id/editText_lectura_actual_de_contador_screen_incidence_summary"
-                android:layout_width="136dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:gravity="center" />
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="40dp"
-            android:gravity="center"
-
-            >
-
-            <TextView
-                android:id="@+id/textView_numero_serie_nuevo_label_screen_validate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Número de serie nuevo"
-                android:textSize="18sp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:gravity="center"
             >
-
-            <TextView
-                android:id="@+id/textView_numero_serie_nuevo_screen_validate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="H19UA133065"
-                android:textSize="18sp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="10dp"
-            android:gravity="center"
-            >
-
-            <TextView
-                android:id="@+id/textView_calibre_label_screen_validate"
-                android:layout_width="wrap_content"
-
-                android:layout_height="wrap_content"
-                android:paddingBottom="20dp"
-                android:text="CALIBRE:"
-                android:textSize="15dp" />
-
-            <TextView
-                android:id="@+id/textView_calibre_screen_validate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="20dp"
-                android:text="15mm"
-                android:textSize="15dp"
-                android:paddingBottom="20dp"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="30dp"
-            android:gravity="left"
-            android:layout_gravity="left"
-            >
-
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:gravity="left"
-                android:text="Firma"
-                android:textStyle="bold"
-                android:textSize="20dp"
-                android:layout_marginLeft="45dp"/>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="110dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="horizontal">
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:orientation="horizontal"
 
-            <ImageView
-                android:id="@+id/imageButton_firma_cliente_screen_validate"
-                android:layout_width="278dp"
-                android:layout_height="150dp"
-                android:src="@drawable/screen_validate_firma_imagen" />
+                >
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Lectura última"
+                    android:textSize="18dp"
+                    android:paddingTop="15dp"
+                    />
+
+                <EditText
+                    android:id="@+id/editText_lectura_ultima_de_contador_screen_incidence_summary"
+                    android:layout_width="138dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:gravity="center"
+                    android:text="3420" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+
+                android:gravity="center"
+                android:layout_gravity="center"
+                >
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Lectura Actual"
+                    android:gravity="center"
+                    android:textSize="18dp"
+                    android:paddingTop="15dp"
+                    />
+
+                <EditText
+                    android:id="@+id/editText_lectura_actual_de_contador_screen_incidence_summary"
+                    android:layout_width="136dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:gravity="center" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="40dp"
+                android:gravity="center"
+
+                >
+
+                <TextView
+                    android:id="@+id/textView_numero_serie_nuevo_label_screen_validate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Número de serie nuevo"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                >
+
+                <TextView
+                    android:id="@+id/textView_numero_serie_nuevo_screen_validate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="H19UA133065"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                >
+
+                <TextView
+                    android:id="@+id/textView_calibre_label_screen_validate"
+                    android:layout_width="wrap_content"
+
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="20dp"
+                    android:text="CALIBRE:"
+                    android:textSize="15dp" />
+
+                <TextView
+                    android:id="@+id/textView_calibre_screen_validate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="20dp"
+                    android:text="15mm"
+                    android:textSize="15dp"
+                    android:paddingBottom="20dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="30dp"
+                android:gravity="left"
+                android:layout_gravity="left"
+                >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:gravity="left"
+                    android:text="Firma"
+                    android:textStyle="bold"
+                    android:textSize="20dp"
+                    android:layout_marginLeft="45dp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="110dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/imageButton_firma_cliente_screen_validate"
+                    android:layout_width="278dp"
+                    android:layout_height="150dp"
+                    android:src="@drawable/screen_validate_firma_imagen" />
+            </LinearLayout>
+
+
         </LinearLayout>
 
         <LinearLayout

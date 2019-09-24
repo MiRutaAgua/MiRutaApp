@@ -50,9 +50,6 @@ public class Screen_Battery_Intake_Asignation extends AppCompatActivity {
     public static String mCurrentPhotoPath_foto_lectura= "";
     public static String mCurrentPhotoPath_foto_serie = "";
 
-    Bitmap bitmap_foto_antes_instalacion = null;
-    Bitmap bitmap_foto_lectura = null;
-    Bitmap bitmap_foto_numero_serie = null;
     private ImageView imageView_foto_instalacion_screen_battery_intake_asignation,
             imageView_foto_lectura_screen_battery_intake_asignation,
             imageView_foto_numero_serie_screen_battery_intake_asignation;
@@ -270,20 +267,22 @@ public class Screen_Battery_Intake_Asignation extends AppCompatActivity {
 
         if(resultCode == RESULT_OK) {
             if (requestCode == CAM_REQUEST_INST_PHOTO) {
-                bitmap_foto_antes_instalacion = getPhotoUserLocal(mCurrentPhotoPath_foto_antes);
-                imageView_foto_instalacion_screen_battery_intake_asignation.setImageBitmap(bitmap_foto_antes_instalacion);
                 mCurrentPhotoPath_foto_antes = saveBitmapImage(getPhotoUserLocal(mCurrentPhotoPath_foto_antes), "foto_antes_instalacion");
+                Bitmap bitmap_foto_antes_instalacion = getPhotoUserLocal(mCurrentPhotoPath_foto_antes);
+                imageView_foto_instalacion_screen_battery_intake_asignation.setVisibility(View.VISIBLE);
+                imageView_foto_instalacion_screen_battery_intake_asignation.setImageBitmap(bitmap_foto_antes_instalacion);
             }
             if (requestCode == CAM_REQUEST_READ_PHOTO) {
-                bitmap_foto_lectura = getPhotoUserLocal(mCurrentPhotoPath_foto_lectura);
-                imageView_foto_lectura_screen_battery_intake_asignation.setImageBitmap(bitmap_foto_lectura);
                 mCurrentPhotoPath_foto_lectura = saveBitmapImage(getPhotoUserLocal(mCurrentPhotoPath_foto_lectura), "foto_lectura");
-
+                Bitmap bitmap_foto_lectura = getPhotoUserLocal(mCurrentPhotoPath_foto_lectura);
+                imageView_foto_lectura_screen_battery_intake_asignation.setVisibility(View.VISIBLE);
+                imageView_foto_lectura_screen_battery_intake_asignation.setImageBitmap(bitmap_foto_lectura);
             }
             if (requestCode == CAM_REQUEST_SN_PHOTO) {
-                bitmap_foto_numero_serie = getPhotoUserLocal(mCurrentPhotoPath_foto_serie);
-                imageView_foto_numero_serie_screen_battery_intake_asignation.setImageBitmap(bitmap_foto_numero_serie);
                 mCurrentPhotoPath_foto_serie = saveBitmapImage(getPhotoUserLocal(mCurrentPhotoPath_foto_serie), "foto_numero_serie");
+                Bitmap bitmap_foto_numero_serie  = getPhotoUserLocal(mCurrentPhotoPath_foto_serie);
+                imageView_foto_numero_serie_screen_battery_intake_asignation.setVisibility(View.VISIBLE);
+                imageView_foto_numero_serie_screen_battery_intake_asignation.setImageBitmap(bitmap_foto_numero_serie);
             }
         }
     }

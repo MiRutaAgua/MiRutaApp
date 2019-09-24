@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     >
     <LinearLayout
+        android:id="@+id/linearLayout_screen_incidence_summary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -51,7 +52,7 @@
                 />
             <ImageView
                 android:id="@+id/imageView_foto1_screen_incidence_summary"
-                android:layout_height="wrap_content"
+                android:layout_height="500dp"
                 android:layout_width="match_parent"
                 android:layout_gravity="center"
                 android:src="@drawable/screen_incidence_sumary_foto"
@@ -68,7 +69,7 @@
                 />
             <ImageView
                 android:id="@+id/imageView_foto2_screen_incidence_summary"
-                android:layout_height="wrap_content"
+                android:layout_height="500dp"
                 android:layout_width="match_parent"
                 android:src="@drawable/screen_incidence_sumary_foto"
                 android:visibility="gone"
@@ -82,7 +83,7 @@
                 />
             <ImageView
                 android:id="@+id/imageView_foto3_screen_incidence_summary"
-                android:layout_height="wrap_content"
+                android:layout_height="500dp"
                 android:layout_width="match_parent"
                 android:src="@drawable/screen_incidence_sumary_foto"
                 android:visibility="gone"/>

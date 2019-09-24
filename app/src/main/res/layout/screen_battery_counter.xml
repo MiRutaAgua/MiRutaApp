@@ -10,6 +10,7 @@
         android:orientation="vertical"
         android:layout_gravity="top"
         android:gravity="top"
+        android:paddingBottom="40dp"
         >
         <include layout = "@layout/toolbar"
             android:id="@+id/my_toolbar"
@@ -62,8 +63,24 @@
                 />
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+            <ImageView
+                android:layout_width="266dp"
+                android:layout_height="50dp"
+                android:src="@drawable/screen_counter_trazar_ruta"
+                android:id="@+id/button_trazar_ruta_screen_battery_counter"
+                />
+        </LinearLayout>
 
-    <LinearLayout
+
+
+        <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -265,7 +282,7 @@
             <ImageView
                 android:id="@+id/imageView_screen_battery_counter_imagen"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="500dp"
                 android:layout_weight="1"
                 android:src="@drawable/screen_unity_counter_imagen" />
         </LinearLayout>

@@ -110,7 +110,7 @@
             <ImageView
                 android:id="@+id/imageView_foto1_image_screen_incidence"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="500dp"
                 android:layout_gravity="center"
                 android:src="@drawable/screen_unity_counter_imagen"
                 android:visibility="gone"/>
@@ -124,7 +124,7 @@
             <ImageView
                 android:id="@+id/imageView_foto2_image_screen_incidence"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="500dp"
                 android:layout_gravity="center"
                 android:src="@drawable/screen_unity_counter_imagen"
                 android:visibility="gone"
@@ -139,7 +139,7 @@
             <ImageView
                 android:id="@+id/imageView_foto3_image_screen_incidence"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="500dp"
                 android:layout_gravity="center"
                 android:src="@drawable/screen_unity_counter_imagen"
                 android:visibility="gone"/>

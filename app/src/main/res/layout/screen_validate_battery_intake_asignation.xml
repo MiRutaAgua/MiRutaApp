@@ -56,7 +56,7 @@ android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="450dp"
         android:orientation="horizontal"
         android:layout_marginTop="10dp"
         android:gravity="center"
@@ -65,7 +65,7 @@ android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/imageView_foto_instalacion_screen_validate_battery_intake_asignation"
-            android:layout_height="wrap_content"
+            android:layout_height="450dp"
             android:layout_width="match_parent"
             android:src="@drawable/screen_validate_battery_intake_asignation_imagen"
             />
@@ -79,15 +79,13 @@ android:layout_height="match_parent">
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginTop="30dp"
-        android:gravity="left"
-        android:layout_marginLeft="144dp"
+        android:gravity="center"
         >
 
         <TextView
             android:text="Foto Lectura"
             android:textSize="18dp"
-
-            android:layout_gravity="left"
+            android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             />
@@ -97,65 +95,72 @@ android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="10dp"
-        android:gravity="left"
-        android:layout_marginLeft="30dp"
+        android:orientation="vertical"
+        android:gravity="top"
         >
 
+        <ImageView
+            android:id="@+id/imageView_foto_lectura_screen_validate_battery_intake_asignation"
+            android:layout_height="450dp"
+            android:layout_width="match_parent"
+            android:src="@drawable/screen_validate_battery_intake_asignation_imagen"
+            android:layout_gravity="top"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="30dp"
+            />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:gravity="left"
-            android:layout_gravity="left"
+            android:gravity="center"
+            android:layout_gravity="center"
             >
-                <LinearLayout
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <TextView
+                    android:id="@+id/textView_numero_serie_screen_validate_battery_intake_asignation"
+                    android:text="FC13FA247970"
+                    android:textSize="18dp"
+                    android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    >
+                    />
+            </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/textView_numero_serie_screen_validate_battery_intake_asignation"
-                        android:text="FC13FA247970"
-                        android:textSize="18dp"
-                        android:layout_gravity="center"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        />
-                </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="left"
+                android:gravity="left"
+                >
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="10dp"
+                <TextView
+                    android:text="Lectura Anterior"
+                    android:textSize="14dp"
                     android:layout_gravity="left"
                     android:gravity="left"
-                    >
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
 
-                    <TextView
-                        android:text="Lectura Anterior"
-                        android:textSize="14dp"
-                        android:layout_gravity="left"
-                        android:gravity="left"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        />
+                <TextView
+                    android:id="@+id/textView_lectura_anterior_value_screen_validate_battery_intake_asignation"
+                    android:text="320 M3"
+                    android:textSize="14dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
 
-                    <TextView
-                        android:id="@+id/textView_lectura_anterior_value_screen_validate_battery_intake_asignation"
-                        android:text="320 M3"
-                        android:textSize="14dp"
-                        android:layout_marginLeft="8dp"
-                        android:layout_gravity="center"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        />
-
-                </LinearLayout>
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -194,15 +199,6 @@ android:layout_height="match_parent">
 
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/imageView_foto_lectura_screen_validate_battery_intake_asignation"
-            android:layout_height="100dp"
-            android:layout_width="100dp"
-            android:src="@drawable/screen_validate_battery_intake_asignation_imagen"
-            android:layout_gravity="center"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="30dp"
-            />
     </LinearLayout>
 
 
@@ -210,16 +206,14 @@ android:layout_height="match_parent">
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:gravity="left"
-        android:layout_marginLeft="30dp"
-        android:orientation="horizontal">
+        android:gravity="center"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_gravity="center"
-            android:paddingBottom="60dp"
             >
 
             <TextView
@@ -244,10 +238,9 @@ android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/imageView_foto_numero_serie_screen_validate_battery_intake_asignation"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="match_parent"
+            android:layout_height="450dp"
             android:layout_gravity="center"
-            android:layout_marginLeft="40dp"
             android:src="@drawable/screen_validate_battery_intake_asignation_imagen"
             />
     </LinearLayout>

@@ -46,7 +46,7 @@
                 android:src="@drawable/screen_battery_intake_asignation_foto_instalacion" />
             <ImageView
                 android:id="@+id/imageView_foto_instalacion_screen_battery_intake_asignation"
-                android:layout_height="wrap_content"
+                android:layout_height="500dp"
                 android:layout_width="match_parent"
                 android:src="@drawable/screen_validate_battery_intake_asignation_imagen"
                 />
@@ -64,7 +64,7 @@
                 android:src="@drawable/screen_battery_intake_asignation_foto_lectura" />
             <ImageView
                 android:id="@+id/imageView_foto_lectura_screen_battery_intake_asignation"
-                android:layout_height="wrap_content"
+                android:layout_height="500dp"
                 android:layout_width="match_parent"
                 android:src="@drawable/screen_validate_battery_intake_asignation_imagen"
                 />
@@ -84,7 +84,7 @@
                 android:src="@drawable/screen_battery_intake_asignation_foto_numero_de_serie" />
             <ImageView
                 android:id="@+id/imageView_foto_numero_serie_screen_battery_intake_asignation"
-                android:layout_height="wrap_content"
+                android:layout_height="500dp"
                 android:layout_width="match_parent"
                 android:src="@drawable/screen_validate_battery_intake_asignation_imagen"
                 />

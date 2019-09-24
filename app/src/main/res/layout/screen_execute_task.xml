@@ -66,8 +66,9 @@
             <ImageView
                 android:id="@+id/instalation_photo_screen_exec_task"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="500dp"
                 android:src="@drawable/screen_unity_counter_imagen"
+                android:visibility="gone"
                 />
         </LinearLayout>
 
@@ -90,8 +91,9 @@
             <ImageView
                 android:id="@+id/read_photo_screen_exec_task"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="500dp"
                 android:src="@drawable/screen_unity_counter_imagen"
+                android:visibility="gone"
                 />
             <EditText
                 android:layout_width="80dp"
@@ -119,8 +121,9 @@
             <ImageView
                 android:id="@+id/serial_number_photo_screen_exec_task"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="500dp"
                 android:src="@drawable/screen_unity_counter_imagen"
+                android:visibility="gone"
                 />
         </LinearLayout>
 
@@ -283,8 +286,9 @@
             <ImageView
                 android:id="@+id/final_instalation_photo_screen_exec_task"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="500dp"
                 android:src="@drawable/screen_unity_counter_imagen"
+                android:visibility="gone"
                 />
         </LinearLayout>
 
