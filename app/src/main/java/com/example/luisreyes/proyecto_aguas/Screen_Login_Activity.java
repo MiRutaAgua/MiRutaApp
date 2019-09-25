@@ -68,6 +68,11 @@ public class Screen_Login_Activity extends Activity implements TaskCompleted{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.screen_login);
 
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_NETWORK_STATE}, 1);
+        }
+
         dBoperariosController = new DBoperariosController(this);
 
         //Toast.makeText(this, Environment.getExternalStorageDirectory().toString(), Toast.LENGTH_SHORT).show();
@@ -80,10 +85,7 @@ public class Screen_Login_Activity extends Activity implements TaskCompleted{
         tarea_JSON = new JSONObject();
         operario_JSON = new JSONObject();
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 1);
-        }
+
 
         textView_nombre_de_pantalla = (TextView) findViewById(R.id.textView_Nombre_de_Pantalla);
         lineEdit_nombre_de_operario = (EditText) findViewById(R.id.editText_Nombre_Operario_screen_login);

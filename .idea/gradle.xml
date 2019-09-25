@@ -5,13 +5,14 @@
       <GradleProjectSettings>
         <option name="distributionType" value="LOCAL" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="gradleHome" value="C:\Program Files\Android\Android Studio\gradle\gradle-4.1" />
+        <option name="gradleHome" value="D:/programas/ANDROIDSTUDIO/gradle-4.5-bin/gradle-4.5" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/core-3.3.3" />
+            <option value="$PROJECT_DIR$/crop-imagen" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

@@ -321,6 +321,7 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
     }
     private String saveBitmapImage(Bitmap bitmap, String key){
         try {
+            bitmap = Bitmap.createScaledBitmap(bitmap, 1200, 1600, true);
             String numero_serie = Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador");
             String file_full_name = numero_serie+"_"+key;
             //Toast.makeText(Screen_Incidence.this,"archivo: "+file_full_name, Toast.LENGTH_LONG).show();

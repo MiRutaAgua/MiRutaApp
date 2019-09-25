@@ -2,11 +2,15 @@ package com.example.luisreyes.proyecto_aguas;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.hardware.Camera;
 import android.graphics.Color;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -34,9 +38,11 @@ import org.json.JSONException;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.security.Policy;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Alejandro on 11/08/2019.
@@ -86,6 +92,12 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.screen_execute_task);
+
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+        }
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         myToolbar.setBackgroundColor(Color.TRANSPARENT);
@@ -142,14 +154,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
             @Override
             public void onClick(View view) {
                 guardar_en_JSON_modificaciones();
-//                try {
-//                    if(team_or_personal_task_selection_screen_Activity.dBtareasController.databasefileExists(Screen_Execute_Task.this)
-//                            && team_or_personal_task_selection_screen_Activity.dBtareasController.checkForTableExists()) {
-//                        team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea(Screen_Login_Activity.tarea_JSON);
-//                    }
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
+
                 showRingDialog("Guardando Cambios en Tarea");
                 if(checkConection()) {
                     String type = "update_tarea";
@@ -365,10 +370,23 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
             }
 
             if (requestCode == CAM_REQUEST_INST_PHOTO) {
-                mCurrentPhotoPath_foto_antes = saveBitmapImage(getPhotoUserLocal(mCurrentPhotoPath_foto_antes), "foto_antes_instalacion");
-                Bitmap bitmap_foto_antes_instalacion = getPhotoUserLocal(mCurrentPhotoPath_foto_antes);
-                instalation_photo_screen_exec_task.setVisibility(View.VISIBLE);
-                instalation_photo_screen_exec_task.setImageBitmap(bitmap_foto_antes_instalacion);
+
+//                File f = new File(mCurrentPhotoPath_foto_antes);
+//                if(f.exists()) {
+//
+//                    try {
+//                        instalation_photo_screen_exec_task.setVisibility(View.VISIBLE);
+//                        Uri uri = Uri.fromFile(f);
+//                        instalation_photo_screen_exec_task.setImageURI(uri);
+//                    } catch (OutOfMemoryError e) {
+//                        e.printStackTrace();
+                        Toast.makeText(Screen_Execute_Task.this, mCurrentPhotoPath_foto_antes, Toast.LENGTH_SHORT).show();
+//                    }
+//                }
+//                mCurrentPhotoPath_foto_antes = saveBitmapImage(getPhotoUserLocal(mCurrentPhotoPath_foto_antes), "foto_antes_instalacion");
+//                Bitmap bitmap_foto_antes_instalacion = getPhotoUserLocal(mCurrentPhotoPath_foto_antes);
+//                instalation_photo_screen_exec_task.setVisibility(View.VISIBLE);
+//                instalation_photo_screen_exec_task.setImageBitmap(bitmap_foto_antes_instalacion);
             }
             if (requestCode == CAM_REQUEST_READ_PHOTO) {
                 mCurrentPhotoPath_foto_lectura = saveBitmapImage(getPhotoUserLocal(mCurrentPhotoPath_foto_lectura), "foto_lectura");
@@ -394,6 +412,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
 
     private String saveBitmapImage(Bitmap bitmap, String key){
         try {
+            bitmap = Bitmap.createScaledBitmap(bitmap, 1200, 1600, true);
             String numero_serie = Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador");
             String file_full_name = numero_serie+"_"+key;
             //Toast.makeText(Screen_Incidence.this,"archivo: "+file_full_name, Toast.LENGTH_LONG).show();
@@ -417,27 +436,44 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
             try {
                 FileOutputStream out = new FileOutputStream(file);
                 bitmap.compress(Bitmap.CompressFormat.JPEG, MainActivity.COMPRESS_QUALITY, out);
+
+//                ExifInterface exif=new ExifInterface(file.toString());
+//
+////                Log.d("EXIF value", exif.getAttribute(ExifInterface.TAG_ORIENTATION));
+//                if(exif.getAttribute(ExifInterface.TAG_ORIENTATION).equalsIgnoreCase("6")){
+//                    bitmap= rotate(bitmap, 90);
+//                } else if(exif.getAttribute(ExifInterface.TAG_ORIENTATION).equalsIgnoreCase("8")){
+//                    bitmap= rotate(bitmap, 270);
+//                } else if(exif.getAttribute(ExifInterface.TAG_ORIENTATION).equalsIgnoreCase("3")){
+//                    bitmap= rotate(bitmap, 180);
+//                } else if(exif.getAttribute(ExifInterface.TAG_ORIENTATION).equalsIgnoreCase("0")){
+//                    bitmap= rotate(bitmap, 90);
+//                }
+
                 out.flush();
                 out.close();
             } catch (Exception e) {
                 e.printStackTrace();
             }
             Screen_Login_Activity.tarea_JSON.put(key, file_full_name);
-//            if(team_or_personal_task_selection_screen_Activity.dBtareasController != null){
-//                team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea(Screen_Login_Activity.tarea_JSON);
-//            }
-//            else if(Screen_Table_Personal.dBtareasController != null){
-//                if(Screen_Table_Personal.dBtareasController.databasefileExists(this) && Screen_Table_Personal.dBtareasController.checkForTableExists())
-//                {
-//                    Screen_Table_Personal.dBtareasController.updateTarea(Screen_Login_Activity.tarea_JSON);
-//                }
-//            }
+
             return file.getAbsolutePath();
         } catch (JSONException e) {
             e.printStackTrace();
         }
         return null;
     }
+
+    public static Bitmap rotate(Bitmap bitmap, int degree) {
+        int w = bitmap.getWidth();
+        int h = bitmap.getHeight();
+
+        Matrix mtx = new Matrix();
+        //       mtx.postRotate(degree);
+        mtx.setRotate(degree);
+        return Bitmap.createBitmap(bitmap, 0, 0, w, h, mtx, true);
+    }
+
     public void openDialog(String title, String hint){
         tag=title;
         Dialog dialog = new Dialog();
@@ -539,7 +575,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
     private void dispatchTakePictureIntent(int request) throws JSONException {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+        //if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             // Create the File where the photo should go
             File photoFile = null;
             try {
@@ -560,14 +596,29 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                 Toast.makeText(this, "No se pudo crear el archivo", Toast.LENGTH_LONG).show();
             }
             // Continue only if the File was successfully created
+            Camera camera = Camera.open();
+            Camera.Parameters params = camera.getParameters();
+            List<Camera.Size> sizes = params.getSupportedPictureSizes();
+
+            Toast.makeText(this, String.valueOf(sizes.get(sizes.size()-3).height) + "  " + String.valueOf(sizes.get(sizes.size()-3).width), Toast.LENGTH_LONG).show();
+
             if (photoFile != null) {
                 Uri photoURI = FileProvider.getUriForFile(this,
                         "com.example.luisreyes.proyecto_aguas.fileprovider",
                         photoFile);
+                //takePictureIntent.setType("image/*");
+                takePictureIntent.putExtra("crop", true);
+                takePictureIntent.putExtra("outputX", 240);
+                takePictureIntent.putExtra("outputY", 320);
+//                takePictureIntent.putExtra("aspectX", 1);
+//                takePictureIntent.putExtra("aspectY", 1);
+                takePictureIntent.putExtra("scale", true);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                takePictureIntent.putExtra("outputFormat",
+                        Bitmap.CompressFormat.JPEG.toString());
                 startActivityForResult(takePictureIntent, request);
             }
-        }
+        //}
     }
 
     private File createImageFile(String foto_x) throws IOException, JSONException {
@@ -614,8 +665,10 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         if(file.exists()) {
             Bitmap bitmap = null;
             try {
-                bitmap = MediaStore.Images.Media
-                        .getBitmap(this.getContentResolver(), Uri.fromFile(file));
+                bitmap =Bitmap.createScaledBitmap(MediaStore.Images.Media
+                        .getBitmap(this.getContentResolver(), Uri.fromFile(file)), 512, 512, true);
+//                bitmap = MediaStore.Images.Media
+//                        .getBitmap(this.getContentResolver(), Uri.fromFile(file));
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -29,8 +29,8 @@ public class MainActivity extends AppCompatActivity {
 
     private Intent intent_open_screen_login;
 
-    public static int DB_VERSION = 27;
-    public static int COMPRESS_QUALITY = 25;
+    public static int DB_VERSION = 28;
+    public static int COMPRESS_QUALITY = 30;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -44,6 +44,11 @@ public class MainActivity extends AppCompatActivity {
 //        setSupportActionBar(myToolbar);
 //        getSupportActionBar().setIcon(getDrawable(R.drawable.toolbar_icon));
 //        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.INTERNET}, 1);
+        }
 
         textView_pantalla_principal = (TextView) findViewById(R.id.textView_screen_main);
         startTimer();

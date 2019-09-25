@@ -280,6 +280,7 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
     }
 
     private void saveBitmapImage(Bitmap bitmap, String file_name){
+        bitmap = Bitmap.createScaledBitmap(bitmap, 1200, 1600, true);
         file_name = "operario_"+file_name;
 
         File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_operarios");
