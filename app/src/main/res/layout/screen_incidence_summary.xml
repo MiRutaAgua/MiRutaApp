@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     >
     <LinearLayout
-        android:id="@+id/linearLayout_screen_incidence_summary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -16,49 +15,66 @@
             android:id="@+id/my_toolbar"
             />
         <LinearLayout
+            android:id="@+id/linearLayout_screen_incidence_summary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:layout_marginTop="20dp"
             android:gravity="center"
             >
-
-            <TextView
-                android:id="@+id/textView_nombre_y_tarea_screen_incidence_summary"
-                android:text="Camino Angel de la Guarda, 13 1dch"
-                android:textStyle="bold"
-                android:textSize="18dp"
-                android:layout_gravity="center"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                />
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                >
+
+                <TextView
+                    android:id="@+id/textView_nombre_y_tarea_screen_incidence_summary"
+                    android:text="Camino Angel de la Guarda, 13 1dch"
+                    android:textStyle="bold"
+                    android:textSize="18dp"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                >
+
+                <TextView
+                    android:text="Foto 1"
+                    android:textSize="18dp"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+                <ImageView
+                    android:id="@+id/imageView_foto1_screen_incidence_summary"
+                    android:layout_height="500dp"
+                    android:layout_width="match_parent"
+                    android:layout_gravity="center"
+                    android:src="@drawable/screen_incidence_sumary_foto"
+                    android:visibility="gone"
+                    />
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linearLayout_screen_incidence_summary_2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center"
-            android:layout_gravity="center"
-            android:layout_marginTop="10dp"
             >
-
-            <TextView
-                android:text="Foto 1"
-                android:textSize="18dp"
-                android:layout_gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
-            <ImageView
-                android:id="@+id/imageView_foto1_screen_incidence_summary"
-                android:layout_height="500dp"
-                android:layout_width="match_parent"
-                android:layout_gravity="center"
-                android:src="@drawable/screen_incidence_sumary_foto"
-                android:visibility="gone"
-                />
-
             <TextView
 
                 android:text="Foto 2"
@@ -74,6 +90,15 @@
                 android:src="@drawable/screen_incidence_sumary_foto"
                 android:visibility="gone"
                 />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:id="@+id/linearLayout_screen_incidence_summary_3"
+            >
             <TextView
                 android:text="Foto 3"
                 android:textSize="18dp"
@@ -87,100 +112,107 @@
                 android:layout_width="match_parent"
                 android:src="@drawable/screen_incidence_sumary_foto"
                 android:visibility="gone"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="30dp"
-            android:gravity="center"
-            android:layout_gravity="center"
-
-            >
-
-            <TextView
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Lectura"
-                android:textStyle="bold"
-                android:gravity="center"
-                android:layout_marginRight="100dp"
-                android:textSize="18dp" />
-            <EditText
-
-                android:inputType="number"
-                android:id="@+id/editText_lectura_de_contador_screen_incidence_summary"
-                android:minWidth="80dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                 />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="40dp"
-            android:gravity="center"
-            >
-            <TextView
-                android:text="Observaciones"
-                android:textStyle="bold"
-                android:textSize="18dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                />
-
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="10dp"
-            android:gravity="center"
-            >
-            <TextView
-                android:id="@+id/textView_obsevaciones_screen_incidence_summary"
-                android:text="Contador Mal Ubicado"
-                android:textSize="15dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                />
-
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginTop="40dp"
             android:gravity="center"
             android:layout_gravity="center"
-            android:layout_weight="1"
+            android:id="@+id/linearLayout_screen_incidence_summary_4"
             >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="36dp"
-                android:layout_gravity="center"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="30dp"
                 android:gravity="center"
-                android:text="Firma"
-                android:textStyle="bold"
-                android:textSize="18dp" />
+                android:layout_gravity="center"
 
-            <ImageView
-                android:id="@+id/imageButton_firma_cliente_screen_validate"
-                android:layout_width="125dp"
-                android:layout_height="120dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/screen_incidence_sumary_espacio_para_firma" />
+                >
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Lectura"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:layout_marginRight="100dp"
+                    android:textSize="18dp" />
+                <EditText
+
+                    android:inputType="number"
+                    android:id="@+id/editText_lectura_de_contador_screen_incidence_summary"
+                    android:minWidth="80dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="40dp"
+                android:gravity="center"
+                >
+                <TextView
+                    android:text="Observaciones"
+                    android:textStyle="bold"
+                    android:textSize="18dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                >
+                <TextView
+                    android:id="@+id/textView_obsevaciones_screen_incidence_summary"
+                    android:text="Contador Mal Ubicado"
+                    android:textSize="15dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="40dp"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="Firma"
+                    android:textStyle="bold"
+                    android:textSize="18dp" />
+
+                <ImageView
+                    android:id="@+id/imageButton_firma_cliente_screen_validate"
+                    android:layout_width="125dp"
+                    android:layout_height="120dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/screen_incidence_sumary_espacio_para_firma" />
+            </LinearLayout>
         </LinearLayout>
-
         <LinearLayout
             android:gravity="center"
             android:layout_width="match_parent"
@@ -190,7 +222,7 @@
             >
 
             <ImageView
-                android:id="@+id/button_compartir_screen_incidence_sumary"
+                android:id="@+id/button_compartir_screen_incidence_summary"
                 android:layout_width="266dp"
                 android:layout_height="50dp"
                 android:src="@drawable/screen_incidence_sumary_compartir" />

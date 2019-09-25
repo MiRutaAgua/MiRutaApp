@@ -1,17 +1,24 @@
 package com.example.luisreyes.proyecto_aguas;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -112,11 +119,23 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+
                 showRingDialog("Guardando datos");
 
-                String type = "update_tarea";
-                BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Validate_Battery_Intake_Asignation.this);
-                backgroundWorker.execute(type);
+                if(team_or_personal_task_selection_screen_Activity.dBtareasController != null){
+                    try {
+                        team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea(Screen_Login_Activity.tarea_JSON);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if(checkConection()) {
+                    String type = "update_tarea";
+                    BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Validate_Battery_Intake_Asignation.this);
+                    backgroundWorker.execute(type);
+                } else{
+                    Toast.makeText(Screen_Validate_Battery_Intake_Asignation.this, "No hay conexion se guardaron los datos en el telefono", Toast.LENGTH_LONG).show();
+                }
                 //Intent open_screen_battery_counter = new Intent(Screen_Validate_Battery_Intake_Asignation.this, Screen_Battery_counter.class);
                 //startActivity(open_screen_battery_counter);
             }
@@ -127,15 +146,18 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
 
             foto_antes_intalacion_bitmap = getPhotoUserLocal(Screen_Battery_Intake_Asignation.mCurrentPhotoPath_foto_antes);
             if(foto_antes_intalacion_bitmap != null) {
+                foto_instalacion.setVisibility(View.VISIBLE);
                 foto_instalacion.setImageBitmap(foto_antes_intalacion_bitmap);
             }
             foto_numero_serie_bitmap = getPhotoUserLocal(Screen_Battery_Intake_Asignation.mCurrentPhotoPath_foto_serie);
             if(foto_numero_serie_bitmap != null) {
+                foto_numero_de_serie.setVisibility(View.VISIBLE);
                 foto_numero_de_serie.setImageBitmap(foto_numero_serie_bitmap);
             }
 
             foto_lectura_bitmap = getPhotoUserLocal(Screen_Battery_Intake_Asignation.mCurrentPhotoPath_foto_lectura);
             if(foto_lectura_bitmap != null) {
+                foto_lectura.setVisibility(View.VISIBLE);
                 foto_lectura.setImageBitmap(foto_lectura_bitmap);
             }
             numero_serie.setText(Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador"));
@@ -299,5 +321,20 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
     }
     private void hideRingDialog(){
         progressDialog.dismiss();
+    }
+
+    public boolean checkConection(){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_NETWORK_STATE}, 1);
+        }
+        ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+            //we are connected to a network
+            return true;
+        }
+        else
+            return false;
     }
 }

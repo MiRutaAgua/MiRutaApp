@@ -1,14 +1,23 @@
 package com.example.luisreyes.proyecto_aguas;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -22,6 +31,7 @@ import org.json.JSONException;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 
 /**
  * Created by luis.reyes on 10/08/2019.
@@ -122,22 +132,74 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
             }
         });
 
-        try {
-            String foto_instalacion =  Screen_Login_Activity.tarea_JSON.getString("foto_antes_instalacion");
-            Toast.makeText(this, foto_instalacion, Toast.LENGTH_LONG).show();
-            showRingDialog("Obteniendo foto de instalación");
-            String type_script = "download_image";
-            BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Unity_Counter.this);
-            backgroundWorker.execute(type_script,foto_instalacion);
-        } catch (JSONException e) {
-            e.printStackTrace();
+        if (checkConection()){
+            try {
+                String foto_instalacion =  Screen_Login_Activity.tarea_JSON.getString("foto_antes_instalacion");
+                //Toast.makeText(this, foto_instalacion, Toast.LENGTH_LONG).show();
+                showRingDialog("Obteniendo foto de instalación");
+                String type_script = "download_image";
+                BackgroundWorker backgroundWorker = new BackgroundWorker(this);
+                backgroundWorker.execute(type_script,foto_instalacion);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }else{
+            try {
+                //String foto_instalacion =  Screen_Login_Activity.tarea_JSON.getString("foto_antes_instalacion");
+                String image = Screen_Login_Activity.tarea_JSON.getString("foto_antes_instalacion");
+                File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas");
+                File[] files = storageDir.listFiles();
+                for(int i=0; i< files.length;i++){
+                    if(files[i].getName().contains(image)){
+                        //Toast.makeText(this, storageDir +"/" + files[i].getName(), Toast.LENGTH_LONG).show();
+                        imagen_contador.setImageBitmap(getPhotoUserLocal(storageDir +"/" + files[i].getName()));
+                    }
+                }
+//                Toast.makeText(this, image, Toast.LENGTH_LONG).show();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
 
     }
 
+    public Bitmap getPhotoUserLocal(String path){
+        File file = new File(path);
+        if(file.exists()) {
+            Bitmap bitmap = null;
+            try {
+                bitmap = MediaStore.Images.Media
+                        .getBitmap(this.getContentResolver(), Uri.fromFile(file));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            if (bitmap != null) {
+                return bitmap;
+            } else {
+                return null;
+            }
+        }else{
+            return null;
+        }
+    }
+    public boolean checkConection(){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_NETWORK_STATE}, 1);
+        }
+        ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+            //we are connected to a network
+            return true;
+        }
+        else
+            return false;
+    }
     private void saveBitmapImage(Bitmap bitmap, String file_name){
 //        file_name = "operario_"+file_name;
-        Toast.makeText(Screen_Unity_Counter.this,file_name, Toast.LENGTH_LONG).show();
+        //Toast.makeText(Screen_Unity_Counter.this,file_name, Toast.LENGTH_LONG).show();
 
         File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas");
         if (!myDir.exists()) {
@@ -184,7 +246,7 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
                 Toast.makeText(this, "No se puede acceder al servidor, no se obtuvo foto instalacion", Toast.LENGTH_LONG).show();
             }
             else {
-                Toast.makeText(Screen_Unity_Counter.this, "Foto de obtenida", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(Screen_Unity_Counter.this, "Foto de obtenida", Toast.LENGTH_SHORT).show();
                 Bitmap bitmap = Screen_Register_Operario.getImageFromString(result);
                 imagen_contador.setImageBitmap(bitmap);
                 saveBitmapImage(bitmap, Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador")+"_foto_antes_instalacion");

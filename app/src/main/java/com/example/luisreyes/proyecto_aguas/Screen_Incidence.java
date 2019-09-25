@@ -321,7 +321,8 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
     }
     private String saveBitmapImage(Bitmap bitmap, String key){
         try {
-            String file_full_name = Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador")+"_"+key;
+            String numero_serie = Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador");
+            String file_full_name = numero_serie+"_"+key;
             //Toast.makeText(Screen_Incidence.this,"archivo: "+file_full_name, Toast.LENGTH_LONG).show();
 
             File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas");
@@ -331,7 +332,10 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
             else{
                 File[] files = myDir.listFiles();
                 for(int i=0; i< files.length; i++){
-                    if(files[i].getName().contains(file_full_name)){
+                    if(files[i].getName().contains(file_full_name) || files[i].getName().contains(numero_serie+"_foto_antes")
+                            || files[i].getName().contains(numero_serie+"_foto_despues")
+                            || files[i].getName().contains(numero_serie+"_foto_numero")
+                            || files[i].getName().contains(numero_serie+"_foto_lectura")){
                         files[i].delete();
                     }
                 }
@@ -349,12 +353,9 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
                 e.printStackTrace();
             }
             Screen_Login_Activity.tarea_JSON.put(key, file_full_name);
-//            if(Screen_Table_Team.dBtareasController != null){
-//                if(Screen_Table_Team.dBtareasController.databasefileExists(this) && Screen_Table_Team.dBtareasController.checkForTableExists())
-//                {///ve porque no entra aqui
-//                    Screen_Table_Team.dBtareasController.updateTarea( Screen_Login_Activity.tarea_JSON);
-//                }
-//            }
+            if(team_or_personal_task_selection_screen_Activity.dBtareasController != null){
+                    team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea(Screen_Login_Activity.tarea_JSON);
+            }
 //            else if(Screen_Table_Personal.dBtareasController != null){
 //                if(Screen_Table_Personal.dBtareasController.databasefileExists(this) && Screen_Table_Personal.dBtareasController.checkForTableExists())
 //                {

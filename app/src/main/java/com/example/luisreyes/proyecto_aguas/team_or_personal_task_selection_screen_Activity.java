@@ -51,13 +51,13 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
 
         dBtareasController = new DBtareasController(this);
 
-        if(dBtareasController.databasefileExists(this)&& dBtareasController.checkForTableExists()){
-            Toast.makeText(team_or_personal_task_selection_screen_Activity.this, "Existe: "+String.valueOf(dBtareasController.countTableTareas()), Toast.LENGTH_SHORT).show();
-        }
-
-        else{
-            Toast.makeText(team_or_personal_task_selection_screen_Activity.this, "No existe", Toast.LENGTH_SHORT).show();
-        }
+//        if(dBtareasController.databasefileExists(this)&& dBtareasController.checkForTableExists()){
+//            Toast.makeText(team_or_personal_task_selection_screen_Activity.this, "Existe: "+String.valueOf(dBtareasController.countTableTareas()), Toast.LENGTH_SHORT).show();
+//        }
+//
+//        else{
+//            Toast.makeText(team_or_personal_task_selection_screen_Activity.this, "No existe", Toast.LENGTH_SHORT).show();
+//        }
         imageView_logo = (ImageView) findViewById(R.id.imageView_logo);
         button_tarea_equipo = (ImageView) findViewById(R.id.button_tarea_equipo);
         button_tarea_personal = (ImageView) findViewById(R.id.button_tarea_personal);

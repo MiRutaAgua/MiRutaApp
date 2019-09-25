@@ -150,11 +150,17 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
 //                } catch (JSONException e) {
 //                    e.printStackTrace();
 //                }
-                String type = "update_tarea";
-                BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Execute_Task.this);
-                backgroundWorker.execute(type);
-                //Toast.makeText(Screen_Execute_Task.this, "Guardando Cambios en Tarea", Toast.LENGTH_SHORT).show();
                 showRingDialog("Guardando Cambios en Tarea");
+                if(checkConection()) {
+                    String type = "update_tarea";
+                    BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Execute_Task.this);
+                    backgroundWorker.execute(type);
+                } else{
+                    Toast.makeText(Screen_Execute_Task.this, "No hay conexion se guardaron los datos en el telefono", Toast.LENGTH_LONG).show();
+                }
+
+                //Toast.makeText(Screen_Execute_Task.this, "Guardando Cambios en Tarea", Toast.LENGTH_SHORT).show();
+
             }
         });
         observaciones_button.setOnClickListener(new View.OnClickListener() {
@@ -333,6 +339,13 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                 Toast.makeText(Screen_Execute_Task.this, "No pudo guardar foto_despues_instalacion", Toast.LENGTH_LONG).show();
             }
         }
+        if(team_or_personal_task_selection_screen_Activity.dBtareasController != null){
+            try {
+                team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea(Screen_Login_Activity.tarea_JSON);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -381,7 +394,8 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
 
     private String saveBitmapImage(Bitmap bitmap, String key){
         try {
-            String file_full_name = Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador")+"_"+key;
+            String numero_serie = Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador");
+            String file_full_name = numero_serie+"_"+key;
             //Toast.makeText(Screen_Incidence.this,"archivo: "+file_full_name, Toast.LENGTH_LONG).show();
 
             File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas");
@@ -391,7 +405,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
             else{
                 File[] files = myDir.listFiles();
                 for(int i=0; i< files.length; i++){
-                    if(files[i].getName().contains(file_full_name)){
+                    if(files[i].getName().contains(file_full_name) || files[i].getName().contains(numero_serie+"_foto_incidencia")){
                         files[i].delete();
                     }
                 }
@@ -409,13 +423,8 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                 e.printStackTrace();
             }
             Screen_Login_Activity.tarea_JSON.put(key, file_full_name);
-            Toast.makeText(Screen_Execute_Task.this,"Cambio: "
-                    +Screen_Login_Activity.tarea_JSON.getString("foto_incidencia_1"), Toast.LENGTH_LONG).show();
-//            if(Screen_Table_Team.dBtareasController != null){
-//                if(Screen_Table_Team.dBtareasController.databasefileExists(this) && Screen_Table_Team.dBtareasController.checkForTableExists())
-//                {///ve porque no entra aqui
-//                    Screen_Table_Team.dBtareasController.updateTarea( Screen_Login_Activity.tarea_JSON);
-//                }
+//            if(team_or_personal_task_selection_screen_Activity.dBtareasController != null){
+//                team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea(Screen_Login_Activity.tarea_JSON);
 //            }
 //            else if(Screen_Table_Personal.dBtareasController != null){
 //                if(Screen_Table_Personal.dBtareasController.databasefileExists(this) && Screen_Table_Personal.dBtareasController.checkForTableExists())

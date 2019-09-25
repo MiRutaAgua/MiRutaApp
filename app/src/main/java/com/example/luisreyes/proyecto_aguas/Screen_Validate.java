@@ -1,21 +1,28 @@
 package com.example.luisreyes.proyecto_aguas;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.pdf.PdfDocument;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -55,13 +62,14 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
     private LinearLayout llScroll_3;
     private LinearLayout llScroll_4;
     boolean bitmap1_no_nulo = false, bitmap2_no_nulo = false,bitmap3_no_nulo = false,bitmap4_no_nulo = true;
+    private Bitmap bitmap_firma_cliente = null, bitmap = null,  bitmap2 = null,bitmap3 = null,bitmap4 = null;
     private static final String pdfName = "pdf_validar";
     private ImageView imageButton_editar_firma_cliente_screen_validate, imageView_screen_validate_cerrar_tarea;
     private EditText lectura_ultima_et, lectura_actual_et;
     private TextView textView_calibre_label_screen_validate,numero_serie_nuevo_label, numero_serie_nuevo, textView_calibre_screen_validate,textView_numero_serie_viejo_label,textView_numero_serie_viejo;
 
 
-    private Bitmap bitmap_firma_cliente = null, bitmap = null,  bitmap2 = null,bitmap3 = null,bitmap4 = null;
+
     private String current_tag;
     private ProgressDialog progressDialog;
     private TextView nombre_y_tarea;
@@ -240,10 +248,20 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                             Screen_Login_Activity.tarea_JSON.put("lectura_ultima", lect_last_string);
                             Screen_Login_Activity.tarea_JSON.put("lectura_actual", lect_string);
                             showRingDialog("Guardando datos");
-
-                            String type = "update_tarea";
-                            BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Validate.this);
-                            backgroundWorker.execute(type);
+                            if(team_or_personal_task_selection_screen_Activity.dBtareasController != null){
+                                try {
+                                    team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea(Screen_Login_Activity.tarea_JSON);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            if(checkConection()) {
+                                String type = "update_tarea";
+                                BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Validate.this);
+                                backgroundWorker.execute(type);
+                            }else{
+                                Toast.makeText(Screen_Validate.this, "No hay conexion se guardaron los datos en el telefono", Toast.LENGTH_LONG).show();
+                            }
                         }
                         else{
                             Toast.makeText(Screen_Validate.this, "La lectura actual debe ser mayor que la anterior", Toast.LENGTH_LONG).show();
@@ -352,6 +370,10 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
         document = setContentPDF(document, bitmap4, convertWidth, convertHighet, ++page_count);
         //////////////////////////////////////////////////////////////////////////////////////////////
         // write the document content
+        File myDir = new File(String.valueOf(getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)));
+        if (!myDir.exists()) {
+            myDir.mkdirs();
+        }
         String targetPdf = getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)+"/"+pdfName+".pdf";
         File filePath;
         filePath = new File(targetPdf);
@@ -367,16 +389,38 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
         document.close();
 
         hideRingDialog();
-        Toast.makeText(this, "PDF creado correctamente", Toast.LENGTH_SHORT).show();
-
-//        Intent intent = new Intent(Intent.ACTION_SEND ,Uri.parse("mailto:")); // it's not ACTION_SEND
-//        intent.setType("text/plain");
-//        intent.putExtra(Intent.EXTRA_SUBJECT, "Card Set ");
-//        intent.putExtra(Intent.EXTRA_TEXT, "");
-//        intent.putExtra(Intent.EXTRA_STREAM,Uri.fromFile(filePath));
+        if(filePath.exists()) {
+            Toast.makeText(this, "PDF creado correctamente "/* + targetPdf*/, Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(Intent.ACTION_SEND ,Uri.parse("mailto: mraguascontadores@gmail.com")); // it's not ACTION_SEND
+            intent.setType("text/plain");
+            intent.putExtra(Intent.EXTRA_SUBJECT, "PDF validar");
+            intent.putExtra(Intent.EXTRA_TEXT, "");
+//        intent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file:"+filePath.getAbsolutePath()));
 //        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // this will make such that when user returns to your app, your app is displayed, instead of the email app.
-//        startActivity(intent);
-        //openGeneratedPDF();
+            startActivity(intent);
+        }
+        else{
+            Toast.makeText(this, "PDF no creado", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+    private void openGeneratedPDF(){
+        File file = new File(getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)+"/"+pdfName+".pdf");
+        if (file.exists())
+        {
+            Intent intent=new Intent(Intent.ACTION_VIEW);
+            Uri uri = Uri.fromFile(file);
+            intent.setDataAndType(uri, "application/pdf");
+            //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            try
+            {
+                startActivity(intent);
+            }
+            catch(ActivityNotFoundException e)
+            {
+                Toast.makeText(this, "No hay aplicación para abrir pdf", Toast.LENGTH_LONG).show();
+            }
+        }
     }
     public void uploadPhotos(){
         if(images_files.isEmpty()){
@@ -515,5 +559,19 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
         }else{
             return null;
         }
+    }
+    public boolean checkConection(){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_NETWORK_STATE}, 1);
+        }
+        ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+            //we are connected to a network
+            return true;
+        }
+        else
+            return false;
     }
 }

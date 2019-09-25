@@ -150,7 +150,7 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
                 File[] files = storageDir.listFiles();
                 for(int i=0; i< files.length;i++){
                     if(files[i].getName().contains(image)){
-                        Toast.makeText(this, storageDir +"/" + files[i].getName(), Toast.LENGTH_LONG).show();
+                        //Toast.makeText(this, storageDir +"/" + files[i].getName(), Toast.LENGTH_LONG).show();
                         imagen_contador.setImageBitmap(getPhotoUserLocal(storageDir +"/" + files[i].getName()));
                     }
                 }
@@ -184,7 +184,7 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
                 Toast.makeText(this, "No se puede acceder al servidor, no se obtuvo foto instalacion", Toast.LENGTH_LONG).show();
             }
             else {
-                Toast.makeText(Screen_Battery_counter.this, "Foto de obtenida", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(Screen_Battery_counter.this, "Foto de obtenida", Toast.LENGTH_SHORT).show();
                 Bitmap bitmap = Screen_Register_Operario.getImageFromString(result);
                 imagen_contador.setImageBitmap(bitmap);
                 saveBitmapImage(bitmap, Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador")+"_foto_antes_instalacion");
@@ -194,7 +194,7 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
 
     private void saveBitmapImage(Bitmap bitmap, String file_name){
 //        file_name = "operario_"+file_name;
-        Toast.makeText(Screen_Battery_counter.this,file_name, Toast.LENGTH_LONG).show();
+        //Toast.makeText(Screen_Battery_counter.this,file_name, Toast.LENGTH_LONG).show();
 
         File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas");
         if (!myDir.exists()) {

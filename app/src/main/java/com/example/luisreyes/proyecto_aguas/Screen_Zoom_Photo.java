@@ -43,8 +43,8 @@ public class Screen_Zoom_Photo extends Activity{
 
         SGD = new ScaleGestureDetector(this, new ScaleListener());
 
-        imageView_photo.getLayoutParams().height = 1920;
-        imageView_photo.getLayoutParams().width = 1080;
+//        imageView_photo.getLayoutParams().height = 1920;
+//        imageView_photo.getLayoutParams().width = 1080;
     }
     private class  ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener{
 

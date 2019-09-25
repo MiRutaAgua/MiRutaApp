@@ -114,7 +114,7 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
                     String user = Screen_Login_Activity.dBoperariosController.get_one_operario_from_Database(usuario);
                     JSONObject jsonObject = new JSONObject(user);
                     String user_foto = jsonObject.getString("foto");
-                    Toast.makeText(Screen_User_Data.this, user_foto, Toast.LENGTH_LONG).show();
+                    //Toast.makeText(Screen_User_Data.this, user_foto, Toast.LENGTH_LONG).show();
                     circlImageView_photo.setImageBitmap(getPhotoUserLocal(getSimilarFile(user_foto)));
                 }
             }

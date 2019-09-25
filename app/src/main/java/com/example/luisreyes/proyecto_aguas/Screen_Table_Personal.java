@@ -448,13 +448,23 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
                 arrayAdapter = new ArrayAdapter(Screen_Table_Personal.this, android.R.layout.simple_list_item_1, lista_contadores);
                 lista_de_contadores_screen_table_personal.setAdapter(arrayAdapter);
                 hideRingDialog();
+                showRingDialog("Actualizando tareas en de Internet...");
+                updateTareaInMySQL();
                 Toast.makeText(Screen_Table_Personal.this,"Tareas descargadas correctamente.", Toast.LENGTH_LONG).show();
+            }
+        }else if(type == "update_tarea"){
+            if(result == null){
+                Toast.makeText(this,"No se pudo establecer conexión con el servidor", Toast.LENGTH_LONG).show();
+            }
+            else {
+                updateTareaInMySQL();
             }
         }
     }
 
     public void updateTareaInMySQL() throws JSONException {
         if(tareas_to_update.isEmpty()){
+            hideRingDialog();
             return;
         }
         else {

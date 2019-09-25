@@ -14,6 +14,7 @@ import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -69,12 +70,13 @@ public class Screen_Login_Activity extends Activity implements TaskCompleted{
 
         dBoperariosController = new DBoperariosController(this);
 
-        if(dBoperariosController.databasefileExists(this)&& dBoperariosController.checkForTableExists()){
-            Toast.makeText(Screen_Login_Activity.this, "Existe: "+String.valueOf(dBoperariosController.countTableOperarios()), Toast.LENGTH_SHORT).show();
-        }
-        else{
-            Toast.makeText(Screen_Login_Activity.this, "Existe: No existe", Toast.LENGTH_SHORT).show();
-        }
+        //Toast.makeText(this, Environment.getExternalStorageDirectory().toString(), Toast.LENGTH_SHORT).show();
+//        if(dBoperariosController.databasefileExists(this)&& dBoperariosController.checkForTableExists()){
+//            Toast.makeText(Screen_Login_Activity.this, "Existe: "+String.valueOf(dBoperariosController.countTableOperarios()), Toast.LENGTH_SHORT).show();
+//        }
+//        else{
+//            Toast.makeText(Screen_Login_Activity.this, "Existe: No existe", Toast.LENGTH_SHORT).show();
+//        }
         tarea_JSON = new JSONObject();
         operario_JSON = new JSONObject();
 

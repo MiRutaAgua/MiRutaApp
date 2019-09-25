@@ -206,8 +206,6 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
         });
 
         descargarTareas();
-
-
     }
 
     private void descargarTareas() {
@@ -451,7 +449,9 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
                 arrayAdapter = new ArrayAdapter(Screen_Table_Team.this, android.R.layout.simple_list_item_1, lista_contadores);
                 lista_de_contadores_screen_table_team.setAdapter(arrayAdapter);
                 hideRingDialog();
-                Toast.makeText(Screen_Table_Team.this,"Tareas descargadas correctamente. SQLite: "+String.valueOf(lite_count), Toast.LENGTH_LONG).show();
+                showRingDialog("Actualizando tareas en de Internet...");
+                updateTareaInMySQL();
+                Toast.makeText(Screen_Table_Team.this,"Tareas descargadas correctamente"/*+" SQLite: "+String.valueOf(lite_count)*/, Toast.LENGTH_LONG).show();
 //                if(dBtareasController.checkForTableExists()){
 //                    Toast.makeText(Screen_Table_Team.this,"Existe"+String.valueOf(lite_count), Toast.LENGTH_LONG).show();
 //                }else{
@@ -470,6 +470,7 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
 
     public void updateTareaInMySQL() throws JSONException {
         if(tareas_to_update.isEmpty()){
+            hideRingDialog();
             return;
         }
         else {

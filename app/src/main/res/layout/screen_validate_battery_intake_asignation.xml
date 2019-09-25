@@ -56,7 +56,7 @@ android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="450dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginTop="10dp"
         android:gravity="center"
@@ -65,9 +65,10 @@ android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/imageView_foto_instalacion_screen_validate_battery_intake_asignation"
-            android:layout_height="450dp"
+            android:layout_height="500dp"
             android:layout_width="match_parent"
             android:src="@drawable/screen_validate_battery_intake_asignation_imagen"
+            android:visibility="gone"
             />
 
     </LinearLayout>
@@ -107,6 +108,7 @@ android:layout_height="match_parent">
             android:layout_gravity="top"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="30dp"
+            android:visibility="gone"
             />
 
         <LinearLayout
@@ -242,6 +244,7 @@ android:layout_height="match_parent">
             android:layout_height="450dp"
             android:layout_gravity="center"
             android:src="@drawable/screen_validate_battery_intake_asignation_imagen"
+            android:visibility="gone"
             />
     </LinearLayout>
 

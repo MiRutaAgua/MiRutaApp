@@ -52,7 +52,8 @@ public class Screen_Battery_Intake_Asignation extends AppCompatActivity {
 
     private ImageView imageView_foto_instalacion_screen_battery_intake_asignation,
             imageView_foto_lectura_screen_battery_intake_asignation,
-            imageView_foto_numero_serie_screen_battery_intake_asignation;
+            imageView_foto_numero_serie_screen_battery_intake_asignation,
+            foto_instalacion, foto_numero_de_serie, foto_lectura;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -81,7 +82,43 @@ public class Screen_Battery_Intake_Asignation extends AppCompatActivity {
         button_instalation_photo_screen_exec_task = (ImageView)findViewById(R.id.button_foto_instalacion_screen_battery_intake_asignation);
         button_read_photo_screen_exec_task = (ImageView)findViewById(R.id.button_foto_lectura_screen_battery_intake_asignation);
         button_serial_number_photo_screen_exec_task = (ImageView)findViewById(R.id.button_foto_numero_serie_screen_battery_intake_asignation);
+        foto_instalacion = (ImageView)findViewById(R.id.imageView_foto_instalacion_screen_battery_intake_asignation);
+        foto_numero_de_serie = (ImageView)findViewById(R.id.imageView_foto_numero_serie_screen_battery_intake_asignation);
+        foto_lectura = (ImageView)findViewById(R.id.imageView_foto_lectura_screen_battery_intake_asignation);
 
+        foto_instalacion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!TextUtils.isEmpty(mCurrentPhotoPath_foto_antes)) {
+                    Intent intent_zoom_photo = new Intent(Screen_Battery_Intake_Asignation.this, Screen_Zoom_Photo.class);
+                    String foto = mCurrentPhotoPath_foto_antes;
+                    intent_zoom_photo.putExtra("zooming_photo", foto);
+                    startActivity(intent_zoom_photo);
+                }
+            }
+        });
+        foto_numero_de_serie.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!TextUtils.isEmpty(mCurrentPhotoPath_foto_serie)) {
+                    Intent intent_zoom_photo = new Intent(Screen_Battery_Intake_Asignation.this, Screen_Zoom_Photo.class);
+                    String foto = mCurrentPhotoPath_foto_serie;
+                    intent_zoom_photo.putExtra("zooming_photo", foto);
+                    startActivity(intent_zoom_photo);
+                }
+            }
+        });
+        foto_lectura.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!TextUtils.isEmpty(mCurrentPhotoPath_foto_lectura)) {
+                    Intent intent_zoom_photo = new Intent(Screen_Battery_Intake_Asignation.this, Screen_Zoom_Photo.class);
+                    String foto = mCurrentPhotoPath_foto_lectura;
+                    intent_zoom_photo.putExtra("zooming_photo", foto);
+                    startActivity(intent_zoom_photo);
+                }
+            }
+        });
         button_instalation_photo_screen_exec_task.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -288,7 +325,8 @@ public class Screen_Battery_Intake_Asignation extends AppCompatActivity {
     }
     private String saveBitmapImage(Bitmap bitmap, String key){
         try {
-            String file_full_name = Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador")+"_"+key;
+            String numero_serie = Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador");
+            String file_full_name = numero_serie+"_"+key;
             //Toast.makeText(Screen_Incidence.this,"archivo: "+file_full_name, Toast.LENGTH_LONG).show();
 
             File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas");
@@ -298,7 +336,7 @@ public class Screen_Battery_Intake_Asignation extends AppCompatActivity {
             else{
                 File[] files = myDir.listFiles();
                 for(int i=0; i< files.length; i++){
-                    if(files[i].getName().contains(file_full_name)){
+                    if(files[i].getName().contains(file_full_name) || files[i].getName().contains(numero_serie+"_foto_incidencia")){
                         files[i].delete();
                     }
                 }
@@ -316,14 +354,9 @@ public class Screen_Battery_Intake_Asignation extends AppCompatActivity {
                 e.printStackTrace();
             }
             Screen_Login_Activity.tarea_JSON.put(key, file_full_name);
-            Toast.makeText(Screen_Battery_Intake_Asignation.this,"Cambio: "
-                    +Screen_Login_Activity.tarea_JSON.getString("foto_incidencia_1"), Toast.LENGTH_LONG).show();
-//            if(Screen_Table_Team.dBtareasController != null){
-//                if(Screen_Table_Team.dBtareasController.databasefileExists(this) && Screen_Table_Team.dBtareasController.checkForTableExists())
-//                {///ve porque no entra aqui
-//                    Screen_Table_Team.dBtareasController.updateTarea( Screen_Login_Activity.tarea_JSON);
-//                }
-//            }
+            if(team_or_personal_task_selection_screen_Activity.dBtareasController != null){
+                team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea(Screen_Login_Activity.tarea_JSON);
+            }
 //            else if(Screen_Table_Personal.dBtareasController != null){
 //                if(Screen_Table_Personal.dBtareasController.databasefileExists(this) && Screen_Table_Personal.dBtareasController.checkForTableExists())
 //                {
