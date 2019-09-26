@@ -43,5 +43,4 @@ dependencies {
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     implementation project(':core')
     implementation project(':core-3.3.3')
-    implementation project(':crop-imagen')
 }

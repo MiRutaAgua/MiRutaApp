@@ -67,6 +67,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
     private ImageView serial_number_photo_screen_exec_task;
     private ImageView button_after_instalation_photo_screen_exec_task;
     private ImageView after_instalation_photo_screen_exec_task;
+    private String contador = "";
 
     private EditText lectura_editText;
 
@@ -132,6 +133,12 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         observaciones_button = (ImageView)findViewById(R.id.button_observations_screen_exec_task);
         textView_observaciones_screen_exec_task = (TextView)findViewById(R.id.textView_observaciones_screen_exec_task);
 
+        try {
+            contador = Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador");
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Toast.makeText(Screen_Execute_Task.this, "no se pudo obtener numero_serie_contador de tarea", Toast.LENGTH_LONG).show();
+        }
         try {
             textView_observaciones_screen_exec_task.setText(Screen_Login_Activity.tarea_JSON.getString("observaciones"));
         } catch (JSONException e) {
@@ -222,11 +229,11 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         button_instalation_photo_screen_exec_task.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    dispatchTakePictureIntent(CAM_REQUEST_INST_PHOTO);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                Intent intent_camera = new Intent(Screen_Execute_Task.this, Screen_Camera.class);
+                intent_camera.putExtra("photo_name", contador+"_foto_antes_instalacion");
+                intent_camera.putExtra("photo_folder", "fotos_tareas");
+                intent_camera.putExtra("contador", contador);
+                startActivityForResult(intent_camera, CAM_REQUEST_INST_PHOTO);
             }
         });
         button_read_photo_screen_exec_task.setOnClickListener(new View.OnClickListener() {
@@ -370,19 +377,12 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
             }
 
             if (requestCode == CAM_REQUEST_INST_PHOTO) {
-
-//                File f = new File(mCurrentPhotoPath_foto_antes);
-//                if(f.exists()) {
-//
-//                    try {
-//                        instalation_photo_screen_exec_task.setVisibility(View.VISIBLE);
-//                        Uri uri = Uri.fromFile(f);
-//                        instalation_photo_screen_exec_task.setImageURI(uri);
-//                    } catch (OutOfMemoryError e) {
-//                        e.printStackTrace();
-                        Toast.makeText(Screen_Execute_Task.this, mCurrentPhotoPath_foto_antes, Toast.LENGTH_SHORT).show();
-//                    }
-//                }
+                if(!TextUtils.isEmpty(data.getStringExtra("photo_path"))&& data.getStringExtra("photo_path")!=null) {
+                    mCurrentPhotoPath_foto_antes = data.getStringExtra("photo_path");
+                    Bitmap bitmap_foto_antes_instalacion = getPhotoUserLocal(mCurrentPhotoPath_foto_antes);
+                    instalation_photo_screen_exec_task.setVisibility(View.VISIBLE);
+                    instalation_photo_screen_exec_task.setImageBitmap(bitmap_foto_antes_instalacion);
+                }
 //                mCurrentPhotoPath_foto_antes = saveBitmapImage(getPhotoUserLocal(mCurrentPhotoPath_foto_antes), "foto_antes_instalacion");
 //                Bitmap bitmap_foto_antes_instalacion = getPhotoUserLocal(mCurrentPhotoPath_foto_antes);
 //                instalation_photo_screen_exec_task.setVisibility(View.VISIBLE);

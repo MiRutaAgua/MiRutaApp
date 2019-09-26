@@ -1,1 +1,1 @@
-include ':app', ':core', ':core-3.3.3', ':crop-imagen'
+include ':app', ':core', ':core-3.3.3'
