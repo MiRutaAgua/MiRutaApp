@@ -18,6 +18,8 @@
             android:id="@+id/textureView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
             android:text="Camara"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -31,10 +33,30 @@
             android:layout_height="80dp"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="27dp"
+            android:layout_marginBottom="20dp"
             style="@style/Widget.AppCompat.Button.Borderless"
             android:background="@drawable/ic_camera_black_24dp"/>
 
+        <Button
+            android:id="@+id/button_flash_picture"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_alignBottom="@+id/button_torch_picture"
+            android:layout_marginEnd="36dp"
+            android:layout_toStartOf="@+id/button_take_picture"
+            android:background="@drawable/ic_flash_off_black_24dp" />
+
+        <Button
+            android:id="@+id/button_torch_picture"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignBaseline="@+id/button_take_picture"
+            android:layout_alignBottom="@+id/button_take_picture"
+            android:layout_marginStart="36dp"
+            android:layout_toEndOf="@+id/button_take_picture"
+            android:background="@drawable/ic_highlight_white_24dp"/>
 
     </RelativeLayout>
 

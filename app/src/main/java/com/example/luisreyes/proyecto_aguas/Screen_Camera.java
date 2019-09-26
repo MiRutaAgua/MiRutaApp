@@ -24,6 +24,7 @@ import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.ExifInterface;
 import android.media.Image;
 import android.media.ImageReader;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -46,7 +47,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileFilter;
@@ -68,10 +68,45 @@ import java.util.UUID;
 
 public class Screen_Camera extends Activity {
 
+    /**
+     * Camera state: Showing camera preview.
+     */
+    private static final int STATE_PREVIEW = 0;
+
+    /**
+     * Camera state: Waiting for the focus to be locked.
+     */
+    private static final int STATE_WAITING_LOCK = 1;
+
+    /**
+     * Camera state: Waiting for the exposure to be precapture state.
+     */
+    private static final int STATE_WAITING_PRECAPTURE = 2;
+
+    /**
+     * Camera state: Waiting for the exposure state to be something other than precapture.
+     */
+    private static final int STATE_WAITING_NON_PRECAPTURE = 3;
+
+    /**
+     * Camera state: Picture was taken.
+     */
+    private static final int STATE_PICTURE_TAKEN = 4;
+
+    /**
+     * Max preview width that is guaranteed by Camera2 API
+     */
+    private static final int MAX_PREVIEW_WIDTH = 1800;
+
+    /**
+     * Max preview height that is guaranteed by Camera2 API
+     */
+    private static final int MAX_PREVIEW_HEIGHT = 1400;
+
     private FloatingActionButton button_cancel_picture_screen_x, button_save_picture_screen_x;
     private Button button_take_picture_screen_x;
+    private Button flashButton, torchButton;
 
-    private Camera mCamera;
     private TextureView textureView;
 
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
@@ -81,6 +116,14 @@ public class Screen_Camera extends Activity {
         ORIENTATIONS.append(Surface.ROTATION_180,270);
         ORIENTATIONS.append(Surface.ROTATION_270,180);
     }
+
+    public static final String CAMERA_FRONT = "1";
+    public static final String CAMERA_BACK = "0";
+
+    private boolean isFlashSupported;
+    private boolean isContinuousAutoFocusSupported;
+    private boolean isTorchOn;
+    private boolean isFlashOn;
 
     private String cameraId;
     private CameraDevice cameraDevice;
@@ -122,6 +165,9 @@ public class Screen_Camera extends Activity {
             cameraDevice=null;
         }
     };
+    private MediaPlayer mp;
+    private int mState;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,7 +184,16 @@ public class Screen_Camera extends Activity {
         button_take_picture_screen_x = (Button)findViewById(R.id.button_take_picture);
         button_save_picture_screen_x = (FloatingActionButton)findViewById(R.id.button_save_picture);
         button_cancel_picture_screen_x = (FloatingActionButton)findViewById(R.id.button_cancel_picture);
+        flashButton = (Button)findViewById(R.id.button_flash_picture);
+        torchButton = (Button)findViewById(R.id.button_torch_picture);
 
+        torchButton.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+            @Override
+            public void onClick(View view) {
+                switchTorch();
+            }
+        });
         button_save_picture_screen_x.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
@@ -147,6 +202,7 @@ public class Screen_Camera extends Activity {
                 resultIntent.putExtra("photo_path", photo_path);
                 setResult(RESULT_OK, resultIntent);
                 finish();
+//                closeCamera();
             }
         });
 
@@ -157,6 +213,8 @@ public class Screen_Camera extends Activity {
 
                 button_save_picture_screen_x.setVisibility(View.GONE);
                 button_cancel_picture_screen_x.setVisibility(View.GONE);
+                torchButton.setVisibility(View.VISIBLE);
+                flashButton.setVisibility(View.VISIBLE);
                 button_take_picture_screen_x.setVisibility(View.VISIBLE);
                 createCameraPreview();
             }
@@ -169,7 +227,10 @@ public class Screen_Camera extends Activity {
                 if(photo_name != null && !TextUtils.isEmpty(photo_name)) {
                     button_save_picture_screen_x.setVisibility(View.VISIBLE);
                     button_cancel_picture_screen_x.setVisibility(View.VISIBLE);
+                    torchButton.setVisibility(View.GONE);
+                    flashButton.setVisibility(View.GONE);
                     button_take_picture_screen_x.setVisibility(View.GONE);
+                    playOnOffSound();
                     takePicture();
                 }
                 else{
@@ -192,12 +253,20 @@ public class Screen_Camera extends Activity {
             Size[] jpegSizes = null;
             if(characteristics != null){
                 jpegSizes = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP).getOutputSizes(ImageFormat.JPEG);
-                int width = 640;
-                int height = 480;
-                if(jpegSizes != null && jpegSizes.length > 0){ //Aqui tengo los tamaños
-//                    width = jpegSizes[0].getWidth();
-//                    height = jpegSizes[0].getHeight();
+                int width = MAX_PREVIEW_WIDTH;
+                int height = MAX_PREVIEW_HEIGHT;
+                if(jpegSizes != null && jpegSizes.length > 0) {
+                    for (int i = 0; i < jpegSizes.length; i++) {
+                        if(jpegSizes[i].getWidth() <= MAX_PREVIEW_WIDTH && jpegSizes[i].getHeight() <= MAX_PREVIEW_HEIGHT) {
+                            //Aqui tengo los tamaños
+                            width = jpegSizes[i].getWidth();
+                            height = jpegSizes[i].getHeight();
+                            Toast.makeText(Screen_Camera.this, "Width: "+width+"    "+"Height: "+height, Toast.LENGTH_LONG).show();
+                            break;
+                        }
+                    }
                 }
+
                 final ImageReader reader = ImageReader.newInstance(width, height, ImageFormat.JPEG, 1);
                 List<Surface> outputSurface = new ArrayList<>(2);
                 outputSurface.add(reader.getSurface());
@@ -288,11 +357,15 @@ public class Screen_Camera extends Activity {
                     public void onConfigured(@NonNull CameraCaptureSession cameraCaptureSession) {
 
                         try {
+                            captureRequBuilder.set(CaptureRequest.CONTROL_AF_TRIGGER,
+                                    CameraMetadata.CONTROL_AF_TRIGGER_START);
+                            mState = STATE_WAITING_LOCK;
                             cameraCaptureSession.capture(captureBuilder.build(), captureListener, mBackgroundHandler);
                         } catch (CameraAccessException e) {
                             e.printStackTrace();
                         }
                     }
+
 
                     @Override
                     public void onConfigureFailed(@NonNull CameraCaptureSession cameraCaptureSession) {
@@ -304,6 +377,7 @@ public class Screen_Camera extends Activity {
             e.printStackTrace();
         }
     }
+
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void createCameraPreview() {
@@ -337,8 +411,15 @@ public class Screen_Camera extends Activity {
     private void updatePreview() {
         if(cameraDevice == null){
             Toast.makeText(Screen_Camera.this, "Error", Toast.LENGTH_LONG).show();
+            return;
+        }
+        if(isTorchOn){
+            captureRequBuilder.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_TORCH);
+        }else{
+            captureRequBuilder.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_OFF);
         }
         captureRequBuilder.set(CaptureRequest.CONTROL_MODE, CaptureRequest.CONTROL_MODE_AUTO);
+        captureRequBuilder.set(CaptureRequest.CONTROL_AF_MODE, CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE);
         try{
             cameraCaptureSessions.setRepeatingRequest(captureRequBuilder.build(), null, mBackgroundHandler);
         }catch (CameraAccessException e){
@@ -354,6 +435,11 @@ public class Screen_Camera extends Activity {
         try{
             cameraId = manager.getCameraIdList()[0];
             CameraCharacteristics characteristics = manager.getCameraCharacteristics(cameraId);
+
+            Boolean available = characteristics.get(CameraCharacteristics.FLASH_INFO_AVAILABLE);
+            isFlashSupported = available == null ? false : available;
+            setupTorchButton();
+
             StreamConfigurationMap map = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
             assert map != null;
             imageDimension = map.getOutputSizes(SurfaceTexture.class)[0];
@@ -373,7 +459,103 @@ public class Screen_Camera extends Activity {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    private void openCameraFront(){
 
+        CameraManager manager = (CameraManager)getSystemService(Context.CAMERA_SERVICE);
+        try{
+            cameraId = manager.getCameraIdList()[1];
+            CameraCharacteristics characteristics = manager.getCameraCharacteristics(cameraId);
+
+            Boolean available = characteristics.get(CameraCharacteristics.FLASH_INFO_AVAILABLE);
+            isFlashSupported = available == null ? false : available;
+            setupTorchButton();
+
+            StreamConfigurationMap map = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
+            assert map != null;
+            imageDimension = map.getOutputSizes(SurfaceTexture.class)[0];
+
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{
+                        Manifest.permission.CAMERA,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                }, REQUEST_CAMERA_PERMISSION);
+
+                return;
+            }
+            manager.openCamera(cameraId, stateCallback, null);
+
+        }catch (CameraAccessException e){
+            e.printStackTrace();
+        }
+    }
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public void switchTorch() {
+        try {
+//            if (cameraId.equals(CAMERA_BACK)) {
+            if (isFlashSupported) {
+                if (isTorchOn) {
+//                        captureRequBuilder.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_OFF);
+//                        cameraCaptureSessions.setRepeatingRequest(captureRequBuilder.build(), null, null);
+                    torchButton.setBackground(getDrawable(R.drawable.ic_highlight_white_24dp));
+                    isTorchOn = false;
+                } else {
+                    captureRequBuilder.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_TORCH);
+//                        //captureRequBuilder.set(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AE_MODE_ON_AUTO_FLASH);
+//                        //captureRequBuilder.set(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AE_MODE_ON_ALWAYS_FLASH);
+//                        //captureRequBuilder.set(CaptureRequest.AE_MODE, CaptureRequest.CONTROL_AE_MODE_ON_ALWAYS_FLASH);
+                    cameraCaptureSessions.setRepeatingRequest(captureRequBuilder.build(), null, null);
+                    torchButton.setBackground(getDrawable(R.drawable.ic_highlight_blue_24dp));
+                    isTorchOn = true;
+                }
+            }
+//            }
+        } catch (CameraAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public void setupTorchButton() {
+        if (isFlashSupported) {
+            torchButton.setVisibility(View.VISIBLE);
+
+            if (isTorchOn) {
+                torchButton.setBackground(getDrawable(R.drawable.ic_highlight_blue_24dp));
+            } else {
+                torchButton.setBackground(getDrawable(R.drawable.ic_highlight_white_24dp));
+            }
+
+        } else {
+            torchButton.setVisibility(View.GONE);
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    private void closeCamera() {
+        if (null != cameraDevice) {
+            cameraDevice.close();
+            cameraDevice = null;
+        }
+        if (null != imageReader) {
+            imageReader.close();
+            imageReader = null;
+        }
+    }
+
+    private void playOnOffSound(){
+
+        mp = MediaPlayer.create(Screen_Camera.this, R.raw.camera_click);
+        mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                // TODO Auto-generated method stub
+                mp.release();
+            }
+        });
+        mp.start();
+    }
     TextureView.SurfaceTextureListener textureListener = new TextureView.SurfaceTextureListener() {
         @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
         @Override
@@ -420,9 +602,22 @@ public class Screen_Camera extends Activity {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    @Override
+    protected void onStop() {
+        if(isTorchOn){
+            switchTorch();
+        }
+        super.onStop();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onPause() {
         stopBackgroundThread();
+        if(isTorchOn){
+            switchTorch();
+        }
         super.onPause();
     }
 
