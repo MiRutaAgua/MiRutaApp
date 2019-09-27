@@ -108,6 +108,9 @@
         <activity android:name=".Screen_Camera"
             android:configChanges="orientation"
             android:screenOrientation="portrait"></activity>
+        <activity android:name=".Screen_Insertar_Tarea"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"></activity>
 
         <!--<activity android:name=".Screen_Login_Activity"-->
            <!--&gt;</activity>-->
@@ -154,6 +157,8 @@
         <!--<activity android:name=".Screen_User_Data"-->
             <!--&gt;</activity>-->
         <!--<activity android:name=".Screen_Camera"-->
+            <!--&gt;</activity>-->
+        <!--<activity android:name=".Screen_Insertar_Tarea"-->
             <!--&gt;</activity>-->
     </application>
 

@@ -151,6 +151,7 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
                 for(int i=0; i< files.length;i++){
                     if(files[i].getName().contains(image)){
                         //Toast.makeText(this, storageDir +"/" + files[i].getName(), Toast.LENGTH_LONG).show();
+                        imagen_contador.setVisibility(View.VISIBLE);
                         imagen_contador.setImageBitmap(getPhotoUserLocal(storageDir +"/" + files[i].getName()));
                     }
                 }
@@ -186,6 +187,7 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
             else {
                 //Toast.makeText(Screen_Battery_counter.this, "Foto de obtenida", Toast.LENGTH_SHORT).show();
                 Bitmap bitmap = Screen_Register_Operario.getImageFromString(result);
+                imagen_contador.setVisibility(View.VISIBLE);
                 imagen_contador.setImageBitmap(bitmap);
                 saveBitmapImage(bitmap, Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador")+"_foto_antes_instalacion");
             }

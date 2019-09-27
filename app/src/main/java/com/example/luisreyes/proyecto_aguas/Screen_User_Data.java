@@ -23,6 +23,8 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -115,6 +117,7 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
                     JSONObject jsonObject = new JSONObject(user);
                     String user_foto = jsonObject.getString("foto");
                     //Toast.makeText(Screen_User_Data.this, user_foto, Toast.LENGTH_LONG).show();
+                    circlImageView_photo.setBackgroundColor(Color.TRANSPARENT);
                     circlImageView_photo.setImageBitmap(getPhotoUserLocal(getSimilarFile(user_foto)));
                 }
             }
@@ -180,6 +183,7 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
                     File file = new File(mCurrentPhotoPath);
                     bitmap_user_photo = null;
                     bitmap_user_photo = getPhotoUserLocal(mCurrentPhotoPath);
+                    circlImageView_photo.setBackgroundColor(Color.TRANSPARENT);
                     circlImageView_photo.setImageBitmap(bitmap_user_photo);
                     if (bitmap_user_photo != null) {
                         showRingDialog("Cambiando foto...");
@@ -241,7 +245,7 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
                 Toast.makeText(Screen_User_Data.this,"Error de script, no se pudo obtener foto "+result, Toast.LENGTH_LONG).show();
             }
             else {
-
+                circlImageView_photo.setBackgroundColor(Color.TRANSPARENT);
                 circlImageView_photo.setImageBitmap(Screen_Register_Operario.getImageFromString(result));
                 saveBitmapImage(Screen_Register_Operario.getImageFromString(result), usuario);
             }
@@ -253,6 +257,7 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
 
         String foto_usuario = json_usuario.getString("foto");
         Bitmap bitmap = Screen_Validate.getImageFromString(foto_usuario);
+        circlImageView_photo.setBackgroundColor(Color.TRANSPARENT);
         circlImageView_photo.setImageBitmap(bitmap);
     }
 
@@ -376,5 +381,34 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
     }
     private void hideRingDialog(){
         progressDialog.dismiss();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                Toast.makeText(Screen_User_Data.this, "Seleccionó la opción settings", Toast.LENGTH_SHORT).show();
+                // User chose the "Settings" item, show the app settings UI...
+                return true;
+
+//            case R.id.action_favorite:
+//                Toast.makeText(MainActivity.this, "Seleccionó la opción faovorito", Toast.LENGTH_SHORT).show();
+//                // User chose the "Favorite" action, mark the current item
+//                // as a favorite...
+//                return true;
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
     }
 }

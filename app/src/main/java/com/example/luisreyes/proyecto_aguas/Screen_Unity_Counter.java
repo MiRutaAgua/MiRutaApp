@@ -90,7 +90,6 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
             acceso.setText((Screen_Login_Activity.tarea_JSON.getString("acceso").replace("\n", "")));
             calibre.setText((Screen_Login_Activity.tarea_JSON.getString("calibre_toma").replace("\n", "")));
 
-            imagen_contador.setImageBitmap(Screen_Register_Operario.getImageFromString(Screen_Login_Activity.tarea_JSON.getString("foto_antes_instalacion")));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -152,6 +151,7 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
                 for(int i=0; i< files.length;i++){
                     if(files[i].getName().contains(image)){
                         //Toast.makeText(this, storageDir +"/" + files[i].getName(), Toast.LENGTH_LONG).show();
+                        imagen_contador.setVisibility(View.VISIBLE);
                         imagen_contador.setImageBitmap(getPhotoUserLocal(storageDir +"/" + files[i].getName()));
                     }
                 }
@@ -248,6 +248,7 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
             else {
                 //Toast.makeText(Screen_Unity_Counter.this, "Foto de obtenida", Toast.LENGTH_SHORT).show();
                 Bitmap bitmap = Screen_Register_Operario.getImageFromString(result);
+                imagen_contador.setVisibility(View.VISIBLE);
                 imagen_contador.setImageBitmap(bitmap);
                 saveBitmapImage(bitmap, Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador")+"_foto_antes_instalacion");
             }

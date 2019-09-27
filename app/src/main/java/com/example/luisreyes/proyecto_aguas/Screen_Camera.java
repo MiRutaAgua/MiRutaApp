@@ -67,48 +67,39 @@ import java.util.UUID;
  */
 
 public class Screen_Camera extends Activity {
-
     /**
      * Camera state: Showing camera preview.
      */
     private static final int STATE_PREVIEW = 0;
-
     /**
      * Camera state: Waiting for the focus to be locked.
      */
     private static final int STATE_WAITING_LOCK = 1;
-
     /**
      * Camera state: Waiting for the exposure to be precapture state.
      */
     private static final int STATE_WAITING_PRECAPTURE = 2;
-
     /**
      * Camera state: Waiting for the exposure state to be something other than precapture.
      */
     private static final int STATE_WAITING_NON_PRECAPTURE = 3;
-
     /**
      * Camera state: Picture was taken.
      */
     private static final int STATE_PICTURE_TAKEN = 4;
-
     /**
      * Max preview width that is guaranteed by Camera2 API
      */
-    private static final int MAX_PREVIEW_WIDTH = 1800;
-
+    private static final int MAX_PREVIEW_WIDTH = 1700;
     /**
      * Max preview height that is guaranteed by Camera2 API
      */
-    private static final int MAX_PREVIEW_HEIGHT = 1400;
+    private static final int MAX_PREVIEW_HEIGHT = 1000;
 
     private FloatingActionButton button_cancel_picture_screen_x, button_save_picture_screen_x;
     private Button button_take_picture_screen_x;
     private Button flashButton, torchButton;
-
     private TextureView textureView;
-
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
     static {
         ORIENTATIONS.append(Surface.ROTATION_0,90);
@@ -116,27 +107,22 @@ public class Screen_Camera extends Activity {
         ORIENTATIONS.append(Surface.ROTATION_180,270);
         ORIENTATIONS.append(Surface.ROTATION_270,180);
     }
-
     public static final String CAMERA_FRONT = "1";
     public static final String CAMERA_BACK = "0";
-
     private boolean isFlashSupported;
     private boolean isContinuousAutoFocusSupported;
     private boolean isTorchOn;
     private boolean isFlashOn;
-
     private String cameraId;
     private CameraDevice cameraDevice;
     private CameraCaptureSession cameraCaptureSessions;
     private CaptureRequest.Builder captureRequBuilder;
     private Size imageDimension;
     private ImageReader imageReader;
-
     private File file;
     private static final int REQUEST_CAMERA_PERMISSION = 200;
     private Handler mBackgroundHandler;
     private HandlerThread mBackgroundThread;
-
     private String photo_name = "";
     private String photo_path = "";
     private String photo_folder = "fotos_tareas";
@@ -153,14 +139,12 @@ public class Screen_Camera extends Activity {
         @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
         @Override
         public void onDisconnected(@NonNull CameraDevice cameraDevice) {
-
             cameraDevice.close();
         }
 
         @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
         @Override
         public void onError(@NonNull CameraDevice cameraDevice, int i) {
-
             cameraDevice.close();
             cameraDevice=null;
         }

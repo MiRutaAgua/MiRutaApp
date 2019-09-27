@@ -304,7 +304,8 @@
                 android:id="@+id/imageView_screen_unity_counter_imagen"
                 android:layout_width="match_parent"
                 android:layout_height="450dp"
-                android:src="@drawable/screen_unity_counter_imagen" />
+                android:src="@drawable/screen_unity_counter_imagen"
+                android:visibility="gone"/>
         </LinearLayout>
 
     </LinearLayout>

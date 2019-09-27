@@ -62,6 +62,7 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
     public static String mCurrentPhotoPath_incidencia_1 = "";
     public static String mCurrentPhotoPath_incidencia_2 = "";
     public static String mCurrentPhotoPath_incidencia_3 = "";
+    private String contador = "";
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -103,6 +104,13 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
         spinner_lista_de_mal_ubicacion.setAdapter(arrayAdapter);
 
         try {
+            contador = Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador");
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Toast.makeText(Screen_Incidence.this, "no se pudo obtener numero_serie_contador de tarea", Toast.LENGTH_LONG).show();
+        }
+
+        try {
             String telefono1_string = Screen_Login_Activity.tarea_JSON.getString("telefono1");
             String telefono2_string = Screen_Login_Activity.tarea_JSON.getString("telefono2");
             telefono1.setText(telefono1_string);
@@ -115,30 +123,45 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
         button_photo1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    dispatchTakePictureIntent(CAM_REQUEST_1_PHOTO_FULL_SIZE);
-                } catch (JSONException e) {
-                }
+                Intent intent_camera = new Intent(Screen_Incidence.this, Screen_Camera.class);
+                intent_camera.putExtra("photo_name", contador+"_foto_incidencia_1");
+                intent_camera.putExtra("photo_folder", "fotos_tareas");
+                intent_camera.putExtra("contador", contador);
+                startActivityForResult(intent_camera, CAM_REQUEST_1_PHOTO_FULL_SIZE);
+//                try {
+//                    dispatchTakePictureIntent(CAM_REQUEST_1_PHOTO_FULL_SIZE);
+//                } catch (JSONException e) {
+//                }
             }
         });
         button_photo2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    dispatchTakePictureIntent(CAM_REQUEST_2_PHOTO_FULL_SIZE);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                Intent intent_camera = new Intent(Screen_Incidence.this, Screen_Camera.class);
+                intent_camera.putExtra("photo_name", contador+"_foto_incidencia_2");
+                intent_camera.putExtra("photo_folder", "fotos_tareas");
+                intent_camera.putExtra("contador", contador);
+                startActivityForResult(intent_camera, CAM_REQUEST_2_PHOTO_FULL_SIZE);
+//                try {
+//                    dispatchTakePictureIntent(CAM_REQUEST_2_PHOTO_FULL_SIZE);
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
             }
         });
         button_photo3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    dispatchTakePictureIntent(CAM_REQUEST_3_PHOTO_FULL_SIZE);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                Intent intent_camera = new Intent(Screen_Incidence.this, Screen_Camera.class);
+                intent_camera.putExtra("photo_name", contador+"_foto_incidencia_3");
+                intent_camera.putExtra("photo_folder", "fotos_tareas");
+                intent_camera.putExtra("contador", contador);
+                startActivityForResult(intent_camera, CAM_REQUEST_3_PHOTO_FULL_SIZE);
+//                try {
+//                    dispatchTakePictureIntent(CAM_REQUEST_3_PHOTO_FULL_SIZE);
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
             }
         });
 
@@ -213,20 +236,37 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == CAM_REQUEST_1_PHOTO_FULL_SIZE){
-            mCurrentPhotoPath_incidencia_1 = saveBitmapImage(getPhotoUserLocal(mCurrentPhotoPath_incidencia_1), "foto_incidencia_1");
-            photo1.setVisibility(View.VISIBLE);
-            photo1.setImageBitmap(getPhotoUserLocal(mCurrentPhotoPath_incidencia_1));
-        }
-        if(requestCode == CAM_REQUEST_2_PHOTO_FULL_SIZE){
-            mCurrentPhotoPath_incidencia_2 =saveBitmapImage(getPhotoUserLocal(mCurrentPhotoPath_incidencia_2), "foto_incidencia_2");
-            photo2.setVisibility(View.VISIBLE);
-            photo2.setImageBitmap(getPhotoUserLocal(mCurrentPhotoPath_incidencia_2));
-        }
-        if(requestCode == CAM_REQUEST_3_PHOTO_FULL_SIZE){
-            mCurrentPhotoPath_incidencia_3 =saveBitmapImage(getPhotoUserLocal(mCurrentPhotoPath_incidencia_3), "foto_incidencia_3");
-            photo3.setVisibility(View.VISIBLE);
-            photo3.setImageBitmap(getPhotoUserLocal(mCurrentPhotoPath_incidencia_3));
+        if(resultCode == RESULT_OK) {
+            if (requestCode == CAM_REQUEST_1_PHOTO_FULL_SIZE) {
+                if (!TextUtils.isEmpty(data.getStringExtra("photo_path")) && data.getStringExtra("photo_path") != null) {
+                    mCurrentPhotoPath_incidencia_1 = data.getStringExtra("photo_path");
+                    photo1.setVisibility(View.VISIBLE);
+                    photo1.setImageBitmap(getPhotoUserLocal(mCurrentPhotoPath_incidencia_1));
+                }
+//            mCurrentPhotoPath_incidencia_1 = saveBitmapImage(getPhotoUserLocal(mCurrentPhotoPath_incidencia_1), "foto_incidencia_1");
+//            photo1.setVisibility(View.VISIBLE);
+//            photo1.setImageBitmap(getPhotoUserLocal(mCurrentPhotoPath_incidencia_1));
+            }
+            if (requestCode == CAM_REQUEST_2_PHOTO_FULL_SIZE) {
+                if (!TextUtils.isEmpty(data.getStringExtra("photo_path")) && data.getStringExtra("photo_path") != null) {
+                    mCurrentPhotoPath_incidencia_2 = data.getStringExtra("photo_path");
+                    photo2.setVisibility(View.VISIBLE);
+                    photo2.setImageBitmap(getPhotoUserLocal(mCurrentPhotoPath_incidencia_2));
+                }
+//                mCurrentPhotoPath_incidencia_2 = saveBitmapImage(getPhotoUserLocal(mCurrentPhotoPath_incidencia_2), "foto_incidencia_2");
+//                photo2.setVisibility(View.VISIBLE);
+//                photo2.setImageBitmap(getPhotoUserLocal(mCurrentPhotoPath_incidencia_2));
+            }
+            if (requestCode == CAM_REQUEST_3_PHOTO_FULL_SIZE) {
+                if (!TextUtils.isEmpty(data.getStringExtra("photo_path")) && data.getStringExtra("photo_path") != null) {
+                    mCurrentPhotoPath_incidencia_3 = data.getStringExtra("photo_path");
+                    photo3.setVisibility(View.VISIBLE);
+                    photo3.setImageBitmap(getPhotoUserLocal(mCurrentPhotoPath_incidencia_3));
+                }
+//                mCurrentPhotoPath_incidencia_3 = saveBitmapImage(getPhotoUserLocal(mCurrentPhotoPath_incidencia_3), "foto_incidencia_3");
+//                photo3.setVisibility(View.VISIBLE);
+//                photo3.setImageBitmap(getPhotoUserLocal(mCurrentPhotoPath_incidencia_3));
+            }
         }
     }
 

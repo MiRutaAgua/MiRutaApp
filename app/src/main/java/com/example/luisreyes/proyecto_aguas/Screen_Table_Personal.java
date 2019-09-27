@@ -12,6 +12,7 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -46,6 +47,7 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
     private EditText editText_filter;
     private ArrayAdapter arrayAdapter;
     private TextView textView_screen_table_personal;
+    private FloatingActionButton agregar_tarea;
 
     Spinner spinner_filtro_tareas;
     private ArrayList<String> lista_desplegable;
@@ -94,7 +96,7 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
         lista_de_contadores_screen_table_personal = (ListView) findViewById(R.id.listView_contadores_screen_table_personal);
         textView_screen_table_personal           = (TextView) findViewById(R.id.textView_screen_table_personal);
         editText_filter                       = (EditText) findViewById(R.id.editText_screen_table_personal_filter);
-
+        agregar_tarea = (FloatingActionButton) findViewById(R.id.button_add_tarea_table_personal);
 //        try {
 //            Toast.makeText(Screen_Table_Personal.this, Screen_Login_Activity.operario_JSON.getString("usuario"), Toast.LENGTH_LONG).show();
 //        } catch (JSONException e) {
@@ -212,7 +214,13 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
 
             }
         });
-
+        agregar_tarea.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent_open_Screen_Insertar_Tarea = new Intent(Screen_Table_Personal.this, Screen_Insertar_Tarea.class);
+                startActivity(intent_open_Screen_Insertar_Tarea);
+            }
+        });
         descargarTareas();
     }
     private void descargarTareas() {

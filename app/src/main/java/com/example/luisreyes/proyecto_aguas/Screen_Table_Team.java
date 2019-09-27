@@ -12,6 +12,7 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -61,6 +62,7 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
     private Intent intent_open_screen_unity_counter;
     private Intent intent_open_screen_battery_counter;
     private ArrayList<String> tareas_to_update;
+    private FloatingActionButton agregar_tarea;
     private int lite_count = -10;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -80,10 +82,11 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
         intent_open_screen_unity_counter = new Intent(this, Screen_Unity_Counter.class);
 
         lista_de_contadores_screen_table_team = (ListView) findViewById(R.id.listView_contadores_screen_table_view);
-        textView_screen_table_team            = (TextView) findViewById(R.id.textView_screen_table_team);
-        editText_filter                       = (EditText) findViewById(R.id.editText_screen_table_team_filter);
+        textView_screen_table_team = (TextView) findViewById(R.id.textView_screen_table_team);
+        editText_filter = (EditText) findViewById(R.id.editText_screen_table_team_filter);
+        agregar_tarea = (FloatingActionButton) findViewById(R.id.button_add_tarea_table_team);
 
-        spinner_filtro_tareas = (Spinner)findViewById(R.id.spinner_filtrar_tareas_screen_table_team);
+        spinner_filtro_tareas = (Spinner) findViewById(R.id.spinner_filtrar_tareas_screen_table_team);
         lista_desplegable = new ArrayList<String>();
         lista_desplegable.add("NINGUNO");
         lista_desplegable.add("DIRECCION");
@@ -124,8 +127,7 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
                             e.printStackTrace();
                         }
                     }
-                }
-                else {
+                } else {
                     for (int n = 1; n <= team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas(); n++) {
                         try {
                             JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.dBtareasController.get_one_tarea_from_Database(n));
@@ -150,6 +152,14 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+            }
+        });
+
+        agregar_tarea.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent_open_Screen_Insertar_Tarea = new Intent(Screen_Table_Team.this, Screen_Insertar_Tarea.class);
+                startActivity(intent_open_Screen_Insertar_Tarea);
             }
         });
 

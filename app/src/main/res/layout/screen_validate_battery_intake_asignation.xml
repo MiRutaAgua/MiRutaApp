@@ -102,12 +102,10 @@ android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/imageView_foto_lectura_screen_validate_battery_intake_asignation"
-            android:layout_height="450dp"
+            android:layout_height="500dp"
             android:layout_width="match_parent"
             android:src="@drawable/screen_validate_battery_intake_asignation_imagen"
             android:layout_gravity="top"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="30dp"
             android:visibility="gone"
             />
 
@@ -241,7 +239,7 @@ android:layout_height="match_parent">
         <ImageView
             android:id="@+id/imageView_foto_numero_serie_screen_validate_battery_intake_asignation"
             android:layout_width="match_parent"
-            android:layout_height="450dp"
+            android:layout_height="500dp"
             android:layout_gravity="center"
             android:src="@drawable/screen_validate_battery_intake_asignation_imagen"
             android:visibility="gone"

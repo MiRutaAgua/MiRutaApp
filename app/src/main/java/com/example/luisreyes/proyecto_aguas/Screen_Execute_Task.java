@@ -239,31 +239,46 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         button_read_photo_screen_exec_task.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    dispatchTakePictureIntent(CAM_REQUEST_READ_PHOTO);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                Intent intent_camera = new Intent(Screen_Execute_Task.this, Screen_Camera.class);
+                intent_camera.putExtra("photo_name", contador+"_foto_lectura");
+                intent_camera.putExtra("photo_folder", "fotos_tareas");
+                intent_camera.putExtra("contador", contador);
+                startActivityForResult(intent_camera, CAM_REQUEST_READ_PHOTO);
+//                try {
+//                    dispatchTakePictureIntent(CAM_REQUEST_READ_PHOTO);
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
             }
         });
         button_serial_number_photo_screen_exec_task.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    dispatchTakePictureIntent(CAM_REQUEST_SN_PHOTO);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                Intent intent_camera = new Intent(Screen_Execute_Task.this, Screen_Camera.class);
+                intent_camera.putExtra("photo_name", contador+"_foto_numero_serie");
+                intent_camera.putExtra("photo_folder", "fotos_tareas");
+                intent_camera.putExtra("contador", contador);
+                startActivityForResult(intent_camera, CAM_REQUEST_SN_PHOTO);
+//                try {
+//                    dispatchTakePictureIntent(CAM_REQUEST_SN_PHOTO);
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
             }
         });
         button_after_instalation_photo_screen_exec_task.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    dispatchTakePictureIntent(CAM_REQUEST_AFT_INT_PHOTO);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                Intent intent_camera = new Intent(Screen_Execute_Task.this, Screen_Camera.class);
+                intent_camera.putExtra("photo_name", contador+"_foto_despues_instalacion");
+                intent_camera.putExtra("photo_folder", "fotos_tareas");
+                intent_camera.putExtra("contador", contador);
+                startActivityForResult(intent_camera, CAM_REQUEST_AFT_INT_PHOTO);
+//                try {
+//                    dispatchTakePictureIntent(CAM_REQUEST_AFT_INT_PHOTO);
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
             }
         });
     }
@@ -379,7 +394,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
             if (requestCode == CAM_REQUEST_INST_PHOTO) {
                 if(!TextUtils.isEmpty(data.getStringExtra("photo_path"))&& data.getStringExtra("photo_path")!=null) {
                     mCurrentPhotoPath_foto_antes = data.getStringExtra("photo_path");
-                    Bitmap bitmap_foto_antes_instalacion = getPhotoUserLocal(mCurrentPhotoPath_foto_antes);
+                    Bitmap bitmap_foto_antes_instalacion = Bitmap.createScaledBitmap(getPhotoUserLocal(mCurrentPhotoPath_foto_antes), 960,1280,true);
                     instalation_photo_screen_exec_task.setVisibility(View.VISIBLE);
                     instalation_photo_screen_exec_task.setImageBitmap(bitmap_foto_antes_instalacion);
                 }
@@ -389,22 +404,40 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
 //                instalation_photo_screen_exec_task.setImageBitmap(bitmap_foto_antes_instalacion);
             }
             if (requestCode == CAM_REQUEST_READ_PHOTO) {
-                mCurrentPhotoPath_foto_lectura = saveBitmapImage(getPhotoUserLocal(mCurrentPhotoPath_foto_lectura), "foto_lectura");
-                Bitmap bitmap_foto_lectura = getPhotoUserLocal(mCurrentPhotoPath_foto_lectura);
-                read_photo_screen_exec_task.setVisibility(View.VISIBLE);
-                read_photo_screen_exec_task.setImageBitmap(bitmap_foto_lectura);
+                if(!TextUtils.isEmpty(data.getStringExtra("photo_path"))&& data.getStringExtra("photo_path")!=null) {
+                    mCurrentPhotoPath_foto_lectura = data.getStringExtra("photo_path");
+                    Bitmap bitmap_foto_lectura = Bitmap.createScaledBitmap(getPhotoUserLocal(mCurrentPhotoPath_foto_lectura), 960,1280,true);
+                    read_photo_screen_exec_task.setVisibility(View.VISIBLE);
+                    read_photo_screen_exec_task.setImageBitmap(bitmap_foto_lectura);
+                }
+//                mCurrentPhotoPath_foto_lectura = saveBitmapImage(getPhotoUserLocal(mCurrentPhotoPath_foto_lectura), "foto_lectura");
+//                Bitmap bitmap_foto_lectura = getPhotoUserLocal(mCurrentPhotoPath_foto_lectura);
+//                read_photo_screen_exec_task.setVisibility(View.VISIBLE);
+//                read_photo_screen_exec_task.setImageBitmap(bitmap_foto_lectura);
             }
             if (requestCode == CAM_REQUEST_SN_PHOTO) {
-                mCurrentPhotoPath_foto_serie = saveBitmapImage(getPhotoUserLocal(mCurrentPhotoPath_foto_serie), "foto_numero_serie");
-                Bitmap bitmap_foto_numero_serie = getPhotoUserLocal(mCurrentPhotoPath_foto_serie);
-                serial_number_photo_screen_exec_task.setVisibility(View.VISIBLE);
-                serial_number_photo_screen_exec_task.setImageBitmap(bitmap_foto_numero_serie);
+                if(!TextUtils.isEmpty(data.getStringExtra("photo_path"))&& data.getStringExtra("photo_path")!=null) {
+                    mCurrentPhotoPath_foto_serie = data.getStringExtra("photo_path");
+                    Bitmap bitmap_foto_numero_serie = Bitmap.createScaledBitmap(getPhotoUserLocal(mCurrentPhotoPath_foto_serie), 960, 1280, true);
+                    serial_number_photo_screen_exec_task.setVisibility(View.VISIBLE);
+                    serial_number_photo_screen_exec_task.setImageBitmap(bitmap_foto_numero_serie);
+                }
+//                mCurrentPhotoPath_foto_serie = saveBitmapImage(getPhotoUserLocal(mCurrentPhotoPath_foto_serie), "foto_numero_serie");
+//                Bitmap bitmap_foto_numero_serie = getPhotoUserLocal(mCurrentPhotoPath_foto_serie);
+//                serial_number_photo_screen_exec_task.setVisibility(View.VISIBLE);
+//                serial_number_photo_screen_exec_task.setImageBitmap(bitmap_foto_numero_serie);
             }
             if (requestCode == CAM_REQUEST_AFT_INT_PHOTO) {
-                mCurrentPhotoPath_foto_despues = saveBitmapImage(getPhotoUserLocal(mCurrentPhotoPath_foto_despues), "foto_despues_instalacion");
-                Bitmap bitmap_foto_despues_instalacion = getPhotoUserLocal(mCurrentPhotoPath_foto_despues);
-                after_instalation_photo_screen_exec_task.setVisibility(View.VISIBLE);
-                after_instalation_photo_screen_exec_task.setImageBitmap(bitmap_foto_despues_instalacion);
+                if(!TextUtils.isEmpty(data.getStringExtra("photo_path"))&& data.getStringExtra("photo_path")!=null) {
+                    mCurrentPhotoPath_foto_despues = data.getStringExtra("photo_path");
+                    Bitmap bitmap_foto_despues_instalacion = Bitmap.createScaledBitmap(getPhotoUserLocal(mCurrentPhotoPath_foto_despues), 960, 1280, true);
+                    after_instalation_photo_screen_exec_task.setVisibility(View.VISIBLE);
+                    after_instalation_photo_screen_exec_task.setImageBitmap(bitmap_foto_despues_instalacion);
+                }
+//                mCurrentPhotoPath_foto_despues = saveBitmapImage(getPhotoUserLocal(mCurrentPhotoPath_foto_despues), "foto_despues_instalacion");
+//                Bitmap bitmap_foto_despues_instalacion = getPhotoUserLocal(mCurrentPhotoPath_foto_despues);
+//                after_instalation_photo_screen_exec_task.setVisibility(View.VISIBLE);
+//                after_instalation_photo_screen_exec_task.setImageBitmap(bitmap_foto_despues_instalacion);
             }
         }
 
