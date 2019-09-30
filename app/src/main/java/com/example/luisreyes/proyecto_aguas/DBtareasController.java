@@ -147,6 +147,9 @@ public class DBtareasController extends SQLiteOpenHelper {
     public void setJsonTarea(JSONObject json){
         jsonTareaType = json;
     }
+    public JSONObject getJsonTarea(){
+        return jsonTareaType;
+    }
 
     public void insertTarea(JSONObject json) throws JSONException {
         SQLiteDatabase database = this.getWritableDatabase();
