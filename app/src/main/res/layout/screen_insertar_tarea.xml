@@ -144,5 +144,13 @@
                 android:id="@+id/imageView_agregar_tarea_screen_insertar_tarea"
                 android:src="@drawable/screen_insertar_tarea_agregar"/>
         </LinearLayout>
+
+        <TextView
+            android:paddingTop="1dp"
+            android:id="@+id/textView_screen_insertar_tarea"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            />
     </LinearLayout>
 </ScrollView>

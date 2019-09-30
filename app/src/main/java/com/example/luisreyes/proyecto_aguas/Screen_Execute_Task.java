@@ -264,6 +264,13 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
 //                } catch (JSONException e) {
 //                    e.printStackTrace();
 //                }
+//                String string_geo_ruta="";
+//                try {
+//                    string_geo_ruta = Screen_Login_Activity.tarea_JSON.getString("geolocalizar");
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                    Toast.makeText(Screen_Execute_Task.this, "no se pudo obtener numero_serie_contador de tarea", Toast.LENGTH_LONG).show();
+//                }
             }
         });
         button_after_instalation_photo_screen_exec_task.setOnClickListener(new View.OnClickListener() {
@@ -282,6 +289,13 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
             }
         });
     }
+//    String string_geo = "2334,2312";
+//
+//    try {
+//        Screen_Login_Activity.tarea_JSON.put("geolocalizar", string_geo);
+//    } catch (JSONException e) {
+//        e.printStackTrace();
+//    }
 
     private void guardar_en_JSON_modificaciones() {
 

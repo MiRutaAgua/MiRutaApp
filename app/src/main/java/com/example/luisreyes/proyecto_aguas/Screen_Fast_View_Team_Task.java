@@ -96,8 +96,8 @@ public class Screen_Fast_View_Team_Task  extends AppCompatActivity implements Ta
                         try {
                             JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.dBtareasController.get_one_tarea_from_Database(i));
                             My_Fast_View_Task fast_task = new My_Fast_View_Task();
-                            fast_task.setTipo_tarea(jsonObject.getString("tipo_tarea").replace("\n", ""));
-                            fast_task.setCalibre(jsonObject.getString("calibre_toma").replace("\n", ""));
+                            fast_task.setTipo_tarea(jsonObject.getString("tipo_tarea").replace("\n", "").replace(" ", ""));
+                            fast_task.setCalibre(jsonObject.getString("calibre_toma").replace("\n", "").replace(" ", ""));
                             lista_tareas_fast.add(fast_task);
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -113,14 +113,15 @@ public class Screen_Fast_View_Team_Task  extends AppCompatActivity implements Ta
                         for (int i = 1; i < lista_tareas_fast.size(); i++) {
                             if(lista_tareas_fast.get(i).compareToOther(lista_tareas_fast.get(i-1))){
                                 lista_cantidades.set(c, lista_cantidades.get(c)+1);
-                                lista_to_display.set(c, lista_cantidades.get(c).toString()+" "+lista_tareas_fast.get(i).getAll_string());
+                                lista_to_display.set(c, lista_cantidades.get(c).toString()+"  "+lista_tareas_fast.get(i).getAll_string());
                             }else{
                                 c++;
                                 lista_cantidades.add(1);
-                                lista_to_display.add(lista_cantidades.get(c).toString()+" "+lista_tareas_fast.get(i).getAll_string());
+                                lista_to_display.add(lista_cantidades.get(c).toString()+"  "+lista_tareas_fast.get(i).getAll_string());
                             }
                         }
                     }
+                    lista_to_display.add(0,"Resumen de Tareas de Equipo");
                     Toast.makeText(this,lista_cantidades.toString(), Toast.LENGTH_LONG).show();
                     ArrayAdapter arrayAdapter = new ArrayAdapter(Screen_Fast_View_Team_Task.this, android.R.layout.simple_list_item_1, lista_to_display);
                     lista_de_contadores_screen_fast_view_table_team.setAdapter(arrayAdapter);
@@ -209,8 +210,8 @@ public class Screen_Fast_View_Team_Task  extends AppCompatActivity implements Ta
                             }
 
                             My_Fast_View_Task fast_task = new My_Fast_View_Task();
-                            fast_task.setTipo_tarea(jsonObject.getString("tipo_tarea").replace("\n", ""));
-                            fast_task.setCalibre(jsonObject.getString("calibre_toma").replace("\n", ""));
+                            fast_task.setTipo_tarea(jsonObject.getString("tipo_tarea").replace("\n", "").replace(" ", ""));
+                            fast_task.setCalibre(jsonObject.getString("calibre_toma").replace("\n", "").replace(" ", ""));
                             lista_tareas_fast.add(fast_task);
                         }
                     } catch (JSONException e) {
@@ -227,14 +228,15 @@ public class Screen_Fast_View_Team_Task  extends AppCompatActivity implements Ta
                     for (int i = 1; i < lista_tareas_fast.size(); i++) {
                         if(lista_tareas_fast.get(i).compareToOther(lista_tareas_fast.get(i-1))){
                             lista_cantidades.set(c, lista_cantidades.get(c)+1);
-                            lista_to_display.set(c, lista_cantidades.get(c).toString()+" "+lista_tareas_fast.get(i).getAll_string());
+                            lista_to_display.set(c, lista_cantidades.get(c).toString()+"  "+lista_tareas_fast.get(i).getAll_string());
                         }else{
                             c++;
                             lista_cantidades.add(1);
-                            lista_to_display.add(lista_cantidades.get(c).toString()+" "+lista_tareas_fast.get(i).getAll_string());
+                            lista_to_display.add(lista_cantidades.get(c).toString()+"  "+lista_tareas_fast.get(i).getAll_string());
                         }
                     }
                 }
+                lista_to_display.add(0,"Resumen de Tareas de Equipo");
                 Toast.makeText(this,lista_cantidades.toString(), Toast.LENGTH_LONG).show();
                 //Toast.makeText(Screen_Fast_View_Team_Task.this,"Tareas descargadas correctamente"/*+" SQLite: "+String.valueOf(lite_count)*/, Toast.LENGTH_LONG).show();
                 ArrayAdapter arrayAdapter = new ArrayAdapter(Screen_Fast_View_Team_Task.this, android.R.layout.simple_list_item_1, lista_to_display);
@@ -284,7 +286,7 @@ public class Screen_Fast_View_Team_Task  extends AppCompatActivity implements Ta
     }
     private void showRingDialog(String text){
         progressDialog = ProgressDialog.show(Screen_Fast_View_Team_Task.this, "Espere", text, true);
-        progressDialog.setCancelable(true);
+        progressDialog.setCancelable(false);
     }
     public static void hideRingDialog(){
         progressDialog.dismiss();

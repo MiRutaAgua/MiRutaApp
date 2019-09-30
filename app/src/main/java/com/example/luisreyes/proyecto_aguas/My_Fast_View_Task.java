@@ -17,11 +17,11 @@ public class My_Fast_View_Task implements Comparable<My_Fast_View_Task> {
 
     public void setCalibre(String calibre) {
         this.calibre = calibre;
-        all_string += " "+ this.calibre + "mm";
+        all_string += " "+ this.calibre + " mm";
     }
     public void setCalibreByInt(int calibre) {
         this.calibre = String.valueOf(calibre);
-        all_string += this.calibre + "mm";
+        all_string += " "+ this.calibre + " mm";
     }
 
     public String getTipo_tarea() {

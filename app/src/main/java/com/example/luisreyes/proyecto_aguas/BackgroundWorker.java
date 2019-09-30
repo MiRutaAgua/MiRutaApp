@@ -100,7 +100,7 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
             get_user_data_url = "https://server26194.000webhostapp.com/get_one_operario.php";
             get_one_tarea_url = "https://server26194.000webhostapp.com/get_one_tarea.php";
             get_tareas_url = "https://server26194.000webhostapp.com/get_tareas.php";
-            create_tarea_url = "https://server26194.webcindario.com/create_task.php";
+            create_tarea_url = "https://server26194.000webhostapp.com/create_task.php";
             update_tarea_url = "http://server26194.000webhostapp.com/update_tarea.php";
             update_operario_url = "https://server26194.000webhostapp.com/update_operario.php";
             test_conection_url = "https://server26194.000webhostapp.com/test_database.php";
@@ -119,7 +119,7 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
             get_user_data_url = "http://192.168.21.125/get_one_operario.php";
             get_one_tarea_url = "http://192.168.21.125/get_one_tarea.php";
             get_tareas_url = "http://192.168.21.125/get_tareas.php";
-            create_tarea_url = "https://192.168.21.125/create_task.php";
+            create_tarea_url = "http://192.168.21.125/create_task.php";
             update_tarea_url = "http://192.168.21.125/update_tarea.php";
             update_operario_url = "http://192.168.21.125/update_operario.php";
             upload_image_url = "http://192.168.21.125/upload_image.php";
@@ -134,7 +134,7 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
 //            get_user_data_url = "http://192.168.137.50/get_one_operario.php";
 //            get_one_tarea_url = "http://192.168.137.50/get_one_tarea.php";
 //            get_tareas_url = "http://192.168.137.50/get_tareas.php";
-//            create_tarea_url = "https://192.168.137.50/create_task.php";
+//            create_tarea_url = "http://192.168.137.50/create_task.php";
 //            update_tarea_url = "http://192.168.137.50/update_tarea.php";
 //            update_operario_url = "http://192.168.137.50/update_operario.php";
 //            upload_image_url = "http://192.168.137.50/upload_image.php";
@@ -303,7 +303,7 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
 
                 Writer bufferedWriter = new BufferedWriter(new OutputStreamWriter(httpURLConnection.getOutputStream(), "UTF-8"));
                 bufferedWriter.write(tarea_post);
-                // bufferedWriter.flush();
+                bufferedWriter.flush();
                 bufferedWriter.close();
 
                 InputStream inputStream = httpURLConnection.getInputStream();

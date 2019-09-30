@@ -1,9 +1,13 @@
 package com.example.luisreyes.proyecto_aguas;
 
 import android.Manifest;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -38,6 +42,8 @@ public class Screen_Insertar_Tarea extends AppCompatActivity implements TaskComp
             editText_tipo_screen_insertar_tarea,
             editText_abonado_screen_insertar_tarea,
             editText_telefono_screen_insertar_tarea;
+    private TextView textView_screen_insertar_tarea;
+    private ProgressDialog progressDialog;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -52,6 +58,7 @@ public class Screen_Insertar_Tarea extends AppCompatActivity implements TaskComp
         getSupportActionBar().setIcon(getDrawable(R.drawable.toolbar_image));
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
+        textView_screen_insertar_tarea = (TextView) findViewById(R.id.textView_screen_insertar_tarea);
         editText_numero_serie_screen_insertar_tarea = (EditText) findViewById(R.id.editText_numero_serie_screen_insertar_tarea);
         editText_operario_screen_insertar_tarea = (EditText) findViewById(R.id.editText_operario_screen_insertar_tarea);
         editText_calibre_screen_insertar_tarea = (EditText) findViewById(R.id.editText_calibre_screen_insertar_tarea);
@@ -70,30 +77,52 @@ public class Screen_Insertar_Tarea extends AppCompatActivity implements TaskComp
         imageView_geolocalizar_screen_insertar_tarea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Screen_Login_Activity.tarea_JSON = team_or_personal_task_selection_screen_Activity.dBtareasController.getJsonTarea();
+                try {
+                    //Screen_Login_Activity.tarea_JSON.put("id", 9);
+                    Screen_Login_Activity.tarea_JSON.put("numero_serie_contador", editText_numero_serie_screen_insertar_tarea.getText().toString());
+                    Screen_Login_Activity.tarea_JSON.put("operario", Screen_Login_Activity.operario_JSON.getString("usuario"));
+                    Screen_Login_Activity.tarea_JSON.put("calibre_toma", editText_calibre_screen_insertar_tarea.getText().toString());
+                    Screen_Login_Activity.tarea_JSON.put("tipo_tarea", editText_tipo_screen_insertar_tarea.getText().toString());
+                    Screen_Login_Activity.tarea_JSON.put("nombre_cliente", editText_abonado_screen_insertar_tarea.getText().toString());
+                    Screen_Login_Activity.tarea_JSON.put("telefono1", editText_telefono_screen_insertar_tarea.getText().toString());
+                    Toast.makeText(Screen_Insertar_Tarea.this, "Entro en update JSON", Toast.LENGTH_SHORT).show();
 
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                textView_screen_insertar_tarea.setText(Screen_Login_Activity.tarea_JSON.toString());
             }
         });
 
         screen_insertar_tarea_agregar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!(TextUtils.isEmpty(editText_numero_serie_screen_insertar_tarea.getText().toString()))){
-                    String type_script = "update_tarea";
-                    BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Insertar_Tarea.this);
+                if(checkConection()){
+                    if(!(TextUtils.isEmpty(editText_numero_serie_screen_insertar_tarea.getText().toString()))){
                     Screen_Login_Activity.tarea_JSON = team_or_personal_task_selection_screen_Activity.dBtareasController.getJsonTarea();
                     try {
+                        //Screen_Login_Activity.tarea_JSON.put("id", 9);
                         Screen_Login_Activity.tarea_JSON.put("numero_serie_contador", editText_numero_serie_screen_insertar_tarea.getText().toString());
                         Screen_Login_Activity.tarea_JSON.put("operario", Screen_Login_Activity.operario_JSON.getString("usuario"));
                         Screen_Login_Activity.tarea_JSON.put("calibre_toma", editText_calibre_screen_insertar_tarea.getText().toString());
                         Screen_Login_Activity.tarea_JSON.put("tipo_tarea", editText_tipo_screen_insertar_tarea.getText().toString());
                         Screen_Login_Activity.tarea_JSON.put("nombre_cliente", editText_abonado_screen_insertar_tarea.getText().toString());
                         Screen_Login_Activity.tarea_JSON.put("telefono1", editText_telefono_screen_insertar_tarea.getText().toString());
+                        Toast.makeText(Screen_Insertar_Tarea.this, "Entro en update JSON", Toast.LENGTH_SHORT).show();
 
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                    showRingDialog("Insertando tarea...");
+                    String type_script = "create_tarea";
+                    BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Insertar_Tarea.this);
                     backgroundWorker.execute(type_script);
+                }}
+                else{
+                    Toast.makeText(Screen_Insertar_Tarea.this, "No hay conexion a internet", Toast.LENGTH_SHORT).show();
                 }
+
             }
         });
 
@@ -132,12 +161,37 @@ public class Screen_Insertar_Tarea extends AppCompatActivity implements TaskComp
     @Override
     public void onTaskComplete(String type, String result) throws JSONException {
         if(type == "create_tarea"){
+            hideRingDialog();
             if(result == null){
-                Toast.makeText(Screen_Insertar_Tarea.this, "No hay conexion a Internet", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Screen_Insertar_Tarea.this, "No se pudo acceder al hosting" + result, Toast.LENGTH_SHORT).show();
             }
             else {
-                Toast.makeText(Screen_Insertar_Tarea.this, "Tarea insertada correctamente -> ", Toast.LENGTH_LONG).show();
+                Toast.makeText(Screen_Insertar_Tarea.this, "Tarea insertada correctamente", Toast.LENGTH_LONG).show();
+                textView_screen_insertar_tarea.setText(result);
             }
         }
+    }
+
+
+    public boolean checkConection(){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_NETWORK_STATE}, 1);
+        }
+        ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+            //we are connected to a network
+            return true;
+        }
+        else
+            return false;
+    }
+    private void showRingDialog(String text){
+        progressDialog = ProgressDialog.show(Screen_Insertar_Tarea.this, "Espere", text, true);
+        progressDialog.setCancelable(true);
+    }
+    private void hideRingDialog(){
+        progressDialog.dismiss();
     }
 }

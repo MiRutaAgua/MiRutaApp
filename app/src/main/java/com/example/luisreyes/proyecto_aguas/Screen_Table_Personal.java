@@ -506,7 +506,7 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
     }
     private void showRingDialog(String text){
         progressDialog = ProgressDialog.show(Screen_Table_Personal.this, "Espere", text, true);
-        progressDialog.setCancelable(true);
+        progressDialog.setCancelable(false);
     }
     private void hideRingDialog(){
         progressDialog.dismiss();

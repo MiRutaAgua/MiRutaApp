@@ -26,12 +26,13 @@ public class DBtareasController extends SQLiteOpenHelper {
     public static final String database_name = "Database_Tareas.db";
     public static String database_path;
     JSONObject jsonTareaType = new JSONObject();
+    JSONObject jsonTareaType_empty = new JSONObject();
     public static final String table_name = "tareas";
 
     public DBtareasController(Context applicationContext){
         super(applicationContext, database_name, null,  MainActivity.DB_VERSION);
         try {
-            jsonTareaType.put("id", 1);
+            jsonTareaType.put("id", "");
             jsonTareaType.put("poblacion", "unknow");
             jsonTareaType.put("calle", "unknow");
             jsonTareaType.put("numero_edificio", "unknow");
@@ -40,6 +41,7 @@ public class DBtareasController extends SQLiteOpenHelper {
             jsonTareaType.put("mano", "unknow");
             jsonTareaType.put("anno_de_contador", "unknow");
             jsonTareaType.put("numero_serie_contador", "unknow");
+            jsonTareaType.put("tipo_tarea", "unknow");
             jsonTareaType.put("calibre_toma", "unknow");
             jsonTareaType.put("calibre_real", "unknow");
             jsonTareaType.put("operario", "unknow");
@@ -79,6 +81,54 @@ public class DBtareasController extends SQLiteOpenHelper {
             jsonTareaType.put("date_time_modified", "unknow");
             jsonTareaType.put("status_tarea", "unknow");
 
+            jsonTareaType_empty.put("id", "");
+            jsonTareaType_empty.put("poblacion", "unknow");
+            jsonTareaType_empty.put("calle", "unknow");
+            jsonTareaType_empty.put("numero_edificio", "unknow");
+            jsonTareaType_empty.put("letra_edificio", "unknow");
+            jsonTareaType_empty.put("piso", "unknow");
+            jsonTareaType_empty.put("mano", "unknow");
+            jsonTareaType_empty.put("anno_de_contador", "unknow");
+            jsonTareaType_empty.put("numero_serie_contador", "unknow");
+            jsonTareaType_empty.put("tipo_tarea", "unknow");
+            jsonTareaType_empty.put("calibre_toma", "unknow");
+            jsonTareaType_empty.put("calibre_real", "unknow");
+            jsonTareaType_empty.put("operario", "unknow");
+            jsonTareaType_empty.put("emplazamiento", "unknow");
+            jsonTareaType_empty.put("observaciones", "unknow");
+            jsonTareaType_empty.put("actividad", "unknow");
+            jsonTareaType_empty.put("nombre_cliente", "unknow");
+            jsonTareaType_empty.put("numero_abonado", "unknow");
+            jsonTareaType_empty.put("telefonos_cliente", "unknow");
+            jsonTareaType_empty.put("telefono1", "unknow");
+            jsonTareaType_empty.put("telefono2", "unknow");
+            jsonTareaType_empty.put("fechas_tocado_puerta", "unknow");
+            jsonTareaType_empty.put("fechas_nota_aviso", "unknow");
+            jsonTareaType_empty.put("acceso", "unknow");
+            jsonTareaType_empty.put("resultado", "unknow");
+            jsonTareaType_empty.put("nuevo_citas", "unknow");
+            jsonTareaType_empty.put("fecha_hora_cita", "unknow");
+            jsonTareaType_empty.put("fecha_de_cambio", "unknow");
+            jsonTareaType_empty.put("zona", "unknow");
+            jsonTareaType_empty.put("ruta", "unknow");
+            jsonTareaType_empty.put("marca_contador", "unknow");
+            jsonTareaType_empty.put("codigo_de_localizacion", "unknow");
+            jsonTareaType_empty.put("foto_antes_instalacion", "unknow");
+            jsonTareaType_empty.put("foto_numero_serie", "unknow");
+            jsonTareaType_empty.put("foto_lectura", "unknow");
+            jsonTareaType_empty.put("foto_despues_instalacion", "unknow");
+            jsonTareaType_empty.put("numero_serie_modulo", "unknow");
+            jsonTareaType_empty.put("firma_cliente", "unknow");
+            jsonTareaType_empty.put("lectura_ultima", "unknow");
+            jsonTareaType_empty.put("lectura_actual", "unknow");
+            jsonTareaType_empty.put("geolocalizacion", "unknow");
+            jsonTareaType_empty.put("ubicacion_en_bateria", "unknow");
+            jsonTareaType_empty.put("incidencia", "unknow");
+            jsonTareaType_empty.put("foto_incidencia_1", "unknow");
+            jsonTareaType_empty.put("foto_incidencia_2", "unknow");
+            jsonTareaType_empty.put("foto_incidencia_3", "unknow");
+            jsonTareaType_empty.put("date_time_modified", "unknow");
+            jsonTareaType_empty.put("status_tarea", "unknow");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -95,6 +145,7 @@ public class DBtareasController extends SQLiteOpenHelper {
                     "mano TEXT, " +
                     "anno_de_contador TEXT, " +
                     "numero_serie_contador TEXT, " +
+                    "tipo_tarea TEXT, " +
                     "calibre_toma TEXT, " +
                     "calibre_real TEXT, " +
                     "operario TEXT, " +
@@ -148,7 +199,7 @@ public class DBtareasController extends SQLiteOpenHelper {
         jsonTareaType = json;
     }
     public JSONObject getJsonTarea(){
-        return jsonTareaType;
+        return jsonTareaType_empty;
     }
 
     public void insertTarea(JSONObject json) throws JSONException {
