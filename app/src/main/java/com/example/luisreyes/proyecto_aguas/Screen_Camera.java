@@ -96,7 +96,7 @@ public class Screen_Camera extends Activity {
      */
     private static final int MAX_PREVIEW_HEIGHT = 1000;
 
-    private FloatingActionButton button_cancel_picture_screen_x, button_save_picture_screen_x;
+    private Button button_cancel_picture_screen_x, button_save_picture_screen_x;
     private Button button_take_picture_screen_x;
     private Button flashButton, torchButton;
     private TextureView textureView;
@@ -166,8 +166,8 @@ public class Screen_Camera extends Activity {
         assert textureView != null;
         textureView.setSurfaceTextureListener(textureListener);
         button_take_picture_screen_x = (Button)findViewById(R.id.button_take_picture);
-        button_save_picture_screen_x = (FloatingActionButton)findViewById(R.id.button_save_picture);
-        button_cancel_picture_screen_x = (FloatingActionButton)findViewById(R.id.button_cancel_picture);
+        button_save_picture_screen_x = (Button)findViewById(R.id.button_save_picture);
+        button_cancel_picture_screen_x = (Button)findViewById(R.id.button_cancel_picture);
         flashButton = (Button)findViewById(R.id.button_flash_picture);
         torchButton = (Button)findViewById(R.id.button_torch_picture);
 

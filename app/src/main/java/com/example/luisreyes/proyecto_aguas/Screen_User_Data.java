@@ -117,8 +117,11 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
                     JSONObject jsonObject = new JSONObject(user);
                     String user_foto = jsonObject.getString("foto");
                     //Toast.makeText(Screen_User_Data.this, user_foto, Toast.LENGTH_LONG).show();
-                    circlImageView_photo.setBackgroundColor(Color.TRANSPARENT);
-                    circlImageView_photo.setImageBitmap(getPhotoUserLocal(getSimilarFile(user_foto)));
+                    Bitmap foto = getPhotoUserLocal(getSimilarFile(user_foto));
+                    if(foto != null) {
+                        circlImageView_photo.setBackgroundColor(Color.TRANSPARENT);
+                        circlImageView_photo.setImageBitmap(foto);
+                    }
                 }
             }
 
@@ -285,7 +288,7 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
     }
 
     private void saveBitmapImage(Bitmap bitmap, String file_name){
-        bitmap = Bitmap.createScaledBitmap(bitmap, 1200, 1600, true);
+        bitmap = Bitmap.createScaledBitmap(bitmap, 1280, 960, true);
         file_name = "operario_"+file_name;
 
         File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_operarios");

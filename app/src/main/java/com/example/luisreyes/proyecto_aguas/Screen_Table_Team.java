@@ -23,6 +23,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -62,7 +63,7 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
     private Intent intent_open_screen_unity_counter;
     private Intent intent_open_screen_battery_counter;
     private ArrayList<String> tareas_to_update;
-    private FloatingActionButton agregar_tarea;
+    private Button agregar_tarea;
     private int lite_count = -10;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -84,7 +85,7 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
         lista_de_contadores_screen_table_team = (ListView) findViewById(R.id.listView_contadores_screen_table_view);
         textView_screen_table_team = (TextView) findViewById(R.id.textView_screen_table_team);
         editText_filter = (EditText) findViewById(R.id.editText_screen_table_team_filter);
-        agregar_tarea = (FloatingActionButton) findViewById(R.id.button_add_tarea_table_team);
+        agregar_tarea = (Button) findViewById(R.id.button_add_tarea_table_team);
 
         spinner_filtro_tareas = (Spinner) findViewById(R.id.spinner_filtrar_tareas_screen_table_team);
         lista_desplegable = new ArrayList<String>();
@@ -214,7 +215,6 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
 
             }
         });
-
         descargarTareas();
     }
 
@@ -338,7 +338,7 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
 
                     if(lite_count < 1){
                         insertar_todas= true;
-                        Toast.makeText(Screen_Table_Team.this, "Insertando todas", Toast.LENGTH_LONG).show();
+                        Toast.makeText(Screen_Table_Team.this, "Insertando todas las tareas", Toast.LENGTH_LONG).show();
                     }
                 }
                 for(int n =0 ; n < Screen_Table_Team.lista_tareas.size() ; n++) {
@@ -378,6 +378,7 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
                                         if (date_SQLite != null) {
 //                                           //aqui actualizar MySQL con la DB SQLite
                                             tareas_to_update.add(jsonObject_Lite.getString("numero_serie_contador"));
+                                            jsonObject = new JSONObject(jsonObject_Lite.getString("numero_serie_contador"));
                                         } else {
                                             Toast.makeText(Screen_Table_Team.this, "Fechas ambas nulas", Toast.LENGTH_LONG).show();
                                         }
@@ -391,6 +392,7 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
                                         } else if (date_MySQL.before(date_SQLite)) {//SQLite mas actualizada
                                             //aqui actualizar MySQL con la DB SQLite
                                             tareas_to_update.add(jsonObject_Lite.getString("numero_serie_contador"));
+                                            jsonObject = new JSONObject(jsonObject_Lite.getString("numero_serie_contador"));
                                         }
                                     }
                                 }
@@ -459,7 +461,7 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
                 arrayAdapter = new ArrayAdapter(Screen_Table_Team.this, android.R.layout.simple_list_item_1, lista_contadores);
                 lista_de_contadores_screen_table_team.setAdapter(arrayAdapter);
                 hideRingDialog();
-                showRingDialog("Actualizando tareas en de Internet...");
+                showRingDialog("Actualizando tareas de Internet...");
                 updateTareaInMySQL();
                 Toast.makeText(Screen_Table_Team.this,"Tareas descargadas correctamente"/*+" SQLite: "+String.valueOf(lite_count)*/, Toast.LENGTH_LONG).show();
 //                if(dBtareasController.checkForTableExists()){

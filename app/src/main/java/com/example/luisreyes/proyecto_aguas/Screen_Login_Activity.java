@@ -41,7 +41,6 @@ import java.util.Date;
 
 public class Screen_Login_Activity extends Activity implements TaskCompleted{
 
-    private TextView textView_nombre_de_pantalla;
     private EditText lineEdit_nombre_de_operario;
     private EditText lineEdit_clave_de_acceso;
     private ImageView button_login, button_register;
@@ -57,7 +56,7 @@ public class Screen_Login_Activity extends Activity implements TaskCompleted{
     boolean login_press = false;
     public static boolean register_press = false;
 
-    public static boolean server_online_or_wamp = true;
+    public static boolean server_online_or_wamp = false;
     public static boolean isOnline = true; ///cambiar todas las ocurrencias de esta variable por isOnline
 
     private ProgressDialog progressDialog;
@@ -85,9 +84,6 @@ public class Screen_Login_Activity extends Activity implements TaskCompleted{
         tarea_JSON = new JSONObject();
         operario_JSON = new JSONObject();
 
-
-
-        textView_nombre_de_pantalla = (TextView) findViewById(R.id.textView_Nombre_de_Pantalla);
         lineEdit_nombre_de_operario = (EditText) findViewById(R.id.editText_Nombre_Operario_screen_login);
         lineEdit_clave_de_acceso    = (EditText) findViewById(R.id.editText_Clave_Acceso_screen_login);
         button_login                = (ImageView) findViewById(R.id.button_login_screen_login);

@@ -17,11 +17,13 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONException;
+
 /**
  * Created by luis.reyes on 26/09/2019.
  */
 
-public class Screen_Insertar_Tarea extends AppCompatActivity{
+public class Screen_Insertar_Tarea extends AppCompatActivity implements TaskCompleted{
 
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -67,5 +69,10 @@ public class Screen_Insertar_Tarea extends AppCompatActivity{
                 return super.onOptionsItemSelected(item);
 
         }
+    }
+
+    @Override
+    public void onTaskComplete(String type, String result) throws JSONException {
+
     }
 }

@@ -240,8 +240,11 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
             if (requestCode == CAM_REQUEST_1_PHOTO_FULL_SIZE) {
                 if (!TextUtils.isEmpty(data.getStringExtra("photo_path")) && data.getStringExtra("photo_path") != null) {
                     mCurrentPhotoPath_incidencia_1 = data.getStringExtra("photo_path");
-                    photo1.setVisibility(View.VISIBLE);
-                    photo1.setImageBitmap(getPhotoUserLocal(mCurrentPhotoPath_incidencia_1));
+                    Bitmap bitmap = getPhotoUserLocal(mCurrentPhotoPath_incidencia_1);
+                    if(bitmap!=null) {
+                        photo1.setVisibility(View.VISIBLE);
+                        photo1.setImageBitmap(getPhotoUserLocal(mCurrentPhotoPath_incidencia_1));
+                    }
                 }
 //            mCurrentPhotoPath_incidencia_1 = saveBitmapImage(getPhotoUserLocal(mCurrentPhotoPath_incidencia_1), "foto_incidencia_1");
 //            photo1.setVisibility(View.VISIBLE);
@@ -250,8 +253,11 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
             if (requestCode == CAM_REQUEST_2_PHOTO_FULL_SIZE) {
                 if (!TextUtils.isEmpty(data.getStringExtra("photo_path")) && data.getStringExtra("photo_path") != null) {
                     mCurrentPhotoPath_incidencia_2 = data.getStringExtra("photo_path");
-                    photo2.setVisibility(View.VISIBLE);
-                    photo2.setImageBitmap(getPhotoUserLocal(mCurrentPhotoPath_incidencia_2));
+                    Bitmap bitmap = getPhotoUserLocal(mCurrentPhotoPath_incidencia_2);
+                    if(bitmap!=null) {
+                        photo2.setVisibility(View.VISIBLE);
+                        photo2.setImageBitmap(getPhotoUserLocal(mCurrentPhotoPath_incidencia_2));
+                    }
                 }
 //                mCurrentPhotoPath_incidencia_2 = saveBitmapImage(getPhotoUserLocal(mCurrentPhotoPath_incidencia_2), "foto_incidencia_2");
 //                photo2.setVisibility(View.VISIBLE);
@@ -260,8 +266,11 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
             if (requestCode == CAM_REQUEST_3_PHOTO_FULL_SIZE) {
                 if (!TextUtils.isEmpty(data.getStringExtra("photo_path")) && data.getStringExtra("photo_path") != null) {
                     mCurrentPhotoPath_incidencia_3 = data.getStringExtra("photo_path");
-                    photo3.setVisibility(View.VISIBLE);
-                    photo3.setImageBitmap(getPhotoUserLocal(mCurrentPhotoPath_incidencia_3));
+                    Bitmap bitmap = getPhotoUserLocal(mCurrentPhotoPath_incidencia_3);
+                    if(bitmap!=null) {
+                        photo3.setVisibility(View.VISIBLE);
+                        photo3.setImageBitmap(bitmap);
+                    }
                 }
 //                mCurrentPhotoPath_incidencia_3 = saveBitmapImage(getPhotoUserLocal(mCurrentPhotoPath_incidencia_3), "foto_incidencia_3");
 //                photo3.setVisibility(View.VISIBLE);

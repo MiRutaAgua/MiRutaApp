@@ -79,18 +79,18 @@
 
     </LinearLayout>
 
-    <android.support.design.widget.FloatingActionButton
+    <Button
         android:id="@+id/button_add_tarea_table_team"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:foregroundGravity="center"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_marginBottom="20dp"
         android:layout_marginRight="20dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:clickable="true"
-        android:backgroundTint="@color/colorBlueAppRuta"
-        android:src="@drawable/ic_add_black_24dp"
-        app:fabSize="normal"
+        android:background="@drawable/button_add_screen_table"
         app:layout_anchor="@+id/linearLayout"
         app:layout_anchorGravity="right|bottom" />
 

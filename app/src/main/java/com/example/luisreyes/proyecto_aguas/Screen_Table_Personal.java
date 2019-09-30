@@ -23,6 +23,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -47,7 +48,7 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
     private EditText editText_filter;
     private ArrayAdapter arrayAdapter;
     private TextView textView_screen_table_personal;
-    private FloatingActionButton agregar_tarea;
+    private Button agregar_tarea;
 
     Spinner spinner_filtro_tareas;
     private ArrayList<String> lista_desplegable;
@@ -96,7 +97,7 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
         lista_de_contadores_screen_table_personal = (ListView) findViewById(R.id.listView_contadores_screen_table_personal);
         textView_screen_table_personal           = (TextView) findViewById(R.id.textView_screen_table_personal);
         editText_filter                       = (EditText) findViewById(R.id.editText_screen_table_personal_filter);
-        agregar_tarea = (FloatingActionButton) findViewById(R.id.button_add_tarea_table_personal);
+        agregar_tarea = (Button) findViewById(R.id.button_add_tarea_table_personal);
 //        try {
 //            Toast.makeText(Screen_Table_Personal.this, Screen_Login_Activity.operario_JSON.getString("usuario"), Toast.LENGTH_LONG).show();
 //        } catch (JSONException e) {
@@ -241,7 +242,8 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
                     for (int i = 1; i <= team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas(); i++) {
                         try {
                             JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.dBtareasController.get_one_tarea_from_Database(i));
-                            if(jsonObject.getString("operario").equals(Screen_Login_Activity.operario_JSON.getString("usuario"))) {
+                            if(jsonObject.getString("operario").equals(
+                                    Screen_Login_Activity.operario_JSON.getString("usuario"))) {
                                 String dir = jsonObject.getString("poblacion") + ", "
                                         + jsonObject.getString("calle").replace("\n", "") + ", "
                                         + jsonObject.getString("numero_edificio").replace("\n", "")
@@ -334,7 +336,7 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
                     Toast.makeText(Screen_Table_Personal.this, "Existe", Toast.LENGTH_LONG).show();
 
                     if(lite_count < 1){
-                        Toast.makeText(Screen_Table_Personal.this, "Insertando todas", Toast.LENGTH_LONG).show();
+                        Toast.makeText(Screen_Table_Personal.this, "Insertando todas las tareas", Toast.LENGTH_LONG).show();
                         insertar_todas= true;
                     }
                 }
@@ -377,6 +379,7 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
                                             if (date_SQLite != null) {
 //                                           //aqui actualizar MySQL con la DB SQLite
                                                 tareas_to_update.add(jsonObject_Lite.getString("numero_serie_contador"));
+                                                jsonObject = new JSONObject(jsonObject_Lite.getString("numero_serie_contador"));
                                             } else {
                                                 Toast.makeText(Screen_Table_Personal.this, "Fechas ambas nulas", Toast.LENGTH_LONG).show();
                                             }
@@ -389,12 +392,14 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
                                             } else if (date_MySQL.before(date_SQLite)) {//SQLite mas actualizada
                                                 //aqui actualizar MySQL con la DB SQLite
                                                 tareas_to_update.add(jsonObject_Lite.getString("numero_serie_contador"));
+                                                jsonObject = new JSONObject(jsonObject_Lite.getString("numero_serie_contador"));
                                             }
                                         }
                                     }
                                 }
                             }
-                            if(jsonObject.getString("operario").equals(Screen_Login_Activity.operario_JSON.getString("usuario"))) {
+                            if(jsonObject.getString("operario").equals(
+                                    Screen_Login_Activity.operario_JSON.getString("usuario"))) {
                                 String dir = jsonObject.getString("poblacion") + ", "
                                         + jsonObject.getString("calle").replace("\n", "") + ", "
                                         + jsonObject.getString("numero_edificio").replace("\n", "")
@@ -456,7 +461,7 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
                 arrayAdapter = new ArrayAdapter(Screen_Table_Personal.this, android.R.layout.simple_list_item_1, lista_contadores);
                 lista_de_contadores_screen_table_personal.setAdapter(arrayAdapter);
                 hideRingDialog();
-                showRingDialog("Actualizando tareas en de Internet...");
+                showRingDialog("Actualizando tareas de Internet...");
                 updateTareaInMySQL();
                 Toast.makeText(Screen_Table_Personal.this,"Tareas descargadas correctamente.", Toast.LENGTH_LONG).show();
             }
