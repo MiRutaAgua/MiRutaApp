@@ -11,6 +11,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -18,8 +20,13 @@ import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Base64;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -39,7 +46,7 @@ import java.util.Date;
  * Created by luis.reyes on 10/08/2019.
  */
 
-public class Screen_Login_Activity extends Activity implements TaskCompleted{
+public class Screen_Login_Activity extends AppCompatActivity implements TaskCompleted{
 
     private EditText lineEdit_nombre_de_operario;
     private EditText lineEdit_clave_de_acceso;
@@ -363,6 +370,5 @@ public class Screen_Login_Activity extends Activity implements TaskCompleted{
     private void hideRingDialog(){
         progressDialog.dismiss();
     }
-
 
 }

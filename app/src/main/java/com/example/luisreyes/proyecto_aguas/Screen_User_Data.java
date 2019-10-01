@@ -396,7 +396,7 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_settings:
+            case R.id.action_opcion1:
                 Toast.makeText(Screen_User_Data.this, "Seleccionó la opción settings", Toast.LENGTH_SHORT).show();
                 // User chose the "Settings" item, show the app settings UI...
                 return true;

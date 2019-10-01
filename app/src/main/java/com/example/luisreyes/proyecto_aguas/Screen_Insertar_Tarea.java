@@ -53,8 +53,8 @@ public class Screen_Insertar_Tarea extends AppCompatActivity implements TaskComp
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         myToolbar.setBackgroundColor(Color.TRANSPARENT);
-
         setSupportActionBar(myToolbar);
+
         getSupportActionBar().setIcon(getDrawable(R.drawable.toolbar_image));
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
@@ -139,7 +139,7 @@ public class Screen_Insertar_Tarea extends AppCompatActivity implements TaskComp
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_settings:
+            case R.id.action_opcion1:
                 Toast.makeText(Screen_Insertar_Tarea.this, "Seleccionó la opción settings", Toast.LENGTH_SHORT).show();
                 // User chose the "Settings" item, show the app settings UI...
                 return true;

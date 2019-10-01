@@ -111,8 +111,8 @@ public class Screen_Camera extends Activity {
     public static final String CAMERA_BACK = "0";
     private boolean isFlashSupported;
     private boolean isContinuousAutoFocusSupported;
-    private boolean isTorchOn;
-    private boolean isFlashOn;
+    private boolean isTorchOn = false;
+    private boolean isFlashOn = false;
     private String cameraId;
     private CameraDevice cameraDevice;
     private CameraCaptureSession cameraCaptureSessions;
@@ -171,6 +171,13 @@ public class Screen_Camera extends Activity {
         flashButton = (Button)findViewById(R.id.button_flash_picture);
         torchButton = (Button)findViewById(R.id.button_torch_picture);
 
+        flashButton.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+            @Override
+            public void onClick(View view) {
+                switchFlash();
+            }
+        });
         torchButton.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
@@ -186,7 +193,6 @@ public class Screen_Camera extends Activity {
                 resultIntent.putExtra("photo_path", photo_path);
                 setResult(RESULT_OK, resultIntent);
                 finish();
-                closeCamera();
             }
         });
 
@@ -262,14 +268,11 @@ public class Screen_Camera extends Activity {
 
                 if(isTorchOn){
                     captureBuilder.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_TORCH);
+                }else if(isFlashOn){
+                    captureBuilder.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_SINGLE);
                 }else{
                     captureBuilder.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_OFF);
                 }
-//                if(isFlashOn){
-//                    captureBuilder.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_SINGLE);
-//                }else{
-//                    captureBuilder.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_OFF);
-//                }
 
                 int rotation = getWindowManager().getDefaultDisplay().getRotation();
                 captureBuilder.set(CaptureRequest.JPEG_ORIENTATION, ORIENTATIONS.get(rotation));
@@ -352,9 +355,9 @@ public class Screen_Camera extends Activity {
                     public void onConfigured(@NonNull CameraCaptureSession cameraCaptureSession) {
 
                         try {
-                            captureRequBuilder.set(CaptureRequest.CONTROL_AF_TRIGGER,
-                                    CameraMetadata.CONTROL_AF_TRIGGER_START);
-                            mState = STATE_WAITING_LOCK;
+//                            captureRequBuilder.set(CaptureRequest.CONTROL_AF_TRIGGER,
+//                                    CameraMetadata.CONTROL_AF_TRIGGER_START);
+//                            mState = STATE_WAITING_LOCK;
                             cameraCaptureSession.capture(captureBuilder.build(), captureListener, mBackgroundHandler);
                         } catch (CameraAccessException e) {
                             e.printStackTrace();
@@ -410,6 +413,8 @@ public class Screen_Camera extends Activity {
         }
         if(isTorchOn){
             captureRequBuilder.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_TORCH);
+        }else if(isFlashOn){
+            captureRequBuilder.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_SINGLE);
         }else{
             captureRequBuilder.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_OFF);
         }
@@ -487,42 +492,73 @@ public class Screen_Camera extends Activity {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void switchTorch() {
         try {
-//            if (cameraId.equals(CAMERA_BACK)) {
-            if (isFlashSupported) {
-                if (isTorchOn) {
-//                        captureRequBuilder.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_OFF);
-//                        cameraCaptureSessions.setRepeatingRequest(captureRequBuilder.build(), null, null);
-                    torchButton.setBackground(getDrawable(R.drawable.ic_highlight_white_24dp));
-                    isTorchOn = false;
-                } else {
-                    captureRequBuilder.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_TORCH);
-//                        //captureRequBuilder.set(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AE_MODE_ON_AUTO_FLASH);
-//                        //captureRequBuilder.set(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AE_MODE_ON_ALWAYS_FLASH);
-//                        //captureRequBuilder.set(CaptureRequest.AE_MODE, CaptureRequest.CONTROL_AE_MODE_ON_ALWAYS_FLASH);
-                    cameraCaptureSessions.setRepeatingRequest(captureRequBuilder.build(), null, null);
-                    torchButton.setBackground(getDrawable(R.drawable.ic_highlight_blue_24dp));
-                    isTorchOn = true;
+            if (cameraId.equals(CAMERA_BACK)) {
+                if (isFlashSupported) {
+                    if (isTorchOn) {
+                        captureRequBuilder.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_OFF);
+                        cameraCaptureSessions.setRepeatingRequest(captureRequBuilder.build(), null, null);
+                        torchButton.setBackground(getDrawable(R.drawable.ic_highlight_white_24dp));
+                        isTorchOn = false;
+                    } else {
+                        if(isFlashOn){
+                            switchFlash();
+                        }
+                        captureRequBuilder.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_TORCH);
+                        cameraCaptureSessions.setRepeatingRequest(captureRequBuilder.build(), null, null);
+                        torchButton.setBackground(getDrawable(R.drawable.ic_highlight_blue_24dp));
+                        isTorchOn = true;
+                    }
                 }
             }
-//            }
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public void switchFlash() {
+        try {
+            if (cameraId.equals(CAMERA_BACK)) {
+                if (isFlashSupported) {
+                    if (isFlashOn) {
+                        captureRequBuilder.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_OFF);
+                        cameraCaptureSessions.setRepeatingRequest(captureRequBuilder.build(), null, null);
+                        flashButton.setBackground(getDrawable(R.drawable.ic_flash_off_black_24dp));
+                        isFlashOn = false;
+                    } else {
+                        if(isTorchOn){
+                            switchTorch();
+                        }
+                        captureRequBuilder.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_SINGLE);
+                        cameraCaptureSessions.setRepeatingRequest(captureRequBuilder.build(), null, null);
+                        flashButton.setBackground(getDrawable(R.drawable.ic_flash_on_black_24dp));
+                        isFlashOn = true;
+                    }
+                }
+            }
+        } catch (CameraAccessException e) {
+            e.printStackTrace();
+        }
+    }
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void setupTorchButton() {
         if (isFlashSupported) {
             torchButton.setVisibility(View.VISIBLE);
-
+            flashButton.setVisibility(View.VISIBLE);
             if (isTorchOn) {
                 torchButton.setBackground(getDrawable(R.drawable.ic_highlight_blue_24dp));
             } else {
                 torchButton.setBackground(getDrawable(R.drawable.ic_highlight_white_24dp));
             }
+            if (isFlashOn) {
+                flashButton.setBackground(getDrawable(R.drawable.ic_flash_on_black_24dp));
+            } else {
+                flashButton.setBackground(getDrawable(R.drawable.ic_flash_off_black_24dp));
+            }
 
         } else {
             torchButton.setVisibility(View.GONE);
+            flashButton.setVisibility(View.GONE);
         }
     }
 
@@ -600,9 +636,7 @@ public class Screen_Camera extends Activity {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onStop() {
-        if(isTorchOn){
-            switchTorch();
-        }
+        closeCamera();
         super.onStop();
     }
 
@@ -610,9 +644,7 @@ public class Screen_Camera extends Activity {
     @Override
     protected void onPause() {
         stopBackgroundThread();
-        if(isTorchOn){
-            switchTorch();
-        }
+        closeCamera();
         super.onPause();
     }
 
