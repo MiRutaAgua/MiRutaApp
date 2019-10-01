@@ -98,7 +98,7 @@ public class Screen_Camera extends Activity {
 
     private Button button_cancel_picture_screen_x, button_save_picture_screen_x;
     private Button button_take_picture_screen_x;
-    private Button flashButton, torchButton;
+    private Button flashButton, torchButton, selectButton, roteButton;
     private TextureView textureView;
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
     static {
@@ -113,6 +113,8 @@ public class Screen_Camera extends Activity {
     private boolean isContinuousAutoFocusSupported;
     private boolean isTorchOn = false;
     private boolean isFlashOn = false;
+    private boolean isVisibleOn = false;
+    private boolean isFrontCameraOn = false;
     private String cameraId;
     private CameraDevice cameraDevice;
     private CameraCaptureSession cameraCaptureSessions;
@@ -170,7 +172,32 @@ public class Screen_Camera extends Activity {
         button_cancel_picture_screen_x = (Button)findViewById(R.id.button_cancel_picture);
         flashButton = (Button)findViewById(R.id.button_flash_picture);
         torchButton = (Button)findViewById(R.id.button_torch_picture);
+        roteButton = (Button)findViewById(R.id.button_rote_picture);
+        selectButton = (Button)findViewById(R.id.button_select_picture);
 
+        roteButton.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+            @Override
+            public void onClick(View view) {
+                closeCamera();
+                if(isFrontCameraOn){
+                    openCamera();
+                    roteButton.setBackground(getDrawable(R.drawable.ic_camera_front_black_24dp));
+                    isFrontCameraOn = false;
+                }else{
+                    openCameraFront();
+                    roteButton.setBackground(getDrawable(R.drawable.ic_camera_rear_black_24dp));
+                    isFrontCameraOn = true;
+                }
+            }
+        });
+        selectButton.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+            @Override
+            public void onClick(View view) {
+                switchVisibilityButtonsLight();
+            }
+        });
         flashButton.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
@@ -203,8 +230,8 @@ public class Screen_Camera extends Activity {
 
                 button_save_picture_screen_x.setVisibility(View.GONE);
                 button_cancel_picture_screen_x.setVisibility(View.GONE);
-                torchButton.setVisibility(View.VISIBLE);
-                flashButton.setVisibility(View.VISIBLE);
+                setupTorchButton();
+                roteButton.setVisibility(View.VISIBLE);
                 button_take_picture_screen_x.setVisibility(View.VISIBLE);
                 createCameraPreview();
             }
@@ -219,6 +246,8 @@ public class Screen_Camera extends Activity {
                     button_cancel_picture_screen_x.setVisibility(View.VISIBLE);
                     torchButton.setVisibility(View.GONE);
                     flashButton.setVisibility(View.GONE);
+                    selectButton.setVisibility(View.GONE);
+                    roteButton.setVisibility(View.GONE);
                     button_take_picture_screen_x.setVisibility(View.GONE);
                     playOnOffSound();
                     takePicture();
@@ -229,6 +258,18 @@ public class Screen_Camera extends Activity {
             }
         });
 
+    }
+
+    private void switchVisibilityButtonsLight() {
+        if(isVisibleOn){
+            isVisibleOn=false;
+            flashButton.setVisibility(View.GONE);
+            torchButton.setVisibility(View.GONE);
+        }else {
+            isVisibleOn=true;
+            flashButton.setVisibility(View.VISIBLE);
+            torchButton.setVisibility(View.VISIBLE);
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -430,7 +471,6 @@ public class Screen_Camera extends Activity {
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void openCamera(){
-
         CameraManager manager = (CameraManager)getSystemService(Context.CAMERA_SERVICE);
         try{
             cameraId = manager.getCameraIdList()[0];
@@ -498,6 +538,7 @@ public class Screen_Camera extends Activity {
                         captureRequBuilder.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_OFF);
                         cameraCaptureSessions.setRepeatingRequest(captureRequBuilder.build(), null, null);
                         torchButton.setBackground(getDrawable(R.drawable.ic_highlight_white_24dp));
+                        selectButton.setBackground(getDrawable(R.drawable.ic_highlight_white_24dp));
                         isTorchOn = false;
                     } else {
                         if(isFlashOn){
@@ -506,8 +547,11 @@ public class Screen_Camera extends Activity {
                         captureRequBuilder.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_TORCH);
                         cameraCaptureSessions.setRepeatingRequest(captureRequBuilder.build(), null, null);
                         torchButton.setBackground(getDrawable(R.drawable.ic_highlight_blue_24dp));
+                        selectButton.setBackground(getDrawable(R.drawable.ic_highlight_blue_24dp));
                         isTorchOn = true;
                     }
+                    torchButton.setVisibility(View.GONE);
+                    flashButton.setVisibility(View.GONE);
                 }
             }
         } catch (CameraAccessException e) {
@@ -524,6 +568,7 @@ public class Screen_Camera extends Activity {
                         captureRequBuilder.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_OFF);
                         cameraCaptureSessions.setRepeatingRequest(captureRequBuilder.build(), null, null);
                         flashButton.setBackground(getDrawable(R.drawable.ic_flash_off_black_24dp));
+                        selectButton.setBackground(getDrawable(R.drawable.ic_flash_off_black_24dp));
                         isFlashOn = false;
                     } else {
                         if(isTorchOn){
@@ -532,8 +577,11 @@ public class Screen_Camera extends Activity {
                         captureRequBuilder.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_SINGLE);
                         cameraCaptureSessions.setRepeatingRequest(captureRequBuilder.build(), null, null);
                         flashButton.setBackground(getDrawable(R.drawable.ic_flash_on_black_24dp));
+                        selectButton.setBackground(getDrawable(R.drawable.ic_flash_on_black_24dp));
                         isFlashOn = true;
                     }
+                    torchButton.setVisibility(View.GONE);
+                    flashButton.setVisibility(View.GONE);
                 }
             }
         } catch (CameraAccessException e) {
@@ -543,8 +591,7 @@ public class Screen_Camera extends Activity {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void setupTorchButton() {
         if (isFlashSupported) {
-            torchButton.setVisibility(View.VISIBLE);
-            flashButton.setVisibility(View.VISIBLE);
+            selectButton.setVisibility(View.VISIBLE);
             if (isTorchOn) {
                 torchButton.setBackground(getDrawable(R.drawable.ic_highlight_blue_24dp));
             } else {
@@ -557,8 +604,7 @@ public class Screen_Camera extends Activity {
             }
 
         } else {
-            torchButton.setVisibility(View.GONE);
-            flashButton.setVisibility(View.GONE);
+            selectButton.setVisibility(View.GONE);
         }
     }
 
