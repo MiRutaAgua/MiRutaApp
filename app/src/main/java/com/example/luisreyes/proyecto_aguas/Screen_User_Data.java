@@ -74,10 +74,7 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         myToolbar.setBackgroundColor(Color.TRANSPARENT);
-
         setSupportActionBar(myToolbar);
-        getSupportActionBar().setIcon(getDrawable(R.drawable.toolbar_image));
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         button_continuar = (ImageView)findViewById(R.id.button_screen_user_data_continuar);
         circlImageView_photo = (CircleImageView)findViewById(R.id.circleImageView_screen_user_data_photo);
@@ -85,48 +82,43 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
         telefono = (TextView)findViewById(R.id.textView_screen_user_data_telefono);
 
         String json_usuario_string = getIntent().getStringExtra("usuario");
-        try {
+        if(json_usuario_string != null && !TextUtils.isEmpty(json_usuario_string)){
+            try {
+                JSONObject json_usuario = new JSONObject(json_usuario_string);
+                Screen_Login_Activity.operario_JSON = json_usuario;
+                //Bitmap bitmap = Screen_Validate.getImageFromString(foto_usuario);
+                //circlImageView_photo.setImageBitmap(bitmap);/////////////////////**************************************************************************************
+                nombre_operario = json_usuario.getString("nombre");
+                apellidos = json_usuario.getString("apellidos");
+                usuario = json_usuario.getString("usuario");
+                clave = json_usuario.getString("clave");
+                image = json_usuario.getString("foto");
+                nombre.setText(nombre_operario + " " + apellidos);
+                telefono.setText(json_usuario.getString("telefonos"));
 
-
-            JSONObject json_usuario = new JSONObject(json_usuario_string);
-
-            Screen_Login_Activity.operario_JSON = json_usuario;
-
-
-            //Bitmap bitmap = Screen_Validate.getImageFromString(foto_usuario);
-            //circlImageView_photo.setImageBitmap(bitmap);/////////////////////**************************************************************************************
-
-            nombre_operario = json_usuario.getString("nombre");
-            apellidos = json_usuario.getString("apellidos");
-            usuario = json_usuario.getString("usuario");
-            clave = json_usuario.getString("clave");
-            image = json_usuario.getString("foto");
-            nombre.setText(nombre_operario + " "+ apellidos);
-            telefono.setText(json_usuario.getString("telefonos"));
-
-            if(checkConection()) {
-                showRingDialog("Cargado informacion de operario...");
-
-                String type_script = "download_user_image";
-                BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_User_Data.this);
-                backgroundWorker.execute(type_script, usuario);
-            }else{
-                if(Screen_Login_Activity.dBoperariosController.databasefileExists(this) && Screen_Login_Activity.dBoperariosController.checkForTableExists()) {
-                    //Toast.makeText(Screen_User_Data.this,"Existe y no esta vacia", Toast.LENGTH_LONG).show();
-                    String user = Screen_Login_Activity.dBoperariosController.get_one_operario_from_Database(usuario);
-                    JSONObject jsonObject = new JSONObject(user);
-                    String user_foto = jsonObject.getString("foto");
-                    //Toast.makeText(Screen_User_Data.this, user_foto, Toast.LENGTH_LONG).show();
-                    Bitmap foto = getPhotoUserLocal(getSimilarFile(user_foto));
-                    if(foto != null) {
-                        circlImageView_photo.setBackgroundColor(Color.TRANSPARENT);
-                        circlImageView_photo.setImageBitmap(foto);
+                if (checkConection()) {
+                    showRingDialog("Cargado informacion de operario...");
+                    String type_script = "download_user_image";
+                    BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_User_Data.this);
+                    backgroundWorker.execute(type_script, usuario);
+                } else {
+                    if (Screen_Login_Activity.dBoperariosController.databasefileExists(this) && Screen_Login_Activity.dBoperariosController.checkForTableExists()) {
+                        //Toast.makeText(Screen_User_Data.this,"Existe y no esta vacia", Toast.LENGTH_LONG).show();
+                        String user = Screen_Login_Activity.dBoperariosController.get_one_operario_from_Database(usuario);
+                        JSONObject jsonObject = new JSONObject(user);
+                        String user_foto = jsonObject.getString("foto");
+                        //Toast.makeText(Screen_User_Data.this, user_foto, Toast.LENGTH_LONG).show();
+                        Bitmap foto = getPhotoUserLocal(getSimilarFile(user_foto));
+                        if (foto != null) {
+                            circlImageView_photo.setBackgroundColor(Color.TRANSPARENT);
+                            circlImageView_photo.setImageBitmap(foto);
+                        }
                     }
                 }
-            }
 
-        } catch (JSONException e) {
-            e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
 
         circlImageView_photo.setOnClickListener(new View.OnClickListener() {
@@ -182,7 +174,7 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
         if(requestCode == REQUEST_TAKE_PHOTO_FULL_SIZE){
             if (resultCode == RESULT_OK) {
                 try {
-                    saveBitmapImage(getPhotoUserLocal(mCurrentPhotoPath), "operario_"+Screen_Login_Activity.operario_JSON.getString("usuario"));
+                    mCurrentPhotoPath = saveBitmapImage(getPhotoUserLocal(mCurrentPhotoPath), "operario_"+Screen_Login_Activity.operario_JSON.getString("usuario"));
                     File file = new File(mCurrentPhotoPath);
                     bitmap_user_photo = null;
                     bitmap_user_photo = getPhotoUserLocal(mCurrentPhotoPath);
@@ -249,8 +241,12 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
             }
             else {
                 circlImageView_photo.setBackgroundColor(Color.TRANSPARENT);
-                circlImageView_photo.setImageBitmap(Screen_Register_Operario.getImageFromString(result));
-                saveBitmapImage(Screen_Register_Operario.getImageFromString(result), usuario);
+                Bitmap bitmap = null;
+                bitmap = Screen_Register_Operario.getImageFromString(result);
+                if(bitmap != null){
+                    circlImageView_photo.setImageBitmap(bitmap);
+                    saveBitmapImage(Screen_Register_Operario.getImageFromString(result), usuario);
+                }
             }
         }
     }
@@ -287,10 +283,7 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
         }
     }
 
-    private void saveBitmapImage(Bitmap bitmap, String file_name){
-        bitmap = Bitmap.createScaledBitmap(bitmap, 1280, 960, true);
-        file_name = "operario_"+file_name;
-
+    private String saveBitmapImage(Bitmap bitmap, String file_name){
         File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_operarios");
         if (!myDir.exists()) {
             myDir.mkdirs();
@@ -318,6 +311,7 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return file.getAbsolutePath();
     }
 
     private File createImageFile() throws IOException {

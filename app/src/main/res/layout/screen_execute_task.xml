@@ -109,31 +109,7 @@
             android:layout_width="match_parent"
             android:orientation="vertical"
             android:gravity="center"
-            android:layout_marginTop="20dip">
-
-            <ImageView
-                android:id="@+id/button_scan_serial_number_screen_exec_task"
-                android:layout_width="266dp"
-                android:layout_height="50dp"
-                android:src="@drawable/screen_exec_task_scan_serie"
-                />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="        "
-                android:layout_gravity="center"
-                android:textSize="18dp"
-                android:id="@+id/textView_serial_number_screen_exec_task"
-                />
-        </LinearLayout>
-
-        <LinearLayout
-
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:layout_marginTop="1dp">
+            android:layout_marginTop="30dp">
 
 
             <ImageView
@@ -148,44 +124,6 @@
                 android:layout_height="500dp"
                 android:src="@drawable/screen_unity_counter_imagen"
                 android:visibility="gone"
-                />
-        </LinearLayout>
-
-
-        <LinearLayout
-
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_marginTop="5dip">
-
-
-            <ImageView
-                android:id="@+id/button_scan_module_screen_exec_task"
-                android:layout_width="266dp"
-                android:layout_height="50dp"
-                android:src="@drawable/screen_exec_task_scan_modulo"
-
-                />
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:gravity="center"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:orientation="horizontal"
-
-            >
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="       "
-                android:layout_gravity="center"
-                android:textSize="18dp"
-                android:id="@+id/textView_module_number_screen_exec_task"
-                android:visibility="invisible"
                 />
         </LinearLayout>
 
@@ -239,6 +177,70 @@
 
             </LinearLayout>
         </LinearLayout>
+
+        <LinearLayout
+
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_marginTop="20dip">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="        "
+                android:layout_gravity="center"
+                android:textSize="18dp"
+                android:id="@+id/textView_serial_number_screen_exec_task"
+                />
+            <ImageView
+                android:id="@+id/button_scan_serial_number_screen_exec_task"
+                android:layout_width="266dp"
+                android:layout_height="50dp"
+                android:src="@drawable/screen_exec_task_scan_serie"
+                />
+        </LinearLayout>
+
+
+
+
+        <LinearLayout
+
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="5dip">
+
+
+            <ImageView
+                android:id="@+id/button_scan_module_screen_exec_task"
+                android:layout_width="266dp"
+                android:layout_height="50dp"
+                android:src="@drawable/screen_exec_task_scan_modulo"
+
+                />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:gravity="center"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="       "
+                android:layout_gravity="center"
+                android:textSize="18dp"
+                android:id="@+id/textView_module_number_screen_exec_task"
+                android:visibility="invisible"
+                />
+        </LinearLayout>
+
 
         <LinearLayout
 

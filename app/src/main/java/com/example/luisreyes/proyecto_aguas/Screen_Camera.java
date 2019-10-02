@@ -14,6 +14,7 @@ import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.graphics.SurfaceTexture;
 import android.graphics.drawable.BitmapDrawable;
+import android.hardware.SensorManager;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCaptureSession;
 import android.hardware.camera2.CameraCharacteristics;
@@ -42,6 +43,7 @@ import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Size;
 import android.util.SparseIntArray;
+import android.view.OrientationEventListener;
 import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
@@ -134,6 +136,9 @@ public class Screen_Camera extends Activity {
     private String photo_folder = "fotos_tareas";
     private String contador = "";
 
+    public static int sensorOrientation;
+    private OrientationEventListener orientationListener;
+
     CameraDevice.StateCallback stateCallback = new CameraDevice.StateCallback() {
         @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
         @Override
@@ -185,6 +190,33 @@ public class Screen_Camera extends Activity {
         photo_name = getIntent().getStringExtra("photo_name");
         photo_folder = getIntent().getStringExtra("photo_folder");
         contador = getIntent().getStringExtra("contador");
+
+        orientationListener = new OrientationEventListener(this, SensorManager.SENSOR_DELAY_UI * 10) {
+            public void onOrientationChanged(int orientation) {
+//                Toast.makeText(Screen_Camera.this, "new : "+String.valueOf(orientation), Toast.LENGTH_LONG).show();
+                sensorOrientation = orientation;
+//                int value = Screen_Camera.sensorOrientation;
+//                if(value < 45 && value >= 315){
+//                    Matrix matrix = new Matrix();
+//                    imageView.setScaleType(ImageView.ScaleType.MATRIX);   //required
+//                    matrix.postRotate(imageView.getDrawable().getBounds().width()/2, imageView.getDrawable().getBounds().height()/2);
+//                    imageView.setImageMatrix(matrix);
+//                }else if(value >= 225 && value < 315) {
+//                    Matrix matrix = new Matrix();
+//                    imageView.setScaleType(ImageView.ScaleType.MATRIX);   //required
+//                    matrix.postRotate((float) angle, pivotX, pivotY);
+//                    imageView.setImageMatrix(matrix);
+//                }else if(value >= 135 && value < 225) {
+//                    currentOrientation = 4;
+//                }else if(value >= 45 && value < 135) {
+//                    Matrix matrix = new Matrix();
+//                    imageView.setScaleType(ImageView.ScaleType.MATRIX);   //required
+//                    matrix.postRotate((float) angle, pivotX, pivotY);
+//                    imageView.setImageMatrix(matrix);
+//                }
+            }
+        };
+        orientationListener.enable();
 
         textureView = (TextureView)findViewById(R.id.textureView);
 
@@ -666,6 +698,7 @@ public class Screen_Camera extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+        orientationListener.enable();
         startBackgroundThread();
         if(textureView.isAvailable()){
             openCamera();
@@ -678,6 +711,7 @@ public class Screen_Camera extends Activity {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onStop() {
+        orientationListener.disable();
         closeCamera();
         super.onStop();
     }
@@ -685,6 +719,7 @@ public class Screen_Camera extends Activity {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onPause() {
+        orientationListener.disable();
         stopBackgroundThread();
         closeCamera();
         super.onPause();

@@ -7,9 +7,8 @@ import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.annotation.FloatRange;
-import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -19,21 +18,22 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 /**
  * Created by Alejandro on 27/08/2019.
  */
-
+@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class Screen_Zoom_Photo extends Activity{
 
     private ImageView imageView_photo;
     private Bitmap bitmap_photo;
     private Button button_cancel_picture_screen_x, button_save_picture_screen_x;
-
-    Matrix matrix = new Matrix();
-    Float scale=1f;
-    ScaleGestureDetector SGD;
+    private int currentOrientation;
+//    Matrix matrix = new Matrix();
+//    Float scale=1f;
+//    ScaleGestureDetector SGD;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,15 +48,41 @@ public class Screen_Zoom_Photo extends Activity{
         button_cancel_picture_screen_x = (Button)findViewById(R.id.button_cancel_picture);
         imageView_photo = (ImageView)findViewById(R.id.imageView_screen_zoom_photo);
 
+        int value = Screen_Camera.sensorOrientation;
+        if(value < 45 && value >= 315){
+            currentOrientation = 1;
+        }else if(value >= 225 && value < 315) {
+            currentOrientation = 2;
+        }else if(value >= 135 && value < 225) {
+            currentOrientation = 4;
+        }else if(value >= 45 && value < 135) {
+            currentOrientation = 3;
+        }
+
         if(bitmap_photo!=null) {
+            if(currentOrientation == 2){
+                float degrees = -90;//rotation degree
+                Matrix matrix = new Matrix();
+                matrix.setRotate(degrees);
+                bitmap_photo = Bitmap.createBitmap(bitmap_photo, 0, 0, bitmap_photo.getWidth(), bitmap_photo.getHeight(), matrix, true);
+                replaceBitmapImage(bitmap_photo, foto, 100);
+            }else if(currentOrientation == 3){
+                float degrees = 90;//rotation degree
+                Matrix matrix = new Matrix();
+                matrix.setRotate(degrees);
+                bitmap_photo = Bitmap.createBitmap(bitmap_photo, 0, 0, bitmap_photo.getWidth(), bitmap_photo.getHeight(), matrix, true);
+                replaceBitmapImage(bitmap_photo, foto, 100);
+            }else if(currentOrientation == 4){
+                float degrees = 180;//rotation degree
+                Matrix matrix = new Matrix();
+                matrix.setRotate(degrees);
+                bitmap_photo = Bitmap.createBitmap(bitmap_photo, 0, 0, bitmap_photo.getWidth(), bitmap_photo.getHeight(), matrix, true);
+                replaceBitmapImage(bitmap_photo, foto, 100);
+            }
             imageView_photo.setImageBitmap(bitmap_photo);
         }
 
-        SGD = new ScaleGestureDetector(this, new ScaleListener());
-//        imageView_photo.getLayoutParams().height = 1920;
-//        imageView_photo.getLayoutParams().width = 1080;
-
-        Toast.makeText(Screen_Zoom_Photo.this, "Width: "+bitmap_photo.getWidth()+"    "+"Height: "+bitmap_photo.getHeight(), Toast.LENGTH_LONG).show();
+//        Toast.makeText(Screen_Zoom_Photo.this, String.valueOf(Screen_Camera.sensorOrientation), Toast.LENGTH_LONG).show();
 
 
         button_cancel_picture_screen_x.setOnClickListener(new View.OnClickListener() {
@@ -80,20 +106,50 @@ public class Screen_Zoom_Photo extends Activity{
             }
         });
     }
-    private class  ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener{
 
-        @Override
-        public boolean onScale(ScaleGestureDetector detector) {
+//---------------------------------------------------------------------------------------------------------------------------
+//        SGD = new ScaleGestureDetector(this, new ScaleListener());
+//        imageView_photo.getLayoutParams().height = 1920;
+//        imageView_photo.getLayoutParams().width = 1080;
 
-            scale = scale*detector.getScaleFactor();
-            scale = Math.max(0.1f, Math.min(scale, 5f));
-            matrix.setScale(scale,scale);
-            imageView_photo.setImageMatrix(matrix);
-            return true;
+//    private class  ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener{
+//        @Override
+//        public boolean onScale(ScaleGestureDetector detector) {
+//
+//            scale = scale*detector.getScaleFactor();
+//            scale = Math.max(0.1f, Math.min(scale, 5f));
+//            matrix.setScale(scale,scale);
+//            imageView_photo.setImageMatrix(matrix);
+//            return true;
+//
+//        }
+//    }
+//    @Override
+//    public boolean onTouchEvent(MotionEvent event) {
+//        SGD.onTouchEvent(event);
+//        return true;
+//    }//-------------------------------------------------------------------------------------------------------------------
 
+    private void replaceBitmapImage(Bitmap bitmap, String file_name, int quality){
+        if(quality > 100){
+            quality = 100;
+        }else if(quality < 0){
+            quality = 0;
+        }
+        if(bitmap!= null) {
+            File file = new File(file_name);
+            if (file.exists())
+                file.delete();
+            try {
+                FileOutputStream out = new FileOutputStream(file);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                out.flush();
+                out.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
-
     public Bitmap getPhotoUserLocal(String path){
         File file = new File(path);
         if(file.exists()) {
@@ -114,10 +170,5 @@ public class Screen_Zoom_Photo extends Activity{
             return null;
         }
     }
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
 
-        SGD.onTouchEvent(event);
-        return true;
-    }
 }

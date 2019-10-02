@@ -108,6 +108,8 @@
             android:configChanges="orientation"
             android:screenOrientation="portrait"></activity>
         <activity android:name=".Screen_Camera"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
             ></activity>
         <activity android:name=".Screen_Insertar_Tarea"
             android:configChanges="orientation"

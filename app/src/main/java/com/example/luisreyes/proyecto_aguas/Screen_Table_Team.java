@@ -2,8 +2,10 @@ package com.example.luisreyes.proyecto_aguas;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -141,14 +143,32 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
                     }
                 }
                 try {
-                    String acceso = Screen_Login_Activity.tarea_JSON.getString("acceso");
-                    acceso = acceso.replace("\n", "");
-                    acceso = acceso.replace(" ", "");
-                    //Toast.makeText(Screen_Table_Team.this, "Acceso -> \n"+acceso, Toast.LENGTH_SHORT).show();
-                    if (acceso.contains("BAT")) {
-                        startActivity(intent_open_screen_battery_counter);
-                    } else {
-                        startActivity(intent_open_screen_unity_counter);
+                    if(Screen_Login_Activity.tarea_JSON.getString("operario").equals(Screen_Login_Activity.operario_JSON.getString("usuario"))) {
+                        acceder_a_Tarea();
+                    }else {
+                        new AlertDialog.Builder(Screen_Table_Team.this)
+                                .setTitle("Cambiar Operario")
+                                .setMessage("Esta tarea corresponde a otro operario\n¿Desea asignarse esta tarea?")
+                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener(){
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        try {
+                                            Screen_Login_Activity.tarea_JSON.put("operario", Screen_Login_Activity.operario_JSON.getString("usuario").replace("\n", ""));
+                                        } catch (JSONException e) {
+                                            Toast.makeText(Screen_Table_Team.this, "Error -> No pudo asignarse tarea a este operario", Toast.LENGTH_SHORT).show();
+                                            e.printStackTrace();
+                                            return;
+                                        }
+                                        acceder_a_Tarea();
+                                    }
+                                })
+                                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                                    }
+                                }).show();
+
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -216,6 +236,22 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
             }
         });
         descargarTareas();
+    }
+
+    private void acceder_a_Tarea(){
+        try {
+            String acceso = Screen_Login_Activity.tarea_JSON.getString("acceso");
+            acceso = acceso.replace("\n", "");
+            acceso = acceso.replace(" ", "");
+            //Toast.makeText(Screen_Table_Team.this, "Acceso -> \n"+acceso, Toast.LENGTH_SHORT).show();
+            if (acceso.contains("BAT")) {
+                startActivity(intent_open_screen_battery_counter);
+            } else {
+                startActivity(intent_open_screen_unity_counter);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void descargarTareas() {

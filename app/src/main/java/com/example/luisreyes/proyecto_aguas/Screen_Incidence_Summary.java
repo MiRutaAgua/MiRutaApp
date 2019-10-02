@@ -101,11 +101,11 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
             e.printStackTrace();
             Toast.makeText(Screen_Incidence_Summary.this, "no se pudo obtener nombre de cliente", Toast.LENGTH_LONG).show();
         }
-        try {
-            Toast.makeText(Screen_Incidence_Summary.this, Screen_Login_Activity.tarea_JSON.getString("foto_incidencia_1"), Toast.LENGTH_LONG).show();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            Toast.makeText(Screen_Incidence_Summary.this, Screen_Login_Activity.tarea_JSON.getString("foto_incidencia_1"), Toast.LENGTH_LONG).show();
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
         Bitmap bitmapf = getPhotoUserLocal(Screen_Incidence.mCurrentPhotoPath_incidencia_1);
         if(bitmapf!=null){
             bitmap1_no_nulo =true;

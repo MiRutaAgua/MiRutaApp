@@ -265,6 +265,7 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
                                 String fecha_cita = jsonObject.getString("fecha_hora_cita").replace("\n", "");
                                 MyCounter contador = new MyCounter();
                                 contador.setDateTime(DBtareasController.getFechaHoraFromString(fecha_cita));
+                                contador.setNumero_serie_contador(numero_serie_contador);
                                 contador.setContador(numero_serie_contador);
                                 contador.setAnno_contador(anno_contador);
                                 contador.setCalibre(calibre);

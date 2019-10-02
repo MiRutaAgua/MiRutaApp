@@ -186,10 +186,13 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
             }
             else {
                 //Toast.makeText(Screen_Battery_counter.this, "Foto de obtenida", Toast.LENGTH_SHORT).show();
-                Bitmap bitmap = Screen_Register_Operario.getImageFromString(result);
-                imagen_contador.setVisibility(View.VISIBLE);
-                imagen_contador.setImageBitmap(bitmap);
-                saveBitmapImage(bitmap, Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador")+"_foto_antes_instalacion");
+                Bitmap bitmap = null;
+                bitmap = Screen_Register_Operario.getImageFromString(result);
+                if(bitmap!= null) {
+                    imagen_contador.setVisibility(View.VISIBLE);
+                    imagen_contador.setImageBitmap(bitmap);
+                    saveBitmapImage(bitmap, Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador") + "_foto_antes_instalacion");
+                }
             }
         }
     }
