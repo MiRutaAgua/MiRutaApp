@@ -11,7 +11,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.Camera;
 import android.graphics.ImageFormat;
 import android.graphics.Matrix;
+import android.graphics.RectF;
 import android.graphics.SurfaceTexture;
+import android.graphics.drawable.BitmapDrawable;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCaptureSession;
 import android.hardware.camera2.CameraCharacteristics;
@@ -66,7 +68,10 @@ import java.util.UUID;
  * Created by luis.reyes on 14/08/2019.
  */
 
+@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class Screen_Camera extends Activity {
+
+    private static final int PHOTO_PREVIEW_REQUEST = 1212;
     /**
      * Camera state: Showing camera preview.
      */
@@ -96,7 +101,6 @@ public class Screen_Camera extends Activity {
      */
     private static final int MAX_PREVIEW_HEIGHT = 1000;
 
-    private Button button_cancel_picture_screen_x, button_save_picture_screen_x;
     private Button button_take_picture_screen_x;
     private Button flashButton, torchButton, selectButton, roteButton;
     private TextureView textureView;
@@ -155,6 +159,25 @@ public class Screen_Camera extends Activity {
     private int mState;
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK){
+            if(requestCode == PHOTO_PREVIEW_REQUEST){
+                String res = data.getStringExtra("result");
+                Toast.makeText(Screen_Camera.this, "Resultado ok: " + res, Toast.LENGTH_SHORT).show();
+                if(res.equals("save")){
+                    Intent resultIntent = new Intent();
+                    resultIntent.putExtra("photo_path", photo_path);
+                    setResult(RESULT_OK, resultIntent);
+                    finish();
+                }else if(res.equals("cancel")){
+                    setupTorchButton();
+                }
+            }
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.screen_camera);
@@ -168,15 +191,12 @@ public class Screen_Camera extends Activity {
         assert textureView != null;
         textureView.setSurfaceTextureListener(textureListener);
         button_take_picture_screen_x = (Button)findViewById(R.id.button_take_picture);
-        button_save_picture_screen_x = (Button)findViewById(R.id.button_save_picture);
-        button_cancel_picture_screen_x = (Button)findViewById(R.id.button_cancel_picture);
         flashButton = (Button)findViewById(R.id.button_flash_picture);
         torchButton = (Button)findViewById(R.id.button_torch_picture);
         roteButton = (Button)findViewById(R.id.button_rote_picture);
         selectButton = (Button)findViewById(R.id.button_select_picture);
 
         roteButton.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View view) {
                 closeCamera();
@@ -192,64 +212,28 @@ public class Screen_Camera extends Activity {
             }
         });
         selectButton.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View view) {
                 switchVisibilityButtonsLight();
             }
         });
         flashButton.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View view) {
                 switchFlash();
             }
         });
         torchButton.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View view) {
                 switchTorch();
             }
         });
-        button_save_picture_screen_x.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-            @Override
-            public void onClick(View view) {
-                Intent resultIntent = new Intent();
-                resultIntent.putExtra("photo_path", photo_path);
-                setResult(RESULT_OK, resultIntent);
-                finish();
-            }
-        });
-
-        button_cancel_picture_screen_x.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-            @Override
-            public void onClick(View view) {
-
-                button_save_picture_screen_x.setVisibility(View.GONE);
-                button_cancel_picture_screen_x.setVisibility(View.GONE);
-                setupTorchButton();
-                roteButton.setVisibility(View.VISIBLE);
-                button_take_picture_screen_x.setVisibility(View.VISIBLE);
-                createCameraPreview();
-            }
-        });
         button_take_picture_screen_x.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View view) {
 
                 if(photo_name != null && !TextUtils.isEmpty(photo_name)) {
-                    button_save_picture_screen_x.setVisibility(View.VISIBLE);
-                    button_cancel_picture_screen_x.setVisibility(View.VISIBLE);
-                    torchButton.setVisibility(View.GONE);
-                    flashButton.setVisibility(View.GONE);
-                    selectButton.setVisibility(View.GONE);
-                    roteButton.setVisibility(View.GONE);
-                    button_take_picture_screen_x.setVisibility(View.GONE);
-                    playOnOffSound();
                     takePicture();
                 }
                 else{
@@ -272,7 +256,6 @@ public class Screen_Camera extends Activity {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void takePicture(){
         if(cameraDevice == null){
             return;
@@ -292,7 +275,6 @@ public class Screen_Camera extends Activity {
                             //Aqui tengo los tamaños
                             width = jpegSizes[i].getWidth();
                             height = jpegSizes[i].getHeight();
-                            Toast.makeText(Screen_Camera.this, "Width: "+width+"    "+"Height: "+height, Toast.LENGTH_LONG).show();
                             break;
                         }
                     }
@@ -383,29 +365,28 @@ public class Screen_Camera extends Activity {
                 };
                 reader.setOnImageAvailableListener(readListener, mBackgroundHandler);
                 final CameraCaptureSession.CaptureCallback captureListener = new CameraCaptureSession.CaptureCallback() {
+                    @RequiresApi(api = Build.VERSION_CODES.M)
                     @Override
                     public void onCaptureCompleted(@NonNull CameraCaptureSession session, @NonNull CaptureRequest request, @NonNull TotalCaptureResult result) {
                         super.onCaptureCompleted(session, request, result);
+                        playOnOffSound();
                         //Toast.makeText(Screen_Camera.this, "Saved "+file, Toast.LENGTH_LONG).show();
-                        //createCameraPreview();
+                        Intent sendFileAddressIntent = new Intent(Screen_Camera.this, Screen_Zoom_Photo.class);
+                        sendFileAddressIntent.putExtra("zooming_photo", photo_path);
+                        startActivityForResult(sendFileAddressIntent, PHOTO_PREVIEW_REQUEST);
+                        createCameraPreview();
                     }
                 };
 
                 cameraDevice.createCaptureSession(outputSurface, new CameraCaptureSession.StateCallback() {
                     @Override
                     public void onConfigured(@NonNull CameraCaptureSession cameraCaptureSession) {
-
                         try {
-//                            captureRequBuilder.set(CaptureRequest.CONTROL_AF_TRIGGER,
-//                                    CameraMetadata.CONTROL_AF_TRIGGER_START);
-//                            mState = STATE_WAITING_LOCK;
                             cameraCaptureSession.capture(captureBuilder.build(), captureListener, mBackgroundHandler);
                         } catch (CameraAccessException e) {
                             e.printStackTrace();
                         }
                     }
-
-
                     @Override
                     public void onConfigureFailed(@NonNull CameraCaptureSession cameraCaptureSession) {
 
@@ -417,8 +398,28 @@ public class Screen_Camera extends Activity {
         }
     }
 
+    private void transformImage(int width, int height){
+        if(textureView == null){
+            return;
+        }
+        Matrix matrix = new Matrix();
+        int rotation = getWindowManager().getDefaultDisplay().getRotation();
+        RectF textureRectF = new RectF(0,0, width, height);
+        RectF previewRectF = new RectF(0,0, imageDimension.getWidth(), imageDimension.getHeight());
+        float centerX = textureRectF.centerX();
+        float centerY = textureRectF.centerY();
+        if(rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270){
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+            previewRectF.offset(centerX - previewRectF.centerX(), centerY- previewRectF.centerY());
+            matrix.setRectToRect(textureRectF, previewRectF, Matrix.ScaleToFit.FILL);
+            float scale = Math.max((float)width/imageDimension.getWidth(),
+                    (float)height / imageDimension.getHeight());
+            matrix.postScale(scale, scale, centerX, centerY);
+            matrix.postRotate(90*(rotation-2), centerX, centerY);
+            textureView.setTransform(matrix);
+        }
+    }
+
     private void createCameraPreview() {
         try {
             SurfaceTexture texture = textureView.getSurfaceTexture();
@@ -468,8 +469,6 @@ public class Screen_Camera extends Activity {
         }
     }
 
-
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void openCamera(){
         CameraManager manager = (CameraManager)getSystemService(Context.CAMERA_SERVICE);
         try{
@@ -499,7 +498,6 @@ public class Screen_Camera extends Activity {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void openCameraFront(){
 
         CameraManager manager = (CameraManager)getSystemService(Context.CAMERA_SERVICE);
@@ -529,7 +527,7 @@ public class Screen_Camera extends Activity {
             e.printStackTrace();
         }
     }
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+
     public void switchTorch() {
         try {
             if (cameraId.equals(CAMERA_BACK)) {
@@ -550,8 +548,6 @@ public class Screen_Camera extends Activity {
                         selectButton.setBackground(getDrawable(R.drawable.ic_highlight_blue_24dp));
                         isTorchOn = true;
                     }
-                    torchButton.setVisibility(View.GONE);
-                    flashButton.setVisibility(View.GONE);
                 }
             }
         } catch (CameraAccessException e) {
@@ -559,7 +555,6 @@ public class Screen_Camera extends Activity {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void switchFlash() {
         try {
             if (cameraId.equals(CAMERA_BACK)) {
@@ -580,18 +575,17 @@ public class Screen_Camera extends Activity {
                         selectButton.setBackground(getDrawable(R.drawable.ic_flash_on_black_24dp));
                         isFlashOn = true;
                     }
-                    torchButton.setVisibility(View.GONE);
-                    flashButton.setVisibility(View.GONE);
                 }
             }
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }
     }
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+
     public void setupTorchButton() {
         if (isFlashSupported) {
-            selectButton.setVisibility(View.VISIBLE);
+            flashButton.setVisibility(View.VISIBLE);
+            torchButton.setVisibility(View.VISIBLE);
             if (isTorchOn) {
                 torchButton.setBackground(getDrawable(R.drawable.ic_highlight_blue_24dp));
             } else {
@@ -604,11 +598,11 @@ public class Screen_Camera extends Activity {
             }
 
         } else {
-            selectButton.setVisibility(View.GONE);
+            flashButton.setVisibility(View.GONE);
+            torchButton.setVisibility(View.GONE);
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void closeCamera() {
         if (null != cameraDevice) {
             cameraDevice.close();
@@ -633,11 +627,13 @@ public class Screen_Camera extends Activity {
         });
         mp.start();
     }
+
     TextureView.SurfaceTextureListener textureListener = new TextureView.SurfaceTextureListener() {
         @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
         @Override
         public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int i, int i1) {
             openCamera();
+            transformImage(textureView.getWidth(), textureView.getHeight());
         }
 
         @Override
