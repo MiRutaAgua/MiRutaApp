@@ -157,20 +157,6 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == CAM_REQUEST_USER_PHOTO) {
-
-            Bitmap foto_nueva = (Bitmap) data.getExtras().get("data");
-            circlImageView_photo.setImageBitmap(foto_nueva);
-
-            saveBitmapImage(foto_nueva, usuario);
-
-            String image = Screen_Register_Operario.getStringImage(foto_nueva);
-            String date_time_modified = DBoperariosController.getStringFromFechaHora(new Date());
-
-            String type = "change_foto";
-            BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_User_Data.this);
-            backgroundWorker.execute(type, usuario, clave, image, date_time_modified);
-        }
         if(requestCode == REQUEST_TAKE_PHOTO_FULL_SIZE){
             if (resultCode == RESULT_OK) {
                 try {

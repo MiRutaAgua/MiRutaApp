@@ -11,6 +11,16 @@ public class MyCounter implements Comparable<MyCounter> {
     private Date dateTime;
     private String contador;
     private String direccion;
+    private String tipo_tarea;
+
+    public String getTipo_tarea() {
+        return tipo_tarea;
+    }
+
+    public void setTipo_tarea(String tipo_tarea) {
+        this.tipo_tarea = tipo_tarea;
+    }
+
     private String cita;
     private String abonado;
     private String numero_serie_contador;
@@ -19,6 +29,15 @@ public class MyCounter implements Comparable<MyCounter> {
     private String telefono1;
     private String telefono2;
     private String fecha_cita;
+    private String numero_abonado;
+
+    public String getNumero_abonado() {
+        return numero_abonado;
+    }
+
+    public void setNumero_abonado(String numero_abonado) {
+        this.numero_abonado = numero_abonado;
+    }
 
     public String getCita() {
         return cita;
@@ -48,7 +67,7 @@ public class MyCounter implements Comparable<MyCounter> {
         return calibre;
     }
     public void setCalibre(String calibre) {
-        this.calibre = calibre;
+        this.calibre = calibre.replace("\n","").replace(" ","")+" mm\n";
     }
     public String getTelefono1() {
         return telefono1;

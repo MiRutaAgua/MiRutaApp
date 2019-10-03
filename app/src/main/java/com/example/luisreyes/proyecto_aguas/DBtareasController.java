@@ -32,7 +32,7 @@ public class DBtareasController extends SQLiteOpenHelper {
     public DBtareasController(Context applicationContext){
         super(applicationContext, database_name, null,  MainActivity.DB_VERSION);
         try {
-            jsonTareaType.put("id", "");
+            jsonTareaType.put("id", 1);
             jsonTareaType.put("poblacion", "unknow");
             jsonTareaType.put("calle", "unknow");
             jsonTareaType.put("numero_edificio", "unknow");
@@ -81,7 +81,7 @@ public class DBtareasController extends SQLiteOpenHelper {
             jsonTareaType.put("date_time_modified", "unknow");
             jsonTareaType.put("status_tarea", "unknow");
 
-            jsonTareaType_empty.put("id", "");
+            jsonTareaType_empty.put("id", 1);
             jsonTareaType_empty.put("poblacion", "unknow");
             jsonTareaType_empty.put("calle", "unknow");
             jsonTareaType_empty.put("numero_edificio", "unknow");

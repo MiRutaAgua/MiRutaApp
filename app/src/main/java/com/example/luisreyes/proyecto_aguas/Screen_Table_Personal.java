@@ -107,9 +107,9 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
 
         lista_desplegable.add("NINGUNO");
         lista_desplegable.add("DIRECCION");
-        lista_desplegable.add("TAREAS");
-        lista_desplegable.add("ABONADO");
-        lista_desplegable.add("# SERIE");
+        lista_desplegable.add("DATOS PRIVADOS");
+        lista_desplegable.add("TIPO DE TAREA");
+        lista_desplegable.add("DATOS ÚNICOS");
         lista_desplegable.add("CITAS");
 
         ArrayAdapter arrayAdapter_spinner = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista_desplegable);
@@ -176,7 +176,7 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
                     arrayAdapter = new ArrayAdapter(Screen_Table_Personal.this, android.R.layout.simple_list_item_1, lista_filtro_direcciones);
                     lista_de_contadores_screen_table_personal.setAdapter(arrayAdapter);
                 }
-                else if(lista_desplegable.get(i).contains("TAREAS")){
+                else if(lista_desplegable.get(i).contains("TIPO DE TAREA")){
                     arrayAdapter = new ArrayAdapter(Screen_Table_Personal.this, android.R.layout.simple_list_item_1, lista_filtro_Tareas);
                     lista_de_contadores_screen_table_personal.setAdapter(arrayAdapter);
                 }
@@ -184,10 +184,10 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
                     arrayAdapter = new ArrayAdapter(Screen_Table_Personal.this, android.R.layout.simple_list_item_1, lista_filtro_Citas);
                     lista_de_contadores_screen_table_personal.setAdapter(arrayAdapter);
                 }
-                else if(lista_desplegable.get(i).contains("# SERIE")){
+                else if(lista_desplegable.get(i).contains("DATOS ÚNICOS")){
                     arrayAdapter = new ArrayAdapter(Screen_Table_Personal.this, android.R.layout.simple_list_item_1, lista_filtro_numero_serie);
                     lista_de_contadores_screen_table_personal.setAdapter(arrayAdapter);
-                }else if(lista_desplegable.get(i).contains("ABONADO")){
+                }else if(lista_desplegable.get(i).contains("DATOS PRIVADOS")){
                     arrayAdapter = new ArrayAdapter(Screen_Table_Personal.this, android.R.layout.simple_list_item_1, lista_filtro_abonado);
                     lista_de_contadores_screen_table_personal.setAdapter(arrayAdapter);
                 }
@@ -254,13 +254,13 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
                                         + "                   " + jsonObject.getString("nuevo_citas").split("\n")[1] + "\n";
 
                                 String abonado = jsonObject.getString("nombre_cliente").replace("\n", "") + "\n";
-
                                 String numero_serie_contador = jsonObject.getString("numero_serie_contador").replace("\n", "");
-                                String anno_contador = jsonObject.getString("anno_de_contador").replace("\n", "") + "\n";
-                                String calibre = jsonObject.getString("calibre_toma").replace("\n", "") + "\n";
-                                String telefono1 = jsonObject.getString("telefono1").replace("\n", "") + "\n";
-                                String telefono2 = jsonObject.getString("telefono2").replace("\n", "") + "\n";
-
+                                String anno_contador = jsonObject.getString("anno_de_contador").replace("\n", "")+"\n";
+                                String tipo_tarea = jsonObject.getString("tipo_tarea").replace("\n", "")+"\n";
+                                String calibre = jsonObject.getString("calibre_toma").replace("\n", "")+"\n";
+                                String telefono1 = jsonObject.getString("telefono1").replace("\n", "")+"\n";
+                                String telefono2 = jsonObject.getString("telefono2").replace("\n", "")+"\n";
+                                String numero_abonado = jsonObject.getString("numero_abonado").replace("\n", "")+"\n";
 
                                 String fecha_cita = jsonObject.getString("fecha_hora_cita").replace("\n", "");
                                 MyCounter contador = new MyCounter();
@@ -268,12 +268,14 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
                                 contador.setNumero_serie_contador(numero_serie_contador);
                                 contador.setContador(numero_serie_contador);
                                 contador.setAnno_contador(anno_contador);
+                                contador.setTipo_tarea(tipo_tarea);
                                 contador.setCalibre(calibre);
                                 contador.setCita(cita);
                                 contador.setDireccion(dir);
                                 contador.setTelefono1(telefono1);
                                 contador.setTelefono2(telefono2);
                                 contador.setAbonado(abonado);
+                                contador.setNumero_abonado(numero_abonado);
                                 lista_ordenada_de_tareas.add(contador);
                             }
                         } catch (JSONException e) {
@@ -287,14 +289,13 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
                                 +"Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado());
                         lista_filtro_direcciones.add("\nDirección:  "+lista_ordenada_de_tareas.get(i).getDireccion()
                                 +" Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado());
-                        lista_filtro_Tareas.add("\n    Calibre:  "+lista_ordenada_de_tareas.get(i).getCalibre()
+                        lista_filtro_Tareas.add("\n      Tarea:  "+lista_ordenada_de_tareas.get(i).getTipo_tarea()+"   Calibre:  "+lista_ordenada_de_tareas.get(i).getCalibre()
                                 +"Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado());
-                        lista_filtro_abonado.add("\nTelefono 1:  "+lista_ordenada_de_tareas.get(i).getTelefono1()
-                                +"Telefono 2:  "+lista_ordenada_de_tareas.get(i).getTelefono2()
-                                +"   Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado());
-                        lista_filtro_numero_serie.add("\nNumero de Serie:  "+lista_ordenada_de_tareas.get(i).getNumero_serie_contador()
-                                +"\n     Año Contador:  "+lista_ordenada_de_tareas.get(i).getAnno_contador()
-                                +"             Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado());
+                        lista_filtro_abonado.add("\n   Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado()+"Telefono 1:  "+lista_ordenada_de_tareas.get(i).getTelefono1()
+                                +"Telefono 2:  "+lista_ordenada_de_tareas.get(i).getTelefono2());
+                        lista_filtro_numero_serie.add("\n       Número de Serie:  "+lista_ordenada_de_tareas.get(i).getNumero_serie_contador()
+                                +"\n              Año o Prefijo:  "+lista_ordenada_de_tareas.get(i).getAnno_contador()
+                                +"Número de Abonado:  "+lista_ordenada_de_tareas.get(i).getNumero_abonado());
                         lista_filtro_Citas.add("\n        Cita:  "+lista_ordenada_de_tareas.get(i).getCita()
                                 +"Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado());
                     }
@@ -411,22 +412,28 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
                                         + "                   " + jsonObject.getString("nuevo_citas").split("\n")[1] + "\n";
                                 String abonado = jsonObject.getString("nombre_cliente").replace("\n", "") + "\n";
                                 String numero_serie_contador = jsonObject.getString("numero_serie_contador").replace("\n", "");
-                                String anno_contador = jsonObject.getString("anno_de_contador").replace("\n", "") + "\n";
-                                String calibre = jsonObject.getString("calibre_toma").replace("\n", "") + "\n";
-                                String telefono1 = jsonObject.getString("telefono1").replace("\n", "") + "\n";
-                                String telefono2 = jsonObject.getString("telefono2").replace("\n", "") + "\n";
+                                String anno_contador = jsonObject.getString("anno_de_contador").replace("\n", "")+"\n";
+                                String tipo_tarea = jsonObject.getString("tipo_tarea").replace("\n", "")+"\n";
+                                String calibre = jsonObject.getString("calibre_toma").replace("\n", "")+"\n";
+                                String telefono1 = jsonObject.getString("telefono1").replace("\n", "")+"\n";
+                                String telefono2 = jsonObject.getString("telefono2").replace("\n", "")+"\n";
+                                String numero_abonado = jsonObject.getString("numero_abonado").replace("\n", "")+"\n";
+
 
                                 String fecha_cita = jsonObject.getString("fecha_hora_cita").replace("\n", "");
                                 MyCounter contador = new MyCounter();
                                 contador.setDateTime(DBtareasController.getFechaHoraFromString(fecha_cita));
+                                contador.setNumero_serie_contador(numero_serie_contador);
                                 contador.setContador(numero_serie_contador);
                                 contador.setAnno_contador(anno_contador);
+                                contador.setTipo_tarea(tipo_tarea);
                                 contador.setCalibre(calibre);
                                 contador.setCita(cita);
                                 contador.setDireccion(dir);
                                 contador.setTelefono1(telefono1);
                                 contador.setTelefono2(telefono2);
                                 contador.setAbonado(abonado);
+                                contador.setNumero_abonado(numero_abonado);
 
                                 lista_ordenada_de_tareas.add(contador);
                             }
@@ -441,21 +448,15 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
                     lista_contadores.add("\nDirección:  "+lista_ordenada_de_tareas.get(i).getDireccion()
                             +"         Cita:  "+lista_ordenada_de_tareas.get(i).getCita()
                             +"Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado());
-
                     lista_filtro_direcciones.add("\nDirección:  "+lista_ordenada_de_tareas.get(i).getDireccion()
                             +" Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado());
-
-                    lista_filtro_Tareas.add("\n    Calibre:  "+lista_ordenada_de_tareas.get(i).getCalibre()
+                    lista_filtro_Tareas.add("\n      Tarea:  "+lista_ordenada_de_tareas.get(i).getTipo_tarea()+"   Calibre:  "+lista_ordenada_de_tareas.get(i).getCalibre()
                             +"Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado());
-
-                    lista_filtro_abonado.add("\nTelefono 1:  "+lista_ordenada_de_tareas.get(i).getTelefono1()
-                            +"Telefono 2:  "+lista_ordenada_de_tareas.get(i).getTelefono2()
-                            +"   Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado());
-
-                    lista_filtro_numero_serie.add("\nNumero de Serie:  "+lista_ordenada_de_tareas.get(i).getNumero_serie_contador()
-                            +"\n     Año Contador:  "+lista_ordenada_de_tareas.get(i).getAnno_contador()
-                            +"             Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado());
-
+                    lista_filtro_abonado.add("\n   Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado()+"Telefono 1:  "+lista_ordenada_de_tareas.get(i).getTelefono1()
+                            +"Telefono 2:  "+lista_ordenada_de_tareas.get(i).getTelefono2());
+                    lista_filtro_numero_serie.add("\n       Número de Serie:  "+lista_ordenada_de_tareas.get(i).getNumero_serie_contador()
+                            +"\n              Año o Prefijo:  "+lista_ordenada_de_tareas.get(i).getAnno_contador()
+                            +"Número de Abonado:  "+lista_ordenada_de_tareas.get(i).getNumero_abonado());
                     lista_filtro_Citas.add("\n        Cita:  "+lista_ordenada_de_tareas.get(i).getCita()
                             +"Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado());
                 }
