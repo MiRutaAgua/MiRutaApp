@@ -116,15 +116,18 @@ public class Screen_Insertar_Tarea extends AppCompatActivity implements TaskComp
                         String type_script = "create_tarea";
                         BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Insertar_Tarea.this);
                         backgroundWorker.execute(type_script);
-                }}
+                    }
+                }
                 else{
-                    Toast.makeText(Screen_Insertar_Tarea.this, "No hay conexion a internet, insertando tarea en sqlite", Toast.LENGTH_SHORT).show();
+                    Screen_Login_Activity.tarea_JSON = team_or_personal_task_selection_screen_Activity.dBtareasController.getJsonTarea();
                     guardar_modificaciones();
                     try {
                         Screen_Login_Activity.tarea_JSON.put("status_tarea", "TO_UPLOAD");
                         team_or_personal_task_selection_screen_Activity.dBtareasController.insertTarea(Screen_Login_Activity.tarea_JSON);
+                        Toast.makeText(Screen_Insertar_Tarea.this, "Insertando Tarea Offline", Toast.LENGTH_SHORT).show();
                     } catch (JSONException e) {
                         e.printStackTrace();
+                        Toast.makeText(Screen_Insertar_Tarea.this, "Problemas con JSON en Offline", Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -163,10 +166,9 @@ public class Screen_Insertar_Tarea extends AppCompatActivity implements TaskComp
 
             Screen_Login_Activity.tarea_JSON.put("date_time_modified", DBtareasController.getStringFromFechaHora(new Date()));
             Screen_Login_Activity.tarea_JSON.put("status_tarea", "IDLE");
-            Toast.makeText(Screen_Insertar_Tarea.this, "No hay problemas con JSON", Toast.LENGTH_SHORT).show();
-
         } catch (JSONException e) {
             e.printStackTrace();
+            Toast.makeText(Screen_Insertar_Tarea.this, "Problemas con JSON", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -207,8 +209,8 @@ public class Screen_Insertar_Tarea extends AppCompatActivity implements TaskComp
                 Toast.makeText(Screen_Insertar_Tarea.this, "No se pudo acceder al hosting" + result, Toast.LENGTH_SHORT).show();
             }
             else {
-                Toast.makeText(Screen_Insertar_Tarea.this, "Tarea insertada correctamente" + result, Toast.LENGTH_LONG).show();
-//                textView_screen_insertar_tarea.setText(result);
+                Toast.makeText(Screen_Insertar_Tarea.this, "Tarea insertada correctamente", Toast.LENGTH_LONG).show();
+                textView_screen_insertar_tarea.setText(result);
             }
         }
     }

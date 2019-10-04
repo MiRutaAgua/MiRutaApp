@@ -415,10 +415,6 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                         instalation_photo_screen_exec_task.setImageBitmap(bitmap_foto_antes_instalacion);
                     }
                 }
-//                mCurrentPhotoPath_foto_antes = saveBitmapImage(getPhotoUserLocal(mCurrentPhotoPath_foto_antes), "foto_antes_instalacion");
-//                Bitmap bitmap_foto_antes_instalacion = getPhotoUserLocal(mCurrentPhotoPath_foto_antes);
-//                instalation_photo_screen_exec_task.setVisibility(View.VISIBLE);
-//                instalation_photo_screen_exec_task.setImageBitmap(bitmap_foto_antes_instalacion);
             }
             if (requestCode == CAM_REQUEST_READ_PHOTO) {
                 if(!TextUtils.isEmpty(data.getStringExtra("photo_path"))&& data.getStringExtra("photo_path")!=null) {
@@ -430,10 +426,6 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                         read_photo_screen_exec_task.setImageBitmap(bitmap_foto_lectura);
                     }
                 }
-//                mCurrentPhotoPath_foto_lectura = saveBitmapImage(getPhotoUserLocal(mCurrentPhotoPath_foto_lectura), "foto_lectura");
-//                Bitmap bitmap_foto_lectura = getPhotoUserLocal(mCurrentPhotoPath_foto_lectura);
-//                read_photo_screen_exec_task.setVisibility(View.VISIBLE);
-//                read_photo_screen_exec_task.setImageBitmap(bitmap_foto_lectura);
             }
             if (requestCode == CAM_REQUEST_SN_PHOTO) {
                 if(!TextUtils.isEmpty(data.getStringExtra("photo_path"))&& data.getStringExtra("photo_path")!=null) {
@@ -445,10 +437,6 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                         serial_number_photo_screen_exec_task.setImageBitmap(bitmap_foto_numero_serie);
                     }
                 }
-//                mCurrentPhotoPath_foto_serie = saveBitmapImage(getPhotoUserLocal(mCurrentPhotoPath_foto_serie), "foto_numero_serie");
-//                Bitmap bitmap_foto_numero_serie = getPhotoUserLocal(mCurrentPhotoPath_foto_serie);
-//                serial_number_photo_screen_exec_task.setVisibility(View.VISIBLE);
-//                serial_number_photo_screen_exec_task.setImageBitmap(bitmap_foto_numero_serie);
             }
             if (requestCode == CAM_REQUEST_AFT_INT_PHOTO) {
                 if(!TextUtils.isEmpty(data.getStringExtra("photo_path"))&& data.getStringExtra("photo_path")!=null) {
@@ -460,10 +448,6 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                         after_instalation_photo_screen_exec_task.setImageBitmap(bitmap_foto_despues_instalacion);
                     }
                 }
-//                mCurrentPhotoPath_foto_despues = saveBitmapImage(getPhotoUserLocal(mCurrentPhotoPath_foto_despues), "foto_despues_instalacion");
-//                Bitmap bitmap_foto_despues_instalacion = getPhotoUserLocal(mCurrentPhotoPath_foto_despues);
-//                after_instalation_photo_screen_exec_task.setVisibility(View.VISIBLE);
-//                after_instalation_photo_screen_exec_task.setImageBitmap(bitmap_foto_despues_instalacion);
             }
         }
 
@@ -471,7 +455,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
 
     private String saveBitmapImage(Bitmap bitmap, String key){
         try {
-            bitmap = Bitmap.createScaledBitmap(bitmap, 1200, 1600, true);
+            bitmap = Bitmap.createScaledBitmap(bitmap, 960, 1280, true);
             String numero_serie = Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador");
             String file_full_name = numero_serie+"_"+key;
             //Toast.makeText(Screen_Incidence.this,"archivo: "+file_full_name, Toast.LENGTH_LONG).show();

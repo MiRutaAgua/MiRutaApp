@@ -105,16 +105,23 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
                 } else {
                     if (Screen_Login_Activity.dBoperariosController.databasefileExists(this) && Screen_Login_Activity.dBoperariosController.checkForTableExists()) {
                         //Toast.makeText(Screen_User_Data.this,"Existe y no esta vacia", Toast.LENGTH_LONG).show();
-                        String user = Screen_Login_Activity.dBoperariosController.get_one_operario_from_Database(usuario);
-                        JSONObject jsonObject = new JSONObject(user);
-                        String user_foto = jsonObject.getString("foto");
-                        //Toast.makeText(Screen_User_Data.this, user_foto, Toast.LENGTH_LONG).show();
-                        if(user_foto!=null && !TextUtils.isEmpty(user_foto)){
-                            Bitmap foto = getPhotoUserLocal(getSimilarFile(user_foto));
-                            if (foto != null) {
-                                circlImageView_photo.setBackgroundColor(Color.TRANSPARENT);
-                                circlImageView_photo.setImageBitmap(foto);
+                        String user = null;
+                        try {
+                            user = Screen_Login_Activity.dBoperariosController.get_one_operario_from_Database(usuario);
+                            if(user!=null && !TextUtils.isEmpty(user)){
+                                JSONObject jsonObject = new JSONObject(user);
+                                String user_foto = jsonObject.getString("foto");
+                                //Toast.makeText(Screen_User_Data.this, user_foto, Toast.LENGTH_LONG).show();
+                                if (user_foto != null && !TextUtils.isEmpty(user_foto)) {
+                                    Bitmap foto = getPhotoUserLocal(getSimilarFile(user_foto));
+                                    if (foto != null) {
+                                        circlImageView_photo.setBackgroundColor(Color.TRANSPARENT);
+                                        circlImageView_photo.setImageBitmap(foto);
+                                    }
+                                }
                             }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
                     }
                 }

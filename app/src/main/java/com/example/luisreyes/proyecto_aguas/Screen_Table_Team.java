@@ -307,7 +307,7 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
                             if(anno_contador.equals("null\n")) {
                                 anno_contador = "-\n";
                             }
-                            String tipo_tarea = jsonObject.getString("tipo_tarea").replace("\n", "")+"\n";
+                            String tipo_tarea = jsonObject.getString("tipo_tarea").replace("\n", "").replace(" ","")+"\n";
                             if(tipo_tarea.equals("null\n")) {
                                 tipo_tarea = "NCI\n";
                             }
@@ -355,13 +355,13 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
                                 +"Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado());
                         lista_filtro_direcciones.add("\nDirección:  "+lista_ordenada_de_tareas.get(i).getDireccion()
                                 +" Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado());
-                        lista_filtro_Tareas.add("\n      Tarea  :"+lista_ordenada_de_tareas.get(i).getTipo_tarea()+"    Calibre:  "+lista_ordenada_de_tareas.get(i).getCalibre()
+                        lista_filtro_Tareas.add("\n      Tarea:  "+lista_ordenada_de_tareas.get(i).getTipo_tarea()+"   Calibre:  "+lista_ordenada_de_tareas.get(i).getCalibre()
                                 +"Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado());
                         lista_filtro_abonado.add("\n   Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado()+"Telefono 1:  "+lista_ordenada_de_tareas.get(i).getTelefono1()
                                 +"Telefono 2:  "+lista_ordenada_de_tareas.get(i).getTelefono2());
-                        lista_filtro_numero_serie.add("\nNúmero de Serie:  "+lista_ordenada_de_tareas.get(i).getNumero_serie_contador()
-                                +"\n    Año o Prefijo:  "+lista_ordenada_de_tareas.get(i).getAnno_contador()
-                                +"   Número de Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado());
+                        lista_filtro_numero_serie.add("\n       Número de Serie:  "+lista_ordenada_de_tareas.get(i).getNumero_serie_contador()
+                                +"\n              Año o Prefijo:  "+lista_ordenada_de_tareas.get(i).getAnno_contador()
+                                +"Número de Abonado:  "+lista_ordenada_de_tareas.get(i).getNumero_abonado());
                         lista_filtro_Citas.add("\n        Cita:  "+lista_ordenada_de_tareas.get(i).getCita()
                                 +"Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado());
                     }
@@ -508,7 +508,7 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
                             if(anno_contador.equals("null\n")) {
                                 anno_contador = "-\n";
                             }
-                            String tipo_tarea = jsonObject.getString("tipo_tarea").replace("\n", "")+"\n";
+                            String tipo_tarea = jsonObject.getString("tipo_tarea").replace("\n", "").replace("\n", "")+"\n";
                             if(tipo_tarea.equals("null\n")) {
                                 tipo_tarea = "NCI\n";
                             }
@@ -571,22 +571,23 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
                 lista_de_contadores_screen_table_team.setAdapter(arrayAdapter);
                 hideRingDialog();
 
-                if(!tareas_to_upload.isEmpty()){
+
+                tareas_to_upload.clear();
+                if (team_or_personal_task_selection_screen_Activity.dBtareasController.checkForTableExists()) {
                     tareas_to_upload.clear();
-                    if (team_or_personal_task_selection_screen_Activity.dBtareasController.checkForTableExists()) {
-                        tareas_to_upload.clear();
-                        for (int i = 1; i <= team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas(); i++) {
-                            try {
-                                JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.dBtareasController.get_one_tarea_from_Database(i));
-                                String status_tarea = jsonObject.getString("status_tarea");
-                                if(status_tarea.equals("TO_UPLOAD")){
-                                    tareas_to_upload.add(jsonObject.getString("numero_serie_contador"));
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+                    for (int i = 1; i <= team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas(); i++) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.dBtareasController.get_one_tarea_from_Database(i));
+                            String status_tarea = jsonObject.getString("status_tarea");
+                            if(status_tarea.equals("TO_UPLOAD")){
+                                tareas_to_upload.add(jsonObject.getString("numero_serie_contador"));
                             }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
                     }
+                }
+                if(!tareas_to_upload.isEmpty()) {
                     showRingDialog("Insertando Tareas creadas offline en Servidor...");
                     upLoadTareaInMySQL();
                 }else {
@@ -601,6 +602,13 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
             }
             else {
                 updateTareaInMySQL();
+            }
+        }else if(type == "create_tarea"){
+            if(result == null){
+                Toast.makeText(this,"No se pudo establecer conexión con el servidor", Toast.LENGTH_LONG).show();
+            }
+            else {
+                upLoadTareaInMySQL();
             }
         }
     }

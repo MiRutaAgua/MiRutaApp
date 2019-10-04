@@ -21,6 +21,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -133,7 +134,7 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
 
         if (checkConection()){
             try {
-                String foto_instalacion =  Screen_Login_Activity.tarea_JSON.getString("foto_antes_instalacion");
+                String foto_instalacion =  Screen_Login_Activity.tarea_JSON.getString("foto_despues_instalacion");
                 //Toast.makeText(this, foto_instalacion, Toast.LENGTH_LONG).show();
                 showRingDialog("Obteniendo foto de instalación");
                 String type_script = "download_image";
@@ -145,14 +146,17 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
         }else{
             try {
                 //String foto_instalacion =  Screen_Login_Activity.tarea_JSON.getString("foto_antes_instalacion");
-                String image = Screen_Login_Activity.tarea_JSON.getString("foto_antes_instalacion");
-                File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas");
-                File[] files = storageDir.listFiles();
-                for(int i=0; i< files.length;i++){
-                    if(files[i].getName().contains(image)){
-                        //Toast.makeText(this, storageDir +"/" + files[i].getName(), Toast.LENGTH_LONG).show();
-                        imagen_contador.setVisibility(View.VISIBLE);
-                        imagen_contador.setImageBitmap(getPhotoUserLocal(storageDir +"/" + files[i].getName()));
+                String image = null;
+                image = Screen_Login_Activity.tarea_JSON.getString("foto_despues_instalacion");
+                if(image!=null && !image.equals("null") && !TextUtils.isEmpty(image)) {
+                    File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/fotos_tareas");
+                    File[] files = storageDir.listFiles();
+                    for (int i = 0; i < files.length; i++) {
+                        if (files[i].getName().contains(image)) {
+                            //Toast.makeText(this, storageDir +"/" + files[i].getName(), Toast.LENGTH_LONG).show();
+                            imagen_contador.setVisibility(View.VISIBLE);
+                            imagen_contador.setImageBitmap(getPhotoUserLocal(storageDir + "/" + files[i].getName()));
+                        }
                     }
                 }
 //                Toast.makeText(this, image, Toast.LENGTH_LONG).show();
