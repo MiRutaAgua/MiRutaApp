@@ -54,6 +54,7 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
     Spinner spinner_filtro_tareas;
     ArrayList<String> lista_desplegable;
     private ProgressDialog progressDialog;
+
     private ArrayList<String> lista_filtro_direcciones;
     private ArrayList<String> lista_filtro_Tareas;
     private ArrayList<String> lista_filtro_Citas;
@@ -65,6 +66,7 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
     private Intent intent_open_screen_unity_counter;
     private Intent intent_open_screen_battery_counter;
     private ArrayList<String> tareas_to_update;
+    private ArrayList<String> tareas_to_upload;
     private Button agregar_tarea;
     private int lite_count = -10;
 
@@ -101,8 +103,9 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
         ArrayAdapter arrayAdapter_spinner = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista_desplegable);
         spinner_filtro_tareas.setAdapter(arrayAdapter_spinner);
 
-        tareas_to_update = new ArrayList<String>();
+        tareas_to_upload = new ArrayList<String>();
 
+        tareas_to_update = new ArrayList<String>();
         lista_contadores = new ArrayList<String>();
         lista_filtro_direcciones = new ArrayList<String>();
         lista_filtro_Citas = new ArrayList<String>();
@@ -567,8 +570,29 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
                 arrayAdapter = new ArrayAdapter(Screen_Table_Team.this, android.R.layout.simple_list_item_1, lista_contadores);
                 lista_de_contadores_screen_table_team.setAdapter(arrayAdapter);
                 hideRingDialog();
-                showRingDialog("Actualizando tareas de Internet...");
-                updateTareaInMySQL();
+
+                if(!tareas_to_upload.isEmpty()){
+                    tareas_to_upload.clear();
+                    if (team_or_personal_task_selection_screen_Activity.dBtareasController.checkForTableExists()) {
+                        tareas_to_upload.clear();
+                        for (int i = 1; i <= team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas(); i++) {
+                            try {
+                                JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.dBtareasController.get_one_tarea_from_Database(i));
+                                String status_tarea = jsonObject.getString("status_tarea");
+                                if(status_tarea.equals("TO_UPLOAD")){
+                                    tareas_to_upload.add(jsonObject.getString("numero_serie_contador"));
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                    showRingDialog("Insertando Tareas creadas offline en Servidor...");
+                    upLoadTareaInMySQL();
+                }else {
+                    showRingDialog("Actualizando tareas en Internet...");
+                    updateTareaInMySQL();
+                }
                 Toast.makeText(Screen_Table_Team.this,"Tareas descargadas correctamente"/*+" SQLite: "+String.valueOf(lite_count)*/, Toast.LENGTH_LONG).show();
             }
         }else if(type == "update_tarea"){
@@ -581,6 +605,28 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
         }
     }
 
+    public void upLoadTareaInMySQL() throws JSONException {
+        if(tareas_to_upload.isEmpty()){
+            hideRingDialog();
+            showRingDialog("Actualizando tareas en Internet...");
+            updateTareaInMySQL();
+            return;
+        }
+        else {
+            JSONObject jsonObject_Lite = new JSONObject(team_or_personal_task_selection_screen_Activity.dBtareasController.get_one_tarea_from_Database(
+                    tareas_to_upload.get(tareas_to_upload.size() - 1)));
+            tareas_to_upload.remove(tareas_to_upload.size() - 1);
+
+            jsonObject_Lite.put("status_tarea", "IDLE");
+            jsonObject_Lite.put("date_time_modified", DBtareasController.getStringFromFechaHora(new Date()));
+            team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea(jsonObject_Lite);
+
+            String type_script = "create_tarea";
+            BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Table_Team.this);
+            Screen_Login_Activity.tarea_JSON = jsonObject_Lite;
+            backgroundWorker.execute(type_script);
+        }
+    }
     public void updateTareaInMySQL() throws JSONException {
         if(tareas_to_update.isEmpty()){
             hideRingDialog();

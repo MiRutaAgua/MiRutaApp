@@ -410,6 +410,36 @@ public class DBtareasController extends SQLiteOpenHelper {
         }
     }
 
+    public ArrayList<String>  get_tareas_toUpload_from_Database() throws JSONException {
+
+        ArrayList<String> rows = new ArrayList<String>();
+        ArrayList<String> keys = new ArrayList<String>();
+        int temp;
+        String upload_string = "TO_UPLOAD";
+
+        SQLiteDatabase database = this.getReadableDatabase();
+        if(database == null){
+            keys.add("null");
+            return keys;
+        }
+        Cursor c = database.rawQuery("SELECT * FROM "+table_name+" WHERE status_tarea LIKE \""+upload_string+"\";", null);
+
+        Iterator<String> keys_it = jsonTareaType.keys();
+        while (keys_it.hasNext()) {
+            keys.add(keys_it.next());
+        }
+        for(int i=0; c.moveToPosition(i); i++){
+
+            for (int n=0; n < keys.size(); n++){
+                jsonTareaType.put(keys.get(n),  c.getString(n));
+            }
+
+            rows.add(jsonTareaType.toString());
+        }
+        c.close();
+        return rows;
+    }
+
     public ArrayList<String> get_all_tareas_from_Database() throws JSONException {
 
         ArrayList<String> rows = new ArrayList<String>();
