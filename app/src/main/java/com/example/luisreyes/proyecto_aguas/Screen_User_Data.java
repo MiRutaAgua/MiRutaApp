@@ -33,6 +33,7 @@ import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -108,10 +109,12 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
                         JSONObject jsonObject = new JSONObject(user);
                         String user_foto = jsonObject.getString("foto");
                         //Toast.makeText(Screen_User_Data.this, user_foto, Toast.LENGTH_LONG).show();
-                        Bitmap foto = getPhotoUserLocal(getSimilarFile(user_foto));
-                        if (foto != null) {
-                            circlImageView_photo.setBackgroundColor(Color.TRANSPARENT);
-                            circlImageView_photo.setImageBitmap(foto);
+                        if(user_foto!=null && !TextUtils.isEmpty(user_foto)){
+                            Bitmap foto = getPhotoUserLocal(getSimilarFile(user_foto));
+                            if (foto != null) {
+                                circlImageView_photo.setBackgroundColor(Color.TRANSPARENT);
+                                circlImageView_photo.setImageBitmap(foto);
+                            }
                         }
                     }
                 }

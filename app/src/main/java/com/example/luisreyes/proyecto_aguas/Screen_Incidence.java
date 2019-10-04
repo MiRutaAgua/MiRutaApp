@@ -203,7 +203,6 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
                     Toast.makeText(Screen_Incidence.this, "No se pudo insetar texto incidencia en JSON tarea", Toast.LENGTH_LONG).show();
                 }
 
-
                 Intent intent_open_incidence_summary = new Intent(Screen_Incidence.this, Screen_Incidence_Summary.class);
                 startActivity(intent_open_incidence_summary);
             }

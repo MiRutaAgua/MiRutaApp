@@ -264,21 +264,36 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
                     Toast.makeText(Screen_Validate_Battery_Intake_Asignation.this, "No se pudo insertar correctamente, problemas con el servidor", Toast.LENGTH_SHORT).show();
 
                 }else {
-                    images_files.add(Screen_Battery_Intake_Asignation.mCurrentPhotoPath_foto_antes);
-                    images_files.add(Screen_Battery_Intake_Asignation.mCurrentPhotoPath_foto_lectura);
-                    images_files.add(Screen_Battery_Intake_Asignation.mCurrentPhotoPath_foto_serie);
+                    Toast.makeText(Screen_Validate_Battery_Intake_Asignation.this, "Datos actualizados correctamente, procediendo a subir fotos", Toast.LENGTH_SHORT).show();
                     String contador=null;
                     try {
                         contador = Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador");
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    images_files_names.add(contador+"_foto_antes_instalacion.jpg");
-                    images_files_names.add(contador+"_foto_numero_serie.jpg");
-                    images_files_names.add(contador+"_foto_lectura.jpg");
-                    showRingDialog("Subiedo fotos");
-                    uploadPhotos();
 
+                    if(!TextUtils.isEmpty(Screen_Battery_Intake_Asignation.mCurrentPhotoPath_foto_antes)) {
+                        images_files.add(Screen_Battery_Intake_Asignation.mCurrentPhotoPath_foto_antes);
+                        if(contador!=null && !TextUtils.isEmpty(contador)){
+                            images_files_names.add(contador+"_foto_antes_instalacion.jpg");
+                        }
+                    }
+                    if(!TextUtils.isEmpty(Screen_Battery_Intake_Asignation.mCurrentPhotoPath_foto_lectura)) {
+                        images_files.add(Screen_Battery_Intake_Asignation.mCurrentPhotoPath_foto_lectura);
+                        if(contador!=null && !TextUtils.isEmpty(contador)){
+                            images_files_names.add(contador+"_foto_numero_serie.jpg");
+                        }
+                    }
+                    if(!TextUtils.isEmpty(Screen_Battery_Intake_Asignation.mCurrentPhotoPath_foto_serie)) {
+                        images_files.add(Screen_Battery_Intake_Asignation.mCurrentPhotoPath_foto_serie);
+                        if(contador!=null && !TextUtils.isEmpty(contador)){
+                            images_files_names.add(contador+"_foto_lectura.jpg");
+                        }
+                    }
+                    if(!images_files_names.isEmpty() && !images_files.isEmpty()) {
+                        showRingDialog("Subiedo fotos");
+                        uploadPhotos();
+                    }
                 }
             }
         }

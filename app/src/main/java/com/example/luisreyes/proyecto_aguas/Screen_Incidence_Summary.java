@@ -335,13 +335,22 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
                         Toast.makeText(Screen_Incidence_Summary.this, "No se pudo insertar correctamente, problemas con el servidor de la base de datos", Toast.LENGTH_SHORT).show();
 
                     } else {
+                        Toast.makeText(Screen_Incidence_Summary.this, "Datos actualizados correctamente, procediendo a subir fotos", Toast.LENGTH_SHORT).show();
                         images_files.clear();
-                        images_files.add(Screen_Incidence.mCurrentPhotoPath_incidencia_1);
-                        images_files.add(Screen_Incidence.mCurrentPhotoPath_incidencia_2);
-                        images_files.add(Screen_Incidence.mCurrentPhotoPath_incidencia_3);
+                        if(!TextUtils.isEmpty(Screen_Incidence.mCurrentPhotoPath_incidencia_1) && Screen_Incidence.mCurrentPhotoPath_incidencia_1!=null) {
+                            images_files.add(Screen_Incidence.mCurrentPhotoPath_incidencia_1);
+                        }
+                        if(!TextUtils.isEmpty(Screen_Incidence.mCurrentPhotoPath_incidencia_2) && Screen_Incidence.mCurrentPhotoPath_incidencia_2!=null) {
+                            images_files.add(Screen_Incidence.mCurrentPhotoPath_incidencia_2);
+                        }
+                        if(!TextUtils.isEmpty(Screen_Incidence.mCurrentPhotoPath_incidencia_3) && Screen_Incidence.mCurrentPhotoPath_incidencia_3!=null) {
+                            images_files.add(Screen_Incidence.mCurrentPhotoPath_incidencia_3);
+                        }
 
-                        showRingDialog("Subiendo foto...");
-                        uploadPhotos();
+                        if(!images_files.isEmpty()) {
+                            showRingDialog("Subiendo foto...");
+                            uploadPhotos();
+                        }
                     }
                 }
             }
