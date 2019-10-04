@@ -278,18 +278,52 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
                                     +jsonObject.getString("letra_edificio").replace("\n", "")+" "
                                     +jsonObject.getString("piso").replace("\n", "")+" "
                                     +jsonObject.getString("mano").replace("\n", "")+"\n";
-                            String cita = jsonObject.getString("nuevo_citas").split("\n")[0]+"\n"
-                                    +"                   "+jsonObject.getString("nuevo_citas").split("\n")[1]+"\n";
+                            if(dir.contains("null, null, nullnull")) {
+                                dir = "No hay dirección\n";
+                            }
+
+                            String cita = jsonObject.getString("nuevo_citas");
+//                            Toast.makeText(Screen_Table_Team.this, cita, Toast.LENGTH_LONG).show();
+                            if(!cita.equals("null")) {
+                                cita = cita.split("\n")[0] + "\n"
+                                        + "                   " + jsonObject.getString("nuevo_citas").split("\n")[1] + "\n";
+                            }else{
+                                cita = "No hay cita\n";
+                            }
 
                             String abonado = jsonObject.getString("nombre_cliente").replace("\n", "")+"\n";
-
+                            if(abonado.equals("null\n")) {
+                                abonado = "Desconocido\n";
+                            }
+//                            Toast.makeText(Screen_Table_Team.this, abonado, Toast.LENGTH_LONG).show();
                             String numero_serie_contador = jsonObject.getString("numero_serie_contador").replace("\n", "");
+                            if(numero_serie_contador.equals("null\n")) {
+                                numero_serie_contador = "-\n";
+                            }
                             String anno_contador = jsonObject.getString("anno_de_contador").replace("\n", "")+"\n";
+                            if(anno_contador.equals("null\n")) {
+                                anno_contador = "-\n";
+                            }
                             String tipo_tarea = jsonObject.getString("tipo_tarea").replace("\n", "")+"\n";
+                            if(tipo_tarea.equals("null\n")) {
+                                tipo_tarea = "NCI\n";
+                            }
                             String calibre = jsonObject.getString("calibre_toma").replace("\n", "")+"\n";
+                            if(calibre.equals("null\n")) {
+                                calibre = "Desconocido\n";
+                            }
                             String telefono1 = jsonObject.getString("telefono1").replace("\n", "")+"\n";
+                            if(telefono1.equals("null\n")) {
+                                telefono1 = "-\n";
+                            }
                             String telefono2 = jsonObject.getString("telefono2").replace("\n", "")+"\n";
+                            if(telefono2.equals("null\n")) {
+                                telefono2 = "-\n";
+                            }
                             String numero_abonado = jsonObject.getString("numero_abonado").replace("\n", "")+"\n";
+                            if(numero_abonado.equals("null\n")) {
+                                numero_abonado = "-\n";
+                            }
 
                             String fecha_cita = jsonObject.getString("fecha_hora_cita").replace("\n", "");
                             MyCounter contador = new MyCounter();
@@ -372,7 +406,7 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
                 boolean insertar_todas = false;
                 if(team_or_personal_task_selection_screen_Activity.dBtareasController.checkForTableExists()) {
                     lite_count = team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas();
-                    Toast.makeText(Screen_Table_Team.this, "Existe", Toast.LENGTH_LONG).show();
+//                    Toast.makeText(Screen_Table_Team.this, "Existe", Toast.LENGTH_LONG).show();
 
                     if(lite_count < 1){
                         insertar_todas= true;
@@ -402,6 +436,7 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
                                     JSONObject jsonObject_Lite = new JSONObject(team_or_personal_task_selection_screen_Activity.dBtareasController.get_one_tarea_from_Database(jsonObject.getString("numero_serie_contador").replace("\n", "")));
                                     String date_SQLite_string = jsonObject_Lite.getString("date_time_modified").replace("\n", "");
                                     Date date_SQLite = null;
+//                                    Toast.makeText(Screen_Table_Team.this, date_SQLite_string, Toast.LENGTH_LONG).show();
                                     if(!TextUtils.isEmpty(date_SQLite_string)){
                                         date_SQLite = team_or_personal_task_selection_screen_Activity.dBtareasController.getFechaHoraFromString(date_SQLite_string);
                                     }
@@ -412,7 +447,8 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
                                             Toast.makeText(Screen_Table_Team.this, "Fechas ambas nulas", Toast.LENGTH_LONG).show();
                                         }
 
-                                    } else if (date_MySQL == null) {
+                                    }
+                                    else if (date_MySQL == null) {
                                         if (date_SQLite != null) {
 //                                           //aqui actualizar MySQL con la DB SQLite
                                             tareas_to_update.add(jsonObject_Lite.getString("numero_serie_contador"));
@@ -420,19 +456,20 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
                                         } else {
                                             Toast.makeText(Screen_Table_Team.this, "Fechas ambas nulas", Toast.LENGTH_LONG).show();
                                         }
-                                    } else { //si ninguna de la dos son nulas
-
-                                        if (date_MySQL.after(date_SQLite)) {//MySQL mas actualizada
-                                            team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea(jsonObject, "numero_serie_contador");
-
-                                            //Toast.makeText(Screen_Table_Team.this, "tarea actualizadas: "+String.valueOf(tareas_actualizadas_count), Toast.LENGTH_LONG).show();
-
-                                        } else if (date_MySQL.before(date_SQLite)) {//SQLite mas actualizada
-                                            //aqui actualizar MySQL con la DB SQLite
-                                            tareas_to_update.add(jsonObject_Lite.getString("numero_serie_contador"));
-                                            jsonObject = new JSONObject(jsonObject_Lite.getString("numero_serie_contador"));
-                                        }
                                     }
+                                    else { //si ninguna de la dos son nulas
+
+                                    if (date_MySQL.after(date_SQLite)) {//MySQL mas actualizada
+                                        team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea(jsonObject, "numero_serie_contador");
+
+                                        //Toast.makeText(Screen_Table_Team.this, "tarea actualizadas: "+String.valueOf(tareas_actualizadas_count), Toast.LENGTH_LONG).show();
+
+                                    } else if (date_MySQL.before(date_SQLite)) {//SQLite mas actualizada
+                                        //aqui actualizar MySQL con la DB SQLite
+                                        tareas_to_update.add(jsonObject_Lite.getString("numero_serie_contador"));
+                                        jsonObject = new JSONObject(jsonObject_Lite.getString("numero_serie_contador"));
+                                    }
+                                }
                                 }
                             }
 
@@ -442,19 +479,52 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
                                     +jsonObject.getString("letra_edificio").replace("\n", "")+" "
                                     +jsonObject.getString("piso").replace("\n", "")+" "
                                     +jsonObject.getString("mano").replace("\n", "")+"\n";
-                            String cita = jsonObject.getString("nuevo_citas").split("\n")[0]+"\n"
-                                    +"                   "+jsonObject.getString("nuevo_citas").split("\n")[1]+"\n";
+                            if(dir.contains("null, null, nullnull")) {
+                                dir = "No hay dirección\n";
+                            }
+
+                            String cita = jsonObject.getString("nuevo_citas");
+//                            Toast.makeText(Screen_Table_Team.this, cita, Toast.LENGTH_LONG).show();
+                            if(!cita.equals("null")) {
+                                cita = cita.split("\n")[0] + "\n"
+                                        + "                   " + jsonObject.getString("nuevo_citas").split("\n")[1] + "\n";
+                            }else{
+                                cita = "No hay cita\n";
+                            }
 
                             String abonado = jsonObject.getString("nombre_cliente").replace("\n", "")+"\n";
-
+                            if(abonado.equals("null\n")) {
+                                abonado = "Desconocido\n";
+                            }
+//                            Toast.makeText(Screen_Table_Team.this, abonado, Toast.LENGTH_LONG).show();
                             String numero_serie_contador = jsonObject.getString("numero_serie_contador").replace("\n", "");
+                            if(numero_serie_contador.equals("null\n")) {
+                                numero_serie_contador = "-\n";
+                            }
                             String anno_contador = jsonObject.getString("anno_de_contador").replace("\n", "")+"\n";
+                            if(anno_contador.equals("null\n")) {
+                                anno_contador = "-\n";
+                            }
                             String tipo_tarea = jsonObject.getString("tipo_tarea").replace("\n", "")+"\n";
+                            if(tipo_tarea.equals("null\n")) {
+                                tipo_tarea = "NCI\n";
+                            }
                             String calibre = jsonObject.getString("calibre_toma").replace("\n", "")+"\n";
+                            if(calibre.equals("null\n")) {
+                                calibre = "Desconocido\n";
+                            }
                             String telefono1 = jsonObject.getString("telefono1").replace("\n", "")+"\n";
+                            if(telefono1.equals("null\n")) {
+                                telefono1 = "-\n";
+                            }
                             String telefono2 = jsonObject.getString("telefono2").replace("\n", "")+"\n";
+                            if(telefono2.equals("null\n")) {
+                                telefono2 = "-\n";
+                            }
                             String numero_abonado = jsonObject.getString("numero_abonado").replace("\n", "")+"\n";
-
+                            if(numero_abonado.equals("null\n")) {
+                                numero_abonado = "-\n";
+                            }
 
                             String fecha_cita = jsonObject.getString("fecha_hora_cita").replace("\n", "");
                             MyCounter contador = new MyCounter();
@@ -500,11 +570,6 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
                 showRingDialog("Actualizando tareas de Internet...");
                 updateTareaInMySQL();
                 Toast.makeText(Screen_Table_Team.this,"Tareas descargadas correctamente"/*+" SQLite: "+String.valueOf(lite_count)*/, Toast.LENGTH_LONG).show();
-//                if(dBtareasController.checkForTableExists()){
-//                    Toast.makeText(Screen_Table_Team.this,"Existe"+String.valueOf(lite_count), Toast.LENGTH_LONG).show();
-//                }else{
-//                    Toast.makeText(Screen_Table_Team.this,"No Existe", Toast.LENGTH_LONG).show();
-//                }
             }
         }else if(type == "update_tarea"){
             if(result == null){

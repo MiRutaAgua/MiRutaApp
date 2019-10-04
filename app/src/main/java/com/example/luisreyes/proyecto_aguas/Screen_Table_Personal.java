@@ -244,23 +244,58 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
                             JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.dBtareasController.get_one_tarea_from_Database(i));
                             if(jsonObject.getString("operario").equals(
                                     Screen_Login_Activity.operario_JSON.getString("usuario"))) {
-                                String dir = jsonObject.getString("poblacion") + ", "
-                                        + jsonObject.getString("calle").replace("\n", "") + ", "
-                                        + jsonObject.getString("numero_edificio").replace("\n", "")
-                                        + jsonObject.getString("letra_edificio").replace("\n", "") + " "
-                                        + jsonObject.getString("piso").replace("\n", "") + " "
-                                        + jsonObject.getString("mano").replace("\n", "") + "\n";
-                                String cita = jsonObject.getString("nuevo_citas").split("\n")[0] + "\n"
-                                        + "                   " + jsonObject.getString("nuevo_citas").split("\n")[1] + "\n";
+                                String dir = jsonObject.getString("poblacion")+", "
+                                        +jsonObject.getString("calle").replace("\n", "")+", "
+                                        +jsonObject.getString("numero_edificio").replace("\n", "")
+                                        +jsonObject.getString("letra_edificio").replace("\n", "")+" "
+                                        +jsonObject.getString("piso").replace("\n", "")+" "
+                                        +jsonObject.getString("mano").replace("\n", "")+"\n";
+                                if(dir.contains("null, null, nullnull")) {
+                                    dir = "No hay dirección\n";
+                                }
 
-                                String abonado = jsonObject.getString("nombre_cliente").replace("\n", "") + "\n";
+                                String cita = jsonObject.getString("nuevo_citas");
+//                            Toast.makeText(Screen_Table_Team.this, cita, Toast.LENGTH_LONG).show();
+                                if(!cita.equals("null")) {
+                                    cita = cita.split("\n")[0] + "\n"
+                                            + "                   " + jsonObject.getString("nuevo_citas").split("\n")[1] + "\n";
+                                }else{
+                                    cita = "No hay cita\n";
+                                }
+
+                                String abonado = jsonObject.getString("nombre_cliente").replace("\n", "")+"\n";
+                                if(abonado.equals("null\n")) {
+                                    abonado = "Desconocido\n";
+                                }
+//                            Toast.makeText(Screen_Table_Team.this, abonado, Toast.LENGTH_LONG).show();
                                 String numero_serie_contador = jsonObject.getString("numero_serie_contador").replace("\n", "");
+                                if(numero_serie_contador.equals("null\n")) {
+                                    numero_serie_contador = "-\n";
+                                }
                                 String anno_contador = jsonObject.getString("anno_de_contador").replace("\n", "")+"\n";
+                                if(anno_contador.equals("null\n")) {
+                                    anno_contador = "-\n";
+                                }
                                 String tipo_tarea = jsonObject.getString("tipo_tarea").replace("\n", "")+"\n";
+                                if(tipo_tarea.equals("null\n")) {
+                                    tipo_tarea = "NCI\n";
+                                }
                                 String calibre = jsonObject.getString("calibre_toma").replace("\n", "")+"\n";
+                                if(calibre.equals("null\n")) {
+                                    calibre = "Desconocido\n";
+                                }
                                 String telefono1 = jsonObject.getString("telefono1").replace("\n", "")+"\n";
+                                if(telefono1.equals("null\n")) {
+                                    telefono1 = "-\n";
+                                }
                                 String telefono2 = jsonObject.getString("telefono2").replace("\n", "")+"\n";
+                                if(telefono2.equals("null\n")) {
+                                    telefono2 = "-\n";
+                                }
                                 String numero_abonado = jsonObject.getString("numero_abonado").replace("\n", "")+"\n";
+                                if(numero_abonado.equals("null\n")) {
+                                    numero_abonado = "-\n";
+                                }
 
                                 String fecha_cita = jsonObject.getString("fecha_hora_cita").replace("\n", "");
                                 MyCounter contador = new MyCounter();
@@ -402,23 +437,58 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
                             }
                             if(jsonObject.getString("operario").equals(
                                     Screen_Login_Activity.operario_JSON.getString("usuario"))) {
-                                String dir = jsonObject.getString("poblacion") + ", "
-                                        + jsonObject.getString("calle").replace("\n", "") + ", "
-                                        + jsonObject.getString("numero_edificio").replace("\n", "")
-                                        + jsonObject.getString("letra_edificio").replace("\n", "") + " "
-                                        + jsonObject.getString("piso").replace("\n", "") + " "
-                                        + jsonObject.getString("mano").replace("\n", "") + "\n";
-                                String cita = jsonObject.getString("nuevo_citas").split("\n")[0] + "\n"
-                                        + "                   " + jsonObject.getString("nuevo_citas").split("\n")[1] + "\n";
-                                String abonado = jsonObject.getString("nombre_cliente").replace("\n", "") + "\n";
-                                String numero_serie_contador = jsonObject.getString("numero_serie_contador").replace("\n", "");
-                                String anno_contador = jsonObject.getString("anno_de_contador").replace("\n", "")+"\n";
-                                String tipo_tarea = jsonObject.getString("tipo_tarea").replace("\n", "")+"\n";
-                                String calibre = jsonObject.getString("calibre_toma").replace("\n", "")+"\n";
-                                String telefono1 = jsonObject.getString("telefono1").replace("\n", "")+"\n";
-                                String telefono2 = jsonObject.getString("telefono2").replace("\n", "")+"\n";
-                                String numero_abonado = jsonObject.getString("numero_abonado").replace("\n", "")+"\n";
+                                String dir = jsonObject.getString("poblacion")+", "
+                                        +jsonObject.getString("calle").replace("\n", "")+", "
+                                        +jsonObject.getString("numero_edificio").replace("\n", "")
+                                        +jsonObject.getString("letra_edificio").replace("\n", "")+" "
+                                        +jsonObject.getString("piso").replace("\n", "")+" "
+                                        +jsonObject.getString("mano").replace("\n", "")+"\n";
+                                if(dir.contains("null, null, nullnull")) {
+                                    dir = "No hay dirección\n";
+                                }
 
+                                String cita = jsonObject.getString("nuevo_citas");
+//                            Toast.makeText(Screen_Table_Team.this, cita, Toast.LENGTH_LONG).show();
+                                if(!cita.equals("null")) {
+                                    cita = cita.split("\n")[0] + "\n"
+                                            + "                   " + jsonObject.getString("nuevo_citas").split("\n")[1] + "\n";
+                                }else{
+                                    cita = "No hay cita\n";
+                                }
+
+                                String abonado = jsonObject.getString("nombre_cliente").replace("\n", "")+"\n";
+                                if(abonado.equals("null\n")) {
+                                    abonado = "Desconocido\n";
+                                }
+//                            Toast.makeText(Screen_Table_Team.this, abonado, Toast.LENGTH_LONG).show();
+                                String numero_serie_contador = jsonObject.getString("numero_serie_contador").replace("\n", "");
+                                if(numero_serie_contador.equals("null\n")) {
+                                    numero_serie_contador = "-\n";
+                                }
+                                String anno_contador = jsonObject.getString("anno_de_contador").replace("\n", "")+"\n";
+                                if(anno_contador.equals("null\n")) {
+                                    anno_contador = "-\n";
+                                }
+                                String tipo_tarea = jsonObject.getString("tipo_tarea").replace("\n", "")+"\n";
+                                if(tipo_tarea.equals("null\n")) {
+                                    tipo_tarea = "NCI\n";
+                                }
+                                String calibre = jsonObject.getString("calibre_toma").replace("\n", "")+"\n";
+                                if(calibre.equals("null\n")) {
+                                    calibre = "Desconocido\n";
+                                }
+                                String telefono1 = jsonObject.getString("telefono1").replace("\n", "")+"\n";
+                                if(telefono1.equals("null\n")) {
+                                    telefono1 = "-\n";
+                                }
+                                String telefono2 = jsonObject.getString("telefono2").replace("\n", "")+"\n";
+                                if(telefono2.equals("null\n")) {
+                                    telefono2 = "-\n";
+                                }
+                                String numero_abonado = jsonObject.getString("numero_abonado").replace("\n", "")+"\n";
+                                if(numero_abonado.equals("null\n")) {
+                                    numero_abonado = "-\n";
+                                }
 
                                 String fecha_cita = jsonObject.getString("fecha_hora_cita").replace("\n", "");
                                 MyCounter contador = new MyCounter();
