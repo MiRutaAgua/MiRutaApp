@@ -50,7 +50,7 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
 
     private EditText lineEdit_nombre_de_operario;
     private EditText lineEdit_clave_de_acceso;
-    private ImageView button_login, button_register;
+    private Button button_login, button_register;
 
     public static JSONObject tarea_JSON;
     public static JSONObject operario_JSON;
@@ -93,8 +93,8 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
 
         lineEdit_nombre_de_operario = (EditText) findViewById(R.id.editText_Nombre_Operario_screen_login);
         lineEdit_clave_de_acceso    = (EditText) findViewById(R.id.editText_Clave_Acceso_screen_login);
-        button_login                = (ImageView) findViewById(R.id.button_login_screen_login);
-        button_register             = (ImageView) findViewById(R.id.button_register_screen_login);
+        button_login                = (Button) findViewById(R.id.button_login_screen_login);
+        button_register             = (Button) findViewById(R.id.button_register_screen_login);
 
 
         try {

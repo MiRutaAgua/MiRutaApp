@@ -31,8 +31,8 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
     public static DBtareasController dBtareasController;
 
     private ImageView imageView_logo;
-    private ImageView button_tarea_equipo;
-    private ImageView button_tarea_personal;
+    private Button button_tarea_equipo;
+    private Button button_tarea_personal;
 
     private Intent team_task_screen;
     private Intent personal_task_screen;
@@ -63,8 +63,8 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
 //            Toast.makeText(team_or_personal_task_selection_screen_Activity.this, "No existe", Toast.LENGTH_SHORT).show();
 //        }
         imageView_logo = (ImageView) findViewById(R.id.imageView_logo);
-        button_tarea_equipo = (ImageView) findViewById(R.id.button_tarea_equipo);
-        button_tarea_personal = (ImageView) findViewById(R.id.button_tarea_personal);
+        button_tarea_equipo = (Button) findViewById(R.id.button_tarea_equipo);
+        button_tarea_personal = (Button) findViewById(R.id.button_tarea_personal);
 
         team_task_screen = new Intent(this, team_task_screen_Activity.class);
         personal_task_screen = new Intent(this, personal_task_screen_Activity.class);

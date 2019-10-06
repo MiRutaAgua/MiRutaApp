@@ -24,8 +24,8 @@ import android.widget.ImageView;
 
 public class personal_task_screen_Activity extends AppCompatActivity {
     private ImageView imageView_logo_personal;
-    private ImageView button_tabla_tareas_operario;
-    private ImageView button_vista_rapida_tareas_operario;
+    private Button button_tabla_tareas_operario;
+    private Button button_vista_rapida_tareas_operario;
 
     private Intent intent_open_table_personal;
 
@@ -50,8 +50,8 @@ public class personal_task_screen_Activity extends AppCompatActivity {
         intent_open_table_personal_fast_view = new Intent(this, Screen_Fast_View_Personal_Task.class);
 
         imageView_logo_personal        = (ImageView) findViewById(R.id.imageView_logo_personal);
-        button_tabla_tareas_operario   = (ImageView) findViewById(R.id.button_tabla_tareas_operarios_screen_personal_task);
-        button_vista_rapida_tareas_operario = (ImageView) findViewById(R.id.button_vista_rapida_tareas_operario_screen_personal_task);
+        button_tabla_tareas_operario   = (Button) findViewById(R.id.button_tabla_tareas_operarios_screen_personal_task);
+        button_vista_rapida_tareas_operario = (Button) findViewById(R.id.button_vista_rapida_tareas_operario_screen_personal_task);
 
         button_tabla_tareas_operario.setOnClickListener(new View.OnClickListener() {
             @Override

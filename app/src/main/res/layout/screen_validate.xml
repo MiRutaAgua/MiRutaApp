@@ -303,11 +303,11 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="horizontal">
-            <ImageView
+            <Button
                 android:id="@+id/imageButton_editar_firma_cliente_screen_validate"
                 android:layout_width="266dp"
-                android:layout_height="40dp"
-                android:src="@drawable/screen_validate_cambiar_firma" />
+                android:layout_height="35dp"
+                android:background="@drawable/screen_validate_cambiar_firma" />
         </LinearLayout>
 
         <LinearLayout
@@ -316,18 +316,27 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:orientation="vertical"
+            android:padding="5dp"
             >
 
-            <ImageView
+            <Button
                 android:id="@+id/button_compartir_screen_validate"
                 android:layout_width="266dp"
-                android:layout_height="50dp"
-                android:src="@drawable/screen_validate_compartir" />
-            <ImageView
+                android:layout_height="38dp"
+                android:background="@drawable/screen_validate_compartir" />
+        </LinearLayout>
+           <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+               android:padding="5dp"
+               >
+            <Button
                 android:id="@+id/button_cerrar_tarea_screen_validate"
                 android:layout_width="266dp"
-                android:layout_height="50dp"
-                android:src="@drawable/screen_validate_cerrar_tarea" />
+                android:layout_height="38dp"
+                android:background="@drawable/screen_validate_cerrar_tarea" />
         </LinearLayout>
 
     </LinearLayout>

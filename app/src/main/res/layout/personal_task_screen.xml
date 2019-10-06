@@ -39,13 +39,14 @@
         android:layout_marginLeft="50dp"
         android:layout_marginRight="40dp"
         android:orientation="horizontal"
+        android:padding="10dp"
         >
 
-        <ImageView
+        <Button
             android:id="@+id/button_tabla_tareas_operarios_screen_personal_task"
             android:layout_width="wrap_content"
-            android:layout_height="80dp"
-            android:src="@drawable/screen_tareas_operario_tabla_operario" />
+            android:layout_height="50dp"
+            android:background="@drawable/screen_tareas_operario_tabla_operario" />
     </LinearLayout>
 
     <LinearLayout
@@ -55,12 +56,13 @@
         android:orientation="horizontal"
         android:layout_marginLeft="50dp"
         android:layout_marginRight="40dp"
+        android:padding="10dp"
         >
-        <ImageView
+        <Button
             android:id="@+id/button_vista_rapida_tareas_operario_screen_personal_task"
             android:layout_width="wrap_content"
-            android:layout_height="80dp"
-            android:src="@drawable/screen_tareas_operario_vista_rapida"
+            android:layout_height="60dp"
+            android:background="@drawable/screen_tareas_operario_vista_rapida"
             />
     </LinearLayout>
 

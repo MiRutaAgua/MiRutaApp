@@ -37,14 +37,15 @@
         android:layout_marginTop="20dip"
         android:layout_marginLeft="50dp"
         android:layout_marginRight="40dp"
+        android:padding="10dp"
         >
 
 
-        <ImageView
+        <Button
             android:id="@+id/button_tabla_tareas_equipo_screen_team_task"
             android:layout_width="wrap_content"
-            android:layout_height="80dp"
-            android:src="@drawable/screen_tareas_equipo_tabla_equipo" />
+            android:layout_height="50dp"
+            android:background="@drawable/screen_tareas_equipo_tabla_equipo" />
     </LinearLayout>
 
     <LinearLayout
@@ -54,14 +55,15 @@
         android:gravity="center"
         android:layout_marginLeft="50dp"
         android:layout_marginRight="40dp"
+        android:padding="10dp"
         >
 
-        <ImageView
+        <Button
 
             android:id="@+id/button_vista_tareas_equipo_screen_team_task"
             android:layout_width="wrap_content"
-            android:layout_height="80dp"
-            android:src="@drawable/screen_tareas_equipo_vista_rapida" />
+            android:layout_height="60dp"
+            android:background="@drawable/screen_tareas_equipo_vista_rapida" />
     </LinearLayout>
 
 </LinearLayout>

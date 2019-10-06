@@ -32,6 +32,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -59,7 +60,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
     private ImageView foto_instalacion_screen_exec_task;
     private ImageView foto_final_instalacion_screen_exec_task;
     private ImageView foto_numero_de_serie_screen_exec_task;
-    private ImageView imageButton_firma_cliente_screen_validate, button_compartir_screen_validate;
+    private ImageView imageButton_firma_cliente_screen_validate;
     private LinearLayout llScroll;
     private LinearLayout llScroll_2;
     private LinearLayout llScroll_3;
@@ -67,7 +68,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
     boolean bitmap1_no_nulo = false, bitmap2_no_nulo = false,bitmap3_no_nulo = false,bitmap4_no_nulo = true;
     private Bitmap bitmap_firma_cliente = null, bitmap = null,  bitmap2 = null,bitmap3 = null,bitmap4 = null;
     private static final String pdfName = "pdf_validar";
-    private ImageView imageButton_editar_firma_cliente_screen_validate, imageView_screen_validate_cerrar_tarea;
+    private Button imageButton_editar_firma_cliente_screen_validate,button_compartir_screen_validate, imageView_screen_validate_cerrar_tarea;
     private EditText lectura_ultima_et, lectura_actual_et;
     private TextView textView_calibre_label_screen_validate,numero_serie_nuevo_label, numero_serie_nuevo, textView_calibre_screen_validate,textView_numero_serie_viejo_label,textView_numero_serie_viejo;
 
@@ -96,7 +97,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
         llScroll_2 = (LinearLayout)findViewById(R.id.linearLayout_screen_validate_2);
         llScroll_3 = (LinearLayout)findViewById(R.id.linearLayout_screen_validate_3);
         llScroll_4 = (LinearLayout)findViewById(R.id.linearLayout_screen_validate_4);
-        button_compartir_screen_validate  = (ImageView)findViewById(R.id.button_compartir_screen_validate);
+        button_compartir_screen_validate  = (Button)findViewById(R.id.button_compartir_screen_validate);
         lectura_ultima_et    = (EditText)findViewById(R.id.editText_lectura_ultima_de_contador_screen_incidence_summary);
         lectura_actual_et    = (EditText)findViewById(R.id.editText_lectura_actual_de_contador_screen_incidence_summary);
         numero_serie_nuevo_label    = (TextView)findViewById(R.id.textView_numero_serie_nuevo_label_screen_validate);
@@ -106,13 +107,13 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
         textView_numero_serie_viejo_label = (TextView)findViewById(R.id.textView_numero_serie_viejo_label);
         textView_numero_serie_viejo = (TextView)findViewById(R.id.textView_numero_serie_viejo);
 
-        imageView_screen_validate_cerrar_tarea    = (ImageView)findViewById(R.id.button_cerrar_tarea_screen_validate);
+        imageView_screen_validate_cerrar_tarea    = (Button)findViewById(R.id.button_cerrar_tarea_screen_validate);
         foto_instalacion_screen_exec_task         = (ImageView)findViewById(R.id.imageView_foto_antes_instalacion_screen_validate);
         foto_final_instalacion_screen_exec_task   = (ImageView)findViewById(R.id.imageView_foto_final_instalacion_screen_validate);
         foto_numero_de_serie_screen_exec_task     = (ImageView)findViewById(R.id.imageView_foto_numero_serie_screen_validate);
 
         imageButton_firma_cliente_screen_validate = (ImageView)findViewById(R.id.imageButton_firma_cliente_screen_validate);
-        imageButton_editar_firma_cliente_screen_validate = (ImageView)findViewById(R.id.imageButton_editar_firma_cliente_screen_validate);
+        imageButton_editar_firma_cliente_screen_validate = (Button)findViewById(R.id.imageButton_editar_firma_cliente_screen_validate);
 
         nombre_y_tarea = (TextView) findViewById(R.id.textView_nombre_cliente_y_tarea_screen_validate);
 

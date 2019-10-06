@@ -25,6 +25,7 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,7 +54,7 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
     Bitmap foto_numero_serie_bitmap= null;
     private ArrayList<String> images_files;
     private ArrayList<String> images_files_names;
-    ImageView button_guardar_datos_screen_validate_battery_intake_asignation;
+    Button button_guardar_datos_screen_validate_battery_intake_asignation;
 
     TextView numero_serie, numero_serie_nuevo, lectura_ultima, label_lectura_ultima, lectura_anterior, observaciones, ubicacion;
     String current_tag;
@@ -84,6 +85,7 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
         lectura_anterior     = (TextView)findViewById(R.id.textView_lectura_anterior_value_screen_validate_battery_intake_asignation);
         observaciones     = (TextView)findViewById(R.id.textView_observaciones_screen_validate_battery_intake_asignation);
         ubicacion     = (TextView)findViewById(R.id.textView_ubicacion_screen_validate_battery_intake_asignation);
+        button_guardar_datos_screen_validate_battery_intake_asignation = (Button)findViewById(R.id.button_guardar_datos_screen_validate_battery_intake_asignation);
 
         label_lectura_ultima.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,7 +112,6 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
             }
         });
 
-        button_guardar_datos_screen_validate_battery_intake_asignation = (ImageView)findViewById(R.id.button_guardar_datos_screen_validate_battery_intake_asignation);
         button_guardar_datos_screen_validate_battery_intake_asignation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -47,7 +47,7 @@ import java.util.Date;
 
 public class Screen_User_Data extends AppCompatActivity implements TaskCompleted{
 
-    ImageView button_continuar;
+    Button button_continuar;
     CircleImageView circlImageView_photo;
     TextView nombre, telefono;
     String nombre_operario;
@@ -77,7 +77,7 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
         myToolbar.setBackgroundColor(Color.TRANSPARENT);
         setSupportActionBar(myToolbar);
 
-        button_continuar = (ImageView)findViewById(R.id.button_screen_user_data_continuar);
+        button_continuar = (Button)findViewById(R.id.button_screen_user_data_continuar);
         circlImageView_photo = (CircleImageView)findViewById(R.id.circleImageView_screen_user_data_photo);
         nombre = (TextView)findViewById(R.id.textView_screen_user_data_nombre);
         telefono = (TextView)findViewById(R.id.textView_screen_user_data_telefono);

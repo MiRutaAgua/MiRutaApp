@@ -297,13 +297,13 @@ android:layout_height="match_parent">
         android:orientation="horizontal"
         android:layout_marginTop="30dp"
         android:gravity="center"
-        android:paddingBottom="20dp"
+        android:padding="20dp"
         >
-        <ImageView
+        <Button
             android:id="@+id/button_guardar_datos_screen_validate_battery_intake_asignation"
             android:layout_width="280dp"
-            android:layout_height="60dp"
-            android:src="@drawable/screen_validate_battery_intake_asgnation_boton" />
+            android:layout_height="40dp"
+            android:background="@drawable/screen_validate_battery_intake_asgnation_boton" />
 
     </LinearLayout>
 
