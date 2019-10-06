@@ -45,7 +45,7 @@
         <Button
             android:id="@+id/button_tabla_tareas_operarios_screen_personal_task"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_height="48dp"
             android:background="@drawable/screen_tareas_operario_tabla_operario" />
     </LinearLayout>
 
@@ -57,11 +57,12 @@
         android:layout_marginLeft="50dp"
         android:layout_marginRight="40dp"
         android:padding="10dp"
+        android:layout_marginTop="5dp"
         >
         <Button
             android:id="@+id/button_vista_rapida_tareas_operario_screen_personal_task"
             android:layout_width="wrap_content"
-            android:layout_height="60dp"
+            android:layout_height="55dp"
             android:background="@drawable/screen_tareas_operario_vista_rapida"
             />
     </LinearLayout>

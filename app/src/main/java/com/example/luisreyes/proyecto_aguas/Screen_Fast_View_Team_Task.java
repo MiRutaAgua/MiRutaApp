@@ -95,10 +95,13 @@ public class Screen_Fast_View_Team_Task  extends AppCompatActivity implements Ta
                     for (int i = 1; i <= team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas(); i++) {
                         try {
                             JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.dBtareasController.get_one_tarea_from_Database(i));
-                            My_Fast_View_Task fast_task = new My_Fast_View_Task();
-                            fast_task.setTipo_tarea(jsonObject.getString("tipo_tarea").replace("\n", "").replace(" ", ""));
-                            fast_task.setCalibre(jsonObject.getString("calibre_toma").replace("\n", "").replace(" ", ""));
-                            lista_tareas_fast.add(fast_task);
+                            String tipo_tarea =jsonObject.getString("tipo_tarea").replace("\n", "");
+                            if(!tipo_tarea.contains("null")){
+                                My_Fast_View_Task fast_task = new My_Fast_View_Task();
+                                fast_task.setTipo_tarea(tipo_tarea);
+                                fast_task.setCalibre(jsonObject.getString("calibre_toma").replace("\n", ""));
+                                lista_tareas_fast.add(fast_task);
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Toast.makeText(this,"Error no pudo obtener tipo de tarea : "+e.toString(), Toast.LENGTH_LONG).show();
@@ -209,10 +212,13 @@ public class Screen_Fast_View_Team_Task  extends AppCompatActivity implements Ta
                                 }
                             }
 
-                            My_Fast_View_Task fast_task = new My_Fast_View_Task();
-                            fast_task.setTipo_tarea(jsonObject.getString("tipo_tarea").replace("\n", "").replace(" ", ""));
-                            fast_task.setCalibre(jsonObject.getString("calibre_toma").replace("\n", "").replace(" ", ""));
-                            lista_tareas_fast.add(fast_task);
+                            String tipo_tarea =jsonObject.getString("tipo_tarea").replace("\n", "");
+                            if(!tipo_tarea.contains("null")){
+                                My_Fast_View_Task fast_task = new My_Fast_View_Task();
+                                fast_task.setTipo_tarea(tipo_tarea);
+                                fast_task.setCalibre(jsonObject.getString("calibre_toma").replace("\n", ""));
+                                lista_tareas_fast.add(fast_task);
+                            }
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
