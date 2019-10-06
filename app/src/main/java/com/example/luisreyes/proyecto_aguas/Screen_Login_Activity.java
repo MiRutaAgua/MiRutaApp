@@ -99,13 +99,13 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
 
         try {
             operario_JSON.put("id", 1);
-            operario_JSON.put("nombre", "unknow");
-            operario_JSON.put("apellidos", "unknow");
+            operario_JSON.put("nombre", "null");
+            operario_JSON.put("apellidos", "null");
             operario_JSON.put("edad", 0);
-            operario_JSON.put("telefonos", "000000");
-            operario_JSON.put("usuario", "user");
-            operario_JSON.put("clave", "password");
-            operario_JSON.put("tareas", "0");
+            operario_JSON.put("telefonos", "null");
+            operario_JSON.put("usuario", "null");
+            operario_JSON.put("clave", "null");
+            operario_JSON.put("tareas", "null");
             operario_JSON.put("date_time_modified", "0");
             operario_JSON.put("foto", "null");
 

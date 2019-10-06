@@ -182,7 +182,7 @@ public class Screen_Insertar_Tarea extends AppCompatActivity implements TaskComp
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_opcion1:
+            case R.id.Contactar:
                 Toast.makeText(Screen_Insertar_Tarea.this, "Seleccionó la opción settings", Toast.LENGTH_SHORT).show();
                 // User chose the "Settings" item, show the app settings UI...
                 return true;

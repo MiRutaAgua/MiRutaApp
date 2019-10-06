@@ -98,7 +98,7 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
                 telefono.setText(json_usuario.getString("telefonos"));
 
                 if (checkConection()) {
-                    showRingDialog("Cargado informacion de operario...");
+                    showRingDialog("Cargando información de operario...");
                     String type_script = "download_user_image";
                     BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_User_Data.this);
                     backgroundWorker.execute(type_script, usuario);
@@ -170,7 +170,7 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
         if(requestCode == REQUEST_TAKE_PHOTO_FULL_SIZE){
             if (resultCode == RESULT_OK) {
                 try {
-                    mCurrentPhotoPath = saveBitmapImage(getPhotoUserLocal(mCurrentPhotoPath), "operario_"+Screen_Login_Activity.operario_JSON.getString("usuario"));
+                    mCurrentPhotoPath = saveBitmapImage(getPhotoUserLocal(mCurrentPhotoPath), Screen_Login_Activity.operario_JSON.getString("usuario")+"_operario");
                     File file = new File(mCurrentPhotoPath);
                     bitmap_user_photo = null;
                     bitmap_user_photo = getPhotoUserLocal(mCurrentPhotoPath);
@@ -241,7 +241,7 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
                 bitmap = Screen_Register_Operario.getImageFromString(result);
                 if(bitmap != null){
                     circlImageView_photo.setImageBitmap(bitmap);
-                    saveBitmapImage(Screen_Register_Operario.getImageFromString(result), usuario);
+                    saveBitmapImage(Screen_Register_Operario.getImageFromString(result), usuario+"_operario");
                 }
             }
         }
@@ -297,6 +297,7 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
         }
         file_name+=".jpg";
         File file = new File(myDir, file_name);
+//        Toast.makeText(Screen_User_Data.this, file_name, Toast.LENGTH_SHORT).show();
         if (file.exists())
             file.delete();
         try {
@@ -314,7 +315,7 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
         // Create an image file name
 
         String imageFileName = null;
-        image = "operario_"+usuario.toString();
+        image = usuario.toString()+"_operario";
         File image_file=null;
         File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_operarios");
         if (!storageDir.exists()) {
@@ -386,16 +387,27 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_opcion1:
-                Toast.makeText(Screen_User_Data.this, "Seleccionó la opción settings", Toast.LENGTH_SHORT).show();
+            case R.id.Contactar:
+//                Toast.makeText(Screen_User_Data.this, "Seleccionó la opción settings", Toast.LENGTH_SHORT).show();
+                openMessage("Contactar",
+                        /*+"\nAdrian Nieves: 1331995adrian@gmail.com"
+                        +"\nJorge G. Perez: yoyi1991@gmail.com"*/
+                        "\n   Michel Morales: mraguas@gmail.com"
+                                +"\n\n       Luis A. Reyes: inglreyesm@gmail.com");
                 // User chose the "Settings" item, show the app settings UI...
                 return true;
 
-//            case R.id.action_favorite:
-//                Toast.makeText(MainActivity.this, "Seleccionó la opción faovorito", Toast.LENGTH_SHORT).show();
-//                // User chose the "Favorite" action, mark the current item
-//                // as a favorite...
-//                return true;
+            case R.id.Ayuda:
+                Toast.makeText(Screen_User_Data.this, "Ayuda", Toast.LENGTH_SHORT).show();
+                // User chose the "Favorite" action, mark the current item
+                // as a favorite...
+                return true;
+
+            case R.id.Configuracion:
+                Toast.makeText(Screen_User_Data.this, "Configuracion", Toast.LENGTH_SHORT).show();
+                // User chose the "Favorite" action, mark the current item
+                // as a favorite...
+                return true;
 
             default:
                 // If we got here, the user's action was not recognized.
@@ -403,5 +415,11 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
                 return super.onOptionsItemSelected(item);
 
         }
+    }
+
+    public void openMessage(String title, String hint){
+        MessageDialog messageDialog = new MessageDialog();
+        messageDialog.setTitleAndHint(title, hint);
+        messageDialog.show(getSupportFragmentManager(), title);
     }
 }

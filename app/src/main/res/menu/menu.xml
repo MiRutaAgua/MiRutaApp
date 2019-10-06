@@ -1,18 +1,25 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="400dp"
+    >
 
     <item
-        android:id="@+id/action_opcion1"
-        android:title="opcion 1"
-        app:showAsAction="never"/>
+        android:id="@+id/Configuracion"
+        android:title="Configuracion"
+        app:showAsAction="never"
+        android:layout_width="400dp"
+        />
 
+    <item android:id="@+id/Ayuda"
+        android:title="Ayuda"
+        app:showAsAction="never"
+        android:layout_width="400dp"
+        />
 
-    <item android:id="@+id/action_opcion2"
-        android:title="opcion 2"
-        app:showAsAction="never"/>
-
-    <item android:id="@+id/action_opcion3"
-        android:title="opcion 3"
-        app:showAsAction="never"/>
+    <item android:id="@+id/Contactar"
+        android:title="Contactar"
+        app:showAsAction="never"
+        android:layout_width="400dp"
+        />
 
 </menu>

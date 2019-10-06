@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Camera;
+import android.graphics.Color;
 import android.graphics.ImageFormat;
 import android.graphics.Matrix;
 import android.graphics.RectF;
@@ -40,6 +41,8 @@ import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Size;
 import android.util.SparseIntArray;
@@ -195,25 +198,6 @@ public class Screen_Camera extends Activity {
             public void onOrientationChanged(int orientation) {
 //                Toast.makeText(Screen_Camera.this, "new : "+String.valueOf(orientation), Toast.LENGTH_LONG).show();
                 sensorOrientation = orientation;
-//                int value = Screen_Camera.sensorOrientation;
-//                if(value < 45 && value >= 315){
-//                    Matrix matrix = new Matrix();
-//                    imageView.setScaleType(ImageView.ScaleType.MATRIX);   //required
-//                    matrix.postRotate(imageView.getDrawable().getBounds().width()/2, imageView.getDrawable().getBounds().height()/2);
-//                    imageView.setImageMatrix(matrix);
-//                }else if(value >= 225 && value < 315) {
-//                    Matrix matrix = new Matrix();
-//                    imageView.setScaleType(ImageView.ScaleType.MATRIX);   //required
-//                    matrix.postRotate((float) angle, pivotX, pivotY);
-//                    imageView.setImageMatrix(matrix);
-//                }else if(value >= 135 && value < 225) {
-//                    currentOrientation = 4;
-//                }else if(value >= 45 && value < 135) {
-//                    Matrix matrix = new Matrix();
-//                    imageView.setScaleType(ImageView.ScaleType.MATRIX);   //required
-//                    matrix.postRotate((float) angle, pivotX, pivotY);
-//                    imageView.setImageMatrix(matrix);
-//                }
             }
         };
         orientationListener.enable();

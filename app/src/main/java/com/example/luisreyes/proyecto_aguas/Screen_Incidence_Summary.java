@@ -27,6 +27,8 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.DisplayMetrics;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -49,6 +51,7 @@ import java.util.Date;
  * Created by Alejandro on 11/08/2019.
  */
 
+@RequiresApi(api = Build.VERSION_CODES.KITKAT)
 public class Screen_Incidence_Summary extends AppCompatActivity implements TaskCompleted{
 
     private ImageView button_compartir_screen_incidence_summary,firma_cliente, foto1, foto2, foto3, cerrar_tarea;
@@ -75,10 +78,8 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         myToolbar.setBackgroundColor(Color.TRANSPARENT);
-
         setSupportActionBar(myToolbar);
-        getSupportActionBar().setIcon(getDrawable(R.drawable.toolbar_image));
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
 
         llScroll = (LinearLayout)findViewById(R.id.linearLayout_screen_incidence_summary);
         llScroll_2 = (LinearLayout)findViewById(R.id.linearLayout_screen_incidence_summary_2);
@@ -432,5 +433,51 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
     }
     private void hideRingDialog(){
         progressDialog.dismiss();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.Contactar:
+//                Toast.makeText(Screen_User_Data.this, "Seleccionó la opción settings", Toast.LENGTH_SHORT).show();
+                openMessage("Contactar",
+                        /*+"\nAdrian Nieves: 1331995adrian@gmail.com"
+                        +"\nJorge G. Perez: yoyi1991@gmail.com"*/
+                        "\n   Michel Morales: mraguas@gmail.com"
+                                +"\n\n       Luis A. Reyes: inglreyesm@gmail.com");
+                // User chose the "Settings" item, show the app settings UI...
+                return true;
+
+            case R.id.Ayuda:
+//                Toast.makeText(Screen_User_Data.this, "Ayuda", Toast.LENGTH_SHORT).show();
+                // User chose the "Favorite" action, mark the current item
+                // as a favorite...
+                return true;
+
+            case R.id.Configuracion:
+//                Toast.makeText(Screen_User_Data.this, "Configuracion", Toast.LENGTH_SHORT).show();
+                // User chose the "Favorite" action, mark the current item
+                // as a favorite...
+                return true;
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
+    }
+
+    public void openMessage(String title, String hint){
+        MessageDialog messageDialog = new MessageDialog();
+        messageDialog.setTitleAndHint(title, hint);
+        messageDialog.show(getSupportFragmentManager(), title);
     }
 }
