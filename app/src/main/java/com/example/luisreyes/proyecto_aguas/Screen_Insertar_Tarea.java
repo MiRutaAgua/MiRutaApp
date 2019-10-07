@@ -101,36 +101,47 @@ public class Screen_Insertar_Tarea extends AppCompatActivity implements TaskComp
         screen_insertar_tarea_agregar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(checkConection()){
-                    if(!(TextUtils.isEmpty(editText_numero_serie_screen_insertar_tarea.getText().toString()))){
-                        //Screen_Login_Activity.tarea_JSON = team_or_personal_task_selection_screen_Activity.dBtareasController.getJsonTarea();
-                        guardar_modificaciones();
+                if (!(TextUtils.isEmpty(editText_numero_serie_screen_insertar_tarea.getText().toString()))) {
+                    if (!team_or_personal_task_selection_screen_Activity.dBtareasController.checkIfTareaExists(
+                            editText_numero_serie_screen_insertar_tarea.getText().toString())) {
+                        if (checkConection()) {
+                            //Screen_Login_Activity.tarea_JSON = team_or_personal_task_selection_screen_Activity.dBtareasController.getJsonTarea();
+                            guardar_modificaciones();
 
-                        textView_screen_insertar_tarea.setText(Screen_Login_Activity.tarea_JSON.toString());
-                        showRingDialog("Insertando tarea...");
-                        try {
-                            team_or_personal_task_selection_screen_Activity.dBtareasController.insertTarea(Screen_Login_Activity.tarea_JSON);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                            textView_screen_insertar_tarea.setText(Screen_Login_Activity.tarea_JSON.toString());
+                            showRingDialog("Insertando tarea...");
+                            try {
+                                team_or_personal_task_selection_screen_Activity.dBtareasController.insertTarea(Screen_Login_Activity.tarea_JSON);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            String type_script = "create_tarea";
+                            BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Insertar_Tarea.this);
+                            backgroundWorker.execute(type_script);
+                        } else {
+                            Screen_Login_Activity.tarea_JSON = team_or_personal_task_selection_screen_Activity.dBtareasController.getJsonTarea();
+                            guardar_modificaciones();
+                            try {
+                                Screen_Login_Activity.tarea_JSON.put("status_tarea", "TO_UPLOAD");
+                                team_or_personal_task_selection_screen_Activity.dBtareasController.insertTarea(Screen_Login_Activity.tarea_JSON);
+                                Toast.makeText(Screen_Insertar_Tarea.this, "Insertando Tarea Offline", Toast.LENGTH_SHORT).show();
+
+                                Intent intent_open_task_or_personal_screen = new Intent(Screen_Insertar_Tarea.this, team_or_personal_task_selection_screen_Activity.class);
+                                startActivity(intent_open_task_or_personal_screen);
+                                Screen_Insertar_Tarea.this.finish();
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                Toast.makeText(Screen_Insertar_Tarea.this, "Problemas con JSON en Offline", Toast.LENGTH_SHORT).show();
+                            }
                         }
-                        String type_script = "create_tarea";
-                        BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Insertar_Tarea.this);
-                        backgroundWorker.execute(type_script);
+                    }else{
+                        Toast.makeText(Screen_Insertar_Tarea.this, " El contador ya existe", Toast.LENGTH_SHORT).show();
                     }
                 }
                 else{
-                    Screen_Login_Activity.tarea_JSON = team_or_personal_task_selection_screen_Activity.dBtareasController.getJsonTarea();
-                    guardar_modificaciones();
-                    try {
-                        Screen_Login_Activity.tarea_JSON.put("status_tarea", "TO_UPLOAD");
-                        team_or_personal_task_selection_screen_Activity.dBtareasController.insertTarea(Screen_Login_Activity.tarea_JSON);
-                        Toast.makeText(Screen_Insertar_Tarea.this, "Insertando Tarea Offline", Toast.LENGTH_SHORT).show();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        Toast.makeText(Screen_Insertar_Tarea.this, "Problemas con JSON en Offline", Toast.LENGTH_SHORT).show();
-                    }
+                    Toast.makeText(Screen_Insertar_Tarea.this, "Inserte número de serie", Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
 
@@ -211,6 +222,10 @@ public class Screen_Insertar_Tarea extends AppCompatActivity implements TaskComp
             else {
                 Toast.makeText(Screen_Insertar_Tarea.this, "Tarea insertada correctamente", Toast.LENGTH_LONG).show();
                 textView_screen_insertar_tarea.setText(result);
+
+                Intent intent_open_task_or_personal_screen = new Intent(Screen_Insertar_Tarea.this, team_or_personal_task_selection_screen_Activity.class);
+                startActivity(intent_open_task_or_personal_screen);
+                Screen_Insertar_Tarea.this.finish();
             }
         }
     }

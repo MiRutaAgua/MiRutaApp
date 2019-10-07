@@ -164,6 +164,12 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
 
                 showRingDialog("Guardando Cambios en Tarea");
                 if(checkConection()) {
+                    try {
+                        team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea(Screen_Login_Activity.tarea_JSON);
+                    } catch (JSONException e) {
+                        Toast.makeText(Screen_Execute_Task.this, "no se pudo obtener guardar tarea local", Toast.LENGTH_LONG).show();
+                        e.printStackTrace();
+                    }
                     String type = "update_tarea";
                     BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Execute_Task.this);
                     backgroundWorker.execute(type);
@@ -619,6 +625,11 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                         if(!images_files_names.isEmpty() && !images_files.isEmpty()) {
                             showRingDialog("Subiedo fotos");
                             uploadPhotos();
+                        }else{
+                            Toast.makeText(Screen_Execute_Task.this, "Actualizada tarea correctamente", Toast.LENGTH_SHORT).show();
+                            Intent intent_open_task_or_personal_screen = new Intent(Screen_Execute_Task.this, team_or_personal_task_selection_screen_Activity.class);
+                            startActivity(intent_open_task_or_personal_screen);
+                            Screen_Execute_Task.this.finish();
                         }
                     }
                 }

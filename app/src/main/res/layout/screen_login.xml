@@ -48,7 +48,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dip"
                 android:layout_weight="1"
-                android:text="lreyesm"
+                android:text="Michel"
                 android:id="@+id/editText_Nombre_Operario_screen_login"
                 android:inputType="text"
                 android:imeOptions="actionNext"
@@ -84,7 +84,7 @@
                 android:inputType="textPassword"
                 android:imeOptions="actionDone"
                 android:fontFamily="sans-serif"
-                android:text="password"
+                android:text="123456"
                 />
         </LinearLayout>
 

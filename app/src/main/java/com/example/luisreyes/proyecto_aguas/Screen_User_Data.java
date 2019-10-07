@@ -171,7 +171,7 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
         if(requestCode == REQUEST_TAKE_PHOTO_FULL_SIZE){
             if (resultCode == RESULT_OK) {
                 try {
-                    mCurrentPhotoPath = saveBitmapImage(getPhotoUserLocal(mCurrentPhotoPath), "operario_"+Screen_Login_Activity.operario_JSON.getString("usuario"));
+                    mCurrentPhotoPath = saveBitmapImage(getPhotoUserLocal(mCurrentPhotoPath), Screen_Login_Activity.operario_JSON.getString("usuario")+"_operario");
                     File file = new File(mCurrentPhotoPath);
                     bitmap_user_photo = null;
                     bitmap_user_photo = getPhotoUserLocal(mCurrentPhotoPath);
@@ -242,7 +242,7 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
                 bitmap = Screen_Register_Operario.getImageFromString(result);
                 if(bitmap != null){
                     circlImageView_photo.setImageBitmap(bitmap);
-                    saveBitmapImage(Screen_Register_Operario.getImageFromString(result), "operario_"+usuario);
+                    saveBitmapImage(Screen_Register_Operario.getImageFromString(result), usuario+"_operario");
                 }
             }
         }
@@ -316,7 +316,7 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
         // Create an image file name
 
         String imageFileName = null;
-        image = "operario_"+usuario.toString();
+        image =usuario.toString()+"_operario";
         File image_file=null;
         File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_operarios");
         if (!storageDir.exists()) {

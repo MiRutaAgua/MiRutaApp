@@ -101,7 +101,7 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
             get_one_tarea_url = "https://server26194.000webhostapp.com/get_one_tarea.php";
             get_tareas_url = "https://server26194.000webhostapp.com/get_tareas.php";
             create_tarea_url = "https://server26194.000webhostapp.com/create_task.php";
-            update_tarea_url = "http://server26194.000webhostapp.com/update_tarea.php";
+            update_tarea_url = "https://server26194.000webhostapp.com/update_tarea.php";
             update_operario_url = "https://server26194.000webhostapp.com/update_operario.php";
             test_conection_url = "https://server26194.000webhostapp.com/test_database.php";
             upload_image_url = "https://server26194.000webhostapp.com/upload_image.php";
