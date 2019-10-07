@@ -162,7 +162,6 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
             public void onClick(View view) {
                 guardar_en_JSON_modificaciones();
 
-                showRingDialog("Guardando Cambios en Tarea");
                 if(checkConection()) {
                     try {
                         team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea(Screen_Login_Activity.tarea_JSON);
@@ -170,15 +169,14 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                         Toast.makeText(Screen_Execute_Task.this, "no se pudo obtener guardar tarea local", Toast.LENGTH_LONG).show();
                         e.printStackTrace();
                     }
+                    showRingDialog("Guardando Cambios en Tarea");
                     String type = "update_tarea";
                     BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Execute_Task.this);
                     backgroundWorker.execute(type);
                 } else{
                     Toast.makeText(Screen_Execute_Task.this, "No hay conexion se guardaron los datos en el telefono", Toast.LENGTH_LONG).show();
                 }
-
                 //Toast.makeText(Screen_Execute_Task.this, "Guardando Cambios en Tarea", Toast.LENGTH_SHORT).show();
-
             }
         });
         observaciones_button.setOnClickListener(new View.OnClickListener() {
@@ -354,7 +352,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        if(contador != null){
+        if(contador != null  && !TextUtils.isEmpty(mCurrentPhotoPath_foto_antes)){
             try {
                 Screen_Login_Activity.tarea_JSON.put("foto_antes_instalacion",contador +"_foto_antes_instalacion.jpg");
             } catch (JSONException e) {
@@ -362,7 +360,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                 Toast.makeText(Screen_Execute_Task.this, "No pudo guardar foto_antes_instalacion", Toast.LENGTH_LONG).show();
             }
         }
-        if(contador != null){
+        if(contador != null && !TextUtils.isEmpty(mCurrentPhotoPath_foto_antes) ){
             try {
                 Screen_Login_Activity.tarea_JSON.put("foto_lectura",contador +"_foto_lectura.jpg");
             } catch (JSONException e) {
@@ -370,7 +368,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                 Toast.makeText(Screen_Execute_Task.this, "No pudo guardar foto_lectura", Toast.LENGTH_LONG).show();
             }
         }
-        if(contador != null){
+        if(contador != null && !TextUtils.isEmpty(mCurrentPhotoPath_foto_antes)){
             try {
                 Screen_Login_Activity.tarea_JSON.put("foto_numero_serie",contador +"_foto_numero_serie.jpg");
             } catch (JSONException e) {
@@ -378,7 +376,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                 Toast.makeText(Screen_Execute_Task.this, "No pudo guardar foto_numero_serie", Toast.LENGTH_LONG).show();
             }
         }
-        if(contador != null){
+        if(contador != null && !TextUtils.isEmpty(mCurrentPhotoPath_foto_antes)){
             try {
                 Screen_Login_Activity.tarea_JSON.put("foto_despues_instalacion", contador +"_foto_despues_instalacion.jpg");
             } catch (JSONException e) {

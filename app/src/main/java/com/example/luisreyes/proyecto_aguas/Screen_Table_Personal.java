@@ -256,7 +256,7 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
 
                                 String cita = jsonObject.getString("nuevo_citas");
 //                            Toast.makeText(Screen_Table_Team.this, cita, Toast.LENGTH_LONG).show();
-                                if(!cita.equals("null")) {
+                                if(!cita.equals("null") && !TextUtils.isEmpty(cita)) {
                                     cita = cita.split("\n")[0] + "\n"
                                             + "                   " + jsonObject.getString("nuevo_citas").split("\n")[1] + "\n";
                                 }else{
@@ -264,36 +264,36 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
                                 }
 
                                 String abonado = jsonObject.getString("nombre_cliente").replace("\n", "")+"\n";
-                                if(abonado.equals("null\n")) {
+                                if(abonado.equals("null\n")  && !TextUtils.isEmpty(abonado)) {
                                     abonado = "Desconocido\n";
                                 }
 //                            Toast.makeText(Screen_Table_Team.this, abonado, Toast.LENGTH_LONG).show();
                                 String numero_serie_contador = jsonObject.getString("numero_serie_contador").replace("\n", "");
-                                if(numero_serie_contador.equals("null\n")) {
+                                if(numero_serie_contador.equals("null\n") && !TextUtils.isEmpty(numero_serie_contador)) {
                                     numero_serie_contador = "-\n";
                                 }
                                 String anno_contador = jsonObject.getString("anno_de_contador").replace("\n", "")+"\n";
-                                if(anno_contador.equals("null\n")) {
+                                if(anno_contador.equals("null\n") && !TextUtils.isEmpty(anno_contador)) {
                                     anno_contador = "-\n";
                                 }
-                                String tipo_tarea = jsonObject.getString("tipo_tarea").replace("\n", "")+"\n";
-                                if(tipo_tarea.equals("null\n")) {
+                                String tipo_tarea = jsonObject.getString("tipo_tarea").replace("\n", "").replace(" ","")+"\n";
+                                if(tipo_tarea.equals("null\n") && !TextUtils.isEmpty(tipo_tarea)) {
                                     tipo_tarea = "NCI\n";
                                 }
                                 String calibre = jsonObject.getString("calibre_toma").replace("\n", "")+"\n";
-                                if(calibre.equals("null\n")) {
+                                if(calibre.equals("null\n") && !TextUtils.isEmpty(calibre)) {
                                     calibre = "Desconocido\n";
                                 }
                                 String telefono1 = jsonObject.getString("telefono1").replace("\n", "")+"\n";
-                                if(telefono1.equals("null\n")) {
+                                if(telefono1.equals("null\n") && !TextUtils.isEmpty(telefono1)) {
                                     telefono1 = "-\n";
                                 }
                                 String telefono2 = jsonObject.getString("telefono2").replace("\n", "")+"\n";
-                                if(telefono2.equals("null\n")) {
+                                if(telefono2.equals("null\n") && !TextUtils.isEmpty(telefono2)) {
                                     telefono2 = "-\n";
                                 }
                                 String numero_abonado = jsonObject.getString("numero_abonado").replace("\n", "")+"\n";
-                                if(numero_abonado.equals("null\n")) {
+                                if(numero_abonado.equals("null\n") && !TextUtils.isEmpty(numero_abonado)) {
                                     numero_abonado = "-\n";
                                 }
 
@@ -449,7 +449,7 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
 
                                 String cita = jsonObject.getString("nuevo_citas");
 //                            Toast.makeText(Screen_Table_Team.this, cita, Toast.LENGTH_LONG).show();
-                                if(!cita.equals("null")) {
+                                if(!cita.equals("null") && !TextUtils.isEmpty(cita)) {
                                     cita = cita.split("\n")[0] + "\n"
                                             + "                   " + jsonObject.getString("nuevo_citas").split("\n")[1] + "\n";
                                 }else{
@@ -457,36 +457,36 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
                                 }
 
                                 String abonado = jsonObject.getString("nombre_cliente").replace("\n", "")+"\n";
-                                if(abonado.equals("null\n")) {
+                                if(abonado.equals("null\n")  && !TextUtils.isEmpty(abonado)) {
                                     abonado = "Desconocido\n";
                                 }
 //                            Toast.makeText(Screen_Table_Team.this, abonado, Toast.LENGTH_LONG).show();
                                 String numero_serie_contador = jsonObject.getString("numero_serie_contador").replace("\n", "");
-                                if(numero_serie_contador.equals("null\n")) {
+                                if(numero_serie_contador.equals("null\n") && !TextUtils.isEmpty(numero_serie_contador)) {
                                     numero_serie_contador = "-\n";
                                 }
                                 String anno_contador = jsonObject.getString("anno_de_contador").replace("\n", "")+"\n";
-                                if(anno_contador.equals("null\n")) {
+                                if(anno_contador.equals("null\n") && !TextUtils.isEmpty(anno_contador)) {
                                     anno_contador = "-\n";
                                 }
-                                String tipo_tarea = jsonObject.getString("tipo_tarea").replace("\n", "")+"\n";
-                                if(tipo_tarea.equals("null\n")) {
+                                String tipo_tarea = jsonObject.getString("tipo_tarea").replace("\n", "").replace(" ","")+"\n";
+                                if(tipo_tarea.equals("null\n") && !TextUtils.isEmpty(tipo_tarea)) {
                                     tipo_tarea = "NCI\n";
                                 }
                                 String calibre = jsonObject.getString("calibre_toma").replace("\n", "")+"\n";
-                                if(calibre.equals("null\n")) {
+                                if(calibre.equals("null\n") && !TextUtils.isEmpty(calibre)) {
                                     calibre = "Desconocido\n";
                                 }
                                 String telefono1 = jsonObject.getString("telefono1").replace("\n", "")+"\n";
-                                if(telefono1.equals("null\n")) {
+                                if(telefono1.equals("null\n") && !TextUtils.isEmpty(telefono1)) {
                                     telefono1 = "-\n";
                                 }
                                 String telefono2 = jsonObject.getString("telefono2").replace("\n", "")+"\n";
-                                if(telefono2.equals("null\n")) {
+                                if(telefono2.equals("null\n") && !TextUtils.isEmpty(telefono2)) {
                                     telefono2 = "-\n";
                                 }
                                 String numero_abonado = jsonObject.getString("numero_abonado").replace("\n", "")+"\n";
-                                if(numero_abonado.equals("null\n")) {
+                                if(numero_abonado.equals("null\n") && !TextUtils.isEmpty(numero_abonado)) {
                                     numero_abonado = "-\n";
                                 }
 
@@ -504,7 +504,6 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
                                 contador.setTelefono2(telefono2);
                                 contador.setAbonado(abonado);
                                 contador.setNumero_abonado(numero_abonado);
-
                                 lista_ordenada_de_tareas.add(contador);
                             }
                         }
