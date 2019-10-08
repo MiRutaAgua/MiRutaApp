@@ -87,7 +87,7 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
 
         try {
             String cita = Screen_Login_Activity.tarea_JSON.getString("nuevo_citas");
-            if(!TextUtils.isEmpty(cita)) {
+            if(!TextUtils.isEmpty(cita) &&  !cita.equals("null") ) {
                 fecha_cita.setText(cita.split("\n")[0]);
                 hora_cita.setText(cita.split("\n")[1]);
             }
@@ -98,7 +98,7 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
 
         try {
             String telefonos_datos = Screen_Login_Activity.tarea_JSON.getString("telefonos_cliente");
-            if(!TextUtils.isEmpty(telefonos_datos)) {
+            if(!TextUtils.isEmpty(telefonos_datos)&&  !telefonos_datos.equals("null")) {
                 if (telefonos_datos.contains("TEL1_INCORRECTO")) {
                     checkBox_incorrecto_telefono1.setChecked(true);
                 }
@@ -119,10 +119,10 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
         try {
             String telefono1_string = Screen_Login_Activity.tarea_JSON.getString("telefono1");
             String telefono2_string = Screen_Login_Activity.tarea_JSON.getString("telefono2");
-            if(!TextUtils.isEmpty(telefono1_string)) {
+            if(!TextUtils.isEmpty(telefono1_string)&&  !telefono1_string.equals("null")) {
                 telefono1.setText(telefono1_string);
             }
-            if(!TextUtils.isEmpty(telefono2_string)) {
+            if(!TextUtils.isEmpty(telefono2_string)&&  !telefono2_string.equals("null")) {
                 telefono2.setText(telefono2_string);
             }
         } catch (JSONException e) {
@@ -131,7 +131,7 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
         }
         try {
             String observaciones_string = Screen_Login_Activity.tarea_JSON.getString("observaciones");
-            if(!TextUtils.isEmpty(observaciones_string)) {
+            if(!TextUtils.isEmpty(observaciones_string)&&  !observaciones_string.equals("null")) {
                 observaciones_text.setText(observaciones_string);
             }
         } catch (JSONException e) {
