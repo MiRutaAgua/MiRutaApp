@@ -31,6 +31,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -54,8 +55,9 @@ import java.util.Date;
 @RequiresApi(api = Build.VERSION_CODES.KITKAT)
 public class Screen_Incidence_Summary extends AppCompatActivity implements TaskCompleted{
 
-    private ImageView button_compartir_screen_incidence_summary,firma_cliente, foto1, foto2, foto3, cerrar_tarea;
+    private ImageView button_compartir_screen_incidence_summary, firma_cliente, foto1, foto2, foto3, cerrar_tarea;
 
+    private Button button_firma_cliente;
     private static final int CANVAS_REQUEST_INC_SUMMARY = 3331;
     private Bitmap bitmap_firma_cliente = null;
     private TextView observaciones_incidence, nombre_y_tarea;
@@ -86,6 +88,7 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
         llScroll_3 = (LinearLayout)findViewById(R.id.linearLayout_screen_incidence_summary_3);
         llScroll_4 = (LinearLayout)findViewById(R.id.linearLayout_screen_incidence_summary_4);
         images_files = new ArrayList<>();
+        button_firma_cliente = (Button)findViewById(R.id.imageButton_editar_firma_cliente_screen_incidence_summary);
         button_compartir_screen_incidence_summary = (ImageView)findViewById(R.id.button_compartir_screen_incidence_summary);
         firma_cliente = (ImageView)findViewById(R.id.imageButton_firma_cliente_screen_validate);
         foto1 = (ImageView)findViewById(R.id.imageView_foto1_screen_incidence_summary);
@@ -145,7 +148,13 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
             Toast.makeText(Screen_Incidence_Summary.this, "no se pudo cambiar observaciones de tarea", Toast.LENGTH_LONG).show();
         }
         try {
-            firma_cliente.setImageBitmap(Screen_Register_Operario.getImageFromString(Screen_Login_Activity.tarea_JSON.getString("firma_cliente")));
+            String string_firma = Screen_Login_Activity.tarea_JSON.getString("firma_cliente");
+            if(!TextUtils.isEmpty(string_firma) && !string_firma.equals("null")) {
+                bitmap_firma_cliente = Screen_Register_Operario.getImageFromString(string_firma);
+                if(bitmap_firma_cliente!=null) {
+                    firma_cliente.setImageBitmap(bitmap_firma_cliente);
+                }
+            }
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(Screen_Incidence_Summary.this, "no se pudo obtener firma cliente de tarea", Toast.LENGTH_LONG).show();
@@ -161,6 +170,18 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
         }
 
         firma_cliente.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent_zoom_firma = new Intent(Screen_Incidence_Summary.this, Screen_Zoom_Firma.class);
+                if(bitmap_firma_cliente != null) {
+                    String foto = Screen_Register_Operario.getStringImage(bitmap_firma_cliente);
+                    intent_zoom_firma.putExtra("zooming_photo", foto);
+                    startActivity(intent_zoom_firma);
+                }
+            }
+        });
+
+        button_firma_cliente.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent_open_screen_client_sign = new Intent(Screen_Incidence_Summary.this, Screen_Draw_Canvas.class);

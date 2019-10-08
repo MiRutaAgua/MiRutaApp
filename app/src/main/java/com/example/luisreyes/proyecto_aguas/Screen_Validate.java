@@ -178,12 +178,13 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
             foto_final_instalacion_screen_exec_task.setImageBitmap(foto_despues_intalacion_bitmap);
         }
         try {
-            Bitmap bitmap_firma_cliente = Screen_Register_Operario.getImageFromString(
-                    Screen_Login_Activity.tarea_JSON.getString("firma_cliente"));
-            if(bitmap_firma_cliente != null) {
-                imageButton_firma_cliente_screen_validate.setImageBitmap(bitmap_firma_cliente);
+            String string_firma = Screen_Login_Activity.tarea_JSON.getString("firma_cliente");
+            if(!TextUtils.isEmpty(string_firma) && !string_firma.equals("null")) {
+                bitmap_firma_cliente = Screen_Register_Operario.getImageFromString(string_firma);
+                if(bitmap_firma_cliente!=null) {
+                    imageButton_firma_cliente_screen_validate.setImageBitmap(bitmap_firma_cliente);
+                }
             }
-
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(Screen_Validate.this, "no se pudo obtener foto_despues_instalacion", Toast.LENGTH_LONG).show();
@@ -327,11 +328,11 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
         imageButton_firma_cliente_screen_validate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent_zoom_photo = new Intent(Screen_Validate.this, Screen_Zoom_Photo.class);
+                Intent intent_zoom_firma = new Intent(Screen_Validate.this, Screen_Zoom_Firma.class);
                 if(bitmap_firma_cliente != null) {
                     String foto = Screen_Register_Operario.getStringImage(bitmap_firma_cliente);
-                    intent_zoom_photo.putExtra("zooming_photo", foto);
-                    startActivity(intent_zoom_photo);
+                    intent_zoom_firma.putExtra("zooming_photo", foto);
+                    startActivity(intent_zoom_firma);
                 }
             }
         });
@@ -461,15 +462,17 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == CANVAS_REQUEST_VALIDATE){
-            String firma = data.getStringExtra("firma_cliente");
-            //int result = data.getIntExtra("result", 0);
-            //String res = String.valueOf(result);
-            if(!firma.equals("null")) {
-                bitmap_firma_cliente = getImageFromString(firma);
-                imageButton_firma_cliente_screen_validate.setImageBitmap(bitmap_firma_cliente);
+        if(resultCode == RESULT_OK) {
+            if (requestCode == CANVAS_REQUEST_VALIDATE) {
+                String firma = data.getStringExtra("firma_cliente");
+                //int result = data.getIntExtra("result", 0);
+                //String res = String.valueOf(result);
+                if (!firma.equals("null")) {
+                    bitmap_firma_cliente = getImageFromString(firma);
+                    imageButton_firma_cliente_screen_validate.setImageBitmap(bitmap_firma_cliente);
+                }
+                //Toast.makeText(Screen_Validate.this, "Resultado ok: " + res, Toast.LENGTH_LONG).show();
             }
-            //Toast.makeText(Screen_Validate.this, "Resultado ok: " + res, Toast.LENGTH_LONG).show();
         }
     }
 
