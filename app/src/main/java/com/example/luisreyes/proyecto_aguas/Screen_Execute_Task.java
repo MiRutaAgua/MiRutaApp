@@ -336,7 +336,6 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
             }
         }
         if(!TextUtils.isEmpty(lectura_editText.getText().toString())){
-
             String lectura_string = lectura_editText.getText().toString();
             try {
                 Screen_Login_Activity.tarea_JSON.put("lectura_actual",lectura_string);

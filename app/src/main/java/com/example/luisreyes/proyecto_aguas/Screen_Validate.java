@@ -124,7 +124,17 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
             Toast.makeText(Screen_Validate.this, "no se pudo obtener nombre de cliente", Toast.LENGTH_LONG).show();
         }
         try {
-            lectura_ultima_et.setText(Screen_Login_Activity.tarea_JSON.getString("lectura_actual"));
+            lectura_ultima_et.setText(Screen_Login_Activity.tarea_JSON.getString("lectura_ultima"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Toast.makeText(Screen_Validate.this, "no se pudo obtener lectura_ultima", Toast.LENGTH_LONG).show();
+        }
+        try {
+            String n = null;
+            n= Screen_Login_Activity.tarea_JSON.getString("lectura_actual");
+            if(!n.equals("null") && !TextUtils.isEmpty(n) && n != null) {
+                lectura_actual_et.setText(Screen_Login_Activity.tarea_JSON.getString("lectura_actual"));
+            }
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(Screen_Validate.this, "no se pudo obtener lectura_actual", Toast.LENGTH_LONG).show();

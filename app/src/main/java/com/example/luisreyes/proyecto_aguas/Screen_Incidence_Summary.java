@@ -107,23 +107,30 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
 //        } catch (JSONException e) {
 //            e.printStackTrace();
 //        }
-        Bitmap bitmapf = getPhotoUserLocal(Screen_Incidence.mCurrentPhotoPath_incidencia_1);
-        if(bitmapf!=null){
-            bitmap1_no_nulo =true;
-            foto1.setVisibility(View.VISIBLE);
-            foto1.setImageBitmap(bitmapf);
+        Bitmap bitmapf = null;
+        if(!TextUtils.isEmpty(Screen_Incidence.mCurrentPhotoPath_incidencia_1)) {
+            bitmapf = getPhotoUserLocal(Screen_Incidence.mCurrentPhotoPath_incidencia_1);
+            if (bitmapf != null) {
+                bitmap1_no_nulo = true;
+                foto1.setVisibility(View.VISIBLE);
+                foto1.setImageBitmap(bitmapf);
+            }
         }
-        bitmapf = getPhotoUserLocal(Screen_Incidence.mCurrentPhotoPath_incidencia_2);
-        if(bitmapf!=null){
-            bitmap2_no_nulo =true;
-            foto2.setVisibility(View.VISIBLE);
-            foto2.setImageBitmap(bitmapf);
+        if(!TextUtils.isEmpty(Screen_Incidence.mCurrentPhotoPath_incidencia_2)) {
+            bitmapf = getPhotoUserLocal(Screen_Incidence.mCurrentPhotoPath_incidencia_2);
+            if (bitmapf != null) {
+                bitmap2_no_nulo = true;
+                foto2.setVisibility(View.VISIBLE);
+                foto2.setImageBitmap(bitmapf);
+            }
         }
-        bitmapf = getPhotoUserLocal(Screen_Incidence.mCurrentPhotoPath_incidencia_3);
-        if(bitmapf!=null){
-            bitmap3_no_nulo =true;
-            foto3.setVisibility(View.VISIBLE);
-            foto3.setImageBitmap(bitmapf);
+        if(!TextUtils.isEmpty(Screen_Incidence.mCurrentPhotoPath_incidencia_3)) {
+            bitmapf = getPhotoUserLocal(Screen_Incidence.mCurrentPhotoPath_incidencia_3);
+            if (bitmapf != null) {
+                bitmap3_no_nulo = true;
+                foto3.setVisibility(View.VISIBLE);
+                foto3.setImageBitmap(bitmapf);
+            }
         }
         try {
             observaciones_incidence.setText(Screen_Login_Activity.tarea_JSON.getString("incidencia"));
@@ -145,7 +152,7 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
         }
         try {
             String lectura_string = Screen_Login_Activity.tarea_JSON.getString("lectura_actual");
-            if(!TextUtils.isEmpty(lectura_string)){
+            if(!TextUtils.isEmpty(lectura_string) && !lectura_string.equals("null")){
                 lectura.setHint(lectura_string);
             }
         } catch (JSONException e) {

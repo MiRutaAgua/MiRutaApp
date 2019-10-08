@@ -98,7 +98,7 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
 
         try {
             String telefonos_datos = Screen_Login_Activity.tarea_JSON.getString("telefonos_cliente");
-            if(!TextUtils.isEmpty(telefonos_datos)&&  !telefonos_datos.equals("null")) {
+            if(!TextUtils.isEmpty(telefonos_datos) && !telefonos_datos.equals("null")) {
                 if (telefonos_datos.contains("TEL1_INCORRECTO")) {
                     checkBox_incorrecto_telefono1.setChecked(true);
                 }
@@ -122,7 +122,7 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
             if(!TextUtils.isEmpty(telefono1_string)&&  !telefono1_string.equals("null")) {
                 telefono1.setText(telefono1_string);
             }
-            if(!TextUtils.isEmpty(telefono2_string)&&  !telefono2_string.equals("null")) {
+            if(!TextUtils.isEmpty(telefono2_string) && !telefono2_string.equals("null")) {
                 telefono2.setText(telefono2_string);
             }
         } catch (JSONException e) {
