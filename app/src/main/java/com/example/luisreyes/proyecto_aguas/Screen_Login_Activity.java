@@ -9,9 +9,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -22,7 +24,9 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -41,6 +45,7 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by luis.reyes on 10/08/2019.
@@ -114,6 +119,11 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
         }
 
 
+        if(lineEdit_nombre_de_operario.getText().toString().isEmpty()){
+            lineEdit_nombre_de_operario.setTypeface(lineEdit_nombre_de_operario.getTypeface(), Typeface.ITALIC);
+        }else{
+            lineEdit_nombre_de_operario.setTypeface(null, Typeface.NORMAL);
+        }
 
         if(checkConection()){
             isOnline = true;
@@ -127,17 +137,36 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
             Toast.makeText(this,"No hay conexion a Internet", Toast.LENGTH_LONG).show();
         }
 
+        lineEdit_nombre_de_operario.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                if(charSequence.toString().isEmpty()){
+                    lineEdit_nombre_de_operario.setTypeface(lineEdit_nombre_de_operario.getTypeface(), Typeface.ITALIC);
+                }else{
+                    lineEdit_nombre_de_operario.setTypeface(null, Typeface.NORMAL);
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
         button_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(checkConection()){
+                if (checkConection()) {
                     isOnline = true;
                     Intent intent_open_register_screen = new Intent(Screen_Login_Activity.this, Screen_Register_Operario.class);
                     startActivity(intent_open_register_screen);
-                }
-                else{
+                } else {
                     isOnline = false;
-                    Toast.makeText(Screen_Login_Activity.this,"No puede registrarse sin conexion a Internet", Toast.LENGTH_LONG).show();
+                    Toast.makeText(Screen_Login_Activity.this, "No puede registrarse sin conexion a Internet", Toast.LENGTH_LONG).show();
                 }
 
             }

@@ -169,7 +169,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:gravity="center"
-                    android:text="3420" />
+                    android:inputType="number"/>
             </LinearLayout>
 
             <LinearLayout
@@ -196,7 +196,8 @@
                     android:layout_width="136dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
-                    android:gravity="center" />
+                    android:gravity="center"
+                    android:inputType="number"/>
             </LinearLayout>
 
 

@@ -1,13 +1,14 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
+
         <item name="android:actionOverflowButtonStyle"> @style/MyActionButtonOverflow </item>
         <item name="colorPrimary">#0086FF</item>
         <item name="colorPrimaryDark">#0086FF</item>
         <item name="colorAccent">#0086FF</item>
-        <item name="android:fontFamily">@font/segoeui</item>
+        <item name="android:fontFamily" tools:targetApi="jelly_bean">@font/segoeui</item>
     </style>
 
     <!-- Style to replace actionbar overflow icon. set item 'android:actionOverflowButtonStyle' in AppTheme -->
@@ -17,7 +18,7 @@
         <item name="colorPrimary">#0086FF</item>
         <item name="colorPrimaryDark">#0086FF</item>
         <item name="colorAccent">#0086FF</item>
-        <item name="android:fontFamily">@font/segoeui</item>
+        <item name="android:fontFamily" tools:targetApi="jelly_bean">@font/segoeui</item>
     </style>
 
 </resources>

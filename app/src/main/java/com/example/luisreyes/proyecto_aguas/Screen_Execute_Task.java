@@ -70,6 +70,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
     private ImageView button_after_instalation_photo_screen_exec_task;
     private ImageView after_instalation_photo_screen_exec_task;
     private String contador = "";
+    public static String lectura_introducida = "";
 
     private EditText lectura_editText;
 
@@ -171,6 +172,15 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
             @Override
             public void onClick(View view) {
                 guardar_en_JSON_modificaciones();
+                if(!TextUtils.isEmpty(lectura_editText.getText().toString())){
+                    lectura_introducida = lectura_editText.getText().toString();
+                    try {
+                        Screen_Login_Activity.tarea_JSON.put("lectura_actual",lectura_introducida);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Toast.makeText(Screen_Execute_Task.this, "No pudo guardar lectura", Toast.LENGTH_LONG).show();
+                    }
+                }
 
                 if(checkConection()) {
                     try {
@@ -219,6 +229,9 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
             public void onClick(View view) {
                 showRingDialog("Validando...");
                 guardar_en_JSON_modificaciones();
+                if(!TextUtils.isEmpty(lectura_editText.getText().toString())) {
+                    lectura_introducida = lectura_editText.getText().toString();
+                }
                 Intent intent_open_screen_validate = new Intent(Screen_Execute_Task.this, Screen_Validate.class);
                 startActivity(intent_open_screen_validate);
             }
@@ -345,19 +358,11 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                 Toast.makeText(Screen_Execute_Task.this, "No pudo guardar telefono2", Toast.LENGTH_LONG).show();
             }
         }
-        if(!TextUtils.isEmpty(lectura_editText.getText().toString())){
-            String lectura_string = lectura_editText.getText().toString();
-            try {
-                Screen_Login_Activity.tarea_JSON.put("lectura_actual",lectura_string);
-            } catch (JSONException e) {
-                e.printStackTrace();
-                Toast.makeText(Screen_Execute_Task.this, "No pudo guardar lectura", Toast.LENGTH_LONG).show();
-            }
-        }
+
         String contador=null;
         try {
             contador = Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador");
-            Toast.makeText(Screen_Execute_Task.this, "Contador"+contador, Toast.LENGTH_LONG).show();
+//            Toast.makeText(Screen_Execute_Task.this, "Contador"+contador, Toast.LENGTH_LONG).show();
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -124,21 +124,24 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
             Toast.makeText(Screen_Validate.this, "no se pudo obtener nombre de cliente", Toast.LENGTH_LONG).show();
         }
         try {
-            lectura_ultima_et.setText(Screen_Login_Activity.tarea_JSON.getString("lectura_ultima"));
+            String lectura_last = "";
+            lectura_ultima_et.setText("");
+            lectura_last = Screen_Login_Activity.tarea_JSON.getString("lectura_actual");
+            if(lectura_last != null && !lectura_last.equals("null") && !TextUtils.isEmpty(lectura_last)) {
+                lectura_ultima_et.setText(lectura_last);
+            }
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(Screen_Validate.this, "no se pudo obtener lectura_ultima", Toast.LENGTH_LONG).show();
         }
-        try {
-            String n = null;
-            n= Screen_Login_Activity.tarea_JSON.getString("lectura_actual");
-            if(!n.equals("null") && !TextUtils.isEmpty(n) && n != null) {
-                lectura_actual_et.setText(Screen_Login_Activity.tarea_JSON.getString("lectura_actual"));
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-            Toast.makeText(Screen_Validate.this, "no se pudo obtener lectura_actual", Toast.LENGTH_LONG).show();
+
+        String n = null;
+        lectura_actual_et.setText("");
+        n = Screen_Execute_Task.lectura_introducida;
+        if(!n.equals("null") && !TextUtils.isEmpty(n) && n != null) {
+            lectura_actual_et.setText(n);
         }
+
         try {
             numero_serie_nuevo.setText(Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador").replace("\n",""));
         } catch (JSONException e) {
@@ -501,6 +504,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
 
                 }else {
                     String contador=null;
+                    Screen_Execute_Task.lectura_introducida="";
                     try {
                         contador = Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador");
                     } catch (JSONException e) {
@@ -534,6 +538,12 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                     if(!images_files_names.isEmpty() && !images_files.isEmpty()) {
                         showRingDialog("Subiedo fotos");
                         uploadPhotos();
+                    }
+                    else{
+                        Toast.makeText(Screen_Validate.this, "Actualizada tarea correctamente", Toast.LENGTH_LONG).show();
+                        Intent intent_open_battery_counter = new Intent(Screen_Validate.this, team_or_personal_task_selection_screen_Activity.class);
+                        startActivity(intent_open_battery_counter);
+                        Screen_Validate.this.finish();
                     }
                 }
             }

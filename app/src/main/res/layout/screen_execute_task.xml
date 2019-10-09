@@ -100,6 +100,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/editText_lectura_screen_exec_task"
                 android:textSize="18dp"
+                android:inputType="number"
                 />
         </LinearLayout>
 

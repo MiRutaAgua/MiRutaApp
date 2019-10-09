@@ -52,7 +52,6 @@
                 android:id="@+id/editText_Nombre_Operario_screen_login"
                 android:inputType="text"
                 android:imeOptions="actionNext"
-                android:textStyle="italic"
                 />
         </LinearLayout>
 
