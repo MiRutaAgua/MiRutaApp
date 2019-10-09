@@ -3,11 +3,14 @@ package com.example.luisreyes.proyecto_aguas;
 import android.Manifest;
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -55,7 +58,9 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
     int time_picker_repeat=0;
     TextView fecha_cita, hora_cita;
     String fecha_hora_cita="";
-    private ImageView button_guardar_datos_screen_absent;
+    private ImageView button_guardar_datos_screen_absent, button_geolocalizar_screen_absent;
+    private ProgressDialog progressDialog;
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +76,7 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
         myToolbar.setBackgroundColor(Color.TRANSPARENT);
         setSupportActionBar(myToolbar);
 
-
+        button_geolocalizar_screen_absent= (ImageView)findViewById(R.id.button_geolocalizar_screen_absent);
         button_guardar_datos_screen_absent= (ImageView)findViewById(R.id.button_guardar_datos_screen_absent);
         telefono1 = (TextView)findViewById(R.id.textView_screen_absent_telefono1);
         telefono2 = (TextView)findViewById(R.id.textView_screen_absent_telefono2);
@@ -101,9 +106,11 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
             if(!TextUtils.isEmpty(telefonos_datos) && !telefonos_datos.equals("null")) {
                 if (telefonos_datos.contains("TEL1_INCORRECTO")) {
                     checkBox_incorrecto_telefono1.setChecked(true);
+                    telefono1.setTextColor(Color.RED);
                 }
                 if (telefonos_datos.contains("TEL2_INCORRECTO")) {
                     checkBox_incorrecto_telefono2.setChecked(true);
+                    telefono2.setTextColor(Color.RED);
                 }
                 if (telefonos_datos.contains("TEL1_NO_CONTESTA")) {
                     checkbox_no_contesta_1_screen_absent.setChecked(true);
@@ -139,10 +146,17 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
             Toast.makeText(Screen_Absent.this, "No se pudo obtener observaciones", Toast.LENGTH_LONG).show();
         }
 
+        button_geolocalizar_screen_absent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(),MapsActivity.class);
+                startActivity(intent);
+            }
+        });
+
         button_guardar_datos_screen_absent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(Screen_Absent.this, "Guardando datos", Toast.LENGTH_LONG).show();
 
                 try {
                     Screen_Login_Activity.tarea_JSON.put("date_time_modified", DBtareasController.getStringFromFechaHora(new Date()));
@@ -172,7 +186,15 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                }else{
+                    try {
+                        if(Screen_Login_Activity.tarea_JSON.getString("telefonos_cliente").contains("TEL1_INCORRECTO"))
+                            Screen_Login_Activity.tarea_JSON.put("telefonos_cliente", Screen_Login_Activity.tarea_JSON.getString("telefonos_cliente").replace("TEL1_INCORRECTO",""));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
+
                 if(checkBox_incorrecto_telefono2.isChecked()) {
                     try {
                         if(!Screen_Login_Activity.tarea_JSON.getString("telefonos_cliente").contains("TEL2_INCORRECTO"))
@@ -180,7 +202,15 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                }else{
+                    try {
+                        if(Screen_Login_Activity.tarea_JSON.getString("telefonos_cliente").contains("TEL2_INCORRECTO"))
+                            Screen_Login_Activity.tarea_JSON.put("telefonos_cliente", Screen_Login_Activity.tarea_JSON.getString("telefonos_cliente").replace("TEL2_INCORRECTO",""));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
+
                 if(checkbox_no_contesta_1_screen_absent.isChecked()) {
                     try {
                         if(!Screen_Login_Activity.tarea_JSON.getString("telefonos_cliente").contains("TEL1_NO_CONTESTA"))
@@ -188,7 +218,15 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                }else{
+                    try {
+                        if(Screen_Login_Activity.tarea_JSON.getString("telefonos_cliente").contains("TEL1_NO_CONTESTA"))
+                            Screen_Login_Activity.tarea_JSON.put("telefonos_cliente", Screen_Login_Activity.tarea_JSON.getString("telefonos_cliente").replace("TEL1_NO_CONTESTA",""));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
+
                 if(checkbox_no_contesta_2_screen_absent.isChecked()) {
                     try {
                         if(!Screen_Login_Activity.tarea_JSON.getString("telefonos_cliente").contains("TEL2_NO_CONTESTA"))
@@ -196,11 +234,38 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                }else{
+                    try {
+                        if(Screen_Login_Activity.tarea_JSON.getString("telefonos_cliente").contains("TEL2_NO_CONTESTA"))
+                            Screen_Login_Activity.tarea_JSON.put("telefonos_cliente", Screen_Login_Activity.tarea_JSON.getString("telefonos_cliente").replace("TEL2_NO_CONTESTA",""));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
-
-                String type = "update_tarea";
-                BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Absent.this);
-                backgroundWorker.execute(type);
+//                Toast.makeText(Screen_Absent.this, "Guardando datos", Toast.LENGTH_LONG).show();
+                if(checkConection()) {
+                    showRingDialog("Guardando datos...");
+                    try {
+                        team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea(Screen_Login_Activity.tarea_JSON);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Toast.makeText(Screen_Absent.this, "No se pudo guardar datos offline", Toast.LENGTH_LONG).show();
+                    }
+                    String type = "update_tarea";
+                    BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Absent.this);
+                    backgroundWorker.execute(type);
+                }else{
+                    try {
+                        team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea(Screen_Login_Activity.tarea_JSON);
+                        Toast.makeText(Screen_Absent.this, "Guardando datos offline, en la proxima conexion se actualizan los datos", Toast.LENGTH_LONG).show();
+                        Intent intent_open_battery_counter = new Intent(Screen_Absent.this, team_or_personal_task_selection_screen_Activity.class);
+                        startActivity(intent_open_battery_counter);
+                        Screen_Absent.this.finish();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Toast.makeText(Screen_Absent.this, "No se pudo guardar datos offline", Toast.LENGTH_LONG).show();
+                    }
+                }
             }
         });
         telefono1.setOnClickListener(new View.OnClickListener() {
@@ -286,6 +351,21 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
                 openDialog();
             }
         });
+    }
+
+    public boolean checkConection(){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_NETWORK_STATE}, 1);
+        }
+        ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+            //we are connected to a network
+            return true;
+        }
+        else
+            return false;
     }
 
     public void openDialog(){
@@ -395,6 +475,7 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
     public void onTaskComplete(String type, String result) throws JSONException {
 
         if(type == "update_tarea"){
+            hideRingDialog();
             if(result == null){
                 Toast.makeText(this,"No hay conexion a Internet, no se pudo guardar tarea. Intente de nuevo con conexion", Toast.LENGTH_LONG).show();
             }
@@ -403,12 +484,22 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
                     Toast.makeText(Screen_Absent.this, "No se pudo insertar correctamente, problemas con el servidor", Toast.LENGTH_SHORT).show();
 
                 }else {
-                    Toast.makeText(Screen_Absent.this, "Guardada tarea correctamente\n", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Screen_Absent.this, "Guardada tarea correctamente", Toast.LENGTH_SHORT).show();
+                    Intent intent_open_battery_counter = new Intent(Screen_Absent.this, team_or_personal_task_selection_screen_Activity.class);
+                    startActivity(intent_open_battery_counter);
+                    Screen_Absent.this.finish();
                 }
             }
         }
     }
 
+    private void showRingDialog(String text){
+        progressDialog = ProgressDialog.show(Screen_Absent.this, "Espere", text, true);
+        progressDialog.setCancelable(true);
+    }
+    private void hideRingDialog(){
+        progressDialog.dismiss();
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -439,6 +530,15 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
 //                Toast.makeText(Screen_User_Data.this, "Configuracion", Toast.LENGTH_SHORT).show();
                 // User chose the "Favorite" action, mark the current item
                 // as a favorite...
+                try {
+                    openMessage("Tarea","Contador: "+Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador")
+                            +"\nModificacion: "+Screen_Login_Activity.tarea_JSON.getString("date_time_modified")
+                            +"\ncita: "+Screen_Login_Activity.tarea_JSON.getString("nuevo_citas")
+                            +"\nContador: "+Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(Screen_Absent.this, "No se pudo obtener datos de tarea", Toast.LENGTH_SHORT).show();
+                }
                 return true;
 
             default:

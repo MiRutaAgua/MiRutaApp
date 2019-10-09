@@ -94,7 +94,8 @@ public class Screen_Insertar_Tarea extends AppCompatActivity implements TaskComp
         imageView_geolocalizar_screen_insertar_tarea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(getApplicationContext(),MapsActivity.class);
+                startActivity(intent);
             }
         });
 

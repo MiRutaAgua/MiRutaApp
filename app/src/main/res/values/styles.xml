@@ -7,6 +7,7 @@
         <item name="colorPrimary">#0086FF</item>
         <item name="colorPrimaryDark">#0086FF</item>
         <item name="colorAccent">#0086FF</item>
+        <item name="android:fontFamily">@font/segoeui</item>
     </style>
 
     <!-- Style to replace actionbar overflow icon. set item 'android:actionOverflowButtonStyle' in AppTheme -->
@@ -16,6 +17,7 @@
         <item name="colorPrimary">#0086FF</item>
         <item name="colorPrimaryDark">#0086FF</item>
         <item name="colorAccent">#0086FF</item>
+        <item name="android:fontFamily">@font/segoeui</item>
     </style>
 
 </resources>

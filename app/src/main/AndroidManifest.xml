@@ -118,6 +118,13 @@
             android:configChanges="orientation"
             android:screenOrientation="portrait"></activity>
 
+        <activity android:name=".MapsActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".Maps_Box"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"></activity>
+
         <!--<activity android:name=".Screen_Login_Activity"-->
            <!--&gt;</activity>-->
         <!--<activity android:name=".team_or_personal_task_selection_screen_Activity"-->

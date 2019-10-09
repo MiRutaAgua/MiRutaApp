@@ -45,7 +45,7 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
 
     private ImageView button_modo_battery;
 
-    private ImageView button_incidence_screen_unity_counter;
+    private ImageView button_incidence_screen_unity_counter, button_trazar_ruta_screen_unity_counter;
 
     private ImageView button_absent_screen_unity_counter;
 
@@ -74,7 +74,10 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
         direccion = (TextView) findViewById(R.id.textView_direccion_screen_unity_counter);
         datosEspecificos = (TextView) findViewById(R.id.textView_datos_especificos_screen_unity_counter);
         button_modo_battery = (ImageView) findViewById(R.id.button_modo_bateria_screen_unity_counter);
-
+        button_incidence_screen_unity_counter = (ImageView)findViewById(R.id.button_incidencia_screen_unity_counter);
+        button_absent_screen_unity_counter = (ImageView)findViewById(R.id.button_abandonado_ausente_screen_unity_counter);
+        button_exec_task_screen_unity_counter = (ImageView)findViewById(R.id.button_ejecutar_tarea_screen_unity_counter);
+        button_trazar_ruta_screen_unity_counter = (ImageView)findViewById(R.id.button_trazar_ruta_screen_unity_counter);
 
         try {
             direccion.setText((Screen_Login_Activity.tarea_JSON.getString("poblacion") + "   "
@@ -94,9 +97,15 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
             e.printStackTrace();
         }
 
-        button_incidence_screen_unity_counter = (ImageView)findViewById(R.id.button_incidencia_screen_unity_counter);
-        button_absent_screen_unity_counter = (ImageView)findViewById(R.id.button_abandonado_ausente_screen_unity_counter);
-        button_exec_task_screen_unity_counter = (ImageView)findViewById(R.id.button_ejecutar_tarea_screen_unity_counter);
+
+
+        button_trazar_ruta_screen_unity_counter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent_open_Map_Box = new Intent(Screen_Unity_Counter.this, Maps_Box.class);
+                startActivity(intent_open_Map_Box);
+            }
+        });
 
         button_modo_battery.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -298,6 +307,15 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
 //                Toast.makeText(Screen_User_Data.this, "Configuracion", Toast.LENGTH_SHORT).show();
                 // User chose the "Favorite" action, mark the current item
                 // as a favorite...
+                try {
+                    openMessage("Tarea","Contador: "+Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador")
+                            +"\nModificacion: "+Screen_Login_Activity.tarea_JSON.getString("date_time_modified")
+                            +"\ncita: "+Screen_Login_Activity.tarea_JSON.getString("nuevo_citas")
+                            +"\nContador: "+Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(Screen_Unity_Counter.this, "No se pudo obtener datos de tarea", Toast.LENGTH_SHORT).show();
+                }
                 return true;
 
             default:

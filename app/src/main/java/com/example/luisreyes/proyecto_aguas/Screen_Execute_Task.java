@@ -59,7 +59,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
 
     private ImageView button_scan_module_screen_exec_task, observaciones_button ,button_guardar_datos;
 
-    private ImageView button_validate_screen_exec_task;
+    private ImageView button_validate_screen_exec_task, button_geolocalization_screen_exec_task;
 
     private ImageView button_instalation_photo_screen_exec_task;
     private ImageView instalation_photo_screen_exec_task;
@@ -132,6 +132,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         button_guardar_datos = (ImageView)findViewById(R.id.button_guardar_datos_screen_exec_task);
         observaciones_button = (ImageView)findViewById(R.id.button_observations_screen_exec_task);
         textView_observaciones_screen_exec_task = (TextView)findViewById(R.id.textView_observaciones_screen_exec_task);
+        button_geolocalization_screen_exec_task= (ImageView)findViewById(R.id.button_geolocalization_screen_exec_task);
 
         try {
             contador = Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador");
@@ -157,6 +158,15 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
             e.printStackTrace();
             Toast.makeText(Screen_Execute_Task.this, "no se pudo obtener telefono 2 de cliente", Toast.LENGTH_LONG).show();
         }
+
+        button_geolocalization_screen_exec_task.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent_open_MapsActivity = new Intent(getApplicationContext(), MapsActivity.class);
+                startActivity(intent_open_MapsActivity);
+            }
+
+        });
         button_guardar_datos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

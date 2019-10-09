@@ -165,16 +165,20 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
                             //Toast.makeText(Screen_Login_Activity.this, "Comprobando informacion", Toast.LENGTH_SHORT).show();
                             try {
                                 String json_user = dBoperariosController.get_one_operario_from_Database(lineEdit_nombre_de_operario.getText().toString());
-                                operario_JSON = new JSONObject(json_user);
-                                if(operario_JSON.getString("clave").equals(lineEdit_clave_de_acceso.getText().toString())){
+                                if(!json_user.equals("no existe")) {
+                                    operario_JSON = new JSONObject(json_user);
+                                    if (operario_JSON.getString("clave").equals(lineEdit_clave_de_acceso.getText().toString())) {
 
-                                    Intent intent_open_next_screen = new Intent(Screen_Login_Activity.this, Screen_User_Data.class);
-                                    intent_open_next_screen.putExtra("usuario", json_user);
-                                    startActivity(intent_open_next_screen);
-                                    Toast.makeText(Screen_Login_Activity.this, "Bienvenido", Toast.LENGTH_SHORT).show();
+                                        Intent intent_open_next_screen = new Intent(Screen_Login_Activity.this, Screen_User_Data.class);
+                                        intent_open_next_screen.putExtra("usuario", json_user);
+                                        startActivity(intent_open_next_screen);
+                                        Toast.makeText(Screen_Login_Activity.this, "Bienvenido", Toast.LENGTH_SHORT).show();
 
+                                    } else {
+                                        Toast.makeText(Screen_Login_Activity.this, "Incorrecta contraseña", Toast.LENGTH_SHORT).show();
+                                    }
                                 }else{
-                                    Toast.makeText(Screen_Login_Activity.this, "Incorrecto nombre de usuario o contraseña", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(Screen_Login_Activity.this, "No existe usuario "+ lineEdit_nombre_de_operario.getText().toString(), Toast.LENGTH_SHORT).show();
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();

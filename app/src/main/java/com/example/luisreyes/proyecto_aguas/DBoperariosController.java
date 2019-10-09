@@ -229,26 +229,30 @@ public class DBoperariosController extends SQLiteOpenHelper {
         }
         Cursor c = database.rawQuery("SELECT * FROM "+table_name+" WHERE usuario LIKE \""+user_name+"\";", null);
 
-        try {
-            if(c.moveToFirst()) {
-                Iterator<String> keys_it = jsonOperarioType.keys();
-                while (keys_it.hasNext()) {
-                    keys.add(keys_it.next());
-                }
+        if(c.getCount() > 0) {
+            try {
+                if (c.moveToFirst()) {
+                    Iterator<String> keys_it = jsonOperarioType.keys();
+                    while (keys_it.hasNext()) {
+                        keys.add(keys_it.next());
+                    }
 
-                for (int n = 0; n < keys.size(); n++) {
-                    jsonOperarioType.put(keys.get(n), c.getString(n));
+                    for (int n = 0; n < keys.size(); n++) {
+                        jsonOperarioType.put(keys.get(n), c.getString(n));
+                    }
+                    c.close();
+                    return jsonOperarioType.toString();
+                } else {
+                    c.close();
+                    return "null";
                 }
-                c.close();
-                return jsonOperarioType.toString();
-            }else{
+            } catch (JSONException e) {
+                e.printStackTrace();
                 c.close();
                 return "null";
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
-            c.close();
-            return "null";
+        }else{
+            return "no existe";
         }
     }
 

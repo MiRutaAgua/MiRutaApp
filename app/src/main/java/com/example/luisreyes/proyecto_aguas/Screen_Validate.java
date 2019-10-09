@@ -158,24 +158,30 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
             Toast.makeText(Screen_Validate.this, "no se pudo obtener calibre_toma", Toast.LENGTH_LONG).show();
         }
 
-        Bitmap foto_antes_intalacion_bitmap = getPhotoUserLocal(Screen_Execute_Task.mCurrentPhotoPath_foto_antes);
-        if(foto_antes_intalacion_bitmap != null) {
-            bitmap1_no_nulo = true;
-            foto_instalacion_screen_exec_task.setVisibility(View.VISIBLE);
-            foto_instalacion_screen_exec_task.setImageBitmap(foto_antes_intalacion_bitmap);
+        if(!Screen_Execute_Task.mCurrentPhotoPath_foto_antes.isEmpty()) {
+            Bitmap foto_antes_intalacion_bitmap = getPhotoUserLocal(Screen_Execute_Task.mCurrentPhotoPath_foto_antes);
+            if (foto_antes_intalacion_bitmap != null) {
+                bitmap1_no_nulo = true;
+                foto_instalacion_screen_exec_task.setVisibility(View.VISIBLE);
+                foto_instalacion_screen_exec_task.setImageBitmap(foto_antes_intalacion_bitmap);
+            }
         }
-        Bitmap foto_numero_serie_bitmap = getPhotoUserLocal(Screen_Execute_Task.mCurrentPhotoPath_foto_serie);
-        if(foto_numero_serie_bitmap != null) {
-            bitmap3_no_nulo = true;
-            foto_numero_de_serie_screen_exec_task.setVisibility(View.VISIBLE);
-            foto_numero_de_serie_screen_exec_task.setImageBitmap(foto_numero_serie_bitmap);
+        if(!Screen_Execute_Task.mCurrentPhotoPath_foto_serie.isEmpty()) {
+            Bitmap foto_numero_serie_bitmap = getPhotoUserLocal(Screen_Execute_Task.mCurrentPhotoPath_foto_serie);
+            if (foto_numero_serie_bitmap != null) {
+                bitmap3_no_nulo = true;
+                foto_numero_de_serie_screen_exec_task.setVisibility(View.VISIBLE);
+                foto_numero_de_serie_screen_exec_task.setImageBitmap(foto_numero_serie_bitmap);
+            }
         }
 
-        Bitmap foto_despues_intalacion_bitmap = getPhotoUserLocal(Screen_Execute_Task.mCurrentPhotoPath_foto_despues);
-        if(foto_despues_intalacion_bitmap != null) {
-            bitmap2_no_nulo = true;
-            foto_final_instalacion_screen_exec_task.setVisibility(View.VISIBLE);
-            foto_final_instalacion_screen_exec_task.setImageBitmap(foto_despues_intalacion_bitmap);
+        if(!Screen_Execute_Task.mCurrentPhotoPath_foto_despues.isEmpty()) {
+            Bitmap foto_despues_intalacion_bitmap = getPhotoUserLocal(Screen_Execute_Task.mCurrentPhotoPath_foto_despues);
+            if (foto_despues_intalacion_bitmap != null) {
+                bitmap2_no_nulo = true;
+                foto_final_instalacion_screen_exec_task.setVisibility(View.VISIBLE);
+                foto_final_instalacion_screen_exec_task.setImageBitmap(foto_despues_intalacion_bitmap);
+            }
         }
         try {
             String string_firma = Screen_Login_Activity.tarea_JSON.getString("firma_cliente");

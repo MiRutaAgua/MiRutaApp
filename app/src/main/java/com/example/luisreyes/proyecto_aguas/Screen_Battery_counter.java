@@ -43,7 +43,7 @@ import java.util.ArrayList;
 
 public class Screen_Battery_counter extends AppCompatActivity implements TaskCompleted{
 
-    private ImageView button_reajustar_ubicacion;
+    private ImageView button_reajustar_ubicacion, button_trazar_ruta_screen_battery_counter;
 
     private ImageView button_incidence_screen_battery_counter;
 
@@ -88,6 +88,7 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
         button_reajustar_ubicacion = (ImageView)findViewById(R.id.button_reajustar_ubicacion_screen_battery_counter);
         button_ejecutar_tarea_screen_battery_counter = (ImageView)findViewById(R.id.button_ejecutar_tarea_screen_battery_counter);
         button_incidence_screen_battery_counter = (ImageView)findViewById(R.id.button_incidencia_screen_battery_counter);
+        button_trazar_ruta_screen_battery_counter= (ImageView)findViewById(R.id.button_trazar_ruta_screen_battery_counter);
 
         try {
             direccion.setText((Screen_Login_Activity.tarea_JSON.getString("poblacion") + "   "
@@ -108,6 +109,13 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
             e.printStackTrace();
         }
 
+        button_trazar_ruta_screen_battery_counter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent_open_MapBox = new Intent(Screen_Battery_counter.this, Maps_Box.class);
+                startActivity(intent_open_MapBox);
+            }
+        });
 
         button_ejecutar_tarea_screen_battery_counter.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -302,6 +310,15 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
 //                Toast.makeText(Screen_User_Data.this, "Configuracion", Toast.LENGTH_SHORT).show();
                 // User chose the "Favorite" action, mark the current item
                 // as a favorite...
+                try {
+                    openMessage("Tarea","Contador: "+Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador")
+                            +"\nModificacion: "+Screen_Login_Activity.tarea_JSON.getString("date_time_modified")
+                            +"\ncita: "+Screen_Login_Activity.tarea_JSON.getString("nuevo_citas")
+                            +"\nContador: "+Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(Screen_Battery_counter.this, "No se pudo obtener datos de tarea", Toast.LENGTH_SHORT).show();
+                }
                 return true;
 
             default:

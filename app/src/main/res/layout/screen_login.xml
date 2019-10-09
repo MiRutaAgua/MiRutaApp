@@ -43,7 +43,7 @@
                 android:src="@drawable/screen_login_nombre_operario_icon"
                 android:text="Nombre de Operario" />
             <EditText
-                android:hint="Nombre de Operario"
+                android:hint="Usuario de Operario"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dip"
@@ -52,6 +52,7 @@
                 android:id="@+id/editText_Nombre_Operario_screen_login"
                 android:inputType="text"
                 android:imeOptions="actionNext"
+                android:textStyle="italic"
                 />
         </LinearLayout>
 

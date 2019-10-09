@@ -61,6 +61,7 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
     private ArrayList<String> lista_filtro_numero_serie;
     private ArrayList<String> lista_filtro_abonado;
     private ArrayList<String> tareas_to_update;
+    private ArrayList<String> tareas_to_upload;
     private ArrayList<MyCounter> lista_ordenada_de_tareas;
 
     private Intent intent_open_screen_unity_counter;
@@ -80,6 +81,7 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
 
 
         tareas_to_update = new ArrayList<String>();
+        tareas_to_upload = new ArrayList<String>();
         lista_contadores = new ArrayList<String>();
         lista_filtro_direcciones = new ArrayList<String>();
         lista_filtro_Citas = new ArrayList<String>();
@@ -415,8 +417,12 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
                                         } else if (date_MySQL == null) {
                                             if (date_SQLite != null) {
 //                                           //aqui actualizar MySQL con la DB SQLite
-                                                tareas_to_update.add(jsonObject_Lite.getString("numero_serie_contador"));
-                                                jsonObject = new JSONObject(jsonObject_Lite.getString("numero_serie_contador"));
+                                                try {
+                                                    tareas_to_update.add(jsonObject_Lite.getString("numero_serie_contador"));
+                                                    jsonObject = jsonObject_Lite;
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
                                             } else {
                                                 Toast.makeText(Screen_Table_Personal.this, "Fechas ambas nulas", Toast.LENGTH_LONG).show();
                                             }
@@ -428,8 +434,12 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
 
                                             } else if (date_MySQL.before(date_SQLite)) {//SQLite mas actualizada
                                                 //aqui actualizar MySQL con la DB SQLite
-                                                tareas_to_update.add(jsonObject_Lite.getString("numero_serie_contador"));
-                                                jsonObject = new JSONObject(jsonObject_Lite.getString("numero_serie_contador"));
+                                                try {
+                                                    tareas_to_update.add(jsonObject_Lite.getString("numero_serie_contador"));
+                                                    jsonObject = jsonObject_Lite;
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
                                             }
                                         }
                                     }
@@ -492,7 +502,11 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
 
                                 String fecha_cita = jsonObject.getString("fecha_hora_cita").replace("\n", "");
                                 MyCounter contador = new MyCounter();
-                                contador.setDateTime(DBtareasController.getFechaHoraFromString(fecha_cita));
+                                if(fecha_cita!= null && !fecha_cita.equals("null") && !TextUtils.isEmpty(fecha_cita)){
+                                    contador.setDateTime(DBtareasController.getFechaHoraFromString(fecha_cita));
+                                }else {
+                                    contador.setDateTime(new Date());
+                                }
                                 contador.setNumero_serie_contador(numero_serie_contador);
                                 contador.setContador(numero_serie_contador);
                                 contador.setAnno_contador(anno_contador);
@@ -532,9 +546,31 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
                 arrayAdapter = new ArrayAdapter(Screen_Table_Personal.this, android.R.layout.simple_list_item_1, lista_contadores);
                 lista_de_contadores_screen_table_personal.setAdapter(arrayAdapter);
                 hideRingDialog();
-                showRingDialog("Actualizando tareas de Internet...");
-                updateTareaInMySQL();
                 Toast.makeText(Screen_Table_Personal.this,"Tareas descargadas correctamente.", Toast.LENGTH_LONG).show();
+
+                if (team_or_personal_task_selection_screen_Activity.dBtareasController.checkForTableExists()) {
+                    tareas_to_upload.clear();
+                    for (int i = 1; i <= team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas(); i++) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.dBtareasController.get_one_tarea_from_Database(i));
+                            String status_tarea = jsonObject.getString("status_tarea");
+                            if(status_tarea.contains("TO_UPLOAD")){
+                                tareas_to_upload.add(jsonObject.getString("numero_serie_contador"));
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                if(!tareas_to_upload.isEmpty()) {
+                    showRingDialog("Insertando Tareas creadas offline en Servidor...");
+                    upLoadTareaInMySQL();
+                }else {
+                    if(!tareas_to_update.isEmpty()) {
+                        showRingDialog("Actualizando tareas en Internet...");
+                        updateTareaInMySQL();
+                    }
+                }
             }
         }else if(type == "update_tarea"){
             if(result == null){
@@ -543,6 +579,31 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
             else {
                 updateTareaInMySQL();
             }
+        }
+    }
+
+    public void upLoadTareaInMySQL() throws JSONException {
+        if(tareas_to_upload.isEmpty()){
+            hideRingDialog();
+            Toast.makeText(Screen_Table_Personal.this, "Tareas subidas en internet", Toast.LENGTH_SHORT).show();
+            showRingDialog("Actualizando tareas en Internet...");
+            updateTareaInMySQL();
+            return;
+        }
+        else {
+            JSONObject jsonObject_Lite = new JSONObject(team_or_personal_task_selection_screen_Activity.dBtareasController.get_one_tarea_from_Database(
+                    tareas_to_upload.get(tareas_to_upload.size() - 1)));
+            tareas_to_upload.remove(tareas_to_upload.size() - 1);
+
+            //jsonObject_Lite.put("status_tarea", jsonObject_Lite.getString("status_tarea").replace("TO_UPLOAD", ""));
+            jsonObject_Lite.put("status_tarea", "IDLE");
+            jsonObject_Lite.put("date_time_modified", DBtareasController.getStringFromFechaHora(new Date()));
+            team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea(jsonObject_Lite);
+
+            String type_script = "create_tarea";
+            BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Table_Personal.this);
+            Screen_Login_Activity.tarea_JSON = jsonObject_Lite;
+            backgroundWorker.execute(type_script);
         }
     }
 

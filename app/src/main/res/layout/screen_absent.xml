@@ -238,7 +238,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="Lunes 21  de Marzo del 2019"
+                    android:text="Toca aquí para cambiar"
                     android:id="@+id/textView_screen_absent_fecha_cita"
                     />
             </LinearLayout>
@@ -264,7 +264,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-                    android:text="Entre las 12:00 y las 12:30"
+                    android:text="Toca aquí para cambiar"
                     android:id="@+id/textView_screen_absent_hora_cita"/>
             </LinearLayout>
 
@@ -300,7 +300,7 @@
                     android:layout_marginRight="20dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Este vecino saldra al trabajo solo para el cambio del contador y estará esperando fuera de casa"
+                    android:text="Toca aquí para insertar observación"
                     android:layout_gravity="center"
                     android:textSize="16dp"
                     android:id="@+id/textView_screen_absent_Observaciones"

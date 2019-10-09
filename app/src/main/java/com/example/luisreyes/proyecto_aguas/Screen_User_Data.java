@@ -114,10 +114,13 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
                                 String user_foto = jsonObject.getString("foto");
                                 //Toast.makeText(Screen_User_Data.this, user_foto, Toast.LENGTH_LONG).show();
                                 if (user_foto != null && !TextUtils.isEmpty(user_foto)) {
-                                    Bitmap foto = getPhotoUserLocal(getSimilarFile(user_foto));
-                                    if (foto != null) {
-                                        circlImageView_photo.setBackgroundColor(Color.TRANSPARENT);
-                                        circlImageView_photo.setImageBitmap(foto);
+                                    String similar = getSimilarFile(user_foto);
+                                    if(similar!=null && !similar.isEmpty()) {
+                                        Bitmap foto = getPhotoUserLocal(similar);
+                                        if (foto != null) {
+                                            circlImageView_photo.setBackgroundColor(Color.TRANSPARENT);
+                                            circlImageView_photo.setImageBitmap(foto);
+                                        }
                                     }
                                 }
                             }

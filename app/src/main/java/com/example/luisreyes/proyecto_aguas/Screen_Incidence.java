@@ -169,12 +169,8 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
             @Override
             public void onClick(View view) {
 
-                if (ContextCompat.checkSelfPermission(Screen_Incidence.this, Manifest.permission.ACCESS_FINE_LOCATION)
-                        != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(Screen_Incidence.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-                }
-//                Intent intent = new Intent(getApplicationContext(),MapsActivity.class);
-//                startActivity(intent);
+                Intent intent = new Intent(getApplicationContext(),MapsActivity.class);
+                startActivity(intent);
             }
         });
 
