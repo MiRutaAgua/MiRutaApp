@@ -65,6 +65,7 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
     public static String currentUser = "";
     public static DBoperariosController dBoperariosController;
 
+    boolean login_pendent = false;
     boolean login_press = false;
     public static boolean register_press = false;
 
@@ -125,17 +126,7 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
             lineEdit_nombre_de_operario.setTypeface(null, Typeface.NORMAL);
         }
 
-        if(checkConection()){
-            isOnline = true;
-            showRingDialog("Actualizando informacion de operarios");
-            String type = "get_operarios";
-            BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Login_Activity.this);
-            backgroundWorker.execute(type);
-        }
-        else{
-            isOnline = false;
-            Toast.makeText(this,"No hay conexion a Internet", Toast.LENGTH_LONG).show();
-        }
+        descargarOperarios();
 
         lineEdit_nombre_de_operario.addTextChangedListener(new TextWatcher() {
             @Override
@@ -183,13 +174,12 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
                         isOnline = checkConection();
                         login_press = true;
                         if(isOnline) {
-                            String username = lineEdit_nombre_de_operario.getText().toString();
-                            String password = lineEdit_clave_de_acceso.getText().toString();
-
-                            showRingDialog("Comprobando informacion");
-                            String type = "login";
-                            BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Login_Activity.this);
-                            backgroundWorker.execute(type, username, password);
+                            if(dBoperariosController.countTableOperarios() < 1){ //descargar si la tabla esta vacia
+                                login_pendent = true;
+                                descargarOperarios();
+                            }else {
+                                loginOperario();
+                            }
                         }else{
                             //Toast.makeText(Screen_Login_Activity.this, "Comprobando informacion", Toast.LENGTH_SHORT).show();
                             try {
@@ -204,24 +194,24 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
                                         Toast.makeText(Screen_Login_Activity.this, "Bienvenido", Toast.LENGTH_SHORT).show();
 
                                     } else {
-                                        Toast.makeText(Screen_Login_Activity.this, "Incorrecta contraseña", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(Screen_Login_Activity.this, "Contraseña incorrecta", Toast.LENGTH_SHORT).show();
                                     }
                                 }else{
-                                    Toast.makeText(Screen_Login_Activity.this, "No existe usuario "+ lineEdit_nombre_de_operario.getText().toString(), Toast.LENGTH_SHORT).show();
+                                    if(!dBoperariosController.databasefileExists(Screen_Login_Activity.this)){
+                                        Toast.makeText(Screen_Login_Activity.this, "No se encuentra base de datos SQLite: "+DBoperariosController.database_name, Toast.LENGTH_SHORT).show();
+                                    }
+                                    else if(!dBoperariosController.checkForTableExists()){
+                                        Toast.makeText(Screen_Login_Activity.this, "No se encuentra tabla SQLite: "+DBoperariosController.table_name, Toast.LENGTH_SHORT).show();
+                                    }
+                                    else if(dBoperariosController.countTableOperarios() < 1){
+                                        Toast.makeText(Screen_Login_Activity.this, "Está vacia la tabla SQLite: "+DBoperariosController.table_name+"\nConéctese a Internet para descargarlos", Toast.LENGTH_SHORT).show();
+                                    }else{
+                                        Toast.makeText(Screen_Login_Activity.this, "No existe usuario " + lineEdit_nombre_de_operario.getText().toString(), Toast.LENGTH_SHORT).show();
+                                    }
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
-                                if(!dBoperariosController.databasefileExists(Screen_Login_Activity.this)){
-                                    Toast.makeText(Screen_Login_Activity.this, "No se encuentra base de datos SQLite: "+DBoperariosController.database_name, Toast.LENGTH_SHORT).show();
-                                }
-                                else if(!dBoperariosController.checkForTableExists()){
-                                    Toast.makeText(Screen_Login_Activity.this, "No se encuentra tabla SQLite: "+DBoperariosController.table_name, Toast.LENGTH_SHORT).show();
-                                }
-                                else if(dBoperariosController.countTableOperarios() < 1){
-                                    Toast.makeText(Screen_Login_Activity.this, "Está vacia la tabla SQLite: "+DBoperariosController.table_name+"\nConéctese a Internet para descargarlos", Toast.LENGTH_SHORT).show();
-                                }else {
-                                    Toast.makeText(Screen_Login_Activity.this, "Error accediendo a base de datos SQLite.\nError -> " + e.toString(), Toast.LENGTH_SHORT).show();
-                                }
+                                Toast.makeText(Screen_Login_Activity.this, "Error accediendo a base de datos SQLite.\nError -> " + e.toString(), Toast.LENGTH_SHORT).show();
                             }
                             login_press= false;
                         }
@@ -234,7 +224,30 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
         });
     }
 
+    private void descargarOperarios() {
+        if(checkConection()){
+            isOnline = true;
+            showRingDialog("Actualizando informacion de operarios");
+            String type = "get_operarios";
+            BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Login_Activity.this);
+            backgroundWorker.execute(type);
+        }
+        else{
+            isOnline = false;
+            Toast.makeText(this,"No hay conexion a Internet", Toast.LENGTH_LONG).show();
+        }
+    }
 
+    private void loginOperario(){
+        login_pendent = false;
+        String username = lineEdit_nombre_de_operario.getText().toString();
+        String password = lineEdit_clave_de_acceso.getText().toString();
+
+        showRingDialog("Comprobando informacion");
+        String type = "login";
+        BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Login_Activity.this);
+        backgroundWorker.execute(type, username, password);
+    }
     @Override
     public void onTaskComplete(String type, String result) throws JSONException {
 
@@ -296,7 +309,6 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
             }
             else {
                 Toast.makeText(this,"Informacion de Operarios actualizada correctamente", Toast.LENGTH_LONG).show();
-
                 int sqlite_database_count = dBoperariosController.countTableOperarios();
                 boolean insertar_todos = false;
                 if(sqlite_database_count < 1){
@@ -368,6 +380,9 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
 
     public void updateOperarioInMySQL() throws JSONException {
         if(usuarios_to_update.isEmpty()){
+            if(login_pendent){
+                loginOperario();
+            }
             return;
         }
         else {

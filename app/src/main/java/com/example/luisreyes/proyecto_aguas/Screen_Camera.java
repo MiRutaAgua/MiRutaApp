@@ -405,7 +405,7 @@ public class Screen_Camera extends Activity {
                     }
                     @Override
                     public void onConfigureFailed(@NonNull CameraCaptureSession cameraCaptureSession) {
-
+                        Toast.makeText(Screen_Camera.this, "Fallo la configuracion de la camara", Toast.LENGTH_LONG).show();
                     }
                 }, mBackgroundHandler);
             }
@@ -455,7 +455,7 @@ public class Screen_Camera extends Activity {
 
                 @Override
                 public void onConfigureFailed(@NonNull CameraCaptureSession cameraCaptureSession) {
-                    Toast.makeText(Screen_Camera.this, "Changed", Toast.LENGTH_LONG).show();
+                    Toast.makeText(Screen_Camera.this, "Fallo la configuracion de la camara", Toast.LENGTH_LONG).show();
                 }
             }, null);
         } catch (Exception e) {

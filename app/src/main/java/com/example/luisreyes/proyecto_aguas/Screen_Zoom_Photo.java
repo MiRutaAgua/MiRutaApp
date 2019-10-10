@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -79,12 +80,40 @@ public class Screen_Zoom_Photo extends Activity{
                 bitmap_photo = Bitmap.createBitmap(bitmap_photo, 0, 0, bitmap_photo.getWidth(), bitmap_photo.getHeight(), matrix, true);
                 replaceBitmapImage(bitmap_photo, foto, 100);
             }
-            imageView_photo.setImageBitmap(bitmap_photo);
+            Bitmap rotatedBitmap = null;
+            ExifInterface ei = null;
+            try {
+                ei = new ExifInterface(foto);
+                int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                        ExifInterface.ORIENTATION_UNDEFINED);
+
+
+                switch(orientation) {
+
+                    case ExifInterface.ORIENTATION_ROTATE_90:
+                        rotatedBitmap = rotateImage(bitmap_photo, 90);
+                        break;
+
+                    case ExifInterface.ORIENTATION_ROTATE_180:
+                        rotatedBitmap = rotateImage(bitmap_photo, 180);
+                        break;
+
+                    case ExifInterface.ORIENTATION_ROTATE_270:
+                        rotatedBitmap = rotateImage(bitmap_photo, 270);
+                        break;
+
+                    case ExifInterface.ORIENTATION_NORMAL:
+                    default:
+                        rotatedBitmap = bitmap_photo;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            replaceBitmapImage(rotatedBitmap, foto, 100);
+            imageView_photo.setImageBitmap(rotatedBitmap);
         }
 
 //        Toast.makeText(Screen_Zoom_Photo.this, String.valueOf(Screen_Camera.sensorOrientation), Toast.LENGTH_LONG).show();
-
-
         button_cancel_picture_screen_x.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
@@ -107,29 +136,12 @@ public class Screen_Zoom_Photo extends Activity{
         });
     }
 
-//---------------------------------------------------------------------------------------------------------------------------
-//        SGD = new ScaleGestureDetector(this, new ScaleListener());
-//        imageView_photo.getLayoutParams().height = 1920;
-//        imageView_photo.getLayoutParams().width = 1080;
-
-//    private class  ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener{
-//        @Override
-//        public boolean onScale(ScaleGestureDetector detector) {
-//
-//            scale = scale*detector.getScaleFactor();
-//            scale = Math.max(0.1f, Math.min(scale, 5f));
-//            matrix.setScale(scale,scale);
-//            imageView_photo.setImageMatrix(matrix);
-//            return true;
-//
-//        }
-//    }
-//    @Override
-//    public boolean onTouchEvent(MotionEvent event) {
-//        SGD.onTouchEvent(event);
-//        return true;
-//    }//-------------------------------------------------------------------------------------------------------------------
-
+    public static Bitmap rotateImage(Bitmap source, float angle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
+                matrix, true);
+    }
     private void replaceBitmapImage(Bitmap bitmap, String file_name, int quality){
         if(quality > 100){
             quality = 100;
@@ -170,5 +182,27 @@ public class Screen_Zoom_Photo extends Activity{
             return null;
         }
     }
+//---------------------------------------------------------------------------------------------------------------------------
+//        SGD = new ScaleGestureDetector(this, new ScaleListener());
+//        imageView_photo.getLayoutParams().height = 1920;
+//        imageView_photo.getLayoutParams().width = 1080;
+
+//    private class  ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener{
+//        @Override
+//        public boolean onScale(ScaleGestureDetector detector) {
+//
+//            scale = scale*detector.getScaleFactor();
+//            scale = Math.max(0.1f, Math.min(scale, 5f));
+//            matrix.setScale(scale,scale);
+//            imageView_photo.setImageMatrix(matrix);
+//            return true;
+//
+//        }
+//    }
+//    @Override
+//    public boolean onTouchEvent(MotionEvent event) {
+//        SGD.onTouchEvent(event);
+//        return true;
+//    }//-------------------------------------------------------------------------------------------------------------------
 
 }
