@@ -167,7 +167,8 @@ public class Screen_Battery_Intake_Asignation extends AppCompatActivity {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    if(contador != null){
+                    if(contador != null && !mCurrentPhotoPath_foto_antes.isEmpty()
+                            && !mCurrentPhotoPath_foto_antes.equals("null")){
                         try {
                             Screen_Login_Activity.tarea_JSON.put("foto_antes_instalacion",contador +"_foto_antes_instalacion.jpg");
                         } catch (JSONException e) {
@@ -175,7 +176,8 @@ public class Screen_Battery_Intake_Asignation extends AppCompatActivity {
                             Toast.makeText(Screen_Battery_Intake_Asignation.this, "No pudo guardar foto_antes_instalacion", Toast.LENGTH_LONG).show();
                         }
                     }
-                    if(contador != null){
+                    if(contador != null && !mCurrentPhotoPath_foto_lectura.isEmpty()
+                            && !mCurrentPhotoPath_foto_lectura.equals("null")){
                         try {
                             Screen_Login_Activity.tarea_JSON.put("foto_lectura",contador +"_foto_lectura.jpg");
                         } catch (JSONException e) {
@@ -183,7 +185,8 @@ public class Screen_Battery_Intake_Asignation extends AppCompatActivity {
                             Toast.makeText(Screen_Battery_Intake_Asignation.this, "No pudo guardar foto_lectura", Toast.LENGTH_LONG).show();
                         }
                     }
-                    if(contador != null){
+                    if(contador != null && !mCurrentPhotoPath_foto_serie.isEmpty()
+                            && !mCurrentPhotoPath_foto_serie.equals("null")){
                         try {
                             Screen_Login_Activity.tarea_JSON.put("foto_numero_serie",contador +"_foto_numero_serie.jpg");
                         } catch (JSONException e) {

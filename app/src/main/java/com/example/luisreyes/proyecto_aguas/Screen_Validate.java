@@ -269,20 +269,28 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                         if(lectura_actual_int.compareTo(lectura_last_int)>0){
                             Screen_Login_Activity.tarea_JSON.put("lectura_ultima", lect_last_string);
                             Screen_Login_Activity.tarea_JSON.put("lectura_actual", lect_string);
-                            showRingDialog("Guardando datos");
-                            if(team_or_personal_task_selection_screen_Activity.dBtareasController != null){
+
+                            boolean error=false;
+                            if(team_or_personal_task_selection_screen_Activity.dBtareasController != null) {
                                 try {
                                     team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea(Screen_Login_Activity.tarea_JSON);
                                 } catch (JSONException e) {
+                                    Toast.makeText(Screen_Validate.this, "No se pudo guardar tarea local " + e.toString(), Toast.LENGTH_LONG).show();
                                     e.printStackTrace();
+                                    error = true;
                                 }
+                            }else{
+                                error = true;
+                                Toast.makeText(Screen_Validate.this, "No hay tabla donde guardar", Toast.LENGTH_LONG).show();
                             }
                             if(checkConection()) {
+                                showRingDialog("Guardando datos...");
                                 String type = "update_tarea";
                                 BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Validate.this);
                                 backgroundWorker.execute(type);
                             }else{
-                                Toast.makeText(Screen_Validate.this, "No hay conexion se guardaron los datos en el telefono", Toast.LENGTH_LONG).show();
+                                if(error)
+                                    Toast.makeText(Screen_Validate.this, "No hay conexion se guardaron los datos en el telefono", Toast.LENGTH_LONG).show();
                             }
                         }
                         else{

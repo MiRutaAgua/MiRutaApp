@@ -181,20 +181,27 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                         Toast.makeText(Screen_Execute_Task.this, "No pudo guardar lectura", Toast.LENGTH_LONG).show();
                     }
                 }
-
-                if(checkConection()) {
+                boolean error=false;
+                if(team_or_personal_task_selection_screen_Activity.dBtareasController != null) {
                     try {
                         team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea(Screen_Login_Activity.tarea_JSON);
                     } catch (JSONException e) {
-                        Toast.makeText(Screen_Execute_Task.this, "no se pudo obtener guardar tarea local", Toast.LENGTH_LONG).show();
+                        Toast.makeText(Screen_Execute_Task.this, "No se pudo guardar tarea local " + e.toString(), Toast.LENGTH_LONG).show();
                         e.printStackTrace();
+                        error = true;
                     }
+                }else{
+                    error = true;
+                    Toast.makeText(Screen_Execute_Task.this, "No hay tabla donde guardar", Toast.LENGTH_LONG).show();
+                }
+                if(checkConection()) {
                     showRingDialog("Guardando Cambios en Tarea");
                     String type = "update_tarea";
                     BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Execute_Task.this);
                     backgroundWorker.execute(type);
                 } else{
-                    Toast.makeText(Screen_Execute_Task.this, "No hay conexion se guardaron los datos en el telefono", Toast.LENGTH_LONG).show();
+                    if(!error)
+                        Toast.makeText(Screen_Execute_Task.this, "No hay conexion se guardaron los datos en el telefono", Toast.LENGTH_LONG).show();
                 }
                 //Toast.makeText(Screen_Execute_Task.this, "Guardando Cambios en Tarea", Toast.LENGTH_SHORT).show();
             }
