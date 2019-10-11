@@ -289,7 +289,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                                 BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Validate.this);
                                 backgroundWorker.execute(type);
                             }else{
-                                if(error)
+                                if(!error)
                                     Toast.makeText(Screen_Validate.this, "No hay conexion se guardaron los datos en el telefono", Toast.LENGTH_LONG).show();
                             }
                         }
@@ -548,10 +548,10 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                         uploadPhotos();
                     }
                     else{
-                        Toast.makeText(Screen_Validate.this, "Actualizada tarea correctamente", Toast.LENGTH_LONG).show();
-                        Intent intent_open_battery_counter = new Intent(Screen_Validate.this, team_or_personal_task_selection_screen_Activity.class);
+                        Toast.makeText(this, "Actualizada tarea correctamente", Toast.LENGTH_LONG).show();
+                        Intent intent_open_battery_counter = new Intent(this, team_or_personal_task_selection_screen_Activity.class);
                         startActivity(intent_open_battery_counter);
-                        Screen_Validate.this.finish();
+                        this.finish();
                     }
                 }
             }
@@ -663,8 +663,14 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
 //                Toast.makeText(Screen_User_Data.this, "Configuracion", Toast.LENGTH_SHORT).show();
                 // User chose the "Favorite" action, mark the current item
                 // as a favorite...
+                openMessage("Tarea", Screen_Battery_counter.get_tarea_info());
                 return true;
-
+            case R.id.Info_Tarea:
+//                Toast.makeText(Screen_User_Data.this, "Configuracion", Toast.LENGTH_SHORT).show();
+                // User chose the "Favorite" action, mark the current item
+                // as a favorite...
+                openMessage("Tarea", Screen_Battery_counter.get_tarea_info());
+                return true;
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.

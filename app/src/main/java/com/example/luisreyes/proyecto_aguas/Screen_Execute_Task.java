@@ -73,6 +73,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
     public static String lectura_introducida = "";
 
     private EditText lectura_editText;
+    private String lectura_string;
 
     private static final int CAM_REQUEST_INST_PHOTO = 1313;
     private static final int CAM_REQUEST_READ_PHOTO = 1314;
@@ -159,7 +160,20 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
             e.printStackTrace();
             Toast.makeText(Screen_Execute_Task.this, "no se pudo obtener telefono 2 de cliente", Toast.LENGTH_LONG).show();
         }
-
+        try {
+            lectura_string = Screen_Login_Activity.tarea_JSON.getString("lectura_actual");
+            if(!TextUtils.isEmpty(lectura_string) && !lectura_string.equals("null")){
+                lectura_editText.setHint(lectura_string);
+            }else{
+                lectura_string = Screen_Login_Activity.tarea_JSON.getString("lectura_ultima");
+                if(!TextUtils.isEmpty(lectura_string) && !lectura_string.equals("null")){
+                    lectura_editText.setHint(lectura_string);
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Toast.makeText(Screen_Execute_Task.this, "no se pudo obtener actual lectura de contador", Toast.LENGTH_LONG).show();
+        }
         button_geolocalization_screen_exec_task.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -172,38 +186,35 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
             @Override
             public void onClick(View view) {
                 guardar_en_JSON_modificaciones();
-                if(!TextUtils.isEmpty(lectura_editText.getText().toString())){
-                    lectura_introducida = lectura_editText.getText().toString();
-                    try {
-                        Screen_Login_Activity.tarea_JSON.put("lectura_actual",lectura_introducida);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        Toast.makeText(Screen_Execute_Task.this, "No pudo guardar lectura", Toast.LENGTH_LONG).show();
-                    }
-                }
-                boolean error=false;
-                if(team_or_personal_task_selection_screen_Activity.dBtareasController != null) {
-                    try {
-                        team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea(Screen_Login_Activity.tarea_JSON);
-                    } catch (JSONException e) {
-                        Toast.makeText(Screen_Execute_Task.this, "No se pudo guardar tarea local " + e.toString(), Toast.LENGTH_LONG).show();
-                        e.printStackTrace();
-                        error = true;
+                if(!(TextUtils.isEmpty(lectura_editText.getText()))) {
+                    if(!lectura_string.isEmpty() && !lectura_string.equals("null")){
+                        String lectura_actual = lectura_editText.getText().toString();
+                        if(Integer.parseInt(lectura_actual) > Integer.parseInt(lectura_string)){
+                            try {
+                                Screen_Login_Activity.tarea_JSON.put("lectura_ultima", lectura_string);
+                                Screen_Login_Activity.tarea_JSON.put("lectura_actual", lectura_actual);
+
+                                saveData();
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                Toast.makeText(Screen_Execute_Task.this, "no se pudo cambiar lectura de contador", Toast.LENGTH_LONG).show();
+                            }
+                        }else{
+                            Toast.makeText(Screen_Execute_Task.this, "La lectura del contador debe ser mayor que la ultima registrada", Toast.LENGTH_LONG).show();
+                        }
+                    }else {
+                        try {
+                            Screen_Login_Activity.tarea_JSON.put("lectura_actual", lectura_editText.getText().toString());
+                            saveData();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(Screen_Execute_Task.this, "no se pudo cambiar lectura de contador", Toast.LENGTH_LONG).show();
+                        }
                     }
                 }else{
-                    error = true;
-                    Toast.makeText(Screen_Execute_Task.this, "No hay tabla donde guardar", Toast.LENGTH_LONG).show();
+                    Toast.makeText(Screen_Execute_Task.this, "Inserte la lectura del contador", Toast.LENGTH_LONG).show();
                 }
-                if(checkConection()) {
-                    showRingDialog("Guardando Cambios en Tarea");
-                    String type = "update_tarea";
-                    BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Execute_Task.this);
-                    backgroundWorker.execute(type);
-                } else{
-                    if(!error)
-                        Toast.makeText(Screen_Execute_Task.this, "No hay conexion se guardaron los datos en el telefono", Toast.LENGTH_LONG).show();
-                }
-                //Toast.makeText(Screen_Execute_Task.this, "Guardando Cambios en Tarea", Toast.LENGTH_SHORT).show();
             }
         });
         observaciones_button.setOnClickListener(new View.OnClickListener() {
@@ -234,11 +245,11 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         button_validate_screen_exec_task.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showRingDialog("Validando...");
                 guardar_en_JSON_modificaciones();
                 if(!TextUtils.isEmpty(lectura_editText.getText().toString())) {
                     lectura_introducida = lectura_editText.getText().toString();
                 }
+                showRingDialog("Validando...");
                 Intent intent_open_screen_validate = new Intent(Screen_Execute_Task.this, Screen_Validate.class);
                 startActivity(intent_open_screen_validate);
             }
@@ -330,6 +341,31 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
 //    } catch (JSONException e) {
 //        e.printStackTrace();
 //    }
+
+    public void saveData() {
+        boolean error=false;
+        if(team_or_personal_task_selection_screen_Activity.dBtareasController != null) {
+            try {
+                team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea(Screen_Login_Activity.tarea_JSON);
+            } catch (JSONException e) {
+                Toast.makeText(this, "No se pudo guardar tarea local " + e.toString(), Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+                error = true;
+            }
+        }else{
+            error = true;
+            Toast.makeText(this, "No hay tabla donde guardar", Toast.LENGTH_LONG).show();
+        }
+        if(checkConection()) {
+            showRingDialog("Guardando Datos...");
+            String type = "update_tarea";
+            BackgroundWorker backgroundWorker = new BackgroundWorker(this);
+            backgroundWorker.execute(type);
+        } else{
+            if(!error)
+                Toast.makeText(this, "No hay conexion se guardaron los datos en el telefono", Toast.LENGTH_LONG).show();
+        }
+    }
 
     private void guardar_en_JSON_modificaciones() {
 
@@ -626,13 +662,13 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                         if(!TextUtils.isEmpty(mCurrentPhotoPath_foto_lectura)) {
                             images_files.add(mCurrentPhotoPath_foto_lectura);
                             if(contador!=null && !TextUtils.isEmpty(contador)){
-                                images_files_names.add(contador+"_foto_numero_serie.jpg");
+                                images_files_names.add(contador+"_foto_lectura.jpg");
                             }
                         }
                         if(!TextUtils.isEmpty(mCurrentPhotoPath_foto_serie)) {
                             images_files.add(mCurrentPhotoPath_foto_serie);
                             if(contador!=null && !TextUtils.isEmpty(contador)){
-                                images_files_names.add(contador+"_foto_lectura.jpg");
+                                images_files_names.add(contador+"_foto_numero_serie.jpg");
                             }
                         }
                         if(!TextUtils.isEmpty(mCurrentPhotoPath_foto_despues)) {
@@ -829,8 +865,14 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
 //                Toast.makeText(Screen_User_Data.this, "Configuracion", Toast.LENGTH_SHORT).show();
                 // User chose the "Favorite" action, mark the current item
                 // as a favorite...
+                openMessage("Tarea", Screen_Battery_counter.get_tarea_info());
                 return true;
-
+            case R.id.Info_Tarea:
+//                Toast.makeText(Screen_User_Data.this, "Configuracion", Toast.LENGTH_SHORT).show();
+                // User chose the "Favorite" action, mark the current item
+                // as a favorite...
+                openMessage("Tarea", Screen_Battery_counter.get_tarea_info());
+                return true;
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.

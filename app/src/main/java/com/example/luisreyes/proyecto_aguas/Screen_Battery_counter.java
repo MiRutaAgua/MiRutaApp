@@ -144,12 +144,26 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
 
         if (checkConection()){
             try {
-                String foto_instalacion =  Screen_Login_Activity.tarea_JSON.getString("foto_despues_instalacion");
+                String foto =  Screen_Login_Activity.tarea_JSON.getString("foto_despues_instalacion");
                 //Toast.makeText(this, foto_instalacion, Toast.LENGTH_LONG).show();
-                showRingDialog("Obteniendo foto de instalación");
-                String type_script = "download_image";
-                BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Battery_counter.this);
-                backgroundWorker.execute(type_script,foto_instalacion);
+                if(foto.isEmpty() && foto.equals("null") && foto == null){
+                }else{
+                    foto =  Screen_Login_Activity.tarea_JSON.getString("foto_antes_instalacion");
+                    if(foto.isEmpty() && foto.equals("null") && foto == null){
+                    }else{
+                        foto =  Screen_Login_Activity.tarea_JSON.getString("foto_lectura");
+                        if(foto.isEmpty() && foto.equals("null") && foto == null){
+                        }else{
+                            foto =  Screen_Login_Activity.tarea_JSON.getString("foto_numero_serie");
+                        }
+                    }
+                }
+                if(!foto.isEmpty() && !foto.equals("null") && foto != null){
+                    showRingDialog("Obteniendo foto de contador");
+                    String type_script = "download_image";
+                    BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Battery_counter.this);
+                    backgroundWorker.execute(type_script,foto);
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -199,13 +213,22 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
                 Toast.makeText(this, "No se puede acceder al servidor, no se obtuvo foto instalacion", Toast.LENGTH_LONG).show();
             }
             else {
-                //Toast.makeText(Screen_Battery_counter.this, "Foto de obtenida", Toast.LENGTH_SHORT).show();
-                Bitmap bitmap = null;
-                bitmap = Screen_Register_Operario.getImageFromString(result);
-                if(bitmap!= null) {
-                    imagen_contador.setVisibility(View.VISIBLE);
-                    imagen_contador.setImageBitmap(bitmap);
-                    saveBitmapImage(bitmap, Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador") + "_foto_antes_instalacion");
+                if(result.contains("not success")){
+                    if(result.contains("no se pudo obtener imagen")){
+                        Toast.makeText(this, "Error obteniendo imagen", Toast.LENGTH_LONG).show();
+                    }
+                    else if(result.contains("no existe imagen")){
+                        Toast.makeText(this, "No hay foto de contador", Toast.LENGTH_LONG).show();
+                    }
+                }else{
+                    Bitmap bitmap = null;
+                    bitmap = Screen_Register_Operario.getImageFromString(result);
+                    if(bitmap!= null) {
+                        imagen_contador.setVisibility(View.VISIBLE);
+                        imagen_contador.setImageBitmap(bitmap);
+                        saveBitmapImage(bitmap, Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador") + "_foto_antes_instalacion");
+                        Toast.makeText(Screen_Battery_counter.this, "Imagen descargada", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         }
@@ -310,17 +333,15 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
 //                Toast.makeText(Screen_User_Data.this, "Configuracion", Toast.LENGTH_SHORT).show();
                 // User chose the "Favorite" action, mark the current item
                 // as a favorite...
-                try {
-                    openMessage("Tarea","Contador: "+Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador")
-                            +"\nModificacion: "+Screen_Login_Activity.tarea_JSON.getString("date_time_modified")
-                            +"\ncita: "+Screen_Login_Activity.tarea_JSON.getString("nuevo_citas")
-                            +"\nContador: "+Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador"));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(Screen_Battery_counter.this, "No se pudo obtener datos de tarea", Toast.LENGTH_SHORT).show();
-                }
-                return true;
+                    openMessage("Tarea", Screen_Battery_counter.get_tarea_info());
 
+                return true;
+            case R.id.Info_Tarea:
+//                Toast.makeText(Screen_User_Data.this, "Configuracion", Toast.LENGTH_SHORT).show();
+                // User chose the "Favorite" action, mark the current item
+                // as a favorite...
+                openMessage("Tarea", Screen_Battery_counter.get_tarea_info());
+                return true;
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
@@ -334,4 +355,27 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
         messageDialog.setTitleAndHint(title, hint);
         messageDialog.show(getSupportFragmentManager(), title);
     }
+
+    public static String get_tarea_info(){
+        String n = "";
+        try{
+            n = "Contador: "+Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador")
+                    +"\nModificacion: "+Screen_Login_Activity.tarea_JSON.getString("date_time_modified")
+                    +"\ncita: "+Screen_Login_Activity.tarea_JSON.getString("nuevo_citas")
+                    +"\nlecturaU: "+Screen_Login_Activity.tarea_JSON.getString("lectura_ultima")
+                    +"\nlecturaA: "+Screen_Login_Activity.tarea_JSON.getString("lectura_actual")
+                    +"\nCodigo_Localizacion: "+Screen_Login_Activity.tarea_JSON.getString("codigo_de_localizacion")
+                    +"\ngeolocalizacion: "+Screen_Login_Activity.tarea_JSON.getString("geolocalizacion");
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return "No se pudo obtener datos de tarea";
+        }
+        if(!n.equals("null") && !n.isEmpty() && n!=null){
+            return n;
+        }else{
+            return "null";
+        }
+    }
+
+
 }

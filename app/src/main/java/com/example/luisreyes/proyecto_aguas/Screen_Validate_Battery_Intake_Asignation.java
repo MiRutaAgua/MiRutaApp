@@ -87,6 +87,35 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
         ubicacion     = (TextView)findViewById(R.id.textView_ubicacion_screen_validate_battery_intake_asignation);
         button_guardar_datos_screen_validate_battery_intake_asignation = (Button)findViewById(R.id.button_guardar_datos_screen_validate_battery_intake_asignation);
 
+        try {
+
+            foto_antes_intalacion_bitmap = getPhotoUserLocal(Screen_Battery_Intake_Asignation.mCurrentPhotoPath_foto_antes);
+            if(foto_antes_intalacion_bitmap != null) {
+                foto_instalacion.setVisibility(View.VISIBLE);
+                foto_instalacion.setImageBitmap(foto_antes_intalacion_bitmap);
+            }
+            foto_numero_serie_bitmap = getPhotoUserLocal(Screen_Battery_Intake_Asignation.mCurrentPhotoPath_foto_serie);
+            if(foto_numero_serie_bitmap != null) {
+                foto_numero_de_serie.setVisibility(View.VISIBLE);
+                foto_numero_de_serie.setImageBitmap(foto_numero_serie_bitmap);
+            }
+
+            foto_lectura_bitmap = getPhotoUserLocal(Screen_Battery_Intake_Asignation.mCurrentPhotoPath_foto_lectura);
+            if(foto_lectura_bitmap != null) {
+                foto_lectura.setVisibility(View.VISIBLE);
+                foto_lectura.setImageBitmap(foto_lectura_bitmap);
+            }
+            numero_serie.setText(Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador"));
+            lectura_anterior.setText(Screen_Login_Activity.tarea_JSON.getString("lectura_ultima"));
+            lectura_ultima.setText(Screen_Login_Activity.tarea_JSON.getString("lectura_actual"));
+            numero_serie_nuevo.setText(Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador"));
+            observaciones.setText(Screen_Login_Activity.tarea_JSON.getString("observaciones"));
+            ubicacion.setText(Screen_Login_Activity.tarea_JSON.getString("ubicacion_en_bateria"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Toast.makeText(Screen_Validate_Battery_Intake_Asignation.this, "No se pudo insetar datos en JSON tarea", Toast.LENGTH_LONG).show();
+        }
+
         label_lectura_ultima.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -121,67 +150,61 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
                     e.printStackTrace();
                     Toast.makeText(Screen_Validate_Battery_Intake_Asignation.this, "Error date_time_modified "+e.toString(), Toast.LENGTH_LONG).show();
                 }
-
-                boolean error=false;
-                if(team_or_personal_task_selection_screen_Activity.dBtareasController != null) {
-                    try {
-                        team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea(Screen_Login_Activity.tarea_JSON);
-                    } catch (JSONException e) {
-                        Toast.makeText(Screen_Validate_Battery_Intake_Asignation.this, "No se pudo guardar tarea local " + e.toString(), Toast.LENGTH_LONG).show();
-                        e.printStackTrace();
-                        error = true;
+                String ultima = lectura_anterior.getText().toString();
+                String actual = lectura_ultima.getText().toString();
+                if(!ultima.isEmpty() && !ultima.equals("null") && ultima!=null){
+                    Integer ultimaInt = Integer.parseInt(ultima);
+                    Integer actualInt = Integer.parseInt(actual);
+                    if(actualInt > ultimaInt){
+                        try {
+                            Screen_Login_Activity.tarea_JSON.put("lectura_ultima", ultima);
+                            Screen_Login_Activity.tarea_JSON.put("lectura_actual", actual);
+                            saveData();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(Screen_Validate_Battery_Intake_Asignation.this, "No se pudo salvar datos, "+e.toString(), Toast.LENGTH_LONG).show();
+                        }
+                    }else {
+                        Toast.makeText(Screen_Validate_Battery_Intake_Asignation.this, "La lectura del contador debe ser mayor que la ultima registrada", Toast.LENGTH_LONG).show();
                     }
                 }else{
-                    error = true;
-                    Toast.makeText(Screen_Validate_Battery_Intake_Asignation.this, "No hay tabla donde guardar", Toast.LENGTH_LONG).show();
+                    try {
+                        Screen_Login_Activity.tarea_JSON.put("lectura_actual", actual);
+                        saveData();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Toast.makeText(Screen_Validate_Battery_Intake_Asignation.this, "No se pudo salvar datos, "+e.toString(), Toast.LENGTH_LONG).show();
+                    }
                 }
-                if(checkConection()) {
-                    showRingDialog("Guardando datos");
-                    String type = "update_tarea";
-                    BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Validate_Battery_Intake_Asignation.this);
-                    backgroundWorker.execute(type);
-                } else{
-                    if(error)
-                        Toast.makeText(Screen_Validate_Battery_Intake_Asignation.this, "No hay conexion se guardaron los datos en el telefono", Toast.LENGTH_LONG).show();
-                }
-                //Intent open_screen_battery_counter = new Intent(Screen_Validate_Battery_Intake_Asignation.this, Screen_Battery_counter.class);
-                //startActivity(open_screen_battery_counter);
             }
         });
 
-
-        try {
-
-            foto_antes_intalacion_bitmap = getPhotoUserLocal(Screen_Battery_Intake_Asignation.mCurrentPhotoPath_foto_antes);
-            if(foto_antes_intalacion_bitmap != null) {
-                foto_instalacion.setVisibility(View.VISIBLE);
-                foto_instalacion.setImageBitmap(foto_antes_intalacion_bitmap);
-            }
-            foto_numero_serie_bitmap = getPhotoUserLocal(Screen_Battery_Intake_Asignation.mCurrentPhotoPath_foto_serie);
-            if(foto_numero_serie_bitmap != null) {
-                foto_numero_de_serie.setVisibility(View.VISIBLE);
-                foto_numero_de_serie.setImageBitmap(foto_numero_serie_bitmap);
-            }
-
-            foto_lectura_bitmap = getPhotoUserLocal(Screen_Battery_Intake_Asignation.mCurrentPhotoPath_foto_lectura);
-            if(foto_lectura_bitmap != null) {
-                foto_lectura.setVisibility(View.VISIBLE);
-                foto_lectura.setImageBitmap(foto_lectura_bitmap);
-            }
-            numero_serie.setText(Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador"));
-            lectura_anterior.setText(Screen_Login_Activity.tarea_JSON.getString("lectura_ultima"));
-            lectura_ultima.setText(Screen_Login_Activity.tarea_JSON.getString("lectura_actual"));
-            numero_serie_nuevo.setText(Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador"));
-            observaciones.setText(Screen_Login_Activity.tarea_JSON.getString("observaciones"));
-            ubicacion.setText(Screen_Login_Activity.tarea_JSON.getString("ubicacion_en_bateria"));
-
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-            Toast.makeText(Screen_Validate_Battery_Intake_Asignation.this, "No se pudo insetar datos en JSON tarea", Toast.LENGTH_LONG).show();
-        }
     }
 
+    public void saveData() {
+        boolean error=false;
+        if(team_or_personal_task_selection_screen_Activity.dBtareasController != null) {
+            try {
+                team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea(Screen_Login_Activity.tarea_JSON);
+            } catch (JSONException e) {
+                Toast.makeText(this, "No se pudo guardar tarea local " + e.toString(), Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+                error = true;
+            }
+        }else{
+            error = true;
+            Toast.makeText(this, "No hay tabla donde guardar", Toast.LENGTH_LONG).show();
+        }
+        if(checkConection()) {
+            showRingDialog("Guardando Datos...");
+            String type = "update_tarea";
+            BackgroundWorker backgroundWorker = new BackgroundWorker(this);
+            backgroundWorker.execute(type);
+        } else{
+            if(!error)
+                Toast.makeText(this, "No hay conexion se guardaron los datos en el telefono", Toast.LENGTH_LONG).show();
+        }
+    }
     public Bitmap getPhotoUserLocal(String path){
         File file = new File(path);
         if(file.exists()) {
@@ -225,10 +248,26 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
                 numero_serie_nuevo.setText(wrote_string);
             }
 
-        }else if(current_tag.contains("Lectura")){
+        }else if(current_tag.contains("Lectura")) {
 
-            Screen_Login_Activity.tarea_JSON.put("lectura_actual", wrote_string);
-            lectura_ultima.setText(wrote_string);
+            String lectura_last = Screen_Login_Activity.tarea_JSON.getString("lectura_actual");
+            if(!lectura_last.isEmpty() && !lectura_last.equals("null") && lectura_last!=null){
+                Integer lectura_lastInt = Integer.parseInt(lectura_last);
+                Integer lectura_actualInt = Integer.parseInt(wrote_string);
+                if(lectura_actualInt > lectura_lastInt) {
+                    Screen_Login_Activity.tarea_JSON.put("lectura_ultima", lectura_last);
+                    Screen_Login_Activity.tarea_JSON.put("lectura_actual", wrote_string);
+                    lectura_anterior.setText(lectura_last);
+                    lectura_ultima.setText(wrote_string);
+                }
+                else{
+                    Toast.makeText(this, "La lectura del contador debe ser mayor que la ultima registrada", Toast.LENGTH_LONG).show();
+                }
+            }
+            else{//no hay lectura actual
+                Screen_Login_Activity.tarea_JSON.put("lectura_actual", wrote_string);
+                lectura_ultima.setText(wrote_string);
+            }
         }
     }
 
@@ -244,7 +283,7 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
                     Toast.makeText(Screen_Validate_Battery_Intake_Asignation.this, "No se pudo insertar correctamente, problemas con el servidor", Toast.LENGTH_SHORT).show();
 
                 }else {
-                    Toast.makeText(Screen_Validate_Battery_Intake_Asignation.this, "Datos actualizados correctamente, procediendo a subir fotos", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Screen_Validate_Battery_Intake_Asignation.this, "Datos actualizados correctamente", Toast.LENGTH_SHORT).show();
                     String contador=null;
                     try {
                         contador = Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador");
@@ -273,6 +312,11 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
                     if(!images_files_names.isEmpty() && !images_files.isEmpty()) {
                         showRingDialog("Subiedo fotos");
                         uploadPhotos();
+                    }else{
+
+                        Intent intent_open_battery_counter = new Intent(this, Screen_Battery_counter.class);
+                        startActivity(intent_open_battery_counter);
+                        this.finish();
                     }
                 }
             }
@@ -291,10 +335,10 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
     public void uploadPhotos(){
         if(images_files.isEmpty()){
             hideRingDialog();
-            Toast.makeText(Screen_Validate_Battery_Intake_Asignation.this, "Actualizada tarea correctamente\n", Toast.LENGTH_SHORT).show();
-            Intent intent_open_battery_counter = new Intent(Screen_Validate_Battery_Intake_Asignation.this, Screen_Battery_counter.class);
+            Toast.makeText(this, "Actualizada tarea correctamente", Toast.LENGTH_SHORT).show();
+            Intent intent_open_battery_counter = new Intent(this, Screen_Battery_counter.class);
             startActivity(intent_open_battery_counter);
-            Screen_Validate_Battery_Intake_Asignation.this.finish();
+            this.finish();
             return;
         }
         else {
@@ -364,7 +408,12 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
                 // User chose the "Favorite" action, mark the current item
                 // as a favorite...
                 return true;
-
+            case R.id.Info_Tarea:
+//                Toast.makeText(Screen_User_Data.this, "Configuracion", Toast.LENGTH_SHORT).show();
+                // User chose the "Favorite" action, mark the current item
+                // as a favorite...
+                openMessage("Tarea", Screen_Battery_counter.get_tarea_info());
+                return true;
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.

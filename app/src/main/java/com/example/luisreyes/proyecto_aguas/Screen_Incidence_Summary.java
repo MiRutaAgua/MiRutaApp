@@ -62,6 +62,7 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
     private Bitmap bitmap_firma_cliente = null;
     private TextView observaciones_incidence, nombre_y_tarea;
     private EditText lectura;
+    private String lectura_string = "";
     private ProgressDialog progressDialog;
     private ArrayList<String> images_files;
     private LinearLayout llScroll;
@@ -160,7 +161,7 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
             Toast.makeText(Screen_Incidence_Summary.this, "no se pudo obtener firma cliente de tarea", Toast.LENGTH_LONG).show();
         }
         try {
-            String lectura_string = Screen_Login_Activity.tarea_JSON.getString("lectura_actual");
+            lectura_string = Screen_Login_Activity.tarea_JSON.getString("lectura_actual");
             if(!TextUtils.isEmpty(lectura_string) && !lectura_string.equals("null")){
                 lectura.setHint(lectura_string);
             }else{
@@ -217,14 +218,6 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                if(!(TextUtils.isEmpty(lectura.getText()))) {
-                    try {
-                        Screen_Login_Activity.tarea_JSON.put("lectura_actual", lectura.getText().toString());
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        Toast.makeText(Screen_Incidence_Summary.this, "no se pudo cambiar lectura de contador", Toast.LENGTH_LONG).show();
-                    }
-                }
                 if(bitmap_firma_cliente!=null) {
                     try {
                         String firma = Screen_Register_Operario.getStringImage(bitmap_firma_cliente);
@@ -234,33 +227,62 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
                         Toast.makeText(Screen_Incidence_Summary.this, "no se pudo cambiar firma de cliente", Toast.LENGTH_LONG).show();
                     }
                 }
+                if(!(TextUtils.isEmpty(lectura.getText()))) {
+                    if(!lectura_string.isEmpty() && !lectura_string.equals("null")){
+                        String lectura_actual = lectura.getText().toString();
+                        if(Integer.parseInt(lectura_actual) > Integer.parseInt(lectura_string)){
+                            try {
+                                Screen_Login_Activity.tarea_JSON.put("lectura_ultima", lectura_string);
+                                Screen_Login_Activity.tarea_JSON.put("lectura_actual", lectura_actual);
 
-                boolean error=false;
-                if(team_or_personal_task_selection_screen_Activity.dBtareasController != null) {
-                    try {
-                        team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea(Screen_Login_Activity.tarea_JSON);
-                    } catch (JSONException e) {
-                        Toast.makeText(Screen_Incidence_Summary.this, "No se pudo guardar tarea local " + e.toString(), Toast.LENGTH_LONG).show();
-                        e.printStackTrace();
-                        error = true;
+                                saveData();
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                Toast.makeText(Screen_Incidence_Summary.this, "no se pudo cambiar lectura de contador", Toast.LENGTH_LONG).show();
+                            }
+                        }else{
+                            Toast.makeText(Screen_Incidence_Summary.this, "La lectura del contador debe ser mayor que la ultima registrada", Toast.LENGTH_LONG).show();
+                        }
+                    }else {
+                        try {
+                            Screen_Login_Activity.tarea_JSON.put("lectura_actual", lectura.getText().toString());
+                            saveData();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(Screen_Incidence_Summary.this, "no se pudo cambiar lectura de contador", Toast.LENGTH_LONG).show();
+                        }
                     }
                 }else{
-                    error = true;
-                    Toast.makeText(Screen_Incidence_Summary.this, "No hay tabla donde guardar", Toast.LENGTH_LONG).show();
+                    Toast.makeText(Screen_Incidence_Summary.this, "Inserte la lectura del contador", Toast.LENGTH_LONG).show();
                 }
-                if(checkConection()) {
-                    showRingDialog("Guardando Incidencias...");
-                    String type = "update_tarea";
-                    BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Incidence_Summary.this);
-                    backgroundWorker.execute(type);
-                } else{
-                    if(error)
-                        Toast.makeText(Screen_Incidence_Summary.this, "No hay conexion se guardaron los datos en el telefono", Toast.LENGTH_LONG).show();
-                }
-
             }
         });
 
+    }
+    public void saveData() {
+        boolean error=false;
+        if(team_or_personal_task_selection_screen_Activity.dBtareasController != null) {
+            try {
+                team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea(Screen_Login_Activity.tarea_JSON);
+            } catch (JSONException e) {
+                Toast.makeText(Screen_Incidence_Summary.this, "No se pudo guardar tarea local " + e.toString(), Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+                error = true;
+            }
+        }else{
+            error = true;
+            Toast.makeText(Screen_Incidence_Summary.this, "No hay tabla donde guardar", Toast.LENGTH_LONG).show();
+        }
+        if(checkConection()) {
+            showRingDialog("Guardando Incidencias...");
+            String type = "update_tarea";
+            BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Incidence_Summary.this);
+            backgroundWorker.execute(type);
+        } else{
+            if(!error)
+                Toast.makeText(Screen_Incidence_Summary.this, "No hay conexion se guardaron los datos en el telefono", Toast.LENGTH_LONG).show();
+        }
     }
 
     public static Bitmap loadBitmapFromView(View v, int width, int height) {
@@ -377,7 +399,7 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
                         Toast.makeText(Screen_Incidence_Summary.this, "No se pudo insertar correctamente, problemas con el servidor de la base de datos", Toast.LENGTH_SHORT).show();
 
                     } else {
-                        Toast.makeText(Screen_Incidence_Summary.this, "Datos actualizados correctamente, procediendo a subir fotos", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Screen_Incidence_Summary.this, "Datos actualizados correctamente", Toast.LENGTH_SHORT).show();
                         images_files.clear();
                         if(!TextUtils.isEmpty(Screen_Incidence.mCurrentPhotoPath_incidencia_1) && Screen_Incidence.mCurrentPhotoPath_incidencia_1!=null) {
                             images_files.add(Screen_Incidence.mCurrentPhotoPath_incidencia_1);
@@ -392,6 +414,10 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
                         if(!images_files.isEmpty()) {
                             showRingDialog("Subiendo foto...");
                             uploadPhotos();
+                        }else {
+                            Intent intent_open_task_or_personal_screen = new Intent(this, team_or_personal_task_selection_screen_Activity.class);
+                            startActivity(intent_open_task_or_personal_screen);
+                            this.finish();
                         }
                     }
                 }
@@ -507,7 +533,12 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
                 // User chose the "Favorite" action, mark the current item
                 // as a favorite...
                 return true;
-
+            case R.id.Info_Tarea:
+//                Toast.makeText(Screen_User_Data.this, "Configuracion", Toast.LENGTH_SHORT).show();
+                // User chose the "Favorite" action, mark the current item
+                // as a favorite...
+                openMessage("Tarea", Screen_Battery_counter.get_tarea_info());
+                return true;
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.

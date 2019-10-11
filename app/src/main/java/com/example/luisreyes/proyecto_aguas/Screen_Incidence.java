@@ -445,7 +445,12 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
                 // User chose the "Favorite" action, mark the current item
                 // as a favorite...
                 return true;
-
+            case R.id.Info_Tarea:
+//                Toast.makeText(Screen_User_Data.this, "Configuracion", Toast.LENGTH_SHORT).show();
+                // User chose the "Favorite" action, mark the current item
+                // as a favorite...
+                openMessage("Tarea", Screen_Battery_counter.get_tarea_info());
+                return true;
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.

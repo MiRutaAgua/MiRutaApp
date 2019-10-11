@@ -307,15 +307,13 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
 //                Toast.makeText(Screen_User_Data.this, "Configuracion", Toast.LENGTH_SHORT).show();
                 // User chose the "Favorite" action, mark the current item
                 // as a favorite...
-                try {
-                    openMessage("Tarea","Contador: "+Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador")
-                            +"\nModificacion: "+Screen_Login_Activity.tarea_JSON.getString("date_time_modified")
-                            +"\ncita: "+Screen_Login_Activity.tarea_JSON.getString("nuevo_citas")
-                            +"\nContador: "+Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador"));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(Screen_Unity_Counter.this, "No se pudo obtener datos de tarea", Toast.LENGTH_SHORT).show();
-                }
+                openMessage("Tarea", Screen_Battery_counter.get_tarea_info());
+                return true;
+            case R.id.Info_Tarea:
+//                Toast.makeText(Screen_User_Data.this, "Configuracion", Toast.LENGTH_SHORT).show();
+                // User chose the "Favorite" action, mark the current item
+                // as a favorite...
+                openMessage("Tarea", Screen_Battery_counter.get_tarea_info());
                 return true;
 
             default:

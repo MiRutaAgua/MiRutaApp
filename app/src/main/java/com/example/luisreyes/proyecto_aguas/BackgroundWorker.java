@@ -127,20 +127,20 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
 //            download_user_image_url = "http://192.168.21.125/download_user_image.php";
 //            upload_user_image_url = "http://192.168.21.125/upload_user_image.php";
             //Mi PC en casa
-            login_url = "http://192.168.137.50/login_operarios.php";
-            register_url = "http://192.168.137.50/register_operario.php";
-            change_foto_url = "http://192.168.137.50/change_foto.php";
-            get_operarios_url = "http://192.168.137.50/get_operarios.php";
-            get_user_data_url = "http://192.168.137.50/get_one_operario.php";
-            get_one_tarea_url = "http://192.168.137.50/get_one_tarea.php";
-            get_tareas_url = "http://192.168.137.50/get_tareas.php";
-            create_tarea_url = "http://192.168.137.50/create_task.php";
-            update_tarea_url = "http://192.168.137.50/update_tarea.php";
-            update_operario_url = "http://192.168.137.50/update_operario.php";
-            upload_image_url = "http://192.168.137.50/upload_image.php";
-            download_image_url = "http://192.168.137.50/download_image.php";
-            download_user_image_url = "http://192.168.137.50/download_user_image.php";
-            upload_user_image_url = "http://192.168.137.50/upload_user_image.php";
+            login_url = "http://192.168.56.1/login_operarios.php";
+            register_url = "http://192.168.56.1/register_operario.php";
+            change_foto_url = "http://192.168.56.1/change_foto.php";
+            get_operarios_url = "http://192.168.56.1/get_operarios.php";
+            get_user_data_url = "http://192.168.56.1/get_one_operario.php";
+            get_one_tarea_url = "http://192.168.56.1/get_one_tarea.php";
+            get_tareas_url = "http://192.168.56.1/get_tareas.php";
+            create_tarea_url = "http://192.168.56.1/create_task.php";
+            update_tarea_url = "http://192.168.56.1/update_tarea.php";
+            update_operario_url = "http://192.168.56.1/update_operario.php";
+            upload_image_url = "http://192.168.56.1/upload_image.php";
+            download_image_url = "http://192.168.56.1/download_image.php";
+            download_user_image_url = "http://192.168.56.1/download_user_image.php";
+            upload_user_image_url = "http://192.168.56.1/upload_user_image.php";
         }
 
 
