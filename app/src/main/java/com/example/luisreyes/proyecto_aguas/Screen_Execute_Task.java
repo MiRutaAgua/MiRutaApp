@@ -455,14 +455,24 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         super.onActivityResult(requestCode, resultCode, data);
 
         if(resultCode == RESULT_OK) {
-            if (requestCode == REQUEST_LECTOR_SNC) {
-                if (!data.getStringExtra("result").equals("null")) {
+            if (requestCode == REQUEST_LECTOR_SNC) {//OJO preguntar sobre el numero de serie a cambiar
+                String data_result = "";
+                data_result = data.getStringExtra("result");
+                if (!data_result.equals("null") && !data_result.isEmpty() && data_result!=null) {
                     textView_serial_number_result.setText(data.getStringExtra("result"));
                 }
             }
             if (requestCode == REQUEST_LECTOR_SNM) {
-                if (!data.getStringExtra("result").equals("null")) {
-                    textView_serial_number_module_result.setText(data.getStringExtra("result"));
+                String data_result = "";
+                data_result = data.getStringExtra("result");
+                if (!data_result.equals("null") && !data_result.isEmpty() && data_result!=null) {
+                    try {
+                        Screen_Login_Activity.tarea_JSON.put("numero_serie_modulo", data_result);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Toast.makeText(this,"No pudo insertarse numero serie de modulo: "+e.toString(), Toast.LENGTH_LONG).show();
+                    }
+                    textView_serial_number_module_result.setText(data_result);
                 }
             }
 
@@ -474,6 +484,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                         bitmap_foto_antes_instalacion = Bitmap.createScaledBitmap(bitmap_foto_antes_instalacion, 960, 1280, true);
                         instalation_photo_screen_exec_task.setVisibility(View.VISIBLE);
                         instalation_photo_screen_exec_task.setImageBitmap(bitmap_foto_antes_instalacion);
+                        lectura_editText.setVisibility(View.VISIBLE);
                     }
                 }
             }

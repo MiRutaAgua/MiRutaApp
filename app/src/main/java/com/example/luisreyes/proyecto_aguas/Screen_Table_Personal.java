@@ -2,8 +2,10 @@ package com.example.luisreyes.proyecto_aguas;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -63,9 +65,6 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
     private ArrayList<String> tareas_to_update;
     private ArrayList<String> tareas_to_upload;
     private ArrayList<MyCounter> lista_ordenada_de_tareas;
-
-    private Intent intent_open_screen_unity_counter;
-    private Intent intent_open_screen_battery_counter;
     private ProgressDialog progressDialog;
     private int lite_count = -10;
 
@@ -91,9 +90,6 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
         lista_ordenada_de_tareas = new ArrayList<MyCounter>();
         lista_contadores = new ArrayList<String>();
         lista_desplegable = new ArrayList<String>();
-
-        intent_open_screen_battery_counter = new Intent(this, Screen_Battery_counter.class);
-        intent_open_screen_unity_counter = new Intent(this, Screen_Unity_Counter.class);
 
         spinner_filtro_tareas = (Spinner)findViewById(R.id.spinner_filtrar_tareas_screen_table_personal);
         lista_de_contadores_screen_table_personal = (ListView) findViewById(R.id.listView_contadores_screen_table_personal);
@@ -124,38 +120,45 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
         lista_de_contadores_screen_table_personal.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //String n_tarea ="";
-                if (checkConection()) {
-                    for(int n=0; n < arrayAdapter_all.getCount(); n++){
-                        if(arrayAdapter_all.getItem(n).equals(arrayAdapter.getItem(i))){
-                            try{
-                                JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.
-                                        dBtareasController.get_one_tarea_from_Database(lista_ordenada_de_tareas.get(n).getContador()));
-                                if(jsonObject!=null){
-                                    Screen_Login_Activity.tarea_JSON = jsonObject;
+                Object object_click = arrayAdapter.getItem(i);
+                if(object_click!=null) {
+                    if (!arrayAdapter_all.isEmpty() && !arrayAdapter.isEmpty()) {
+                        for (int n = 0; n < arrayAdapter_all.getCount(); n++) {
+                            Object object = arrayAdapter_all.getItem(n);
+                            if (object != null) {
+                                if (object.equals(object_click)) {
+                                    try {
+                                        if(n < team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas()){
+                                            JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.
+                                                    dBtareasController.get_one_tarea_from_Database(lista_ordenada_de_tareas.get(n).getContador()));
+                                            if (jsonObject != null) {
+                                                Screen_Login_Activity.tarea_JSON = jsonObject;
+                                                if(Screen_Login_Activity.tarea_JSON!=null) {
+                                                    acceder_a_Tarea();//revisar esto
+                                                }else{
+                                                    Toast.makeText(Screen_Table_Personal.this, "Tarea nula", Toast.LENGTH_SHORT).show();
+                                                }
+                                            }else{
+                                                Toast.makeText(Screen_Table_Personal.this, "JSON nulo, se delvio de la tabla elemento nulo", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }else{
+                                            Toast.makeText(Screen_Table_Personal.this, "Elemento fuera del tamaño de tabla", Toast.LENGTH_SHORT).show();
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                        Toast.makeText(Screen_Table_Personal.this, "No se pudo obtener tarea de la tabla "+e.toString(), Toast.LENGTH_SHORT).show();
+                                    }
                                 }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+                            }else{
+                                Toast.makeText(Screen_Table_Personal.this, "Elemento presionado es nulo en lista completa", Toast.LENGTH_SHORT).show();
                             }
                         }
+                    }else{
+                        Toast.makeText(Screen_Table_Personal.this, "Adaptador vacio, puede ser lista completa o de filtro", Toast.LENGTH_SHORT).show();
                     }
+                }else{
+                    Toast.makeText(Screen_Table_Personal.this, "Elemento presionado nulo", Toast.LENGTH_SHORT).show();
                 }
-                else {
-                    for(int n=0; n < arrayAdapter_all.getCount(); n++){
-                        if(arrayAdapter_all.getItem(n).equals(arrayAdapter.getItem(i))){
-                            try{
-                                JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.
-                                        dBtareasController.get_one_tarea_from_Database(lista_ordenada_de_tareas.get(n).getContador()));
-                                if(jsonObject!=null){
-                                    Screen_Login_Activity.tarea_JSON = jsonObject;
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                }
-                acceder_a_Tarea();
             }
         });
         spinner_filtro_tareas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -231,8 +234,10 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
             acceso = acceso.replace(" ", "");
             //Toast.makeText(Screen_Table_Team.this, "Acceso -> \n"+acceso, Toast.LENGTH_SHORT).show();
             if (acceso.contains("BAT")) {
+                Intent intent_open_screen_battery_counter = new Intent(this, Screen_Battery_counter.class);
                 startActivity(intent_open_screen_battery_counter);
             } else {
+                Intent intent_open_screen_unity_counter = new Intent(this, Screen_Unity_Counter.class);
                 startActivity(intent_open_screen_unity_counter);
             }
         } catch (JSONException e) {
@@ -244,7 +249,7 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
             Screen_Login_Activity.isOnline = true;
             showRingDialog("Actualizando informacion de tareas");
             String type_script = "get_tareas";
-            BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Table_Personal.this);
+            BackgroundWorker backgroundWorker = new BackgroundWorker(this);
             backgroundWorker.execute(type_script);
         }
         else{

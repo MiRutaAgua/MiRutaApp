@@ -8,11 +8,15 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
@@ -38,6 +42,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -69,6 +75,8 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
     private Intent intent_open_screen_unity_counter;
     private Intent intent_open_screen_battery_counter;
     private ArrayList<String> tareas_to_update;
+    private ArrayList<String> images_files_names;
+    private ArrayList<String> images_files;
     private ArrayList<String> tareas_to_update_help;
     private ArrayList<String> tareas_to_upload;
     private Button agregar_tarea;
@@ -105,6 +113,8 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
         ArrayAdapter arrayAdapter_spinner = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista_desplegable);
         spinner_filtro_tareas.setAdapter(arrayAdapter_spinner);
 
+        images_files_names = new ArrayList<String>();
+        images_files = new ArrayList<String>();
         tareas_to_upload = new ArrayList<String>();
         tareas_to_update_help = new ArrayList<String>();
         tareas_to_update = new ArrayList<String>();
@@ -122,65 +132,75 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
         lista_de_contadores_screen_table_team.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if (checkConection()) {
-                    for(int n=0; n < arrayAdapter_all.getCount(); n++){
-                        if(arrayAdapter_all.getItem(n).equals(arrayAdapter.getItem(i))){
-                            try{
-                                JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.
-                                        dBtareasController.get_one_tarea_from_Database(lista_ordenada_de_tareas.get(n).getContador()));
-                                if(jsonObject!=null){
-                                    Screen_Login_Activity.tarea_JSON = jsonObject;
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                } else {
-                    for(int n=0; n < arrayAdapter_all.getCount(); n++){
-                        if(arrayAdapter_all.getItem(n).equals(arrayAdapter.getItem(i))){
-                            try{
-                                JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.
-                                        dBtareasController.get_one_tarea_from_Database(lista_ordenada_de_tareas.get(n).getContador()));
-                                if(jsonObject!=null){
-                                    Screen_Login_Activity.tarea_JSON = jsonObject;
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                }
-                try {
-                    if(Screen_Login_Activity.tarea_JSON.getString("operario").equals(Screen_Login_Activity.operario_JSON.getString("usuario"))) {
-                        acceder_a_Tarea();
-                    }else {
-                        new AlertDialog.Builder(Screen_Table_Team.this)
-                                .setTitle("Cambiar Operario")
-                                .setMessage("Esta tarea corresponde a otro operario\n¿Desea asignarse esta tarea?")
-                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener(){
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        try {
-                                            Screen_Login_Activity.tarea_JSON.put("operario", Screen_Login_Activity.operario_JSON.getString("usuario").replace("\n", ""));
-                                        } catch (JSONException e) {
-                                            Toast.makeText(Screen_Table_Team.this, "Error -> No pudo asignarse tarea a este operario", Toast.LENGTH_SHORT).show();
-                                            e.printStackTrace();
-                                            return;
+                Object object_click = arrayAdapter.getItem(i);
+                if(object_click!=null) {
+                    if (!arrayAdapter_all.isEmpty() && !arrayAdapter.isEmpty()) {
+                        for (int n = 0; n < arrayAdapter_all.getCount(); n++) {
+                            Object object = arrayAdapter_all.getItem(n);
+                            if (object != null) {
+                                if (object.equals(object_click)) {
+                                    try {
+                                        if(n < team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas()){
+                                            JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.
+                                                    dBtareasController.get_one_tarea_from_Database(lista_ordenada_de_tareas.get(n).getContador()));
+                                            if (jsonObject != null) {
+                                                Screen_Login_Activity.tarea_JSON = jsonObject;
+
+                                                try {
+                                                    if(Screen_Login_Activity.tarea_JSON!=null) {
+                                                        if (Screen_Login_Activity.tarea_JSON.getString("operario").equals(Screen_Login_Activity.operario_JSON.getString("usuario"))) {
+                                                            acceder_a_Tarea();//revisar esto
+                                                        } else {
+                                                            new AlertDialog.Builder(Screen_Table_Team.this)
+                                                                    .setTitle("Cambiar Operario")
+                                                                    .setMessage("Esta tarea corresponde a otro operario\n¿Desea asignarse esta tarea?")
+                                                                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                                                        @Override
+                                                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                                                            try {
+                                                                                Screen_Login_Activity.tarea_JSON.put("operario", Screen_Login_Activity.operario_JSON.getString("usuario").replace("\n", ""));
+                                                                            } catch (JSONException e) {
+                                                                                Toast.makeText(Screen_Table_Team.this, "Error -> No pudo asignarse tarea a este operario", Toast.LENGTH_SHORT).show();
+                                                                                e.printStackTrace();
+                                                                                return;
+                                                                            }
+                                                                            acceder_a_Tarea();
+                                                                        }
+                                                                    })
+                                                                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                                                        @Override
+                                                                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                                                                        }
+                                                                    }).show();
+                                                        }
+                                                    }else{
+                                                        Toast.makeText(Screen_Table_Team.this, "Tarea nula", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                    Toast.makeText(Screen_Table_Team.this, "No pudo acceder a tarea Error -> "+e.toString(), Toast.LENGTH_SHORT).show();
+                                                }
+                                            }else{
+                                                Toast.makeText(Screen_Table_Team.this, "JSON nulo, se delvio de la tabla elemento nulo", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }else{
+                                            Toast.makeText(Screen_Table_Team.this, "Elemento fuera del tamaño de tabla", Toast.LENGTH_SHORT).show();
                                         }
-                                        acceder_a_Tarea();
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                        Toast.makeText(Screen_Table_Team.this, "No se pudo obtener tarea de la tabla "+e.toString(), Toast.LENGTH_SHORT).show();
                                     }
-                                })
-                                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-
-                                    }
-                                }).show();
-
+                                }
+                            }else{
+                                Toast.makeText(Screen_Table_Team.this, "Elemento presionado es nulo en lista completa", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }else{
+                        Toast.makeText(Screen_Table_Team.this, "Adaptador vacio, puede ser lista completa o de filtro", Toast.LENGTH_SHORT).show();
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                }else{
+                    Toast.makeText(Screen_Table_Team.this, "Elemento presionado nulo", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -197,6 +217,7 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 //Toast.makeText(Screen_Table_Team.this, lista_desplegable.get(i), Toast.LENGTH_LONG).show();
+                editText_filter.setText("");
                 if(lista_desplegable.get(i).contains("NINGUNO")){
                     arrayAdapter = new ArrayAdapter(Screen_Table_Team.this, android.R.layout.simple_list_item_1, lista_contadores);
                     arrayAdapter_all = new ArrayAdapter(Screen_Table_Team.this, android.R.layout.simple_list_item_1, lista_contadores);
@@ -238,21 +259,12 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
             }
-
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 (Screen_Table_Team.this).arrayAdapter.getFilter().filter(charSequence);
-//                (Screen_Table_Team.this).arrayAdapter.notifyDataSetChanged();
-//                ArrayList<String> underlying = new ArrayList<String>();
-//                for (int c = 0; c < (Screen_Table_Team.this).arrayAdapter.getCount(); c++)
-//                    underlying.add(Screen_Table_Team.this.arrayAdapter.getItem(c).toString());
-//
-//                Toast.makeText(Screen_Table_Team.this, underlying.toString(), Toast.LENGTH_SHORT).show();
             }
-
             @Override
             public void afterTextChanged(Editable editable) {
-
             }
         });
         descargarTareas();
@@ -392,21 +404,15 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
 
     @Override
     public void onTaskComplete(String type, String result) throws JSONException {
-
         if(type == "get_one_tarea"){
             if(result == null){
                 Toast.makeText(Screen_Table_Team.this, "No hay conexion a Internet", Toast.LENGTH_SHORT).show();
             }
             else {
-
                 JSONObject json_tarea = new JSONObject(result);
-
                 //Screen_Login_Activity.tarea_JSON = json_tarea;
-
                 String poblacion = json_tarea.getString("poblacion");
                 Toast.makeText(Screen_Table_Team.this, "Tarea obtenida correctamente -> "+poblacion, Toast.LENGTH_LONG).show();
-
-
             }
         }else if(type == "get_tareas"){
 
@@ -515,7 +521,6 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
 
                                 }
                             }
-
                             String dir = jsonObject.getString("poblacion")+", "
                                     +jsonObject.getString("calle").replace("\n", "")+", "
                                     +jsonObject.getString("numero_edificio").replace("\n", "")
@@ -642,9 +647,9 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
                         return;
                     }
                 }
-
             }
         }else if(type == "update_tarea"){
+            hideRingDialog();
             if (!checkConection()) {
                 Toast.makeText(Screen_Table_Team.this, "No hay conexion a Internet, no se pudo guardar tarea. Intente de nuevo con conexion", Toast.LENGTH_LONG).show();
             }else {
@@ -654,12 +659,24 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
                     if (result.contains("not success")) {
                         Toast.makeText(Screen_Table_Team.this, "No se pudo insertar correctamente, problemas con el servidor de la base de datos", Toast.LENGTH_SHORT).show();
                     } else {
-                        updateTareaInMySQL();
+                            showRingDialog("Subiedo fotos de contador "
+                                    + Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador"));
+                            updatePhotosInMySQL();
                         return;
                     }
                 }
             }
-        }else if(type == "create_tarea"){
+        }else if(type == "upload_image"){
+            if(result == null){
+                Toast.makeText(this,"No se puede acceder al servidor, no se subio imagen", Toast.LENGTH_LONG).show();
+            }
+            else {
+                Toast.makeText(this, "Imagen subida", Toast.LENGTH_SHORT).show();
+                updatePhotosInMySQL();
+                //showRingDialog("Validando registro...");
+            }
+        }
+        else if(type == "create_tarea"){
             if(result == null){
                 Toast.makeText(this,"No se pudo establecer conexión con el servidor", Toast.LENGTH_LONG).show();
             }
@@ -674,8 +691,10 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
         if(tareas_to_upload.isEmpty()){
             hideRingDialog();
             Toast.makeText(Screen_Table_Team.this, "Tareas subidas en internet", Toast.LENGTH_SHORT).show();
-            showRingDialog("Actualizando tareas en Internet...");
-            updateTareaInMySQL();
+            if(!tareas_to_update.isEmpty()) {
+                showRingDialog("Actualizando tareas en Internet1111...");
+                updateTareaInMySQL();
+            }
             return;
         }
         else {
@@ -694,21 +713,109 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
             backgroundWorker.execute(type_script);
         }
     }
-    public void updateTareaInMySQL() throws JSONException {
-        if(tareas_to_update.isEmpty()){
+    public void updatePhotosInMySQL() throws JSONException {
+        if(images_files.isEmpty()){
             hideRingDialog();
-            Toast.makeText(Screen_Table_Team.this, "Tareas actualizadas en internet", Toast.LENGTH_SHORT).show();
+            updateTareaInMySQL();
             return;
         }
         else {
+            String file_name = null, image_file;
+            file_name = images_files_names.get(images_files.size() - 1);
+            images_files_names.remove(images_files.size() - 1);
+            image_file = images_files.get(images_files.size() - 1);
+            images_files.remove(images_files.size() - 1);
+            Bitmap bitmap = null;
+            bitmap = getPhotoUserLocal(image_file);
+            if(bitmap!=null) {
+                String type = "upload_image";
+                BackgroundWorker backgroundWorker = new BackgroundWorker(this);
+                backgroundWorker.execute(type, Screen_Register_Operario.getStringImage(bitmap), file_name);
+            }else{
+                updatePhotosInMySQL();
+            }
+        }
+    }
+    public void updateTareaInMySQL() throws JSONException {
+        if(tareas_to_update.isEmpty()){
+            hideRingDialog();
+            Toast.makeText(this, "Tareas actualizadas en internet", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        else {
+            images_files.clear();
+            images_files_names.clear();
             JSONObject jsonObject_Lite = new JSONObject(team_or_personal_task_selection_screen_Activity.dBtareasController.get_one_tarea_from_Database(
                     tareas_to_update.get(tareas_to_update.size() - 1)));
             tareas_to_update.remove(tareas_to_update.size() - 1);
-            Toast.makeText(Screen_Table_Team.this, "Actualizando Contador: "+ jsonObject_Lite.getString("numero_serie_contador"), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Actualizando Contador: "+ jsonObject_Lite.getString("numero_serie_contador"), Toast.LENGTH_SHORT).show();
             String type_script = "update_tarea";
-            BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Table_Team.this);
+            BackgroundWorker backgroundWorker = new BackgroundWorker(this);
             Screen_Login_Activity.tarea_JSON = jsonObject_Lite;
+            addPhotos_toUpload();
             backgroundWorker.execute(type_script);
+        }
+    }
+    public void addPhotos_toUpload() throws JSONException { //luego rellenar en campo de incidencia algo para saber que tiene incidencias
+        String foto = "";
+        String path = getExternalFilesDir(Environment.DIRECTORY_PICTURES)+"/fotos_tareas/";
+
+        foto = Screen_Login_Activity.tarea_JSON.getString("foto_antes_instalacion");
+        if(foto!=null && !foto.isEmpty() && !foto.equals("null")){
+            images_files.add(path+foto);
+            images_files_names.add(foto);
+        }
+        foto = Screen_Login_Activity.tarea_JSON.getString("foto_lectura");
+        if(foto!=null && !foto.isEmpty() && !foto.equals("null")){
+            images_files.add(path+foto);
+            images_files_names.add(foto);
+        }
+        foto = Screen_Login_Activity.tarea_JSON.getString("foto_numero_serie");
+        if(foto!=null && !foto.isEmpty() && !foto.equals("null")){
+            images_files.add(path+foto);
+            images_files_names.add(foto);
+        }
+        foto = Screen_Login_Activity.tarea_JSON.getString("foto_despues_instalacion");
+        if(foto!=null && !foto.isEmpty() && !foto.equals("null")){
+            images_files.add(path+foto);
+            images_files_names.add(foto);
+        }
+        foto = Screen_Login_Activity.tarea_JSON.getString("foto_incidencia_1");
+        if(foto!=null && !foto.isEmpty() && !foto.equals("null")){
+            images_files.add(path+foto);
+            images_files_names.add(foto);
+        }
+        foto = Screen_Login_Activity.tarea_JSON.getString("foto_incidencia_2");
+        if(foto!=null && !foto.isEmpty() && !foto.equals("null")){
+            images_files.add(path+foto);
+            images_files_names.add(foto);
+        }
+        foto = Screen_Login_Activity.tarea_JSON.getString("foto_incidencia_3");
+        if(foto!=null && !foto.isEmpty() && !foto.equals("null")){
+            images_files.add(path+foto);
+            images_files_names.add(foto);
+        }
+    }
+    public Bitmap getPhotoUserLocal(String path){
+        File file = new File(path);
+        if(file.exists()) {
+            Bitmap bitmap = null;
+            try {
+                bitmap =Bitmap.createScaledBitmap(MediaStore.Images.Media
+                        .getBitmap(this.getContentResolver(), Uri.fromFile(file)), 512, 512, true);
+//                bitmap = MediaStore.Images.Media
+//                        .getBitmap(this.getContentResolver(), Uri.fromFile(file));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            if (bitmap != null) {
+                return bitmap;
+            } else {
+                return null;
+            }
+        }else{
+            return null;
         }
     }
     public boolean checkConection(){
