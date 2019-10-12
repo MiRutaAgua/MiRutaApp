@@ -94,6 +94,12 @@ public class Screen_Insertar_Tarea extends AppCompatActivity implements TaskComp
         imageView_geolocalizar_screen_insertar_tarea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                try {
+                    Toast.makeText(Screen_Insertar_Tarea.this, Screen_Login_Activity.operario_JSON.getString("usuario"), Toast.LENGTH_SHORT).show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(Screen_Insertar_Tarea.this, "Error al obtener operario -> "+e.toString(),Toast.LENGTH_SHORT).show();
+                }
                 Intent intent = new Intent(getApplicationContext(),MapsActivity.class);
                 startActivity(intent);
             }
@@ -150,7 +156,8 @@ public class Screen_Insertar_Tarea extends AppCompatActivity implements TaskComp
 
     private void guardar_modificaciones(){
         try {
-            //Screen_Login_Activity.tarea_JSON.put("id", 9);
+            Screen_Login_Activity.tarea_JSON = team_or_personal_task_selection_screen_Activity.dBtareasController.getJsonTarea();
+
             Screen_Login_Activity.tarea_JSON.put("anno_de_contador", editText_anno_prefijo_screen_insertar_tarea.getText().toString());
             Screen_Login_Activity.tarea_JSON.put("numero_serie_contador", editText_numero_serie_screen_insertar_tarea.getText().toString());
             if(!(TextUtils.isEmpty(editText_poblacion_screen_insertar_tarea.getText().toString())))

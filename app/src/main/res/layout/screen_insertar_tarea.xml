@@ -45,6 +45,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/editText_numero_serie_screen_insertar_tarea"
                 android:hint="Número de Serie"
+                android:imeOptions="actionNext"
                 />
         </LinearLayout>
 
@@ -59,6 +60,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/editText_anno_prefijo_screen_insertar_tarea"
                 android:hint="Año o Prefijo"
+                android:imeOptions="actionNext"
                 />
         </LinearLayout>
         <LinearLayout
@@ -73,6 +75,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/editText_poblacion_screen_insertar_tarea"
                 android:hint="Población"
+                android:imeOptions="actionNext"
                 />
         </LinearLayout>
         <LinearLayout
@@ -86,6 +89,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/editText_calle_screen_insertar_tarea"
                 android:hint="Calle"
+                android:imeOptions="actionNext"
                 />
         </LinearLayout>
         <LinearLayout
@@ -99,6 +103,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/editText_numero_edificio_screen_insertar_tarea"
                 android:hint="Numero Edificio"
+                android:imeOptions="actionNext"
                 />
         </LinearLayout>
         <LinearLayout
@@ -112,6 +117,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/editText_letra_edificio_screen_insertar_tarea"
                 android:hint="Letra Edificio"
+                android:imeOptions="actionNext"
                 />
         </LinearLayout>
         <LinearLayout
@@ -125,6 +131,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/editText_piso_screen_insertar_tarea"
                 android:hint="Piso"
+                android:imeOptions="actionNext"
                 />
         </LinearLayout>
         <LinearLayout
@@ -138,6 +145,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/editText_mano_screen_insertar_tarea"
                 android:hint="Mano"
+                android:imeOptions="actionNext"
                 />
         </LinearLayout>
 
@@ -151,7 +159,9 @@
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/editText_operario_screen_insertar_tarea"
-                android:hint="Operario"/>
+                android:hint="Operario"
+                android:imeOptions="actionNext"
+                />
         </LinearLayout>
 
         <LinearLayout
@@ -165,7 +175,9 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/editText_calibre_screen_insertar_tarea"
                 android:hint="Calibre"
-                android:inputType="number"/>
+                android:inputType="number"
+                android:imeOptions="actionNext"
+                />
         </LinearLayout>
 
         <LinearLayout
@@ -178,7 +190,9 @@
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/editText_tipo_screen_insertar_tarea"
-                android:hint="Tipo de Tarea"/>
+                android:hint="Tipo de Tarea"
+                android:imeOptions="actionNext"
+                />
         </LinearLayout>
 
         <LinearLayout
@@ -191,7 +205,9 @@
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/editText_abonado_screen_insertar_tarea"
-                android:hint="Abonado"/>
+                android:hint="Abonado"
+                android:imeOptions="actionNext"
+                />
         </LinearLayout>
 
 
@@ -206,7 +222,9 @@
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/editText_telefono_screen_insertar_tarea"
-                android:hint="Telefono"/>
+                android:hint="Telefono"
+                android:imeOptions="actionDone"
+                />
         </LinearLayout>
 
 

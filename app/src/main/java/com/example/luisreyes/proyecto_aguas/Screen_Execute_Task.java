@@ -149,13 +149,23 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
             Toast.makeText(Screen_Execute_Task.this, "no se pudo obtener observaciones de tarea", Toast.LENGTH_LONG).show();
         }
         try {
-            telefono1.setText(Screen_Login_Activity.tarea_JSON.getString("telefono1"));
+            String telefono1_string = Screen_Login_Activity.tarea_JSON.getString("telefono1");
+            if(!telefono1_string.equals("null") && !telefono1_string.isEmpty() && telefono1_string!=null) {
+                telefono1.setText(telefono1_string);
+            }else{
+                telefono1.setText("Añadir");
+            }
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(Screen_Execute_Task.this, "no se pudo obtener telefono 1 de cliente", Toast.LENGTH_LONG).show();
         }
         try {
-            telefono2.setText(Screen_Login_Activity.tarea_JSON.getString("telefono2"));
+            String telefono2_string = Screen_Login_Activity.tarea_JSON.getString("telefono2");
+            if(!telefono2_string.equals("null") && !telefono2_string.isEmpty() && telefono2_string!=null) {
+                telefono2.setText(telefono2_string);
+            }else{
+                telefono2.setText("Añadir");
+            }
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(Screen_Execute_Task.this, "no se pudo obtener telefono 2 de cliente", Toast.LENGTH_LONG).show();

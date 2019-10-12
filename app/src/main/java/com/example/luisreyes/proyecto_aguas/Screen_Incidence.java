@@ -113,11 +113,19 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
         try {
             String telefono1_string = Screen_Login_Activity.tarea_JSON.getString("telefono1");
             String telefono2_string = Screen_Login_Activity.tarea_JSON.getString("telefono2");
-            telefono1.setText(telefono1_string);
-            telefono2.setText(telefono2_string);
+            if(!telefono1_string.equals("null") && !telefono1_string.isEmpty() && telefono1_string!=null) {
+                telefono1.setText(telefono1_string);
+            }else{
+                telefono1.setText("Añadir");
+            }
+            if(!telefono2_string.equals("null") && !telefono2_string.isEmpty() && telefono2_string!=null) {
+                telefono2.setText(telefono2_string);
+            }else{
+                telefono2.setText("Añadir");
+            }
         } catch (JSONException e) {
             e.printStackTrace();
-            Toast.makeText(Screen_Incidence.this, "No se pudo obtener numeros telefono", Toast.LENGTH_LONG).show();
+            Toast.makeText(Screen_Incidence.this, "No se pudo obtener numeros de telefono", Toast.LENGTH_LONG).show();
         }
 
         button_photo1.setOnClickListener(new View.OnClickListener() {

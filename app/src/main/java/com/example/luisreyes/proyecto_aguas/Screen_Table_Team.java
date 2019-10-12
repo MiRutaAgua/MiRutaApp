@@ -62,6 +62,7 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
     private  TextView textView_screen_table_team;
     Spinner spinner_filtro_tareas;
     ArrayList<String> lista_desplegable;
+    JSONObject jsonObjectSalvaLite = null;
     private ProgressDialog progressDialog;
 
     private ArrayList<String> lista_filtro_direcciones;
@@ -265,7 +266,12 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
             public void afterTextChanged(Editable editable) {
             }
         });
-        descargarTareas();
+        try {
+            subirTareasSiExisten();
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Toast.makeText(Screen_Table_Team.this, "Error al subir tareas -> \n"+e.toString(), Toast.LENGTH_LONG).show();
+        }
     }
 
     private void acceder_a_Tarea(){
@@ -618,31 +624,12 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
                 hideRingDialog();
 //                Toast.makeText(Screen_Table_Team.this,"Tareas descargadas correctamente"/*+" SQLite: "+String.valueOf(lite_count)*/, Toast.LENGTH_LONG).show();
 
-                if (team_or_personal_task_selection_screen_Activity.dBtareasController.checkForTableExists()) {
-                    tareas_to_upload.clear();
-                    for (int i = 1; i <= team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas(); i++) {
-                        try {
-                            JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.dBtareasController.get_one_tarea_from_Database(i));
-                            String status_tarea = jsonObject.getString("status_tarea");
-                            if(status_tarea.contains("TO_UPLOAD")){
-                                tareas_to_upload.add(jsonObject.getString("numero_serie_contador"));
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-                if(!tareas_to_upload.isEmpty()) {
-                    showRingDialog("Insertando Tareas creadas offline en Servidor...");
-                    upLoadTareaInMySQL();
+                if(!tareas_to_update.isEmpty()) {
+                    showRingDialog("Actualizando tareas en Internet...");
+                    updateTareaInMySQL();
                     return;
-                }else {
-                    if(!tareas_to_update.isEmpty()) {
-                        showRingDialog("Actualizando tareas en Internet...");
-                        updateTareaInMySQL();
-                        return;
-                    }
                 }
+
             }
         }else if(type == "update_tarea"){
             hideRingDialog();
@@ -680,20 +667,44 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
                 Toast.makeText(this,"No se pudo establecer conexión con el servidor", Toast.LENGTH_LONG).show();
             }
             else {
+                if(jsonObjectSalvaLite!=null) {
+                    team_or_personal_task_selection_screen_Activity.
+                            dBtareasController.updateTarea(jsonObjectSalvaLite);
+                }
                 upLoadTareaInMySQL();
                 return;
             }
         }
     }
 
+    public void subirTareasSiExisten() throws JSONException {
+        if (team_or_personal_task_selection_screen_Activity.dBtareasController.checkForTableExists()) {
+            tareas_to_upload.clear();
+            for (int i = 1; i <= team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas(); i++) {
+                try {
+                    JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.dBtareasController.get_one_tarea_from_Database(i));
+                    String status_tarea = jsonObject.getString("status_tarea");
+                    if(status_tarea.contains("TO_UPLOAD")){
+                        tareas_to_upload.add(jsonObject.getString("numero_serie_contador"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        if(!tareas_to_upload.isEmpty() && checkConection()) {
+            showRingDialog("Insertando Tareas creadas offline en Servidor...");
+            upLoadTareaInMySQL();
+            return;
+        }else{
+            descargarTareas();
+        }
+    }
     public void upLoadTareaInMySQL() throws JSONException {
         if(tareas_to_upload.isEmpty()){
             hideRingDialog();
-            Toast.makeText(Screen_Table_Team.this, "Tareas subidas en internet", Toast.LENGTH_SHORT).show();
-            if(!tareas_to_update.isEmpty()) {
-                showRingDialog("Actualizando tareas en Internet...");
-                updateTareaInMySQL();
-            }
+            Toast.makeText(this, "Tareas subidas en internet", Toast.LENGTH_SHORT).show();
+            descargarTareas();
             return;
         }
         else {
@@ -704,11 +715,13 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
             //jsonObject_Lite.put("status_tarea", jsonObject_Lite.getString("status_tarea").replace("TO_UPLOAD", ""));
             jsonObject_Lite.put("status_tarea", "IDLE");
             jsonObject_Lite.put("date_time_modified", DBtareasController.getStringFromFechaHora(new Date()));
-            team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea(jsonObject_Lite);
+            jsonObjectSalvaLite = jsonObject_Lite;
 
             String type_script = "create_tarea";
             BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Table_Team.this);
             Screen_Login_Activity.tarea_JSON = jsonObject_Lite;
+//            team_or_personal_task_selection_screen_Activity.
+//                    dBtareasController.updateTarea(jsonObject_Lite);
             backgroundWorker.execute(type_script);
         }
     }
