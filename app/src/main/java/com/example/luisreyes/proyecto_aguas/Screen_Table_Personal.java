@@ -48,7 +48,7 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
 
     private ListView lista_de_contadores_screen_table_personal;
     private EditText editText_filter;
-    private ArrayAdapter arrayAdapter;
+    private ArrayAdapter arrayAdapter, arrayAdapter_all;
     private TextView textView_screen_table_personal;
     private Button agregar_tarea;
 
@@ -118,6 +118,7 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
         spinner_filtro_tareas.setAdapter(arrayAdapter_spinner);
 
         arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, lista_contadores);
+        arrayAdapter_all = new ArrayAdapter(this, android.R.layout.simple_list_item_1, lista_contadores);
         lista_de_contadores_screen_table_personal.setAdapter(arrayAdapter);
 
         lista_de_contadores_screen_table_personal.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -125,45 +126,36 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 //String n_tarea ="";
                 if (checkConection()) {
-                    for (int n = 0; n < Screen_Table_Team.lista_tareas.size(); n++) {
-                        try {
-                            JSONArray jsonArray = new JSONArray(Screen_Table_Team.lista_tareas.get(n));
-                            for (int c = 0; c < jsonArray.length(); c++) {
-                                JSONObject jsonObject = jsonArray.getJSONObject(c);
-                                if (jsonObject.getString("numero_serie_contador").replace("\n", "").equals(lista_ordenada_de_tareas.get(i).getContador())) {
+                    for(int n=0; n < arrayAdapter_all.getCount(); n++){
+                        if(arrayAdapter_all.getItem(n).equals(arrayAdapter.getItem(i))){
+                            try{
+                                JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.
+                                        dBtareasController.get_one_tarea_from_Database(lista_ordenada_de_tareas.get(n).getContador()));
+                                if(jsonObject!=null){
                                     Screen_Login_Activity.tarea_JSON = jsonObject;
                                 }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
                         }
                     }
                 }
                 else {
-                    for (int n = 1; n <= team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas(); n++) {
-                        try {
-                            JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.dBtareasController.get_one_tarea_from_Database(n));
-                            if (jsonObject.getString("numero_serie_contador").replace("\n", "").equals(lista_ordenada_de_tareas.get(i).getContador())) {
-                                Screen_Login_Activity.tarea_JSON = jsonObject;
+                    for(int n=0; n < arrayAdapter_all.getCount(); n++){
+                        if(arrayAdapter_all.getItem(n).equals(arrayAdapter.getItem(i))){
+                            try{
+                                JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.
+                                        dBtareasController.get_one_tarea_from_Database(lista_ordenada_de_tareas.get(n).getContador()));
+                                if(jsonObject!=null){
+                                    Screen_Login_Activity.tarea_JSON = jsonObject;
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
                         }
                     }
                 }
-                try {
-                    String acceso = Screen_Login_Activity.tarea_JSON.getString("acceso");
-                    acceso = acceso.replace("\n", "");
-                    acceso = acceso.replace(" ", "");
-                    //Toast.makeText(Screen_Table_Team.this, "Acceso -> \n"+acceso, Toast.LENGTH_SHORT).show();
-                    if (acceso.contains("BAT")) {
-                        startActivity(intent_open_screen_battery_counter);
-                    } else {
-                        startActivity(intent_open_screen_unity_counter);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                acceder_a_Tarea();
             }
         });
         spinner_filtro_tareas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -172,25 +164,31 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
                 //Toast.makeText(Screen_Table_Team.this, lista_desplegable.get(i), Toast.LENGTH_LONG).show();
                 if(lista_desplegable.get(i).contains("NINGUNO")){
                     arrayAdapter = new ArrayAdapter(Screen_Table_Personal.this, android.R.layout.simple_list_item_1, lista_contadores);
+                    arrayAdapter_all = new ArrayAdapter(Screen_Table_Personal.this, android.R.layout.simple_list_item_1, lista_contadores);
                     lista_de_contadores_screen_table_personal.setAdapter(arrayAdapter);
                 }
                 else if(lista_desplegable.get(i).contains("DIRECCION")){
                     arrayAdapter = new ArrayAdapter(Screen_Table_Personal.this, android.R.layout.simple_list_item_1, lista_filtro_direcciones);
+                    arrayAdapter_all = new ArrayAdapter(Screen_Table_Personal.this, android.R.layout.simple_list_item_1, lista_filtro_direcciones);
                     lista_de_contadores_screen_table_personal.setAdapter(arrayAdapter);
                 }
                 else if(lista_desplegable.get(i).contains("TIPO DE TAREA")){
                     arrayAdapter = new ArrayAdapter(Screen_Table_Personal.this, android.R.layout.simple_list_item_1, lista_filtro_Tareas);
+                    arrayAdapter_all = new ArrayAdapter(Screen_Table_Personal.this, android.R.layout.simple_list_item_1, lista_filtro_Tareas);
                     lista_de_contadores_screen_table_personal.setAdapter(arrayAdapter);
                 }
                 else if(lista_desplegable.get(i).contains("CITAS")){
                     arrayAdapter = new ArrayAdapter(Screen_Table_Personal.this, android.R.layout.simple_list_item_1, lista_filtro_Citas);
+                    arrayAdapter_all = new ArrayAdapter(Screen_Table_Personal.this, android.R.layout.simple_list_item_1, lista_filtro_Citas);
                     lista_de_contadores_screen_table_personal.setAdapter(arrayAdapter);
                 }
                 else if(lista_desplegable.get(i).contains("DATOS ÚNICOS")){
                     arrayAdapter = new ArrayAdapter(Screen_Table_Personal.this, android.R.layout.simple_list_item_1, lista_filtro_numero_serie);
+                    arrayAdapter_all = new ArrayAdapter(Screen_Table_Personal.this, android.R.layout.simple_list_item_1, lista_filtro_numero_serie);
                     lista_de_contadores_screen_table_personal.setAdapter(arrayAdapter);
                 }else if(lista_desplegable.get(i).contains("DATOS PRIVADOS")){
                     arrayAdapter = new ArrayAdapter(Screen_Table_Personal.this, android.R.layout.simple_list_item_1, lista_filtro_abonado);
+                    arrayAdapter_all = new ArrayAdapter(Screen_Table_Personal.this, android.R.layout.simple_list_item_1, lista_filtro_abonado);
                     lista_de_contadores_screen_table_personal.setAdapter(arrayAdapter);
                 }
             }
@@ -225,6 +223,21 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
             }
         });
         descargarTareas();
+    }
+    private void acceder_a_Tarea(){
+        try {
+            String acceso = Screen_Login_Activity.tarea_JSON.getString("acceso");
+            acceso = acceso.replace("\n", "");
+            acceso = acceso.replace(" ", "");
+            //Toast.makeText(Screen_Table_Team.this, "Acceso -> \n"+acceso, Toast.LENGTH_SHORT).show();
+            if (acceso.contains("BAT")) {
+                startActivity(intent_open_screen_battery_counter);
+            } else {
+                startActivity(intent_open_screen_unity_counter);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
     private void descargarTareas() {
         if(checkConection()){
@@ -337,6 +350,7 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
                                 +"Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado());
                     }
                     arrayAdapter = new ArrayAdapter(Screen_Table_Personal.this, android.R.layout.simple_list_item_1, lista_contadores);
+                    arrayAdapter_all = new ArrayAdapter(Screen_Table_Personal.this, android.R.layout.simple_list_item_1, lista_contadores);
                     lista_de_contadores_screen_table_personal.setAdapter(arrayAdapter);
                 }
             }
@@ -368,6 +382,7 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
                 lista_filtro_numero_serie.clear();
                 lista_ordenada_de_tareas.clear();
                 arrayAdapter.clear();
+                arrayAdapter_all.clear();
 
                 boolean insertar_todas = false;
                 if(team_or_personal_task_selection_screen_Activity.dBtareasController.checkForTableExists()) {
@@ -544,6 +559,7 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
                             +"Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado());
                 }
                 arrayAdapter = new ArrayAdapter(Screen_Table_Personal.this, android.R.layout.simple_list_item_1, lista_contadores);
+                arrayAdapter_all = new ArrayAdapter(Screen_Table_Personal.this, android.R.layout.simple_list_item_1, lista_contadores);
                 lista_de_contadores_screen_table_personal.setAdapter(arrayAdapter);
                 hideRingDialog();
                 Toast.makeText(Screen_Table_Personal.this,"Tareas descargadas correctamente.", Toast.LENGTH_LONG).show();
