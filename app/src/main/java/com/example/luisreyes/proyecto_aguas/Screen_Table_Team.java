@@ -73,8 +73,7 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
     private ArrayList<MyCounter> lista_ordenada_de_tareas;
     private ArrayList<String> lista_filtro_abonado;
     private Date date_cita;
-    private Intent intent_open_screen_unity_counter;
-    private Intent intent_open_screen_battery_counter;
+
     private ArrayList<String> tareas_to_update;
     private ArrayList<String> images_files_names;
     private ArrayList<String> images_files;
@@ -91,10 +90,6 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         myToolbar.setBackgroundColor(Color.TRANSPARENT);
         setSupportActionBar(myToolbar);
-
-
-        intent_open_screen_battery_counter = new Intent(this, Screen_Battery_counter.class);
-        intent_open_screen_unity_counter = new Intent(this, Screen_Unity_Counter.class);
 
         lista_de_contadores_screen_table_team = (ListView) findViewById(R.id.listView_contadores_screen_table_view);
         textView_screen_table_team = (TextView) findViewById(R.id.textView_screen_table_team);
@@ -266,11 +261,12 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
             public void afterTextChanged(Editable editable) {
             }
         });
+        
         try {
             subirTareasSiExisten();
         } catch (JSONException e) {
             e.printStackTrace();
-            Toast.makeText(Screen_Table_Team.this, "Error al subir tareas -> \n"+e.toString(), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Error al subir tareas -> \n"+e.toString(), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -281,8 +277,10 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
             acceso = acceso.replace(" ", "");
             //Toast.makeText(Screen_Table_Team.this, "Acceso -> \n"+acceso, Toast.LENGTH_SHORT).show();
             if (acceso.contains("BAT")) {
+                Intent intent_open_screen_battery_counter = new Intent(this, Screen_Battery_counter.class);
                 startActivity(intent_open_screen_battery_counter);
             } else {
+                Intent intent_open_screen_unity_counter = new Intent(this, Screen_Unity_Counter.class);
                 startActivity(intent_open_screen_unity_counter);
             }
         } catch (JSONException e) {

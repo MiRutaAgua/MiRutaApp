@@ -176,8 +176,12 @@ public class Screen_Insertar_Tarea extends AppCompatActivity implements TaskComp
             Screen_Login_Activity.tarea_JSON.put("operario", Screen_Login_Activity.operario_JSON.getString("usuario"));
             if(!(TextUtils.isEmpty(editText_calibre_screen_insertar_tarea.getText().toString())))
                 Screen_Login_Activity.tarea_JSON.put("calibre_toma", editText_calibre_screen_insertar_tarea.getText().toString());
-            if(!(TextUtils.isEmpty(editText_tipo_screen_insertar_tarea.getText().toString())))
+            if(!(TextUtils.isEmpty(editText_tipo_screen_insertar_tarea.getText().toString()))) {
                 Screen_Login_Activity.tarea_JSON.put("tipo_tarea", editText_tipo_screen_insertar_tarea.getText().toString());
+            }
+            else{
+                Screen_Login_Activity.tarea_JSON.put("tipo_tarea", "");
+            }
             if(!(TextUtils.isEmpty(editText_abonado_screen_insertar_tarea.getText().toString())))
                 Screen_Login_Activity.tarea_JSON.put("nombre_cliente", editText_abonado_screen_insertar_tarea.getText().toString());
             if(!(TextUtils.isEmpty(editText_telefono_screen_insertar_tarea.getText().toString())))

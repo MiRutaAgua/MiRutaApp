@@ -255,6 +255,7 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
             e.printStackTrace();
         }
     }
+
     private void descargarTareas() {
         if(checkConection()){
             Screen_Login_Activity.isOnline = true;
@@ -424,8 +425,7 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
                                     if (!team_or_personal_task_selection_screen_Activity.dBtareasController.checkIfTareaExists(jsonObject.getString("numero_serie_contador"))) {
                                         Toast.makeText(this, "MySQL tarea: "+jsonObject.getString("numero_serie_contador")+" insertada", Toast.LENGTH_LONG).show();
                                         team_or_personal_task_selection_screen_Activity.dBtareasController.insertTarea(jsonObject);
-                                    }
-                                    else {
+                                    }else {
                                         String date_MySQL_string = null;
                                         try {
                                             date_MySQL_string = jsonObject.getString("date_time_modified").replace("\n", "");
@@ -455,6 +455,7 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
                                                     try {
                                                         tareas_to_update.add(jsonObject_Lite.getString("numero_serie_contador"));
                                                         jsonObject = jsonObject_Lite;
+//                                                        openMessage("Actualizar", jsonObject_Lite.getString("numero_serie_contador"));
                                                     } catch (JSONException e) {
                                                         e.printStackTrace();
                                                         Toast.makeText(this, "No se pudo actualizar tarea\n"+e.toString(), Toast.LENGTH_LONG).show();
@@ -468,7 +469,6 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
 
                                                 if (date_MySQL.after(date_SQLite)) {//MySQL mas actualizada
                                                     team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea(jsonObject, "numero_serie_contador");
-
                                                     //Toast.makeText(Screen_Table_Team.this, "tarea actualizadas: "+String.valueOf(tareas_actualizadas_count), Toast.LENGTH_LONG).show();
 
                                                 } else if (date_MySQL.before(date_SQLite)) {//SQLite mas actualizada
@@ -476,6 +476,7 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
                                                     try {
                                                         tareas_to_update.add(jsonObject_Lite.getString("numero_serie_contador"));
                                                         jsonObject = jsonObject_Lite;
+//                                                        openMessage("Actualizar 2", jsonObject_Lite.getString("numero_serie_contador"));
                                                     } catch (JSONException e) {
                                                         e.printStackTrace();
                                                         Toast.makeText(this, "No se pudo actualizar tarea\n"+ e.toString(), Toast.LENGTH_LONG).show();
