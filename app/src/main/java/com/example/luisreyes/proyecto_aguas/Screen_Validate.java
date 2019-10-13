@@ -426,6 +426,8 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
             intent.setType("text/plain");
             intent.putExtra(Intent.EXTRA_SUBJECT, "PDF validar");
             intent.putExtra(Intent.EXTRA_TEXT, "");
+            intent.putExtra(Intent.EXTRA_STREAM, filePath.getAbsolutePath());
+//            intent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file:"+filePath));
 //        intent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file:"+filePath.getAbsolutePath()));
 //        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // this will make such that when user returns to your app, your app is displayed, instead of the email app.
             startActivity(intent);

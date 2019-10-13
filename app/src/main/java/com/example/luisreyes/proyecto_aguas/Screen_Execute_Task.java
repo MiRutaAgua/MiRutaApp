@@ -203,7 +203,6 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                             try {
                                 Screen_Login_Activity.tarea_JSON.put("lectura_ultima", lectura_string);
                                 Screen_Login_Activity.tarea_JSON.put("lectura_actual", lectura_actual);
-
                                 saveData();
 
                             } catch (JSONException e) {
@@ -451,13 +450,13 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                 Toast.makeText(Screen_Execute_Task.this, "No pudo guardar foto_despues_instalacion", Toast.LENGTH_LONG).show();
             }
         }
-        if(team_or_personal_task_selection_screen_Activity.dBtareasController != null){
-            try {
-                team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea(Screen_Login_Activity.tarea_JSON);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
+//        if(team_or_personal_task_selection_screen_Activity.dBtareasController != null){
+//            try {
+//                team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea(Screen_Login_Activity.tarea_JSON);
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//        }
     }
 
     @Override
