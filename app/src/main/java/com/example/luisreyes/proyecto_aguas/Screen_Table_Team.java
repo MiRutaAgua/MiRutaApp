@@ -77,7 +77,6 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
     private ArrayList<String> tareas_to_update;
     private ArrayList<String> images_files_names;
     private ArrayList<String> images_files;
-    private ArrayList<String> tareas_to_update_help;
     private ArrayList<String> tareas_to_upload;
     private Button agregar_tarea;
     private int lite_count = -10;
@@ -116,7 +115,6 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
         images_files_names = new ArrayList<String>();
         images_files = new ArrayList<String>();
         tareas_to_upload = new ArrayList<String>();
-        tareas_to_update_help = new ArrayList<String>();
         tareas_to_update = new ArrayList<String>();
         lista_contadores = new ArrayList<String>();
         lista_filtro_direcciones = new ArrayList<String>();
@@ -484,7 +482,6 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
                                                 //aqui actualizar MySQL con la DB SQLite
                                                 try {
                                                     tareas_to_update.add(jsonObject_Lite.getString("numero_serie_contador"));
-                                                    tareas_to_update_help.add(jsonObject_Lite.getString("numero_serie_contador"));
                                                     jsonObject = jsonObject_Lite;
                                                 } catch (JSONException e) {
                                                     e.printStackTrace();
@@ -505,7 +502,6 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
                                             } else if (date_MySQL.before(date_SQLite)) {//SQLite mas actualizada
                                                 //aqui actualizar MySQL con la DB SQLite
                                                 try {
-                                                    tareas_to_update_help.add(jsonObject_Lite.getString("numero_serie_contador"));
                                                     tareas_to_update.add(jsonObject_Lite.getString("numero_serie_contador"));
                                                     jsonObject = jsonObject_Lite;
                                                 } catch (JSONException e) {
@@ -651,17 +647,20 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
         }else if(type == "update_tarea"){
             hideRingDialog();
             if (!checkConection()) {
-                Toast.makeText(Screen_Table_Team.this, "No hay conexion a Internet, no se pudo guardar tarea. Intente de nuevo con conexion", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "No hay conexion a Internet, no se pudo guardar tarea. Intente de nuevo con conexion", Toast.LENGTH_LONG).show();
             }else {
                 if (result == null) {
-                    Toast.makeText(Screen_Table_Team.this, "No se puede acceder al hosting", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "No se puede acceder al hosting", Toast.LENGTH_LONG).show();
                 }else{
                     if (result.contains("not success")) {
-                        Toast.makeText(Screen_Table_Team.this, "No se pudo insertar correctamente, problemas con el servidor de la base de datos", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "No se pudo insertar correctamente, problemas con el servidor de la base de datos", Toast.LENGTH_SHORT).show();
                     } else {
+                        String contador = Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador");
+                        if(!contador.isEmpty() && contador!=null && !contador.equals("null")) {
                             showRingDialog("Subiedo fotos de contador "
-                                    + Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador"));
+                                    + contador);
                             updatePhotosInMySQL();
+                        }
                         return;
                     }
                 }
@@ -692,7 +691,7 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
             hideRingDialog();
             Toast.makeText(Screen_Table_Team.this, "Tareas subidas en internet", Toast.LENGTH_SHORT).show();
             if(!tareas_to_update.isEmpty()) {
-                showRingDialog("Actualizando tareas en Internet1111...");
+                showRingDialog("Actualizando tareas en Internet...");
                 updateTareaInMySQL();
             }
             return;
@@ -796,6 +795,7 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
             images_files_names.add(foto);
         }
     }
+
     public Bitmap getPhotoUserLocal(String path){
         File file = new File(path);
         if(file.exists()) {
@@ -864,24 +864,19 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
 //                Toast.makeText(Screen_User_Data.this, "Ayuda", Toast.LENGTH_SHORT).show();
                 // User chose the "Favorite" action, mark the current item
                 // as a favorite...
-                openMessage("A actualizar",tareas_to_update_help.toString());
                 return true;
 
             case R.id.Configuracion:
 //                Toast.makeText(Screen_User_Data.this, "Configuracion", Toast.LENGTH_SHORT).show();
                 // User chose the "Favorite" action, mark the current item
                 // as a favorite...
-                try {
-                    openMessage("Tarea","Contador: "+Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador")
-                            +"\nModificacion: "+Screen_Login_Activity.tarea_JSON.getString("date_time_modified")
-                            +"\ncita: "+Screen_Login_Activity.tarea_JSON.getString("nuevo_citas")
-                            +"\nContador: "+Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador"));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(Screen_Table_Team.this, "No se pudo obtener datos de tarea", Toast.LENGTH_SHORT).show();
-                }
                 return true;
-
+            case R.id.Info_Tarea:
+//                Toast.makeText(Screen_User_Data.this, "Configuracion", Toast.LENGTH_SHORT).show();
+                // User chose the "Favorite" action, mark the current item
+                // as a favorite...
+                openMessage("Tarea", Screen_Battery_counter.get_tarea_info());
+                return true;
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.

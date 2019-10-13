@@ -297,7 +297,7 @@ android:layout_height="match_parent">
         android:orientation="horizontal"
         android:layout_marginTop="30dp"
         android:gravity="center"
-        android:padding="20dp"
+        android:paddingBottom="50dp"
         >
         <Button
             android:id="@+id/button_guardar_datos_screen_validate_battery_intake_asignation"

@@ -99,7 +99,7 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
                     + Screen_Login_Activity.tarea_JSON.getString("mano").replace("\n", "")));
             datosEspecificos.setText((Screen_Login_Activity.tarea_JSON.getString("observaciones").replace("\n", "")));
             serie.setText((Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador").replace("\n", "")));
-            lectura.setText((Screen_Login_Activity.tarea_JSON.getString("lectura_ultima").replace("\n", "")));
+            lectura.setText((Screen_Login_Activity.tarea_JSON.getString("lectura_actual").replace("\n", "")));
             ubicacion.setText((Screen_Login_Activity.tarea_JSON.getString("emplazamiento").replace("\n", "")));
             acceso.setText((Screen_Login_Activity.tarea_JSON.getString("acceso").replace("\n", "")));
             calibre.setText((Screen_Login_Activity.tarea_JSON.getString("calibre_toma").replace("\n", "")));
@@ -365,7 +365,8 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
                     +"\nlecturaU: "+Screen_Login_Activity.tarea_JSON.getString("lectura_ultima")
                     +"\nlecturaA: "+Screen_Login_Activity.tarea_JSON.getString("lectura_actual")
                     +"\nCodigo_Localizacion: "+Screen_Login_Activity.tarea_JSON.getString("codigo_de_localizacion")
-                    +"\ngeolocalizacion: "+Screen_Login_Activity.tarea_JSON.getString("geolocalizacion");
+                    +"\ngeolocalizacion: "+Screen_Login_Activity.tarea_JSON.getString("geolocalizacion")
+                    +"\nestado: "+Screen_Login_Activity.tarea_JSON.getString("status_tarea");
         } catch (JSONException e) {
             e.printStackTrace();
             return "No se pudo obtener datos de tarea";
@@ -376,6 +377,4 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
             return "null";
         }
     }
-
-
 }

@@ -656,7 +656,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
 
                     } else {
 
-                        Toast.makeText(Screen_Execute_Task.this, "Datos actualizados correctamente, procediendo a subir fotos", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Screen_Execute_Task.this, "Datos guardados correctamente en el servidor", Toast.LENGTH_SHORT).show();
                         String contador=null;
                         try {
                             contador = Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador");
@@ -692,7 +692,6 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                             showRingDialog("Subiedo fotos");
                             uploadPhotos();
                         }else{
-                            Toast.makeText(Screen_Execute_Task.this, "Actualizada tarea correctamente", Toast.LENGTH_SHORT).show();
                             Intent intent_open_task_or_personal_screen = new Intent(Screen_Execute_Task.this, team_or_personal_task_selection_screen_Activity.class);
                             startActivity(intent_open_task_or_personal_screen);
                             Screen_Execute_Task.this.finish();

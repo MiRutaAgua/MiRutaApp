@@ -456,7 +456,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
     public void uploadPhotos(){
         if(images_files.isEmpty()){
             hideRingDialog();
-            Toast.makeText(Screen_Validate.this, "Actualizada tarea correctamente\n", Toast.LENGTH_LONG).show();
+            Toast.makeText(Screen_Validate.this, "Actualizada tarea correctamente", Toast.LENGTH_LONG).show();
             Intent intent_open_battery_counter = new Intent(Screen_Validate.this, team_or_personal_task_selection_screen_Activity.class);
             startActivity(intent_open_battery_counter);
             Screen_Validate.this.finish();
@@ -508,9 +508,10 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
             }
             else {
                 if (result.contains("not success")) {
-                    Toast.makeText(Screen_Validate.this, "No se pudo insertar correctamente, problemas con el servidor", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "No se pudo insertar correctamente, problemas con el servidor", Toast.LENGTH_LONG).show();
 
                 }else {
+                    Toast.makeText(this, "Datos guardados correctamente en el servidor", Toast.LENGTH_LONG).show();
                     String contador=null;
                     Screen_Execute_Task.lectura_introducida="";
                     try {
@@ -548,7 +549,6 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                         uploadPhotos();
                     }
                     else{
-                        Toast.makeText(this, "Actualizada tarea correctamente", Toast.LENGTH_LONG).show();
                         Intent intent_open_battery_counter = new Intent(this, team_or_personal_task_selection_screen_Activity.class);
                         startActivity(intent_open_battery_counter);
                         this.finish();

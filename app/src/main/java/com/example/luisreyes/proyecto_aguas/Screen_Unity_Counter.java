@@ -88,7 +88,7 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
                     + Screen_Login_Activity.tarea_JSON.getString("mano").replace("\n", "")));
             datosEspecificos.setText((Screen_Login_Activity.tarea_JSON.getString("observaciones").replace("\n", "")));
             serie.setText((Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador").replace("\n", "")));
-            lectura.setText((Screen_Login_Activity.tarea_JSON.getString("lectura_ultima").replace("\n", "")));
+            lectura.setText((Screen_Login_Activity.tarea_JSON.getString("lectura_actual").replace("\n", "")));
             ubicacion.setText((Screen_Login_Activity.tarea_JSON.getString("emplazamiento").replace("\n", "")));
             acceso.setText((Screen_Login_Activity.tarea_JSON.getString("acceso").replace("\n", "")));
             calibre.setText((Screen_Login_Activity.tarea_JSON.getString("calibre_toma").replace("\n", "")));

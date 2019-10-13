@@ -118,7 +118,7 @@
             <ImageView
                 android:id="@+id/imageView_foto2_screen_incidence"
                 android:layout_width="130dp"
-                android:layout_height="54dp"
+                android:layout_height="58dp"
                 android:layout_gravity="center"
                 android:src="@drawable/screen_incidence_foto2" />
             <ImageView

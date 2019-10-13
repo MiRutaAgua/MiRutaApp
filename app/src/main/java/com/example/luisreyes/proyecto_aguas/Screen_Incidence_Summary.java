@@ -53,7 +53,7 @@ import java.util.Date;
  */
 
 @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-public class Screen_Incidence_Summary extends AppCompatActivity implements TaskCompleted{
+public class Screen_Incidence_Summary extends AppCompatActivity implements TaskCompleted {
 
     private ImageView button_compartir_screen_incidence_summary, firma_cliente, foto1, foto2, foto3, cerrar_tarea;
 
@@ -69,9 +69,11 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
     private LinearLayout llScroll_2;
     private LinearLayout llScroll_3;
     private LinearLayout llScroll_4;
-    boolean bitmap1_no_nulo = false, bitmap2_no_nulo = false,bitmap3_no_nulo = false,bitmap4_no_nulo = true;
-    private Bitmap bitmap = null,  bitmap2 = null,bitmap3 = null,bitmap4 = null;
+    boolean bitmap1_no_nulo = false, bitmap2_no_nulo = false, bitmap3_no_nulo = false, bitmap4_no_nulo = true;
+    private Bitmap bitmap = null, bitmap2 = null, bitmap3 = null, bitmap4 = null;
     private static final String pdfName = "pdf_validar_incidencia";
+
+    private String contador= "";
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -101,6 +103,12 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
         lectura = (EditText)findViewById(R.id.editText_lectura_de_contador_screen_incidence_summary);
 
         try {
+            contador = Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador");
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Toast.makeText(Screen_Incidence_Summary.this, "No pudo obtenerse contador", Toast.LENGTH_LONG).show();
+        }
+        try {
             nombre_y_tarea.setText(Screen_Login_Activity.tarea_JSON.getString("nombre_cliente").replace("\n", "")+", "+Screen_Login_Activity.tarea_JSON.getString("calibre_toma"));
         } catch (JSONException e) {
             e.printStackTrace();
@@ -118,6 +126,14 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
                 bitmap1_no_nulo = true;
                 foto1.setVisibility(View.VISIBLE);
                 foto1.setImageBitmap(bitmapf);
+
+                if(contador != null && !contador.isEmpty() && !contador.equals("null")) {
+                    try {
+                        Screen_Login_Activity.tarea_JSON.put("foto_incidencia_1", contador + "_foto_incidencia_1.jpg");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         }
         if(!TextUtils.isEmpty(Screen_Incidence.mCurrentPhotoPath_incidencia_2)) {
@@ -126,6 +142,14 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
                 bitmap2_no_nulo = true;
                 foto2.setVisibility(View.VISIBLE);
                 foto2.setImageBitmap(bitmapf);
+
+                if(contador != null && !contador.isEmpty() && !contador.equals("null")) {
+                    try {
+                        Screen_Login_Activity.tarea_JSON.put("foto_incidencia_2", contador + "_foto_incidencia_2.jpg");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         }
         if(!TextUtils.isEmpty(Screen_Incidence.mCurrentPhotoPath_incidencia_3)) {
@@ -134,6 +158,14 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
                 bitmap3_no_nulo = true;
                 foto3.setVisibility(View.VISIBLE);
                 foto3.setImageBitmap(bitmapf);
+
+                if(contador != null && !contador.isEmpty() && !contador.equals("null")) {
+                    try {
+                        Screen_Login_Activity.tarea_JSON.put("foto_incidencia_3", contador + "_foto_incidencia_3.jpg");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         }
         try {
