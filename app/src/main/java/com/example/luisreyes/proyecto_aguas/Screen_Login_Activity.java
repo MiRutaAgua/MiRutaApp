@@ -87,7 +87,7 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
 
         dBoperariosController = new DBoperariosController(this);
 
-        //Toast.makeText(this, Environment.getExternalStorageDirectory().toString(), Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, Environment.getExternalStorageDirectory().toString(), Toast.LENGTH_SHORT).show();
 //        if(dBoperariosController.databasefileExists(this)&& dBoperariosController.checkForTableExists()){
 //            Toast.makeText(Screen_Login_Activity.this, "Existe: "+String.valueOf(dBoperariosController.countTableOperarios()), Toast.LENGTH_SHORT).show();
 //        }

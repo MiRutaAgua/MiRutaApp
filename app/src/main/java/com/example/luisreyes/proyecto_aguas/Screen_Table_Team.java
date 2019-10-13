@@ -78,7 +78,8 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
     private ArrayList<String> images_files_names;
     private ArrayList<String> images_files;
     private ArrayList<String> tareas_to_upload;
-    private Button agregar_tarea;
+    private Button agregar_tarea, button_advance_filter_table_team;
+
     private int lite_count = -10;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -95,8 +96,9 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
         textView_screen_table_team = (TextView) findViewById(R.id.textView_screen_table_team);
         editText_filter = (EditText) findViewById(R.id.editText_screen_table_team_filter);
         agregar_tarea = (Button) findViewById(R.id.button_add_tarea_table_team);
-
+        button_advance_filter_table_team  = (Button) findViewById(R.id.button_advance_filter_table_team);
         spinner_filtro_tareas = (Spinner) findViewById(R.id.spinner_filtrar_tareas_screen_table_team);
+
         lista_desplegable = new ArrayList<String>();
         lista_desplegable.add("NINGUNO");
         lista_desplegable.add("DIRECCION");
@@ -198,7 +200,6 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
                 }
             }
         });
-
         agregar_tarea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -206,7 +207,13 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
                 startActivity(intent_open_Screen_Insertar_Tarea);
             }
         });
-
+        button_advance_filter_table_team.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent_open_Screen_advance_filter = new Intent(Screen_Table_Team.this, Screen_Advance_Filter.class);
+                startActivity(intent_open_Screen_advance_filter);
+            }
+        });
         spinner_filtro_tareas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -520,78 +527,7 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
                                     }
                                 }
                             }
-                            String dir = jsonObject.getString("poblacion")+", "
-                                    +jsonObject.getString("calle").replace("\n", "")+", "
-                                    +jsonObject.getString("numero_edificio").replace("\n", "")
-                                    +jsonObject.getString("letra_edificio").replace("\n", "")+" "
-                                    +jsonObject.getString("piso").replace("\n", "")+" "
-                                    +jsonObject.getString("mano").replace("\n", "")+"\n";
-                            if(dir.contains("null, null, nullnull")) {
-                                dir = "No hay dirección\n";
-                            }
-
-                            String cita = jsonObject.getString("nuevo_citas");
-//                            Toast.makeText(Screen_Table_Team.this, cita, Toast.LENGTH_LONG).show();
-                            if(!cita.equals("null") && !TextUtils.isEmpty(cita)) {
-                                cita = cita.split("\n")[0] + "\n"
-                                        + "                   " + jsonObject.getString("nuevo_citas").split("\n")[1] + "\n";
-                            }else{
-                                cita = "No hay cita\n";
-                            }
-
-                            String abonado = jsonObject.getString("nombre_cliente").replace("\n", "")+"\n";
-                            if(abonado.equals("null\n")  && !TextUtils.isEmpty(abonado)) {
-                                abonado = "Desconocido\n";
-                            }
-//                            Toast.makeText(Screen_Table_Team.this, abonado, Toast.LENGTH_LONG).show();
-                            String numero_serie_contador = jsonObject.getString("numero_serie_contador").replace("\n", "");
-                            if(numero_serie_contador.equals("null\n") && !TextUtils.isEmpty(numero_serie_contador)) {
-                                numero_serie_contador = "-\n";
-                            }
-                            String anno_contador = jsonObject.getString("anno_de_contador").replace("\n", "")+"\n";
-                            if(anno_contador.equals("null\n") && !TextUtils.isEmpty(anno_contador)) {
-                                anno_contador = "-\n";
-                            }
-                            String tipo_tarea = jsonObject.getString("tipo_tarea").replace("\n", "").replace(" ","")+"\n";
-                            if(tipo_tarea.equals("null\n") && !TextUtils.isEmpty(tipo_tarea)) {
-                                tipo_tarea = "NCI\n";
-                            }
-                            String calibre = jsonObject.getString("calibre_toma").replace("\n", "")+"\n";
-                            if(calibre.equals("null\n") && !TextUtils.isEmpty(calibre)) {
-                                calibre = "Desconocido\n";
-                            }
-                            String telefono1 = jsonObject.getString("telefono1").replace("\n", "")+"\n";
-                            if(telefono1.equals("null\n") && !TextUtils.isEmpty(telefono1)) {
-                                telefono1 = "-\n";
-                            }
-                            String telefono2 = jsonObject.getString("telefono2").replace("\n", "")+"\n";
-                            if(telefono2.equals("null\n") && !TextUtils.isEmpty(telefono2)) {
-                                telefono2 = "-\n";
-                            }
-                            String numero_abonado = jsonObject.getString("numero_abonado").replace("\n", "")+"\n";
-                            if(numero_abonado.equals("null\n") && !TextUtils.isEmpty(numero_abonado)) {
-                                numero_abonado = "-\n";
-                            }
-
-                            String fecha_cita = jsonObject.getString("fecha_hora_cita").replace("\n", "");
-                            MyCounter contador = new MyCounter();
-                            if(fecha_cita!= null && !fecha_cita.equals("null") && !TextUtils.isEmpty(fecha_cita)){
-                                contador.setDateTime(DBtareasController.getFechaHoraFromString(fecha_cita));
-                            }else {
-                                contador.setDateTime(new Date());
-                            }
-                            contador.setNumero_serie_contador(numero_serie_contador);
-                            contador.setContador(numero_serie_contador);
-                            contador.setAnno_contador(anno_contador);
-                            contador.setTipo_tarea(tipo_tarea);
-                            contador.setCalibre(calibre);
-                            contador.setCita(cita);
-                            contador.setDireccion(dir);
-                            contador.setTelefono1(telefono1);
-                            contador.setTelefono2(telefono2);
-                            contador.setAbonado(abonado);
-                            contador.setNumero_abonado(numero_abonado);
-                            lista_ordenada_de_tareas.add(contador);
+                            lista_ordenada_de_tareas.add(orderTareaFromJSON(jsonObject));
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -623,6 +559,7 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
 
                 if(!tareas_to_update.isEmpty()) {
                     showRingDialog("Actualizando tareas en Internet...");
+                    openMessage("Tareas", tareas_to_update.toString());
                     updateTareaInMySQL();
                     return;
                 }
@@ -672,6 +609,82 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
                 return;
             }
         }
+    }
+
+    public MyCounter orderTareaFromJSON(JSONObject jsonObject) throws JSONException {
+        String dir = jsonObject.getString("poblacion")+", "
+                +jsonObject.getString("calle").replace("\n", "")+", "
+                +jsonObject.getString("numero_edificio").replace("\n", "")
+                +jsonObject.getString("letra_edificio").replace("\n", "")+" "
+                +jsonObject.getString("piso").replace("\n", "")+" "
+                +jsonObject.getString("mano").replace("\n", "")+"\n";
+        if(dir.contains("null, null, nullnull")) {
+            dir = "No hay dirección\n";
+        }
+
+        String cita = jsonObject.getString("nuevo_citas");
+//                            Toast.makeText(Screen_Table_Team.this, cita, Toast.LENGTH_LONG).show();
+        if(!cita.equals("null") && !TextUtils.isEmpty(cita)) {
+            cita = cita.split("\n")[0] + "\n"
+                    + "                   " + jsonObject.getString("nuevo_citas").split("\n")[1] + "\n";
+        }else{
+            cita = "No hay cita\n";
+        }
+
+        String abonado = jsonObject.getString("nombre_cliente").replace("\n", "")+"\n";
+        if(abonado.equals("null\n")  && !TextUtils.isEmpty(abonado)) {
+            abonado = "Desconocido\n";
+        }
+//                            Toast.makeText(Screen_Table_Team.this, abonado, Toast.LENGTH_LONG).show();
+        String numero_serie_contador = jsonObject.getString("numero_serie_contador").replace("\n", "");
+        if(numero_serie_contador.equals("null\n") && !TextUtils.isEmpty(numero_serie_contador)) {
+            numero_serie_contador = "-\n";
+        }
+        String anno_contador = jsonObject.getString("anno_de_contador").replace("\n", "")+"\n";
+        if(anno_contador.equals("null\n") && !TextUtils.isEmpty(anno_contador)) {
+            anno_contador = "-\n";
+        }
+        String tipo_tarea = jsonObject.getString("tipo_tarea").replace("\n", "").replace(" ","")+"\n";
+        if(tipo_tarea.equals("null\n") && !TextUtils.isEmpty(tipo_tarea)) {
+            tipo_tarea = "NCI\n";
+        }
+        String calibre = jsonObject.getString("calibre_toma").replace("\n", "")+"\n";
+        if(calibre.equals("null\n") && !TextUtils.isEmpty(calibre)) {
+            calibre = "Desconocido\n";
+        }
+        String telefono1 = jsonObject.getString("telefono1").replace("\n", "")+"\n";
+        if(telefono1.equals("null\n") && !TextUtils.isEmpty(telefono1)) {
+            telefono1 = "-\n";
+        }
+        String telefono2 = jsonObject.getString("telefono2").replace("\n", "")+"\n";
+        if(telefono2.equals("null\n") && !TextUtils.isEmpty(telefono2)) {
+            telefono2 = "-\n";
+        }
+        String numero_abonado = jsonObject.getString("numero_abonado").replace("\n", "")+"\n";
+        if(numero_abonado.equals("null\n") && !TextUtils.isEmpty(numero_abonado)) {
+            numero_abonado = "-\n";
+        }
+
+        String fecha_cita = jsonObject.getString("fecha_hora_cita").replace("\n", "");
+        MyCounter contador = new MyCounter();
+        if(fecha_cita!= null && !fecha_cita.equals("null") && !TextUtils.isEmpty(fecha_cita)){
+            contador.setDateTime(DBtareasController.getFechaHoraFromString(fecha_cita));
+        }else {
+            contador.setDateTime(new Date());
+        }
+        contador.setNumero_serie_contador(numero_serie_contador);
+        contador.setContador(numero_serie_contador);
+        contador.setAnno_contador(anno_contador);
+        contador.setTipo_tarea(tipo_tarea);
+        contador.setCalibre(calibre);
+        contador.setCita(cita);
+        contador.setDireccion(dir);
+        contador.setTelefono1(telefono1);
+        contador.setTelefono2(telefono2);
+        contador.setAbonado(abonado);
+        contador.setNumero_abonado(numero_abonado);
+
+        return contador;
     }
 
     public void subirTareasSiExisten() throws JSONException {

@@ -297,10 +297,11 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="20dp"
-            android:hint="filtrar" />
+            android:hint="filtrar"
+            android:visibility="gone"/>
 
         <ListView
-            android:id="@+id/listView_contadores_screen_table_view"
+            android:id="@+id/listView_contadores_screen_advance_filter"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="20dp"

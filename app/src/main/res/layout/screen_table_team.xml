@@ -40,6 +40,14 @@
                 android:layout_marginTop="1dp"
                 android:gravity="center"
                 android:src="@drawable/screen_table_team_icon" />
+            <Button
+                android:id="@+id/button_advance_filter_table_team"
+                android:gravity="center"
+                android:foregroundGravity="center"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/button_add_screen_table"
+                />
         </LinearLayout>
 
 
@@ -71,9 +79,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="20dp"
-
             >
-
         </ListView>
 
 
