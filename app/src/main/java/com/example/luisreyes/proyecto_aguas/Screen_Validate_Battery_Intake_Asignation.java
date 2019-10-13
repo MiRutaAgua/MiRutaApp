@@ -291,19 +291,22 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
                         e.printStackTrace();
                     }
 
-                    if(!TextUtils.isEmpty(Screen_Battery_Intake_Asignation.mCurrentPhotoPath_foto_antes)) {
+                    if(!TextUtils.isEmpty(Screen_Battery_Intake_Asignation.mCurrentPhotoPath_foto_antes)
+                            && ((new File(Screen_Battery_Intake_Asignation.mCurrentPhotoPath_foto_antes)).exists())) {
                         images_files.add(Screen_Battery_Intake_Asignation.mCurrentPhotoPath_foto_antes);
                         if(contador!=null && !TextUtils.isEmpty(contador)){
                             images_files_names.add(contador+"_foto_antes_instalacion.jpg");
                         }
                     }
-                    if(!TextUtils.isEmpty(Screen_Battery_Intake_Asignation.mCurrentPhotoPath_foto_lectura)) {
+                    if(!TextUtils.isEmpty(Screen_Battery_Intake_Asignation.mCurrentPhotoPath_foto_lectura)
+                            && ((new File(Screen_Battery_Intake_Asignation.mCurrentPhotoPath_foto_lectura)).exists())) {
                         images_files.add(Screen_Battery_Intake_Asignation.mCurrentPhotoPath_foto_lectura);
                         if(contador!=null && !TextUtils.isEmpty(contador)){
                             images_files_names.add(contador+"_foto_numero_serie.jpg");
                         }
                     }
-                    if(!TextUtils.isEmpty(Screen_Battery_Intake_Asignation.mCurrentPhotoPath_foto_serie)) {
+                    if(!TextUtils.isEmpty(Screen_Battery_Intake_Asignation.mCurrentPhotoPath_foto_serie)
+                            && ((new File(Screen_Battery_Intake_Asignation.mCurrentPhotoPath_foto_serie)).exists())) {
                         images_files.add(Screen_Battery_Intake_Asignation.mCurrentPhotoPath_foto_serie);
                         if(contador!=null && !TextUtils.isEmpty(contador)){
                             images_files_names.add(contador+"_foto_lectura.jpg");

@@ -522,25 +522,29 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                         e.printStackTrace();
                     }
 
-                    if(!TextUtils.isEmpty(Screen_Execute_Task.mCurrentPhotoPath_foto_antes)) {
+                    if(!TextUtils.isEmpty(Screen_Execute_Task.mCurrentPhotoPath_foto_antes)
+                            && ((new File(Screen_Execute_Task.mCurrentPhotoPath_foto_antes)).exists())) {
                         images_files.add(Screen_Execute_Task.mCurrentPhotoPath_foto_antes);
                         if(contador!=null && !TextUtils.isEmpty(contador)){
                             images_files_names.add(contador+"_foto_antes_instalacion.jpg");
                         }
                     }
-                    if(!TextUtils.isEmpty(Screen_Execute_Task.mCurrentPhotoPath_foto_lectura)) {
+                    if(!TextUtils.isEmpty(Screen_Execute_Task.mCurrentPhotoPath_foto_lectura)
+                            && ((new File(Screen_Execute_Task.mCurrentPhotoPath_foto_lectura)).exists())) {
                         images_files.add(Screen_Execute_Task.mCurrentPhotoPath_foto_lectura);
                         if(contador!=null && !TextUtils.isEmpty(contador)){
                             images_files_names.add(contador+"_foto_numero_serie.jpg");
                         }
                     }
-                    if(!TextUtils.isEmpty(Screen_Execute_Task.mCurrentPhotoPath_foto_serie)) {
+                    if(!TextUtils.isEmpty(Screen_Execute_Task.mCurrentPhotoPath_foto_serie)
+                            && ((new File(Screen_Execute_Task.mCurrentPhotoPath_foto_serie)).exists())) {
                         images_files.add(Screen_Execute_Task.mCurrentPhotoPath_foto_serie);
                         if(contador!=null && !TextUtils.isEmpty(contador)){
                             images_files_names.add(contador+"_foto_lectura.jpg");
                         }
                     }
-                    if(!TextUtils.isEmpty(Screen_Execute_Task.mCurrentPhotoPath_foto_despues)) {
+                    if(!TextUtils.isEmpty(Screen_Execute_Task.mCurrentPhotoPath_foto_despues)
+                            && ((new File(Screen_Execute_Task.mCurrentPhotoPath_foto_despues)).exists())) {
                         images_files.add(Screen_Execute_Task.mCurrentPhotoPath_foto_despues);
                         if(contador!=null && !TextUtils.isEmpty(contador)){
                             images_files_names.add(contador+"_foto_despues_instalacion.jpg");

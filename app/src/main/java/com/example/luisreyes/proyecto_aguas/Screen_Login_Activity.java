@@ -69,7 +69,7 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
     boolean login_press = false;
     public static boolean register_press = false;
 
-    public static boolean server_online_or_wamp = true;
+    public static boolean server_online_or_wamp = false;
     public static boolean isOnline = true; ///cambiar todas las ocurrencias de esta variable por isOnline
 
     private ProgressDialog progressDialog;
@@ -413,7 +413,7 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
 
     private void showRingDialog(String text){
         progressDialog = ProgressDialog.show(Screen_Login_Activity.this, "Espere", text, true);
-        progressDialog.setCancelable(true);
+        progressDialog.setCancelable(false);
     }
     private void hideRingDialog(){
         progressDialog.dismiss();

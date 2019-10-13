@@ -59,10 +59,10 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
     private ArrayAdapter arrayAdapter_all;
     private EditText editText_filter;
     public static ArrayList<String> lista_tareas;
-    private  TextView textView_screen_table_team;
-    Spinner spinner_filtro_tareas;
-    ArrayList<String> lista_desplegable;
-    JSONObject jsonObjectSalvaLite = null;
+    private TextView textView_screen_table_team;
+    private Spinner spinner_filtro_tareas;
+    private ArrayList<String> lista_desplegable;
+    private JSONObject jsonObjectSalvaLite = null;
     private ProgressDialog progressDialog;
 
     private ArrayList<String> lista_filtro_direcciones;

@@ -118,6 +118,9 @@
         <activity android:name=".Screen_Zoom_Firma"
             android:configChanges="orientation"
             android:screenOrientation="portrait"></activity>
+        <activity android:name=".Screen_Advance_Filter"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"></activity>
 
         <activity android:name=".MapsActivity"
             android:configChanges="orientation"

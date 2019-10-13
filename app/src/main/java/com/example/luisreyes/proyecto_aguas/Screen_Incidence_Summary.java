@@ -434,13 +434,19 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
                     } else {
                         Toast.makeText(Screen_Incidence_Summary.this, "Datos actualizados correctamente", Toast.LENGTH_SHORT).show();
                         images_files.clear();
-                        if(!TextUtils.isEmpty(Screen_Incidence.mCurrentPhotoPath_incidencia_1) && Screen_Incidence.mCurrentPhotoPath_incidencia_1!=null) {
+                        if(!TextUtils.isEmpty(Screen_Incidence.mCurrentPhotoPath_incidencia_1)
+                                && Screen_Incidence.mCurrentPhotoPath_incidencia_1!=null
+                                && ((new File(Screen_Incidence.mCurrentPhotoPath_incidencia_1)).exists())) {
                             images_files.add(Screen_Incidence.mCurrentPhotoPath_incidencia_1);
                         }
-                        if(!TextUtils.isEmpty(Screen_Incidence.mCurrentPhotoPath_incidencia_2) && Screen_Incidence.mCurrentPhotoPath_incidencia_2!=null) {
+                        if(!TextUtils.isEmpty(Screen_Incidence.mCurrentPhotoPath_incidencia_2)
+                                && Screen_Incidence.mCurrentPhotoPath_incidencia_2!=null
+                                && ((new File(Screen_Incidence.mCurrentPhotoPath_incidencia_2)).exists())) {
                             images_files.add(Screen_Incidence.mCurrentPhotoPath_incidencia_2);
                         }
-                        if(!TextUtils.isEmpty(Screen_Incidence.mCurrentPhotoPath_incidencia_3) && Screen_Incidence.mCurrentPhotoPath_incidencia_3!=null) {
+                        if(!TextUtils.isEmpty(Screen_Incidence.mCurrentPhotoPath_incidencia_3)
+                                && Screen_Incidence.mCurrentPhotoPath_incidencia_3!=null
+                                && ((new File(Screen_Incidence.mCurrentPhotoPath_incidencia_3)).exists())) {
                             images_files.add(Screen_Incidence.mCurrentPhotoPath_incidencia_3);
                         }
 

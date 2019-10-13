@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/my_toolbar"
+            layout="@layout/toolbar" />
+
+        <TextView
+            android:id="@+id/textView_screen_table_team"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:gravity="center"
+            android:text="Pantalla Lista de Contadores de Equipo"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="10dp"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="FILTRO AVANZADO"
+                android:textStyle="bold"
+                android:textSize="20dp"
+                 />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TIPO DE FILTRO"
+                    android:textStyle="bold"
+                    android:textSize="15dp"
+                    />
+                <Spinner
+                    android:id="@+id/spinner_tipo_filtro_screen_advance_filter"
+                    android:layout_width="168dp"
+                    android:layout_height="wrap_content"
+                    ></Spinner>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp"
+            android:id="@+id/layout_filtro_direccion_screen_advance_filter"
+            >
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Población"
+                    android:textStyle="bold"
+                    android:textSize="15dp"
+                    />
+                <Spinner
+                    android:id="@+id/spinner_filtro_poblacion_screen_advance_filter"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    ></Spinner>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Calle"
+                    android:textStyle="bold"
+                    android:textSize="15dp"
+                    />
+                <Spinner
+                    android:id="@+id/spinner_filtro_calles_screen_advance_filter"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    ></Spinner>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="BIS"
+                    android:textStyle="bold"
+                    android:textSize="15dp"
+                    />
+                <Spinner
+                    android:id="@+id/spinner_filtro_bis_screen_screen_advance_filter"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    ></Spinner>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp"
+            android:id="@+id/layout_filtro_datos_privados_screen_advance_filter"
+            >
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nombre o Empresa"
+                    android:textStyle="bold"
+                    android:textSize="15dp"
+                    />
+                <Spinner
+                    android:id="@+id/spinner_filtro_nombre_abonado_screen_advance_filter"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    ></Spinner>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Teléfonos"
+                    android:textStyle="bold"
+                    android:textSize="15dp"
+                    />
+                <Spinner
+                    android:id="@+id/spinner_filtro_telefonos_screen_advance_filter"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    ></Spinner>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp"
+            android:id="@+id/layout_filtro_tipo_tarea_screen_advance_filter"
+            >
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tipo de Tarea"
+                    android:textStyle="bold"
+                    android:textSize="15dp"
+                    />
+                <Spinner
+                    android:id="@+id/spinner_filtro_tipo_tarea_screen_advance_filter"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    ></Spinner>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Calibre"
+                    android:textStyle="bold"
+                    android:textSize="15dp"
+                    />
+                <Spinner
+                    android:id="@+id/spinner_filtro_calibre_screen_advance_filter"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    ></Spinner>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp"
+            android:id="@+id/layout_filtro_datos_unicos_screen_advance_filter"
+            >
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Abonado"
+                    android:textStyle="bold"
+                    android:textSize="15dp"
+                    />
+                <Spinner
+                    android:id="@+id/spinner_filtro_abonado_screen_advance_filter"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    ></Spinner>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Serie"
+                    android:textStyle="bold"
+                    android:textSize="15dp"
+                    />
+                <Spinner
+                    android:id="@+id/spinner_filtro_serie_screen_advance_filter"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    ></Spinner>
+            </LinearLayout>
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/editText_screen_table_team_filter"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="20dp"
+            android:hint="filtrar" />
+
+        <ListView
+            android:id="@+id/listView_contadores_screen_table_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="20dp"
+
+            >
+
+        </ListView>
+
+
+    </LinearLayout>
+
+</RelativeLayout>
