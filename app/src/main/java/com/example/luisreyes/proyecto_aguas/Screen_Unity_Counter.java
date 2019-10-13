@@ -158,6 +158,9 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
                 image = Screen_Login_Activity.tarea_JSON.getString("foto_despues_instalacion");
                 if(image!=null && !image.equals("null") && !TextUtils.isEmpty(image)) {
                     File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/fotos_tareas");
+                    if(!storageDir.exists()){
+                        storageDir.mkdir();
+                    }
                     File[] files = storageDir.listFiles();
                     for (int i = 0; i < files.length; i++) {
                         if (files[i].getName().contains(image)) {

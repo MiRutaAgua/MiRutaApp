@@ -520,7 +520,6 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
-
                                 }
                             }
                             String dir = jsonObject.getString("poblacion")+", "
@@ -622,7 +621,7 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
                 arrayAdapter_all = new ArrayAdapter(Screen_Table_Team.this, android.R.layout.simple_list_item_1, lista_contadores);
                 lista_de_contadores_screen_table_team.setAdapter(arrayAdapter);
                 hideRingDialog();
-//                Toast.makeText(Screen_Table_Team.this,"Tareas descargadas correctamente"/*+" SQLite: "+String.valueOf(lite_count)*/, Toast.LENGTH_LONG).show();
+                Toast.makeText(Screen_Table_Team.this,"Tareas descargadas correctamente", Toast.LENGTH_LONG).show();
 
                 if(!tareas_to_update.isEmpty()) {
                     showRingDialog("Actualizando tareas en Internet...");
@@ -700,6 +699,7 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
             descargarTareas();
         }
     }
+
     public void upLoadTareaInMySQL() throws JSONException {
         if(tareas_to_upload.isEmpty()){
             hideRingDialog();
@@ -708,7 +708,8 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
             return;
         }
         else {
-            JSONObject jsonObject_Lite = new JSONObject(team_or_personal_task_selection_screen_Activity.dBtareasController.get_one_tarea_from_Database(
+            JSONObject jsonObject_Lite = new JSONObject(team_or_personal_task_selection_screen_Activity
+                    .dBtareasController.get_one_tarea_from_Database(
                     tareas_to_upload.get(tareas_to_upload.size() - 1)));
             tareas_to_upload.remove(tareas_to_upload.size() - 1);
 
@@ -718,7 +719,7 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
             jsonObjectSalvaLite = jsonObject_Lite;
 
             String type_script = "create_tarea";
-            BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Table_Team.this);
+            BackgroundWorker backgroundWorker = new BackgroundWorker(this);
             Screen_Login_Activity.tarea_JSON = jsonObject_Lite;
 //            team_or_personal_task_selection_screen_Activity.
 //                    dBtareasController.updateTarea(jsonObject_Lite);

@@ -158,6 +158,10 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
         File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_operarios");
         if (!storageDir.exists()) {
             storageDir.mkdirs();
+            File storageDir2 = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/fotos_tareas");
+            if(!storageDir2.exists()){
+                storageDir2.mkdir();
+            }
         }
         File[] files = storageDir.listFiles();
         for(int i=0; i< files.length;i++) {
@@ -287,6 +291,10 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
         File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_operarios");
         if (!myDir.exists()) {
             myDir.mkdirs();
+            File storageDir2 = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/fotos_tareas");
+            if(!storageDir2.exists()){
+                storageDir2.mkdir();
+            }
         }
         else{
             File[] files = myDir.listFiles();
@@ -324,6 +332,10 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
         File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_operarios");
         if (!storageDir.exists()) {
             storageDir.mkdirs();
+            File storageDir2 = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/fotos_tareas");
+            if(!storageDir2.exists()){
+                storageDir2.mkdir();
+            }
         }
         image_file = File.createTempFile(
                 image,  /* prefix */
