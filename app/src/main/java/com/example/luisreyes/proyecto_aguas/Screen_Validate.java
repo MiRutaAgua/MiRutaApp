@@ -513,7 +513,9 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                     Toast.makeText(this, "No se pudo insertar correctamente, problemas con el servidor", Toast.LENGTH_LONG).show();
 
                 }else {
-                    Toast.makeText(this, "Datos guardados correctamente en el servidor", Toast.LENGTH_LONG).show();
+                    if(result.contains("success ok")) {
+                        Toast.makeText(this, "Datos guardados correctamente en el servidor", Toast.LENGTH_LONG).show();
+                    }
                     String contador=null;
                     Screen_Execute_Task.lectura_introducida="";
                     try {

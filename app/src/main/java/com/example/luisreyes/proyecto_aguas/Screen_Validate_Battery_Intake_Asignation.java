@@ -283,7 +283,9 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
                     Toast.makeText(Screen_Validate_Battery_Intake_Asignation.this, "No se pudo insertar correctamente, problemas con el servidor", Toast.LENGTH_SHORT).show();
 
                 }else {
-                    Toast.makeText(Screen_Validate_Battery_Intake_Asignation.this, "Datos actualizados correctamente", Toast.LENGTH_SHORT).show();
+                    if(result.contains("success ok")) {
+                        Toast.makeText(this, "Datos guardados correctamente en el servidor", Toast.LENGTH_LONG).show();
+                    }
                     String contador=null;
                     try {
                         contador = Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador");

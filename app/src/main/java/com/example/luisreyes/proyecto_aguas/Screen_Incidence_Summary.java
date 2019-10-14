@@ -432,7 +432,9 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
                         Toast.makeText(Screen_Incidence_Summary.this, "No se pudo insertar correctamente, problemas con el servidor de la base de datos", Toast.LENGTH_SHORT).show();
 
                     } else {
-                        Toast.makeText(Screen_Incidence_Summary.this, "Datos actualizados correctamente", Toast.LENGTH_SHORT).show();
+                        if(result.contains("success ok")) {
+                            Toast.makeText(this, "Datos guardados correctamente en el servidor", Toast.LENGTH_LONG).show();
+                        }
                         images_files.clear();
                         if(!TextUtils.isEmpty(Screen_Incidence.mCurrentPhotoPath_incidencia_1)
                                 && Screen_Incidence.mCurrentPhotoPath_incidencia_1!=null

@@ -69,7 +69,7 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
     boolean login_press = false;
     public static boolean register_press = false;
 
-    public static boolean server_online_or_wamp = false;
+    public static boolean server_online_or_wamp = true;
     public static boolean isOnline = true; ///cambiar todas las ocurrencias de esta variable por isOnline
 
     private ProgressDialog progressDialog;

@@ -665,7 +665,9 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
 
                     } else {
 
-                        Toast.makeText(Screen_Execute_Task.this, "Datos guardados correctamente en el servidor", Toast.LENGTH_SHORT).show();
+                        if(result.contains("success ok")) {
+                            Toast.makeText(this, "Datos guardados correctamente en el servidor", Toast.LENGTH_LONG).show();
+                        }
                         String contador=null;
                         try {
                             contador = Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador");

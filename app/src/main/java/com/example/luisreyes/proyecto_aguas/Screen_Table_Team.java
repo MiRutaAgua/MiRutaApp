@@ -559,7 +559,7 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
 
                 if(!tareas_to_update.isEmpty()) {
                     showRingDialog("Actualizando tareas en Internet...");
-                    openMessage("Tareas", tareas_to_update.toString());
+//                    openMessage("Tareas", tareas_to_update.toString());
                     updateTareaInMySQL();
                     return;
                 }
