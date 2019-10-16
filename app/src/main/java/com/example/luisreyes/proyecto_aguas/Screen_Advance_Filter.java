@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -52,12 +53,13 @@ public class Screen_Advance_Filter extends AppCompatActivity {
 
     private ArrayList<String> lista_desplegable;
     private ArrayList<MyCounter> lista_ordenada_de_tareas;
+    private ArrayList<MyCounter> lista_ordenada_de_tareas_inicial;
     private LinearLayout layout_filtro_direccion_screen_advance_filter
             ,layout_filtro_datos_privados_screen_advance_filter
             , layout_filtro_tipo_tarea_screen_advance_filter
             ,layout_filtro_datos_unicos_screen_advance_filter;
 
-    private ArrayAdapter arrayAdapter, arrayAdapter_all;
+    private ArrayAdapter arrayAdapter;
 
     private ListView listView_contadores_screen_advance_filter;
 
@@ -75,6 +77,11 @@ public class Screen_Advance_Filter extends AppCompatActivity {
     ArrayList<String> lista_filtro_Tareas;
     ArrayList<String> lista_filtro_abonado;
     ArrayList<String> lista_filtro_numero_serie;
+    ArrayList<String> lista_filtro_actual;
+
+    private Button button_maximize_list_srceen_advance_filter;
+    private LinearLayout layout_filter_screen_advance_list;
+    boolean filter_visibility = true;
 
     boolean editText_nombre_abonado_trigger = false;
     boolean editText_telefono_trigger = false;
@@ -90,6 +97,10 @@ public class Screen_Advance_Filter extends AppCompatActivity {
         lista_filtro_Tareas = new ArrayList<>();
         lista_filtro_abonado = new ArrayList<>();
         lista_filtro_numero_serie = new ArrayList<>();
+        lista_filtro_actual  = new ArrayList<>();
+
+        layout_filter_screen_advance_list = (LinearLayout) findViewById(R.id.layout_filter_screen_advance_list);
+        button_maximize_list_srceen_advance_filter=(Button) findViewById(R.id.button_maximize_list_srceen_advance_filter);
 
         editText_nombre_abonado_screen_advance_filter = (EditText)findViewById(R.id.editText_nombre_abonado_screen_advance_filter);
         editText_telefono_screen_advance_filter = (EditText)findViewById(R.id.editText_telefono_screen_advance_filter);
@@ -127,6 +138,7 @@ public class Screen_Advance_Filter extends AppCompatActivity {
         mapaTiposDeTarea.put("R", "REFORMA MAS CONTADOR");
 
         lista_ordenada_de_tareas = new ArrayList<MyCounter>();
+        lista_ordenada_de_tareas_inicial = new ArrayList<MyCounter>();
 
         lista_desplegable = new ArrayList<String>();
         lista_desplegable.add("NINGUNO");
@@ -137,6 +149,25 @@ public class Screen_Advance_Filter extends AppCompatActivity {
 
         ArrayAdapter arrayAdapter_spinner = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista_desplegable);
         spinner_filtro_tareas.setAdapter(arrayAdapter_spinner);
+
+        button_maximize_list_srceen_advance_filter.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+            @Override
+            public void onClick(View view) {
+                if (filter_visibility) {
+                    filter_visibility=false;
+                    button_maximize_list_srceen_advance_filter.
+                            setBackground(getDrawable(R.drawable.ic_vertical_bottom_blue_24dp));
+                    layout_filter_screen_advance_list.setVisibility(View.GONE);
+                } else {
+                    filter_visibility=true;
+                    button_maximize_list_srceen_advance_filter.
+                            setBackground(getDrawable(R.drawable.ic_vertical_up_blue_24dp));
+                    layout_filter_screen_advance_list.setVisibility(View.VISIBLE);
+                }
+
+            }
+        });
 
         editText_nombre_abonado_screen_advance_filter.addTextChangedListener(new TextWatcher() {
             @Override
@@ -167,9 +198,12 @@ public class Screen_Advance_Filter extends AppCompatActivity {
         spinner_filtro_nombre_abonado_screen_advance_filter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                onSelectedNombreAbonadosEmpresa(spinner_filtro_nombre_abonado_screen_advance_filter
-                        .getAdapter().getItem(i).toString());
-                fillTareasList();
+                String selected = spinner_filtro_nombre_abonado_screen_advance_filter
+                        .getAdapter().getItem(i).toString();
+                if(!selected.isEmpty() && selected!=null && !selected.equals("Ninguno")) {
+                    onSelectedNombreAbonadosEmpresa(selected);
+                    fillTareasList();
+                }
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -178,9 +212,12 @@ public class Screen_Advance_Filter extends AppCompatActivity {
         spinner_filtro_telefonos_screen_advance_filter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                onSelectedTelefonos(spinner_filtro_telefonos_screen_advance_filter
-                        .getAdapter().getItem(i).toString());
-                fillTareasList();
+                String selected = spinner_filtro_telefonos_screen_advance_filter
+                        .getAdapter().getItem(i).toString();
+                if(!selected.isEmpty() && selected!=null && !selected.equals("Ninguno")) {
+                    onSelectedTelefonos(selected);
+                    fillTareasList();
+                }
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -216,11 +253,12 @@ public class Screen_Advance_Filter extends AppCompatActivity {
         spinner_filtro_abonado_screen_advance_filter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                onSelectedNumeroAbonado(spinner_filtro_abonado_screen_advance_filter
-                            .getAdapter().getItem(i).toString());
-
-                Toast.makeText(Screen_Advance_Filter.this, String.valueOf(lista_ordenada_de_tareas.size()), Toast.LENGTH_LONG).show();
-                fillTareasList();
+                String selected = spinner_filtro_abonado_screen_advance_filter
+                        .getAdapter().getItem(i).toString();
+                if(!selected.isEmpty() && selected!=null && !selected.equals("Ninguno")) {
+                    onSelectedNumeroAbonado(selected);
+                    fillTareasList();
+                }
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -229,13 +267,12 @@ public class Screen_Advance_Filter extends AppCompatActivity {
         spinner_filtro_serie_screen_advance_filter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if(editText_numero_serie.getText().toString().isEmpty()) {
-                    onSelectedNumeroSerie(spinner_filtro_serie_screen_advance_filter
-                            .getAdapter().getItem(i).toString());
-                }else{
-                    onSelectedNumeroSerie(editText_numero_serie.getText().toString());
+                String selected = spinner_filtro_serie_screen_advance_filter
+                        .getAdapter().getItem(i).toString();
+                if(!selected.isEmpty() && selected!=null && !selected.equals("Ninguno")) {
+                    onSelectedNumeroSerie(selected);
+                    fillTareasList();
                 }
-                fillTareasList();
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -245,8 +282,12 @@ public class Screen_Advance_Filter extends AppCompatActivity {
         spinner_filtro_tipo_tarea_screen_advance_filter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                fillFilterCalibres(spinner_filtro_tipo_tarea_screen_advance_filter
-                        .getAdapter().getItem(i).toString());
+                String selected = spinner_filtro_tipo_tarea_screen_advance_filter
+                        .getAdapter().getItem(i).toString();
+                if(!selected.isEmpty() && selected!=null && !selected.equals("Ninguno")) {
+                    fillFilterCalibres(selected);
+                    fillTareasList();
+                }
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -255,10 +296,13 @@ public class Screen_Advance_Filter extends AppCompatActivity {
         spinner_filtro_calibre_screen_advance_filter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                onSelectedCalibre(spinner_filtro_tipo_tarea_screen_advance_filter.getSelectedItem().toString()
-                        ,spinner_filtro_calibre_screen_advance_filter.
-                        getAdapter().getItem(i).toString());
-                fillTareasList();
+                String selected = spinner_filtro_calibre_screen_advance_filter
+                        .getAdapter().getItem(i).toString();
+                if(!selected.isEmpty() && selected!=null && !selected.equals("Ninguno")) {
+                    onSelectedCalibre(spinner_filtro_tipo_tarea_screen_advance_filter.getSelectedItem().toString()
+                            , selected);
+                    fillTareasList();
+                }
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -268,8 +312,11 @@ public class Screen_Advance_Filter extends AppCompatActivity {
         spinner_filtro_poblacion_screen_advance_filter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                fillFilterCalles(spinner_filtro_poblacion_screen_advance_filter
-                        .getAdapter().getItem(i).toString());
+                String selected = spinner_filtro_poblacion_screen_advance_filter
+                        .getAdapter().getItem(i).toString();
+                if(!selected.isEmpty() && selected!=null && !selected.equals("Ninguno")) {
+                    fillFilterCalles(selected);
+                }
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -278,8 +325,12 @@ public class Screen_Advance_Filter extends AppCompatActivity {
         spinner_filtro_calles_screen_advance_filter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                fillFilterBis(spinner_filtro_poblacion_screen_advance_filter.getSelectedItem().toString()
-                        ,spinner_filtro_calles_screen_advance_filter.getAdapter().getItem(i).toString());
+                String selected = spinner_filtro_calles_screen_advance_filter
+                        .getAdapter().getItem(i).toString();
+                if(!selected.isEmpty() && selected!=null && !selected.equals("Ninguno")) {
+                    fillFilterBis(spinner_filtro_poblacion_screen_advance_filter.getSelectedItem().toString()
+                            , selected);
+                }
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -288,11 +339,14 @@ public class Screen_Advance_Filter extends AppCompatActivity {
         spinner_filtro_bis_screen_screen_advance_filter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                onSelectedDirection(spinner_filtro_poblacion_screen_advance_filter.getSelectedItem().toString()
-                        ,spinner_filtro_calles_screen_advance_filter.getSelectedItem().toString()
-                        ,spinner_filtro_bis_screen_screen_advance_filter.
-                        getAdapter().getItem(i).toString());
-                fillTareasList();
+                String selected = spinner_filtro_bis_screen_screen_advance_filter
+                        .getAdapter().getItem(i).toString();
+                if(!selected.isEmpty() && selected!=null && !selected.equals("Ninguno")) {
+                    onSelectedDirection(spinner_filtro_poblacion_screen_advance_filter.getSelectedItem().toString()
+                            , spinner_filtro_calles_screen_advance_filter.getSelectedItem().toString()
+                            , selected);
+                    fillTareasList();
+                }
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -303,36 +357,38 @@ public class Screen_Advance_Filter extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if(lista_desplegable.get(i).contains("NINGUNO")){
-                    listView_contadores_screen_advance_filter.clearChoices();
+                    lista_filtro_actual = lista_filtro_direcciones;
+                    arrayAdapter = new ArrayAdapter(Screen_Advance_Filter.this, android.R.layout.simple_list_item_1, lista_filtro_direcciones);
+                    listView_contadores_screen_advance_filter.setAdapter(arrayAdapter);
                     hideAllFilters();
                 }
                 else if(lista_desplegable.get(i).contains("DIRECCION")){
+                    lista_filtro_actual = lista_filtro_direcciones;
                     arrayAdapter = new ArrayAdapter(Screen_Advance_Filter.this, android.R.layout.simple_list_item_1, lista_filtro_direcciones);
-                    arrayAdapter_all = new ArrayAdapter(Screen_Advance_Filter.this, android.R.layout.simple_list_item_1, lista_filtro_direcciones);
                     listView_contadores_screen_advance_filter.setAdapter(arrayAdapter);
                     hideAllFilters();
                     layout_filtro_direccion_screen_advance_filter.setVisibility(View.VISIBLE);
                     fillFilterPoblacion();
                 }
                 else if(lista_desplegable.get(i).contains("TIPO DE TAREA")){
+                    lista_filtro_actual = lista_filtro_Tareas;
                     arrayAdapter = new ArrayAdapter(Screen_Advance_Filter.this, android.R.layout.simple_list_item_1, lista_filtro_Tareas);
-                    arrayAdapter_all = new ArrayAdapter(Screen_Advance_Filter.this, android.R.layout.simple_list_item_1, lista_filtro_Tareas);
                     listView_contadores_screen_advance_filter.setAdapter(arrayAdapter);
                     hideAllFilters();
                     layout_filtro_tipo_tarea_screen_advance_filter.setVisibility(View.VISIBLE);
                     fillFilterTiposTareas();
                 }
                 else if(lista_desplegable.get(i).contains("DATOS ÚNICOS")){
+                    lista_filtro_actual = lista_filtro_numero_serie;
                     arrayAdapter = new ArrayAdapter(Screen_Advance_Filter.this, android.R.layout.simple_list_item_1, lista_filtro_numero_serie);
-                    arrayAdapter_all = new ArrayAdapter(Screen_Advance_Filter.this, android.R.layout.simple_list_item_1, lista_filtro_numero_serie);
                     listView_contadores_screen_advance_filter.setAdapter(arrayAdapter);
                     hideAllFilters();
                     layout_filtro_datos_unicos_screen_advance_filter.setVisibility(View.VISIBLE);
                     fillFilterNumerosAbonados();
                     fillFilterNumerosSerie();
                 }else if(lista_desplegable.get(i).contains("DATOS PRIVADOS")){
+                    lista_filtro_actual = lista_filtro_abonado;
                     arrayAdapter = new ArrayAdapter(Screen_Advance_Filter.this, android.R.layout.simple_list_item_1, lista_filtro_abonado);
-                    arrayAdapter_all = new ArrayAdapter(Screen_Advance_Filter.this, android.R.layout.simple_list_item_1, lista_filtro_abonado);
                     listView_contadores_screen_advance_filter.setAdapter(arrayAdapter);
                     hideAllFilters();
                     layout_filtro_datos_privados_screen_advance_filter.setVisibility(View.VISIBLE);
@@ -349,74 +405,76 @@ public class Screen_Advance_Filter extends AppCompatActivity {
         listView_contadores_screen_advance_filter.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Object object_click = arrayAdapter.getItem(i);
+                String object_click = arrayAdapter.getItem(i).toString();
+//                openMessage("lista_filtro_Tareas", lista_filtro_actual.toString());
                 if(object_click!=null) {
-                    if (!arrayAdapter_all.isEmpty() && !arrayAdapter.isEmpty()) {
-                        for (int n = 0; n < arrayAdapter_all.getCount(); n++) {
-//                            Object object = arrayAdapter_all.getItem(n);
-//                            if (object != null) {
-//                                if (object.equals(object_click)) {
-//                                    try {
-//                                        if(n < team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas()){
-//                                            JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.
-//                                                    dBtareasController.get_one_tarea_from_Database(lista_ordenada_de_tareas.get(n).getContador()));
-//                                            if (jsonObject != null) {
-//                                                Screen_Login_Activity.tarea_JSON = jsonObject;
-//                                                try {
-//                                                    if(Screen_Login_Activity.tarea_JSON!=null) {
-//                                                        if (Screen_Login_Activity.tarea_JSON.getString("operario").equals(Screen_Login_Activity.operario_JSON.getString("usuario"))) {
-//                                                            acceder_a_Tarea();//revisar esto
-//                                                        } else {
-//                                                            new AlertDialog.Builder(Screen_Advance_Filter.this)
-//                                                                    .setTitle("Cambiar Operario")
-//                                                                    .setMessage("Esta tarea corresponde a otro operario\n¿Desea asignarse esta tarea?")
-//                                                                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-//                                                                        @Override
-//                                                                        public void onClick(DialogInterface dialogInterface, int i) {
-//                                                                            try {
-//                                                                                Screen_Login_Activity.tarea_JSON.put("operario", Screen_Login_Activity.operario_JSON.getString("usuario").replace("\n", ""));
-//                                                                            } catch (JSONException e) {
-//                                                                                Toast.makeText(Screen_Advance_Filter.this, "Error -> No pudo asignarse tarea a este operario", Toast.LENGTH_SHORT).show();
-//                                                                                e.printStackTrace();
-//                                                                                return;
-//                                                                            }
-//                                                                            acceder_a_Tarea();
-//                                                                        }
-//                                                                    })
-//                                                                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-//                                                                        @Override
-//                                                                        public void onClick(DialogInterface dialogInterface, int i) {
-//
-//                                                                        }
-//                                                                    }).show();
-//                                                        }
-//                                                    }else{
-//                                                        Toast.makeText(Screen_Advance_Filter.this, "Tarea nula", Toast.LENGTH_SHORT).show();
-//                                                    }
-//                                                } catch (JSONException e) {
-//                                                    e.printStackTrace();
-//                                                    Toast.makeText(Screen_Advance_Filter.this, "No pudo acceder a tarea Error -> "+e.toString(), Toast.LENGTH_SHORT).show();
-//                                                }
-//                                            }else{
-//                                                Toast.makeText(Screen_Advance_Filter.this, "JSON nulo, se delvio de la tabla elemento nulo", Toast.LENGTH_SHORT).show();
-//                                            }
-//                                        }else{
-//                                            Toast.makeText(Screen_Advance_Filter.this, "Elemento fuera del tamaño de tabla", Toast.LENGTH_SHORT).show();
-//                                        }
-//                                    } catch (JSONException e) {
-//                                        e.printStackTrace();
-//                                        Toast.makeText(Screen_Advance_Filter.this, "No se pudo obtener tarea de la tabla "+e.toString(), Toast.LENGTH_SHORT).show();
-//                                    }
-//                                }
-//                            }else{
-//                                Toast.makeText(Screen_Advance_Filter.this, "Elemento presionado es nulo en lista completa", Toast.LENGTH_SHORT).show();
+                    if (!lista_filtro_actual.isEmpty() && !arrayAdapter.isEmpty()) {
+                        for (int n = 0; n < lista_filtro_actual.size(); n++) {
+                            String object = lista_filtro_actual.get(n);
+                            if (object != null && !object.isEmpty()) {
+                                if (object.equals(object_click)) {
+                                    try {
+                                        if(n < team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas()
+                                                && !lista_ordenada_de_tareas_inicial.isEmpty() && lista_ordenada_de_tareas_inicial.size()> n){
+                                            JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.
+                                                    dBtareasController.get_one_tarea_from_Database(lista_ordenada_de_tareas_inicial.get(n).getContador()));
+                                            if (jsonObject != null) {
+                                                Screen_Login_Activity.tarea_JSON = jsonObject;
+                                                try {
+                                                    if(Screen_Login_Activity.tarea_JSON!=null) {
+                                                        if (Screen_Login_Activity.tarea_JSON.getString("operario").equals(Screen_Login_Activity.operario_JSON.getString("usuario"))) {
+                                                            acceder_a_Tarea();//revisar esto
+                                                        } else {
+                                                            new AlertDialog.Builder(Screen_Advance_Filter.this)
+                                                                    .setTitle("Cambiar Operario")
+                                                                    .setMessage("Esta tarea corresponde a otro operario\n¿Desea asignarse esta tarea?")
+                                                                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                                                        @Override
+                                                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                                                            try {
+                                                                                Screen_Login_Activity.tarea_JSON.put("operario", Screen_Login_Activity.operario_JSON.getString("usuario").replace("\n", ""));
+                                                                            } catch (JSONException e) {
+                                                                                Toast.makeText(Screen_Advance_Filter.this, "Error -> No pudo asignarse tarea a este operario", Toast.LENGTH_SHORT).show();
+                                                                                e.printStackTrace();
+                                                                                return;
+                                                                            }
+                                                                            acceder_a_Tarea();
+                                                                        }
+                                                                    })
+                                                                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                                                        @Override
+                                                                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                                                                        }
+                                                                    }).show();
+                                                        }
+                                                    }else{
+                                                        Toast.makeText(Screen_Advance_Filter.this, "Tarea nula", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                    Toast.makeText(Screen_Advance_Filter.this, "No pudo acceder a tarea Error -> "+e.toString(), Toast.LENGTH_SHORT).show();
+                                                }
+                                            }else{
+                                                Toast.makeText(Screen_Advance_Filter.this, "JSON nulo, se delvio de la tabla elemento nulo", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }else{
+                                            Toast.makeText(Screen_Advance_Filter.this, "Elemento fuera del tamaño de tabla", Toast.LENGTH_SHORT).show();
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                        Toast.makeText(Screen_Advance_Filter.this, "No se pudo obtener tarea de la tabla "+e.toString(), Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            }else{
+                                Toast.makeText(Screen_Advance_Filter.this, "Elemento presionado es nulo en lista completa", Toast.LENGTH_SHORT).show();
                             }
-//                        }
-//                    }else{
-//                        Toast.makeText(Screen_Advance_Filter.this, "Adaptador vacio, puede ser lista completa o de filtro", Toast.LENGTH_SHORT).show();
+                        }
+                    }else{
+                        Toast.makeText(Screen_Advance_Filter.this, "Adaptador vacio, puede ser lista completa o de filtro", Toast.LENGTH_SHORT).show();
                     }
-//                }else{
-//                    Toast.makeText(Screen_Advance_Filter.this, "Elemento presionado nulo", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(Screen_Advance_Filter.this, "Elemento presionado nulo", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -501,6 +559,7 @@ public class Screen_Advance_Filter extends AppCompatActivity {
             }
         }
         Collections.sort(lista_desplegable, String.CASE_INSENSITIVE_ORDER);
+        lista_desplegable.add(0,"Ninguno");
         arrayAdapter_nombre_abonados = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista_desplegable){
             public View getView(int position, View convertView,ViewGroup parent) {
                 View v = super.getView(position, convertView, parent);
@@ -542,6 +601,7 @@ public class Screen_Advance_Filter extends AppCompatActivity {
             }
         }
         Collections.sort(lista_desplegable, String.CASE_INSENSITIVE_ORDER);
+        lista_desplegable.add(0,"Ninguno");
         arrayAdapter_numero_telefonos = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista_desplegable);
         spinner_filtro_telefonos_screen_advance_filter.setAdapter(arrayAdapter_numero_telefonos);
     }
@@ -588,6 +648,7 @@ public class Screen_Advance_Filter extends AppCompatActivity {
                     if(!lista_desplegable.contains(abonados)) {
                         lista_desplegable.add(abonados);
                     }
+                    openMessage("lista_desplegable", lista_desplegable.toString());
                     lista_ordenada_de_tareas.add(orderTareaFromJSON(jsonObject));
                 }
             } catch (JSONException e) {
@@ -595,6 +656,7 @@ public class Screen_Advance_Filter extends AppCompatActivity {
             }
         }
         Collections.sort(lista_desplegable, String.CASE_INSENSITIVE_ORDER);
+        lista_desplegable.add(0,"Ninguno");
         arrayAdapter_numero_abonados = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista_desplegable);
         spinner_filtro_abonado_screen_advance_filter.setAdapter(arrayAdapter_numero_abonados);
     }
@@ -617,6 +679,7 @@ public class Screen_Advance_Filter extends AppCompatActivity {
             }
         }
         Collections.sort(lista_desplegable, String.CASE_INSENSITIVE_ORDER);
+        lista_desplegable.add(0,"Ninguno");
         arrayAdapter_numero_serie = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista_desplegable);
         spinner_filtro_serie_screen_advance_filter.setAdapter(arrayAdapter_numero_serie);
     }
@@ -670,6 +733,7 @@ public class Screen_Advance_Filter extends AppCompatActivity {
             }
         }
         Collections.sort(lista_desplegable, String.CASE_INSENSITIVE_ORDER);
+        lista_desplegable.add(0,"Ninguno");
         ArrayAdapter arrayAdapter_spinner = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, lista_desplegable);
         spinner_filtro_tipo_tarea_screen_advance_filter.setAdapter(arrayAdapter_spinner);
     }
@@ -701,6 +765,7 @@ public class Screen_Advance_Filter extends AppCompatActivity {
             }
         }
         Collections.sort(lista_desplegable, String.CASE_INSENSITIVE_ORDER);
+        lista_desplegable.add(0,"Ninguno");
         ArrayAdapter arrayAdapter_spinner = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista_desplegable);
         spinner_filtro_calibre_screen_advance_filter.setAdapter(arrayAdapter_spinner);
     }
@@ -719,8 +784,11 @@ public class Screen_Advance_Filter extends AppCompatActivity {
                         dBtareasController.get_one_tarea_from_Database(i));
                 String poblacion = jsonObject.getString("poblacion").
                         replace(" ","").replace("\n","");
+                poblacion_selected = poblacion_selected.replace(" ","").replace("\n","");
                 String calle = jsonObject.getString("calle").
-                        replace(" ","").replace("\n","");;
+                        replace(" ","").replace("\n","");
+                calle_selected = calle_selected.replace(" ","").replace("\n","");
+
                 String Bis = jsonObject.getString("numero_edificio").replace(" ","").replace("\n","")
                         +jsonObject.getString("letra_edificio").replace(" ","").replace("\n","");
                 if(poblacion.equals(poblacion_selected) && calle.equals(calle_selected) && Bis.equals(bis_selected.replace("\n",""))){
@@ -750,6 +818,7 @@ public class Screen_Advance_Filter extends AppCompatActivity {
             }
         }
         Collections.sort(lista_desplegable, String.CASE_INSENSITIVE_ORDER);
+        lista_desplegable.add(0,"Ninguno");
         ArrayAdapter arrayAdapter_spinner = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista_desplegable);
         spinner_filtro_poblacion_screen_advance_filter.setAdapter(arrayAdapter_spinner);
     }
@@ -777,6 +846,7 @@ public class Screen_Advance_Filter extends AppCompatActivity {
             }
         }
         Collections.sort(lista_desplegable, String.CASE_INSENSITIVE_ORDER);
+        lista_desplegable.add(0,"Ninguno");
         ArrayAdapter arrayAdapter_spinner = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista_desplegable);
         spinner_filtro_calles_screen_advance_filter.setAdapter(arrayAdapter_spinner);
     }
@@ -810,6 +880,7 @@ public class Screen_Advance_Filter extends AppCompatActivity {
             }
         }
         Collections.sort(lista_desplegable, String.CASE_INSENSITIVE_ORDER);
+        lista_desplegable.add(0,"Ninguno");
         ArrayAdapter arrayAdapter_spinner = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista_desplegable);
         spinner_filtro_bis_screen_screen_advance_filter.setAdapter(arrayAdapter_spinner);
     }
@@ -935,7 +1006,7 @@ public class Screen_Advance_Filter extends AppCompatActivity {
     public void cargarTodasEnLista(){
         if(team_or_personal_task_selection_screen_Activity.dBtareasController.databasefileExists(this)){
             if(team_or_personal_task_selection_screen_Activity.dBtareasController.checkForTableExists()){
-                lista_ordenada_de_tareas.clear();
+                lista_ordenada_de_tareas_inicial.clear();
                 for (int i = 1; i <= team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas(); i++) {
                     try {
                         JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.dBtareasController.get_one_tarea_from_Database(i));
@@ -1006,33 +1077,38 @@ public class Screen_Advance_Filter extends AppCompatActivity {
                         contador.setTelefono2(telefono2);
                         contador.setAbonado(abonado);
                         contador.setNumero_abonado(numero_abonado);
-                        lista_ordenada_de_tareas.add(contador);
+                        lista_ordenada_de_tareas_inicial.add(contador);
 
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
-                Collections.sort(lista_ordenada_de_tareas);
-                for(int i=0; i < lista_ordenada_de_tareas.size(); i++){
-                    lista_contadores.add("\nDirección:  "+lista_ordenada_de_tareas.get(i).getDireccion()
+                Collections.sort(lista_ordenada_de_tareas_inicial);
+                for(int i=0; i < lista_ordenada_de_tareas_inicial.size(); i++){
+                    lista_contadores.add("\nDirección:  "+lista_ordenada_de_tareas_inicial.get(i).getDireccion()
 //                            +"         Cita:  "+lista_ordenada_de_tareas.get(i).getCita()
-                            +"Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado());
-                    lista_filtro_direcciones.add("\nDirección:  "+lista_ordenada_de_tareas.get(i).getDireccion()
-                            +" Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado());
-                    lista_filtro_Tareas.add("\n      Tarea:  "+lista_ordenada_de_tareas.get(i).getTipo_tarea()+"   Calibre:  "+lista_ordenada_de_tareas.get(i).getCalibre()
-                            +"Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado());
-                    lista_filtro_abonado.add("\n   Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado()+"Telefono 1:  "+lista_ordenada_de_tareas.get(i).getTelefono1()
-                            +"Telefono 2:  "+lista_ordenada_de_tareas.get(i).getTelefono2());
-                    lista_filtro_numero_serie.add("\n       Número de Serie:  "+lista_ordenada_de_tareas.get(i).getNumero_serie_contador()
-                            +"\n              Año o Prefijo:  "+lista_ordenada_de_tareas.get(i).getAnno_contador()
-                            +"Número de Abonado:  "+lista_ordenada_de_tareas.get(i).getNumero_abonado());
-//                    lista_filtro_Citas.add("\n        Cita:  "+lista_ordenada_de_tareas.get(i).getCita()
-//                            +"Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado());
+                            +"Abonado:  "+lista_ordenada_de_tareas_inicial.get(i).getAbonado());
+                    lista_filtro_direcciones.add("\nDirección:  "+lista_ordenada_de_tareas_inicial.get(i).getDireccion()
+                            +" Abonado:  "+lista_ordenada_de_tareas_inicial.get(i).getAbonado());
+                    lista_filtro_Tareas.add("\n      Tarea:  "+lista_ordenada_de_tareas_inicial.get(i).getTipo_tarea()+"   Calibre:  "+lista_ordenada_de_tareas_inicial.get(i).getCalibre()
+                            +"Abonado:  "+lista_ordenada_de_tareas_inicial.get(i).getAbonado());
+                    lista_filtro_abonado.add("\n   Abonado:  "+lista_ordenada_de_tareas_inicial.get(i).getAbonado()+"Telefono 1:  "+lista_ordenada_de_tareas_inicial.get(i).getTelefono1()
+                            +"Telefono 2:  "+lista_ordenada_de_tareas_inicial.get(i).getTelefono2());
+                    lista_filtro_numero_serie.add("\n       Número de Serie:  "+lista_ordenada_de_tareas_inicial.get(i).getNumero_serie_contador()
+                            +"\n              Año o Prefijo:  "+lista_ordenada_de_tareas_inicial.get(i).getAnno_contador()
+                            +"Número de Abonado:  "+lista_ordenada_de_tareas_inicial.get(i).getNumero_abonado());
+//                    lista_filtro_Citas.add("\n        Cita:  "+lista_ordenada_de_tareas_inicial.get(i).getCita()
+//                            +"Abonado:  "+lista_ordenada_de_tareas_inicial.get(i).getAbonado());
                 }
                 arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, lista_contadores);
-                arrayAdapter_all = new ArrayAdapter(this, android.R.layout.simple_list_item_1, lista_contadores);
                 listView_contadores_screen_advance_filter.setAdapter(arrayAdapter);
             }
         }
+    }
+
+    public void openMessage(String title, String hint){
+        MessageDialog messageDialog = new MessageDialog();
+        messageDialog.setTitleAndHint(title, hint);
+        messageDialog.show(getSupportFragmentManager(), title);
     }
 }

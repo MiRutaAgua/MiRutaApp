@@ -47,66 +47,192 @@
                  />
         </LinearLayout>
 
+
         <LinearLayout
+            android:id="@+id/layout_filter_screen_advance_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:layout_marginTop="30dp"
             >
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:orientation="vertical"
+                android:orientation="horizontal"
                 >
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="TIPO DE FILTRO"
-                    android:textStyle="bold"
-                    android:textSize="18dp"
-                    />
-                <Spinner
-                    android:id="@+id/spinner_tipo_filtro_screen_advance_filter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:layout_gravity="center"
                     android:gravity="center"
-                    ></Spinner>
+                    android:orientation="vertical"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="TIPO DE FILTRO"
+                        android:textStyle="bold"
+                        android:textSize="18dp"
+                        />
+                    <Spinner
+                        android:id="@+id/spinner_tipo_filtro_screen_advance_filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        ></Spinner>
+                </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:layout_marginTop="20dp"
-            android:id="@+id/layout_filtro_direccion_screen_advance_filter"
-            >
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:orientation="vertical"
+                android:layout_marginTop="20dp"
+                android:id="@+id/layout_filtro_direccion_screen_advance_filter"
                 >
-                <TextView
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Población"
+                        android:textStyle="bold"
+                        android:textSize="17dp"
+                        />
+                    <Spinner
+                        android:id="@+id/spinner_filtro_poblacion_screen_advance_filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:textAlignment="center"
+                        android:layout_marginLeft="20dp"
+                        ></Spinner>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:layout_marginTop="20dp"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Calle"
+                        android:textStyle="bold"
+                        android:textSize="17dp"
+                        />
+                    <Spinner
+                        android:id="@+id/spinner_filtro_calles_screen_advance_filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:textAlignment="center"
+                        ></Spinner>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:layout_marginTop="20dp"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="BIS"
+                        android:textStyle="bold"
+                        android:textSize="17dp"
+                        />
+                    <Spinner
+                        android:id="@+id/spinner_filtro_bis_screen_screen_advance_filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:textAlignment="center"
+                        ></Spinner>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:layout_marginTop="20dp"
+                android:id="@+id/layout_filtro_datos_privados_screen_advance_filter"
+                >
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Población"
-                    android:textStyle="bold"
-                    android:textSize="17dp"
-                    />
-                <Spinner
-                    android:id="@+id/spinner_filtro_poblacion_screen_advance_filter"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Nombre o Empresa"
+                        android:textStyle="bold"
+                        android:textSize="17dp"
+                        />
+                    <Spinner
+                        android:id="@+id/spinner_filtro_nombre_abonado_screen_advance_filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="1dp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        ></Spinner>
+                    <EditText
+                        android:id="@+id/editText_nombre_abonado_screen_advance_filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="Nombre o Empresa"
+                        android:textSize="15dp"
+                        android:textAlignment="center"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical"
                     android:layout_marginTop="10dp"
-                    android:textAlignment="center"
-                    android:layout_marginLeft="20dp"
-                    ></Spinner>
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Teléfonos"
+                        android:textStyle="bold"
+                        android:textSize="17dp"
+                        />
+                    <Spinner
+                        android:id="@+id/spinner_filtro_telefonos_screen_advance_filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="1dp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        ></Spinner>
+                    <EditText
+                        android:id="@+id/editText_telefono_screen_advance_filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="Teléfono"
+                        android:textSize="15dp"
+                        android:textAlignment="center"
+                        />
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
@@ -115,21 +241,52 @@
                 android:gravity="center"
                 android:orientation="vertical"
                 android:layout_marginTop="20dp"
+                android:id="@+id/layout_filtro_tipo_tarea_screen_advance_filter"
                 >
-                <TextView
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Calle"
-                    android:textStyle="bold"
-                    android:textSize="17dp"
-                    />
-                <Spinner
-                    android:id="@+id/spinner_filtro_calles_screen_advance_filter"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tipo de Tarea"
+                        android:textStyle="bold"
+                        android:textSize="17dp"
+                        />
+
+                    <Spinner
+                        android:id="@+id/spinner_filtro_tipo_tarea_screen_advance_filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:textAlignment="center"
+                        ></Spinner>
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:textAlignment="center"
-                    ></Spinner>
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Calibre"
+                        android:textStyle="bold"
+                        android:textSize="17dp"
+                        />
+                    <Spinner
+                        android:id="@+id/spinner_filtro_calibre_screen_advance_filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:textAlignment="center"
+                        ></Spinner>
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
@@ -138,214 +295,83 @@
                 android:gravity="center"
                 android:orientation="vertical"
                 android:layout_marginTop="20dp"
+                android:id="@+id/layout_filtro_datos_unicos_screen_advance_filter"
                 >
-                <TextView
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="BIS"
-                    android:textStyle="bold"
-                    android:textSize="17dp"
-                    />
-                <Spinner
-                    android:id="@+id/spinner_filtro_bis_screen_screen_advance_filter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:textAlignment="center"
-                    ></Spinner>
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:layout_marginTop="20dp"
-            android:id="@+id/layout_filtro_datos_privados_screen_advance_filter"
-            >
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="vertical"
-                >
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Nombre o Empresa"
-                    android:textStyle="bold"
-                    android:textSize="17dp"
-                    />
-                <Spinner
-                    android:id="@+id/spinner_filtro_nombre_abonado_screen_advance_filter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="1dp"
-                    android:layout_gravity="center"
                     android:gravity="center"
-                    ></Spinner>
-                <EditText
-                    android:id="@+id/editText_nombre_abonado_screen_advance_filter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:hint="Nombre o Empresa"
-                    android:textSize="15dp"
-                    android:textAlignment="center"
-                    />
-            </LinearLayout>
+                    android:orientation="vertical"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Abonados"
+                        android:textStyle="bold"
+                        android:textSize="17dp"
+                        />
+                    <Spinner
+                        android:id="@+id/spinner_filtro_abonado_screen_advance_filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:textAlignment="center"
+                        ></Spinner>
+                    <EditText
+                        android:id="@+id/editText_numero_abonado_screen_advance_filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="Número de abonado"
+                        />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:layout_marginTop="10dp"
-                >
-                <TextView
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Teléfonos"
-                    android:textStyle="bold"
-                    android:textSize="17dp"
-                    />
-                <Spinner
-                    android:id="@+id/spinner_filtro_telefonos_screen_advance_filter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="1dp"
-                    android:layout_gravity="center"
                     android:gravity="center"
-                    ></Spinner>
-                <EditText
-                    android:id="@+id/editText_telefono_screen_advance_filter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:hint="Teléfono"
-                    android:textSize="15dp"
-                    android:textAlignment="center"
-                    />
+                    android:orientation="vertical"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Serie"
+                        android:textStyle="bold"
+                        android:textSize="15dp"
+                        />
+                    <Spinner
+                        android:id="@+id/spinner_filtro_serie_screen_advance_filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:textAlignment="center"
+                        ></Spinner>
+                    <EditText
+                        android:id="@+id/editText_numero_serie_screen_advance_filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="Número de serie"
+                        />
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:orientation="vertical"
-            android:layout_marginTop="20dp"
-            android:id="@+id/layout_filtro_tipo_tarea_screen_advance_filter"
+            android:layout_marginTop="1dp"
+            android:layout_gravity="right"
+            android:gravity="right"
             >
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="vertical"
-                >
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Tipo de Tarea"
-                    android:textStyle="bold"
-                    android:textSize="17dp"
-                    />
 
-                <Spinner
-                    android:id="@+id/spinner_filtro_tipo_tarea_screen_advance_filter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:textAlignment="center"
-                    ></Spinner>
-            </LinearLayout>
+            <Button
+                android:id="@+id/button_maximize_list_srceen_advance_filter"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/ic_vertical_up_blue_24dp"
+                />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="vertical"
-                >
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Calibre"
-                    android:textStyle="bold"
-                    android:textSize="17dp"
-                    />
-                <Spinner
-                    android:id="@+id/spinner_filtro_calibre_screen_advance_filter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:textAlignment="center"
-                    ></Spinner>
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:layout_marginTop="20dp"
-            android:id="@+id/layout_filtro_datos_unicos_screen_advance_filter"
-            >
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="vertical"
-                >
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Abonados"
-                    android:textStyle="bold"
-                    android:textSize="17dp"
-                    />
-                <Spinner
-                    android:id="@+id/spinner_filtro_abonado_screen_advance_filter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:textAlignment="center"
-                    ></Spinner>
-                <EditText
-                    android:id="@+id/editText_numero_abonado_screen_advance_filter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:hint="Número de abonado"
-                    />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="vertical"
-                >
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Serie"
-                    android:textStyle="bold"
-                    android:textSize="15dp"
-                    />
-                <Spinner
-                    android:id="@+id/spinner_filtro_serie_screen_advance_filter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:textAlignment="center"
-                    ></Spinner>
-                <EditText
-                    android:id="@+id/editText_numero_serie_screen_advance_filter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:hint="Número de serie"
-                    />
-            </LinearLayout>
         </LinearLayout>
 
         <EditText
@@ -357,11 +383,12 @@
             android:hint="filtrar"
             android:visibility="gone"/>
 
+
         <ListView
             android:id="@+id/listView_contadores_screen_advance_filter"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             >
         </ListView>
 

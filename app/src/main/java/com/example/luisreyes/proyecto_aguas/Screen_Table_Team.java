@@ -136,7 +136,8 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
                             if (object != null) {
                                 if (object.equals(object_click)) {
                                     try {
-                                        if(n < team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas()){
+                                        if(n < team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas()
+                                                && !lista_ordenada_de_tareas.isEmpty() && lista_ordenada_de_tareas.size()> n){
                                             JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.
                                                     dBtareasController.get_one_tarea_from_Database(lista_ordenada_de_tareas.get(n).getContador()));
                                             if (jsonObject != null) {
@@ -144,7 +145,8 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
 
                                                 try {
                                                     if(Screen_Login_Activity.tarea_JSON!=null) {
-                                                        if (Screen_Login_Activity.tarea_JSON.getString("operario").equals(Screen_Login_Activity.operario_JSON.getString("usuario"))) {
+                                                        if (Screen_Login_Activity.tarea_JSON.getString("operario").equals(
+                                                                Screen_Login_Activity.operario_JSON.getString("usuario"))) {
                                                             acceder_a_Tarea();//revisar esto
                                                         } else {
                                                             new AlertDialog.Builder(Screen_Table_Team.this)

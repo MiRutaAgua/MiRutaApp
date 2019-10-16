@@ -283,26 +283,39 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         button_instalation_photo_screen_exec_task.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent_camera = new Intent(Screen_Execute_Task.this, Screen_Camera.class);
-                intent_camera.putExtra("photo_name", contador+"_foto_antes_instalacion");
-                intent_camera.putExtra("photo_folder", "fotos_tareas");
-                intent_camera.putExtra("contador", contador);
-                startActivityForResult(intent_camera, CAM_REQUEST_INST_PHOTO);
+                if(Screen_Login_Activity.movileModel){
+                    try {
+                        dispatchTakePictureIntent(CAM_REQUEST_INST_PHOTO);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                else {
+                    Intent intent_camera = new Intent(Screen_Execute_Task.this, Screen_Camera.class);
+                    intent_camera.putExtra("photo_name", contador + "_foto_antes_instalacion");
+                    intent_camera.putExtra("photo_folder", "fotos_tareas");
+                    intent_camera.putExtra("contador", contador);
+                    startActivityForResult(intent_camera, CAM_REQUEST_INST_PHOTO);
+                }
             }
         });
         button_read_photo_screen_exec_task.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent_camera = new Intent(Screen_Execute_Task.this, Screen_Camera.class);
-                intent_camera.putExtra("photo_name", contador+"_foto_lectura");
-                intent_camera.putExtra("photo_folder", "fotos_tareas");
-                intent_camera.putExtra("contador", contador);
-                startActivityForResult(intent_camera, CAM_REQUEST_READ_PHOTO);
-//                try {
-//                    dispatchTakePictureIntent(CAM_REQUEST_READ_PHOTO);
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
+                if(Screen_Login_Activity.movileModel){
+                    try {
+                        dispatchTakePictureIntent(CAM_REQUEST_READ_PHOTO);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                else {
+                    Intent intent_camera = new Intent(Screen_Execute_Task.this, Screen_Camera.class);
+                    intent_camera.putExtra("photo_name", contador + "_foto_lectura");
+                    intent_camera.putExtra("photo_folder", "fotos_tareas");
+                    intent_camera.putExtra("contador", contador);
+                    startActivityForResult(intent_camera, CAM_REQUEST_READ_PHOTO);
+                }
             }
         });
         button_serial_number_photo_screen_exec_task.setOnClickListener(new View.OnClickListener() {
@@ -317,13 +330,6 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
 //                    dispatchTakePictureIntent(CAM_REQUEST_SN_PHOTO);
 //                } catch (JSONException e) {
 //                    e.printStackTrace();
-//                }
-//                String string_geo_ruta="";
-//                try {
-//                    string_geo_ruta = Screen_Login_Activity.tarea_JSON.getString("geolocalizar");
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                    Toast.makeText(Screen_Execute_Task.this, "no se pudo obtener numero_serie_contador de tarea", Toast.LENGTH_LONG).show();
 //                }
             }
         });
@@ -474,59 +480,65 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
             if (requestCode == REQUEST_LECTOR_SNM) {
                 String data_result = "";
                 data_result = data.getStringExtra("result");
-                if (!data_result.equals("null") && !data_result.isEmpty() && data_result!=null) {
+                if (!data_result.equals("null") && !data_result.isEmpty() && data_result != null) {
                     try {
                         Screen_Login_Activity.tarea_JSON.put("numero_serie_modulo", data_result);
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        Toast.makeText(this,"No pudo insertarse numero serie de modulo: "+e.toString(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, "No pudo insertarse numero serie de modulo: " + e.toString(), Toast.LENGTH_LONG).show();
                     }
                     textView_serial_number_module_result.setText(data_result);
                 }
             }
 
-            if (requestCode == CAM_REQUEST_INST_PHOTO) {
-                if(!TextUtils.isEmpty(data.getStringExtra("photo_path"))&& data.getStringExtra("photo_path")!=null) {
-                    mCurrentPhotoPath_foto_antes = data.getStringExtra("photo_path");
-                    Bitmap bitmap_foto_antes_instalacion = getPhotoUserLocal(mCurrentPhotoPath_foto_antes);
-                    if(bitmap_foto_antes_instalacion!=null) {
-                        bitmap_foto_antes_instalacion = Bitmap.createScaledBitmap(bitmap_foto_antes_instalacion, 960, 1280, true);
-                        instalation_photo_screen_exec_task.setVisibility(View.VISIBLE);
-                        instalation_photo_screen_exec_task.setImageBitmap(bitmap_foto_antes_instalacion);
-                        lectura_editText.setVisibility(View.VISIBLE);
+            if(Screen_Login_Activity.movileModel){
+
+                
+            }
+            else {
+                if (requestCode == CAM_REQUEST_INST_PHOTO) {
+                    if (!TextUtils.isEmpty(data.getStringExtra("photo_path")) && data.getStringExtra("photo_path") != null) {
+                        mCurrentPhotoPath_foto_antes = data.getStringExtra("photo_path");
+                        Bitmap bitmap_foto_antes_instalacion = getPhotoUserLocal(mCurrentPhotoPath_foto_antes);
+                        if (bitmap_foto_antes_instalacion != null) {
+                            bitmap_foto_antes_instalacion = Bitmap.createScaledBitmap(bitmap_foto_antes_instalacion, 960, 1280, true);
+                            instalation_photo_screen_exec_task.setVisibility(View.VISIBLE);
+                            instalation_photo_screen_exec_task.setImageBitmap(bitmap_foto_antes_instalacion);
+                            lectura_editText.setVisibility(View.VISIBLE);
+                        }
                     }
                 }
-            }
-            if (requestCode == CAM_REQUEST_READ_PHOTO) {
-                if(!TextUtils.isEmpty(data.getStringExtra("photo_path"))&& data.getStringExtra("photo_path")!=null) {
-                    mCurrentPhotoPath_foto_lectura = data.getStringExtra("photo_path");
-                    Bitmap bitmap_foto_lectura = getPhotoUserLocal(mCurrentPhotoPath_foto_lectura);
-                    if(bitmap_foto_lectura!=null) {
-                        bitmap_foto_lectura = Bitmap.createScaledBitmap(bitmap_foto_lectura, 960, 1280, true);
-                        read_photo_screen_exec_task.setVisibility(View.VISIBLE);
-                        read_photo_screen_exec_task.setImageBitmap(bitmap_foto_lectura);
+                if (requestCode == CAM_REQUEST_READ_PHOTO) {
+                    if (!TextUtils.isEmpty(data.getStringExtra("photo_path")) && data.getStringExtra("photo_path") != null) {
+                        mCurrentPhotoPath_foto_lectura = data.getStringExtra("photo_path");
+                        Bitmap bitmap_foto_lectura = getPhotoUserLocal(mCurrentPhotoPath_foto_lectura);
+                        if (bitmap_foto_lectura != null) {
+                            bitmap_foto_lectura = Bitmap.createScaledBitmap(bitmap_foto_lectura, 960, 1280, true);
+                            read_photo_screen_exec_task.setVisibility(View.VISIBLE);
+                            read_photo_screen_exec_task.setImageBitmap(bitmap_foto_lectura);
+                        }
                     }
                 }
-            }
-            if (requestCode == CAM_REQUEST_SN_PHOTO) {
-                if(!TextUtils.isEmpty(data.getStringExtra("photo_path"))&& data.getStringExtra("photo_path")!=null) {
-                    mCurrentPhotoPath_foto_serie = data.getStringExtra("photo_path");
-                    Bitmap bitmap_foto_numero_serie = getPhotoUserLocal(mCurrentPhotoPath_foto_serie);
-                    if(bitmap_foto_numero_serie!=null) {
-                        bitmap_foto_numero_serie = Bitmap.createScaledBitmap(bitmap_foto_numero_serie, 960, 1280, true);
-                        serial_number_photo_screen_exec_task.setVisibility(View.VISIBLE);
-                        serial_number_photo_screen_exec_task.setImageBitmap(bitmap_foto_numero_serie);
+                if (requestCode == CAM_REQUEST_SN_PHOTO) {
+                    if (!TextUtils.isEmpty(data.getStringExtra("photo_path")) && data.getStringExtra("photo_path") != null) {
+                        mCurrentPhotoPath_foto_serie = data.getStringExtra("photo_path");
+                        Bitmap bitmap_foto_numero_serie = getPhotoUserLocal(mCurrentPhotoPath_foto_serie);
+                        if (bitmap_foto_numero_serie != null) {
+                            bitmap_foto_numero_serie = Bitmap.createScaledBitmap(bitmap_foto_numero_serie, 960, 1280, true);
+                            serial_number_photo_screen_exec_task.setVisibility(View.VISIBLE);
+                            serial_number_photo_screen_exec_task.setImageBitmap(bitmap_foto_numero_serie);
+                        }
                     }
                 }
-            }
-            if (requestCode == CAM_REQUEST_AFT_INT_PHOTO) {
-                if(!TextUtils.isEmpty(data.getStringExtra("photo_path"))&& data.getStringExtra("photo_path")!=null) {
-                    mCurrentPhotoPath_foto_despues = data.getStringExtra("photo_path");
-                    Bitmap bitmap_foto_despues_instalacion = getPhotoUserLocal(mCurrentPhotoPath_foto_despues);
-                    if(bitmap_foto_despues_instalacion!=null) {
-                        bitmap_foto_despues_instalacion = Bitmap.createScaledBitmap(bitmap_foto_despues_instalacion, 960, 1280, true);
-                        after_instalation_photo_screen_exec_task.setVisibility(View.VISIBLE);
-                        after_instalation_photo_screen_exec_task.setImageBitmap(bitmap_foto_despues_instalacion);
+                if (requestCode == CAM_REQUEST_AFT_INT_PHOTO) {
+                    if (!TextUtils.isEmpty(data.getStringExtra("photo_path")) && data.getStringExtra("photo_path") != null) {
+                        mCurrentPhotoPath_foto_despues = data.getStringExtra("photo_path");
+                        Bitmap bitmap_foto_despues_instalacion = getPhotoUserLocal(mCurrentPhotoPath_foto_despues);
+                        if (bitmap_foto_despues_instalacion != null) {
+                            bitmap_foto_despues_instalacion = Bitmap.createScaledBitmap(bitmap_foto_despues_instalacion, 960, 1280, true);
+                            after_instalation_photo_screen_exec_task.setVisibility(View.VISIBLE);
+                            after_instalation_photo_screen_exec_task.setImageBitmap(bitmap_foto_despues_instalacion);
+                        }
                     }
                 }
             }

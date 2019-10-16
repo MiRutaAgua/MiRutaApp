@@ -58,7 +58,7 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
     private EditText editText_filter;
     private ArrayAdapter arrayAdapter, arrayAdapter_all;
     private TextView textView_screen_table_personal;
-    private Button agregar_tarea;
+    private Button agregar_tarea, button_advance_filter_table_team;
 
     Spinner spinner_filtro_tareas;
     private ArrayList<String> lista_desplegable;
@@ -106,6 +106,7 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
         textView_screen_table_personal           = (TextView) findViewById(R.id.textView_screen_table_personal);
         editText_filter                       = (EditText) findViewById(R.id.editText_screen_table_personal_filter);
         agregar_tarea = (Button) findViewById(R.id.button_add_tarea_table_personal);
+        button_advance_filter_table_team  = (Button) findViewById(R.id.button_advance_filter_table_personal);
 
         lista_desplegable.add("NINGUNO");
         lista_desplegable.add("DIRECCION");
@@ -132,7 +133,8 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
                             if (object != null) {
                                 if (object.equals(object_click)) {
                                     try {
-                                        if(n < team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas()){
+                                        if(n < team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas()
+                                                && !lista_ordenada_de_tareas.isEmpty() && lista_ordenada_de_tareas.size()> n){
                                             JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.
                                                     dBtareasController.get_one_tarea_from_Database(lista_ordenada_de_tareas.get(n).getContador()));
                                             if (jsonObject != null) {
@@ -165,6 +167,15 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
                 }
             }
         });
+
+        button_advance_filter_table_team.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent_open_Screen_advance_filter = new Intent(Screen_Table_Personal.this, Screen_Advance_Filter.class);
+                startActivity(intent_open_Screen_advance_filter);
+            }
+        });
+
         spinner_filtro_tareas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
