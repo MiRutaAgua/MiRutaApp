@@ -321,41 +321,42 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         button_serial_number_photo_screen_exec_task.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent_camera = new Intent(Screen_Execute_Task.this, Screen_Camera.class);
-                intent_camera.putExtra("photo_name", contador+"_foto_numero_serie");
-                intent_camera.putExtra("photo_folder", "fotos_tareas");
-                intent_camera.putExtra("contador", contador);
-                startActivityForResult(intent_camera, CAM_REQUEST_SN_PHOTO);
-//                try {
-//                    dispatchTakePictureIntent(CAM_REQUEST_SN_PHOTO);
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
+                if(Screen_Login_Activity.movileModel){
+                    try {
+                        dispatchTakePictureIntent(CAM_REQUEST_SN_PHOTO);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                else {
+                    Intent intent_camera = new Intent(Screen_Execute_Task.this, Screen_Camera.class);
+                    intent_camera.putExtra("photo_name", contador + "_foto_numero_serie");
+                    intent_camera.putExtra("photo_folder", "fotos_tareas");
+                    intent_camera.putExtra("contador", contador);
+                    startActivityForResult(intent_camera, CAM_REQUEST_SN_PHOTO);
+                }
             }
         });
         button_after_instalation_photo_screen_exec_task.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent_camera = new Intent(Screen_Execute_Task.this, Screen_Camera.class);
-                intent_camera.putExtra("photo_name", contador+"_foto_despues_instalacion");
-                intent_camera.putExtra("photo_folder", "fotos_tareas");
-                intent_camera.putExtra("contador", contador);
-                startActivityForResult(intent_camera, CAM_REQUEST_AFT_INT_PHOTO);
-//                try {
-//                    dispatchTakePictureIntent(CAM_REQUEST_AFT_INT_PHOTO);
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
+                if(Screen_Login_Activity.movileModel){
+                    try {
+                        dispatchTakePictureIntent(CAM_REQUEST_AFT_INT_PHOTO);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                else {
+                    Intent intent_camera = new Intent(Screen_Execute_Task.this, Screen_Camera.class);
+                    intent_camera.putExtra("photo_name", contador + "_foto_despues_instalacion");
+                    intent_camera.putExtra("photo_folder", "fotos_tareas");
+                    intent_camera.putExtra("contador", contador);
+                    startActivityForResult(intent_camera, CAM_REQUEST_AFT_INT_PHOTO);
+                }
             }
         });
     }
-//    String string_geo = "2334,2312";
-//
-//    try {
-//        Screen_Login_Activity.tarea_JSON.put("geolocalizar", string_geo);
-//    } catch (JSONException e) {
-//        e.printStackTrace();
-//    }
 
     public void saveData() {
         boolean error=false;
@@ -492,8 +493,95 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
             }
 
             if(Screen_Login_Activity.movileModel){
-
-                
+                if (requestCode == CAM_REQUEST_INST_PHOTO) {
+                    Bitmap bitmap = null;
+                    bitmap = getPhotoUserLocal(mCurrentPhotoPath_foto_antes);
+                    if(bitmap!=null) {
+                        String filename = saveBitmapImage(bitmap, "foto_antes_instalacion");
+                        if (filename != null && !filename.isEmpty() && !filename.equals("null")) {
+                            mCurrentPhotoPath_foto_antes = filename;
+                            bitmap = null;
+                            bitmap = getPhotoUserLocal(mCurrentPhotoPath_foto_antes);
+                            if (bitmap != null) {
+                                instalation_photo_screen_exec_task.setVisibility(View.VISIBLE);
+                                instalation_photo_screen_exec_task.setImageBitmap(bitmap);
+                                lectura_editText.setVisibility(View.VISIBLE);
+                            }else{
+                                Toast.makeText(this,"No se encuentra foto luego de cambiar nombre: " +mCurrentPhotoPath_foto_antes, Toast.LENGTH_LONG).show();
+                            }
+                        }else{
+                            Toast.makeText(this,"No se encuentra archivo fotoe: " +filename, Toast.LENGTH_LONG).show();
+                        }
+                    }else{
+                        Toast.makeText(this,"No se encuentra foto: " +mCurrentPhotoPath_foto_antes, Toast.LENGTH_LONG).show();
+                    }
+                }
+                if (requestCode == CAM_REQUEST_READ_PHOTO) {
+                    Bitmap bitmap = null;
+                    bitmap = getPhotoUserLocal(mCurrentPhotoPath_foto_lectura);
+                    if(bitmap!=null) {
+                        String filename = saveBitmapImage(bitmap, "foto_lectura");
+                        if (filename != null && !filename.isEmpty() && !filename.equals("null")) {
+                            mCurrentPhotoPath_foto_lectura = filename;
+                            bitmap = null;
+                            bitmap = getPhotoUserLocal(mCurrentPhotoPath_foto_lectura);
+                            if (bitmap != null) {
+                                read_photo_screen_exec_task.setVisibility(View.VISIBLE);
+                                read_photo_screen_exec_task.setImageBitmap(bitmap);
+                            }else{
+                                Toast.makeText(this,"No se encuentra foto luego de cambiar nombre: " +mCurrentPhotoPath_foto_lectura, Toast.LENGTH_LONG).show();
+                            }
+                        }else{
+                            Toast.makeText(this,"No se encuentra archivo fotoe: " +filename, Toast.LENGTH_LONG).show();
+                        }
+                    }else{
+                        Toast.makeText(this,"No se encuentra foto: " +mCurrentPhotoPath_foto_lectura, Toast.LENGTH_LONG).show();
+                    }
+                }
+                if (requestCode == CAM_REQUEST_SN_PHOTO) {
+                    Bitmap bitmap = null;
+                    bitmap = getPhotoUserLocal(mCurrentPhotoPath_foto_serie);
+                    if(bitmap!=null) {
+                        String filename = saveBitmapImage(bitmap, "foto_numero_serie");
+                        if (filename != null && !filename.isEmpty() && !filename.equals("null")) {
+                            mCurrentPhotoPath_foto_serie = filename;
+                            bitmap = null;
+                            bitmap = getPhotoUserLocal(mCurrentPhotoPath_foto_serie);
+                            if (bitmap != null) {
+                                serial_number_photo_screen_exec_task.setVisibility(View.VISIBLE);
+                                serial_number_photo_screen_exec_task.setImageBitmap(bitmap);
+                            }else{
+                                Toast.makeText(this,"No se encuentra foto luego de cambiar nombre: " +mCurrentPhotoPath_foto_serie, Toast.LENGTH_LONG).show();
+                            }
+                        }else{
+                            Toast.makeText(this,"No se encuentra archivo fotoe: " +filename, Toast.LENGTH_LONG).show();
+                        }
+                    }else{
+                        Toast.makeText(this,"No se encuentra foto: " +mCurrentPhotoPath_foto_serie, Toast.LENGTH_LONG).show();
+                    }
+                }
+                if (requestCode == CAM_REQUEST_AFT_INT_PHOTO) {
+                    Bitmap bitmap = null;
+                    bitmap = getPhotoUserLocal(mCurrentPhotoPath_foto_despues);
+                    if(bitmap!=null) {
+                        String filename = saveBitmapImage(bitmap, "foto_despues_instalacion");
+                        if (filename != null && !filename.isEmpty() && !filename.equals("null")) {
+                            mCurrentPhotoPath_foto_despues = filename;
+                            bitmap = null;
+                            bitmap = getPhotoUserLocal(mCurrentPhotoPath_foto_despues);
+                            if (bitmap != null) {
+                                after_instalation_photo_screen_exec_task.setVisibility(View.VISIBLE);
+                                after_instalation_photo_screen_exec_task.setImageBitmap(bitmap);
+                            }else{
+                                Toast.makeText(this,"No se encuentra foto luego de cambiar nombre: " +mCurrentPhotoPath_foto_despues, Toast.LENGTH_LONG).show();
+                            }
+                        }else{
+                            Toast.makeText(this,"No se encuentra archivo fotoe: " +filename, Toast.LENGTH_LONG).show();
+                        }
+                    }else{
+                        Toast.makeText(this,"No se encuentra foto: " +mCurrentPhotoPath_foto_despues, Toast.LENGTH_LONG).show();
+                    }
+                }
             }
             else {
                 if (requestCode == CAM_REQUEST_INST_PHOTO) {
@@ -505,6 +593,8 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                             instalation_photo_screen_exec_task.setVisibility(View.VISIBLE);
                             instalation_photo_screen_exec_task.setImageBitmap(bitmap_foto_antes_instalacion);
                             lectura_editText.setVisibility(View.VISIBLE);
+                        }else{
+                            Toast.makeText(this,"No se encuentra foto: " +mCurrentPhotoPath_foto_antes, Toast.LENGTH_LONG).show();
                         }
                     }
                 }
@@ -516,6 +606,8 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                             bitmap_foto_lectura = Bitmap.createScaledBitmap(bitmap_foto_lectura, 960, 1280, true);
                             read_photo_screen_exec_task.setVisibility(View.VISIBLE);
                             read_photo_screen_exec_task.setImageBitmap(bitmap_foto_lectura);
+                        }else{
+                            Toast.makeText(this,"No se encuentra foto: " +mCurrentPhotoPath_foto_lectura, Toast.LENGTH_LONG).show();
                         }
                     }
                 }
@@ -527,6 +619,8 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                             bitmap_foto_numero_serie = Bitmap.createScaledBitmap(bitmap_foto_numero_serie, 960, 1280, true);
                             serial_number_photo_screen_exec_task.setVisibility(View.VISIBLE);
                             serial_number_photo_screen_exec_task.setImageBitmap(bitmap_foto_numero_serie);
+                        }else{
+                            Toast.makeText(this,"No se encuentra foto: " +mCurrentPhotoPath_foto_serie, Toast.LENGTH_LONG).show();
                         }
                     }
                 }
@@ -538,6 +632,8 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                             bitmap_foto_despues_instalacion = Bitmap.createScaledBitmap(bitmap_foto_despues_instalacion, 960, 1280, true);
                             after_instalation_photo_screen_exec_task.setVisibility(View.VISIBLE);
                             after_instalation_photo_screen_exec_task.setImageBitmap(bitmap_foto_despues_instalacion);
+                        }else{
+                            Toast.makeText(this,"No se encuentra foto: " +mCurrentPhotoPath_foto_despues, Toast.LENGTH_LONG).show();
                         }
                     }
                 }

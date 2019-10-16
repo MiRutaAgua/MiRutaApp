@@ -179,12 +179,12 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
             if (resultCode == RESULT_OK) {
                 try {
                     mCurrentPhotoPath = saveBitmapImage(getPhotoUserLocal(mCurrentPhotoPath), Screen_Login_Activity.operario_JSON.getString("usuario")+"_operario");
-                    File file = new File(mCurrentPhotoPath);
                     bitmap_user_photo = null;
                     bitmap_user_photo = getPhotoUserLocal(mCurrentPhotoPath);
-                    circlImageView_photo.setBackgroundColor(Color.TRANSPARENT);
-                    circlImageView_photo.setImageBitmap(bitmap_user_photo);
                     if (bitmap_user_photo != null) {
+                        circlImageView_photo.setBackgroundColor(Color.TRANSPARENT);
+                        circlImageView_photo.setImageBitmap(bitmap_user_photo);
+
                         showRingDialog("Cambiando foto...");
                         //Toast.makeText(this, "Imagen ok", Toast.LENGTH_LONG).show();
                         String type = "upload_user_image";

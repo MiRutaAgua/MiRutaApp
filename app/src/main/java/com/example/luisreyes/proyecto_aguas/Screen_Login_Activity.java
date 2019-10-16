@@ -64,13 +64,13 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
     ArrayList<String> usuarios_to_update = new ArrayList<>();
     public static String currentUser = "";
     public static DBoperariosController dBoperariosController;
-    public static boolean movileModel = true;
+    public static boolean movileModel = true; //for changing camera (PhoneCamera or Screen_Camera)
 
     boolean login_pendent = false;
     boolean login_press = false;
     public static boolean register_press = false;
 
-    public static boolean server_online_or_wamp = false;
+    public static boolean server_online_or_wamp = true;
     public static boolean isOnline = true; ///cambiar todas las ocurrencias de esta variable por isOnline
 
     private ProgressDialog progressDialog;
