@@ -33,12 +33,6 @@ public class My_Fast_View_Task implements Comparable<My_Fast_View_Task> {
         all_string += tipo_tarea;
     }
 
-//    public My_Fast_View_Task(String _tipo_tarea, String _calibre) {
-//        calibre = _tipo_tarea;
-//        tipo_tarea = _tipo_tarea;
-//        all_string = tipo_tarea+ "  " +calibre+" mm";
-//    }
-
     private String calibre="";
     private String tipo_tarea="";
     private String all_string="";

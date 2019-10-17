@@ -21,6 +21,16 @@ public class MyCounter implements Comparable<MyCounter> {
         this.tipo_tarea = tipo_tarea;
     }
 
+    public String getNumero_interno() {
+        return numero_interno;
+    }
+
+    public void setNumero_interno(String numero_interno) {
+        if(!numero_interno.isEmpty())
+            this.numero_interno = numero_interno;
+    }
+
+    private String numero_interno = null;
     private String cita;
     private String abonado;
     private String numero_serie_contador;
@@ -49,7 +59,7 @@ public class MyCounter implements Comparable<MyCounter> {
         return abonado;
     }
     public void setAbonado(String abonado) {
-        this.abonado = abonado;
+        this.abonado = abonado.replace("null", "");
     }
     public String getNumero_serie_contador() {
         return numero_serie_contador;
@@ -61,7 +71,7 @@ public class MyCounter implements Comparable<MyCounter> {
         return anno_contador;
     }
     public void setAnno_contador(String anno_contador) {
-        this.anno_contador = anno_contador;
+        this.anno_contador = anno_contador.replace("null", "");
     }
     public String getCalibre() {
         return calibre;
@@ -73,13 +83,13 @@ public class MyCounter implements Comparable<MyCounter> {
         return telefono1;
     }
     public void setTelefono1(String telefono1) {
-        this.telefono1 = telefono1;
+        this.telefono1 = telefono1.replace("null", "");
     }
     public String getTelefono2() {
         return telefono2;
     }
     public void setTelefono2(String telefono2) {
-        this.telefono2 = telefono2;
+        this.telefono2 = telefono2.replace("null", "");
     }
 
     public String getFecha_cita() {
@@ -94,7 +104,7 @@ public class MyCounter implements Comparable<MyCounter> {
     }
 
     public void setDireccion(String direccion) {
-        this.direccion = direccion;
+        this.direccion = direccion.replace("null", "");
     }
 
     public String getContador() {

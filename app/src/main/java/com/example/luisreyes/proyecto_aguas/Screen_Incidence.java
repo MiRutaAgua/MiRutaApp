@@ -104,15 +104,15 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
         spinner_lista_de_mal_ubicacion.setAdapter(arrayAdapter);
 
         try {
-            contador = Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador");
+            contador = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador);
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(Screen_Incidence.this, "no se pudo obtener numero_serie_contador de tarea", Toast.LENGTH_LONG).show();
         }
 
         try {
-            String telefono1_string = Screen_Login_Activity.tarea_JSON.getString("telefono1");
-            String telefono2_string = Screen_Login_Activity.tarea_JSON.getString("telefono2");
+            String telefono1_string = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.telefono1);
+            String telefono2_string = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.telefono2);
             if(!telefono1_string.equals("null") && !telefono1_string.isEmpty() && telefono1_string!=null) {
                 telefono1.setText(telefono1_string);
             }else{
@@ -214,7 +214,8 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
             public void onClick(View view) {
 
                 try {
-                    Screen_Login_Activity.tarea_JSON.put("incidencia", spinner_lista_de_mal_ubicacion.getSelectedItem().toString());
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.incidencia,
+                            spinner_lista_de_mal_ubicacion.getSelectedItem().toString());
                 }catch (JSONException e) {
                     e.printStackTrace();
                     Toast.makeText(Screen_Incidence.this, "No se pudo insetar texto incidencia en JSON tarea", Toast.LENGTH_LONG).show();
@@ -226,6 +227,7 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
         });
 
     }
+
 
     public void openDialog(String tel){
 
@@ -240,10 +242,10 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
         if(!(TextUtils.isEmpty(telefono))){
             if(Dialog.getTitle() == "telefono1"){
                 telefono1.setText((CharSequence) telefono);
-                Screen_Login_Activity.tarea_JSON.put("telefono1", telefono1.getText().toString());
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.telefono1, telefono1.getText().toString());
             }else if(Dialog.getTitle() == "telefono2"){
                 telefono2.setText((CharSequence) telefono);
-                Screen_Login_Activity.tarea_JSON.put("telefono2", telefono2.getText().toString());
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.telefono2, telefono2.getText().toString());
             }
         }
     }
@@ -399,7 +401,7 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
         // Create an image file name
 
         String imageFileName = null;
-        String image = Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador")+"_"+incidencia_X;
+        String image = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador)+"_"+incidencia_X;
         File image_file=null;
         File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas");
         if (!storageDir.exists()) {
@@ -455,8 +457,8 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
     }
     private String saveBitmapImage(Bitmap bitmap, String key){
         try {
-            bitmap = Bitmap.createScaledBitmap(bitmap, 1200, 1600, true);
-            String numero_serie = Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador");
+            bitmap = Bitmap.createScaledBitmap(bitmap, 960, 1280, true);
+            String numero_serie = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador);
             String file_full_name = numero_serie+"_"+key;
             //Toast.makeText(Screen_Incidence.this,"archivo: "+file_full_name, Toast.LENGTH_LONG).show();
 

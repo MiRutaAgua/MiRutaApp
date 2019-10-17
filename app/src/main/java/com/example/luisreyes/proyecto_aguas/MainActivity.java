@@ -29,8 +29,8 @@ public class MainActivity extends AppCompatActivity {
 
     private Intent intent_open_screen_login;
 
-    public static int DB_VERSION = 30;
-    public static int COMPRESS_QUALITY = 100;
+    public static int DB_VERSION = 33;
+    public static int COMPRESS_QUALITY = 50;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override

@@ -66,6 +66,7 @@ public class Screen_Register_Operario extends AppCompatActivity implements TaskC
     ImageView capture_Photo;
     private String image;
     private ProgressDialog progressDialog;
+    boolean registrando = false;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -112,46 +113,49 @@ public class Screen_Register_Operario extends AppCompatActivity implements TaskC
             @Override
             public void onClick(View view) {
 
-                if(checkConection()) {
-                    if (photo_taken && !(TextUtils.isEmpty(etname.getText().toString()))
-                            && !(TextUtils.isEmpty(etapellidos.getText().toString()))
-                            && !(TextUtils.isEmpty(etedad.getText().toString()))
-                            && !(TextUtils.isEmpty(etTelefonos.getText().toString()))
-                            && !(TextUtils.isEmpty(etuser_name.getText().toString()))
-                            && !(TextUtils.isEmpty(etclave.getText().toString()))) {
+                if (!registrando) {
+                    registrando = true;
+                    if (checkConection()) {
+                        if (photo_taken && !(TextUtils.isEmpty(etname.getText().toString()))
+                                && !(TextUtils.isEmpty(etapellidos.getText().toString()))
+                                && !(TextUtils.isEmpty(etedad.getText().toString()))
+                                && !(TextUtils.isEmpty(etTelefonos.getText().toString()))
+                                && !(TextUtils.isEmpty(etuser_name.getText().toString()))
+                                && !(TextUtils.isEmpty(etclave.getText().toString()))) {
 
-                        username_reg = etuser_name.getText().toString();
-                        if (!Screen_Login_Activity.lista_usuarios.contains(username_reg)) {
+                            username_reg = etuser_name.getText().toString();
+                            if (!Screen_Login_Activity.lista_usuarios.contains(username_reg)) {
 
-                            name = etname.getText().toString();
-                            surname = etapellidos.getText().toString();
-                            age = etedad.getText().toString();
-                            telefonos = etTelefonos.getText().toString();
-                            password_reg = etclave.getText().toString();
-                            String fecha_hora = DBoperariosController.getStringFromFechaHora(new Date());
-                            //image = getStringImage(bitmap_foto);
-                            capture_Photo.setImageDrawable(getDrawable(R.drawable.screen_exec_task_imagen));
-                            //etname.setText(image);
+                                name = etname.getText().toString();
+                                surname = etapellidos.getText().toString();
+                                age = etedad.getText().toString();
+                                telefonos = etTelefonos.getText().toString();
+                                password_reg = etclave.getText().toString();
+                                String fecha_hora = DBoperariosController.getStringFromFechaHora(new Date());
+                                //image = getStringImage(bitmap_foto);
+                                capture_Photo.setImageDrawable(getDrawable(R.drawable.screen_exec_task_imagen));
+                                //etname.setText(image);
 
-                            showRingDialog("Registrando operario...");
+                                showRingDialog("Registrando operario...");
 
-                            String type = "register";
-                            BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Register_Operario.this);
-                            backgroundWorker.execute(type, name, surname, age, telefonos, username_reg, password_reg, image, fecha_hora);
+                                String type = "register";
+                                BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Register_Operario.this);
+                                backgroundWorker.execute(type, name, surname, age, telefonos, username_reg, password_reg, image, fecha_hora);
+                            } else {
+                                Toast.makeText(Screen_Register_Operario.this, "El usuario " + username_reg + " ya está registrado", Toast.LENGTH_LONG).show();
+                            }
                         } else {
-                            Toast.makeText(Screen_Register_Operario.this, "El usuario " + username_reg + " ya está registrado", Toast.LENGTH_LONG).show();
+
+                            if (!photo_taken) {
+                                Toast.makeText(Screen_Register_Operario.this, "Debe tomarse una foto, presione el icono del camara", Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(Screen_Register_Operario.this, "Debe rellenar todos los campos", Toast.LENGTH_LONG).show();
+                            }
                         }
                     } else {
-
-                        if (!photo_taken) {
-                            Toast.makeText(Screen_Register_Operario.this, "Debe tomarse una foto, presione el icono del camara", Toast.LENGTH_LONG).show();
-                        } else {
-                            Toast.makeText(Screen_Register_Operario.this, "Debe rellenar todos los campos", Toast.LENGTH_LONG).show();
-                        }
+                        registrando = false;
+                        Toast.makeText(Screen_Register_Operario.this, "No hay conexion a internet", Toast.LENGTH_LONG).show();
                     }
-                }
-                else {
-                    Toast.makeText(Screen_Register_Operario.this, "No hay conexion a internet", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -199,6 +203,7 @@ public class Screen_Register_Operario extends AppCompatActivity implements TaskC
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private void setFotoUsuarioFromJSONString(String result) throws JSONException {
         JSONObject json_usuario = new JSONObject(result);
 
@@ -210,6 +215,7 @@ public class Screen_Register_Operario extends AppCompatActivity implements TaskC
     public void onTaskComplete(String type, String result) throws JSONException {
 
         if(type == "register"){
+            registrando = false;
             hideRingDialog();
             if(result == null){
                 Toast.makeText(Screen_Register_Operario.this,"No se puede acceder al servidor, no se pudo registrar", Toast.LENGTH_LONG).show();

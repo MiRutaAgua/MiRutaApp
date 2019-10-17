@@ -315,7 +315,6 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
                 if(sqlite_database_count < 1){
                     insertar_todos = true;
                 }
-                //ArrayList<String> lista_contadores = new ArrayList<>();
                 for(int n =0 ; n < lista_operarios.size() ; n++) {
                     try {
                         JSONArray jsonArray = new JSONArray(lista_operarios.get(n));

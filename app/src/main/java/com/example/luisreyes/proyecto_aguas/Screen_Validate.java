@@ -118,7 +118,9 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
         nombre_y_tarea = (TextView) findViewById(R.id.textView_nombre_cliente_y_tarea_screen_validate);
 
         try {
-            nombre_y_tarea.setText(Screen_Login_Activity.tarea_JSON.getString("nombre_cliente").replace("\n", "")+", "+Screen_Login_Activity.tarea_JSON.getString("calibre_toma"));
+            nombre_y_tarea.setText(Screen_Login_Activity.tarea_JSON.getString(DBtareasController.nombre_cliente)
+                    .replace("\n", "")+", "
+                    +Screen_Login_Activity.tarea_JSON.getString(DBtareasController.calibre_toma));
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(Screen_Validate.this, "no se pudo obtener nombre de cliente", Toast.LENGTH_LONG).show();
@@ -126,7 +128,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
         try {
             String lectura_last = "";
             lectura_ultima_et.setText("");
-            lectura_last = Screen_Login_Activity.tarea_JSON.getString("lectura_actual");
+            lectura_last = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.lectura_actual);
             if(lectura_last != null && !lectura_last.equals("null") && !TextUtils.isEmpty(lectura_last)) {
                 lectura_ultima_et.setText(lectura_last);
             }
@@ -143,19 +145,16 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
         }
 
         try {
-            numero_serie_nuevo.setText(Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador").replace("\n",""));
+            numero_serie_nuevo.setText(Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador).replace("\n",""));
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(Screen_Validate.this, "no se pudo obtener numero_serie_contador", Toast.LENGTH_LONG).show();
         }
+        textView_numero_serie_viejo.setText(Screen_Execute_Task.numero_serie_viejo.replace("\n",""));
+
         try {
-            textView_numero_serie_viejo.setText(Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador").replace("\n",""));
-        } catch (JSONException e) {
-            e.printStackTrace();
-            Toast.makeText(Screen_Validate.this, "no se pudo obtener numero_serie_contador", Toast.LENGTH_LONG).show();
-        }
-        try {
-            textView_calibre_screen_validate.setText(Screen_Login_Activity.tarea_JSON.getString("calibre_toma").replace("\n",""));
+            textView_calibre_screen_validate.setText(Screen_Login_Activity.tarea_JSON.
+                    getString(DBtareasController.calibre_toma).replace("\n",""));
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(Screen_Validate.this, "no se pudo obtener calibre_toma", Toast.LENGTH_LONG).show();
@@ -187,7 +186,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
             }
         }
         try {
-            String string_firma = Screen_Login_Activity.tarea_JSON.getString("firma_cliente");
+            String string_firma = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.firma_cliente);
             if(!TextUtils.isEmpty(string_firma) && !string_firma.equals("null")) {
                 bitmap_firma_cliente = Screen_Register_Operario.getImageFromString(string_firma);
                 if(bitmap_firma_cliente!=null) {
@@ -246,14 +245,19 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
             public void onClick(View view) {
                 ////aqui va la actualizacion de la tarea;
                 try {
-                    Screen_Login_Activity.tarea_JSON.put("date_time_modified", DBtareasController.getStringFromFechaHora(new Date()));
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.date_time_modified, DBtareasController.getStringFromFechaHora(new Date()));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.status_tarea,"DONE");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
                 if(bitmap_firma_cliente != null){
                     String firma_cliente_string = Screen_Register_Operario.getStringImage(bitmap_firma_cliente);
                     try {
-                        Screen_Login_Activity.tarea_JSON.put("firma_cliente", firma_cliente_string);
+                        Screen_Login_Activity.tarea_JSON.put(DBtareasController.firma_cliente, firma_cliente_string);
                     } catch (JSONException e) {
                         e.printStackTrace();
                         Toast.makeText(Screen_Validate.this, "No pudo guardar de firma", Toast.LENGTH_LONG).show();
@@ -263,34 +267,35 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                     try {
                         //Comprobar aqui que la lectura no sea menor que la ultima
                         String lect_string = lectura_actual_et.getText().toString();
-                        String lect_last_string = lectura_ultima_et.getText().toString();
+                        String lect_last_string = "";
+                        if(lectura_ultima_et.getText().toString().isEmpty()){
+                            lect_last_string="0";
+                        }else {
+                            lect_last_string=lectura_ultima_et.getText().toString();
+                        }
                         Integer lectura_actual_int = Integer.parseInt(lect_string);
                         Integer lectura_last_int = Integer.parseInt(lect_last_string);
                         if(lectura_actual_int.compareTo(lectura_last_int)>0){
-                            Screen_Login_Activity.tarea_JSON.put("lectura_ultima", lect_last_string);
-                            Screen_Login_Activity.tarea_JSON.put("lectura_actual", lect_string);
+                            Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_ultima, lect_last_string);
+                            Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_actual, lect_string);
 
-                            boolean error=false;
-                            if(team_or_personal_task_selection_screen_Activity.dBtareasController != null) {
-                                try {
-                                    team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea(Screen_Login_Activity.tarea_JSON);
-                                } catch (JSONException e) {
-                                    Toast.makeText(Screen_Validate.this, "No se pudo guardar tarea local " + e.toString(), Toast.LENGTH_LONG).show();
-                                    e.printStackTrace();
-                                    error = true;
-                                }
-                            }else{
-                                error = true;
-                                Toast.makeText(Screen_Validate.this, "No hay tabla donde guardar", Toast.LENGTH_LONG).show();
-                            }
+
                             if(checkConection()) {
+                                boolean error = saveTaskLocal();
                                 showRingDialog("Guardando datos...");
                                 String type = "update_tarea";
                                 BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Validate.this);
                                 backgroundWorker.execute(type);
                             }else{
-                                if(!error)
+                                try {
+                                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.status_tarea,"DONE,TO_UPLOAD");
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                boolean error = saveTaskLocal();
+                                if(!error) {
                                     Toast.makeText(Screen_Validate.this, "No hay conexion se guardaron los datos en el telefono", Toast.LENGTH_LONG).show();
+                                }
                             }
                         }
                         else{
@@ -354,6 +359,23 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
             }
         });
 
+    }
+
+    public boolean saveTaskLocal() {
+        boolean error = false;
+        if(team_or_personal_task_selection_screen_Activity.dBtareasController != null) {
+            try {
+                team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea(Screen_Login_Activity.tarea_JSON);
+            } catch (JSONException e) {
+                Toast.makeText(Screen_Validate.this, "No se pudo guardar tarea local " + e.toString(), Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+                error = true;
+            }
+        }else{
+            error = true;
+            Toast.makeText(this, "No hay tabla donde guardar", Toast.LENGTH_LONG).show();
+        }
+        return error;
     }
 
     public static Bitmap loadBitmapFromView(View v, int width, int height) {
@@ -519,7 +541,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                     String contador=null;
                     Screen_Execute_Task.lectura_introducida="";
                     try {
-                        contador = Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador");
+                        contador = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -527,22 +549,22 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                     if(!TextUtils.isEmpty(Screen_Execute_Task.mCurrentPhotoPath_foto_antes)
                             && ((new File(Screen_Execute_Task.mCurrentPhotoPath_foto_antes)).exists())) {
                         images_files.add(Screen_Execute_Task.mCurrentPhotoPath_foto_antes);
-                        if(contador!=null && !TextUtils.isEmpty(contador)){
-                            images_files_names.add(contador+"_foto_antes_instalacion.jpg");
+                        if(Screen_Execute_Task.numero_serie_viejo!=null && !TextUtils.isEmpty(Screen_Execute_Task.numero_serie_viejo)){
+                            images_files_names.add(Screen_Execute_Task.numero_serie_viejo+"_foto_antes_instalacion.jpg");
                         }
                     }
                     if(!TextUtils.isEmpty(Screen_Execute_Task.mCurrentPhotoPath_foto_lectura)
                             && ((new File(Screen_Execute_Task.mCurrentPhotoPath_foto_lectura)).exists())) {
                         images_files.add(Screen_Execute_Task.mCurrentPhotoPath_foto_lectura);
-                        if(contador!=null && !TextUtils.isEmpty(contador)){
-                            images_files_names.add(contador+"_foto_numero_serie.jpg");
+                        if(Screen_Execute_Task.numero_serie_viejo!=null && !TextUtils.isEmpty(Screen_Execute_Task.numero_serie_viejo)){
+                            images_files_names.add(Screen_Execute_Task.numero_serie_viejo+"_foto_numero_serie.jpg");
                         }
                     }
                     if(!TextUtils.isEmpty(Screen_Execute_Task.mCurrentPhotoPath_foto_serie)
                             && ((new File(Screen_Execute_Task.mCurrentPhotoPath_foto_serie)).exists())) {
                         images_files.add(Screen_Execute_Task.mCurrentPhotoPath_foto_serie);
-                        if(contador!=null && !TextUtils.isEmpty(contador)){
-                            images_files_names.add(contador+"_foto_lectura.jpg");
+                        if(Screen_Execute_Task.numero_serie_viejo!=null && !TextUtils.isEmpty(Screen_Execute_Task.numero_serie_viejo)){
+                            images_files_names.add(Screen_Execute_Task.numero_serie_viejo+"_foto_lectura.jpg");
                         }
                     }
                     if(!TextUtils.isEmpty(Screen_Execute_Task.mCurrentPhotoPath_foto_despues)
@@ -586,13 +608,13 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
         if(current_tag.contains("Numero de Serie Nuevo")) {
             if (!(TextUtils.isEmpty(wrote_string))) {
 
-                Screen_Login_Activity.tarea_JSON.put("numero_serie_contador", wrote_string);
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.numero_serie_contador, wrote_string);
                 numero_serie_nuevo.setText(wrote_string);
             }
         }else if(current_tag.contains("Calibre Real")){
             if (!(TextUtils.isEmpty(wrote_string))) {
 
-                Screen_Login_Activity.tarea_JSON.put("calibre_real", wrote_string);
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.calibre_real, wrote_string);
                 textView_calibre_screen_validate.setText(wrote_string);
             }
         }

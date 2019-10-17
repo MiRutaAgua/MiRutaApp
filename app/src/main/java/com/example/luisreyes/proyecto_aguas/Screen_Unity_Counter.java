@@ -85,14 +85,14 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
                     + Screen_Login_Activity.tarea_JSON.getString("numero_edificio").replace("\n", "")
                     + Screen_Login_Activity.tarea_JSON.getString("letra_edificio").replace("\n", "") + "  "
                     + Screen_Login_Activity.tarea_JSON.getString("piso").replace("\n", "") + "  "
-                    + Screen_Login_Activity.tarea_JSON.getString("mano").replace("\n", "")));
-            datosEspecificos.setText((Screen_Login_Activity.tarea_JSON.getString("observaciones").replace("\n", "")));
-            serie.setText((Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador").replace("\n", "")));
-            lectura.setText((Screen_Login_Activity.tarea_JSON.getString("lectura_actual").replace("\n", "")));
-            ubicacion.setText((Screen_Login_Activity.tarea_JSON.getString("emplazamiento").replace("\n", "")));
-            acceso.setText((Screen_Login_Activity.tarea_JSON.getString("acceso").replace("\n", "")));
-            calibre.setText((Screen_Login_Activity.tarea_JSON.getString("calibre_toma").replace("\n", "")));
-
+                    + Screen_Login_Activity.tarea_JSON.getString("mano").replace("\n", "")).replace("null",""));
+            datosEspecificos.setText((Screen_Login_Activity.tarea_JSON.getString("observaciones").replace("\n", "")).replace("null",""));
+            serie.setText((Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador").replace("\n", "")).replace("null",""));
+            lectura.setText((Screen_Login_Activity.tarea_JSON.getString("lectura_actual").replace("\n", "")).replace("null",""));
+            ubicacion.setText((Screen_Login_Activity.tarea_JSON.getString("emplazamiento").replace("\n", "")).replace("null",""));
+            acceso.setText((Screen_Login_Activity.tarea_JSON.getString("acceso").replace("\n", "")).replace("null",""));
+            calibre.setText((Screen_Login_Activity.tarea_JSON.getString("calibre_toma").replace("\n", "")).replace("null",""));
+            
         } catch (Exception e) {
             e.printStackTrace();
         }

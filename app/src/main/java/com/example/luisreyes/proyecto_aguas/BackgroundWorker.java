@@ -371,7 +371,7 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
             try{
                 return_image = false;
                 ArrayList<String> keys = new ArrayList<String>();
-                keys.add("numero_serie_contador");
+                keys.add(DBtareasController.numero_interno);
                 ArrayList<String> values = new ArrayList<String>();
                 for (int i = 0; i < keys.size(); i++) {
                     values.add(params[i+1]);

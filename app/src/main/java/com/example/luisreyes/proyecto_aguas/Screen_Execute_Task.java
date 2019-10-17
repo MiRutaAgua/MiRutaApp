@@ -71,6 +71,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
     private ImageView after_instalation_photo_screen_exec_task;
     private String contador = "";
     public static String lectura_introducida = "";
+    public static String numero_serie_viejo = "";
 
     private EditText lectura_editText;
     private String lectura_string;
@@ -138,6 +139,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
 
         try {
             contador = Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador");
+            numero_serie_viejo = contador;
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(Screen_Execute_Task.this, "no se pudo obtener numero_serie_contador de tarea", Toast.LENGTH_LONG).show();
@@ -292,9 +294,9 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                 }
                 else {
                     Intent intent_camera = new Intent(Screen_Execute_Task.this, Screen_Camera.class);
-                    intent_camera.putExtra("photo_name", contador + "_foto_antes_instalacion");
+                    intent_camera.putExtra("photo_name", numero_serie_viejo + "_foto_antes_instalacion");
                     intent_camera.putExtra("photo_folder", "fotos_tareas");
-                    intent_camera.putExtra("contador", contador);
+                    intent_camera.putExtra("contador", numero_serie_viejo);
                     startActivityForResult(intent_camera, CAM_REQUEST_INST_PHOTO);
                 }
             }
@@ -311,9 +313,9 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                 }
                 else {
                     Intent intent_camera = new Intent(Screen_Execute_Task.this, Screen_Camera.class);
-                    intent_camera.putExtra("photo_name", contador + "_foto_lectura");
+                    intent_camera.putExtra("photo_name", numero_serie_viejo + "_foto_lectura");
                     intent_camera.putExtra("photo_folder", "fotos_tareas");
-                    intent_camera.putExtra("contador", contador);
+                    intent_camera.putExtra("contador", numero_serie_viejo);
                     startActivityForResult(intent_camera, CAM_REQUEST_READ_PHOTO);
                 }
             }
@@ -330,9 +332,9 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                 }
                 else {
                     Intent intent_camera = new Intent(Screen_Execute_Task.this, Screen_Camera.class);
-                    intent_camera.putExtra("photo_name", contador + "_foto_numero_serie");
+                    intent_camera.putExtra("photo_name", numero_serie_viejo + "_foto_numero_serie");
                     intent_camera.putExtra("photo_folder", "fotos_tareas");
-                    intent_camera.putExtra("contador", contador);
+                    intent_camera.putExtra("contador", numero_serie_viejo);
                     startActivityForResult(intent_camera, CAM_REQUEST_SN_PHOTO);
                 }
             }
@@ -399,7 +401,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                 Toast.makeText(Screen_Execute_Task.this, "No pudo guardar observaciones", Toast.LENGTH_LONG).show();
             }
         }
-        if(!TextUtils.isEmpty(telefono1.getText().toString())){
+        if(!TextUtils.isEmpty(telefono1.getText().toString()) && !telefono1.getText().toString().contains("Añadir")){
             String tel1 = telefono1.getText().toString();
             try {
                 Screen_Login_Activity.tarea_JSON.put("telefono1",tel1);
@@ -408,7 +410,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                 Toast.makeText(Screen_Execute_Task.this, "No pudo guardar telefono1", Toast.LENGTH_LONG).show();
             }
         }
-        if(!TextUtils.isEmpty(telefono2.getText().toString())){
+        if(!TextUtils.isEmpty(telefono2.getText().toString()) && !telefono2.getText().toString().contains("Añadir")){
             String tel2 = telefono2.getText().toString();
             try {
                 Screen_Login_Activity.tarea_JSON.put("telefono2",tel2);
@@ -427,7 +429,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         }
         if(contador != null  && !TextUtils.isEmpty(mCurrentPhotoPath_foto_antes) && ((new File(mCurrentPhotoPath_foto_antes)).exists())){
             try {
-                Screen_Login_Activity.tarea_JSON.put("foto_antes_instalacion",contador +"_foto_antes_instalacion.jpg");
+                Screen_Login_Activity.tarea_JSON.put("foto_antes_instalacion",numero_serie_viejo +"_foto_antes_instalacion.jpg");
             } catch (JSONException e) {
                 e.printStackTrace();
                 Toast.makeText(Screen_Execute_Task.this, "No pudo guardar foto_antes_instalacion", Toast.LENGTH_LONG).show();
@@ -435,7 +437,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         }
         if(contador != null && !TextUtils.isEmpty(mCurrentPhotoPath_foto_lectura) && ((new File(mCurrentPhotoPath_foto_lectura)).exists()) ){
             try {
-                Screen_Login_Activity.tarea_JSON.put("foto_lectura",contador +"_foto_lectura.jpg");
+                Screen_Login_Activity.tarea_JSON.put("foto_lectura",numero_serie_viejo +"_foto_lectura.jpg");
             } catch (JSONException e) {
                 e.printStackTrace();
                 Toast.makeText(Screen_Execute_Task.this, "No pudo guardar foto_lectura", Toast.LENGTH_LONG).show();
@@ -443,7 +445,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         }
         if(contador != null && !TextUtils.isEmpty(mCurrentPhotoPath_foto_serie) && ((new File(mCurrentPhotoPath_foto_serie)).exists())){
             try {
-                Screen_Login_Activity.tarea_JSON.put("foto_numero_serie",contador +"_foto_numero_serie.jpg");
+                Screen_Login_Activity.tarea_JSON.put("foto_numero_serie",numero_serie_viejo +"_foto_numero_serie.jpg");
             } catch (JSONException e) {
                 e.printStackTrace();
                 Toast.makeText(Screen_Execute_Task.this, "No pudo guardar foto_numero_serie", Toast.LENGTH_LONG).show();
@@ -475,7 +477,14 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                 String data_result = "";
                 data_result = data.getStringExtra("result");
                 if (!data_result.equals("null") && !data_result.isEmpty() && data_result!=null) {
-                    textView_serial_number_result.setText(data.getStringExtra("result"));
+                    textView_serial_number_result.setText(data_result);
+                    contador = data_result;
+                    try {
+                        Screen_Login_Activity.tarea_JSON.put(DBtareasController.numero_serie_contador, data_result);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Toast.makeText(this, "No pudo insertarse numero serie: " + e.toString(), Toast.LENGTH_LONG).show();
+                    }
                 }
             }
             if (requestCode == REQUEST_LECTOR_SNM) {
@@ -786,19 +795,19 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                         if(!TextUtils.isEmpty(mCurrentPhotoPath_foto_antes)  && ((new File(mCurrentPhotoPath_foto_antes)).exists())) {
                             images_files.add(mCurrentPhotoPath_foto_antes);
                             if(contador!=null && !TextUtils.isEmpty(contador)){
-                                images_files_names.add(contador+"_foto_antes_instalacion.jpg");
+                                images_files_names.add(numero_serie_viejo+"_foto_antes_instalacion.jpg");
                             }
                         }
                         if(!TextUtils.isEmpty(mCurrentPhotoPath_foto_lectura) && ((new File(mCurrentPhotoPath_foto_lectura)).exists())) {
                             images_files.add(mCurrentPhotoPath_foto_lectura);
                             if(contador!=null && !TextUtils.isEmpty(contador)){
-                                images_files_names.add(contador+"_foto_lectura.jpg");
+                                images_files_names.add(numero_serie_viejo+"_foto_lectura.jpg");
                             }
                         }
                         if(!TextUtils.isEmpty(mCurrentPhotoPath_foto_serie) && ((new File(mCurrentPhotoPath_foto_serie)).exists())) {
                             images_files.add(mCurrentPhotoPath_foto_serie);
                             if(contador!=null && !TextUtils.isEmpty(contador)){
-                                images_files_names.add(contador+"_foto_numero_serie.jpg");
+                                images_files_names.add(numero_serie_viejo+"_foto_numero_serie.jpg");
                             }
                         }
                         if(!TextUtils.isEmpty(mCurrentPhotoPath_foto_despues) && ((new File(mCurrentPhotoPath_foto_despues)).exists())) {
@@ -957,10 +966,10 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         if(file.exists()) {
             Bitmap bitmap = null;
             try {
-                bitmap =Bitmap.createScaledBitmap(MediaStore.Images.Media
-                        .getBitmap(this.getContentResolver(), Uri.fromFile(file)), 512, 512, true);
-//                bitmap = MediaStore.Images.Media
-//                        .getBitmap(this.getContentResolver(), Uri.fromFile(file));
+//                bitmap =Bitmap.createScaledBitmap(MediaStore.Images.Media
+//                        .getBitmap(this.getContentResolver(), Uri.fromFile(file)), 512, 512, true);
+                bitmap = MediaStore.Images.Media
+                        .getBitmap(this.getContentResolver(), Uri.fromFile(file));
             } catch (IOException e) {
                 e.printStackTrace();
             }

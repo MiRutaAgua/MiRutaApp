@@ -29,106 +29,119 @@ public class DBtareasController extends SQLiteOpenHelper {
     JSONObject jsonTareaType_empty = new JSONObject();
     public static final String table_name = "tareas";
 
+    public static final String id = "id";
+    public static final String numero_interno = "numero_interno";
+    public static final String poblacion = "poblacion";
+    public static final String calle = "calle";
+    public static final String numero_edificio = "numero_edificio";
+    public static final String letra_edificio = "letra_edificio";
+    public static final String piso = "piso";
+    public static final String mano = "mano";
+    public static final String anno_de_contador = "anno_de_contador";
+    public static final String numero_serie_contador = "numero_serie_contador";
+    public static final String tipo_tarea = "tipo_tarea";
+    public static final String calibre_toma = "calibre_toma";
+    public static final String calibre_real = "calibre_real";
+    public static final String operario = "operario";
+    public static final String emplazamiento = "emplazamiento";
+    public static final String observaciones = "observaciones";
+    public static final String actividad = "actividad";
+    public static final String nombre_cliente = "nombre_cliente";
+    public static final String numero_abonado = "numero_abonado";
+    public static final String telefonos_cliente = "telefonos_cliente";
+    public static final String telefono1 = "telefono1";
+    public static final String telefono2 = "telefono2";
+    public static final String fechas_tocado_puerta = "fechas_tocado_puerta";
+    public static final String fechas_nota_aviso = "fechas_nota_aviso";
+    public static final String acceso = "acceso";
+    public static final String resultado = "resultado";
+    public static final String nuevo_citas = "nuevo_citas";
+    public static final String fecha_hora_cita = "fecha_hora_cita";
+    public static final String fecha_de_cambio = "fecha_de_cambio";
+    public static final String zona = "zona";
+    public static final String ruta = "ruta";
+    public static final String marca_contador = "marca_contador";
+    public static final String codigo_de_localizacion = "codigo_de_localizacion";
+    public static final String foto_antes_instalacion = "foto_antes_instalacion";
+    public static final String foto_numero_serie = "foto_numero_serie";
+    public static final String foto_lectura = "foto_lectura";
+    public static final String foto_despues_instalacion = "foto_despues_instalacion";
+    public static final String numero_serie_modulo = "numero_serie_modulo";
+    public static final String firma_cliente = "firma_cliente";
+    public static final String lectura_ultima = "lectura_ultima";
+    public static final String lectura_actual = "lectura_actual";
+    public static final String geolocalizacion = "geolocalizacion";
+    public static final String ubicacion_en_bateria = "ubicacion_en_bateria";
+    public static final String incidencia = "incidencia";
+    public static final String foto_incidencia_1 = "foto_incidencia_1";
+    public static final String foto_incidencia_2 = "foto_incidencia_2";
+    public static final String foto_incidencia_3 = "foto_incidencia_3";
+    public static final String propiedad = "propiedad";
+    public static final String reparacion = "reparacion";
+    public static final String numero = "numero";
+    public static final String ruedas = "ruedas";
+    public static final String date_time_modified = "date_time_modified";
+    public static final String status_tarea = "status_tarea";
+
     public DBtareasController(Context applicationContext){
         super(applicationContext, database_name, null,  MainActivity.DB_VERSION);
         try {
-            jsonTareaType.put("id", 1);
-            jsonTareaType.put("poblacion", "null");
-            jsonTareaType.put("calle", "null");
-            jsonTareaType.put("numero_edificio", "null");
-            jsonTareaType.put("letra_edificio", "null");
-            jsonTareaType.put("piso", "null");
-            jsonTareaType.put("mano", "null");
-            jsonTareaType.put("anno_de_contador", "null");
-            jsonTareaType.put("numero_serie_contador", "null");
-            jsonTareaType.put("tipo_tarea", "null");
-            jsonTareaType.put("calibre_toma", "null");
-            jsonTareaType.put("calibre_real", "null");
-            jsonTareaType.put("operario", "null");
-            jsonTareaType.put("emplazamiento", "null");
-            jsonTareaType.put("observaciones", "null");
-            jsonTareaType.put("actividad", "null");
-            jsonTareaType.put("nombre_cliente", "null");
-            jsonTareaType.put("numero_abonado", "null");
-            jsonTareaType.put("telefonos_cliente", "null");
-            jsonTareaType.put("telefono1", "null");
-            jsonTareaType.put("telefono2", "null");
-            jsonTareaType.put("fechas_tocado_puerta", "null");
-            jsonTareaType.put("fechas_nota_aviso", "null");
-            jsonTareaType.put("acceso", "null");
-            jsonTareaType.put("resultado", "null");
-            jsonTareaType.put("nuevo_citas", "null");
-            jsonTareaType.put("fecha_hora_cita", "null");
-            jsonTareaType.put("fecha_de_cambio", "null");
-            jsonTareaType.put("zona", "null");
-            jsonTareaType.put("ruta", "null");
-            jsonTareaType.put("marca_contador", "null");
-            jsonTareaType.put("codigo_de_localizacion", "null");
-            jsonTareaType.put("foto_antes_instalacion", "null");
-            jsonTareaType.put("foto_numero_serie", "null");
-            jsonTareaType.put("foto_lectura", "null");
-            jsonTareaType.put("foto_despues_instalacion", "null");
-            jsonTareaType.put("numero_serie_modulo", "null");
-            jsonTareaType.put("firma_cliente", "null");
-            jsonTareaType.put("lectura_ultima", "null");
-            jsonTareaType.put("lectura_actual", "null");
-            jsonTareaType.put("geolocalizacion", "null");
-            jsonTareaType.put("ubicacion_en_bateria", "null");
-            jsonTareaType.put("incidencia", "null");
-            jsonTareaType.put("foto_incidencia_1", "null");
-            jsonTareaType.put("foto_incidencia_2", "null");
-            jsonTareaType.put("foto_incidencia_3", "null");
-            jsonTareaType.put("date_time_modified", "null");
-            jsonTareaType.put("status_tarea", "null");
+            jsonTareaType.put(id, 1);
+            jsonTareaType.put(numero_interno, "null");
+            jsonTareaType.put(poblacion, "null");
+            jsonTareaType.put(calle, "null");
+            jsonTareaType.put(numero_edificio, "null");
+            jsonTareaType.put(letra_edificio, "null");
+            jsonTareaType.put(piso, "null");
+            jsonTareaType.put(mano, "null");
+            jsonTareaType.put(anno_de_contador, "null");
+            jsonTareaType.put(numero_serie_contador, "null");
+            jsonTareaType.put(tipo_tarea, "null");
+            jsonTareaType.put(calibre_toma, "null");
+            jsonTareaType.put(calibre_real, "null");
+            jsonTareaType.put(operario, "null");
+            jsonTareaType.put(emplazamiento, "null");
+            jsonTareaType.put(observaciones, "null");
+            jsonTareaType.put(actividad, "null");
+            jsonTareaType.put(nombre_cliente, "null");
+            jsonTareaType.put(numero_abonado, "null");
+            jsonTareaType.put(telefonos_cliente, "null");
+            jsonTareaType.put(telefono1, "null");
+            jsonTareaType.put(telefono2, "null");
+            jsonTareaType.put(fechas_tocado_puerta, "null");
+            jsonTareaType.put(fechas_nota_aviso, "null");
+            jsonTareaType.put(acceso, "null");
+            jsonTareaType.put(resultado, "null");
+            jsonTareaType.put(nuevo_citas, "null");
+            jsonTareaType.put(fecha_hora_cita, "null");
+            jsonTareaType.put(fecha_de_cambio, "null");
+            jsonTareaType.put(zona, "null");
+            jsonTareaType.put(ruta, "null");
+            jsonTareaType.put(marca_contador, "null");
+            jsonTareaType.put(codigo_de_localizacion, "null");
+            jsonTareaType.put(foto_antes_instalacion, "null");
+            jsonTareaType.put(foto_numero_serie, "null");
+            jsonTareaType.put(foto_lectura, "null");
+            jsonTareaType.put(foto_despues_instalacion, "null");
+            jsonTareaType.put(numero_serie_modulo, "null");
+            jsonTareaType.put(firma_cliente, "null");
+            jsonTareaType.put(lectura_ultima, "null");
+            jsonTareaType.put(lectura_actual, "null");
+            jsonTareaType.put(geolocalizacion, "null");
+            jsonTareaType.put(ubicacion_en_bateria, "null");
+            jsonTareaType.put(incidencia, "null");
+            jsonTareaType.put(foto_incidencia_1, "null");
+            jsonTareaType.put(foto_incidencia_2, "null");
+            jsonTareaType.put(foto_incidencia_3, "null");
+            jsonTareaType.put(propiedad, "null");
+            jsonTareaType.put(reparacion, "null");
+            jsonTareaType.put(numero, "null");
+            jsonTareaType.put(ruedas, "null");
+            jsonTareaType.put(date_time_modified, "null");
+            jsonTareaType.put(status_tarea, "null");
 
-            jsonTareaType_empty.put("id", 1);
-            jsonTareaType_empty.put("poblacion", "null");
-            jsonTareaType_empty.put("calle", "null");
-            jsonTareaType_empty.put("numero_edificio", "null");
-            jsonTareaType_empty.put("letra_edificio", "null");
-            jsonTareaType_empty.put("piso", "null");
-            jsonTareaType_empty.put("mano", "null");
-            jsonTareaType_empty.put("anno_de_contador", "null");
-            jsonTareaType_empty.put("numero_serie_contador", "null");
-            jsonTareaType_empty.put("tipo_tarea", "null");
-            jsonTareaType_empty.put("calibre_toma", "null");
-            jsonTareaType_empty.put("calibre_real", "null");
-            jsonTareaType_empty.put("operario", "null");
-            jsonTareaType_empty.put("emplazamiento", "null");
-            jsonTareaType_empty.put("observaciones", "null");
-            jsonTareaType_empty.put("actividad", "null");
-            jsonTareaType_empty.put("nombre_cliente", "null");
-            jsonTareaType_empty.put("numero_abonado", "null");
-            jsonTareaType_empty.put("telefonos_cliente", "null");
-            jsonTareaType_empty.put("telefono1", "null");
-            jsonTareaType_empty.put("telefono2", "null");
-            jsonTareaType_empty.put("fechas_tocado_puerta", "null");
-            jsonTareaType_empty.put("fechas_nota_aviso", "null");
-            jsonTareaType_empty.put("acceso", "null");
-            jsonTareaType_empty.put("resultado", "null");
-            jsonTareaType_empty.put("nuevo_citas", "null");
-            jsonTareaType_empty.put("fecha_hora_cita", "null");
-            jsonTareaType_empty.put("fecha_de_cambio", "null");
-            jsonTareaType_empty.put("zona", "null");
-            jsonTareaType_empty.put("ruta", "null");
-            jsonTareaType_empty.put("marca_contador", "null");
-            jsonTareaType_empty.put("codigo_de_localizacion", "null");
-            jsonTareaType_empty.put("foto_antes_instalacion", "null");
-            jsonTareaType_empty.put("foto_numero_serie", "null");
-            jsonTareaType_empty.put("foto_lectura", "null");
-            jsonTareaType_empty.put("foto_despues_instalacion", "null");
-            jsonTareaType_empty.put("numero_serie_modulo", "null");
-            jsonTareaType_empty.put("firma_cliente", "null");
-            jsonTareaType_empty.put("lectura_ultima", "null");
-            jsonTareaType_empty.put("lectura_actual", "null");
-            jsonTareaType_empty.put("geolocalizacion", "null");
-            jsonTareaType_empty.put("ubicacion_en_bateria", "null");
-            jsonTareaType_empty.put("incidencia", "null");
-            jsonTareaType_empty.put("foto_incidencia_1", "null");
-            jsonTareaType_empty.put("foto_incidencia_2", "null");
-            jsonTareaType_empty.put("foto_incidencia_3", "null");
-            jsonTareaType_empty.put("date_time_modified", "null");
-            jsonTareaType_empty.put("status_tarea", "null");
+            jsonTareaType_empty = jsonTareaType;
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -137,53 +150,58 @@ public class DBtareasController extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         if(sqLiteDatabase != null) {
             sqLiteDatabase.execSQL("Create table if not exists " + table_name + " (id integer primary key autoincrement, " +
-                    "poblacion TEXT, " +
-                    "calle TEXT, " +
-                    "numero_edificio TEXT, " +
-                    "letra_edificio TEXT, " +
-                    "piso TEXT, " +
-                    "mano TEXT, " +
-                    "anno_de_contador TEXT, " +
-                    "numero_serie_contador TEXT, " +
-                    "tipo_tarea TEXT, " +
-                    "calibre_toma TEXT, " +
-                    "calibre_real TEXT, " +
-                    "operario TEXT, " +
-                    "emplazamiento TEXT, " +
-                    "observaciones TEXT, " +
-                    "actividad TEXT, " +
-                    "nombre_cliente TEXT, " +
-                    "numero_abonado TEXT, " +
-                    "telefonos_cliente TEXT, " +
-                    "telefono1 TEXT, " +
-                    "telefono2 TEXT, " +
-                    "fechas_tocado_puerta TEXT, " +
-                    "fechas_nota_aviso TEXT, " +
-                    "acceso TEXT, " +
-                    "resultado TEXT, " +
-                    "nuevo_citas TEXT, " +
-                    "fecha_hora_cita TEXT, " +
-                    "fecha_de_cambio TEXT, " +
-                    "zona TEXT, " +
-                    "ruta TEXT, " +
-                    "marca_contador TEXT, " +
-                    "codigo_de_localizacion TEXT, " +
-                    "foto_antes_instalacion TEXT, " +
-                    "foto_numero_serie TEXT, " +
-                    "foto_lectura TEXT, " +
-                    "foto_despues_instalacion TEXT, " +
-                    "numero_serie_modulo TEXT, " +
-                    "firma_cliente TEXT, " +
-                    "lectura_ultima TEXT, " +
-                    "lectura_actual TEXT, " +
-                    "geolocalizacion INTEGER, " +
-                    "ubicacion_en_bateria TEXT, " +
-                    "incidencia TEXT, " +
-                    "foto_incidencia_1 TEXT, " +
-                    "foto_incidencia_2 TEXT, " +
-                    "foto_incidencia_3 TEXT, " +
-                    "date_time_modified TEXT, " +
-                    "status_tarea TEXT" +
+                    numero_interno+" TEXT, " +
+                    poblacion+" TEXT, " +
+                    calle+" TEXT, " +
+                    numero_edificio+" TEXT, " +
+                    letra_edificio+" TEXT, " +
+                    piso+" TEXT, " +
+                    mano+" TEXT, " +
+                    anno_de_contador+" TEXT, " +
+                    numero_serie_contador+" TEXT, " +
+                    tipo_tarea+" TEXT, " +
+                    calibre_toma+" TEXT, " +
+                    calibre_real+" TEXT, " +
+                    operario+" TEXT, " +
+                    emplazamiento+" TEXT, " +
+                    observaciones+" TEXT, " +
+                    actividad+" TEXT, " +
+                    nombre_cliente+" TEXT, " +
+                    numero_abonado+" TEXT, " +
+                    telefonos_cliente+" TEXT, " +
+                    telefono1+" TEXT, " +
+                    telefono2+" TEXT, " +
+                    fechas_tocado_puerta+" TEXT, " +
+                    fechas_nota_aviso+" TEXT, " +
+                    acceso+" TEXT, " +
+                    resultado+" TEXT, " +
+                    nuevo_citas+" TEXT, " +
+                    fecha_hora_cita+" TEXT, " +
+                    fecha_de_cambio+" TEXT, " +
+                    zona+" TEXT, " +
+                    ruta+" TEXT, " +
+                    marca_contador+" TEXT, " +
+                    codigo_de_localizacion+" TEXT, " +
+                    foto_antes_instalacion+" TEXT, " +
+                    foto_numero_serie+" TEXT, " +
+                    foto_lectura+" TEXT, " +
+                    foto_despues_instalacion+" TEXT, " +
+                    numero_serie_modulo+" TEXT, " +
+                    firma_cliente+" TEXT, " +
+                    lectura_ultima+" TEXT, " +
+                    lectura_actual+" TEXT, " +
+                    geolocalizacion+" INTEGER, " +
+                    ubicacion_en_bateria+" TEXT, " +
+                    incidencia+" TEXT, " +
+                    foto_incidencia_1+" TEXT, " +
+                    foto_incidencia_2+" TEXT, " +
+                    foto_incidencia_3+" TEXT, " +
+                    propiedad+" TEXT, " +
+                    reparacion+" TEXT, " +
+                    numero+" TEXT, " +
+                    ruedas+" TEXT, " +
+                    date_time_modified+" TEXT, " +
+                    status_tarea+" TEXT" +
                     ")");
         }
     }
@@ -344,7 +362,7 @@ public class DBtareasController extends SQLiteOpenHelper {
         }
     }
 
-    public String get_one_tarea_from_Database(String numero_serie_contador) throws JSONException {
+    public String get_one_tarea_from_Database(String numero_interno_var) throws JSONException {
 
         ArrayList<String> keys = new ArrayList<String>();
 
@@ -352,7 +370,7 @@ public class DBtareasController extends SQLiteOpenHelper {
         if(database == null){
             return "null";
         }
-        Cursor c = database.rawQuery("SELECT * FROM "+table_name+" WHERE numero_serie_contador LIKE \""+numero_serie_contador+"\";", null);
+        Cursor c = database.rawQuery("SELECT * FROM "+table_name+" WHERE "+numero_interno+" LIKE \""+ numero_interno_var +"\";", null);
 
         try {
             if(c.moveToFirst()) {
@@ -470,12 +488,12 @@ public class DBtareasController extends SQLiteOpenHelper {
         return rows;
     }
 
-    public boolean checkIfTareaExists(String serial_number){
+    public boolean checkIfTareaExists(String numero_interno_var){
         SQLiteDatabase database = this.getReadableDatabase();
         if(database == null){
             return false;
         }
-        Cursor c = database.rawQuery("SELECT * FROM "+table_name+" WHERE numero_serie_contador=\""+serial_number+"\";", null);
+        Cursor c = database.rawQuery("SELECT * FROM "+table_name+" WHERE "+numero_interno+"=\""+numero_interno_var+"\";", null);
         if (c.getCount() > 0) {
             return true;
         }else{

@@ -158,6 +158,7 @@ public class Screen_Insertar_Tarea extends AppCompatActivity implements TaskComp
         try {
             Screen_Login_Activity.tarea_JSON = team_or_personal_task_selection_screen_Activity.dBtareasController.getJsonTarea();
 
+            Screen_Login_Activity.tarea_JSON.put(DBtareasController.numero_interno, DBtareasController.getStringFromFechaHora(new Date()));
             Screen_Login_Activity.tarea_JSON.put("anno_de_contador", editText_anno_prefijo_screen_insertar_tarea.getText().toString());
             Screen_Login_Activity.tarea_JSON.put("numero_serie_contador", editText_numero_serie_screen_insertar_tarea.getText().toString());
             if(!(TextUtils.isEmpty(editText_poblacion_screen_insertar_tarea.getText().toString())))

@@ -288,6 +288,7 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
     }
 
     private String saveBitmapImage(Bitmap bitmap, String file_name){
+        bitmap = Bitmap.createScaledBitmap(bitmap, 960, 1280, true);
         File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_operarios");
         if (!myDir.exists()) {
             myDir.mkdirs();
@@ -314,7 +315,7 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
             file.delete();
         try {
             FileOutputStream out = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, MainActivity.COMPRESS_QUALITY, out);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
             out.flush();
             out.close();
         } catch (Exception e) {

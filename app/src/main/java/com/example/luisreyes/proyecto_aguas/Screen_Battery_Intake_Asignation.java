@@ -100,7 +100,7 @@ public class Screen_Battery_Intake_Asignation extends AppCompatActivity {
             public void onClick(View view) {
                 if(Screen_Login_Activity.movileModel){
                     try {
-                        dispatchTakePictureIntent(CAM_REQUEST_READ_PHOTO);
+                        dispatchTakePictureIntent(CAM_REQUEST_INST_PHOTO);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -416,6 +416,7 @@ public class Screen_Battery_Intake_Asignation extends AppCompatActivity {
     }
     private String saveBitmapImage(Bitmap bitmap, String key){
         try {
+            bitmap = Bitmap.createScaledBitmap(bitmap, 960, 1280, true);
             String numero_serie = Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador");
             String file_full_name = numero_serie+"_"+key;
             //Toast.makeText(Screen_Incidence.this,"archivo: "+file_full_name, Toast.LENGTH_LONG).show();
