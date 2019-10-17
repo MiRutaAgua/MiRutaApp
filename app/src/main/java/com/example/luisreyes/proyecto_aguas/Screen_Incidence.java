@@ -131,45 +131,58 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
         button_photo1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent_camera = new Intent(Screen_Incidence.this, Screen_Camera.class);
-                intent_camera.putExtra("photo_name", contador+"_foto_incidencia_1");
-                intent_camera.putExtra("photo_folder", "fotos_tareas");
-                intent_camera.putExtra("contador", contador);
-                startActivityForResult(intent_camera, CAM_REQUEST_1_PHOTO_FULL_SIZE);
-//                try {
-//                    dispatchTakePictureIntent(CAM_REQUEST_1_PHOTO_FULL_SIZE);
-//                } catch (JSONException e) {
-//                }
+                if(Screen_Login_Activity.movileModel){
+                    try {
+                        dispatchTakePictureIntent(CAM_REQUEST_1_PHOTO_FULL_SIZE);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                else {
+                    Intent intent_camera = new Intent(Screen_Incidence.this, Screen_Camera.class);
+                    intent_camera.putExtra("photo_name", contador + "_foto_incidencia_1");
+                    intent_camera.putExtra("photo_folder", "fotos_tareas");
+                    intent_camera.putExtra("contador", contador);
+                    startActivityForResult(intent_camera, CAM_REQUEST_1_PHOTO_FULL_SIZE);
+                }
             }
         });
         button_photo2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent_camera = new Intent(Screen_Incidence.this, Screen_Camera.class);
-                intent_camera.putExtra("photo_name", contador+"_foto_incidencia_2");
-                intent_camera.putExtra("photo_folder", "fotos_tareas");
-                intent_camera.putExtra("contador", contador);
-                startActivityForResult(intent_camera, CAM_REQUEST_2_PHOTO_FULL_SIZE);
-//                try {
-//                    dispatchTakePictureIntent(CAM_REQUEST_2_PHOTO_FULL_SIZE);
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
+                    if(Screen_Login_Activity.movileModel){
+                        try {
+                            dispatchTakePictureIntent(CAM_REQUEST_2_PHOTO_FULL_SIZE);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    else {
+                        Intent intent_camera = new Intent(Screen_Incidence.this, Screen_Camera.class);
+                        intent_camera.putExtra("photo_name", contador + "_foto_incidencia_2");
+                        intent_camera.putExtra("photo_folder", "fotos_tareas");
+                        intent_camera.putExtra("contador", contador);
+                        startActivityForResult(intent_camera, CAM_REQUEST_2_PHOTO_FULL_SIZE);
+                    }
             }
         });
         button_photo3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent_camera = new Intent(Screen_Incidence.this, Screen_Camera.class);
-                intent_camera.putExtra("photo_name", contador+"_foto_incidencia_3");
-                intent_camera.putExtra("photo_folder", "fotos_tareas");
-                intent_camera.putExtra("contador", contador);
-                startActivityForResult(intent_camera, CAM_REQUEST_3_PHOTO_FULL_SIZE);
-//                try {
-//                    dispatchTakePictureIntent(CAM_REQUEST_3_PHOTO_FULL_SIZE);
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
+                if(Screen_Login_Activity.movileModel){
+                    try {
+                        dispatchTakePictureIntent(CAM_REQUEST_3_PHOTO_FULL_SIZE);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                else {
+                    Intent intent_camera = new Intent(Screen_Incidence.this, Screen_Camera.class);
+                    intent_camera.putExtra("photo_name", contador + "_foto_incidencia_3");
+                    intent_camera.putExtra("photo_folder", "fotos_tareas");
+                    intent_camera.putExtra("contador", contador);
+                    startActivityForResult(intent_camera, CAM_REQUEST_3_PHOTO_FULL_SIZE);
+                }
             }
         });
 
@@ -240,44 +253,113 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
         super.onActivityResult(requestCode, resultCode, data);
 
         if(resultCode == RESULT_OK) {
-            if (requestCode == CAM_REQUEST_1_PHOTO_FULL_SIZE) {
-                if (!TextUtils.isEmpty(data.getStringExtra("photo_path")) && data.getStringExtra("photo_path") != null) {
-                    mCurrentPhotoPath_incidencia_1 = data.getStringExtra("photo_path");
-                    Bitmap bitmap = getPhotoUserLocal(mCurrentPhotoPath_incidencia_1);
-                    if(bitmap!=null) {
-                        photo1.setVisibility(View.VISIBLE);
-                        photo1.setImageBitmap(getPhotoUserLocal(mCurrentPhotoPath_incidencia_1));
+            if(Screen_Login_Activity.movileModel) {
+                if (requestCode == CAM_REQUEST_1_PHOTO_FULL_SIZE) {
+                    Bitmap bitmap = null;
+                    bitmap = getPhotoUserLocal(mCurrentPhotoPath_incidencia_1);
+                    if (bitmap != null) {
+                        String filename = saveBitmapImage(bitmap, "foto_incidencia_1");
+                        if (filename != null && !filename.isEmpty() && !filename.equals("null")) {
+                            mCurrentPhotoPath_incidencia_1 = filename;
+                            bitmap = null;
+                            bitmap = getPhotoUserLocal(mCurrentPhotoPath_incidencia_1);
+                            if (bitmap != null) {
+                                photo1.setVisibility(View.VISIBLE);
+                                photo1.setImageBitmap(bitmap);
+                            } else {
+                                Toast.makeText(this, "No se encuentra foto luego de cambiar nombre: " + mCurrentPhotoPath_incidencia_1, Toast.LENGTH_LONG).show();
+                            }
+                        } else {
+                            Toast.makeText(this, "No se encuentra archivo fotoe: " + filename, Toast.LENGTH_LONG).show();
+                        }
+                    } else {
+                        Toast.makeText(this, "No se encuentra foto: " + mCurrentPhotoPath_incidencia_1, Toast.LENGTH_LONG).show();
                     }
                 }
+                if (requestCode == CAM_REQUEST_2_PHOTO_FULL_SIZE) {
+                    Bitmap bitmap = null;
+                    bitmap = getPhotoUserLocal(mCurrentPhotoPath_incidencia_2);
+                    if (bitmap != null) {
+                        String filename = saveBitmapImage(bitmap, "foto_incidencia_2");
+                        if (filename != null && !filename.isEmpty() && !filename.equals("null")) {
+                            mCurrentPhotoPath_incidencia_2 = filename;
+                            bitmap = null;
+                            bitmap = getPhotoUserLocal(mCurrentPhotoPath_incidencia_2);
+                            if (bitmap != null) {
+                                photo2.setVisibility(View.VISIBLE);
+                                photo2.setImageBitmap(bitmap);
+                            } else {
+                                Toast.makeText(this, "No se encuentra foto luego de cambiar nombre: " + mCurrentPhotoPath_incidencia_2, Toast.LENGTH_LONG).show();
+                            }
+                        } else {
+                            Toast.makeText(this, "No se encuentra archivo fotoe: " + filename, Toast.LENGTH_LONG).show();
+                        }
+                    } else {
+                        Toast.makeText(this, "No se encuentra foto: " + mCurrentPhotoPath_incidencia_2, Toast.LENGTH_LONG).show();
+                    }
+                }
+                if (requestCode == CAM_REQUEST_3_PHOTO_FULL_SIZE) {
+                    Bitmap bitmap = null;
+                    bitmap = getPhotoUserLocal(mCurrentPhotoPath_incidencia_3);
+                    if (bitmap != null) {
+                        String filename = saveBitmapImage(bitmap, "foto_incidencia_3");
+                        if (filename != null && !filename.isEmpty() && !filename.equals("null")) {
+                            mCurrentPhotoPath_incidencia_3 = filename;
+                            bitmap = null;
+                            bitmap = getPhotoUserLocal(mCurrentPhotoPath_incidencia_3);
+                            if (bitmap != null) {
+                                photo3.setVisibility(View.VISIBLE);
+                                photo3.setImageBitmap(bitmap);
+                            } else {
+                                Toast.makeText(this, "No se encuentra foto luego de cambiar nombre: " + mCurrentPhotoPath_incidencia_3, Toast.LENGTH_LONG).show();
+                            }
+                        } else {
+                            Toast.makeText(this, "No se encuentra archivo fotoe: " + filename, Toast.LENGTH_LONG).show();
+                        }
+                    } else {
+                        Toast.makeText(this, "No se encuentra foto: " + mCurrentPhotoPath_incidencia_3, Toast.LENGTH_LONG).show();
+                    }
+                }
+            }else {
+                if (requestCode == CAM_REQUEST_1_PHOTO_FULL_SIZE) {
+                    if (!TextUtils.isEmpty(data.getStringExtra("photo_path")) && data.getStringExtra("photo_path") != null) {
+                        mCurrentPhotoPath_incidencia_1 = data.getStringExtra("photo_path");
+                        Bitmap bitmap = getPhotoUserLocal(mCurrentPhotoPath_incidencia_1);
+                        if (bitmap != null) {
+                            photo1.setVisibility(View.VISIBLE);
+                            photo1.setImageBitmap(getPhotoUserLocal(mCurrentPhotoPath_incidencia_1));
+                        }
+                    }
 //            mCurrentPhotoPath_incidencia_1 = saveBitmapImage(getPhotoUserLocal(mCurrentPhotoPath_incidencia_1), "foto_incidencia_1");
 //            photo1.setVisibility(View.VISIBLE);
 //            photo1.setImageBitmap(getPhotoUserLocal(mCurrentPhotoPath_incidencia_1));
-            }
-            if (requestCode == CAM_REQUEST_2_PHOTO_FULL_SIZE) {
-                if (!TextUtils.isEmpty(data.getStringExtra("photo_path")) && data.getStringExtra("photo_path") != null) {
-                    mCurrentPhotoPath_incidencia_2 = data.getStringExtra("photo_path");
-                    Bitmap bitmap = getPhotoUserLocal(mCurrentPhotoPath_incidencia_2);
-                    if(bitmap!=null) {
-                        photo2.setVisibility(View.VISIBLE);
-                        photo2.setImageBitmap(getPhotoUserLocal(mCurrentPhotoPath_incidencia_2));
-                    }
                 }
+                if (requestCode == CAM_REQUEST_2_PHOTO_FULL_SIZE) {
+                    if (!TextUtils.isEmpty(data.getStringExtra("photo_path")) && data.getStringExtra("photo_path") != null) {
+                        mCurrentPhotoPath_incidencia_2 = data.getStringExtra("photo_path");
+                        Bitmap bitmap = getPhotoUserLocal(mCurrentPhotoPath_incidencia_2);
+                        if (bitmap != null) {
+                            photo2.setVisibility(View.VISIBLE);
+                            photo2.setImageBitmap(getPhotoUserLocal(mCurrentPhotoPath_incidencia_2));
+                        }
+                    }
 //                mCurrentPhotoPath_incidencia_2 = saveBitmapImage(getPhotoUserLocal(mCurrentPhotoPath_incidencia_2), "foto_incidencia_2");
 //                photo2.setVisibility(View.VISIBLE);
 //                photo2.setImageBitmap(getPhotoUserLocal(mCurrentPhotoPath_incidencia_2));
-            }
-            if (requestCode == CAM_REQUEST_3_PHOTO_FULL_SIZE) {
-                if (!TextUtils.isEmpty(data.getStringExtra("photo_path")) && data.getStringExtra("photo_path") != null) {
-                    mCurrentPhotoPath_incidencia_3 = data.getStringExtra("photo_path");
-                    Bitmap bitmap = getPhotoUserLocal(mCurrentPhotoPath_incidencia_3);
-                    if(bitmap!=null) {
-                        photo3.setVisibility(View.VISIBLE);
-                        photo3.setImageBitmap(bitmap);
-                    }
                 }
+                if (requestCode == CAM_REQUEST_3_PHOTO_FULL_SIZE) {
+                    if (!TextUtils.isEmpty(data.getStringExtra("photo_path")) && data.getStringExtra("photo_path") != null) {
+                        mCurrentPhotoPath_incidencia_3 = data.getStringExtra("photo_path");
+                        Bitmap bitmap = getPhotoUserLocal(mCurrentPhotoPath_incidencia_3);
+                        if (bitmap != null) {
+                            photo3.setVisibility(View.VISIBLE);
+                            photo3.setImageBitmap(bitmap);
+                        }
+                    }
 //                mCurrentPhotoPath_incidencia_3 = saveBitmapImage(getPhotoUserLocal(mCurrentPhotoPath_incidencia_3), "foto_incidencia_3");
 //                photo3.setVisibility(View.VISIBLE);
 //                photo3.setImageBitmap(getPhotoUserLocal(mCurrentPhotoPath_incidencia_3));
+                }
             }
         }
     }

@@ -831,10 +831,59 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         }
     }
 
+//    private void dispatchTakePictureIntent(int request) throws JSONException {
+//        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        // Ensure that there's a camera activity to handle the intent
+//        //if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+//            // Create the File where the photo should go
+//            File photoFile = null;
+//            try {
+//                if(request == CAM_REQUEST_INST_PHOTO){
+//                    photoFile = createImageFile("foto_antes_instalacion");
+//                }
+//                else if(request == CAM_REQUEST_SN_PHOTO){
+//                    photoFile = createImageFile("foto_numero_serie");
+//                }
+//                else if(request == CAM_REQUEST_READ_PHOTO){
+//                    photoFile = createImageFile("foto_lectura");
+//                }
+//                else if(request == CAM_REQUEST_AFT_INT_PHOTO){
+//                    photoFile = createImageFile("foto_despues_instalacion");
+//                }
+//            } catch (IOException ex) {
+//                // Error occurred while creating the File
+//                Toast.makeText(this, "No se pudo crear el archivo", Toast.LENGTH_LONG).show();
+//            }
+//            // Continue only if the File was successfully created
+//            Camera camera = Camera.open();
+//            Camera.Parameters params = camera.getParameters();
+//            List<Camera.Size> sizes = params.getSupportedPictureSizes();
+//
+//            Toast.makeText(this, String.valueOf(sizes.get(sizes.size()-3).height) + "  " + String.valueOf(sizes.get(sizes.size()-3).width), Toast.LENGTH_LONG).show();
+//
+//            if (photoFile != null) {
+//                Uri photoURI = FileProvider.getUriForFile(this,
+//                        "com.example.luisreyes.proyecto_aguas.fileprovider",
+//                        photoFile);
+//                //takePictureIntent.setType("image/*");
+//                takePictureIntent.putExtra("crop", true);
+//                takePictureIntent.putExtra("outputX", 240);
+//                takePictureIntent.putExtra("outputY", 320);
+////                takePictureIntent.putExtra("aspectX", 1);
+////                takePictureIntent.putExtra("aspectY", 1);
+//                takePictureIntent.putExtra("scale", true);
+//                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+//                takePictureIntent.putExtra("outputFormat",
+//                        Bitmap.CompressFormat.JPEG.toString());
+//                startActivityForResult(takePictureIntent, request);
+//            }
+//        //}
+//    }
+
     private void dispatchTakePictureIntent(int request) throws JSONException {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
-        //if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             // Create the File where the photo should go
             File photoFile = null;
             try {
@@ -855,31 +904,15 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                 Toast.makeText(this, "No se pudo crear el archivo", Toast.LENGTH_LONG).show();
             }
             // Continue only if the File was successfully created
-            Camera camera = Camera.open();
-            Camera.Parameters params = camera.getParameters();
-            List<Camera.Size> sizes = params.getSupportedPictureSizes();
-
-            Toast.makeText(this, String.valueOf(sizes.get(sizes.size()-3).height) + "  " + String.valueOf(sizes.get(sizes.size()-3).width), Toast.LENGTH_LONG).show();
-
             if (photoFile != null) {
                 Uri photoURI = FileProvider.getUriForFile(this,
                         "com.example.luisreyes.proyecto_aguas.fileprovider",
                         photoFile);
-                //takePictureIntent.setType("image/*");
-                takePictureIntent.putExtra("crop", true);
-                takePictureIntent.putExtra("outputX", 240);
-                takePictureIntent.putExtra("outputY", 320);
-//                takePictureIntent.putExtra("aspectX", 1);
-//                takePictureIntent.putExtra("aspectY", 1);
-                takePictureIntent.putExtra("scale", true);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                takePictureIntent.putExtra("outputFormat",
-                        Bitmap.CompressFormat.JPEG.toString());
                 startActivityForResult(takePictureIntent, request);
             }
-        //}
+        }
     }
-
     private File createImageFile(String foto_x) throws IOException, JSONException {
         // Create an image file name
 
