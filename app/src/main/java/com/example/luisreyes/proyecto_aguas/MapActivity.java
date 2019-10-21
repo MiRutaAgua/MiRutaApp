@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
  * Created by luis.reyes on 08/10/2019.
  */
 
-public class MapsActivity extends AppCompatActivity {
+public class MapActivity extends AppCompatActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

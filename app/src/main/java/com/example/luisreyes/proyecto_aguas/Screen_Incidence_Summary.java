@@ -296,7 +296,21 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
     }
     public void saveData() {
         try {
-            Screen_Login_Activity.tarea_JSON.put(DBtareasController.status_tarea,"DONE");
+            String status_tarea = Screen_Login_Activity.tarea_JSON.getString(
+                    DBtareasController.status_tarea);
+            if(status_tarea.contains("TO_UPLOAD")) {
+                try {
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.status_tarea, "DONE,TO_UPLOAD");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }else{
+                try {
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.status_tarea, "DONE");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -308,11 +322,6 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
             BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Incidence_Summary.this);
             backgroundWorker.execute(type);
         } else{
-            try {
-                Screen_Login_Activity.tarea_JSON.put(DBtareasController.status_tarea,"DONE,TO_UPLOAD");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
             boolean error=saveTaskLocal();
             if(!error)
                 Toast.makeText(Screen_Incidence_Summary.this, "No hay conexion se guardaron los datos en el telefono", Toast.LENGTH_LONG).show();

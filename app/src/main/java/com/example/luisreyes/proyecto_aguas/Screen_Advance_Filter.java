@@ -126,6 +126,7 @@ public class Screen_Advance_Filter extends AppCompatActivity {
 
         mapaTiposDeTarea = new HashMap<>();
         mapaTiposDeTarea.put("", "NUEVO CONTADOR INSTALAR");
+        mapaTiposDeTarea.put("NCI", "NUEVO CONTADOR INSTALAR");
         mapaTiposDeTarea.put("U", "USADO CONTADOR INSTALAR");
         mapaTiposDeTarea.put("T", "BAJA O CORTE DE SUMINISTRO");
         mapaTiposDeTarea.put("LFTD", "LIMPIEZA DE FILTRO Y TOMA DE DATOS");
@@ -422,7 +423,8 @@ public class Screen_Advance_Filter extends AppCompatActivity {
                                                 Screen_Login_Activity.tarea_JSON = jsonObject;
                                                 try {
                                                     if(Screen_Login_Activity.tarea_JSON!=null) {
-                                                        if (Screen_Login_Activity.tarea_JSON.getString("operario").equals(Screen_Login_Activity.operario_JSON.getString("usuario"))) {
+                                                        if (Screen_Login_Activity.tarea_JSON.getString(DBtareasController.operario).
+                                                                equals(Screen_Login_Activity.operario_JSON.getString("usuario"))) {
                                                             acceder_a_Tarea();//revisar esto
                                                         } else {
                                                             new AlertDialog.Builder(Screen_Advance_Filter.this)
@@ -432,7 +434,9 @@ public class Screen_Advance_Filter extends AppCompatActivity {
                                                                         @Override
                                                                         public void onClick(DialogInterface dialogInterface, int i) {
                                                                             try {
-                                                                                Screen_Login_Activity.tarea_JSON.put("operario", Screen_Login_Activity.operario_JSON.getString("usuario").replace("\n", ""));
+                                                                                Screen_Login_Activity.tarea_JSON.put(DBtareasController.operario,
+                                                                                        Screen_Login_Activity.operario_JSON.getString("usuario").
+                                                                                                replace("\n", ""));
                                                                             } catch (JSONException e) {
                                                                                 Toast.makeText(Screen_Advance_Filter.this, "Error -> No pudo asignarse tarea a este operario", Toast.LENGTH_SHORT).show();
                                                                                 e.printStackTrace();
@@ -481,9 +485,39 @@ public class Screen_Advance_Filter extends AppCompatActivity {
         cargarTodasEnLista();
     }
 
+    public static String getBis(JSONObject jsonObject){
+        String Bis="";
+        String numero_edificio = "";
+        String letra_edificio = "";
+        String piso = "";
+        String mano = "";
+        try {
+            numero_edificio= jsonObject.getString(DBtareasController.numero_edificio).replace(" ","").replace("\n","");
+            if(numero_edificio.equals(null)){
+                numero_edificio = "";
+            }
+            letra_edificio= jsonObject.getString(DBtareasController.letra_edificio).replace(" ","").replace("\n","");
+            if(letra_edificio.equals(null)){
+                letra_edificio = "";
+            }
+            piso= jsonObject.getString(DBtareasController.piso).replace(" ","").replace("\n","");
+            if(piso.equals(null)){
+                piso = "";
+            }
+            mano= jsonObject.getString(DBtareasController.mano).replace(" ","").replace("\n","");
+            if(mano.equals(null)){
+                mano = "";
+            }
+            Bis = numero_edificio + letra_edificio + piso + mano;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return "";
+        }
+        return Bis;
+    }
     private void acceder_a_Tarea(){
         try {
-            String acceso = Screen_Login_Activity.tarea_JSON.getString("acceso");
+            String acceso = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.acceso);
             acceso = acceso.replace("\n", "");
             acceso = acceso.replace(" ", "");
             //Toast.makeText(Screen_Table_Team.this, "Acceso -> \n"+acceso, Toast.LENGTH_SHORT).show();
@@ -505,7 +539,7 @@ public class Screen_Advance_Filter extends AppCompatActivity {
             try {
                 JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.
                         dBtareasController.get_one_tarea_from_Database(i));
-                String nombre_cliente = jsonObject.getString("nombre_cliente").replace("\n","");
+                String nombre_cliente = jsonObject.getString(DBtareasController.nombre_cliente).replace("\n","");
                 if(!nombre_cliente.equals("null") && !nombre_cliente.isEmpty()
                         && nombre_cliente.contains(nombre_o_empresa_selected.replace("\n",""))){
                     lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
@@ -521,8 +555,8 @@ public class Screen_Advance_Filter extends AppCompatActivity {
             try {
                 JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.
                         dBtareasController.get_one_tarea_from_Database(i));
-                String telefono1 = jsonObject.getString("telefono1").replace("\n","").replace(" ","");
-                String telefono2 = jsonObject.getString("telefono2").replace("\n","").replace(" ","");
+                String telefono1 = jsonObject.getString(DBtareasController.telefono1).replace("\n","").replace(" ","");
+                String telefono2 = jsonObject.getString(DBtareasController.telefono2).replace("\n","").replace(" ","");
                 String telefonos = "";
                 if(!telefono1.equals("null") && !telefono1.isEmpty()) {
                     telefonos = "Tel1: " + telefono1 + "   ";
@@ -547,7 +581,7 @@ public class Screen_Advance_Filter extends AppCompatActivity {
             try {
                 JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.
                         dBtareasController.get_one_tarea_from_Database(i));
-                String nombre_cliente = jsonObject.getString("nombre_cliente").replace("\n","");
+                String nombre_cliente = jsonObject.getString(DBtareasController.nombre_cliente).replace("\n","");
                 if(!nombre_cliente.equals("null") && !nombre_cliente.isEmpty()){
                     if(!lista_desplegable.contains(nombre_cliente)) {
                         lista_desplegable.add(nombre_cliente);
@@ -581,8 +615,8 @@ public class Screen_Advance_Filter extends AppCompatActivity {
             try {
                 JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.
                         dBtareasController.get_one_tarea_from_Database(i));
-                String telefono1 = jsonObject.getString("telefono1").replace("\n","").replace(" ","");
-                String telefono2 = jsonObject.getString("telefono2").replace("\n","").replace(" ","");
+                String telefono1 = jsonObject.getString(DBtareasController.telefono1).replace("\n","").replace(" ","");
+                String telefono2 = jsonObject.getString(DBtareasController.telefono2).replace("\n","").replace(" ","");
                 String telefonos = "";
                 if(!telefono1.equals("null") && !telefono1.isEmpty()) {
                     telefonos = "Tel1: " + telefono1 + "   ";
@@ -612,7 +646,7 @@ public class Screen_Advance_Filter extends AppCompatActivity {
             try {
                 JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.
                         dBtareasController.get_one_tarea_from_Database(i));
-                String serie = jsonObject.getString("numero_serie_contador").replace("\n","").replace(" ","");
+                String serie = jsonObject.getString(DBtareasController.numero_serie_contador).replace("\n","").replace(" ","");
                 if(!serie.equals("null") && !serie.isEmpty() && serie.contains(serie_selected.replace("\n",""))){
                     lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
                 }
@@ -627,7 +661,7 @@ public class Screen_Advance_Filter extends AppCompatActivity {
             try {
                 JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.
                         dBtareasController.get_one_tarea_from_Database(i));
-                String abonados = jsonObject.getString("numero_abonado").replace("\n","").replace(" ","");
+                String abonados = jsonObject.getString(DBtareasController.numero_abonado).replace("\n","").replace(" ","");
                 if(!abonados.equals("null") && !abonados.isEmpty() && abonados.contains(numero_selected.replace("\n",""))){
                     lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
                 }
@@ -643,7 +677,7 @@ public class Screen_Advance_Filter extends AppCompatActivity {
             try {
                 JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.
                         dBtareasController.get_one_tarea_from_Database(i));
-                String abonados = jsonObject.getString("numero_abonado").replace("\n","").replace(" ","");
+                String abonados = jsonObject.getString(DBtareasController.numero_abonado).replace("\n","").replace(" ","");
                 if(!abonados.equals("null") && !abonados.isEmpty()){
                     if(!lista_desplegable.contains(abonados)) {
                         lista_desplegable.add(abonados);
@@ -667,7 +701,7 @@ public class Screen_Advance_Filter extends AppCompatActivity {
             try {
                 JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.
                         dBtareasController.get_one_tarea_from_Database(i));
-                String serie = jsonObject.getString("numero_serie_contador").replace("\n","").replace(" ","");
+                String serie = jsonObject.getString(DBtareasController.numero_serie_contador).replace("\n","").replace(" ","");
                 if(!serie.equals("null") && !serie.isEmpty()){
                     if(!lista_desplegable.contains(serie)) {
                         lista_desplegable.add(serie);
@@ -690,9 +724,9 @@ public class Screen_Advance_Filter extends AppCompatActivity {
             try {
                 JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.
                         dBtareasController.get_one_tarea_from_Database(i));
-                String tipo_tarea = jsonObject.getString("tipo_tarea").
+                String tipo_tarea = jsonObject.getString(DBtareasController.tipo_tarea).
                         replace(" ","").replace("\n","");
-                String calibre = jsonObject.getString("calibre_toma").
+                String calibre = jsonObject.getString(DBtareasController.calibre_toma).
                         replace(" ","").replace("\n","");
 
                 if(mapaTiposDeTarea.containsKey(tipo_tarea)) {
@@ -712,8 +746,8 @@ public class Screen_Advance_Filter extends AppCompatActivity {
             try {
                 JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.
                         dBtareasController.get_one_tarea_from_Database(i));
-                String tipo_tarea = jsonObject.getString("tipo_tarea").replace("\n","").replace(" ","");
-                String calibre = jsonObject.getString("calibre_toma").replace("\n","").replace(" ","");
+                String tipo_tarea = jsonObject.getString(DBtareasController.tipo_tarea).replace("\n","").replace(" ","");
+                String calibre = jsonObject.getString(DBtareasController.calibre_toma).replace("\n","").replace(" ","");
                 if((tipo_tarea.equals("null") && calibre.isEmpty()) || (tipo_tarea.isEmpty() && calibre.isEmpty())
                         || (tipo_tarea.isEmpty() && calibre.equals("null")) || (tipo_tarea.equals("null") && calibre.equals("null"))  ){
                 }else {
@@ -744,8 +778,8 @@ public class Screen_Advance_Filter extends AppCompatActivity {
             try {
                 JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.
                         dBtareasController.get_one_tarea_from_Database(i));
-                String tipo_tarea = jsonObject.getString("tipo_tarea").replace("\n","").replace(" ","");
-                String calibre = jsonObject.getString("calibre_toma").replace("\n","").replace(" ","");
+                String tipo_tarea = jsonObject.getString(DBtareasController.tipo_tarea).replace("\n","").replace(" ","");
+                String calibre = jsonObject.getString(DBtareasController.calibre_toma).replace("\n","").replace(" ","");
                 if((tipo_tarea.equals("null") && calibre.isEmpty()) || (tipo_tarea.isEmpty() && calibre.isEmpty())
                         || (tipo_tarea.isEmpty() && calibre.equals("null")) || (tipo_tarea.equals("null") && calibre.equals("null"))  ){
                 }else {
@@ -782,15 +816,14 @@ public class Screen_Advance_Filter extends AppCompatActivity {
             try {
                 JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.
                         dBtareasController.get_one_tarea_from_Database(i));
-                String poblacion = jsonObject.getString("poblacion").
+                String poblacion = jsonObject.getString(DBtareasController.poblacion).
                         replace(" ","").replace("\n","");
                 poblacion_selected = poblacion_selected.replace(" ","").replace("\n","");
-                String calle = jsonObject.getString("calle").
+                String calle = jsonObject.getString(DBtareasController.calle).
                         replace(" ","").replace("\n","");
                 calle_selected = calle_selected.replace(" ","").replace("\n","");
 
-                String Bis = jsonObject.getString("numero_edificio").replace(" ","").replace("\n","")
-                        +jsonObject.getString("letra_edificio").replace(" ","").replace("\n","");
+                String Bis = getBis(jsonObject);
                 if(poblacion.equals(poblacion_selected) && calle.equals(calle_selected) && Bis.equals(bis_selected.replace("\n",""))){
                     lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
                 }
@@ -806,7 +839,7 @@ public class Screen_Advance_Filter extends AppCompatActivity {
             try {
                 JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.
                         dBtareasController.get_one_tarea_from_Database(i));
-                String poblacion = jsonObject.getString("poblacion").replace("\n","");
+                String poblacion = jsonObject.getString(DBtareasController.poblacion).replace("\n","");
                 if(!poblacion.equals("null") && !poblacion.isEmpty()){
                     if(!lista_desplegable.contains(poblacion)) {
                         lista_desplegable.add(poblacion);
@@ -829,10 +862,10 @@ public class Screen_Advance_Filter extends AppCompatActivity {
             try {
                 JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.
                         dBtareasController.get_one_tarea_from_Database(i));
-                String poblacion = jsonObject.getString("poblacion").replace("\n","").replace(" ", "");
+                String poblacion = jsonObject.getString(DBtareasController.poblacion).replace("\n","").replace(" ", "");
                 if(!poblacion.equals("null") && !poblacion.isEmpty()){
                     if(poblacion.equals(poblacion_item.replace(" ", ""))) {
-                        String calle = jsonObject.getString("calle");
+                        String calle = jsonObject.getString(DBtareasController.calle);
                         if (!calle.equals("null") && !calle.isEmpty()) {
                             if(!lista_desplegable.contains(calle)) {
                                 lista_desplegable.add(calle);
@@ -858,15 +891,14 @@ public class Screen_Advance_Filter extends AppCompatActivity {
             try {
                 JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.
                         dBtareasController.get_one_tarea_from_Database(i));
-                String poblacion = jsonObject.getString("poblacion").
+                String poblacion = jsonObject.getString(DBtareasController.poblacion).
                         replace(" ","").replace("\n","");
-                String calle = jsonObject.getString("calle").
+                String calle = jsonObject.getString(DBtareasController.calle).
                         replace(" ","").replace("\n","");;
 
                 if(!poblacion.equals("null") && !poblacion.isEmpty() && !calle.equals("null") && !calle.isEmpty()){
                     if(poblacion.equals(poblacion_item.replace(" ", "")) && calle.equals(calle_item.replace(" ", "")) ) {
-                        String Bis = jsonObject.getString("numero_edificio").replace(" ","").replace("\n","")
-                                +jsonObject.getString("letra_edificio").replace(" ","").replace("\n","");
+                        String Bis = getBis(jsonObject);
                         if (!Bis.contains("null") && !Bis.isEmpty() ){
                             if(!lista_desplegable.contains(Bis)) {
                                 lista_desplegable.add(Bis);
@@ -949,7 +981,7 @@ public class Screen_Advance_Filter extends AppCompatActivity {
                             +" Abonado:  "+lista_ordenada_de_tareas_inicial.get(i).getAbonado());
                     lista_filtro_Tareas.add("\n      Tarea:  "+lista_ordenada_de_tareas_inicial.get(i).getTipo_tarea()+"   Calibre:  "+lista_ordenada_de_tareas_inicial.get(i).getCalibre()
                             +"Abonado:  "+lista_ordenada_de_tareas_inicial.get(i).getAbonado());
-                    lista_filtro_abonado.add("\n   Abonado:  "+lista_ordenada_de_tareas_inicial.get(i).getAbonado()+"Telefono 1:  "+lista_ordenada_de_tareas_inicial.get(i).getTelefono1()
+                    lista_filtro_abonado.add("\n  Abonado:  "+lista_ordenada_de_tareas_inicial.get(i).getAbonado()+"Telefono 1:  "+lista_ordenada_de_tareas_inicial.get(i).getTelefono1()
                             +"Telefono 2:  "+lista_ordenada_de_tareas_inicial.get(i).getTelefono2());
                     lista_filtro_numero_serie.add("\n       Número de Serie:  "+lista_ordenada_de_tareas_inicial.get(i).getNumero_serie_contador()
                             +"\n              Año o Prefijo:  "+lista_ordenada_de_tareas_inicial.get(i).getAnno_contador()
@@ -962,6 +994,7 @@ public class Screen_Advance_Filter extends AppCompatActivity {
             }
         }
     }
+    
 
     public void openMessage(String title, String hint){
         MessageDialog messageDialog = new MessageDialog();

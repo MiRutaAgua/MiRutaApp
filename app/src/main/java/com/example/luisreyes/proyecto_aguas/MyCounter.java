@@ -12,24 +12,6 @@ public class MyCounter implements Comparable<MyCounter> {
     private String contador;
     private String direccion;
     private String tipo_tarea;
-
-    public String getTipo_tarea() {
-        return tipo_tarea;
-    }
-
-    public void setTipo_tarea(String tipo_tarea) {
-        this.tipo_tarea = tipo_tarea;
-    }
-
-    public String getNumero_interno() {
-        return numero_interno;
-    }
-
-    public void setNumero_interno(String numero_interno) {
-        if(!numero_interno.isEmpty())
-            this.numero_interno = numero_interno;
-    }
-
     private String numero_interno = null;
     private String cita;
     private String abonado;
@@ -40,6 +22,27 @@ public class MyCounter implements Comparable<MyCounter> {
     private String telefono2;
     private String fecha_cita;
     private String numero_abonado;
+
+    public String getTipo_tarea() {
+        return tipo_tarea;
+    }
+
+    public void setTipo_tarea(String tipo_tarea) {
+        if(!tipo_tarea.contains("NULL") && !tipo_tarea.contains("null")) {
+            this.tipo_tarea = tipo_tarea;
+        }else{
+            this.tipo_tarea = "";
+        }
+    }
+
+    public String getNumero_interno() {
+        return numero_interno;
+    }
+
+    public void setNumero_interno(String numero_interno) {
+        if(!numero_interno.isEmpty())
+            this.numero_interno = numero_interno;
+    }
 
     public String getNumero_abonado() {
         return numero_abonado;
@@ -77,7 +80,19 @@ public class MyCounter implements Comparable<MyCounter> {
         return calibre;
     }
     public void setCalibre(String calibre) {
-        this.calibre = calibre.replace("\n","").replace(" ","")+" mm\n";
+        if(!calibre.contains("NULL") && !calibre.contains("null")) {
+            this.calibre = calibre.replace("\n", "").replace(" ", "") + " mm\n";
+            if(tipo_tarea.replace("NULL", "").replace("null", "")
+                    .replace("\n", "").replace(" ", "").isEmpty()){
+                tipo_tarea = "NCI\n";
+            }
+        }else{
+            this.calibre = "-\n";
+            if(tipo_tarea.replace("NULL", "").replace("null", "")
+                    .replace("\n", "").replace(" ", "").isEmpty()){
+                tipo_tarea = "-\n";
+            }
+        }
     }
     public String getTelefono1() {
         return telefono1;

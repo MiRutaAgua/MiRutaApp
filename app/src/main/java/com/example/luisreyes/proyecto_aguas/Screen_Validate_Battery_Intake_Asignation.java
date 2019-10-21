@@ -105,12 +105,12 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
                 foto_lectura.setVisibility(View.VISIBLE);
                 foto_lectura.setImageBitmap(foto_lectura_bitmap);
             }
-            numero_serie.setText(Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador"));
-            lectura_anterior.setText(Screen_Login_Activity.tarea_JSON.getString("lectura_ultima"));
-            lectura_ultima.setText(Screen_Login_Activity.tarea_JSON.getString("lectura_actual"));
-            numero_serie_nuevo.setText(Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador"));
-            observaciones.setText(Screen_Login_Activity.tarea_JSON.getString("observaciones"));
-            ubicacion.setText(Screen_Login_Activity.tarea_JSON.getString("ubicacion_en_bateria"));
+            numero_serie.setText(Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador));
+            lectura_anterior.setText(Screen_Login_Activity.tarea_JSON.getString(DBtareasController.lectura_ultima));
+            lectura_ultima.setText(Screen_Login_Activity.tarea_JSON.getString(DBtareasController.lectura_actual));
+            numero_serie_nuevo.setText(Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador));
+            observaciones.setText(Screen_Login_Activity.tarea_JSON.getString(DBtareasController.observaciones));
+            ubicacion.setText(Screen_Login_Activity.tarea_JSON.getString(DBtareasController.ubicacion_en_bateria));
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(Screen_Validate_Battery_Intake_Asignation.this, "No se pudo insetar datos en JSON tarea", Toast.LENGTH_LONG).show();
@@ -145,11 +145,12 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 try {
-                    Screen_Login_Activity.tarea_JSON.put("date_time_modified", DBtareasController.getStringFromFechaHora(new Date()));
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.date_time_modified, DBtareasController.getStringFromFechaHora(new Date()));
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Toast.makeText(Screen_Validate_Battery_Intake_Asignation.this, "Error date_time_modified "+e.toString(), Toast.LENGTH_LONG).show();
                 }
+
                 String ultima = lectura_anterior.getText().toString();
                 String actual = lectura_ultima.getText().toString();
                 if(!ultima.isEmpty() && !ultima.equals("null") && ultima!=null){
@@ -157,8 +158,8 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
                     Integer actualInt = Integer.parseInt(actual);
                     if(actualInt > ultimaInt){
                         try {
-                            Screen_Login_Activity.tarea_JSON.put("lectura_ultima", ultima);
-                            Screen_Login_Activity.tarea_JSON.put("lectura_actual", actual);
+                            Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_ultima, ultima);
+                            Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_actual, actual);
                             saveData();
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -169,7 +170,7 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
                     }
                 }else{
                     try {
-                        Screen_Login_Activity.tarea_JSON.put("lectura_actual", actual);
+                        Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_actual, actual);
                         saveData();
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -182,6 +183,25 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
     }
 
     public void saveData() {
+        try {
+            String status_tarea = Screen_Login_Activity.tarea_JSON.getString(
+                    DBtareasController.status_tarea);
+            if(status_tarea.contains("TO_UPLOAD")) {
+                try {
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.status_tarea, "DONE,TO_UPLOAD");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }else{
+                try {
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.status_tarea, "DONE");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         boolean error=false;
         if(team_or_personal_task_selection_screen_Activity.dBtareasController != null) {
             try {
@@ -238,25 +258,25 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
         if(current_tag.contains("observaciones")) {
             if (!(TextUtils.isEmpty(wrote_string))) {
 
-                Screen_Login_Activity.tarea_JSON.put("observaciones", wrote_string);
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.observaciones, wrote_string);
                 observaciones.setText(wrote_string);
             }
         }else if(current_tag.contains("Número de Serie")){
             if (!(TextUtils.isEmpty(wrote_string))) {
 
-                Screen_Login_Activity.tarea_JSON.put("numero_serie_contador", wrote_string);
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.numero_serie_contador, wrote_string);
                 numero_serie_nuevo.setText(wrote_string);
             }
 
         }else if(current_tag.contains("Lectura")) {
 
-            String lectura_last = Screen_Login_Activity.tarea_JSON.getString("lectura_actual");
+            String lectura_last = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.lectura_actual);
             if(!lectura_last.isEmpty() && !lectura_last.equals("null") && lectura_last!=null){
                 Integer lectura_lastInt = Integer.parseInt(lectura_last);
                 Integer lectura_actualInt = Integer.parseInt(wrote_string);
                 if(lectura_actualInt > lectura_lastInt) {
-                    Screen_Login_Activity.tarea_JSON.put("lectura_ultima", lectura_last);
-                    Screen_Login_Activity.tarea_JSON.put("lectura_actual", wrote_string);
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_ultima, lectura_last);
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_actual, wrote_string);
                     lectura_anterior.setText(lectura_last);
                     lectura_ultima.setText(wrote_string);
                 }
@@ -265,7 +285,7 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
                 }
             }
             else{//no hay lectura actual
-                Screen_Login_Activity.tarea_JSON.put("lectura_actual", wrote_string);
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_actual, wrote_string);
                 lectura_ultima.setText(wrote_string);
             }
         }
@@ -288,7 +308,7 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
                     }
                     String contador=null;
                     try {
-                        contador = Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador");
+                        contador = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

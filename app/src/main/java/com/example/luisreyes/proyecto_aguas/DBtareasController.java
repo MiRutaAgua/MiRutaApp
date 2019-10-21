@@ -266,7 +266,7 @@ public class DBtareasController extends SQLiteOpenHelper {
 
     public String updateTarea(JSONObject json) throws JSONException {
 
-        String id = json.getString("id");
+        String id = json.getString(this.id);
         SQLiteDatabase database = this.getWritableDatabase();
         if(database == null){
             return "null";
@@ -295,7 +295,7 @@ public class DBtareasController extends SQLiteOpenHelper {
     }
 
     public String deleteTarea(JSONObject json) throws JSONException {
-        String id = json.getString("id");
+        String id = json.getString(this.id);
         SQLiteDatabase database = this.getWritableDatabase();
         if(database == null){
             return "null";

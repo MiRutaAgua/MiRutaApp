@@ -103,11 +103,11 @@ public class Screen_Fast_View_Personal_Task extends AppCompatActivity implements
                         try {
                             JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.dBtareasController.get_one_tarea_from_Database(i));
 
-                            if(jsonObject.getString("operario").replace("\n", "").equals(
+                            if(jsonObject.getString(DBtareasController.operario).replace("\n", "").equals(
                                     Screen_Login_Activity.operario_JSON.getString("usuario").replace("\n", ""))){
 
-                                String tipo_tarea =jsonObject.getString("tipo_tarea").replace("\n", "");
-                                String calibre = jsonObject.getString("calibre_toma").replace("\n", "");
+                                String tipo_tarea =jsonObject.getString(DBtareasController.tipo_tarea).replace("\n", "");
+                                String calibre = jsonObject.getString(DBtareasController.calibre_toma).replace("\n", "");
                                 if(tipo_tarea.contains("null") && calibre.contains("null")){
                                     Toast.makeText(this,"Tipo de Tarea y calibre ambos nulos"
                                             +jsonObject.getString(DBtareasController.numero_interno) , Toast.LENGTH_LONG).show();
@@ -184,21 +184,23 @@ public class Screen_Fast_View_Personal_Task extends AppCompatActivity implements
                                 team_or_personal_task_selection_screen_Activity.dBtareasController.insertTarea(jsonObject);
                             }
                             else if(lite_count != -10) {
-                                if (!team_or_personal_task_selection_screen_Activity.dBtareasController.checkIfTareaExists(jsonObject.getString(DBtareasController.numero_interno))) {
+                                if (!team_or_personal_task_selection_screen_Activity.dBtareasController.
+                                        checkIfTareaExists(jsonObject.getString(DBtareasController.numero_interno))) {
                                     Toast.makeText(Screen_Fast_View_Personal_Task.this, "MySQL tarea: "+jsonObject.getString(DBtareasController.numero_interno)+" insertada", Toast.LENGTH_LONG).show();
                                     team_or_personal_task_selection_screen_Activity.dBtareasController.insertTarea(jsonObject);
                                 }
                                 else {
                                     String date_MySQL_string = null;
                                     try {
-                                        date_MySQL_string = jsonObject.getString("date_time_modified").replace("\n", "");
+                                        date_MySQL_string = jsonObject.getString(DBtareasController.date_time_modified).replace("\n", "");
                                         Date date_MySQL=null;
                                         if(!TextUtils.isEmpty(date_MySQL_string)){
                                             date_MySQL = team_or_personal_task_selection_screen_Activity.dBtareasController.getFechaHoraFromString(date_MySQL_string);
                                         }
-                                        JSONObject jsonObject_Lite = new JSONObject(team_or_personal_task_selection_screen_Activity.dBtareasController.get_one_tarea_from_Database(
+                                        JSONObject jsonObject_Lite = new JSONObject(team_or_personal_task_selection_screen_Activity.
+                                                dBtareasController.get_one_tarea_from_Database(
                                                 jsonObject.getString(DBtareasController.numero_interno).replace("\n", "")));
-                                        String date_SQLite_string = jsonObject_Lite.getString("date_time_modified").replace("\n", "");
+                                        String date_SQLite_string = jsonObject_Lite.getString(DBtareasController.date_time_modified).replace("\n", "");
                                         Date date_SQLite = null;
 //                                    Toast.makeText(Screen_Table_Team.this, date_SQLite_string, Toast.LENGTH_LONG).show();
 
@@ -252,12 +254,12 @@ public class Screen_Fast_View_Personal_Task extends AppCompatActivity implements
                                     }
                                 }
                             }
-                            if(jsonObject.getString("operario").replace("\n", "").equals(
+                            if(jsonObject.getString(DBtareasController.operario).replace("\n", "").equals(
                                     Screen_Login_Activity.operario_JSON.getString("usuario").replace("\n", ""))){
 
 
-                                String tipo_tarea =jsonObject.getString("tipo_tarea").replace("\n", "");
-                                String calibre = jsonObject.getString("calibre_toma").replace("\n", "");
+                                String tipo_tarea =jsonObject.getString(DBtareasController.tipo_tarea).replace("\n", "");
+                                String calibre = jsonObject.getString(DBtareasController.calibre_toma).replace("\n", "");
                                 if(tipo_tarea.contains("null") && calibre.contains("null")){
                                     Toast.makeText(this,"Tipo de Tarea y calibre ambos nulos"
                                             +jsonObject.getString(DBtareasController.numero_interno) , Toast.LENGTH_LONG).show();
@@ -319,7 +321,7 @@ public class Screen_Fast_View_Personal_Task extends AppCompatActivity implements
                     if (result.contains("not success")) {
                         Toast.makeText(this, "No se pudo insertar correctamente, problemas con el servidor de la base de datos", Toast.LENGTH_SHORT).show();
                     } else {
-                        String contador = Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador");
+                        String contador = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador);
                         if(!contador.isEmpty() && contador!=null && !contador.equals("null")) {
                             showRingDialog("Subiedo fotos de contador "
                                     + contador);
@@ -360,7 +362,7 @@ public class Screen_Fast_View_Personal_Task extends AppCompatActivity implements
             for (int i = 1; i <= team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas(); i++) {
                 try {
                     JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.dBtareasController.get_one_tarea_from_Database(i));
-                    String status_tarea = jsonObject.getString("status_tarea");
+                    String status_tarea = jsonObject.getString(DBtareasController.status_tarea);
                     if(status_tarea.contains("TO_UPLOAD")){
                         tareas_to_upload.add(jsonObject.getString(DBtareasController.numero_interno));
                     }
@@ -451,37 +453,37 @@ public class Screen_Fast_View_Personal_Task extends AppCompatActivity implements
         String foto = "";
         String path = getExternalFilesDir(Environment.DIRECTORY_PICTURES)+"/fotos_tareas/";
 
-        foto = Screen_Login_Activity.tarea_JSON.getString("foto_antes_instalacion");
+        foto = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_antes_instalacion);
         if(foto!=null && !foto.isEmpty() && !foto.equals("null")){
             images_files.add(path+foto);
             images_files_names.add(foto);
         }
-        foto = Screen_Login_Activity.tarea_JSON.getString("foto_lectura");
+        foto = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_lectura);
         if(foto!=null && !foto.isEmpty() && !foto.equals("null")){
             images_files.add(path+foto);
             images_files_names.add(foto);
         }
-        foto = Screen_Login_Activity.tarea_JSON.getString("foto_numero_serie");
+        foto = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_numero_serie);
         if(foto!=null && !foto.isEmpty() && !foto.equals("null")){
             images_files.add(path+foto);
             images_files_names.add(foto);
         }
-        foto = Screen_Login_Activity.tarea_JSON.getString("foto_despues_instalacion");
+        foto = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_despues_instalacion);
         if(foto!=null && !foto.isEmpty() && !foto.equals("null")){
             images_files.add(path+foto);
             images_files_names.add(foto);
         }
-        foto = Screen_Login_Activity.tarea_JSON.getString("foto_incidencia_1");
+        foto = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_incidencia_1);
         if(foto!=null && !foto.isEmpty() && !foto.equals("null")){
             images_files.add(path+foto);
             images_files_names.add(foto);
         }
-        foto = Screen_Login_Activity.tarea_JSON.getString("foto_incidencia_2");
+        foto = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_incidencia_2);
         if(foto!=null && !foto.isEmpty() && !foto.equals("null")){
             images_files.add(path+foto);
             images_files_names.add(foto);
         }
-        foto = Screen_Login_Activity.tarea_JSON.getString("foto_incidencia_3");
+        foto = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_incidencia_3);
         if(foto!=null && !foto.isEmpty() && !foto.equals("null")){
             images_files.add(path+foto);
             images_files_names.add(foto);

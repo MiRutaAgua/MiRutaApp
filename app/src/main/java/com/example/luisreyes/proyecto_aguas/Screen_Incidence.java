@@ -190,7 +190,7 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent(getApplicationContext(),MapsActivity.class);
+                Intent intent = new Intent(getApplicationContext(),PermissionsActivity.class);
                 startActivity(intent);
             }
         });

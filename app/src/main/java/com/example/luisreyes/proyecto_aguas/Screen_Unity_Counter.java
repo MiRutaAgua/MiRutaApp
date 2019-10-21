@@ -34,6 +34,7 @@ import org.json.JSONException;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
 
 /**
  * Created by luis.reyes on 10/08/2019.
@@ -51,7 +52,9 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
 
     private ImageView button_exec_task_screen_unity_counter, imagen_contador;
 
-    private TextView direccion, datosEspecificos, serie, lectura, acceso, ubicacion,calibre;
+    private TextView tipo_tarea, direccion, datosEspecificos, serie, lectura, acceso, ubicacion,calibre;
+    private HashMap<String, String> mapaTiposDeTarea;
+    private ImageView button_geolocalization;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -63,14 +66,28 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
         myToolbar.setBackgroundColor(Color.TRANSPARENT);
         setSupportActionBar(myToolbar);
 
+        mapaTiposDeTarea = new HashMap<>();
+        mapaTiposDeTarea.put("", "NUEVO CONTADOR INSTALAR");
+        mapaTiposDeTarea.put("NCI", "NUEVO CONTADOR INSTALAR");
+        mapaTiposDeTarea.put("U", "USADO CONTADOR INSTALAR");
+        mapaTiposDeTarea.put("T", "BAJA O CORTE DE SUMINISTRO");
+        mapaTiposDeTarea.put("LFTD", "LIMPIEZA DE FILTRO Y TOMA DE DATOS");
+        mapaTiposDeTarea.put("D", "DATOS");
+        mapaTiposDeTarea.put("TD", "TOMA DE DATOS");
+        mapaTiposDeTarea.put("I", "INSPECCIÓN");
+        mapaTiposDeTarea.put("CF", "COMPROBAR EMISOR");
+        mapaTiposDeTarea.put("EL", "EMISOR LECTURA");
+        mapaTiposDeTarea.put("SI", "SOLO INSTALAR");
+        mapaTiposDeTarea.put("R", "REFORMA MAS CONTADOR");
 
+        button_geolocalization=(ImageView) findViewById(R.id.button_geolocalization_screen_unity_counter);
         imagen_contador = (ImageView) findViewById(R.id.imageView_screen_unity_counter_imagen);
         serie = (TextView) findViewById(R.id.textView_screen_unity_counter_serie);
         lectura = (TextView) findViewById(R.id.textView_screen_unity_counter_lectura);
         acceso = (TextView) findViewById(R.id.textView_screen_unity_counter_acceso);
         ubicacion = (TextView) findViewById(R.id.textView_screen_unity_counter_ubicacion);
         calibre = (TextView) findViewById(R.id.textView_screen_unity_counter_calibre);
-
+        tipo_tarea = (TextView) findViewById(R.id.textView_tipo_tarea_screen_unity_counter);
         direccion = (TextView) findViewById(R.id.textView_direccion_screen_unity_counter);
         datosEspecificos = (TextView) findViewById(R.id.textView_datos_especificos_screen_unity_counter);
         button_modo_battery = (ImageView) findViewById(R.id.button_modo_bateria_screen_unity_counter);
@@ -80,25 +97,54 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
         button_trazar_ruta_screen_unity_counter = (ImageView)findViewById(R.id.button_trazar_ruta_screen_unity_counter);
 
         try {
-            direccion.setText((Screen_Login_Activity.tarea_JSON.getString("poblacion") + "   "
-                    + Screen_Login_Activity.tarea_JSON.getString("calle").replace("\n", "") + "  "
-                    + Screen_Login_Activity.tarea_JSON.getString("numero_edificio").replace("\n", "")
-                    + Screen_Login_Activity.tarea_JSON.getString("letra_edificio").replace("\n", "") + "  "
-                    + Screen_Login_Activity.tarea_JSON.getString("piso").replace("\n", "") + "  "
-                    + Screen_Login_Activity.tarea_JSON.getString("mano").replace("\n", "")).replace("null",""));
-            datosEspecificos.setText((Screen_Login_Activity.tarea_JSON.getString("observaciones").replace("\n", "")).replace("null",""));
-            serie.setText((Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador").replace("\n", "")).replace("null",""));
-            lectura.setText((Screen_Login_Activity.tarea_JSON.getString("lectura_actual").replace("\n", "")).replace("null",""));
-            ubicacion.setText((Screen_Login_Activity.tarea_JSON.getString("emplazamiento").replace("\n", "")).replace("null",""));
-            acceso.setText((Screen_Login_Activity.tarea_JSON.getString("acceso").replace("\n", "")).replace("null",""));
-            calibre.setText((Screen_Login_Activity.tarea_JSON.getString("calibre_toma").replace("\n", "")).replace("null",""));
-            
+            String tipo = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.tipo_tarea).
+                    replace("\n", "").replace(" ", "").
+                    replace("null","").replace("NULL","");
+            for(int i = 0; i < 10; i++){
+                tipo = tipo.replace(String.valueOf(i), "");
+            }
+            String tipo_long="";
+            String calibre_local = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.calibre_toma);
+            if(mapaTiposDeTarea.containsKey(tipo)) {
+                tipo_long = mapaTiposDeTarea.get(tipo);
+            }
+            if((calibre_local.contains("null") && tipo_long.contains("null"))
+                    || (calibre_local.contains("NULL") && tipo_long.contains("NULL"))
+                    || (calibre_local.contains("NULL") && tipo_long.contains("null"))
+                    || (calibre_local.contains("null") && tipo_long.contains("NULL"))){
+                tipo_tarea.setText("Desconocido");
+            }
+            else {
+                tipo_tarea.setText(tipo_long+"  "
+                        +Screen_Login_Activity.tarea_JSON.getString(DBtareasController.calibre_toma).
+                        replace("\n", "").replace("null","").replace(" ","")
+                        +"mm");
+            }
+
+            direccion.setText((Screen_Login_Activity.tarea_JSON.getString(DBtareasController.poblacion).replace("null","").replace("NULL","") + "   "
+                    + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.calle).replace("\n", "").replace("null","").replace("NULL","") + "  "
+                    + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_edificio).replace("\n", "").replace("null","").replace("NULL","")
+                    + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.letra_edificio).replace("\n", "").replace("null","").replace("NULL","") + "  "
+                    + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.piso).replace("\n", "").replace("NULL","").replace("null","") + "  "
+                    + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.mano).replace("\n", "")).replace("null","").replace("NULL",""));
+            datosEspecificos.setText((Screen_Login_Activity.tarea_JSON.getString(DBtareasController.observaciones).replace("\n", "")).replace("null","").replace("NULL",""));
+            serie.setText((Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador).replace("\n", "")).replace("null","").replace("NULL",""));
+            lectura.setText((Screen_Login_Activity.tarea_JSON.getString(DBtareasController.lectura_actual).replace("\n", "")).replace("null","").replace("NULL",""));
+            ubicacion.setText((Screen_Login_Activity.tarea_JSON.getString(DBtareasController.emplazamiento).replace("\n", "")).replace("null","").replace("NULL",""));
+            acceso.setText((Screen_Login_Activity.tarea_JSON.getString(DBtareasController.acceso).replace("\n", "")).replace("null","").replace("NULL",""));
+            calibre.setText((Screen_Login_Activity.tarea_JSON.getString(DBtareasController.calibre_toma).replace("\n", "")).replace("null","").replace("NULL",""));
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+        button_geolocalization.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent_open_MapsActivity = new Intent(getApplicationContext(), PermissionsActivity.class);
+                startActivity(intent_open_MapsActivity);
+            }
 
-
-
+        });
         button_trazar_ruta_screen_unity_counter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -142,7 +188,7 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
 
         if (checkConection()){
             try {
-                String foto_instalacion =  Screen_Login_Activity.tarea_JSON.getString("foto_despues_instalacion");
+                String foto_instalacion =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_despues_instalacion);
                 //Toast.makeText(this, foto_instalacion, Toast.LENGTH_LONG).show();
                 showRingDialog("Obteniendo foto de instalación");
                 String type_script = "download_image";
@@ -153,9 +199,9 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
             }
         }else{
             try {
-                //String foto_instalacion =  Screen_Login_Activity.tarea_JSON.getString("foto_antes_instalacion");
+                //String foto_instalacion =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_antes_instalacion);
                 String image = null;
-                image = Screen_Login_Activity.tarea_JSON.getString("foto_despues_instalacion");
+                image = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_despues_instalacion);
                 if(image!=null && !image.equals("null") && !TextUtils.isEmpty(image)) {
                     File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/fotos_tareas");
                     if(!storageDir.exists()){
@@ -244,7 +290,7 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
 //                    && team_or_personal_task_selection_screen_Activity.dBtareasController.checkForTableExists())
 //            {
 //                try {
-//                    Screen_Login_Activity.tarea_JSON.put("foto_antes_instalacion", file_name);
+//                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.foto_antes_instalacion, file_name);
 //                    team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea( Screen_Login_Activity.tarea_JSON);
 //                } catch (JSONException e) {
 //                    e.printStackTrace();
@@ -267,7 +313,7 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
                 if(bitmap!= null) {
                     imagen_contador.setVisibility(View.VISIBLE);
                     imagen_contador.setImageBitmap(bitmap);
-                    saveBitmapImage(bitmap, Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador") + "_foto_antes_instalacion");
+                    saveBitmapImage(bitmap, Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador) + "_foto_antes_instalacion");
                 }
             }
         }

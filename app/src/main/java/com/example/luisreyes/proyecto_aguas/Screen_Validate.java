@@ -245,15 +245,32 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
             public void onClick(View view) {
                 ////aqui va la actualizacion de la tarea;
                 try {
-                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.date_time_modified, DBtareasController.getStringFromFechaHora(new Date()));
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.date_time_modified,
+                            DBtareasController.getStringFromFechaHora(new Date()));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                String status_tarea = null;
                 try {
-                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.status_tarea,"DONE");
+                    status_tarea = Screen_Login_Activity.tarea_JSON.getString(
+                            DBtareasController.status_tarea);
+                    if(status_tarea.contains("TO_UPLOAD")) {
+                        try {
+                            Screen_Login_Activity.tarea_JSON.put(DBtareasController.status_tarea, "DONE,TO_UPLOAD");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }else{
+                        try {
+                            Screen_Login_Activity.tarea_JSON.put(DBtareasController.status_tarea, "DONE");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+
                 if(bitmap_firma_cliente != null){
                     String firma_cliente_string = Screen_Register_Operario.getStringImage(bitmap_firma_cliente);
                     try {
@@ -287,11 +304,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                                 BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Validate.this);
                                 backgroundWorker.execute(type);
                             }else{
-                                try {
-                                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.status_tarea,"DONE,TO_UPLOAD");
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
+
                                 boolean error = saveTaskLocal();
                                 if(!error) {
                                     Toast.makeText(Screen_Validate.this, "No hay conexion se guardaron los datos en el telefono", Toast.LENGTH_LONG).show();

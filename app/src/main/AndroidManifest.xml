@@ -122,10 +122,13 @@
             android:configChanges="orientation"
             android:screenOrientation="portrait"></activity>
 
-        <activity android:name=".MapsActivity"
+        <activity android:name=".MapActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"></activity>
         <activity android:name=".Maps_Box"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".PermissionsActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"></activity>
 

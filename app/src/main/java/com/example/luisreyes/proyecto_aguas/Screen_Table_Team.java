@@ -322,26 +322,7 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
                             e.printStackTrace();
                         }
                     }
-                    Collections.sort(lista_ordenada_de_tareas);
-                    for(int i=0; i < lista_ordenada_de_tareas.size(); i++){
-                        lista_contadores.add("\nDirección:  "+lista_ordenada_de_tareas.get(i).getDireccion()
-                                +"         Cita:  "+lista_ordenada_de_tareas.get(i).getCita()
-                                +"Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado());
-                        lista_filtro_direcciones.add("\nDirección:  "+lista_ordenada_de_tareas.get(i).getDireccion()
-                                +" Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado());
-                        lista_filtro_Tareas.add("\n      Tarea:  "+lista_ordenada_de_tareas.get(i).getTipo_tarea()+"   Calibre:  "+lista_ordenada_de_tareas.get(i).getCalibre()
-                                +"Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado());
-                        lista_filtro_abonado.add("\n   Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado()+"Telefono 1:  "+lista_ordenada_de_tareas.get(i).getTelefono1()
-                                +"Telefono 2:  "+lista_ordenada_de_tareas.get(i).getTelefono2());
-                        lista_filtro_numero_serie.add("\n       Número de Serie:  "+lista_ordenada_de_tareas.get(i).getNumero_serie_contador()
-                                +"\n              Año o Prefijo:  "+lista_ordenada_de_tareas.get(i).getAnno_contador()
-                                +"Número de Abonado:  "+lista_ordenada_de_tareas.get(i).getNumero_abonado());
-                        lista_filtro_Citas.add("\n        Cita:  "+lista_ordenada_de_tareas.get(i).getCita()
-                                +"Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado());
-                    }
-                    arrayAdapter = new ArrayAdapter(Screen_Table_Team.this, android.R.layout.simple_list_item_1, lista_contadores);
-                    arrayAdapter_all = new ArrayAdapter(Screen_Table_Team.this, android.R.layout.simple_list_item_1, lista_contadores);
-                    lista_de_contadores_screen_table_team.setAdapter(arrayAdapter);
+                    orderTareastoArrayAdapter();
                 }
             }
         }
@@ -396,14 +377,15 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
                                 team_or_personal_task_selection_screen_Activity.dBtareasController.insertTarea(jsonObject);
                             }
                             else if(lite_count != -10) {
-                                if (!team_or_personal_task_selection_screen_Activity.dBtareasController.checkIfTareaExists(jsonObject.getString(DBtareasController.numero_interno))) {
+                                if (!team_or_personal_task_selection_screen_Activity.dBtareasController.
+                                        checkIfTareaExists(jsonObject.getString(DBtareasController.numero_interno))) {
                                     Toast.makeText(Screen_Table_Team.this, "MySQL tarea: "+jsonObject.getString(DBtareasController.numero_interno)+" insertada", Toast.LENGTH_LONG).show();
                                     team_or_personal_task_selection_screen_Activity.dBtareasController.insertTarea(jsonObject);
                                 }
                                 else {
                                     String date_MySQL_string = null;
                                     try {
-                                        date_MySQL_string = jsonObject.getString("date_time_modified").replace("\n", "");
+                                        date_MySQL_string = jsonObject.getString(DBtareasController.date_time_modified).replace("\n", "");
                                         Date date_MySQL=null;
                                         if(!TextUtils.isEmpty(date_MySQL_string)){
                                             date_MySQL = team_or_personal_task_selection_screen_Activity.dBtareasController.getFechaHoraFromString(date_MySQL_string);
@@ -470,26 +452,8 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
                         //Toast.makeText(Screen_Table_Team.this,e.toString(), Toast.LENGTH_LONG).show();
                     }
                 }
-                Collections.sort(lista_ordenada_de_tareas);
-                for(int i=0; i < lista_ordenada_de_tareas.size(); i++){
-                    lista_contadores.add("\nDirección:  "+lista_ordenada_de_tareas.get(i).getDireccion()
-                            +"         Cita:  "+lista_ordenada_de_tareas.get(i).getCita()
-                            +"Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado());
-                    lista_filtro_direcciones.add("\nDirección:  "+lista_ordenada_de_tareas.get(i).getDireccion()
-                            +" Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado());
-                    lista_filtro_Tareas.add("\n      Tarea:  "+lista_ordenada_de_tareas.get(i).getTipo_tarea()+"   Calibre:  "+lista_ordenada_de_tareas.get(i).getCalibre()
-                            +"Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado());
-                    lista_filtro_abonado.add("\n   Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado()+"Telefono 1:  "+lista_ordenada_de_tareas.get(i).getTelefono1()
-                            +"Telefono 2:  "+lista_ordenada_de_tareas.get(i).getTelefono2());
-                    lista_filtro_numero_serie.add("\n       Número de Serie:  "+lista_ordenada_de_tareas.get(i).getNumero_serie_contador()
-                            +"\n              Año o Prefijo:  "+lista_ordenada_de_tareas.get(i).getAnno_contador()
-                            +"Número de Abonado:  "+lista_ordenada_de_tareas.get(i).getNumero_abonado());
-                    lista_filtro_Citas.add("\n        Cita:  "+lista_ordenada_de_tareas.get(i).getCita()
-                            +"Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado());
-                }
-                arrayAdapter = new ArrayAdapter(Screen_Table_Team.this, android.R.layout.simple_list_item_1, lista_contadores);
-                arrayAdapter_all = new ArrayAdapter(Screen_Table_Team.this, android.R.layout.simple_list_item_1, lista_contadores);
-                lista_de_contadores_screen_table_team.setAdapter(arrayAdapter);
+                orderTareastoArrayAdapter();
+
                 hideRingDialog();
                 Toast.makeText(Screen_Table_Team.this,"Tareas descargadas correctamente", Toast.LENGTH_LONG).show();
 
@@ -546,28 +510,52 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
             }
         }
     }
+    public void orderTareastoArrayAdapter(){
+        Collections.sort(lista_ordenada_de_tareas);
+        for(int i=0; i < lista_ordenada_de_tareas.size(); i++){
+            lista_contadores.add("\nDirección:  "+lista_ordenada_de_tareas.get(i).getDireccion()
+                    +"         Cita:  "+lista_ordenada_de_tareas.get(i).getCita()
+                    +"       Tarea:  "+lista_ordenada_de_tareas.get(i).getTipo_tarea()
+                    +"    Calibre:  "+lista_ordenada_de_tareas.get(i).getCalibre()
+                    +"Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado());
+            lista_filtro_direcciones.add("\nDirección:  "+lista_ordenada_de_tareas.get(i).getDireccion()
+                    +" Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado());
+            lista_filtro_Tareas.add("\n      Tarea:  "+lista_ordenada_de_tareas.get(i).getTipo_tarea()+"   Calibre:  "+lista_ordenada_de_tareas.get(i).getCalibre()
+                    +"Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado());
+            lista_filtro_abonado.add("\n  Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado()+"Telefono 1:  "+lista_ordenada_de_tareas.get(i).getTelefono1()
+                    +"Telefono 2:  "+lista_ordenada_de_tareas.get(i).getTelefono2());
+            lista_filtro_numero_serie.add("\n       Número de Serie:  "+lista_ordenada_de_tareas.get(i).getNumero_serie_contador()
+                    +"\n              Año o Prefijo:  "+lista_ordenada_de_tareas.get(i).getAnno_contador()
+                    +"Número de Abonado:  "+lista_ordenada_de_tareas.get(i).getNumero_abonado());
+            lista_filtro_Citas.add("\n        Cita:  "+lista_ordenada_de_tareas.get(i).getCita()
+                    +"Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado());
+        }
+        arrayAdapter = new ArrayAdapter(Screen_Table_Team.this, android.R.layout.simple_list_item_1, lista_contadores);
+        arrayAdapter_all = new ArrayAdapter(Screen_Table_Team.this, android.R.layout.simple_list_item_1, lista_contadores);
+        lista_de_contadores_screen_table_team.setAdapter(arrayAdapter);
+    }
 
     public static MyCounter orderTareaFromJSON(JSONObject jsonObject) throws JSONException {
-        String dir = jsonObject.getString("poblacion")+", "
-                +jsonObject.getString("calle").replace("\n", "")+", "
-                +jsonObject.getString("numero_edificio").replace("\n", "")
-                +jsonObject.getString("letra_edificio").replace("\n", "")+" "
-                +jsonObject.getString("piso").replace("\n", "")+" "
-                +jsonObject.getString("mano").replace("\n", "")+"\n";
+        String dir = jsonObject.getString(DBtareasController.poblacion)+", "
+                +jsonObject.getString(DBtareasController.calle).replace("\n", "")+", "
+                +jsonObject.getString(DBtareasController.numero_edificio).replace("\n", "")
+                +jsonObject.getString(DBtareasController.letra_edificio).replace("\n", "")+" "
+                +jsonObject.getString(DBtareasController.piso).replace("\n", "")+" "
+                +jsonObject.getString(DBtareasController.mano).replace("\n", "")+"\n";
         if(dir.contains("null, null, nullnull")) {
             dir = "No hay dirección\n";
         }
 
-        String cita = jsonObject.getString("nuevo_citas");
+        String cita = jsonObject.getString(DBtareasController.nuevo_citas);
 //                            Toast.makeText(Screen_Table_Team.this, cita, Toast.LENGTH_LONG).show();
         if(!cita.equals("null") && !TextUtils.isEmpty(cita)) {
             cita = cita.split("\n")[0] + "\n"
-                    + "                   " + jsonObject.getString("nuevo_citas").split("\n")[1] + "\n";
+                    + "                   " + jsonObject.getString(DBtareasController.nuevo_citas).split("\n")[1] + "\n";
         }else{
             cita = "No hay cita\n";
         }
 
-        String abonado = jsonObject.getString("nombre_cliente").replace("\n", "")+"\n";
+        String abonado = jsonObject.getString(DBtareasController.nombre_cliente).replace("\n", "")+"\n";
         if(abonado.equals("null\n")  && !TextUtils.isEmpty(abonado)) {
             abonado = "Desconocido\n";
         }
@@ -575,36 +563,36 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
         if(numero_interno.equals("null\n") && !TextUtils.isEmpty(numero_interno)) {
             numero_interno = "-\n";
         }
-        String numero_serie_contador = jsonObject.getString("numero_serie_contador").replace("\n", "");
+        String numero_serie_contador = jsonObject.getString(DBtareasController.numero_serie_contador).replace("\n", "");
         if(numero_serie_contador.equals("null\n") && !TextUtils.isEmpty(numero_serie_contador)) {
             numero_serie_contador = "-\n";
         }
-        String anno_contador = jsonObject.getString("anno_de_contador").replace("\n", "")+"\n";
+        String anno_contador = jsonObject.getString(DBtareasController.anno_de_contador).replace("\n", "")+"\n";
         if(anno_contador.equals("null\n") && !TextUtils.isEmpty(anno_contador)) {
             anno_contador = "-\n";
         }
-        String tipo_tarea = jsonObject.getString("tipo_tarea").replace("\n", "").replace(" ","")+"\n";
+        String tipo_tarea = jsonObject.getString(DBtareasController.tipo_tarea).replace("\n", "").replace(" ","")+"\n";
         if(tipo_tarea.equals("null\n") && !TextUtils.isEmpty(tipo_tarea)) {
             tipo_tarea = "NCI\n";
         }
-        String calibre = jsonObject.getString("calibre_toma").replace("\n", "")+"\n";
+        String calibre = jsonObject.getString(DBtareasController.calibre_toma).replace("\n", "")+"\n";
         if(calibre.equals("null\n") && !TextUtils.isEmpty(calibre)) {
             calibre = "Desconocido\n";
         }
-        String telefono1 = jsonObject.getString("telefono1").replace("\n", "")+"\n";
+        String telefono1 = jsonObject.getString(DBtareasController.telefono1).replace("\n", "")+"\n";
         if(telefono1.equals("null\n") && !TextUtils.isEmpty(telefono1)) {
             telefono1 = "-\n";
         }
-        String telefono2 = jsonObject.getString("telefono2").replace("\n", "")+"\n";
+        String telefono2 = jsonObject.getString(DBtareasController.telefono2).replace("\n", "")+"\n";
         if(telefono2.equals("null\n") && !TextUtils.isEmpty(telefono2)) {
             telefono2 = "-\n";
         }
-        String numero_abonado = jsonObject.getString("numero_abonado").replace("\n", "")+"\n";
+        String numero_abonado = jsonObject.getString(DBtareasController.numero_abonado).replace("\n", "")+"\n";
         if(numero_abonado.equals("null\n") && !TextUtils.isEmpty(numero_abonado)) {
             numero_abonado = "-\n";
         }
 
-        String fecha_cita = jsonObject.getString("fecha_hora_cita").replace("\n", "");
+        String fecha_cita = jsonObject.getString(DBtareasController.fecha_hora_cita).replace("\n", "");
         MyCounter contador = new MyCounter();
         if(fecha_cita!= null && !fecha_cita.equals("null") && !TextUtils.isEmpty(fecha_cita)){
             contador.setDateTime(DBtareasController.getFechaHoraFromString(fecha_cita));
@@ -633,7 +621,7 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
             for (int i = 1; i <= team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas(); i++) {
                 try {
                     JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.dBtareasController.get_one_tarea_from_Database(i));
-                    String status_tarea = jsonObject.getString("status_tarea");
+                    String status_tarea = jsonObject.getString(DBtareasController.status_tarea);
                     if(status_tarea.contains("TO_UPLOAD")){
                         tareas_to_upload.add(jsonObject.getString(DBtareasController.numero_interno));
                     }

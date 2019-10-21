@@ -138,20 +138,21 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         button_geolocalization_screen_exec_task= (ImageView)findViewById(R.id.button_geolocalization_screen_exec_task);
 
         try {
-            contador = Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador");
+            contador = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador);
             numero_serie_viejo = contador;
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(Screen_Execute_Task.this, "no se pudo obtener numero_serie_contador de tarea", Toast.LENGTH_LONG).show();
         }
         try {
-            textView_observaciones_screen_exec_task.setText(Screen_Login_Activity.tarea_JSON.getString("observaciones"));
+            textView_observaciones_screen_exec_task.setText(Screen_Login_Activity.tarea_JSON.getString(
+                    DBtareasController.observaciones));
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(Screen_Execute_Task.this, "no se pudo obtener observaciones de tarea", Toast.LENGTH_LONG).show();
         }
         try {
-            String telefono1_string = Screen_Login_Activity.tarea_JSON.getString("telefono1");
+            String telefono1_string = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.telefono1);
             if(!telefono1_string.equals("null") && !telefono1_string.isEmpty() && telefono1_string!=null) {
                 telefono1.setText(telefono1_string);
             }else{
@@ -162,7 +163,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
             Toast.makeText(Screen_Execute_Task.this, "no se pudo obtener telefono 1 de cliente", Toast.LENGTH_LONG).show();
         }
         try {
-            String telefono2_string = Screen_Login_Activity.tarea_JSON.getString("telefono2");
+            String telefono2_string = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.telefono2);
             if(!telefono2_string.equals("null") && !telefono2_string.isEmpty() && telefono2_string!=null) {
                 telefono2.setText(telefono2_string);
             }else{
@@ -173,11 +174,11 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
             Toast.makeText(Screen_Execute_Task.this, "no se pudo obtener telefono 2 de cliente", Toast.LENGTH_LONG).show();
         }
         try {
-            lectura_string = Screen_Login_Activity.tarea_JSON.getString("lectura_actual");
+            lectura_string = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.lectura_actual);
             if(!TextUtils.isEmpty(lectura_string) && !lectura_string.equals("null")){
                 lectura_editText.setHint(lectura_string);
             }else{
-                lectura_string = Screen_Login_Activity.tarea_JSON.getString("lectura_ultima");
+                lectura_string = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.lectura_ultima);
                 if(!TextUtils.isEmpty(lectura_string) && !lectura_string.equals("null")){
                     lectura_editText.setHint(lectura_string);
                 }
@@ -189,8 +190,23 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         button_geolocalization_screen_exec_task.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent_open_MapsActivity = new Intent(getApplicationContext(), MapsActivity.class);
+                Intent intent_open_MapsActivity = new Intent(getApplicationContext(), PermissionsActivity.class);
                 startActivity(intent_open_MapsActivity);
+            }
+
+        });
+
+        textView_serial_number_result.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openDialog("Numero Serie","Escriba aqui numero serie");
+            }
+
+        });
+        textView_serial_number_module_result.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openDialog("Numero Serie de Modulo","Escriba aqui numero serie de modulo");
             }
 
         });
@@ -203,8 +219,8 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                         String lectura_actual = lectura_editText.getText().toString();
                         if(Integer.parseInt(lectura_actual) > Integer.parseInt(lectura_string)){
                             try {
-                                Screen_Login_Activity.tarea_JSON.put("lectura_ultima", lectura_string);
-                                Screen_Login_Activity.tarea_JSON.put("lectura_actual", lectura_actual);
+                                Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_ultima, lectura_string);
+                                Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_actual, lectura_actual);
                                 saveData();
 
                             } catch (JSONException e) {
@@ -216,7 +232,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                         }
                     }else {
                         try {
-                            Screen_Login_Activity.tarea_JSON.put("lectura_actual", lectura_editText.getText().toString());
+                            Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_actual, lectura_editText.getText().toString());
                             saveData();
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -388,14 +404,14 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
     private void guardar_en_JSON_modificaciones() {
 
         try {
-            Screen_Login_Activity.tarea_JSON.put("date_time_modified", DBtareasController.getStringFromFechaHora(new Date()));
+            Screen_Login_Activity.tarea_JSON.put(DBtareasController.date_time_modified, DBtareasController.getStringFromFechaHora(new Date()));
         } catch (JSONException e) {
             e.printStackTrace();
         }
         if(!TextUtils.isEmpty(textView_observaciones_screen_exec_task.getText().toString())){
             String observaciones = textView_observaciones_screen_exec_task.getText().toString();
             try {
-                Screen_Login_Activity.tarea_JSON.put("observaciones",observaciones);
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.observaciones,observaciones);
             } catch (JSONException e) {
                 e.printStackTrace();
                 Toast.makeText(Screen_Execute_Task.this, "No pudo guardar observaciones", Toast.LENGTH_LONG).show();
@@ -404,7 +420,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         if(!TextUtils.isEmpty(telefono1.getText().toString()) && !telefono1.getText().toString().contains("Añadir")){
             String tel1 = telefono1.getText().toString();
             try {
-                Screen_Login_Activity.tarea_JSON.put("telefono1",tel1);
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.telefono1,tel1);
             } catch (JSONException e) {
                 e.printStackTrace();
                 Toast.makeText(Screen_Execute_Task.this, "No pudo guardar telefono1", Toast.LENGTH_LONG).show();
@@ -413,7 +429,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         if(!TextUtils.isEmpty(telefono2.getText().toString()) && !telefono2.getText().toString().contains("Añadir")){
             String tel2 = telefono2.getText().toString();
             try {
-                Screen_Login_Activity.tarea_JSON.put("telefono2",tel2);
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.telefono2,tel2);
             } catch (JSONException e) {
                 e.printStackTrace();
                 Toast.makeText(Screen_Execute_Task.this, "No pudo guardar telefono2", Toast.LENGTH_LONG).show();
@@ -422,14 +438,16 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
 
         String contador=null;
         try {
-            contador = Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador");
+            contador = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador);
 //            Toast.makeText(Screen_Execute_Task.this, "Contador"+contador, Toast.LENGTH_LONG).show();
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        if(contador != null  && !TextUtils.isEmpty(mCurrentPhotoPath_foto_antes) && ((new File(mCurrentPhotoPath_foto_antes)).exists())){
+        if(contador != null  && !TextUtils.isEmpty(mCurrentPhotoPath_foto_antes)
+                && ((new File(mCurrentPhotoPath_foto_antes)).exists())){
             try {
-                Screen_Login_Activity.tarea_JSON.put("foto_antes_instalacion",numero_serie_viejo +"_foto_antes_instalacion.jpg");
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.foto_antes_instalacion,
+                        numero_serie_viejo +"_foto_antes_instalacion.jpg");
             } catch (JSONException e) {
                 e.printStackTrace();
                 Toast.makeText(Screen_Execute_Task.this, "No pudo guardar foto_antes_instalacion", Toast.LENGTH_LONG).show();
@@ -437,23 +455,27 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         }
         if(contador != null && !TextUtils.isEmpty(mCurrentPhotoPath_foto_lectura) && ((new File(mCurrentPhotoPath_foto_lectura)).exists()) ){
             try {
-                Screen_Login_Activity.tarea_JSON.put("foto_lectura",numero_serie_viejo +"_foto_lectura.jpg");
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.foto_lectura,numero_serie_viejo +"_foto_lectura.jpg");
             } catch (JSONException e) {
                 e.printStackTrace();
                 Toast.makeText(Screen_Execute_Task.this, "No pudo guardar foto_lectura", Toast.LENGTH_LONG).show();
             }
         }
-        if(contador != null && !TextUtils.isEmpty(mCurrentPhotoPath_foto_serie) && ((new File(mCurrentPhotoPath_foto_serie)).exists())){
+        if(contador != null && !TextUtils.isEmpty(mCurrentPhotoPath_foto_serie)
+                && ((new File(mCurrentPhotoPath_foto_serie)).exists())){
             try {
-                Screen_Login_Activity.tarea_JSON.put("foto_numero_serie",numero_serie_viejo +"_foto_numero_serie.jpg");
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.foto_numero_serie,
+                        numero_serie_viejo +"_foto_numero_serie.jpg");
             } catch (JSONException e) {
                 e.printStackTrace();
                 Toast.makeText(Screen_Execute_Task.this, "No pudo guardar foto_numero_serie", Toast.LENGTH_LONG).show();
             }
         }
-        if(contador != null && !TextUtils.isEmpty(mCurrentPhotoPath_foto_despues) && ((new File(mCurrentPhotoPath_foto_despues)).exists())){
+        if(contador != null && !TextUtils.isEmpty(mCurrentPhotoPath_foto_despues)
+                && ((new File(mCurrentPhotoPath_foto_despues)).exists())){
             try {
-                Screen_Login_Activity.tarea_JSON.put("foto_despues_instalacion", contador +"_foto_despues_instalacion.jpg");
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.foto_despues_instalacion,
+                        contador +"_foto_despues_instalacion.jpg");
             } catch (JSONException e) {
                 e.printStackTrace();
                 Toast.makeText(Screen_Execute_Task.this, "No pudo guardar foto_despues_instalacion", Toast.LENGTH_LONG).show();
@@ -492,7 +514,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                 data_result = data.getStringExtra("result");
                 if (!data_result.equals("null") && !data_result.isEmpty() && data_result != null) {
                     try {
-                        Screen_Login_Activity.tarea_JSON.put("numero_serie_modulo", data_result);
+                        Screen_Login_Activity.tarea_JSON.put(DBtareasController.numero_serie_modulo, data_result);
                     } catch (JSONException e) {
                         e.printStackTrace();
                         Toast.makeText(this, "No pudo insertarse numero serie de modulo: " + e.toString(), Toast.LENGTH_LONG).show();
@@ -654,7 +676,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
     private String saveBitmapImage(Bitmap bitmap, String key){
         try {
             bitmap = Bitmap.createScaledBitmap(bitmap, 960, 1280, true);
-            String numero_serie = Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador");
+            String numero_serie = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador);
             String file_full_name = numero_serie+"_"+key;
             //Toast.makeText(Screen_Incidence.this,"archivo: "+file_full_name, Toast.LENGTH_LONG).show();
 
@@ -726,21 +748,35 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
     public void pasarTexto(String wrote_text) throws JSONException {
         if(tag.contains("Telefono 1")) {
             if (!(TextUtils.isEmpty(wrote_text))) {
-                Screen_Login_Activity.tarea_JSON.put("telefono1", wrote_text);
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.telefono1, wrote_text);
                 //Toast.makeText(Screen_Execute_Task.this, Screen_Login_Activity.tarea_JSON.toString(), Toast.LENGTH_LONG).show();
                 telefono1.setText(wrote_text);
             }
         }else if(tag.contains("Telefono 2")){
             if (!(TextUtils.isEmpty(wrote_text))) {
-                Screen_Login_Activity.tarea_JSON.put("telefono2", wrote_text);
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.telefono2, wrote_text);
                 //Toast.makeText(Screen_Execute_Task.this, Screen_Login_Activity.tarea_JSON.toString(), Toast.LENGTH_LONG).show();
                 telefono2.setText(wrote_text);
             }
         }else if(tag.contains("Observaciones")){
             if (!(TextUtils.isEmpty(wrote_text))) {
-                Screen_Login_Activity.tarea_JSON.put("observaciones", wrote_text);
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.observaciones, wrote_text);
                 //Toast.makeText(Screen_Execute_Task.this, Screen_Login_Activity.tarea_JSON.toString(), Toast.LENGTH_LONG).show();
                 textView_observaciones_screen_exec_task.setText(wrote_text);
+            }
+        }else if(tag.contains("Numero Serie")){
+            if (!(TextUtils.isEmpty(wrote_text))) {
+                if (!(TextUtils.isEmpty(wrote_text))) {
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.numero_serie_contador, wrote_text);
+                    textView_serial_number_result.setText(wrote_text);
+                }
+            }
+        }else if(tag.contains("Numero Serie de Modulo")){
+            if (!(TextUtils.isEmpty(wrote_text))) {
+                if (!(TextUtils.isEmpty(wrote_text))) {
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.numero_serie_modulo, wrote_text);
+                    textView_serial_number_module_result.setText(wrote_text);
+                }
             }
         }
     }
@@ -787,7 +823,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                         }
                         String contador=null;
                         try {
-                            contador = Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador");
+                            contador = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -926,7 +962,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         // Create an image file name
 
         String imageFileName = null;
-        String image = Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador")+"_"+foto_x;
+        String image = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador)+"_"+foto_x;
         File image_file=null;
         File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas");
         if (!storageDir.exists()) {
