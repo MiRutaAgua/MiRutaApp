@@ -81,15 +81,15 @@ public class MyCounter implements Comparable<MyCounter> {
     }
     public void setCalibre(String calibre) {
         if(!calibre.contains("NULL") && !calibre.contains("null")) {
-            this.calibre = calibre.replace("\n", "").replace(" ", "") + " mm\n";
+            this.calibre = calibre.replace("\n", "").trim()+ " mm\n";
             if(tipo_tarea.replace("NULL", "").replace("null", "")
-                    .replace("\n", "").replace(" ", "").isEmpty()){
+                    .replace("\n", "").trim().isEmpty()){
                 tipo_tarea = "NCI\n";
             }
         }else{
             this.calibre = "-\n";
             if(tipo_tarea.replace("NULL", "").replace("null", "")
-                    .replace("\n", "").replace(" ", "").isEmpty()){
+                    .replace("\n", "").trim().isEmpty()){
                 tipo_tarea = "-\n";
             }
         }

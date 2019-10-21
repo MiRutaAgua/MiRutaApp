@@ -24,7 +24,7 @@ android:layout_height="match_parent">
         >
 
         <TextView
-
+            android:id="@+id/textViev_nombre_y_tarea_screen_validate_battery_intake_asignation"
             android:text="Camino Angel de la Guarda, 13 1dch"
             android:textSize="18dp"
             android:textStyle="bold"
@@ -129,6 +129,16 @@ android:layout_height="match_parent">
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    />
+                <ImageView
+                    android:id="@+id/imageView_edit_numero_serie_screen_validate_battery_intake_asignation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_edit_blue_24dp"
+                    android:visibility="gone"
                     />
             </LinearLayout>
 
@@ -146,6 +156,7 @@ android:layout_height="match_parent">
                     android:textSize="14dp"
                     android:layout_gravity="left"
                     android:gravity="left"
+                    android:padding="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     />
@@ -154,12 +165,21 @@ android:layout_height="match_parent">
                     android:id="@+id/textView_lectura_anterior_value_screen_validate_battery_intake_asignation"
                     android:text="320 M3"
                     android:textSize="14dp"
-                    android:layout_marginLeft="8dp"
+                    android:padding="10dp"
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     />
-
+                <ImageView
+                    android:paddingTop="1dp"
+                    android:id="@+id/imageView_edit_lectura_anterior_screen_validate_battery_intake_asignation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_edit_blue_24dp"
+                    android:visibility="gone"
+                    />
             </LinearLayout>
 
             <LinearLayout
@@ -175,8 +195,7 @@ android:layout_height="match_parent">
                     android:gravity="left"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="25dp"
-                    android:paddingTop="5dp"
+                    android:padding="10dp"
                     android:id="@+id/textView_lectura_ultima_screen_validate_battery_intake_asignation"
                     />
 
@@ -187,11 +206,18 @@ android:layout_height="match_parent">
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="18dp"
-                    android:paddingBottom="25dp"
-                    android:paddingTop="5dp"
+                    android:padding="10dp"
+                    android:layout_marginLeft="10dp"
                     />
-
+                <ImageView
+                    android:paddingTop="1dp"
+                    android:id="@+id/imageView_edit_lectura_ultima_screen_validate_battery_intake_asignation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_edit_blue_24dp"
+                    />
             </LinearLayout>
 
 
@@ -208,21 +234,21 @@ android:layout_height="match_parent">
         android:layout_marginTop="20dp"
         android:gravity="center"
         android:orientation="vertical">
-
+        <TextView
+            android:text="Número de serie"
+            android:textSize="18dp"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:layout_gravity="center"
             >
 
-            <TextView
-                android:text="Número de serie"
-                android:textSize="18dp"
-                android:layout_gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
+
             <TextView
                 android:id="@+id/textView_numero_serie_nuevo_screen_validate_battery_intake_asignation"
                 android:text="F27337"
@@ -230,10 +256,17 @@ android:layout_height="match_parent">
                 android:layout_gravity="left"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingTop="5dp"
-                android:paddingBottom="25dp"
+                android:padding="10dp"
                 />
-
+            <ImageView
+                android:paddingTop="1dp"
+                android:id="@+id/imageView_edit_new_serial_number_screen_validate_battery_intake_asignation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="10dp"
+                android:src="@drawable/ic_edit_blue_24dp"
+                />
         </LinearLayout>
 
         <ImageView
@@ -288,6 +321,14 @@ android:layout_height="match_parent">
             android:layout_gravity="left"
             android:text="Llaves nuevas, se entra con maestras"
             android:textSize="18sp" />
+        <ImageView
+            android:id="@+id/imageView_edit_obsevations_screen_validate_battery_intake_asignation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="10dp"
+            android:src="@drawable/ic_edit_blue_24dp"
+            />
 
     </LinearLayout>
 

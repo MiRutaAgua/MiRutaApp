@@ -60,7 +60,9 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
     private ImageView foto_instalacion_screen_exec_task;
     private ImageView foto_final_instalacion_screen_exec_task;
     private ImageView foto_numero_de_serie_screen_exec_task;
-    private ImageView imageButton_firma_cliente_screen_validate;
+    private ImageView imageButton_firma_cliente_screen_validate,
+            imageView_edit_serial_number_screen_validate,
+            imageView_edit_calibre_screen_validate;
     private LinearLayout llScroll;
     private LinearLayout llScroll_2;
     private LinearLayout llScroll_3;
@@ -115,12 +117,26 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
         imageButton_firma_cliente_screen_validate = (ImageView)findViewById(R.id.imageButton_firma_cliente_screen_validate);
         imageButton_editar_firma_cliente_screen_validate = (Button)findViewById(R.id.imageButton_editar_firma_cliente_screen_validate);
 
+        imageView_edit_serial_number_screen_validate   = (ImageView)findViewById(R.id.imageView_edit_serial_number_screen_validate);
+        imageView_edit_calibre_screen_validate     = (ImageView)findViewById(R.id.imageView_edit_calibre_screen_validate);
+
         nombre_y_tarea = (TextView) findViewById(R.id.textView_nombre_cliente_y_tarea_screen_validate);
 
+        String tipo, calibre, nombre;
         try {
-            nombre_y_tarea.setText(Screen_Login_Activity.tarea_JSON.getString(DBtareasController.nombre_cliente)
-                    .replace("\n", "")+", "
-                    +Screen_Login_Activity.tarea_JSON.getString(DBtareasController.calibre_toma));
+            nombre = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.nombre_cliente).trim().replace("\n", "");
+            tipo = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.tipo_tarea).trim().replace("\n", "");
+            calibre = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.calibre_toma).trim().replace("\n", "");
+            if(nombre.equals("null") || nombre.equals("NULL")){
+                nombre = "";
+            }
+            if(tipo.equals("null") || tipo.equals("NULL")){
+                tipo = "";
+            }
+            if(calibre.equals("null") || calibre.equals("NULL")){
+                calibre = "";
+            }
+            nombre_y_tarea.setText(nombre+", "+tipo+ " "+calibre);
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(Screen_Validate.this, "no se pudo obtener nombre de cliente", Toast.LENGTH_LONG).show();
@@ -216,6 +232,12 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
             }
         });
 
+        imageView_edit_serial_number_screen_validate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openDialog("Numero de Serie Nuevo");
+            }
+        });
         numero_serie_nuevo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -226,6 +248,12 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
             @Override
             public void onClick(View view) {
                 openDialog("Numero de Serie Nuevo");
+            }
+        });
+        imageView_edit_calibre_screen_validate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openDialog("Calibre Real");
             }
         });
         textView_calibre_screen_validate.setOnClickListener(new View.OnClickListener() {

@@ -32,6 +32,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -79,6 +81,11 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
+        getWindow().setSoftInputMode( //Para esconder el teclado
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
+        );
+
         setContentView(R.layout.screen_login);
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE)
@@ -88,13 +95,6 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
 
         dBoperariosController = new DBoperariosController(this);
 
-//        Toast.makeText(this, Environment.getExternalStorageDirectory().toString(), Toast.LENGTH_SHORT).show();
-//        if(dBoperariosController.databasefileExists(this)&& dBoperariosController.checkForTableExists()){
-//            Toast.makeText(Screen_Login_Activity.this, "Existe: "+String.valueOf(dBoperariosController.countTableOperarios()), Toast.LENGTH_SHORT).show();
-//        }
-//        else{
-//            Toast.makeText(Screen_Login_Activity.this, "Existe: No existe", Toast.LENGTH_SHORT).show();
-//        }
         tarea_JSON = new JSONObject();
         operario_JSON = new JSONObject();
 
@@ -223,6 +223,7 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
 
             }
         });
+
     }
 
     private void descargarOperarios() {
@@ -366,6 +367,7 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
                 }
                 updateOperarioInMySQL();
                 hideRingDialog();
+
                 //Toast.makeText(this,usuarios_to_update.toString()+"\n", Toast.LENGTH_LONG).show();
             }
         }else if(type == "update_operario"){
@@ -381,6 +383,7 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
     public void updateOperarioInMySQL() throws JSONException {
         if(usuarios_to_update.isEmpty()){
             if(login_pendent){
+
                 loginOperario();
             }
             return;

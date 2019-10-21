@@ -30,6 +30,7 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -59,7 +60,11 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
 
     private ImageView button_scan_module_screen_exec_task, observaciones_button ,button_guardar_datos;
 
-    private ImageView button_validate_screen_exec_task, button_geolocalization_screen_exec_task;
+    private ImageView button_validate_screen_exec_task, button_geolocalization_screen_exec_task,
+            imageView_edit_phone1_screen_exec_task,
+            imageView_edit_phone2_screen_exec_task,
+            imageView_edit_serial_number_screen_exec_task,
+            imageView_edit_serial_number_module_screen_exec_task;
 
     private ImageView button_instalation_photo_screen_exec_task;
     private ImageView instalation_photo_screen_exec_task;
@@ -97,6 +102,10 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        getWindow().setSoftInputMode( //Para esconder el teclado
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
+        );
         setContentView(R.layout.screen_execute_task);
 
 
@@ -112,6 +121,11 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
 
         images_files= new ArrayList<>();
         images_files_names =new ArrayList<>();
+
+        imageView_edit_serial_number_screen_exec_task = (ImageView)findViewById(R.id.imageView_edit_serial_number_screen_exec_task);
+        imageView_edit_serial_number_module_screen_exec_task = (ImageView)findViewById(R.id.imageView_edit_serial_number_module_screen_exec_task);
+        imageView_edit_phone1_screen_exec_task = (ImageView)findViewById(R.id.imageView_edit_phone1_screen_exec_task);
+        imageView_edit_phone2_screen_exec_task= (ImageView)findViewById(R.id.imageView_edit_phone2_screen_exec_task);
 
         lectura_editText = (EditText)findViewById(R.id.editText_lectura_screen_exec_task);
         textView_serial_number_result = (TextView)findViewById(R.id.textView_serial_number_screen_exec_task);
@@ -199,14 +213,27 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         textView_serial_number_result.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openDialog("Numero Serie","Escriba aqui numero serie");
+                openDialog("Numero Serie","Escriba aqui número serie");
             }
 
         });
+        imageView_edit_serial_number_screen_exec_task.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openDialog("Numero Serie","Escriba aqui número serie");
+            }
+        });
+        imageView_edit_serial_number_module_screen_exec_task.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openDialog("Numero Serie de Modulo","Escriba número serie de modulo");
+            }
+        });
+
         textView_serial_number_module_result.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openDialog("Numero Serie de Modulo","Escriba aqui numero serie de modulo");
+                openDialog("Numero Serie de Modulo","Escriba número serie de modulo");
             }
 
         });
@@ -254,6 +281,18 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
             @Override
             public void onClick(View view) {
                 openDialog("Telefono 1","547076...");
+            }
+        });
+        imageView_edit_phone1_screen_exec_task.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openDialog("Telefono 1","547076...");
+            }
+        });
+        imageView_edit_phone2_screen_exec_task.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openDialog("Telefono 2","547076...");
             }
         });
         telefono1.setOnClickListener(new View.OnClickListener() {
@@ -499,6 +538,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                 String data_result = "";
                 data_result = data.getStringExtra("result");
                 if (!data_result.equals("null") && !data_result.isEmpty() && data_result!=null) {
+                    textView_serial_number_result.setVisibility(View.VISIBLE);
                     textView_serial_number_result.setText(data_result);
                     contador = data_result;
                     try {
@@ -519,6 +559,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                         e.printStackTrace();
                         Toast.makeText(this, "No pudo insertarse numero serie de modulo: " + e.toString(), Toast.LENGTH_LONG).show();
                     }
+                    textView_serial_number_module_result.setVisibility(View.VISIBLE);
                     textView_serial_number_module_result.setText(data_result);
                 }
             }
@@ -764,17 +805,19 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                 //Toast.makeText(Screen_Execute_Task.this, Screen_Login_Activity.tarea_JSON.toString(), Toast.LENGTH_LONG).show();
                 textView_observaciones_screen_exec_task.setText(wrote_text);
             }
-        }else if(tag.contains("Numero Serie")){
+        }else if(tag.equals("Numero Serie")){
             if (!(TextUtils.isEmpty(wrote_text))) {
                 if (!(TextUtils.isEmpty(wrote_text))) {
                     Screen_Login_Activity.tarea_JSON.put(DBtareasController.numero_serie_contador, wrote_text);
+                    textView_serial_number_result.setVisibility(View.VISIBLE);
                     textView_serial_number_result.setText(wrote_text);
                 }
             }
-        }else if(tag.contains("Numero Serie de Modulo")){
+        }else if(tag.equals("Numero Serie de Modulo")){
             if (!(TextUtils.isEmpty(wrote_text))) {
                 if (!(TextUtils.isEmpty(wrote_text))) {
                     Screen_Login_Activity.tarea_JSON.put(DBtareasController.numero_serie_modulo, wrote_text);
+                    textView_serial_number_module_result.setVisibility(View.VISIBLE);
                     textView_serial_number_module_result.setText(wrote_text);
                 }
             }

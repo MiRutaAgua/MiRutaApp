@@ -108,10 +108,21 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
             e.printStackTrace();
             Toast.makeText(Screen_Incidence_Summary.this, "No pudo obtenerse contador", Toast.LENGTH_LONG).show();
         }
+        String tipo, calibre, nombre;
         try {
-            nombre_y_tarea.setText(Screen_Login_Activity.tarea_JSON.getString(DBtareasController.nombre_cliente)
-                    .replace("\n", "")+", "
-                    +Screen_Login_Activity.tarea_JSON.getString(DBtareasController.calibre_toma));
+            nombre = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.nombre_cliente).trim().replace("\n", "");
+            tipo = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.calibre_toma).trim().replace("\n", "");
+            calibre = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.tipo_tarea).trim().replace("\n", "");
+            if(nombre.equals("null") || nombre.equals("NULL")){
+                nombre = "";
+            }
+            if(tipo.equals("null") || tipo.equals("NULL")){
+                tipo = "";
+            }
+            if(calibre.equals("null") || calibre.equals("NULL")){
+                calibre = "";
+            }
+            nombre_y_tarea.setText(nombre+", "+tipo+ " "+calibre);
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(Screen_Incidence_Summary.this, "no se pudo obtener nombre de cliente", Toast.LENGTH_LONG).show();

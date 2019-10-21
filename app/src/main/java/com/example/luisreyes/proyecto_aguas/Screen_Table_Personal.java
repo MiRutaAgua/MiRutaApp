@@ -81,6 +81,8 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         setContentView(R.layout.screen_table_personal);
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
@@ -118,8 +120,8 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
         ArrayAdapter arrayAdapter_spinner = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista_desplegable);
         spinner_filtro_tareas.setAdapter(arrayAdapter_spinner);
 
-        arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, lista_contadores);
-        arrayAdapter_all = new ArrayAdapter(this, android.R.layout.simple_list_item_1, lista_contadores);
+        arrayAdapter = new ArrayAdapter(this, R.layout.list_text_view, lista_contadores);
+        arrayAdapter_all = new ArrayAdapter(this, R.layout.list_text_view, lista_contadores);
         lista_de_contadores_screen_table_personal.setAdapter(arrayAdapter);
 
         lista_de_contadores_screen_table_personal.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -181,32 +183,32 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 //Toast.makeText(Screen_Table_Team.this, lista_desplegable.get(i), Toast.LENGTH_LONG).show();
                 if(lista_desplegable.get(i).contains("NINGUNO")){
-                    arrayAdapter = new ArrayAdapter(Screen_Table_Personal.this, android.R.layout.simple_list_item_1, lista_contadores);
-                    arrayAdapter_all = new ArrayAdapter(Screen_Table_Personal.this, android.R.layout.simple_list_item_1, lista_contadores);
+                    arrayAdapter = new ArrayAdapter(Screen_Table_Personal.this, R.layout.list_text_view, lista_contadores);
+                    arrayAdapter_all = new ArrayAdapter(Screen_Table_Personal.this, R.layout.list_text_view, lista_contadores);
                     lista_de_contadores_screen_table_personal.setAdapter(arrayAdapter);
                 }
                 else if(lista_desplegable.get(i).contains("DIRECCION")){
-                    arrayAdapter = new ArrayAdapter(Screen_Table_Personal.this, android.R.layout.simple_list_item_1, lista_filtro_direcciones);
-                    arrayAdapter_all = new ArrayAdapter(Screen_Table_Personal.this, android.R.layout.simple_list_item_1, lista_filtro_direcciones);
+                    arrayAdapter = new ArrayAdapter(Screen_Table_Personal.this, R.layout.list_text_view, lista_filtro_direcciones);
+                    arrayAdapter_all = new ArrayAdapter(Screen_Table_Personal.this, R.layout.list_text_view, lista_filtro_direcciones);
                     lista_de_contadores_screen_table_personal.setAdapter(arrayAdapter);
                 }
                 else if(lista_desplegable.get(i).contains("TIPO DE TAREA")){
-                    arrayAdapter = new ArrayAdapter(Screen_Table_Personal.this, android.R.layout.simple_list_item_1, lista_filtro_Tareas);
-                    arrayAdapter_all = new ArrayAdapter(Screen_Table_Personal.this, android.R.layout.simple_list_item_1, lista_filtro_Tareas);
+                    arrayAdapter = new ArrayAdapter(Screen_Table_Personal.this, R.layout.list_text_view, lista_filtro_Tareas);
+                    arrayAdapter_all = new ArrayAdapter(Screen_Table_Personal.this, R.layout.list_text_view, lista_filtro_Tareas);
                     lista_de_contadores_screen_table_personal.setAdapter(arrayAdapter);
                 }
                 else if(lista_desplegable.get(i).contains("CITAS")){
-                    arrayAdapter = new ArrayAdapter(Screen_Table_Personal.this, android.R.layout.simple_list_item_1, lista_filtro_Citas);
-                    arrayAdapter_all = new ArrayAdapter(Screen_Table_Personal.this, android.R.layout.simple_list_item_1, lista_filtro_Citas);
+                    arrayAdapter = new ArrayAdapter(Screen_Table_Personal.this, R.layout.list_text_view, lista_filtro_Citas);
+                    arrayAdapter_all = new ArrayAdapter(Screen_Table_Personal.this, R.layout.list_text_view, lista_filtro_Citas);
                     lista_de_contadores_screen_table_personal.setAdapter(arrayAdapter);
                 }
                 else if(lista_desplegable.get(i).contains("DATOS ÚNICOS")){
-                    arrayAdapter = new ArrayAdapter(Screen_Table_Personal.this, android.R.layout.simple_list_item_1, lista_filtro_numero_serie);
-                    arrayAdapter_all = new ArrayAdapter(Screen_Table_Personal.this, android.R.layout.simple_list_item_1, lista_filtro_numero_serie);
+                    arrayAdapter = new ArrayAdapter(Screen_Table_Personal.this, R.layout.list_text_view, lista_filtro_numero_serie);
+                    arrayAdapter_all = new ArrayAdapter(Screen_Table_Personal.this, R.layout.list_text_view, lista_filtro_numero_serie);
                     lista_de_contadores_screen_table_personal.setAdapter(arrayAdapter);
                 }else if(lista_desplegable.get(i).contains("DATOS PRIVADOS")){
-                    arrayAdapter = new ArrayAdapter(Screen_Table_Personal.this, android.R.layout.simple_list_item_1, lista_filtro_abonado);
-                    arrayAdapter_all = new ArrayAdapter(Screen_Table_Personal.this, android.R.layout.simple_list_item_1, lista_filtro_abonado);
+                    arrayAdapter = new ArrayAdapter(Screen_Table_Personal.this, R.layout.list_text_view, lista_filtro_abonado);
+                    arrayAdapter_all = new ArrayAdapter(Screen_Table_Personal.this, R.layout.list_text_view, lista_filtro_abonado);
                     lista_de_contadores_screen_table_personal.setAdapter(arrayAdapter);
                 }
             }
@@ -485,25 +487,25 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
     public void orderTareastoArrayAdapter(){
         Collections.sort(lista_ordenada_de_tareas);
         for(int i=0; i < lista_ordenada_de_tareas.size(); i++){
-            lista_contadores.add("\nDirección:  "+lista_ordenada_de_tareas.get(i).getDireccion()
-                    +"         Cita:  "+lista_ordenada_de_tareas.get(i).getCita()
-                    +"       Tarea:  "+lista_ordenada_de_tareas.get(i).getTipo_tarea()
-                    +"    Calibre:  "+lista_ordenada_de_tareas.get(i).getCalibre()
-                    +"Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado());
-            lista_filtro_direcciones.add("\nDirección:  "+lista_ordenada_de_tareas.get(i).getDireccion()
-                    +" Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado());
-            lista_filtro_Tareas.add("\n      Tarea:  "+lista_ordenada_de_tareas.get(i).getTipo_tarea()+"   Calibre:  "+lista_ordenada_de_tareas.get(i).getCalibre()
-                    +"Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado());
-            lista_filtro_abonado.add("\n  Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado()+"Telefono 1:  "+lista_ordenada_de_tareas.get(i).getTelefono1()
-                    +"Telefono 2:  "+lista_ordenada_de_tareas.get(i).getTelefono2());
-            lista_filtro_numero_serie.add("\n       Número de Serie:  "+lista_ordenada_de_tareas.get(i).getNumero_serie_contador()
-                    +"\n              Año o Prefijo:  "+lista_ordenada_de_tareas.get(i).getAnno_contador()
-                    +"Número de Abonado:  "+lista_ordenada_de_tareas.get(i).getNumero_abonado());
-            lista_filtro_Citas.add("\n        Cita:  "+lista_ordenada_de_tareas.get(i).getCita()
-                    +"Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado());
-        }
-        arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, lista_contadores);
-        arrayAdapter_all = new ArrayAdapter(this, android.R.layout.simple_list_item_1, lista_contadores);
+                lista_contadores.add("\nDirección:  "+lista_ordenada_de_tareas.get(i).getDireccion()
+                        +"         Cita:  "+lista_ordenada_de_tareas.get(i).getCita()
+                        +"       Tarea:  "+lista_ordenada_de_tareas.get(i).getTipo_tarea()
+                        +"    Calibre:  "+lista_ordenada_de_tareas.get(i).getCalibre()
+                        +"Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado());
+                lista_filtro_direcciones.add("\nDirección:  "+lista_ordenada_de_tareas.get(i).getDireccion()
+                        +" Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado());
+                lista_filtro_Tareas.add("\n      Tarea:  "+lista_ordenada_de_tareas.get(i).getTipo_tarea()+"   Calibre:  "+lista_ordenada_de_tareas.get(i).getCalibre()
+                        +"Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado());
+                lista_filtro_abonado.add("\n  Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado()+"Telefono 1:  "+lista_ordenada_de_tareas.get(i).getTelefono1()
+                        +"Telefono 2:  "+lista_ordenada_de_tareas.get(i).getTelefono2());
+                lista_filtro_numero_serie.add("\n       Número de Serie:  "+lista_ordenada_de_tareas.get(i).getNumero_serie_contador()
+                        +"\n              Año o Prefijo:  "+lista_ordenada_de_tareas.get(i).getAnno_contador()
+                        +"Número de Abonado:  "+lista_ordenada_de_tareas.get(i).getNumero_abonado());
+                lista_filtro_Citas.add("\n        Cita:  "+lista_ordenada_de_tareas.get(i).getCita()
+                        +"Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado());
+            }
+        arrayAdapter = new ArrayAdapter(this, R.layout.list_text_view, lista_contadores);
+        arrayAdapter_all = new ArrayAdapter(this, R.layout.list_text_view, lista_contadores);
         lista_de_contadores_screen_table_personal.setAdapter(arrayAdapter);
     }
 

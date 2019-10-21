@@ -159,13 +159,28 @@ public class Screen_Battery_Intake_Asignation extends AppCompatActivity {
                 String bateria= "",fila = "",columna = "";
 
                 if(!(TextUtils.isEmpty(editText_bateria.getText()))){
-                    bateria = "-"+editText_bateria.getText().toString();
+                    Integer bat = Integer.parseInt(editText_bateria.getText().toString());
+                    if(bat <10){
+                        bateria = "-0" + editText_bateria.getText().toString();
+                    }else {
+                        bateria = "-" + editText_bateria.getText().toString();
+                    }
                 }
                 if(!(TextUtils.isEmpty(editText_fila.getText()))){
-                    fila = "-"+editText_fila.getText().toString();
+                    Integer fil = Integer.parseInt(editText_fila.getText().toString());
+                    if(fil <10){
+                        fila = "-0" + editText_fila.getText().toString();
+                    }else {
+                        fila = "-" + editText_fila.getText().toString();
+                    }
                 }
                 if(!(TextUtils.isEmpty(editText_columna.getText()))){
-                    columna = "-"+editText_columna.getText().toString();
+                    Integer col = Integer.parseInt(editText_columna.getText().toString());
+                    if(col <10){
+                        columna = "-0" + editText_columna.getText().toString();
+                    }else {
+                        columna = "-" + editText_columna.getText().toString();
+                    }
                 }
 
 

@@ -3,6 +3,12 @@
     android:layout_width="400dp"
     >
 
+    <item android:id="@+id/Info_Tarea"
+        android:title="Info Tarea"
+        app:showAsAction="never"
+        android:layout_width="400dp"
+        />
+
     <item
         android:id="@+id/Configuracion"
         android:title="Configuracion"
@@ -18,11 +24,6 @@
 
     <item android:id="@+id/Contactar"
         android:title="Contactar"
-        app:showAsAction="never"
-        android:layout_width="400dp"
-        />
-    <item android:id="@+id/Info_Tarea"
-        android:title="Info Tarea"
         app:showAsAction="never"
         android:layout_width="400dp"
         />

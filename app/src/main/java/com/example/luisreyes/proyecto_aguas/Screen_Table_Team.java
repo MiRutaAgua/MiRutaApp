@@ -29,6 +29,7 @@ import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -86,6 +87,10 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        getWindow().setSoftInputMode( //Para esconder el teclado
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
+        );
         setContentView(R.layout.screen_table_team);
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
@@ -122,8 +127,8 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
         lista_filtro_abonado = new ArrayList<String>();
         lista_ordenada_de_tareas = new ArrayList<MyCounter>();
 
-        arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, lista_contadores);
-        arrayAdapter_all = new ArrayAdapter(this, android.R.layout.simple_list_item_1, lista_contadores);
+        arrayAdapter = new ArrayAdapter(this, R.layout.list_text_view, lista_contadores);
+        arrayAdapter_all = new ArrayAdapter(this, R.layout.list_text_view, lista_contadores);
 
         lista_de_contadores_screen_table_team.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -223,32 +228,32 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
                 //Toast.makeText(Screen_Table_Team.this, lista_desplegable.get(i), Toast.LENGTH_LONG).show();
                 editText_filter.setText("");
                 if(lista_desplegable.get(i).contains("NINGUNO")){
-                    arrayAdapter = new ArrayAdapter(Screen_Table_Team.this, android.R.layout.simple_list_item_1, lista_contadores);
-                    arrayAdapter_all = new ArrayAdapter(Screen_Table_Team.this, android.R.layout.simple_list_item_1, lista_contadores);
+                    arrayAdapter = new ArrayAdapter(Screen_Table_Team.this, R.layout.list_text_view, lista_contadores);
+                    arrayAdapter_all = new ArrayAdapter(Screen_Table_Team.this, R.layout.list_text_view, lista_contadores);
                     lista_de_contadores_screen_table_team.setAdapter(arrayAdapter);
                 }
                 else if(lista_desplegable.get(i).contains("DIRECCION")){
-                    arrayAdapter = new ArrayAdapter(Screen_Table_Team.this, android.R.layout.simple_list_item_1, lista_filtro_direcciones);
-                    arrayAdapter_all = new ArrayAdapter(Screen_Table_Team.this, android.R.layout.simple_list_item_1, lista_filtro_direcciones);
+                    arrayAdapter = new ArrayAdapter(Screen_Table_Team.this, R.layout.list_text_view, lista_filtro_direcciones);
+                    arrayAdapter_all = new ArrayAdapter(Screen_Table_Team.this, R.layout.list_text_view, lista_filtro_direcciones);
                     lista_de_contadores_screen_table_team.setAdapter(arrayAdapter);
                 }
                 else if(lista_desplegable.get(i).contains("TIPO DE TAREA")){
-                    arrayAdapter = new ArrayAdapter(Screen_Table_Team.this, android.R.layout.simple_list_item_1, lista_filtro_Tareas);
-                    arrayAdapter_all = new ArrayAdapter(Screen_Table_Team.this, android.R.layout.simple_list_item_1, lista_filtro_Tareas);
+                    arrayAdapter = new ArrayAdapter(Screen_Table_Team.this, R.layout.list_text_view, lista_filtro_Tareas);
+                    arrayAdapter_all = new ArrayAdapter(Screen_Table_Team.this, R.layout.list_text_view, lista_filtro_Tareas);
                     lista_de_contadores_screen_table_team.setAdapter(arrayAdapter);
                 }
                 else if(lista_desplegable.get(i).contains("CITAS")){
-                    arrayAdapter = new ArrayAdapter(Screen_Table_Team.this, android.R.layout.simple_list_item_1, lista_filtro_Citas);
-                    arrayAdapter_all = new ArrayAdapter(Screen_Table_Team.this, android.R.layout.simple_list_item_1, lista_filtro_Citas);
+                    arrayAdapter = new ArrayAdapter(Screen_Table_Team.this, R.layout.list_text_view, lista_filtro_Citas);
+                    arrayAdapter_all = new ArrayAdapter(Screen_Table_Team.this, R.layout.list_text_view, lista_filtro_Citas);
                     lista_de_contadores_screen_table_team.setAdapter(arrayAdapter);
                 }
                 else if(lista_desplegable.get(i).contains("DATOS ÚNICOS")){
-                    arrayAdapter = new ArrayAdapter(Screen_Table_Team.this, android.R.layout.simple_list_item_1, lista_filtro_numero_serie);
-                    arrayAdapter_all = new ArrayAdapter(Screen_Table_Team.this, android.R.layout.simple_list_item_1, lista_filtro_numero_serie);
+                    arrayAdapter = new ArrayAdapter(Screen_Table_Team.this, R.layout.list_text_view, lista_filtro_numero_serie);
+                    arrayAdapter_all = new ArrayAdapter(Screen_Table_Team.this, R.layout.list_text_view, lista_filtro_numero_serie);
                     lista_de_contadores_screen_table_team.setAdapter(arrayAdapter);
                 }else if(lista_desplegable.get(i).contains("DATOS PRIVADOS")){
-                    arrayAdapter = new ArrayAdapter(Screen_Table_Team.this, android.R.layout.simple_list_item_1, lista_filtro_abonado);
-                    arrayAdapter_all = new ArrayAdapter(Screen_Table_Team.this, android.R.layout.simple_list_item_1, lista_filtro_abonado);
+                    arrayAdapter = new ArrayAdapter(Screen_Table_Team.this, R.layout.list_text_view, lista_filtro_abonado);
+                    arrayAdapter_all = new ArrayAdapter(Screen_Table_Team.this, R.layout.list_text_view, lista_filtro_abonado);
                     lista_de_contadores_screen_table_team.setAdapter(arrayAdapter);
                 }
             }
@@ -530,18 +535,19 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
             lista_filtro_Citas.add("\n        Cita:  "+lista_ordenada_de_tareas.get(i).getCita()
                     +"Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado());
         }
-        arrayAdapter = new ArrayAdapter(Screen_Table_Team.this, android.R.layout.simple_list_item_1, lista_contadores);
-        arrayAdapter_all = new ArrayAdapter(Screen_Table_Team.this, android.R.layout.simple_list_item_1, lista_contadores);
+        arrayAdapter = new ArrayAdapter(Screen_Table_Team.this, R.layout.list_text_view, lista_contadores);
+        arrayAdapter_all = new ArrayAdapter(Screen_Table_Team.this, R.layout.list_text_view, lista_contadores);
         lista_de_contadores_screen_table_team.setAdapter(arrayAdapter);
     }
 
     public static MyCounter orderTareaFromJSON(JSONObject jsonObject) throws JSONException {
-        String dir = jsonObject.getString(DBtareasController.poblacion)+", "
-                +jsonObject.getString(DBtareasController.calle).replace("\n", "")+", "
-                +jsonObject.getString(DBtareasController.numero_edificio).replace("\n", "")
-                +jsonObject.getString(DBtareasController.letra_edificio).replace("\n", "")+" "
-                +jsonObject.getString(DBtareasController.piso).replace("\n", "")+" "
-                +jsonObject.getString(DBtareasController.mano).replace("\n", "")+"\n";
+        String dir = jsonObject.getString(DBtareasController.poblacion).trim()+", "
+                +jsonObject.getString(DBtareasController.calle).trim().replace("\n", "")+", "
+                +jsonObject.getString(DBtareasController.numero).trim().replace("\n", "")+" " //numero de portal
+                +jsonObject.getString(DBtareasController.numero_edificio).trim().replace("\n", "")
+                +jsonObject.getString(DBtareasController.letra_edificio).trim().replace("\n", "")+" "
+                +jsonObject.getString(DBtareasController.piso).trim().replace("\n", "")+" "
+                +jsonObject.getString(DBtareasController.mano).trim().replace("\n", "")+"\n";
         if(dir.contains("null, null, nullnull")) {
             dir = "No hay dirección\n";
         }

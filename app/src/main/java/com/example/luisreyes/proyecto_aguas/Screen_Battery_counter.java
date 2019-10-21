@@ -121,19 +121,19 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
                         +"mm");
             }
 
-            direccion.setText((Screen_Login_Activity.tarea_JSON.getString(DBtareasController.poblacion).replace("null","").replace("null","").replace("NULL","") + "   "
-                    + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.calle).replace("\n", "").replace("null","").replace("NULL","") + "  "
-                    + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_edificio).replace("\n", "").replace("null","").replace("NULL","")
-                    + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.letra_edificio).replace("\n", "").replace("null","").replace("NULL","") + "  "
-                    + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.piso).replace("\n", "").replace("NULL","").replace("null","") + "  "
-                    + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.mano).replace("\n", "")).replace("null","").replace("NULL",""));
-            datosEspecificos.setText((Screen_Login_Activity.tarea_JSON.getString(DBtareasController.observaciones).replace("\n", "")).replace("null","").replace("NULL",""));
-            serie.setText((Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador).replace("\n", "")).replace("null","").replace("NULL",""));
-            lectura.setText((Screen_Login_Activity.tarea_JSON.getString(DBtareasController.lectura_actual).replace("\n", "")).replace("null","").replace("NULL",""));
-            ubicacion.setText((Screen_Login_Activity.tarea_JSON.getString(DBtareasController.emplazamiento).replace("\n", "")).replace("null","").replace("NULL",""));
-            acceso.setText((Screen_Login_Activity.tarea_JSON.getString(DBtareasController.acceso).replace("\n", "")).replace("null","").replace("NULL",""));
-            calibre.setText((Screen_Login_Activity.tarea_JSON.getString(DBtareasController.calibre_toma).replace("\n", "")).replace("null","").replace("NULL",""));
-            ubicacion_bateria.setText((Screen_Login_Activity.tarea_JSON.getString(DBtareasController.ubicacion_en_bateria).replace("\n", "")).replace("null","").replace("NULL",""));
+            direccion.setText((Screen_Login_Activity.tarea_JSON.getString(DBtareasController.poblacion).trim().replace("null","").replace("NULL","") + "   "
+                    + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.calle).trim().replace("\n", "").replace("null","").replace("NULL","") + "  "
+                    + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_edificio).trim().replace("\n", "").replace("null","").replace("NULL","")
+                    + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.letra_edificio).trim().replace("\n", "").replace("null","").replace("NULL","") + "  "
+                    + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.piso).trim().replace("\n", "").replace("NULL","").replace("null","") + "  "
+                    + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.mano).trim().replace("\n", "")).replace("null","").replace("NULL",""));
+            datosEspecificos.setText((Screen_Login_Activity.tarea_JSON.getString(DBtareasController.observaciones).trim().replace("\n", "")).replace("null","").replace("NULL",""));
+            serie.setText((Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador).trim().replace("\n", "")).replace("null","").replace("NULL",""));
+            lectura.setText((Screen_Login_Activity.tarea_JSON.getString(DBtareasController.lectura_actual).trim().replace("\n", "")).replace("null","").replace("NULL",""));
+            ubicacion.setText((Screen_Login_Activity.tarea_JSON.getString(DBtareasController.emplazamiento).trim().replace("\n", "")).replace("null","").replace("NULL",""));
+            acceso.setText((Screen_Login_Activity.tarea_JSON.getString(DBtareasController.acceso).trim().replace("\n", "")).replace("null","").replace("NULL",""));
+            calibre.setText((Screen_Login_Activity.tarea_JSON.getString(DBtareasController.calibre_toma).trim().replace("\n", "")).replace("null","").replace("NULL",""));
+            ubicacion_bateria.setText((Screen_Login_Activity.tarea_JSON.getString(DBtareasController.ubicacion_en_bateria).trim().replace("\n", "")).replace("null","").replace("NULL",""));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -386,21 +386,53 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
     }
 
     public static String get_tarea_info(){
+        HashMap<String, String> mapaTiposDeTarea = new HashMap<>();
+        mapaTiposDeTarea.put("NCI", "NUEVO CONTADOR INSTALAR");
+        mapaTiposDeTarea.put("U", "USADO CONTADOR INSTALAR");
+        mapaTiposDeTarea.put("T", "BAJA O CORTE DE SUMINISTRO");
+        mapaTiposDeTarea.put("LFTD", "LIMPIEZA DE FILTRO Y TOMA DE DATOS");
+        mapaTiposDeTarea.put("D", "DATOS");
+        mapaTiposDeTarea.put("TD", "TOMA DE DATOS");
+        mapaTiposDeTarea.put("I", "INSPECCIÓN");
+        mapaTiposDeTarea.put("CF", "COMPROBAR EMISOR");
+        mapaTiposDeTarea.put("EL", "EMISOR LECTURA");
+        mapaTiposDeTarea.put("SI", "SOLO INSTALAR");
+        mapaTiposDeTarea.put("R", "REFORMA MAS CONTADOR");
+        String tipo_tarea = null;
+        String calibre = null;
+        try {
+            tipo_tarea = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.tipo_tarea).
+                    trim().replace("\n","");
+            calibre = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.calibre_toma).
+                    trim().replace("\n","");
+            if(calibre.contains("null")){
+                calibre = "";
+            }
+            if(tipo_tarea.contains("null")){
+                tipo_tarea = "";
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        if(mapaTiposDeTarea.containsKey(tipo_tarea)) {
+            tipo_tarea = mapaTiposDeTarea.get(tipo_tarea);
+        }
         String n = "";
         try{
-            n = "Tipo: "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.tipo_tarea)
-                    +"\nDireccion: "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.poblacion)
-                    +", "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.calle)
-                    +", "+Screen_Advance_Filter.getBis(Screen_Login_Activity.tarea_JSON)
+            n = "Tipo:\n  "+tipo_tarea + " "+calibre
+                    +"\n\nDireccion:\n  "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.poblacion).trim()
+                    +", "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.calle).trim()
+                    +", "+Screen_Advance_Filter.getBis(Screen_Login_Activity.tarea_JSON).trim()
                     //+"\nModificacion: "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.date_time_modified)
-                    +"Abonado: "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.nombre_cliente)
-                    +"Contador: "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador)
-                    +"\nCita: "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.nuevo_citas)
-                    +"\nlectura Ultima: "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.lectura_ultima)
+                    +"\n\nAbonado:\n  "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.nombre_cliente)
+                    +"\n\nContador:\n  "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador)
+                    +"\n\nCita:  "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.nuevo_citas)
+                    +"\n\nlectura Ultima: "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.lectura_ultima)
                     +"\nlectura Actual: "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.lectura_actual)
                     //+"\nCodigo_Localizacion: "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.codigo_de_localizacion)
                     //+"\ngeolocalizacion: "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.geolocalizacion)
-                    +"\nEstado: "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.status_tarea);
+                    +"\n\nEstado: "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.status_tarea);
         } catch (JSONException e) {
             e.printStackTrace();
             return "No se pudo obtener datos de tarea";

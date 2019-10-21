@@ -49,6 +49,12 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
     ImageView foto_lectura;
     ImageView foto_numero_de_serie;
 
+    ImageView imageView_edit_numero_serie_screen_validate_battery_intake_asignation,
+            imageView_edit_lectura_anterior_screen_validate_battery_intake_asignation,
+            imageView_edit_lectura_ultima_screen_validate_battery_intake_asignation,
+            imageView_edit_new_serial_number_screen_validate_battery_intake_asignation,
+            imageView_edit_obsevations_screen_validate_battery_intake_asignation;
+
     Bitmap foto_antes_intalacion_bitmap = null;
     Bitmap foto_lectura_bitmap= null;
     Bitmap foto_numero_serie_bitmap= null;
@@ -56,7 +62,7 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
     private ArrayList<String> images_files_names;
     Button button_guardar_datos_screen_validate_battery_intake_asignation;
 
-    TextView numero_serie, numero_serie_nuevo, lectura_ultima, label_lectura_ultima, lectura_anterior, observaciones, ubicacion;
+    TextView nombre_y_tarea, numero_serie, numero_serie_nuevo, lectura_ultima, label_lectura_ultima, lectura_anterior, observaciones, ubicacion;
     String current_tag;
     private ProgressDialog progressDialog;
 
@@ -74,10 +80,17 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
         images_files = new ArrayList<>();
         images_files_names = new ArrayList<>();
 
+        imageView_edit_numero_serie_screen_validate_battery_intake_asignation = (ImageView)findViewById(R.id.imageView_edit_numero_serie_screen_validate_battery_intake_asignation);
+        imageView_edit_lectura_anterior_screen_validate_battery_intake_asignation = (ImageView)findViewById(R.id.imageView_edit_lectura_anterior_screen_validate_battery_intake_asignation);
+        imageView_edit_lectura_ultima_screen_validate_battery_intake_asignation = (ImageView)findViewById(R.id.imageView_edit_lectura_ultima_screen_validate_battery_intake_asignation);
+        imageView_edit_new_serial_number_screen_validate_battery_intake_asignation = (ImageView)findViewById(R.id.imageView_edit_new_serial_number_screen_validate_battery_intake_asignation);
+        imageView_edit_obsevations_screen_validate_battery_intake_asignation = (ImageView)findViewById(R.id.imageView_edit_obsevations_screen_validate_battery_intake_asignation);
+
         foto_instalacion = (ImageView)findViewById(R.id.imageView_foto_instalacion_screen_validate_battery_intake_asignation);
         foto_lectura = (ImageView)findViewById(R.id.imageView_foto_lectura_screen_validate_battery_intake_asignation);
         foto_numero_de_serie = (ImageView)findViewById(R.id.imageView_foto_numero_serie_screen_validate_battery_intake_asignation);
 
+        nombre_y_tarea = (TextView) findViewById(R.id.textViev_nombre_y_tarea_screen_validate_battery_intake_asignation);
         numero_serie       = (TextView) findViewById(R.id.textView_numero_serie_screen_validate_battery_intake_asignation);
         numero_serie_nuevo = (TextView)findViewById(R.id.textView_numero_serie_nuevo_screen_validate_battery_intake_asignation);
         label_lectura_ultima     = (TextView)findViewById(R.id.textView_lectura_ultima_screen_validate_battery_intake_asignation);
@@ -87,6 +100,25 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
         ubicacion     = (TextView)findViewById(R.id.textView_ubicacion_screen_validate_battery_intake_asignation);
         button_guardar_datos_screen_validate_battery_intake_asignation = (Button)findViewById(R.id.button_guardar_datos_screen_validate_battery_intake_asignation);
 
+        String tipo, calibre, nombre;
+        try {
+            nombre = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.nombre_cliente).trim().replace("\n", "");
+            tipo = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.tipo_tarea).trim().replace("\n", "");
+            calibre = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.calibre_toma).trim().replace("\n", "");
+            if(nombre.equals("null") || nombre.equals("NULL")){
+                nombre = "";
+            }
+            if(tipo.equals("null") || tipo.equals("NULL")){
+                tipo = "";
+            }
+            if(calibre.equals("null") || calibre.equals("NULL")){
+                calibre = "";
+            }
+            nombre_y_tarea.setText(nombre+", "+tipo+ " "+calibre);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Toast.makeText(Screen_Validate_Battery_Intake_Asignation.this, "no se pudo obtener nombre de cliente", Toast.LENGTH_LONG).show();
+        }
         try {
 
             foto_antes_intalacion_bitmap = getPhotoUserLocal(Screen_Battery_Intake_Asignation.mCurrentPhotoPath_foto_antes);
@@ -105,12 +137,12 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
                 foto_lectura.setVisibility(View.VISIBLE);
                 foto_lectura.setImageBitmap(foto_lectura_bitmap);
             }
-            numero_serie.setText(Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador));
-            lectura_anterior.setText(Screen_Login_Activity.tarea_JSON.getString(DBtareasController.lectura_ultima));
-            lectura_ultima.setText(Screen_Login_Activity.tarea_JSON.getString(DBtareasController.lectura_actual));
-            numero_serie_nuevo.setText(Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador));
-            observaciones.setText(Screen_Login_Activity.tarea_JSON.getString(DBtareasController.observaciones));
-            ubicacion.setText(Screen_Login_Activity.tarea_JSON.getString(DBtareasController.ubicacion_en_bateria));
+            numero_serie.setText(Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador).trim());
+            lectura_anterior.setText(Screen_Login_Activity.tarea_JSON.getString(DBtareasController.lectura_ultima).trim());
+            lectura_ultima.setText(Screen_Login_Activity.tarea_JSON.getString(DBtareasController.lectura_actual).trim());
+            numero_serie_nuevo.setText(Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador).trim());
+            observaciones.setText(Screen_Login_Activity.tarea_JSON.getString(DBtareasController.observaciones).trim());
+            ubicacion.setText(Screen_Login_Activity.tarea_JSON.getString(DBtareasController.ubicacion_en_bateria).trim());
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(Screen_Validate_Battery_Intake_Asignation.this, "No se pudo insetar datos en JSON tarea", Toast.LENGTH_LONG).show();
@@ -128,10 +160,28 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
                 openDialog("Lectura");
             }
         });
+        imageView_edit_lectura_ultima_screen_validate_battery_intake_asignation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openDialog("Lectura");
+            }
+        });
+        imageView_edit_obsevations_screen_validate_battery_intake_asignation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openDialog("observaciones");
+            }
+        });
         observaciones.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 openDialog("observaciones");
+            }
+        });
+        imageView_edit_new_serial_number_screen_validate_battery_intake_asignation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openDialog("Número de Serie");
             }
         });
         numero_serie_nuevo.setOnClickListener(new View.OnClickListener() {
@@ -274,14 +324,15 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
             if(!lectura_last.isEmpty() && !lectura_last.equals("null") && lectura_last!=null){
                 Integer lectura_lastInt = Integer.parseInt(lectura_last);
                 Integer lectura_actualInt = Integer.parseInt(wrote_string);
-                if(lectura_actualInt > lectura_lastInt) {
-                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_ultima, lectura_last);
-                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_actual, wrote_string);
-                    lectura_anterior.setText(lectura_last);
-                    lectura_ultima.setText(wrote_string);
-                }
-                else{
-                    Toast.makeText(this, "La lectura del contador debe ser mayor que la ultima registrada", Toast.LENGTH_LONG).show();
+                if(lectura_actualInt!=null && lectura_lastInt!=null) {
+                    if (lectura_actualInt > lectura_lastInt) {
+                        Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_ultima, lectura_last);
+                        Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_actual, wrote_string);
+                        lectura_anterior.setText(lectura_last);
+                        lectura_ultima.setText(wrote_string);
+                    } else {
+                        Toast.makeText(this, "La lectura del contador debe ser mayor que la ultima registrada", Toast.LENGTH_LONG).show();
+                    }
                 }
             }
             else{//no hay lectura actual

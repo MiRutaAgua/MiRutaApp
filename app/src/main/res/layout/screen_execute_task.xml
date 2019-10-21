@@ -144,14 +144,14 @@
                 android:layout_height="wrap_content"
                 android:text="Teléfonos:"
                 android:textSize="16dp"
-                android:layout_gravity="center"
+                android:layout_gravity="left"
                 android:id="@+id/textView_phones_screen_exec_task"
                 android:textStyle="bold"
-                android:paddingBottom="20dp"
+                android:padding="10dp"
                 />
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 >
@@ -161,7 +161,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left"
-                    android:layout_marginLeft="20dp"
+                    android:padding="10dp"
                     android:textSize="15dp"
                     android:text="53941930"
 
@@ -172,12 +172,36 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left"
-                    android:layout_marginLeft="20dp"
+                    android:padding="10dp"
                     android:textSize="15dp"
                     android:text="52416790"
 
                     />
 
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+                <ImageView
+                    android:paddingTop="1dp"
+                    android:id="@+id/imageView_edit_phone1_screen_exec_task"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_edit_blue_24dp"
+                    />
+                <ImageView
+                    android:paddingTop="1dp"
+                    android:id="@+id/imageView_edit_phone2_screen_exec_task"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_edit_blue_24dp"
+                    />
             </LinearLayout>
         </LinearLayout>
 
@@ -188,14 +212,32 @@
             android:orientation="vertical"
             android:gravity="center"
             android:layout_marginTop="20dip">
-            <TextView
-                android:layout_width="wrap_content"
+
+            <LinearLayout
+
                 android:layout_height="wrap_content"
-                android:text="        "
-                android:layout_gravity="center"
-                android:textSize="18dp"
-                android:id="@+id/textView_serial_number_screen_exec_task"
-                />
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="        "
+                    android:layout_gravity="center"
+                    android:textSize="18dp"
+                    android:id="@+id/textView_serial_number_screen_exec_task"
+                    />
+                <ImageView
+                    android:paddingTop="1dp"
+                    android:id="@+id/imageView_edit_serial_number_screen_exec_task"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_edit_blue_24dp"
+                    />
+            </LinearLayout>
+
             <ImageView
                 android:id="@+id/button_scan_serial_number_screen_exec_task"
                 android:layout_width="266dp"
@@ -233,15 +275,32 @@
             android:orientation="horizontal"
 
             >
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+
                 android:layout_height="wrap_content"
-                android:text="       "
-                android:layout_gravity="center"
-                android:textSize="18dp"
-                android:id="@+id/textView_module_number_screen_exec_task"
-                android:visibility="invisible"
-                />
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="       "
+                    android:layout_gravity="center"
+                    android:textSize="18dp"
+                    android:id="@+id/textView_module_number_screen_exec_task"
+                    android:visibility="invisible"
+                    />
+                <ImageView
+                    android:paddingTop="1dp"
+                    android:id="@+id/imageView_edit_serial_number_module_screen_exec_task"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_edit_blue_24dp"
+                    />
+            </LinearLayout>
+
         </LinearLayout>
 
 

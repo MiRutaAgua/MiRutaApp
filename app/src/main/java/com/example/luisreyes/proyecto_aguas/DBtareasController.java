@@ -78,7 +78,7 @@ public class DBtareasController extends SQLiteOpenHelper {
     public static final String foto_incidencia_3 = "foto_incidencia_3";
     public static final String propiedad = "propiedad";
     public static final String reparacion = "reparacion";
-    public static final String numero = "numero";
+    public static final String numero = "numero_portal";
     public static final String ruedas = "ruedas";
     public static final String date_time_modified = "date_time_modified";
     public static final String status_tarea = "status_tarea";

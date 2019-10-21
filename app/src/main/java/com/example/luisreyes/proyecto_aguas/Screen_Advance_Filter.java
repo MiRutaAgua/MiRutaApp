@@ -359,13 +359,13 @@ public class Screen_Advance_Filter extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if(lista_desplegable.get(i).contains("NINGUNO")){
                     lista_filtro_actual = lista_filtro_direcciones;
-                    arrayAdapter = new ArrayAdapter(Screen_Advance_Filter.this, android.R.layout.simple_list_item_1, lista_filtro_direcciones);
+                    arrayAdapter = new ArrayAdapter(Screen_Advance_Filter.this, R.layout.list_text_view, lista_filtro_direcciones);
                     listView_contadores_screen_advance_filter.setAdapter(arrayAdapter);
                     hideAllFilters();
                 }
                 else if(lista_desplegable.get(i).contains("DIRECCION")){
                     lista_filtro_actual = lista_filtro_direcciones;
-                    arrayAdapter = new ArrayAdapter(Screen_Advance_Filter.this, android.R.layout.simple_list_item_1, lista_filtro_direcciones);
+                    arrayAdapter = new ArrayAdapter(Screen_Advance_Filter.this, R.layout.list_text_view, lista_filtro_direcciones);
                     listView_contadores_screen_advance_filter.setAdapter(arrayAdapter);
                     hideAllFilters();
                     layout_filtro_direccion_screen_advance_filter.setVisibility(View.VISIBLE);
@@ -373,7 +373,7 @@ public class Screen_Advance_Filter extends AppCompatActivity {
                 }
                 else if(lista_desplegable.get(i).contains("TIPO DE TAREA")){
                     lista_filtro_actual = lista_filtro_Tareas;
-                    arrayAdapter = new ArrayAdapter(Screen_Advance_Filter.this, android.R.layout.simple_list_item_1, lista_filtro_Tareas);
+                    arrayAdapter = new ArrayAdapter(Screen_Advance_Filter.this, R.layout.list_text_view, lista_filtro_Tareas);
                     listView_contadores_screen_advance_filter.setAdapter(arrayAdapter);
                     hideAllFilters();
                     layout_filtro_tipo_tarea_screen_advance_filter.setVisibility(View.VISIBLE);
@@ -381,7 +381,7 @@ public class Screen_Advance_Filter extends AppCompatActivity {
                 }
                 else if(lista_desplegable.get(i).contains("DATOS ÚNICOS")){
                     lista_filtro_actual = lista_filtro_numero_serie;
-                    arrayAdapter = new ArrayAdapter(Screen_Advance_Filter.this, android.R.layout.simple_list_item_1, lista_filtro_numero_serie);
+                    arrayAdapter = new ArrayAdapter(Screen_Advance_Filter.this, R.layout.list_text_view, lista_filtro_numero_serie);
                     listView_contadores_screen_advance_filter.setAdapter(arrayAdapter);
                     hideAllFilters();
                     layout_filtro_datos_unicos_screen_advance_filter.setVisibility(View.VISIBLE);
@@ -389,7 +389,7 @@ public class Screen_Advance_Filter extends AppCompatActivity {
                     fillFilterNumerosSerie();
                 }else if(lista_desplegable.get(i).contains("DATOS PRIVADOS")){
                     lista_filtro_actual = lista_filtro_abonado;
-                    arrayAdapter = new ArrayAdapter(Screen_Advance_Filter.this, android.R.layout.simple_list_item_1, lista_filtro_abonado);
+                    arrayAdapter = new ArrayAdapter(Screen_Advance_Filter.this, R.layout.list_text_view, lista_filtro_abonado);
                     listView_contadores_screen_advance_filter.setAdapter(arrayAdapter);
                     hideAllFilters();
                     layout_filtro_datos_privados_screen_advance_filter.setVisibility(View.VISIBLE);
@@ -487,28 +487,33 @@ public class Screen_Advance_Filter extends AppCompatActivity {
 
     public static String getBis(JSONObject jsonObject){
         String Bis="";
+        String numero_portal="";
         String numero_edificio = "";
         String letra_edificio = "";
         String piso = "";
         String mano = "";
         try {
-            numero_edificio= jsonObject.getString(DBtareasController.numero_edificio).replace(" ","").replace("\n","");
+            numero_portal= jsonObject.getString(DBtareasController.numero).trim().replace("\n","");
+            if(numero_portal.equals(null)){
+                numero_portal = "";
+            }
+            numero_edificio= jsonObject.getString(DBtareasController.numero_edificio).trim().replace("\n","");
             if(numero_edificio.equals(null)){
                 numero_edificio = "";
             }
-            letra_edificio= jsonObject.getString(DBtareasController.letra_edificio).replace(" ","").replace("\n","");
+            letra_edificio= jsonObject.getString(DBtareasController.letra_edificio).trim().replace("\n","");
             if(letra_edificio.equals(null)){
                 letra_edificio = "";
             }
-            piso= jsonObject.getString(DBtareasController.piso).replace(" ","").replace("\n","");
+            piso= jsonObject.getString(DBtareasController.piso).trim().replace("\n","");
             if(piso.equals(null)){
                 piso = "";
             }
-            mano= jsonObject.getString(DBtareasController.mano).replace(" ","").replace("\n","");
+            mano= jsonObject.getString(DBtareasController.mano).trim().replace("\n","");
             if(mano.equals(null)){
                 mano = "";
             }
-            Bis = numero_edificio + letra_edificio + piso + mano;
+            Bis = numero_portal + " " + numero_edificio + " " + letra_edificio + " " + piso + " " + mano;
         } catch (JSONException e) {
             e.printStackTrace();
             return "";
@@ -932,7 +937,7 @@ public class Screen_Advance_Filter extends AppCompatActivity {
                     +" Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado());
             lista_filtro_Tareas.add("\n      Tarea:  "+lista_ordenada_de_tareas.get(i).getTipo_tarea()+"   Calibre:  "+lista_ordenada_de_tareas.get(i).getCalibre()
                     +"Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado());
-            lista_filtro_abonado.add("\n   Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado()+"Telefono 1:  "+lista_ordenada_de_tareas.get(i).getTelefono1()
+            lista_filtro_abonado.add("\n  Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado()+"Telefono 1:  "+lista_ordenada_de_tareas.get(i).getTelefono1()
                     +"Telefono 2:  "+lista_ordenada_de_tareas.get(i).getTelefono2());
             lista_filtro_numero_serie.add("\n       Número de Serie:  "+lista_ordenada_de_tareas.get(i).getNumero_serie_contador()
                     +"\n              Año o Prefijo:  "+lista_ordenada_de_tareas.get(i).getAnno_contador()
@@ -955,7 +960,7 @@ public class Screen_Advance_Filter extends AppCompatActivity {
         }
     }
     private void insertList(ArrayList<String> lista){
-        arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, lista);
+        arrayAdapter = new ArrayAdapter(this, R.layout.list_text_view, lista);
         listView_contadores_screen_advance_filter.setAdapter(arrayAdapter);
     }
 
@@ -989,7 +994,7 @@ public class Screen_Advance_Filter extends AppCompatActivity {
 //                    lista_filtro_Citas.add("\n        Cita:  "+lista_ordenada_de_tareas_inicial.get(i).getCita()
 //                            +"Abonado:  "+lista_ordenada_de_tareas_inicial.get(i).getAbonado());
                 }
-                arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, lista_contadores);
+                arrayAdapter = new ArrayAdapter(this, R.layout.list_text_view, lista_contadores);
                 listView_contadores_screen_advance_filter.setAdapter(arrayAdapter);
             }
         }
