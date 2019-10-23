@@ -699,7 +699,7 @@ public class Screen_Advance_Filter extends AppCompatActivity {
                     if(!lista_desplegable.contains(abonados)) {
                         lista_desplegable.add(abonados);
                     }
-                    openMessage("lista_desplegable", lista_desplegable.toString());
+//                    openMessage("lista_desplegable", lista_desplegable.toString());
                     lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
                 }
             } catch (JSONException e) {

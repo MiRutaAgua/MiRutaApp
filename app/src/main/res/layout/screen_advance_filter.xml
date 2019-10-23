@@ -44,6 +44,7 @@
                 android:text="FILTRO AVANZADO"
                 android:textStyle="bold"
                 android:textSize="20dp"
+                android:textColor="@color/colorBlueAppRuta"
                  />
         </LinearLayout>
 
@@ -73,6 +74,7 @@
                         android:text="TIPO DE FILTRO"
                         android:textStyle="bold"
                         android:textSize="18dp"
+                        android:textColor="@color/colorBlueAppRuta"
                         />
                     <Spinner
                         android:id="@+id/spinner_tipo_filtro_screen_advance_filter"
@@ -102,9 +104,10 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Población"
+                        android:text="POBLACIÓN"
                         android:textStyle="bold"
                         android:textSize="17dp"
+                        android:textColor="@color/colorBlueAppRuta"
                         />
                     <Spinner
                         android:id="@+id/spinner_filtro_poblacion_screen_advance_filter"
@@ -126,9 +129,10 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Calle"
+                        android:text="CALLE"
                         android:textStyle="bold"
                         android:textSize="17dp"
+                        android:textColor="@color/colorBlueAppRuta"
                         />
                     <Spinner
                         android:id="@+id/spinner_filtro_calles_screen_advance_filter"
@@ -152,6 +156,7 @@
                         android:text="BIS"
                         android:textStyle="bold"
                         android:textSize="17dp"
+                        android:textColor="@color/colorBlueAppRuta"
                         />
                     <Spinner
                         android:id="@+id/spinner_filtro_bis_screen_screen_advance_filter"
@@ -180,9 +185,10 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Nombre o Empresa"
+                        android:text="NOMBRE O EMPRESA"
                         android:textStyle="bold"
                         android:textSize="17dp"
+                        android:textColor="@color/colorBlueAppRuta"
                         />
                     <Spinner
                         android:id="@+id/spinner_filtro_nombre_abonado_screen_advance_filter"
@@ -212,9 +218,10 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Teléfonos"
+                        android:text="TELÉFONOS"
                         android:textStyle="bold"
                         android:textSize="17dp"
+                        android:textColor="@color/colorBlueAppRuta"
                         />
                     <Spinner
                         android:id="@+id/spinner_filtro_telefonos_screen_advance_filter"
@@ -252,9 +259,10 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Tipo de Tarea"
+                        android:text="TIPO DE TAREA"
                         android:textStyle="bold"
                         android:textSize="17dp"
+                        android:textColor="@color/colorBlueAppRuta"
                         />
 
                     <Spinner
@@ -275,9 +283,10 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Calibre"
+                        android:text="CALIBRE"
                         android:textStyle="bold"
                         android:textSize="17dp"
+                        android:textColor="@color/colorBlueAppRuta"
                         />
                     <Spinner
                         android:id="@+id/spinner_filtro_calibre_screen_advance_filter"
@@ -306,9 +315,10 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Abonados"
+                        android:text="ABONADO"
                         android:textStyle="bold"
                         android:textSize="17dp"
+                        android:textColor="@color/colorBlueAppRuta"
                         />
                     <Spinner
                         android:id="@+id/spinner_filtro_abonado_screen_advance_filter"
@@ -322,6 +332,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:hint="Número de abonado"
+                        android:textColor="@color/colorBlueAppRuta"
                         />
 
                 </LinearLayout>
@@ -335,9 +346,10 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Serie"
+                        android:text="SERIE"
                         android:textStyle="bold"
                         android:textSize="15dp"
+                        android:textColor="@color/colorBlueAppRuta"
                         />
                     <Spinner
                         android:id="@+id/spinner_filtro_serie_screen_advance_filter"
@@ -350,7 +362,8 @@
                         android:id="@+id/editText_numero_serie_screen_advance_filter"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:hint="Número de serie"
+                        android:hint="Número de Serie"
+                        android:textColor="@color/colorBlueAppRuta"
                         />
                 </LinearLayout>
             </LinearLayout>
