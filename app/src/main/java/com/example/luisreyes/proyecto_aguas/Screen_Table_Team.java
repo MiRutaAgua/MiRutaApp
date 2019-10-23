@@ -541,13 +541,24 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
     }
 
     public static MyCounter orderTareaFromJSON(JSONObject jsonObject) throws JSONException {
-        String dir = jsonObject.getString(DBtareasController.poblacion).trim()+", "
-                +jsonObject.getString(DBtareasController.calle).trim().replace("\n", "")+", "
-                +jsonObject.getString(DBtareasController.numero).trim().replace("\n", "")+" " //numero de portal
-                +jsonObject.getString(DBtareasController.numero_edificio).trim().replace("\n", "")
-                +jsonObject.getString(DBtareasController.letra_edificio).trim().replace("\n", "")+" "
-                +jsonObject.getString(DBtareasController.piso).trim().replace("\n", "")+" "
-                +jsonObject.getString(DBtareasController.mano).trim().replace("\n", "")+"\n";
+        String dir= "";
+        if(DBtareasController.tabla_model) {
+            dir = jsonObject.getString(DBtareasController.poblacion).trim() + ", "
+                    + jsonObject.getString(DBtareasController.calle).trim().replace("\n", "") + ", "
+                    + jsonObject.getString(DBtareasController.numero).trim().replace("\n", "") + " " //numero de portal
+                    + jsonObject.getString(DBtareasController.numero_edificio).trim().replace("\n", "")
+                    + jsonObject.getString(DBtareasController.letra_edificio).trim().replace("\n", "") + " "
+                    + jsonObject.getString(DBtareasController.piso).trim().replace("\n", "") + " "
+                    + jsonObject.getString(DBtareasController.mano).trim().replace("\n", "") + "\n";
+        }
+        else{
+            dir = jsonObject.getString(DBtareasController.poblacion).trim() + ", "
+                    + jsonObject.getString(DBtareasController.calle).trim().replace("\n", "") + ", "
+                    + jsonObject.getString(DBtareasController.numero).trim().replace("\n", "") + " " //numero de portal
+                    + jsonObject.getString(DBtareasController.BIS).trim().replace("\n", "") + " "
+                    + jsonObject.getString(DBtareasController.piso).trim().replace("\n", "") + " "
+                    + jsonObject.getString(DBtareasController.mano).trim().replace("\n", "") + "\n";
+        }
         if(dir.contains("null, null, nullnull")) {
             dir = "No hay dirección\n";
         }
@@ -573,7 +584,7 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
         if(numero_serie_contador.equals("null\n") && !TextUtils.isEmpty(numero_serie_contador)) {
             numero_serie_contador = "-\n";
         }
-        String anno_contador = jsonObject.getString(DBtareasController.anno_de_contador).replace("\n", "")+"\n";
+        String anno_contador = jsonObject.getString(DBtareasController.CONTADOR_Prefijo_anno).replace("\n", "")+"\n";
         if(anno_contador.equals("null\n") && !TextUtils.isEmpty(anno_contador)) {
             anno_contador = "-\n";
         }

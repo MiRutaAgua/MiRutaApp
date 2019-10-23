@@ -129,6 +129,7 @@ public class Screen_Advance_Filter extends AppCompatActivity {
         mapaTiposDeTarea.put("NCI", "NUEVO CONTADOR INSTALAR");
         mapaTiposDeTarea.put("U", "USADO CONTADOR INSTALAR");
         mapaTiposDeTarea.put("T", "BAJA O CORTE DE SUMINISTRO");
+        mapaTiposDeTarea.put("TBDN", "BAJA O CORTE DE SUMINISTRO");
         mapaTiposDeTarea.put("LFTD", "LIMPIEZA DE FILTRO Y TOMA DE DATOS");
         mapaTiposDeTarea.put("D", "DATOS");
         mapaTiposDeTarea.put("TD", "TOMA DE DATOS");
@@ -317,6 +318,7 @@ public class Screen_Advance_Filter extends AppCompatActivity {
                         .getAdapter().getItem(i).toString();
                 if(!selected.isEmpty() && selected!=null && !selected.equals("Ninguno")) {
                     fillFilterCalles(selected);
+                    fillTareasList();
                 }
             }
             @Override
@@ -331,6 +333,7 @@ public class Screen_Advance_Filter extends AppCompatActivity {
                 if(!selected.isEmpty() && selected!=null && !selected.equals("Ninguno")) {
                     fillFilterBis(spinner_filtro_poblacion_screen_advance_filter.getSelectedItem().toString()
                             , selected);
+                    fillTareasList();
                 }
             }
             @Override
@@ -497,12 +500,21 @@ public class Screen_Advance_Filter extends AppCompatActivity {
             if(numero_portal.equals(null)){
                 numero_portal = "";
             }
-            numero_edificio= jsonObject.getString(DBtareasController.numero_edificio).trim().replace("\n","");
-            if(numero_edificio.equals(null)){
-                numero_edificio = "";
+            if(DBtareasController.tabla_model) {
+                numero_edificio = jsonObject.getString(DBtareasController.numero_edificio).trim().replace("\n", "");
+                if (numero_edificio.equals(null)) {
+                    numero_edificio = "";
+                }
+                letra_edificio = jsonObject.getString(DBtareasController.letra_edificio).trim().replace("\n", "");
+                if (letra_edificio.equals(null)) {
+                    letra_edificio = "";
+                }
             }
-            letra_edificio= jsonObject.getString(DBtareasController.letra_edificio).trim().replace("\n","");
-            if(letra_edificio.equals(null)){
+            else{
+                numero_edificio = jsonObject.getString(DBtareasController.BIS).trim().replace("\n", "");
+                if (numero_edificio.equals(null)) {
+                    numero_edificio = "";
+                }
                 letra_edificio = "";
             }
             piso= jsonObject.getString(DBtareasController.piso).trim().replace("\n","");
@@ -738,6 +750,11 @@ public class Screen_Advance_Filter extends AppCompatActivity {
                     if (mapaTiposDeTarea.get(tipo_tarea).equals(tipo_tarea_selected) && calibre.equals(calibre_selected.replace("\n",""))) {
                         lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
                     }
+                }else if(tipo_tarea.contains("T") && tipo_tarea.contains("\"")){
+                    tipo_tarea = "BAJA O CORTE DE SUMINISTRO";
+                    if (tipo_tarea.equals(tipo_tarea_selected) && calibre.equals(calibre_selected.replace("\n",""))) {
+                        lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
+                    }
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -765,6 +782,12 @@ public class Screen_Advance_Filter extends AppCompatActivity {
                             }
                             lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
                         }
+                    }else if(tipo_tarea.contains("T") && tipo_tarea.contains("\"")){
+                        tipo = "BAJA O CORTE DE SUMINISTRO";
+                        if(!lista_desplegable.contains(tipo)) {
+                            lista_desplegable.add(tipo);
+                        }
+                        lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
                     }
                 }
             } catch (JSONException e) {
@@ -791,6 +814,14 @@ public class Screen_Advance_Filter extends AppCompatActivity {
                     String tipo = "";
                     if(mapaTiposDeTarea.containsKey(tipo_tarea)) {
                         tipo = mapaTiposDeTarea.get(tipo_tarea);
+                        if (tipo.equals(tipo_tarea_item)) {
+                            if (!lista_desplegable.contains(calibre)) {
+                                lista_desplegable.add(calibre);
+                            }
+                            lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
+                        }
+                    }else if(tipo_tarea.contains("T") && tipo_tarea.contains("\"")){
+                        tipo = "BAJA O CORTE DE SUMINISTRO";
                         if (tipo.equals(tipo_tarea_item)) {
                             if (!lista_desplegable.contains(calibre)) {
                                 lista_desplegable.add(calibre);
