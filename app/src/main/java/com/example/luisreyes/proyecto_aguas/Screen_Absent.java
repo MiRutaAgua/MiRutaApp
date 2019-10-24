@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.media.Image;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -64,6 +65,9 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
     private Button button_guardar_datos_screen_absent, button_geolocalizar_screen_absent;
     private ProgressDialog progressDialog;
 
+    private ImageView imageView_edit_fecha_screen_absent,
+            imageView_edit_hora_screen_absent,
+            imageView_edit_observaciones_screen_absent;
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +82,10 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         myToolbar.setBackgroundColor(Color.TRANSPARENT);
         setSupportActionBar(myToolbar);
+
+        imageView_edit_fecha_screen_absent = (ImageView) findViewById(R.id.imageView_edit_fecha_screen_absent);
+        imageView_edit_hora_screen_absent = (ImageView) findViewById(R.id.imageView_edit_hora_screen_absent);
+        imageView_edit_observaciones_screen_absent = (ImageView) findViewById(R.id.imageView_edit_observaciones_screen_absent);
 
         button_geolocalizar_screen_absent= (Button)findViewById(R.id.button_geolocalizar_screen_absent);
         button_guardar_datos_screen_absent= (Button)findViewById(R.id.button_guardar_datos_screen_absent);
@@ -148,6 +156,82 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
             e.printStackTrace();
             Toast.makeText(Screen_Absent.this, "No se pudo obtener observaciones", Toast.LENGTH_LONG).show();
         }
+        imageView_edit_observaciones_screen_absent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Absent.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        openDialog();
+                    }
+                });
+                imageView_edit_observaciones_screen_absent.startAnimation(myAnim);
+            }
+        });
+        imageView_edit_fecha_screen_absent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Absent.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        selectDateTimeApointMent();
+                    }
+                });
+                imageView_edit_fecha_screen_absent.startAnimation(myAnim);
+            }
+        });
+
+        imageView_edit_hora_screen_absent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Absent.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        selectDateTimeApointMent();
+                    }
+                });
+                imageView_edit_hora_screen_absent.startAnimation(myAnim);
+            }
+        });
 
         button_geolocalizar_screen_absent.setOnClickListener(new View.OnClickListener() {
             @Override

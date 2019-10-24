@@ -232,6 +232,7 @@
                     android:layout_gravity="center"
                     android:textSize="16dp"
                     android:textStyle="bold"
+                    android:padding="10dp"
                     />
                 <TextView
                     android:layout_marginLeft="30dp"
@@ -240,7 +241,15 @@
                     android:layout_gravity="center"
                     android:text="Toca aquí para cambiar"
                     android:id="@+id/textView_screen_absent_fecha_cita"
+                    android:padding="10dp"
                     />
+                <ImageView
+                    android:id="@+id/imageView_edit_fecha_screen_absent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_edit_blue_24dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -250,22 +259,31 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 >
+
                 <TextView
-                    android:layout_marginTop="3dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Hora"
                     android:layout_gravity="center"
+                    android:padding="10dp"
+                    android:text="Hora"
                     android:textSize="16dp"
-                    android:textStyle="bold"
-                    />
+                    android:textStyle="bold" />
                 <TextView
+                    android:padding="10dp"
                     android:layout_marginLeft="20dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
                     android:text="Toca aquí para cambiar"
                     android:id="@+id/textView_screen_absent_hora_cita"/>
+                <ImageView
+                    android:id="@+id/imageView_edit_hora_screen_absent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="10dp"
+                    android:paddingTop="1dp"
+                    android:src="@drawable/ic_edit_blue_24dp" />
             </LinearLayout>
 
 
@@ -305,6 +323,14 @@
                     android:textSize="16dp"
                     android:id="@+id/textView_screen_absent_Observaciones"
                     />
+                <ImageView
+                    android:id="@+id/imageView_edit_observaciones_screen_absent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="10dp"
+                    android:paddingTop="1dp"
+                    android:src="@drawable/ic_edit_blue_24dp" />
             </LinearLayout>
 
         </LinearLayout>

@@ -53,6 +53,8 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
 
     private Button button_photo1,button_photo2, button_photo3;
 
+    private ImageView imageView_edit_phone1_screen_incidence,
+            imageView_edit_phone2_screen_incidence;
     private ImageView photo1;
     private ImageView photo2;
     private ImageView photo3;
@@ -88,6 +90,9 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
         button_photo1 = (Button) findViewById(R.id.imageView_foto1_screen_incidence);
         button_photo2 = (Button) findViewById(R.id.imageView_foto2_screen_incidence);
         button_photo3 = (Button) findViewById(R.id.imageView_foto3_screen_incidence);
+
+        imageView_edit_phone1_screen_incidence = (ImageView) findViewById(R.id.imageView_edit_phone1_screen_incidence);
+        imageView_edit_phone2_screen_incidence = (ImageView) findViewById(R.id.imageView_edit_phone2_screen_incidence);
 
         photo1 = (ImageView) findViewById(R.id.imageView_foto1_image_screen_incidence);
         photo2 = (ImageView) findViewById(R.id.imageView_foto2_image_screen_incidence);
@@ -129,6 +134,58 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
             e.printStackTrace();
             Toast.makeText(Screen_Incidence.this, "No se pudo obtener numeros de telefono", Toast.LENGTH_LONG).show();
         }
+
+        imageView_edit_phone1_screen_incidence.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Incidence.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                Toast.makeText(context,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        openDialog("telefono1");
+                    }
+                });
+                imageView_edit_phone1_screen_incidence.startAnimation(myAnim);
+            }
+        });
+
+        imageView_edit_phone2_screen_incidence.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Incidence.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                Toast.makeText(context,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        openDialog("telefono2");
+                    }
+                });
+                imageView_edit_phone2_screen_incidence.startAnimation(myAnim);
+            }
+        });
 
         button_photo1.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -25,6 +25,8 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -194,42 +196,66 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
         button_guardar_datos_screen_validate_battery_intake_asignation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.date_time_modified, DBtareasController.getStringFromFechaHora(new Date()));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(Screen_Validate_Battery_Intake_Asignation.this, "Error date_time_modified "+e.toString(), Toast.LENGTH_LONG).show();
-                }
-
-                String ultima = lectura_anterior.getText().toString();
-                String actual = lectura_ultima.getText().toString();
-                if(!ultima.isEmpty() && !ultima.equals("null") && ultima!=null){
-                    Integer ultimaInt = Integer.parseInt(ultima);
-                    Integer actualInt = Integer.parseInt(actual);
-                    if(actualInt > ultimaInt){
-                        try {
-                            Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_ultima, ultima);
-                            Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_actual, actual);
-                            saveData();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Toast.makeText(Screen_Validate_Battery_Intake_Asignation.this, "No se pudo salvar datos, "+e.toString(), Toast.LENGTH_LONG).show();
-                        }
-                    }else {
-                        Toast.makeText(Screen_Validate_Battery_Intake_Asignation.this, "La lectura del contador debe ser mayor que la ultima registrada", Toast.LENGTH_LONG).show();
+                final Animation myAnim = AnimationUtils.loadAnimation(
+                        Screen_Validate_Battery_Intake_Asignation.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                Toast.makeText(context,"Animacion iniciada", Toast.LENGTH_LONG).show();
                     }
-                }else{
-                    try {
-                        Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_actual, actual);
-                        saveData();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        Toast.makeText(Screen_Validate_Battery_Intake_Asignation.this, "No se pudo salvar datos, "+e.toString(), Toast.LENGTH_LONG).show();
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
                     }
-                }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        onGuardar_Datos();
+                    }
+                });
+                button_guardar_datos_screen_validate_battery_intake_asignation.startAnimation(myAnim);
             }
         });
 
+    }
+
+    private void onGuardar_Datos() {
+        try {
+            Screen_Login_Activity.tarea_JSON.put(DBtareasController.date_time_modified, DBtareasController.getStringFromFechaHora(new Date()));
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Toast.makeText(Screen_Validate_Battery_Intake_Asignation.this, "Error date_time_modified "+e.toString(), Toast.LENGTH_LONG).show();
+        }
+
+        String ultima = lectura_anterior.getText().toString();
+        String actual = lectura_ultima.getText().toString();
+        if(!ultima.isEmpty() && !ultima.equals("null") && ultima!=null){
+            Integer ultimaInt = Integer.parseInt(ultima);
+            Integer actualInt = Integer.parseInt(actual);
+            if(actualInt > ultimaInt){
+                try {
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_ultima, ultima);
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_actual, actual);
+                    saveData();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(Screen_Validate_Battery_Intake_Asignation.this, "No se pudo salvar datos, "+e.toString(), Toast.LENGTH_LONG).show();
+                }
+            }else {
+                Toast.makeText(Screen_Validate_Battery_Intake_Asignation.this, "La lectura del contador debe ser mayor que la ultima registrada", Toast.LENGTH_LONG).show();
+            }
+        }else{
+            try {
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_actual, actual);
+                saveData();
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Toast.makeText(Screen_Validate_Battery_Intake_Asignation.this, "No se pudo salvar datos, "+e.toString(), Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     public void saveData() {

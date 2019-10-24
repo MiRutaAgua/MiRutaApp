@@ -20,6 +20,8 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -94,66 +96,109 @@ public class Screen_Insertar_Tarea extends AppCompatActivity implements TaskComp
         imageView_geolocalizar_screen_insertar_tarea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    Toast.makeText(Screen_Insertar_Tarea.this, Screen_Login_Activity.operario_JSON.getString("usuario"), Toast.LENGTH_SHORT).show();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(Screen_Insertar_Tarea.this, "Error al obtener operario -> "+e.toString(),Toast.LENGTH_SHORT).show();
-                }
-                Intent intent = new Intent(getApplicationContext(),PermissionsActivity.class);
-                startActivity(intent);
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Insertar_Tarea.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                Toast.makeText(context,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        try {
+                            Toast.makeText(Screen_Insertar_Tarea.this, Screen_Login_Activity.operario_JSON.getString("usuario"), Toast.LENGTH_SHORT).show();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(Screen_Insertar_Tarea.this, "Error al obtener operario -> "+e.toString(),Toast.LENGTH_SHORT).show();
+                        }
+                        Intent intent = new Intent(getApplicationContext(),PermissionsActivity.class);
+                        startActivity(intent);
+                    }
+                });
+                imageView_geolocalizar_screen_insertar_tarea.startAnimation(myAnim);
+
             }
         });
 
         screen_insertar_tarea_agregar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!(TextUtils.isEmpty(editText_numero_serie_screen_insertar_tarea.getText().toString()))) {
-                    if (!team_or_personal_task_selection_screen_Activity.dBtareasController.checkIfTareaExists(
-                            editText_numero_serie_screen_insertar_tarea.getText().toString())) {
-                        if (checkConection()) {
-                            //Screen_Login_Activity.tarea_JSON = team_or_personal_task_selection_screen_Activity.dBtareasController.getJsonTarea();
-                            guardar_modificaciones();
-
-                            textView_screen_insertar_tarea.setText(Screen_Login_Activity.tarea_JSON.toString());
-                            showRingDialog("Insertando tarea...");
-                            try {
-                                team_or_personal_task_selection_screen_Activity.dBtareasController.insertTarea(Screen_Login_Activity.tarea_JSON);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                            String type_script = "create_tarea";
-                            BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Insertar_Tarea.this);
-                            backgroundWorker.execute(type_script);
-                        } else {
-                            Screen_Login_Activity.tarea_JSON = team_or_personal_task_selection_screen_Activity.dBtareasController.getJsonTarea();
-                            guardar_modificaciones();
-                            try {
-                                Screen_Login_Activity.tarea_JSON.put(DBtareasController.status_tarea, "TO_UPLOAD");
-                                team_or_personal_task_selection_screen_Activity.dBtareasController.insertTarea(Screen_Login_Activity.tarea_JSON);
-                                Toast.makeText(Screen_Insertar_Tarea.this, "Insertando Tarea Offline", Toast.LENGTH_SHORT).show();
-
-                                Intent intent_open_task_or_personal_screen = new Intent(Screen_Insertar_Tarea.this, team_or_personal_task_selection_screen_Activity.class);
-                                startActivity(intent_open_task_or_personal_screen);
-                                Screen_Insertar_Tarea.this.finish();
-
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                                Toast.makeText(Screen_Insertar_Tarea.this, "Problemas con JSON en Offline", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    }else{
-                        Toast.makeText(Screen_Insertar_Tarea.this, " El contador ya existe", Toast.LENGTH_SHORT).show();
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Insertar_Tarea.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                Toast.makeText(context,"Animacion iniciada", Toast.LENGTH_LONG).show();
                     }
-                }
-                else{
-                    Toast.makeText(Screen_Insertar_Tarea.this, "Inserte número de serie", Toast.LENGTH_SHORT).show();
-                }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        onInsertar_tarea();
+                    }
+                });
+                screen_insertar_tarea_agregar.startAnimation(myAnim);
+
             }
         });
 
     }
 
+    public  void onInsertar_tarea() {
+        if (!(TextUtils.isEmpty(editText_numero_serie_screen_insertar_tarea.getText().toString()))) {
+            if (!team_or_personal_task_selection_screen_Activity.dBtareasController.checkIfTareaExists(
+                    editText_numero_serie_screen_insertar_tarea.getText().toString())) {
+                if (checkConection()) {
+                    //Screen_Login_Activity.tarea_JSON = team_or_personal_task_selection_screen_Activity.dBtareasController.getJsonTarea();
+                    guardar_modificaciones();
+
+                    textView_screen_insertar_tarea.setText(Screen_Login_Activity.tarea_JSON.toString());
+                    showRingDialog("Insertando tarea...");
+                    try {
+                        team_or_personal_task_selection_screen_Activity.dBtareasController.insertTarea(Screen_Login_Activity.tarea_JSON);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    String type_script = "create_tarea";
+                    BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Insertar_Tarea.this);
+                    backgroundWorker.execute(type_script);
+                } else {
+                    Screen_Login_Activity.tarea_JSON = team_or_personal_task_selection_screen_Activity.dBtareasController.getJsonTarea();
+                    guardar_modificaciones();
+                    try {
+                        Screen_Login_Activity.tarea_JSON.put(DBtareasController.status_tarea, "TO_UPLOAD");
+                        team_or_personal_task_selection_screen_Activity.dBtareasController.insertTarea(Screen_Login_Activity.tarea_JSON);
+                        Toast.makeText(Screen_Insertar_Tarea.this, "Insertando Tarea Offline", Toast.LENGTH_SHORT).show();
+
+                        Intent intent_open_task_or_personal_screen = new Intent(Screen_Insertar_Tarea.this, team_or_personal_task_selection_screen_Activity.class);
+                        startActivity(intent_open_task_or_personal_screen);
+                        Screen_Insertar_Tarea.this.finish();
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Toast.makeText(Screen_Insertar_Tarea.this, "Problemas con JSON en Offline", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }else{
+                Toast.makeText(Screen_Insertar_Tarea.this, " El contador ya existe", Toast.LENGTH_SHORT).show();
+            }
+        }
+        else{
+            Toast.makeText(Screen_Insertar_Tarea.this, "Inserte número de serie", Toast.LENGTH_SHORT).show();
+        }
+    }
     private void guardar_modificaciones(){
         try {
             Screen_Login_Activity.tarea_JSON = team_or_personal_task_selection_screen_Activity.dBtareasController.getJsonTarea();

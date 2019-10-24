@@ -32,6 +32,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -225,15 +227,35 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
         button_compartir_screen_validate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showRingDialog("Creando PDF...");
-                if(bitmap1_no_nulo)
-                bitmap = loadBitmapFromView(llScroll, llScroll.getWidth(), llScroll.getHeight());
-                if(bitmap2_no_nulo)
-                bitmap2 = loadBitmapFromView(llScroll_2, llScroll_2.getWidth(), llScroll_2.getHeight());
-                if(bitmap3_no_nulo)
-                bitmap3 = loadBitmapFromView(llScroll_3, llScroll_3.getWidth(), llScroll_3.getHeight());
-                bitmap4 = loadBitmapFromView(llScroll_4, llScroll_4.getWidth(), llScroll_4.getHeight());
-                createPdf();
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Validate.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                Toast.makeText(context,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        showRingDialog("Creando PDF...");
+                        if(bitmap1_no_nulo)
+                            bitmap = loadBitmapFromView(llScroll, llScroll.getWidth(), llScroll.getHeight());
+                        if(bitmap2_no_nulo)
+                            bitmap2 = loadBitmapFromView(llScroll_2, llScroll_2.getWidth(), llScroll_2.getHeight());
+                        if(bitmap3_no_nulo)
+                            bitmap3 = loadBitmapFromView(llScroll_3, llScroll_3.getWidth(), llScroll_3.getHeight());
+                        bitmap4 = loadBitmapFromView(llScroll_4, llScroll_4.getWidth(), llScroll_4.getHeight());
+                        createPdf();
+                    }
+                });
+                button_compartir_screen_validate.startAnimation(myAnim);
+
             }
         });
 
@@ -277,83 +299,27 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
             @Override
             public void onClick(View view) {
                 ////aqui va la actualizacion de la tarea;
-                try {
-                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.date_time_modified,
-                            DBtareasController.getStringFromFechaHora(new Date()));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                String status_tarea = null;
-                try {
-                    status_tarea = Screen_Login_Activity.tarea_JSON.getString(
-                            DBtareasController.status_tarea);
-                    if(status_tarea.contains("TO_UPLOAD")) {
-                        try {
-                            Screen_Login_Activity.tarea_JSON.put(DBtareasController.status_tarea, "DONE,TO_UPLOAD");
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }else{
-                        try {
-                            Screen_Login_Activity.tarea_JSON.put(DBtareasController.status_tarea, "DONE");
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Validate.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                Toast.makeText(context,"Animacion iniciada", Toast.LENGTH_LONG).show();
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                if(bitmap_firma_cliente != null){
-                    String firma_cliente_string = Screen_Register_Operario.getStringImage(bitmap_firma_cliente);
-                    try {
-                        Screen_Login_Activity.tarea_JSON.put(DBtareasController.firma_cliente, firma_cliente_string);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        Toast.makeText(Screen_Validate.this, "No pudo guardar de firma", Toast.LENGTH_LONG).show();
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
                     }
-                }
-                if(!TextUtils.isEmpty(lectura_actual_et.getText().toString())){
-                    try {
-                        //Comprobar aqui que la lectura no sea menor que la ultima
-                        String lect_string = lectura_actual_et.getText().toString();
-                        String lect_last_string = "";
-                        if(lectura_ultima_et.getText().toString().isEmpty()){
-                            lect_last_string="0";
-                        }else {
-                            lect_last_string=lectura_ultima_et.getText().toString();
-                        }
-                        Integer lectura_actual_int = Integer.parseInt(lect_string);
-                        Integer lectura_last_int = Integer.parseInt(lect_last_string);
-                        if(lectura_actual_int.compareTo(lectura_last_int)>0){
-                            Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_ultima, lect_last_string);
-                            Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_actual, lect_string);
-
-
-                            if(checkConection()) {
-                                boolean error = saveTaskLocal();
-                                showRingDialog("Guardando datos...");
-                                String type = "update_tarea";
-                                BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Validate.this);
-                                backgroundWorker.execute(type);
-                            }else{
-
-                                boolean error = saveTaskLocal();
-                                if(!error) {
-                                    Toast.makeText(Screen_Validate.this, "No hay conexion se guardaron los datos en el telefono", Toast.LENGTH_LONG).show();
-                                }
-                            }
-                        }
-                        else{
-                            Toast.makeText(Screen_Validate.this, "La lectura actual debe ser mayor que la anterior", Toast.LENGTH_LONG).show();
-                            return;
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        onCerrar_tarea();
                     }
-                }else{
-                    Toast.makeText(Screen_Validate.this, "Inserte la lectura actual", Toast.LENGTH_LONG).show();
-                }
+                });
+                imageView_screen_validate_cerrar_tarea.startAnimation(myAnim);
+
             }
         });
 
@@ -405,6 +371,86 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
             }
         });
 
+    }
+
+    private void onCerrar_tarea() {
+        try {
+            Screen_Login_Activity.tarea_JSON.put(DBtareasController.date_time_modified,
+                    DBtareasController.getStringFromFechaHora(new Date()));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String status_tarea = null;
+        try {
+            status_tarea = Screen_Login_Activity.tarea_JSON.getString(
+                    DBtareasController.status_tarea);
+            if(status_tarea.contains("TO_UPLOAD")) {
+                try {
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.status_tarea, "DONE,TO_UPLOAD");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }else{
+                try {
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.status_tarea, "DONE");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        if(bitmap_firma_cliente != null){
+            String firma_cliente_string = Screen_Register_Operario.getStringImage(bitmap_firma_cliente);
+            try {
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.firma_cliente, firma_cliente_string);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Toast.makeText(Screen_Validate.this, "No pudo guardar de firma", Toast.LENGTH_LONG).show();
+            }
+        }
+        if(!TextUtils.isEmpty(lectura_actual_et.getText().toString())){
+            try {
+                //Comprobar aqui que la lectura no sea menor que la ultima
+                String lect_string = lectura_actual_et.getText().toString();
+                String lect_last_string = "";
+                if(lectura_ultima_et.getText().toString().isEmpty()){
+                    lect_last_string="0";
+                }else {
+                    lect_last_string=lectura_ultima_et.getText().toString();
+                }
+                Integer lectura_actual_int = Integer.parseInt(lect_string);
+                Integer lectura_last_int = Integer.parseInt(lect_last_string);
+                if(lectura_actual_int.compareTo(lectura_last_int)>0){
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_ultima, lect_last_string);
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_actual, lect_string);
+
+
+                    if(checkConection()) {
+                        boolean error = saveTaskLocal();
+                        showRingDialog("Guardando datos...");
+                        String type = "update_tarea";
+                        BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Validate.this);
+                        backgroundWorker.execute(type);
+                    }else{
+
+                        boolean error = saveTaskLocal();
+                        if(!error) {
+                            Toast.makeText(Screen_Validate.this, "No hay conexion se guardaron los datos en el telefono", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }
+                else{
+                    Toast.makeText(Screen_Validate.this, "La lectura actual debe ser mayor que la anterior", Toast.LENGTH_LONG).show();
+                    return;
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }else{
+            Toast.makeText(Screen_Validate.this, "Inserte la lectura actual", Toast.LENGTH_LONG).show();
+        }
     }
 
     public boolean saveTaskLocal() {

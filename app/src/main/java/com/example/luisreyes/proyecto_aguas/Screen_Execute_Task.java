@@ -446,7 +446,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                         startActivity(intent_open_screen_validate);
                     }
                 });
-                button_scan_serial_number_screen_exec_task.startAnimation(myAnim);
+                button_validate_screen_exec_task.startAnimation(myAnim);
             }
         });
 

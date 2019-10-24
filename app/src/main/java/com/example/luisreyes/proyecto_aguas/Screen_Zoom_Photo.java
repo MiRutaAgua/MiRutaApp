@@ -14,6 +14,8 @@ import android.support.annotation.RequiresApi;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -118,20 +120,61 @@ public class Screen_Zoom_Photo extends Activity{
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View view) {
-                Intent resultIntent = new Intent();
-                resultIntent.putExtra("result", "cancel");
-                setResult(RESULT_OK, resultIntent);
-                finish();
+                final Animation myAnim = AnimationUtils.loadAnimation(
+                        Screen_Zoom_Photo.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                Toast.makeText(context,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+
+                        Intent resultIntent = new Intent();
+                        resultIntent.putExtra("result", "cancel");
+                        setResult(RESULT_OK, resultIntent);
+                        finish();
+                    }
+                });
+                button_cancel_picture_screen_x.startAnimation(myAnim);
             }
         });
         button_save_picture_screen_x.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View view) {
-                Intent resultIntent = new Intent();
-                resultIntent.putExtra("result", "save");
-                setResult(RESULT_OK, resultIntent);
-                finish();
+                final Animation myAnim = AnimationUtils.loadAnimation(
+                        Screen_Zoom_Photo.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                Toast.makeText(context,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        Intent resultIntent = new Intent();
+                        resultIntent.putExtra("result", "save");
+                        setResult(RESULT_OK, resultIntent);
+                        finish();
+                    }
+                });
+                button_cancel_picture_screen_x.startAnimation(myAnim);
             }
         });
     }

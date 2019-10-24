@@ -24,6 +24,8 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -154,10 +156,29 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
         button_geolocalization.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent_open_MapsActivity = new Intent(getApplicationContext(), PermissionsActivity.class);
-                startActivity(intent_open_MapsActivity);
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Unity_Counter.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(
+                        MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                Toast.makeText(context,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        Intent intent_open_MapsActivity = new Intent(getApplicationContext(), PermissionsActivity.class);
+                        startActivity(intent_open_MapsActivity);
+                    }
+                });
+                button_geolocalization.startAnimation(myAnim);
             }
-
         });
         button_trazar_ruta_screen_unity_counter.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,33 +191,109 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
         button_modo_battery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Intent intent_open_battery_intake_asignation = new Intent(Screen_Unity_Counter.this, Screen_Battery_Intake_Asignation.class);
-                startActivity(intent_open_battery_intake_asignation);
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Unity_Counter.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                Toast.makeText(context,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        Intent intent_open_battery_intake_asignation = new Intent(Screen_Unity_Counter.this, Screen_Battery_Intake_Asignation.class);
+                        startActivity(intent_open_battery_intake_asignation);
+                    }
+                });
+                button_modo_battery.startAnimation(myAnim);
             }
         });
 
         button_incidence_screen_unity_counter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent_open_screen_incidence = new Intent(Screen_Unity_Counter.this, Screen_Incidence.class);
-                startActivity(intent_open_screen_incidence);
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Unity_Counter.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                Toast.makeText(context,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        Intent intent_open_screen_incidence = new Intent(Screen_Unity_Counter.this, Screen_Incidence.class);
+                        startActivity(intent_open_screen_incidence);
+                    }
+                });
+                button_incidence_screen_unity_counter.startAnimation(myAnim);
             }
         });
 
         button_absent_screen_unity_counter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent_open_screen_absent = new Intent(Screen_Unity_Counter.this, Screen_Absent.class);
-                startActivity(intent_open_screen_absent);
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Unity_Counter.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                Toast.makeText(context,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        Intent intent_open_screen_absent = new Intent(Screen_Unity_Counter.this, Screen_Absent.class);
+                        startActivity(intent_open_screen_absent);
+                    }
+                });
+                button_absent_screen_unity_counter.startAnimation(myAnim);
             }
         });
 
         button_exec_task_screen_unity_counter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent_open_screen_exec_task = new Intent(Screen_Unity_Counter.this, Screen_Execute_Task.class);
-                startActivity(intent_open_screen_exec_task);
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Unity_Counter.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(
+                        MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                Toast.makeText(context,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        Intent intent_open_screen_exec_task = new Intent(Screen_Unity_Counter.this, Screen_Execute_Task.class);
+                        startActivity(intent_open_screen_exec_task);
+                    }
+                });
+                button_exec_task_screen_unity_counter.startAnimation(myAnim);
             }
         });
 
