@@ -1207,7 +1207,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         // Create an image file name
 
         String imageFileName = null;
-        String image = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador)+"_"+foto_x;
+        String image = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador).trim().replace(" ", "")+"_"+foto_x;
         File image_file=null;
         File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas");
         if (!storageDir.exists()) {
