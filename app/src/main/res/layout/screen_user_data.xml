@@ -94,9 +94,14 @@
         >
 
         <Button
-            android:layout_width="264dp"
+            android:layout_width="240dp"
             android:layout_height="40dp"
-            android:background="@drawable/screen_user_data_continuar"
+            android:fontFamily="@font/segoeui"
+            android:text="CONTINUAR"
+            android:textSize="16dp"
+            android:textStyle="bold"
+            android:textColor="@color/colorBlueAppRuta"
+            android:background="@drawable/fondo_boton_blanco"
             android:id="@+id/button_screen_user_data_continuar"
             />
     </LinearLayout>

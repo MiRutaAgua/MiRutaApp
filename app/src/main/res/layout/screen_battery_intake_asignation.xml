@@ -36,14 +36,19 @@
             android:gravity="center"
             android:orientation="vertical"
             android:layout_marginTop="20dp"
+            android:padding="5dp"
             >
-
-
-            <ImageView
+            <Button
                 android:id="@+id/button_foto_instalacion_screen_battery_intake_asignation"
                 android:layout_width="266dp"
-                android:layout_height="50dp"
-                android:src="@drawable/screen_battery_intake_asignation_foto_instalacion" />
+                android:layout_height="40dp"
+                android:fontFamily="@font/segoeui"
+                android:text="FOTO DE INSTALACIÓN"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:background="@drawable/fondo_boton_azul"
+                />
             <ImageView
                 android:id="@+id/imageView_foto_instalacion_screen_battery_intake_asignation"
                 android:layout_height="500dp"
@@ -57,12 +62,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:orientation="vertical">
-            <ImageView
+            android:orientation="vertical"
+            android:padding="5dp">
+            <Button
                 android:id="@+id/button_foto_lectura_screen_battery_intake_asignation"
                 android:layout_width="266dp"
-                android:layout_height="50dp"
-                android:src="@drawable/screen_battery_intake_asignation_foto_lectura" />
+                android:layout_height="40dp"
+                android:fontFamily="@font/segoeui"
+                android:text="FOTO DE LECTURA"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:background="@drawable/fondo_boton_azul"
+                />
             <ImageView
                 android:id="@+id/imageView_foto_lectura_screen_battery_intake_asignation"
                 android:layout_height="500dp"
@@ -78,12 +90,19 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="vertical"
+            android:padding="5dp"
             >
-            <ImageView
+            <Button
                 android:id="@+id/button_foto_numero_serie_screen_battery_intake_asignation"
                 android:layout_width="266dp"
-                android:layout_height="50dp"
-                android:src="@drawable/screen_battery_intake_asignation_foto_numero_de_serie" />
+                android:layout_height="40dp"
+                android:fontFamily="@font/segoeui"
+                android:text="FOTO DE NÚMERO SERIE"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:background="@drawable/fondo_boton_azul"
+                />
             <ImageView
                 android:id="@+id/imageView_foto_numero_serie_screen_battery_intake_asignation"
                 android:layout_height="500dp"
@@ -209,12 +228,16 @@
             android:orientation="horizontal"
             android:paddingBottom="30dp"
             >
-
-            <ImageView
+            <Button
                 android:id="@+id/button_validar_screen_battery_intake_asignation"
                 android:layout_width="266dp"
-                android:layout_height="50dp"
-                android:src="@drawable/screen_battery_intake_asignation_validar" />
+                android:layout_height="40dp"
+                android:fontFamily="@font/segoeui"
+                android:text="VALIDAR"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:background="@drawable/fondo_boton_azul"/>
         </LinearLayout>
 
     </LinearLayout>

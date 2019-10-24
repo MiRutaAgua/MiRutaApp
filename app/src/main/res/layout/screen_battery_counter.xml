@@ -38,13 +38,19 @@
             android:layout_marginTop="20dp"
             android:gravity="center"
             android:orientation="horizontal"
+            android:padding="5dp"
             >
 
-            <ImageView
+            <Button
                 android:id="@+id/button_ejecutar_tarea_screen_battery_counter"
                 android:layout_width="266dp"
-                android:layout_height="50dp"
-                android:src="@drawable/screen_unity_counter_exec_task"
+                android:layout_height="40dp"
+                android:fontFamily="@font/segoeui"
+                android:text="EJECUTAR TAREA"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:background="@drawable/fondo_boton_azul"
                 />
         </LinearLayout>
 
@@ -55,11 +61,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:padding="5dp"
             >
-            <ImageView
+            <Button
                 android:layout_width="266dp"
-                android:layout_height="50dp"
-                android:src="@drawable/screen_unity_counter_incidencia"
+                android:layout_height="40dp"
+                android:fontFamily="@font/segoeui"
+                android:text="INCIDENCIA"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:background="@drawable/fondo_boton_azul"
                 android:id="@+id/button_incidencia_screen_battery_counter"
                 />
         </LinearLayout>
@@ -70,12 +82,19 @@
             android:layout_width="match_parent"
             android:orientation="horizontal"
             android:gravity="center"
-            android:layout_marginTop="5dip">
-            <ImageView
+            android:layout_marginTop="5dip"
+            android:padding="5dp"
+            >
+            <Button
                 android:id="@+id/button_geolocalization_screen_battery_counter"
                 android:layout_width="266dp"
-                android:layout_height="50dp"
-                android:src="@drawable/screen_exec_task_geolocalizacion"
+                android:layout_height="40dp"
+                android:fontFamily="@font/segoeui"
+                android:text="GEOLOCALIZACIÓN"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:background="@drawable/fondo_boton_azul"
                 />
         </LinearLayout>
 
@@ -85,11 +104,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:padding="5dp"
             >
-            <ImageView
+            <Button
                 android:layout_width="266dp"
-                android:layout_height="50dp"
-                android:src="@drawable/screen_counter_trazar_ruta"
+                android:layout_height="40dp"
+                android:fontFamily="@font/segoeui"
+                android:text="TRAZAR RUTA"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:background="@drawable/fondo_boton_azul"
                 android:id="@+id/button_trazar_ruta_screen_battery_counter"
                 />
         </LinearLayout>
@@ -378,11 +403,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:padding="5dp"
             >
-            <ImageView
-                android:layout_width="266dp"
-                android:layout_height="50dp"
-                android:src="@drawable/screen_battery_counter_reajustar_datos"
+            <Button
+                android:layout_width="300dp"
+                android:layout_height="40dp"
+                android:fontFamily="@font/segoeui"
+                android:text="REAJUSTAR DATOS DE UBICACIÓN"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:background="@drawable/fondo_boton_azul"
                 android:id="@+id/button_reajustar_ubicacion_screen_battery_counter"
                 />
         </LinearLayout>

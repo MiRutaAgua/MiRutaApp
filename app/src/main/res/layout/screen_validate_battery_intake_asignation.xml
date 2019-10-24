@@ -18,9 +18,9 @@ android:layout_height="match_parent">
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="20dp"
         android:gravity="center"
         android:layout_gravity="center"
+        android:layout_margin="20dp"
         >
 
         <TextView
@@ -38,7 +38,7 @@ android:layout_height="match_parent">
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="20dp"
         android:gravity="center"
         android:padding="1dp"
         >
@@ -344,7 +344,13 @@ android:layout_height="match_parent">
             android:id="@+id/button_guardar_datos_screen_validate_battery_intake_asignation"
             android:layout_width="280dp"
             android:layout_height="40dp"
-            android:background="@drawable/screen_validate_battery_intake_asgnation_boton" />
+            android:fontFamily="@font/segoeui"
+            android:text="GUARDAR DATOS PREVIOS"
+            android:textSize="16dp"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:background="@drawable/fondo_boton_azul"
+            />
 
     </LinearLayout>
 

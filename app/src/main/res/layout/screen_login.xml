@@ -83,7 +83,7 @@
                 android:id="@+id/editText_Clave_Acceso_screen_login"
                 android:inputType="textPassword"
                 android:imeOptions="actionDone"
-                android:fontFamily="sans-serif"
+                android:fontFamily="@font/segoeui"
                 android:text="123456"
                 />
         </LinearLayout>
@@ -102,7 +102,13 @@
                 android:id="@+id/button_login_screen_login"
                 android:layout_width="240dp"
                 android:layout_height="40dp"
-                android:background="@drawable/screen_login_entrar" />
+                android:fontFamily="@font/segoeui"
+                android:text="ENTRAR"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:background="@drawable/fondo_boton_azul"
+                />
         </LinearLayout>
 
         <LinearLayout
@@ -112,12 +118,16 @@
             android:orientation="horizontal"
             android:padding="5dp"
             >
-
             <Button
                 android:id="@+id/button_register_screen_login"
                 android:layout_width="240dp"
                 android:layout_height="40dp"
-                android:background="@drawable/screen_login_registrar"
+                android:fontFamily="@font/segoeui"
+                android:text="REGISTRAR"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:textColor="@color/colorBlueAppRuta"
+                android:background="@drawable/fondo_boton_blanco"
                 />
         </LinearLayout>
 

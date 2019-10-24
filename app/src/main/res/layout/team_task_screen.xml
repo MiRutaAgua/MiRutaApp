@@ -60,7 +60,6 @@
         >
 
         <Button
-
             android:id="@+id/button_vista_tareas_equipo_screen_team_task"
             android:layout_width="wrap_content"
             android:layout_height="60dp"

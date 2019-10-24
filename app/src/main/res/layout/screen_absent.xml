@@ -318,17 +318,27 @@
             android:paddingBottom="40dp"
             >
 
-            <ImageView
+            <Button
                 android:id="@+id/button_geolocalizar_screen_absent"
                 android:layout_width="273dp"
-                android:layout_height="50dp"
-                android:src="@drawable/screen_absent_geolocalizar" />
-
-            <ImageView
+                android:layout_height="40dp"
+                android:fontFamily="@font/segoeui"
+                android:text="GEOLOCALIZAR"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:background="@drawable/fondo_boton_azul"/>
+            <Button
+                android:layout_marginTop="10dp"
                 android:id="@+id/button_guardar_datos_screen_absent"
                 android:layout_width="273dp"
-                android:layout_height="50dp"
-                android:src="@drawable/screen_absent_guardar_datos" />
+                android:layout_height="40dp"
+                android:fontFamily="@font/segoeui"
+                android:text="GUARDAR DATOS"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:background="@drawable/fondo_boton_azul" />
         </LinearLayout>
 
     </LinearLayout>
