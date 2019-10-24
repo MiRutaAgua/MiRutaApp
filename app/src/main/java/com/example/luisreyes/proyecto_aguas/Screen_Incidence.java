@@ -436,7 +436,7 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
         // Create an image file name
 
         String imageFileName = null;
-        String image = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador)+"_"+incidencia_X;
+        String image = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador).trim().replace(" ", "")+"_"+incidencia_X;
         File image_file=null;
         File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas");
         if (!storageDir.exists()) {

@@ -502,7 +502,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                         textView_serial_number_module_result.setVisibility(View.VISIBLE);
                     }
                 });
-                button_scan_module_screen_exec_task.startAnimation(myAnim);
+                button_validate_screen_exec_task.startAnimation(myAnim);
             }
         });
 
