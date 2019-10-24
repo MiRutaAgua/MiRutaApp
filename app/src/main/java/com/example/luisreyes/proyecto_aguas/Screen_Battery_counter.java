@@ -25,6 +25,8 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -44,16 +46,17 @@ import java.util.HashMap;
 
 public class Screen_Battery_counter extends AppCompatActivity implements TaskCompleted{
 
-    private ImageView button_reajustar_ubicacion, button_trazar_ruta_screen_battery_counter;
+    private Button button_incidence_screen_battery_counter,
+            button_ejecutar_tarea_screen_battery_counter,
+            button_geolocalization,
+            button_reajustar_ubicacion,
+            button_trazar_ruta_screen_battery_counter;
 
-    private ImageView button_incidence_screen_battery_counter;
-
-    private ImageView button_ejecutar_tarea_screen_battery_counter, imagen_contador;
+    private ImageView imagen_contador;
 
     private TextView tipo_tarea, direccion, datosEspecificos, serie, lectura, acceso, ubicacion,calibre, ubicacion_bateria;
     private ProgressDialog progressDialog;
     private HashMap<String, String> mapaTiposDeTarea;
-    private ImageView button_geolocalization;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -81,7 +84,7 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
         mapaTiposDeTarea.put("R", "REFORMA MAS CONTADOR");
 
 
-        button_geolocalization =(ImageView) findViewById(R.id.button_geolocalization_screen_battery_counter);
+        button_geolocalization =(Button) findViewById(R.id.button_geolocalization_screen_battery_counter);
         imagen_contador = (ImageView) findViewById(R.id.imageView_screen_battery_counter_imagen);
         serie = (TextView) findViewById(R.id.textView_screen_battery_counter_serie);
         lectura = (TextView) findViewById(R.id.textView_screen_battery_counter_lectura);
@@ -92,10 +95,10 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
         tipo_tarea = (TextView) findViewById(R.id.textView_tipo_tarea_screen_battery_counter);
         direccion = (TextView) findViewById(R.id.textView_direccion_screen_battery_counter);
         datosEspecificos = (TextView) findViewById(R.id.textView_datos_especificos_screen_battery_counter);
-        button_reajustar_ubicacion = (ImageView)findViewById(R.id.button_reajustar_ubicacion_screen_battery_counter);
-        button_ejecutar_tarea_screen_battery_counter = (ImageView)findViewById(R.id.button_ejecutar_tarea_screen_battery_counter);
-        button_incidence_screen_battery_counter = (ImageView)findViewById(R.id.button_incidencia_screen_battery_counter);
-        button_trazar_ruta_screen_battery_counter= (ImageView)findViewById(R.id.button_trazar_ruta_screen_battery_counter);
+        button_reajustar_ubicacion = (Button)findViewById(R.id.button_reajustar_ubicacion_screen_battery_counter);
+        button_ejecutar_tarea_screen_battery_counter = (Button)findViewById(R.id.button_ejecutar_tarea_screen_battery_counter);
+        button_incidence_screen_battery_counter = (Button)findViewById(R.id.button_incidencia_screen_battery_counter);
+        button_trazar_ruta_screen_battery_counter= (Button)findViewById(R.id.button_trazar_ruta_screen_battery_counter);
 
         try {
             String tipo = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.tipo_tarea).
@@ -154,43 +157,139 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
         button_geolocalization.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent_open_MapsActivity = new Intent(getApplicationContext(), PermissionsActivity.class);
-                startActivity(intent_open_MapsActivity);
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Battery_counter.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        Intent intent_open_MapsActivity = new Intent(getApplicationContext(), PermissionsActivity.class);
+                        startActivity(intent_open_MapsActivity);
+                    }
+                });
+                button_geolocalization.startAnimation(myAnim);
             }
 
         });
         button_trazar_ruta_screen_battery_counter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent_open_MapBox = new Intent(Screen_Battery_counter.this, Maps_Box.class);
-                startActivity(intent_open_MapBox);
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Battery_counter.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        Intent intent_open_MapBox = new Intent(Screen_Battery_counter.this, Maps_Box.class);
+                        startActivity(intent_open_MapBox);
+                    }
+                });
+                button_trazar_ruta_screen_battery_counter.startAnimation(myAnim);
             }
         });
 
         button_ejecutar_tarea_screen_battery_counter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent_open_screen_exec_task = new Intent(Screen_Battery_counter.this, Screen_Execute_Task.class);
-                startActivity(intent_open_screen_exec_task);
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Battery_counter.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        Intent intent_open_screen_exec_task = new Intent(Screen_Battery_counter.this, Screen_Execute_Task.class);
+                        startActivity(intent_open_screen_exec_task);
+                    }
+                });
+                button_ejecutar_tarea_screen_battery_counter.startAnimation(myAnim);
+
             }
         });
 
         button_reajustar_ubicacion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent_open_screen_battery_intake_asignation = new Intent(Screen_Battery_counter.this, Screen_Battery_Intake_Asignation.class);
-                startActivity(intent_open_screen_battery_intake_asignation);
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Battery_counter.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        Intent intent_open_screen_battery_intake_asignation = new Intent(Screen_Battery_counter.this, Screen_Battery_Intake_Asignation.class);
+                        startActivity(intent_open_screen_battery_intake_asignation);
+                    }
+                });
+                button_reajustar_ubicacion.startAnimation(myAnim);
+
             }
         });
 
         button_incidence_screen_battery_counter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent_open_screen_incidence = new Intent(Screen_Battery_counter.this, Screen_Incidence.class);
-                startActivity(intent_open_screen_incidence);
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Battery_counter.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        Intent intent_open_screen_incidence = new Intent(Screen_Battery_counter.this, Screen_Incidence.class);
+                        startActivity(intent_open_screen_incidence);
+                    }
+                });
+                button_incidence_screen_battery_counter.startAnimation(myAnim);
             }
         });
-
 
         if (checkConection()){
             try {

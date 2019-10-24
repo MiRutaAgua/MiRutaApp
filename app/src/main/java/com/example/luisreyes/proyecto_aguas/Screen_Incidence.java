@@ -21,6 +21,8 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -42,16 +44,14 @@ import java.util.ArrayList;
 public class Screen_Incidence extends AppCompatActivity implements Dialog.DialogListener{
 
 
-    private ImageView button_firma_del_cliente_screen_incidence, button_geolocalizar_screen_incidence;
+    private Button button_firma_del_cliente_screen_incidence, button_geolocalizar_screen_incidence;
 
     private ArrayList<String> lista_desplegable;
 
     private Spinner spinner_lista_de_mal_ubicacion;
     TextView telefono1, telefono2, telefonos;
 
-    private ImageView button_photo1;
-    private ImageView button_photo2;
-    private ImageView button_photo3;
+    private Button button_photo1,button_photo2, button_photo3;
 
     private ImageView photo1;
     private ImageView photo2;
@@ -77,7 +77,7 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
         setSupportActionBar(myToolbar);
 
 
-        button_geolocalizar_screen_incidence = (ImageView)findViewById(R.id.button_geolocalizar_screen_incidence);
+        button_geolocalizar_screen_incidence = (Button)findViewById(R.id.button_geolocalizar_screen_incidence);
 
         spinner_lista_de_mal_ubicacion = (Spinner)findViewById(R.id.spinner_instalacion_incorrecta);
 
@@ -85,13 +85,15 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
         telefono2 = (TextView)findViewById(R.id.textView_telefono2_screen_incidence);
         telefonos = (TextView)findViewById(R.id.textView_telefonos_screen_incidence);
 
-        button_photo1 = (ImageView) findViewById(R.id.imageView_foto1_screen_incidence);
-        button_photo2 = (ImageView) findViewById(R.id.imageView_foto2_screen_incidence);
-        button_photo3 = (ImageView) findViewById(R.id.imageView_foto3_screen_incidence);
+        button_photo1 = (Button) findViewById(R.id.imageView_foto1_screen_incidence);
+        button_photo2 = (Button) findViewById(R.id.imageView_foto2_screen_incidence);
+        button_photo3 = (Button) findViewById(R.id.imageView_foto3_screen_incidence);
 
         photo1 = (ImageView) findViewById(R.id.imageView_foto1_image_screen_incidence);
         photo2 = (ImageView) findViewById(R.id.imageView_foto2_image_screen_incidence);
         photo3 = (ImageView) findViewById(R.id.imageView_foto3_image_screen_incidence);
+
+        button_firma_del_cliente_screen_incidence = (Button)findViewById(R.id.button_firma_del_cliente_screen_incidence);
 
         lista_desplegable = new ArrayList<String>();
         lista_desplegable.add("INSTALACIÓN EN MAL ESTADO");
@@ -150,20 +152,20 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
         button_photo2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    if(Screen_Login_Activity.movileModel){
-                        try {
-                            dispatchTakePictureIntent(CAM_REQUEST_2_PHOTO_FULL_SIZE);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                if(Screen_Login_Activity.movileModel){
+                    try {
+                        dispatchTakePictureIntent(CAM_REQUEST_2_PHOTO_FULL_SIZE);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                    else {
-                        Intent intent_camera = new Intent(Screen_Incidence.this, Screen_Camera.class);
-                        intent_camera.putExtra("photo_name", contador + "_foto_incidencia_2");
-                        intent_camera.putExtra("photo_folder", "fotos_tareas");
-                        intent_camera.putExtra("contador", contador);
-                        startActivityForResult(intent_camera, CAM_REQUEST_2_PHOTO_FULL_SIZE);
-                    }
+                }
+                else {
+                    Intent intent_camera = new Intent(Screen_Incidence.this, Screen_Camera.class);
+                    intent_camera.putExtra("photo_name", contador + "_foto_incidencia_2");
+                    intent_camera.putExtra("photo_folder", "fotos_tareas");
+                    intent_camera.putExtra("contador", contador);
+                    startActivityForResult(intent_camera, CAM_REQUEST_2_PHOTO_FULL_SIZE);
+                }
             }
         });
         button_photo3.setOnClickListener(new View.OnClickListener() {
@@ -189,9 +191,28 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
         button_geolocalizar_screen_incidence.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Incidence.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
 
-                Intent intent = new Intent(getApplicationContext(),PermissionsActivity.class);
-                startActivity(intent);
+                        Intent intent = new Intent(getApplicationContext(),PermissionsActivity.class);
+                        startActivity(intent);
+                    }
+                });
+                button_geolocalizar_screen_incidence.startAnimation(myAnim);
             }
         });
 
@@ -207,27 +228,43 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
                 openDialog("telefono2");
             }
         });
-        button_firma_del_cliente_screen_incidence = (ImageView)findViewById(R.id.button_firma_del_cliente_screen_incidence);
 
         button_firma_del_cliente_screen_incidence.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Incidence.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
 
-                try {
-                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.incidencia,
-                            spinner_lista_de_mal_ubicacion.getSelectedItem().toString());
-                }catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(Screen_Incidence.this, "No se pudo insetar texto incidencia en JSON tarea", Toast.LENGTH_LONG).show();
-                }
+                        try {
+                            Screen_Login_Activity.tarea_JSON.put(DBtareasController.incidencia,
+                                    spinner_lista_de_mal_ubicacion.getSelectedItem().toString());
+                        }catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(Screen_Incidence.this, "No se pudo insetar texto incidencia en JSON tarea", Toast.LENGTH_LONG).show();
+                        }
 
-                Intent intent_open_incidence_summary = new Intent(Screen_Incidence.this, Screen_Incidence_Summary.class);
-                startActivity(intent_open_incidence_summary);
+                        Intent intent_open_incidence_summary = new Intent(Screen_Incidence.this, Screen_Incidence_Summary.class);
+                        startActivity(intent_open_incidence_summary);
+                    }
+                });
+                button_firma_del_cliente_screen_incidence.startAnimation(myAnim);
             }
         });
-
     }
-
 
     public void openDialog(String tel){
 
@@ -235,7 +272,6 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
         dialog.setTitleAndHint(tel, "telefono");
         dialog.show(getSupportFragmentManager(), "telefonos");
     }
-
     @Override
     public void pasarTexto(String telefono) throws JSONException {
 
@@ -249,7 +285,6 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
             }
         }
     }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

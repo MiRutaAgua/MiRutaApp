@@ -86,6 +86,11 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        getWindow().setSoftInputMode( //Para esconder el teclado
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
+        );
+
         setContentView(R.layout.screen_validate);
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);

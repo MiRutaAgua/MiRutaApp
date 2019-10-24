@@ -31,6 +31,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -55,9 +57,12 @@ import java.util.Date;
 @RequiresApi(api = Build.VERSION_CODES.KITKAT)
 public class Screen_Incidence_Summary extends AppCompatActivity implements TaskCompleted {
 
-    private ImageView button_compartir_screen_incidence_summary, firma_cliente, foto1, foto2, foto3, cerrar_tarea;
+    private ImageView  firma_cliente, foto1, foto2, foto3;
 
-    private Button button_firma_cliente;
+    private Button button_firma_cliente,
+            button_compartir_screen_incidence_summary,
+            cerrar_tarea;
+
     private static final int CANVAS_REQUEST_INC_SUMMARY = 3331;
     private Bitmap bitmap_firma_cliente = null;
     private TextView observaciones_incidence, nombre_y_tarea;
@@ -79,6 +84,11 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        getWindow().setSoftInputMode( //Para esconder el teclado
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
+        );
+
         setContentView(R.layout.screen_incidence_summary);
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
@@ -92,12 +102,12 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
         llScroll_4 = (LinearLayout)findViewById(R.id.linearLayout_screen_incidence_summary_4);
         images_files = new ArrayList<>();
         button_firma_cliente = (Button)findViewById(R.id.imageButton_editar_firma_cliente_screen_incidence_summary);
-        button_compartir_screen_incidence_summary = (ImageView)findViewById(R.id.button_compartir_screen_incidence_summary);
+        button_compartir_screen_incidence_summary = (Button)findViewById(R.id.button_compartir_screen_incidence_summary);
         firma_cliente = (ImageView)findViewById(R.id.imageButton_firma_cliente_screen_validate);
         foto1 = (ImageView)findViewById(R.id.imageView_foto1_screen_incidence_summary);
         foto2 = (ImageView)findViewById(R.id.imageView_foto2_screen_incidence_summary);
         foto3 = (ImageView)findViewById(R.id.imageView_foto3_screen_incidence_summary);
-        cerrar_tarea = (ImageView)findViewById(R.id.button_cerrar_tarea_screen_incidence_sumary);
+        cerrar_tarea = (Button)findViewById(R.id.button_cerrar_tarea_screen_incidence_sumary);
         observaciones_incidence = (TextView)findViewById(R.id.textView_obsevaciones_screen_incidence_summary);
         nombre_y_tarea = (TextView)findViewById(R.id.textView_nombre_y_tarea_screen_incidence_summary);
         lectura = (EditText)findViewById(R.id.editText_lectura_de_contador_screen_incidence_summary);
@@ -223,88 +233,170 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
         firma_cliente.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent_zoom_firma = new Intent(Screen_Incidence_Summary.this, Screen_Zoom_Firma.class);
-                if(bitmap_firma_cliente != null) {
-                    String foto = Screen_Register_Operario.getStringImage(bitmap_firma_cliente);
-                    intent_zoom_firma.putExtra("zooming_photo", foto);
-                    startActivity(intent_zoom_firma);
-                }
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Incidence_Summary.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        Intent intent_zoom_firma = new Intent(Screen_Incidence_Summary.this, Screen_Zoom_Firma.class);
+                        if(bitmap_firma_cliente != null) {
+                            String foto = Screen_Register_Operario.getStringImage(bitmap_firma_cliente);
+                            intent_zoom_firma.putExtra("zooming_photo", foto);
+                            startActivity(intent_zoom_firma);
+                        }
+                    }
+                });
+                firma_cliente.startAnimation(myAnim);
             }
         });
 
         button_firma_cliente.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent_open_screen_client_sign = new Intent(Screen_Incidence_Summary.this, Screen_Draw_Canvas.class);
-                intent_open_screen_client_sign.putExtra("class_caller", CANVAS_REQUEST_INC_SUMMARY);
-                startActivityForResult(intent_open_screen_client_sign, CANVAS_REQUEST_INC_SUMMARY);
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Incidence_Summary.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+
+                        Intent intent_open_screen_client_sign = new Intent(Screen_Incidence_Summary.this, Screen_Draw_Canvas.class);
+                        intent_open_screen_client_sign.putExtra("class_caller", CANVAS_REQUEST_INC_SUMMARY);
+                        startActivityForResult(intent_open_screen_client_sign, CANVAS_REQUEST_INC_SUMMARY);
+                    }
+                });
+                button_firma_cliente.startAnimation(myAnim);
             }
         });
 
         button_compartir_screen_incidence_summary.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showRingDialog("Creando PDF...");
-                if(bitmap1_no_nulo)
-                    bitmap = loadBitmapFromView(llScroll, llScroll.getWidth(), llScroll.getHeight());
-                if(bitmap2_no_nulo)
-                    bitmap2 = loadBitmapFromView(llScroll_2, llScroll_2.getWidth(), llScroll_2.getHeight());
-                if(bitmap3_no_nulo)
-                    bitmap3 = loadBitmapFromView(llScroll_3, llScroll_3.getWidth(), llScroll_3.getHeight());
-                bitmap4 = loadBitmapFromView(llScroll_4, llScroll_4.getWidth(), llScroll_4.getHeight());
-                createPdf();
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Incidence_Summary.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        showRingDialog("Creando PDF...");
+                        if(bitmap1_no_nulo)
+                            bitmap = loadBitmapFromView(llScroll, llScroll.getWidth(), llScroll.getHeight());
+                        if(bitmap2_no_nulo)
+                            bitmap2 = loadBitmapFromView(llScroll_2, llScroll_2.getWidth(), llScroll_2.getHeight());
+                        if(bitmap3_no_nulo)
+                            bitmap3 = loadBitmapFromView(llScroll_3, llScroll_3.getWidth(), llScroll_3.getHeight());
+                        bitmap4 = loadBitmapFromView(llScroll_4, llScroll_4.getWidth(), llScroll_4.getHeight());
+                        createPdf();
+                    }
+                });
+                button_compartir_screen_incidence_summary.startAnimation(myAnim);
             }
         });
         cerrar_tarea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.date_time_modified, DBtareasController.getStringFromFechaHora(new Date()));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                if(bitmap_firma_cliente!=null) {
-                    try {
-                        String firma = Screen_Register_Operario.getStringImage(bitmap_firma_cliente);
-                        Screen_Login_Activity.tarea_JSON.put(DBtareasController.firma_cliente, firma);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        Toast.makeText(Screen_Incidence_Summary.this, "no se pudo cambiar firma de cliente", Toast.LENGTH_LONG).show();
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Incidence_Summary.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
                     }
-                }
-                if(!(TextUtils.isEmpty(lectura.getText()))) {
-                    if(!lectura_string.isEmpty() && !lectura_string.equals("null")){
-                        String lectura_actual = lectura.getText().toString();
-                        if(Integer.parseInt(lectura_actual) > Integer.parseInt(lectura_string)){
-                            try {
-                                Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_ultima, lectura_string);
-                                Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_actual, lectura_actual);
-
-                                saveData();
-
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                                Toast.makeText(Screen_Incidence_Summary.this, "no se pudo cambiar lectura de contador", Toast.LENGTH_LONG).show();
-                            }
-                        }else{
-                            Toast.makeText(Screen_Incidence_Summary.this, "La lectura del contador debe ser mayor que la ultima registrada", Toast.LENGTH_LONG).show();
-                        }
-                    }else {
-                        try {
-                            Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_actual, lectura.getText().toString());
-                            saveData();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Toast.makeText(Screen_Incidence_Summary.this, "no se pudo cambiar lectura de contador", Toast.LENGTH_LONG).show();
-                        }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
                     }
-                }else{
-                    Toast.makeText(Screen_Incidence_Summary.this, "Inserte la lectura del contador", Toast.LENGTH_LONG).show();
-                }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        onCerrar_Tarea();
+                    }
+                });
+                cerrar_tarea.startAnimation(myAnim);
             }
         });
 
     }
+
+    private void onCerrar_Tarea() {
+        try {
+            Screen_Login_Activity.tarea_JSON.put(DBtareasController.date_time_modified, DBtareasController.getStringFromFechaHora(new Date()));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        if(bitmap_firma_cliente!=null) {
+            try {
+                String firma = Screen_Register_Operario.getStringImage(bitmap_firma_cliente);
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.firma_cliente, firma);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Toast.makeText(Screen_Incidence_Summary.this, "no se pudo cambiar firma de cliente", Toast.LENGTH_LONG).show();
+            }
+        }
+        if(!(TextUtils.isEmpty(lectura.getText()))) {
+            if(!lectura_string.isEmpty() && !lectura_string.equals("null")){
+                String lectura_actual = lectura.getText().toString();
+                if(Integer.parseInt(lectura_actual) > Integer.parseInt(lectura_string)){
+                    try {
+                        Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_ultima, lectura_string);
+                        Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_actual, lectura_actual);
+
+                        saveData();
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Toast.makeText(Screen_Incidence_Summary.this, "no se pudo cambiar lectura de contador", Toast.LENGTH_LONG).show();
+                    }
+                }else{
+                    Toast.makeText(Screen_Incidence_Summary.this, "La lectura del contador debe ser mayor que la ultima registrada", Toast.LENGTH_LONG).show();
+                }
+            }else {
+                try {
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_actual, lectura.getText().toString());
+                    saveData();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(Screen_Incidence_Summary.this, "no se pudo cambiar lectura de contador", Toast.LENGTH_LONG).show();
+                }
+            }
+        }else{
+            Toast.makeText(Screen_Incidence_Summary.this, "Inserte la lectura del contador", Toast.LENGTH_LONG).show();
+        }
+    }
+
     public void saveData() {
         try {
             String status_tarea = Screen_Login_Activity.tarea_JSON.getString(

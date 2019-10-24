@@ -44,17 +44,18 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
 
     private ProgressDialog progressDialog;
 
-    private ImageView button_modo_battery;
+    private Button button_modo_battery;
 
-    private ImageView button_incidence_screen_unity_counter, button_trazar_ruta_screen_unity_counter;
+    private Button button_incidence_screen_unity_counter,
+            button_trazar_ruta_screen_unity_counter,
+            button_absent_screen_unity_counter,
+            button_exec_task_screen_unity_counter,
+            button_geolocalization;
 
-    private ImageView button_absent_screen_unity_counter;
-
-    private ImageView button_exec_task_screen_unity_counter, imagen_contador;
+    private ImageView imagen_contador;
 
     private TextView tipo_tarea, direccion, datosEspecificos, serie, lectura, acceso, ubicacion,calibre;
     private HashMap<String, String> mapaTiposDeTarea;
-    private ImageView button_geolocalization;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -81,7 +82,7 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
         mapaTiposDeTarea.put("SI", "SOLO INSTALAR");
         mapaTiposDeTarea.put("R", "REFORMA MAS CONTADOR");
 
-        button_geolocalization=(ImageView) findViewById(R.id.button_geolocalization_screen_unity_counter);
+        button_geolocalization=(Button) findViewById(R.id.button_geolocalization_screen_unity_counter);
         imagen_contador = (ImageView) findViewById(R.id.imageView_screen_unity_counter_imagen);
         serie = (TextView) findViewById(R.id.textView_screen_unity_counter_serie);
         lectura = (TextView) findViewById(R.id.textView_screen_unity_counter_lectura);
@@ -91,11 +92,11 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
         tipo_tarea = (TextView) findViewById(R.id.textView_tipo_tarea_screen_unity_counter);
         direccion = (TextView) findViewById(R.id.textView_direccion_screen_unity_counter);
         datosEspecificos = (TextView) findViewById(R.id.textView_datos_especificos_screen_unity_counter);
-        button_modo_battery = (ImageView) findViewById(R.id.button_modo_bateria_screen_unity_counter);
-        button_incidence_screen_unity_counter = (ImageView)findViewById(R.id.button_incidencia_screen_unity_counter);
-        button_absent_screen_unity_counter = (ImageView)findViewById(R.id.button_abandonado_ausente_screen_unity_counter);
-        button_exec_task_screen_unity_counter = (ImageView)findViewById(R.id.button_ejecutar_tarea_screen_unity_counter);
-        button_trazar_ruta_screen_unity_counter = (ImageView)findViewById(R.id.button_trazar_ruta_screen_unity_counter);
+        button_modo_battery = (Button) findViewById(R.id.button_modo_bateria_screen_unity_counter);
+        button_incidence_screen_unity_counter = (Button)findViewById(R.id.button_incidencia_screen_unity_counter);
+        button_absent_screen_unity_counter = (Button)findViewById(R.id.button_abandonado_ausente_screen_unity_counter);
+        button_exec_task_screen_unity_counter = (Button)findViewById(R.id.button_ejecutar_tarea_screen_unity_counter);
+        button_trazar_ruta_screen_unity_counter = (Button)findViewById(R.id.button_trazar_ruta_screen_unity_counter);
 
         try {
             String tipo = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.tipo_tarea).

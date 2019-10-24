@@ -17,6 +17,8 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -34,15 +36,14 @@ import java.io.IOException;
 
 public class Screen_Battery_Intake_Asignation extends AppCompatActivity {
 
-    private ImageView button_validar;
+    private Button button_validar,
+            button_instalation_photo_screen_exec_task,
+            button_read_photo_screen_exec_task,
+            button_serial_number_photo_screen_exec_task;
 
     private Intent intent_open_screen_validate_battery_intake_asignation;
 
     EditText editText_bateria, editText_fila, editText_columna;
-
-    private ImageView button_instalation_photo_screen_exec_task;
-    private ImageView button_read_photo_screen_exec_task;
-    private ImageView button_serial_number_photo_screen_exec_task;
 
     private static final int CAM_REQUEST_INST_PHOTO = 1323;
     private static final int CAM_REQUEST_READ_PHOTO = 1324;
@@ -76,14 +77,14 @@ public class Screen_Battery_Intake_Asignation extends AppCompatActivity {
         imageView_foto_lectura_screen_battery_intake_asignation = (ImageView)findViewById(R.id.imageView_foto_lectura_screen_battery_intake_asignation);
         imageView_foto_numero_serie_screen_battery_intake_asignation = (ImageView)findViewById(R.id.imageView_foto_numero_serie_screen_battery_intake_asignation);
 
-        button_validar = (ImageView)findViewById(R.id.button_validar_screen_battery_intake_asignation);
+        button_validar = (Button) findViewById(R.id.button_validar_screen_battery_intake_asignation);
         editText_bateria = (EditText)findViewById(R.id.editText_bateria_screen_battery_intake_asignation);
         editText_fila = (EditText)findViewById(R.id.editText_fila_screen_battery_intake_asignation);
         editText_columna = (EditText)findViewById(R.id.editText_columna_screen_battery_intake_asignation);
 
-        button_instalation_photo_screen_exec_task = (ImageView)findViewById(R.id.button_foto_instalacion_screen_battery_intake_asignation);
-        button_read_photo_screen_exec_task = (ImageView)findViewById(R.id.button_foto_lectura_screen_battery_intake_asignation);
-        button_serial_number_photo_screen_exec_task = (ImageView)findViewById(R.id.button_foto_numero_serie_screen_battery_intake_asignation);
+        button_instalation_photo_screen_exec_task = (Button)findViewById(R.id.button_foto_instalacion_screen_battery_intake_asignation);
+        button_read_photo_screen_exec_task = (Button)findViewById(R.id.button_foto_lectura_screen_battery_intake_asignation);
+        button_serial_number_photo_screen_exec_task = (Button)findViewById(R.id.button_foto_numero_serie_screen_battery_intake_asignation);
         foto_instalacion = (ImageView)findViewById(R.id.imageView_foto_instalacion_screen_battery_intake_asignation);
         foto_numero_de_serie = (ImageView)findViewById(R.id.imageView_foto_numero_serie_screen_battery_intake_asignation);
         foto_lectura = (ImageView)findViewById(R.id.imageView_foto_lectura_screen_battery_intake_asignation);
@@ -106,11 +107,11 @@ public class Screen_Battery_Intake_Asignation extends AppCompatActivity {
                     }
                 }
                 else {
-                Intent intent_camera = new Intent(Screen_Battery_Intake_Asignation.this, Screen_Camera.class);
-                intent_camera.putExtra("photo_name", contador+"_foto_antes_instalacion");
-                intent_camera.putExtra("photo_folder", "fotos_tareas");
-                intent_camera.putExtra("contador", contador);
-                startActivityForResult(intent_camera, CAM_REQUEST_INST_PHOTO);
+                    Intent intent_camera = new Intent(Screen_Battery_Intake_Asignation.this, Screen_Camera.class);
+                    intent_camera.putExtra("photo_name", contador+"_foto_antes_instalacion");
+                    intent_camera.putExtra("photo_folder", "fotos_tareas");
+                    intent_camera.putExtra("contador", contador);
+                    startActivityForResult(intent_camera, CAM_REQUEST_INST_PHOTO);
 
                 }
             }
@@ -126,12 +127,12 @@ public class Screen_Battery_Intake_Asignation extends AppCompatActivity {
                     }
                 }
                 else {
-                Intent intent_camera = new Intent(Screen_Battery_Intake_Asignation.this, Screen_Camera.class);
-                intent_camera.putExtra("photo_name", contador+"_foto_lectura");
-                intent_camera.putExtra("photo_folder", "fotos_tareas");
-                intent_camera.putExtra("contador", contador);
-                startActivityForResult(intent_camera, CAM_REQUEST_READ_PHOTO);
-             }
+                    Intent intent_camera = new Intent(Screen_Battery_Intake_Asignation.this, Screen_Camera.class);
+                    intent_camera.putExtra("photo_name", contador+"_foto_lectura");
+                    intent_camera.putExtra("photo_folder", "fotos_tareas");
+                    intent_camera.putExtra("contador", contador);
+                    startActivityForResult(intent_camera, CAM_REQUEST_READ_PHOTO);
+                }
             }
         });
         button_serial_number_photo_screen_exec_task.setOnClickListener(new View.OnClickListener() {
@@ -145,94 +146,116 @@ public class Screen_Battery_Intake_Asignation extends AppCompatActivity {
                     }
                 }
                 else {
-                Intent intent_camera = new Intent(Screen_Battery_Intake_Asignation.this, Screen_Camera.class);
-                intent_camera.putExtra("photo_name", contador+"_foto_numero_serie");
-                intent_camera.putExtra("photo_folder", "fotos_tareas");
-                intent_camera.putExtra("contador", contador);
-                startActivityForResult(intent_camera, CAM_REQUEST_SN_PHOTO);
-              }
+                    Intent intent_camera = new Intent(Screen_Battery_Intake_Asignation.this, Screen_Camera.class);
+                    intent_camera.putExtra("photo_name", contador+"_foto_numero_serie");
+                    intent_camera.putExtra("photo_folder", "fotos_tareas");
+                    intent_camera.putExtra("contador", contador);
+                    startActivityForResult(intent_camera, CAM_REQUEST_SN_PHOTO);
+                }
             }
         });
         button_validar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String bateria= "",fila = "",columna = "";
-
-                if(!(TextUtils.isEmpty(editText_bateria.getText()))){
-                    Integer bat = Integer.parseInt(editText_bateria.getText().toString());
-                    if(bat <10){
-                        bateria = "-0" + editText_bateria.getText().toString();
-                    }else {
-                        bateria = "-" + editText_bateria.getText().toString();
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Battery_Intake_Asignation.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
                     }
-                }
-                if(!(TextUtils.isEmpty(editText_fila.getText()))){
-                    Integer fil = Integer.parseInt(editText_fila.getText().toString());
-                    if(fil <10){
-                        fila = "-0" + editText_fila.getText().toString();
-                    }else {
-                        fila = "-" + editText_fila.getText().toString();
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
                     }
-                }
-                if(!(TextUtils.isEmpty(editText_columna.getText()))){
-                    Integer col = Integer.parseInt(editText_columna.getText().toString());
-                    if(col <10){
-                        columna = "-0" + editText_columna.getText().toString();
-                    }else {
-                        columna = "-" + editText_columna.getText().toString();
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        onValidar_Button();
                     }
-                }
-
-
-                try {
-                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.acceso,"BAT");
-                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.ubicacion_en_bateria, "BA"+bateria+fila+columna);
-
-                    String contador=null;
-                    try {
-                        contador = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador);
-                        Toast.makeText(Screen_Battery_Intake_Asignation.this, "Contador"+contador, Toast.LENGTH_LONG).show();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    if(contador != null && !mCurrentPhotoPath_foto_antes.isEmpty()
-                            && !mCurrentPhotoPath_foto_antes.equals("null")){
-                        try {
-                            Screen_Login_Activity.tarea_JSON.put(DBtareasController.foto_antes_instalacion,contador +"_foto_antes_instalacion.jpg");
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Toast.makeText(Screen_Battery_Intake_Asignation.this, "No pudo guardar foto_antes_instalacion", Toast.LENGTH_LONG).show();
-                        }
-                    }
-                    if(contador != null && !mCurrentPhotoPath_foto_lectura.isEmpty()
-                            && !mCurrentPhotoPath_foto_lectura.equals("null")){
-                        try {
-                            Screen_Login_Activity.tarea_JSON.put(DBtareasController.foto_lectura,contador +"_foto_lectura.jpg");
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Toast.makeText(Screen_Battery_Intake_Asignation.this, "No pudo guardar foto_lectura", Toast.LENGTH_LONG).show();
-                        }
-                    }
-                    if(contador != null && !mCurrentPhotoPath_foto_serie.isEmpty()
-                            && !mCurrentPhotoPath_foto_serie.equals("null")){
-                        try {
-                            Screen_Login_Activity.tarea_JSON.put(DBtareasController.foto_numero_serie,contador +"_foto_numero_serie.jpg");
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Toast.makeText(Screen_Battery_Intake_Asignation.this, "No pudo guardar foto_numero_serie", Toast.LENGTH_LONG).show();
-                        }
-                    }
-
-                    Toast.makeText(Screen_Battery_Intake_Asignation.this, "Asignada posicion en bateria", Toast.LENGTH_SHORT).show();
-                    startActivity(intent_open_screen_validate_battery_intake_asignation);
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(Screen_Battery_Intake_Asignation.this, "No se pudo asignar posicion en bateria", Toast.LENGTH_SHORT).show();
-                }
-
+                });
+                button_validar.startAnimation(myAnim);
             }
         });
+    }
+
+    public void onValidar_Button(){
+        String bateria= "",fila = "",columna = "";
+
+        if(!(TextUtils.isEmpty(editText_bateria.getText()))){
+            Integer bat = Integer.parseInt(editText_bateria.getText().toString());
+            if(bat <10){
+                bateria = "-0" + editText_bateria.getText().toString();
+            }else {
+                bateria = "-" + editText_bateria.getText().toString();
+            }
+        }
+        if(!(TextUtils.isEmpty(editText_fila.getText()))){
+            Integer fil = Integer.parseInt(editText_fila.getText().toString());
+            if(fil <10){
+                fila = "-0" + editText_fila.getText().toString();
+            }else {
+                fila = "-" + editText_fila.getText().toString();
+            }
+        }
+        if(!(TextUtils.isEmpty(editText_columna.getText()))){
+            Integer col = Integer.parseInt(editText_columna.getText().toString());
+            if(col <10){
+                columna = "-0" + editText_columna.getText().toString();
+            }else {
+                columna = "-" + editText_columna.getText().toString();
+            }
+        }
+
+
+        try {
+            Screen_Login_Activity.tarea_JSON.put(DBtareasController.acceso,"BAT");
+            Screen_Login_Activity.tarea_JSON.put(DBtareasController.ubicacion_en_bateria, "BA"+bateria+fila+columna);
+
+            String contador=null;
+            try {
+                contador = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador);
+                Toast.makeText(Screen_Battery_Intake_Asignation.this, "Contador"+contador, Toast.LENGTH_LONG).show();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            if(contador != null && !mCurrentPhotoPath_foto_antes.isEmpty()
+                    && !mCurrentPhotoPath_foto_antes.equals("null")){
+                try {
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.foto_antes_instalacion,contador +"_foto_antes_instalacion.jpg");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(Screen_Battery_Intake_Asignation.this, "No pudo guardar foto_antes_instalacion", Toast.LENGTH_LONG).show();
+                }
+            }
+            if(contador != null && !mCurrentPhotoPath_foto_lectura.isEmpty()
+                    && !mCurrentPhotoPath_foto_lectura.equals("null")){
+                try {
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.foto_lectura,contador +"_foto_lectura.jpg");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(Screen_Battery_Intake_Asignation.this, "No pudo guardar foto_lectura", Toast.LENGTH_LONG).show();
+                }
+            }
+            if(contador != null && !mCurrentPhotoPath_foto_serie.isEmpty()
+                    && !mCurrentPhotoPath_foto_serie.equals("null")){
+                try {
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.foto_numero_serie,contador +"_foto_numero_serie.jpg");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(Screen_Battery_Intake_Asignation.this, "No pudo guardar foto_numero_serie", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            Toast.makeText(Screen_Battery_Intake_Asignation.this, "Asignada posicion en bateria", Toast.LENGTH_SHORT).show();
+            startActivity(intent_open_screen_validate_battery_intake_asignation);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Toast.makeText(Screen_Battery_Intake_Asignation.this, "No se pudo asignar posicion en bateria", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public Bitmap getPhotoUserLocal(String path){

@@ -32,6 +32,9 @@ public class MainActivity extends AppCompatActivity {
     public static int DB_VERSION = 34;
     public static int COMPRESS_QUALITY = 50;
 
+    public static double AMPLITUD_BOUNCE = 0.1;
+    public static int FRECUENCY_BOUNCE = 40;
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {

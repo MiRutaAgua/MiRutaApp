@@ -31,6 +31,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -56,23 +59,24 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
     private  TextView textView_observaciones_screen_exec_task,textView_serial_number_result, textView_serial_number_module_result, telefonos, telefono1, telefono2;
 
     private String tag="";
-    private ImageView button_scan_serial_number_screen_exec_task;
+    private Button button_scan_serial_number_screen_exec_task;
 
-    private ImageView button_scan_module_screen_exec_task, observaciones_button ,button_guardar_datos;
+    private Button button_scan_module_screen_exec_task, observaciones_button ,button_guardar_datos;
 
-    private ImageView button_validate_screen_exec_task, button_geolocalization_screen_exec_task,
-            imageView_edit_phone1_screen_exec_task,
+    private Button button_validate_screen_exec_task, button_geolocalization_screen_exec_task;
+
+    private ImageView imageView_edit_phone1_screen_exec_task,
             imageView_edit_phone2_screen_exec_task,
             imageView_edit_serial_number_screen_exec_task,
             imageView_edit_serial_number_module_screen_exec_task;
 
-    private ImageView button_instalation_photo_screen_exec_task;
+    private Button button_instalation_photo_screen_exec_task;
     private ImageView instalation_photo_screen_exec_task;
-    private ImageView button_read_photo_screen_exec_task;
+    private Button button_read_photo_screen_exec_task;
     private ImageView read_photo_screen_exec_task;
-    private ImageView button_serial_number_photo_screen_exec_task;
+    private Button button_serial_number_photo_screen_exec_task;
     private ImageView serial_number_photo_screen_exec_task;
-    private ImageView button_after_instalation_photo_screen_exec_task;
+    private Button button_after_instalation_photo_screen_exec_task;
     private ImageView after_instalation_photo_screen_exec_task;
     private String contador = "";
     public static String lectura_introducida = "";
@@ -134,22 +138,22 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         telefonos = (TextView) findViewById(R.id.textView_phones_screen_exec_task);
         telefono1 = (TextView) findViewById(R.id.textView_phone1_screen_exec_task);
         telefono2 = (TextView) findViewById(R.id.textView_phone2_screen_exec_task);
-        button_instalation_photo_screen_exec_task = (ImageView)findViewById(R.id.button_instalation_photo_screen_exec_task);
-        button_read_photo_screen_exec_task = (ImageView)findViewById(R.id.button_read_photo_screen_exec_task);
-        button_serial_number_photo_screen_exec_task = (ImageView)findViewById(R.id.button_serial_number_photo_screen_exec_task);
-        button_after_instalation_photo_screen_exec_task = (ImageView)findViewById(R.id.button_final_instalation_photo_screen_exec_task);
+        button_instalation_photo_screen_exec_task = (Button)findViewById(R.id.button_instalation_photo_screen_exec_task);
+        button_read_photo_screen_exec_task = (Button)findViewById(R.id.button_read_photo_screen_exec_task);
+        button_serial_number_photo_screen_exec_task = (Button)findViewById(R.id.button_serial_number_photo_screen_exec_task);
+        button_after_instalation_photo_screen_exec_task = (Button)findViewById(R.id.button_final_instalation_photo_screen_exec_task);
         instalation_photo_screen_exec_task = (ImageView)findViewById(R.id.instalation_photo_screen_exec_task);
         read_photo_screen_exec_task = (ImageView)findViewById(R.id.read_photo_screen_exec_task);
         serial_number_photo_screen_exec_task = (ImageView)findViewById(R.id.serial_number_photo_screen_exec_task);
         after_instalation_photo_screen_exec_task = (ImageView)findViewById(R.id.final_instalation_photo_screen_exec_task);
 
-        button_scan_serial_number_screen_exec_task= (ImageView)findViewById(R.id.button_scan_serial_number_screen_exec_task);
-        button_scan_module_screen_exec_task= (ImageView)findViewById(R.id.button_scan_module_screen_exec_task);
-        button_validate_screen_exec_task          = (ImageView)findViewById(R.id.button_validate_screen_exec_task);
-        button_guardar_datos = (ImageView)findViewById(R.id.button_guardar_datos_screen_exec_task);
-        observaciones_button = (ImageView)findViewById(R.id.button_observations_screen_exec_task);
+        button_scan_serial_number_screen_exec_task= (Button)findViewById(R.id.button_scan_serial_number_screen_exec_task);
+        button_scan_module_screen_exec_task= (Button)findViewById(R.id.button_scan_module_screen_exec_task);
+        button_validate_screen_exec_task          = (Button)findViewById(R.id.button_validate_screen_exec_task);
+        button_guardar_datos = (Button)findViewById(R.id.button_guardar_datos_screen_exec_task);
+        observaciones_button = (Button)findViewById(R.id.button_observations_screen_exec_task);
         textView_observaciones_screen_exec_task = (TextView)findViewById(R.id.textView_observaciones_screen_exec_task);
-        button_geolocalization_screen_exec_task= (ImageView)findViewById(R.id.button_geolocalization_screen_exec_task);
+        button_geolocalization_screen_exec_task= (Button)findViewById(R.id.button_geolocalization_screen_exec_task);
 
         try {
             contador = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador);
@@ -204,8 +208,27 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         button_geolocalization_screen_exec_task.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent_open_MapsActivity = new Intent(getApplicationContext(), PermissionsActivity.class);
-                startActivity(intent_open_MapsActivity);
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Execute_Task.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        Intent intent_open_MapsActivity = new Intent(getApplicationContext(), PermissionsActivity.class);
+                        startActivity(intent_open_MapsActivity);
+                    }
+                });
+                button_geolocalization_screen_exec_task.startAnimation(myAnim);
             }
 
         });
@@ -213,68 +236,155 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         textView_serial_number_result.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openDialog("Numero Serie","Escriba aqui número serie");
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Execute_Task.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        openDialog("Numero Serie","Escriba aqui número serie");
+                    }
+                });
+                textView_serial_number_result.startAnimation(myAnim);
             }
 
         });
         imageView_edit_serial_number_screen_exec_task.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openDialog("Numero Serie","Escriba aqui número serie");
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Execute_Task.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        openDialog("Numero Serie","Escriba aqui número serie");
+                    }
+                });
+                imageView_edit_serial_number_screen_exec_task.startAnimation(myAnim);
+
             }
         });
         imageView_edit_serial_number_module_screen_exec_task.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openDialog("Numero Serie de Modulo","Escriba número serie de modulo");
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Execute_Task.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        openDialog("Numero Serie de Modulo","Escriba número serie de modulo");
+                    }
+                });
+                imageView_edit_serial_number_module_screen_exec_task.startAnimation(myAnim);
             }
         });
 
         textView_serial_number_module_result.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openDialog("Numero Serie de Modulo","Escriba número serie de modulo");
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Execute_Task.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        openDialog("Numero Serie de Modulo","Escriba número serie de modulo");
+                    }
+                });
+                textView_serial_number_module_result.startAnimation(myAnim);
+
             }
 
         });
         button_guardar_datos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                guardar_en_JSON_modificaciones();
-                if(!(TextUtils.isEmpty(lectura_editText.getText()))) {
-                    if(!lectura_string.isEmpty() && !lectura_string.equals("null")){
-                        String lectura_actual = lectura_editText.getText().toString();
-                        if(Integer.parseInt(lectura_actual) > Integer.parseInt(lectura_string)){
-                            try {
-                                Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_ultima, lectura_string);
-                                Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_actual, lectura_actual);
-                                saveData();
-
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                                Toast.makeText(Screen_Execute_Task.this, "no se pudo cambiar lectura de contador", Toast.LENGTH_LONG).show();
-                            }
-                        }else{
-                            Toast.makeText(Screen_Execute_Task.this, "La lectura del contador debe ser mayor que la ultima registrada", Toast.LENGTH_LONG).show();
-                        }
-                    }else {
-                        try {
-                            Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_actual, lectura_editText.getText().toString());
-                            saveData();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Toast.makeText(Screen_Execute_Task.this, "no se pudo cambiar lectura de contador", Toast.LENGTH_LONG).show();
-                        }
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Execute_Task.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
                     }
-                }else{
-                    Toast.makeText(Screen_Execute_Task.this, "Inserte la lectura del contador", Toast.LENGTH_LONG).show();
-                }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        onGuardar_Datos();
+                    }
+                });
+                button_guardar_datos.startAnimation(myAnim);
             }
         });
         observaciones_button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                openDialog("Observaciones","Observación");
+            public void onClick(View view) {final Animation myAnim = AnimationUtils.loadAnimation(Screen_Execute_Task.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        openDialog("Observaciones","Observación");
+                    }
+                });
+                observaciones_button.startAnimation(myAnim);
             }
         });
         telefonos.setOnClickListener(new View.OnClickListener() {
@@ -311,32 +421,91 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         button_validate_screen_exec_task.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                guardar_en_JSON_modificaciones();
-                if(!TextUtils.isEmpty(lectura_editText.getText().toString())) {
-                    lectura_introducida = lectura_editText.getText().toString();
-                }
-                showRingDialog("Validando...");
-                Intent intent_open_screen_validate = new Intent(Screen_Execute_Task.this, Screen_Validate.class);
-                startActivity(intent_open_screen_validate);
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Execute_Task.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        guardar_en_JSON_modificaciones();
+                        if(!TextUtils.isEmpty(lectura_editText.getText().toString())) {
+                            lectura_introducida = lectura_editText.getText().toString();
+                        }
+                        showRingDialog("Validando...");
+                        Intent intent_open_screen_validate = new Intent(Screen_Execute_Task.this, Screen_Validate.class);
+                        startActivity(intent_open_screen_validate);
+                    }
+                });
+                button_scan_serial_number_screen_exec_task.startAnimation(myAnim);
             }
         });
 
         button_scan_serial_number_screen_exec_task.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                intent_open_scan_screen_lector = new Intent(Screen_Execute_Task.this, lector.class);
-                startActivityForResult(intent_open_scan_screen_lector, REQUEST_LECTOR_SNC);
-                textView_serial_number_result.setVisibility(View.VISIBLE);
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Execute_Task.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+
+                        intent_open_scan_screen_lector = new Intent(Screen_Execute_Task.this, lector.class);
+                        startActivityForResult(intent_open_scan_screen_lector, REQUEST_LECTOR_SNC);
+                        textView_serial_number_result.setVisibility(View.VISIBLE);
+                    }
+                });
+                button_scan_serial_number_screen_exec_task.startAnimation(myAnim);
             }
         });
         button_scan_module_screen_exec_task.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                intent_open_scan_screen_lector = new Intent(Screen_Execute_Task.this, lector.class);
-                startActivityForResult(intent_open_scan_screen_lector, REQUEST_LECTOR_SNM);
-                textView_serial_number_module_result.setVisibility(View.VISIBLE);
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Execute_Task.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        intent_open_scan_screen_lector = new Intent(Screen_Execute_Task.this, lector.class);
+                        startActivityForResult(intent_open_scan_screen_lector, REQUEST_LECTOR_SNM);
+                        textView_serial_number_module_result.setVisibility(View.VISIBLE);
+                    }
+                });
+                button_scan_module_screen_exec_task.startAnimation(myAnim);
             }
         });
+
         button_instalation_photo_screen_exec_task.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -397,24 +566,57 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         button_after_instalation_photo_screen_exec_task.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(Screen_Login_Activity.movileModel){
-                    try {
-                        dispatchTakePictureIntent(CAM_REQUEST_AFT_INT_PHOTO);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-                else {
-                    Intent intent_camera = new Intent(Screen_Execute_Task.this, Screen_Camera.class);
-                    intent_camera.putExtra("photo_name", contador + "_foto_despues_instalacion");
-                    intent_camera.putExtra("photo_folder", "fotos_tareas");
-                    intent_camera.putExtra("contador", contador);
-                    startActivityForResult(intent_camera, CAM_REQUEST_AFT_INT_PHOTO);
-                }
+
+                        if(Screen_Login_Activity.movileModel){
+                            try {
+                                dispatchTakePictureIntent(CAM_REQUEST_AFT_INT_PHOTO);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        else {
+                            Intent intent_camera = new Intent(Screen_Execute_Task.this, Screen_Camera.class);
+                            intent_camera.putExtra("photo_name", contador + "_foto_despues_instalacion");
+                            intent_camera.putExtra("photo_folder", "fotos_tareas");
+                            intent_camera.putExtra("contador", contador);
+                            startActivityForResult(intent_camera, CAM_REQUEST_AFT_INT_PHOTO);
+                        }
+
             }
         });
     }
 
+    public void onGuardar_Datos(){
+        guardar_en_JSON_modificaciones();
+        if(!(TextUtils.isEmpty(lectura_editText.getText()))) {
+            if(!lectura_string.isEmpty() && !lectura_string.equals("null")){
+                String lectura_actual = lectura_editText.getText().toString();
+                if(Integer.parseInt(lectura_actual) > Integer.parseInt(lectura_string)){
+                    try {
+                        Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_ultima, lectura_string);
+                        Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_actual, lectura_actual);
+                        saveData();
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Toast.makeText(Screen_Execute_Task.this, "no se pudo cambiar lectura de contador", Toast.LENGTH_LONG).show();
+                    }
+                }else{
+                    Toast.makeText(Screen_Execute_Task.this, "La lectura del contador debe ser mayor que la ultima registrada", Toast.LENGTH_LONG).show();
+                }
+            }else {
+                try {
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_actual, lectura_editText.getText().toString());
+                    saveData();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(Screen_Execute_Task.this, "no se pudo cambiar lectura de contador", Toast.LENGTH_LONG).show();
+                }
+            }
+        }else{
+            Toast.makeText(Screen_Execute_Task.this, "Inserte la lectura del contador", Toast.LENGTH_LONG).show();
+        }
+    }
     public void saveData() {
         boolean error=false;
         if(team_or_personal_task_selection_screen_Activity.dBtareasController != null) {

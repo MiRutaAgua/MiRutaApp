@@ -27,6 +27,8 @@ import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -48,7 +50,8 @@ import java.util.Date;
 public class Screen_Register_Operario extends AppCompatActivity implements TaskCompleted{
 
     EditText etname, etapellidos, etedad, etTelefonos, etuser_name, etclave;
-    ImageView button_register, button_foto;
+    ImageView  button_foto;
+    Button button_register;
 
     String name;
     String surname;
@@ -84,7 +87,7 @@ public class Screen_Register_Operario extends AppCompatActivity implements TaskC
         setSupportActionBar(myToolbar);
 
 
-        button_register = (ImageView)findViewById(R.id.button_screen_register_operario_register);
+        button_register = (Button)findViewById(R.id.button_screen_register_operario_register);
 
         etname = (EditText)findViewById(R.id.editText_screen_register_operario_etNombre);
         etapellidos = (EditText)findViewById(R.id.editText_screen_register_operario_etApellidos);
@@ -112,55 +115,78 @@ public class Screen_Register_Operario extends AppCompatActivity implements TaskC
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View view) {
-
-                if (!registrando) {
-                    registrando = true;
-                    if (checkConection()) {
-                        if (photo_taken && !(TextUtils.isEmpty(etname.getText().toString()))
-                                && !(TextUtils.isEmpty(etapellidos.getText().toString()))
-                                && !(TextUtils.isEmpty(etedad.getText().toString()))
-                                && !(TextUtils.isEmpty(etTelefonos.getText().toString()))
-                                && !(TextUtils.isEmpty(etuser_name.getText().toString()))
-                                && !(TextUtils.isEmpty(etclave.getText().toString()))) {
-
-                            username_reg = etuser_name.getText().toString();
-                            if (!Screen_Login_Activity.lista_usuarios.contains(username_reg)) {
-
-                                name = etname.getText().toString();
-                                surname = etapellidos.getText().toString();
-                                age = etedad.getText().toString();
-                                telefonos = etTelefonos.getText().toString();
-                                password_reg = etclave.getText().toString();
-                                String fecha_hora = DBoperariosController.getStringFromFechaHora(new Date());
-                                //image = getStringImage(bitmap_foto);
-                                capture_Photo.setImageDrawable(getDrawable(R.drawable.screen_exec_task_imagen));
-                                //etname.setText(image);
-
-                                showRingDialog("Registrando operario...");
-
-                                String type = "register";
-                                BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Register_Operario.this);
-                                backgroundWorker.execute(type, name, surname, age, telefonos, username_reg, password_reg, image, fecha_hora);
-                            } else {
-                                Toast.makeText(Screen_Register_Operario.this, "El usuario " + username_reg + " ya está registrado", Toast.LENGTH_LONG).show();
-                            }
-                        } else {
-
-                            if (!photo_taken) {
-                                Toast.makeText(Screen_Register_Operario.this, "Debe tomarse una foto, presione el icono del camara", Toast.LENGTH_LONG).show();
-                            } else {
-                                Toast.makeText(Screen_Register_Operario.this, "Debe rellenar todos los campos", Toast.LENGTH_LONG).show();
-                            }
-                        }
-                    } else {
-                        registrando = false;
-                        Toast.makeText(Screen_Register_Operario.this, "No hay conexion a internet", Toast.LENGTH_LONG).show();
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Register_Operario.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
                     }
-                }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        onRegister_Button();
+                    }
+                });
+
+                button_register.startAnimation(myAnim);
             }
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public void onRegister_Button(){
+        if (!registrando) {
+            registrando = true;
+            if (checkConection()) {
+                if (photo_taken && !(TextUtils.isEmpty(etname.getText().toString()))
+                        && !(TextUtils.isEmpty(etapellidos.getText().toString()))
+                        && !(TextUtils.isEmpty(etedad.getText().toString()))
+                        && !(TextUtils.isEmpty(etTelefonos.getText().toString()))
+                        && !(TextUtils.isEmpty(etuser_name.getText().toString()))
+                        && !(TextUtils.isEmpty(etclave.getText().toString()))) {
+
+                    username_reg = etuser_name.getText().toString();
+                    if (!Screen_Login_Activity.lista_usuarios.contains(username_reg)) {
+
+                        name = etname.getText().toString();
+                        surname = etapellidos.getText().toString();
+                        age = etedad.getText().toString();
+                        telefonos = etTelefonos.getText().toString();
+                        password_reg = etclave.getText().toString();
+                        String fecha_hora = DBoperariosController.getStringFromFechaHora(new Date());
+                        //image = getStringImage(bitmap_foto);
+                        capture_Photo.setImageDrawable(getDrawable(R.drawable.screen_exec_task_imagen));
+                        //etname.setText(image);
+
+                        showRingDialog("Registrando operario...");
+
+                        String type = "register";
+                        BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Register_Operario.this);
+                        backgroundWorker.execute(type, name, surname, age, telefonos, username_reg, password_reg, image, fecha_hora);
+                    } else {
+                        Toast.makeText(Screen_Register_Operario.this, "El usuario " + username_reg + " ya está registrado", Toast.LENGTH_LONG).show();
+                    }
+                } else {
+
+                    if (!photo_taken) {
+                        Toast.makeText(Screen_Register_Operario.this, "Debe tomarse una foto, presione el icono del camara", Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(Screen_Register_Operario.this, "Debe rellenar todos los campos", Toast.LENGTH_LONG).show();
+                    }
+                }
+            } else {
+                registrando = false;
+                Toast.makeText(Screen_Register_Operario.this, "No hay conexion a internet", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
     public static Bitmap compressImage(Bitmap bmp, int quality){
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bmp.compress(Bitmap.CompressFormat.JPEG, quality, baos);
@@ -288,7 +314,7 @@ public class Screen_Register_Operario extends AppCompatActivity implements TaskC
         // Create an image file name
 
         String imageFileName = null;
-        image = "operario_"+etuser_name.getText().toString();
+        image = etuser_name.getText().toString();
         File image_file=null;
         File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_operarios");
         if (!storageDir.exists()) {
