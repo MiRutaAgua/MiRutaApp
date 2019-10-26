@@ -120,6 +120,7 @@ public class Screen_Zoom_Photo extends Activity{
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
                 final Animation myAnim = AnimationUtils.loadAnimation(
                         Screen_Zoom_Photo.this, R.anim.bounce);
                 // Use bounce interpolator with amplitude 0.2 and frequency 20
@@ -151,6 +152,7 @@ public class Screen_Zoom_Photo extends Activity{
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
                 final Animation myAnim = AnimationUtils.loadAnimation(
                         Screen_Zoom_Photo.this, R.anim.bounce);
                 // Use bounce interpolator with amplitude 0.2 and frequency 20

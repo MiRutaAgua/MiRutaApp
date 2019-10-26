@@ -157,6 +157,7 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
         button_geolocalization.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
                 final Animation myAnim = AnimationUtils.loadAnimation(Screen_Battery_counter.this, R.anim.bounce);
                 // Use bounce interpolator with amplitude 0.2 and frequency 20
                 MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
@@ -184,6 +185,7 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
         button_trazar_ruta_screen_battery_counter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
                 final Animation myAnim = AnimationUtils.loadAnimation(Screen_Battery_counter.this, R.anim.bounce);
                 // Use bounce interpolator with amplitude 0.2 and frequency 20
                 MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
@@ -211,6 +213,7 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
         button_ejecutar_tarea_screen_battery_counter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
                 final Animation myAnim = AnimationUtils.loadAnimation(Screen_Battery_counter.this, R.anim.bounce);
                 // Use bounce interpolator with amplitude 0.2 and frequency 20
                 MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
@@ -239,6 +242,7 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
         button_reajustar_ubicacion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
                 final Animation myAnim = AnimationUtils.loadAnimation(Screen_Battery_counter.this, R.anim.bounce);
                 // Use bounce interpolator with amplitude 0.2 and frequency 20
                 MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
@@ -267,6 +271,7 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
         button_incidence_screen_battery_counter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
                 final Animation myAnim = AnimationUtils.loadAnimation(Screen_Battery_counter.this, R.anim.bounce);
                 // Use bounce interpolator with amplitude 0.2 and frequency 20
                 MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
@@ -379,7 +384,7 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
                         imagen_contador.setVisibility(View.VISIBLE);
                         imagen_contador.setImageBitmap(bitmap);
                         saveBitmapImage(bitmap, Screen_Login_Activity.tarea_JSON.getString(
-                                DBtareasController.numero_serie_contador) + "_foto_antes_instalacion");
+                                DBtareasController.foto_despues_instalacion));
                         Toast.makeText(Screen_Battery_counter.this, "Imagen descargada", Toast.LENGTH_SHORT).show();
                     }
                 }

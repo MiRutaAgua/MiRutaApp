@@ -15,6 +15,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
+import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -154,6 +155,8 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
         button_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                playOnOffSound(Screen_Login_Activity.this);
+
                 final Animation myAnim = AnimationUtils.loadAnimation(Screen_Login_Activity.this, R.anim.bounce);
 
                 // Use bounce interpolator with amplitude 0.2 and frequency 20
@@ -190,6 +193,8 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
         button_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                playOnOffSound(Screen_Login_Activity.this);
+
                 final Animation myAnim = AnimationUtils.loadAnimation(Screen_Login_Activity.this, R.anim.bounce);
                 // Use bounce interpolator with amplitude 0.2 and frequency 20
                 MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
@@ -212,6 +217,20 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
                 button_login.startAnimation(myAnim);
             }
         });
+    }
+    public static void playOnOffSound(Context context){
+        if(MainActivity.sounds_on) {
+            MediaPlayer mp = MediaPlayer.create(context, R.raw.sound_clicked);
+            mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    // TODO Auto-generated method stub
+                    mp.release();
+                }
+            });
+            mp.start();
+        }
     }
 
     public void onLogin_Button(){

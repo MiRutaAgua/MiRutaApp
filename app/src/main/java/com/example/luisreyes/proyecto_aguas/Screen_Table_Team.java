@@ -30,6 +30,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -218,8 +220,28 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
         button_advance_filter_table_team.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent_open_Screen_advance_filter = new Intent(Screen_Table_Team.this, Screen_Advance_Filter.class);
-                startActivity(intent_open_Screen_advance_filter);
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
+                final Animation myAnim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        Intent intent_open_Screen_advance_filter = new Intent(Screen_Table_Team.this, Screen_Advance_Filter.class);
+                        startActivity(intent_open_Screen_advance_filter);
+                    }
+                });
+                button_advance_filter_table_team.startAnimation(myAnim);
             }
         });
         spinner_filtro_tareas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

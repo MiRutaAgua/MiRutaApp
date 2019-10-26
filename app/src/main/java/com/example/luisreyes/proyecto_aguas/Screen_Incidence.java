@@ -190,6 +190,7 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
         button_photo1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
                 if(Screen_Login_Activity.movileModel){
                     try {
                         dispatchTakePictureIntent(CAM_REQUEST_1_PHOTO_FULL_SIZE);
@@ -209,6 +210,7 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
         button_photo2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
                 if(Screen_Login_Activity.movileModel){
                     try {
                         dispatchTakePictureIntent(CAM_REQUEST_2_PHOTO_FULL_SIZE);
@@ -228,6 +230,7 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
         button_photo3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
                 if(Screen_Login_Activity.movileModel){
                     try {
                         dispatchTakePictureIntent(CAM_REQUEST_3_PHOTO_FULL_SIZE);
@@ -248,6 +251,7 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
         button_geolocalizar_screen_incidence.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
                 final Animation myAnim = AnimationUtils.loadAnimation(Screen_Incidence.this, R.anim.bounce);
                 // Use bounce interpolator with amplitude 0.2 and frequency 20
                 MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
@@ -289,6 +293,7 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
         button_firma_del_cliente_screen_incidence.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
                 final Animation myAnim = AnimationUtils.loadAnimation(Screen_Incidence.this, R.anim.bounce);
                 // Use bounce interpolator with amplitude 0.2 and frequency 20
                 MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
@@ -550,7 +555,8 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
     private String saveBitmapImage(Bitmap bitmap, String key){
         try {
             bitmap = Bitmap.createScaledBitmap(bitmap, 960, 1280, true);
-            String numero_serie = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador);
+            String numero_serie = Screen_Login_Activity.tarea_JSON.getString(
+                    DBtareasController.numero_serie_contador).trim().replace(" ","");
             String file_full_name = numero_serie+"_"+key;
             //Toast.makeText(Screen_Incidence.this,"archivo: "+file_full_name, Toast.LENGTH_LONG).show();
 

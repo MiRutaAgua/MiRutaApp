@@ -196,6 +196,7 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
         button_guardar_datos_screen_validate_battery_intake_asignation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
                 final Animation myAnim = AnimationUtils.loadAnimation(
                         Screen_Validate_Battery_Intake_Asignation.this, R.anim.bounce);
                 // Use bounce interpolator with amplitude 0.2 and frequency 20

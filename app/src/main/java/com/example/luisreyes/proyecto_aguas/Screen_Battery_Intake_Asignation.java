@@ -99,6 +99,7 @@ public class Screen_Battery_Intake_Asignation extends AppCompatActivity {
         button_instalation_photo_screen_exec_task.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
                 if(Screen_Login_Activity.movileModel){
                     try {
                         dispatchTakePictureIntent(CAM_REQUEST_INST_PHOTO);
@@ -119,6 +120,7 @@ public class Screen_Battery_Intake_Asignation extends AppCompatActivity {
         button_read_photo_screen_exec_task.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
                 if(Screen_Login_Activity.movileModel){
                     try {
                         dispatchTakePictureIntent(CAM_REQUEST_READ_PHOTO);
@@ -138,6 +140,7 @@ public class Screen_Battery_Intake_Asignation extends AppCompatActivity {
         button_serial_number_photo_screen_exec_task.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
                 if(Screen_Login_Activity.movileModel){
                     try {
                         dispatchTakePictureIntent(CAM_REQUEST_SN_PHOTO);
@@ -157,6 +160,7 @@ public class Screen_Battery_Intake_Asignation extends AppCompatActivity {
         button_validar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
                 final Animation myAnim = AnimationUtils.loadAnimation(Screen_Battery_Intake_Asignation.this, R.anim.bounce);
                 // Use bounce interpolator with amplitude 0.2 and frequency 20
                 MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
@@ -283,7 +287,8 @@ public class Screen_Battery_Intake_Asignation extends AppCompatActivity {
         // Create an image file name
 
         String imageFileName = null;
-        String image = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador).trim().replace(" ", "")+"_"+foto_x;
+        String image = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador)
+                .trim().replace(" ", "")+"_"+foto_x;
         File image_file=null;
         File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas");
         if (!storageDir.exists()) {
@@ -455,7 +460,8 @@ public class Screen_Battery_Intake_Asignation extends AppCompatActivity {
     private String saveBitmapImage(Bitmap bitmap, String key){
         try {
             bitmap = Bitmap.createScaledBitmap(bitmap, 960, 1280, true);
-            String numero_serie = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador);
+            String numero_serie = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador)
+                    .trim().replace(" ","")    ;
             String file_full_name = numero_serie+"_"+key;
             //Toast.makeText(Screen_Incidence.this,"archivo: "+file_full_name, Toast.LENGTH_LONG).show();
 

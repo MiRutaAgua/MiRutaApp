@@ -32,8 +32,10 @@ public class MainActivity extends AppCompatActivity {
     public static int DB_VERSION = 36;
     public static int COMPRESS_QUALITY = 50;
 
-    public static double AMPLITUD_BOUNCE = 0.1;
-    public static int FRECUENCY_BOUNCE = 40;
+    public static double AMPLITUD_BOUNCE = 0.05;
+    public static int FRECUENCY_BOUNCE = 60;
+
+    public static boolean sounds_on=true;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override

@@ -56,14 +56,22 @@ import java.util.List;
 
 public class Screen_Execute_Task extends AppCompatActivity implements Dialog.DialogListener, TaskCompleted{
 
-    private  TextView textView_observaciones_screen_exec_task,textView_serial_number_result, textView_serial_number_module_result, telefonos, telefono1, telefono2;
+    private  TextView textView_observaciones_screen_exec_task,
+            textView_serial_number_result,
+            textView_serial_number_module_result,
+            telefonos, telefono1, telefono2,
+            textView_anomalia;
 
     private String tag="";
     private Button button_scan_serial_number_screen_exec_task;
 
-    private Button button_scan_module_screen_exec_task, observaciones_button ,button_guardar_datos;
+    private Button button_scan_module_screen_exec_task,
+            observaciones_button,
+    anomaly_button,
+            button_guardar_datos;
 
-    private Button button_validate_screen_exec_task, button_geolocalization_screen_exec_task;
+    private Button button_validate_screen_exec_task,
+            button_geolocalization_screen_exec_task;
 
     private ImageView imageView_edit_phone1_screen_exec_task,
             imageView_edit_phone2_screen_exec_task,
@@ -135,6 +143,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         textView_serial_number_result = (TextView)findViewById(R.id.textView_serial_number_screen_exec_task);
         textView_serial_number_module_result = (TextView)findViewById(R.id.textView_module_number_screen_exec_task);
 
+        textView_anomalia = (TextView) findViewById(R.id.textView_anomalia_screen_exec_task);
         telefonos = (TextView) findViewById(R.id.textView_phones_screen_exec_task);
         telefono1 = (TextView) findViewById(R.id.textView_phone1_screen_exec_task);
         telefono2 = (TextView) findViewById(R.id.textView_phone2_screen_exec_task);
@@ -152,6 +161,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         button_validate_screen_exec_task          = (Button)findViewById(R.id.button_validate_screen_exec_task);
         button_guardar_datos = (Button)findViewById(R.id.button_guardar_datos_screen_exec_task);
         observaciones_button = (Button)findViewById(R.id.button_observations_screen_exec_task);
+        anomaly_button = (Button)findViewById(R.id.button_anomalia_screen_exec_task);
         textView_observaciones_screen_exec_task = (TextView)findViewById(R.id.textView_observaciones_screen_exec_task);
         button_geolocalization_screen_exec_task= (Button)findViewById(R.id.button_geolocalization_screen_exec_task);
 
@@ -208,6 +218,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         button_geolocalization_screen_exec_task.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
                 final Animation myAnim = AnimationUtils.loadAnimation(Screen_Execute_Task.this, R.anim.bounce);
                 // Use bounce interpolator with amplitude 0.2 and frequency 20
                 MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
@@ -341,6 +352,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         button_guardar_datos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
                 final Animation myAnim = AnimationUtils.loadAnimation(Screen_Execute_Task.this, R.anim.bounce);
                 // Use bounce interpolator with amplitude 0.2 and frequency 20
                 MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
@@ -365,7 +377,9 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         });
         observaciones_button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {final Animation myAnim = AnimationUtils.loadAnimation(Screen_Execute_Task.this, R.anim.bounce);
+            public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Execute_Task.this, R.anim.bounce);
                 // Use bounce interpolator with amplitude 0.2 and frequency 20
                 MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
                 myAnim.setInterpolator(interpolator);
@@ -387,6 +401,35 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                 observaciones_button.startAnimation(myAnim);
             }
         });
+
+        anomaly_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Execute_Task.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        Intent open_anomaly_screen = new Intent(Screen_Execute_Task.this, Screen_Anomaly.class);
+                        startActivity(open_anomaly_screen);
+                    }
+                });
+                anomaly_button.startAnimation(myAnim);
+            }
+        });
+
         telefonos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -421,6 +464,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         button_validate_screen_exec_task.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
                 final Animation myAnim = AnimationUtils.loadAnimation(Screen_Execute_Task.this, R.anim.bounce);
                 // Use bounce interpolator with amplitude 0.2 and frequency 20
                 MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
@@ -453,6 +497,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         button_scan_serial_number_screen_exec_task.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
                 final Animation myAnim = AnimationUtils.loadAnimation(Screen_Execute_Task.this, R.anim.bounce);
                 // Use bounce interpolator with amplitude 0.2 and frequency 20
                 MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
@@ -481,6 +526,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         button_scan_module_screen_exec_task.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
                 final Animation myAnim = AnimationUtils.loadAnimation(Screen_Execute_Task.this, R.anim.bounce);
                 // Use bounce interpolator with amplitude 0.2 and frequency 20
                 MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
@@ -509,6 +555,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         button_instalation_photo_screen_exec_task.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
                 if(Screen_Login_Activity.movileModel){
                     try {
                         dispatchTakePictureIntent(CAM_REQUEST_INST_PHOTO);
@@ -528,6 +575,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         button_read_photo_screen_exec_task.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
                 if(Screen_Login_Activity.movileModel){
                     try {
                         dispatchTakePictureIntent(CAM_REQUEST_READ_PHOTO);
@@ -547,6 +595,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         button_serial_number_photo_screen_exec_task.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
                 if(Screen_Login_Activity.movileModel){
                     try {
                         dispatchTakePictureIntent(CAM_REQUEST_SN_PHOTO);
@@ -566,22 +615,21 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         button_after_instalation_photo_screen_exec_task.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                        if(Screen_Login_Activity.movileModel){
-                            try {
-                                dispatchTakePictureIntent(CAM_REQUEST_AFT_INT_PHOTO);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                        else {
-                            Intent intent_camera = new Intent(Screen_Execute_Task.this, Screen_Camera.class);
-                            intent_camera.putExtra("photo_name", contador + "_foto_despues_instalacion");
-                            intent_camera.putExtra("photo_folder", "fotos_tareas");
-                            intent_camera.putExtra("contador", contador);
-                            startActivityForResult(intent_camera, CAM_REQUEST_AFT_INT_PHOTO);
-                        }
-
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
+                if(Screen_Login_Activity.movileModel){
+                    try {
+                        dispatchTakePictureIntent(CAM_REQUEST_AFT_INT_PHOTO);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                else {
+                    Intent intent_camera = new Intent(Screen_Execute_Task.this, Screen_Camera.class);
+                    intent_camera.putExtra("photo_name", contador + "_foto_despues_instalacion");
+                    intent_camera.putExtra("photo_folder", "fotos_tareas");
+                    intent_camera.putExtra("contador", contador);
+                    startActivityForResult(intent_camera, CAM_REQUEST_AFT_INT_PHOTO);
+                }
             }
         });
     }
@@ -919,7 +967,8 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
     private String saveBitmapImage(Bitmap bitmap, String key){
         try {
             bitmap = Bitmap.createScaledBitmap(bitmap, 960, 1280, true);
-            String numero_serie = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador);
+            String numero_serie = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador)
+                    .trim().replace(" ","")   ;
             String file_full_name = numero_serie+"_"+key;
             //Toast.makeText(Screen_Incidence.this,"archivo: "+file_full_name, Toast.LENGTH_LONG).show();
 
@@ -1207,7 +1256,8 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         // Create an image file name
 
         String imageFileName = null;
-        String image = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador).trim().replace(" ", "")+"_"+foto_x;
+        String image = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador)
+                .trim().replace(" ", "")+"_"+foto_x;
         File image_file=null;
         File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas");
         if (!storageDir.exists()) {

@@ -156,6 +156,7 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
         button_geolocalization.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
                 final Animation myAnim = AnimationUtils.loadAnimation(Screen_Unity_Counter.this, R.anim.bounce);
                 // Use bounce interpolator with amplitude 0.2 and frequency 20
                 MyBounceInterpolator interpolator = new MyBounceInterpolator(
@@ -183,14 +184,35 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
         button_trazar_ruta_screen_unity_counter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent_open_Map_Box = new Intent(Screen_Unity_Counter.this, Maps_Box.class);
-                startActivity(intent_open_Map_Box);
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Unity_Counter.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                Toast.makeText(context,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        Intent intent_open_Map_Box = new Intent(Screen_Unity_Counter.this, Maps_Box.class);
+                        startActivity(intent_open_Map_Box);
+                    }
+                });
+                button_trazar_ruta_screen_unity_counter.startAnimation(myAnim);
             }
         });
 
         button_modo_battery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
                 final Animation myAnim = AnimationUtils.loadAnimation(Screen_Unity_Counter.this, R.anim.bounce);
                 // Use bounce interpolator with amplitude 0.2 and frequency 20
                 MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
@@ -218,6 +240,7 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
         button_incidence_screen_unity_counter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
                 final Animation myAnim = AnimationUtils.loadAnimation(Screen_Unity_Counter.this, R.anim.bounce);
                 // Use bounce interpolator with amplitude 0.2 and frequency 20
                 MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
@@ -245,6 +268,7 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
         button_absent_screen_unity_counter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
                 final Animation myAnim = AnimationUtils.loadAnimation(Screen_Unity_Counter.this, R.anim.bounce);
                 // Use bounce interpolator with amplitude 0.2 and frequency 20
                 MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
@@ -272,6 +296,7 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
         button_exec_task_screen_unity_counter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
                 final Animation myAnim = AnimationUtils.loadAnimation(Screen_Unity_Counter.this, R.anim.bounce);
                 // Use bounce interpolator with amplitude 0.2 and frequency 20
                 MyBounceInterpolator interpolator = new MyBounceInterpolator(
@@ -424,7 +449,8 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
                 if(bitmap!= null) {
                     imagen_contador.setVisibility(View.VISIBLE);
                     imagen_contador.setImageBitmap(bitmap);
-                    saveBitmapImage(bitmap, Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador) + "_foto_antes_instalacion");
+                    saveBitmapImage(bitmap, Screen_Login_Activity.tarea_JSON.getString(
+                            DBtareasController.foto_despues_instalacion));
                 }
             }
         }

@@ -58,6 +58,7 @@ public class personal_task_screen_Activity extends AppCompatActivity {
         button_tabla_tareas_operario.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(personal_task_screen_Activity.this);
                 final Animation myAnim = AnimationUtils.loadAnimation(personal_task_screen_Activity.this, R.anim.bounce);
                 // Use bounce interpolator with amplitude 0.2 and frequency 20
                 MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
@@ -84,6 +85,7 @@ public class personal_task_screen_Activity extends AppCompatActivity {
         button_vista_rapida_tareas_operario.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(personal_task_screen_Activity.this);
                 final Animation myAnim = AnimationUtils.loadAnimation(personal_task_screen_Activity.this, R.anim.bounce);
                 // Use bounce interpolator with amplitude 0.2 and frequency 20
                 MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);

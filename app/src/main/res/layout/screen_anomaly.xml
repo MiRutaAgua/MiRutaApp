@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+        <include layout = "@layout/toolbar"
+            android:id="@+id/my_toolbar"
+            />
+
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="ANOMALIAS"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:fontFamily="@font/segoeui"
+                android:textColor="@color/colorBlueAppRuta"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="40dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="TIPO DE ANOMALIA"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:fontFamily="@font/segoeui"
+                android:textColor="@color/colorBlueAppRuta"
+                />
+            <Spinner
+                android:id="@+id/spinner_tipo_anomalia_screen_anomaly"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                >
+            </Spinner>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="ANOMALIA"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:fontFamily="@font/segoeui"
+                android:textColor="@color/colorBlueAppRuta"
+                />
+            <Spinner
+                android:id="@+id/spinner_anomalias_screen_anomaly"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                >
+            </Spinner>
+        </LinearLayout>
+    </LinearLayout>
+
+
+</ScrollView>

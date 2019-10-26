@@ -15,6 +15,8 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -156,17 +158,38 @@ public class Screen_Advance_Filter extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View view) {
-                if (filter_visibility) {
-                    filter_visibility=false;
-                    button_maximize_list_srceen_advance_filter.
-                            setBackground(getDrawable(R.drawable.ic_vertical_bottom_blue_24dp));
-                    layout_filter_screen_advance_list.setVisibility(View.GONE);
-                } else {
-                    filter_visibility=true;
-                    button_maximize_list_srceen_advance_filter.
-                            setBackground(getDrawable(R.drawable.ic_vertical_up_blue_24dp));
-                    layout_filter_screen_advance_list.setVisibility(View.VISIBLE);
-                }
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
+                final Animation myAnim = AnimationUtils.loadAnimation(
+                        getApplicationContext(), R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                Toast.makeText(context,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        if (filter_visibility) {
+                            filter_visibility=false;
+                            button_maximize_list_srceen_advance_filter.
+                                    setBackground(getDrawable(R.drawable.ic_vertical_bottom_blue_24dp));
+                            layout_filter_screen_advance_list.setVisibility(View.GONE);
+                        } else {
+                            filter_visibility=true;
+                            button_maximize_list_srceen_advance_filter.
+                                    setBackground(getDrawable(R.drawable.ic_vertical_up_blue_24dp));
+                            layout_filter_screen_advance_list.setVisibility(View.VISIBLE);
+                        }
+                    }
+                });
+                button_maximize_list_srceen_advance_filter.startAnimation(myAnim);
 
             }
         });

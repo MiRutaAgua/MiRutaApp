@@ -131,6 +131,9 @@
         <activity android:name=".PermissionsActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"></activity>
+        <activity android:name=".Screen_Anomaly"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"></activity>
 
         <!--<activity android:name=".Screen_Login_Activity"-->
            <!--&gt;</activity>-->
