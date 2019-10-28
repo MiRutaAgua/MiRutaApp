@@ -4,10 +4,10 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:paddingBottom="40dp"
         >
         <include layout = "@layout/toolbar"
             android:id="@+id/my_toolbar"
@@ -26,7 +26,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="ANOMALIAS"
+                android:text="ANOMALÍAS"
                 android:textSize="20dp"
                 android:textStyle="bold"
                 android:fontFamily="@font/segoeui"
@@ -46,7 +46,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="TIPO DE ANOMALIA"
+                android:text="TIPO DE ANOMALÍA"
                 android:textSize="16dp"
                 android:textStyle="bold"
                 android:fontFamily="@font/segoeui"
@@ -72,7 +72,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="ANOMALIA"
+                android:text="ANOMALÍA"
                 android:textSize="16dp"
                 android:textStyle="bold"
                 android:fontFamily="@font/segoeui"
@@ -85,6 +85,172 @@
                 >
             </Spinner>
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_marginTop="30dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="LECTURA DE CONTADOR NUEVO"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:fontFamily="@font/segoeui"
+                android:textColor="@color/colorBlueAppRuta"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView_lectura_nuevo_screen_exec_task"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="        "
+                    android:textSize="18dp" />
+
+                <ImageView
+                    android:id="@+id/imageView_edit_lectura_nuevo_screen_exec_task"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="10dp"
+                    android:paddingTop="1dp"
+                    android:src="@drawable/ic_edit_blue_24dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_marginTop="30dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="EMPLAZAMIENTO"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:fontFamily="@font/segoeui"
+                android:textColor="@color/colorBlueAppRuta"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView_emplazamiento_screen_exec_task"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="        "
+                    android:textSize="18dp" />
+
+                <ImageView
+                    android:id="@+id/imageView_edit_emplazamiento_screen_exec_task"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="10dp"
+                    android:paddingTop="1dp"
+                    android:src="@drawable/ic_edit_blue_24dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_marginTop="30dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="TIPO DE FLUIDO"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:fontFamily="@font/segoeui"
+                android:textColor="@color/colorBlueAppRuta"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView_tipo_fluido_screen_exec_task"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="        "
+                    android:textSize="18dp" />
+
+                <ImageView
+                    android:id="@+id/imageView_edit_tipo_fluido_screen_exec_task"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="10dp"
+                    android:paddingTop="1dp"
+                    android:src="@drawable/ic_edit_blue_24dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_marginTop="30dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="TIPO DE RADIO"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:fontFamily="@font/segoeui"
+                android:textColor="@color/colorBlueAppRuta"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView_tipo_radio_screen_exec_task"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="        "
+                    android:textSize="18dp" />
+
+                <ImageView
+                    android:id="@+id/imageView_edit_tipo_radio_screen_exec_task"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="10dp"
+                    android:paddingTop="1dp"
+                    android:src="@drawable/ic_edit_blue_24dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+
     </LinearLayout>
 
 

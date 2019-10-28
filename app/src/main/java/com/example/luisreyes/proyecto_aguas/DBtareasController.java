@@ -70,6 +70,7 @@ public class DBtareasController extends SQLiteOpenHelper {
     //    public static final String LECT_LEV = "LECT_LEV";
     public static String lectura_ultima = "CODLEC";//---------------
     public static String lectura_actual = "LECT_LEV";//----------------
+    public static String lectura_devuelta = "LECT_LEV";//----------------Cambiar esto------------------------------------------------------------
     public static String observaciones_devueltas = "OBSERVADV";
     public static String TIPO = "TIPO";
     public static String Estado = "Estado";

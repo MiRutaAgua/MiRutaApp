@@ -65,7 +65,7 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
     Button button_guardar_datos_screen_validate_battery_intake_asignation;
 
     TextView nombre_y_tarea, numero_serie, numero_serie_nuevo, lectura_ultima, label_lectura_ultima, lectura_anterior, observaciones, ubicacion;
-    String current_tag;
+    private String current_tag;
     private ProgressDialog progressDialog;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)

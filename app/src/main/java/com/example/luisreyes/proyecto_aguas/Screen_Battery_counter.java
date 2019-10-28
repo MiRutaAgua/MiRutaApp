@@ -544,7 +544,6 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
                     +"\n\nDireccion:\n  "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.poblacion).trim()
                     +", "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.calle).trim()
                     +", "+Screen_Advance_Filter.getBis(Screen_Login_Activity.tarea_JSON).trim()
-                    //+"\nModificacion: "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.date_time_modified)
                     +"\n\nAbonado:\n  "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.nombre_cliente)
                     +"\n\nContador:\n  "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador)
                     +"\n\nCita:  "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.nuevo_citas)
@@ -552,6 +551,7 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
                     +"\nlectura Actual: "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.lectura_actual)
                     //+"\nCodigo_Localizacion: "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.codigo_de_localizacion)
                     //+"\ngeolocalizacion: "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.geolocalizacion)
+                    +"\n\nModificacion:\n"+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.date_time_modified)
                     +"\n\nEstado: "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.status_tarea);
         } catch (JSONException e) {
             e.printStackTrace();
