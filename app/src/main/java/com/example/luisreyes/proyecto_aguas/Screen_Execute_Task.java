@@ -968,7 +968,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         try {
             bitmap = Bitmap.createScaledBitmap(bitmap, 960, 1280, true);
             String numero_serie = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador)
-                    .trim().replace(" ","")   ;
+                    .trim().replace(" ","");
             String file_full_name = numero_serie+"_"+key;
             //Toast.makeText(Screen_Incidence.this,"archivo: "+file_full_name, Toast.LENGTH_LONG).show();
 
@@ -1125,25 +1125,25 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                         if(!TextUtils.isEmpty(mCurrentPhotoPath_foto_antes)  && ((new File(mCurrentPhotoPath_foto_antes)).exists())) {
                             images_files.add(mCurrentPhotoPath_foto_antes);
                             if(contador!=null && !TextUtils.isEmpty(contador)){
-                                images_files_names.add(numero_serie_viejo+"_foto_antes_instalacion.jpg");
+                                images_files_names.add(numero_serie_viejo.trim().replace(" ", "")+"_foto_antes_instalacion.jpg");
                             }
                         }
                         if(!TextUtils.isEmpty(mCurrentPhotoPath_foto_lectura) && ((new File(mCurrentPhotoPath_foto_lectura)).exists())) {
                             images_files.add(mCurrentPhotoPath_foto_lectura);
                             if(contador!=null && !TextUtils.isEmpty(contador)){
-                                images_files_names.add(numero_serie_viejo+"_foto_lectura.jpg");
+                                images_files_names.add(numero_serie_viejo.trim().replace(" ", "")+"_foto_lectura.jpg");
                             }
                         }
                         if(!TextUtils.isEmpty(mCurrentPhotoPath_foto_serie) && ((new File(mCurrentPhotoPath_foto_serie)).exists())) {
                             images_files.add(mCurrentPhotoPath_foto_serie);
                             if(contador!=null && !TextUtils.isEmpty(contador)){
-                                images_files_names.add(numero_serie_viejo+"_foto_numero_serie.jpg");
+                                images_files_names.add(numero_serie_viejo.trim().replace(" ", "")+"_foto_numero_serie.jpg");
                             }
                         }
                         if(!TextUtils.isEmpty(mCurrentPhotoPath_foto_despues) && ((new File(mCurrentPhotoPath_foto_despues)).exists())) {
                             images_files.add(mCurrentPhotoPath_foto_despues);
                             if(contador!=null && !TextUtils.isEmpty(contador)){
-                                images_files_names.add(contador+"_foto_despues_instalacion.jpg");
+                                images_files_names.add(contador.trim().replace(" ", "")+"_foto_despues_instalacion.jpg");
                             }
                         }
                         if(!images_files_names.isEmpty() && !images_files.isEmpty()) {

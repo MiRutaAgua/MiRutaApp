@@ -111,7 +111,8 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
         spinner_lista_de_mal_ubicacion.setAdapter(arrayAdapter);
 
         try {
-            contador = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador);
+            contador = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador)
+                    .trim().replace(" ", "");
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(Screen_Incidence.this, "no se pudo obtener numero_serie_contador de tarea", Toast.LENGTH_LONG).show();
