@@ -90,7 +90,8 @@ public class Screen_Battery_Intake_Asignation extends AppCompatActivity {
         foto_lectura = (ImageView)findViewById(R.id.imageView_foto_lectura_screen_battery_intake_asignation);
 
         try {
-            contador = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador);
+            contador = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador)
+                    .trim().replace(" ", "");
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(Screen_Battery_Intake_Asignation.this, "no se pudo obtener numero_serie_contador de tarea", Toast.LENGTH_LONG).show();
@@ -220,7 +221,8 @@ public class Screen_Battery_Intake_Asignation extends AppCompatActivity {
 
             String contador=null;
             try {
-                contador = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador);
+                contador = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador)
+                .trim().replace(" ", "");
                 Toast.makeText(Screen_Battery_Intake_Asignation.this, "Contador"+contador, Toast.LENGTH_LONG).show();
             } catch (JSONException e) {
                 e.printStackTrace();

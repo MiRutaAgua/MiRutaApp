@@ -168,7 +168,8 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
         }
 
         try {
-            numero_serie_nuevo.setText(Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador).replace("\n",""));
+            numero_serie_nuevo.setText(Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador)
+                    .trim().replace(" ","").replace("\n",""));
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(Screen_Validate.this, "no se pudo obtener numero_serie_contador", Toast.LENGTH_LONG).show();
@@ -655,7 +656,8 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                     String contador=null;
                     Screen_Execute_Task.lectura_introducida="";
                     try {
-                        contador = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador);
+                        contador = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador)
+                                .trim().replace(" ", "");
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -664,21 +666,21 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                             && ((new File(Screen_Execute_Task.mCurrentPhotoPath_foto_antes)).exists())) {
                         images_files.add(Screen_Execute_Task.mCurrentPhotoPath_foto_antes);
                         if(Screen_Execute_Task.numero_serie_viejo!=null && !TextUtils.isEmpty(Screen_Execute_Task.numero_serie_viejo)){
-                            images_files_names.add(Screen_Execute_Task.numero_serie_viejo+"_foto_antes_instalacion.jpg");
+                            images_files_names.add(Screen_Execute_Task.numero_serie_viejo.trim().replace(" ", "")+"_foto_antes_instalacion.jpg");
                         }
                     }
                     if(!TextUtils.isEmpty(Screen_Execute_Task.mCurrentPhotoPath_foto_lectura)
                             && ((new File(Screen_Execute_Task.mCurrentPhotoPath_foto_lectura)).exists())) {
                         images_files.add(Screen_Execute_Task.mCurrentPhotoPath_foto_lectura);
                         if(Screen_Execute_Task.numero_serie_viejo!=null && !TextUtils.isEmpty(Screen_Execute_Task.numero_serie_viejo)){
-                            images_files_names.add(Screen_Execute_Task.numero_serie_viejo+"_foto_numero_serie.jpg");
+                            images_files_names.add(Screen_Execute_Task.numero_serie_viejo.trim().replace(" ", "")+"_foto_numero_serie.jpg");
                         }
                     }
                     if(!TextUtils.isEmpty(Screen_Execute_Task.mCurrentPhotoPath_foto_serie)
                             && ((new File(Screen_Execute_Task.mCurrentPhotoPath_foto_serie)).exists())) {
                         images_files.add(Screen_Execute_Task.mCurrentPhotoPath_foto_serie);
                         if(Screen_Execute_Task.numero_serie_viejo!=null && !TextUtils.isEmpty(Screen_Execute_Task.numero_serie_viejo)){
-                            images_files_names.add(Screen_Execute_Task.numero_serie_viejo+"_foto_lectura.jpg");
+                            images_files_names.add(Screen_Execute_Task.numero_serie_viejo.trim().replace(" ", "")+"_foto_lectura.jpg");
                         }
                     }
                     if(!TextUtils.isEmpty(Screen_Execute_Task.mCurrentPhotoPath_foto_despues)
@@ -701,6 +703,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
             }
         }else if(type == "upload_image"){
             if(result == null){
+                hideRingDialog();
                 Toast.makeText(this,"No se puede acceder al servidor, no se subio imagen", Toast.LENGTH_LONG).show();
             }
             else {

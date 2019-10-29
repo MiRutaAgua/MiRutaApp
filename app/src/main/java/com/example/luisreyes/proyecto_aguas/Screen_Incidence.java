@@ -111,7 +111,8 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
         spinner_lista_de_mal_ubicacion.setAdapter(arrayAdapter);
 
         try {
-            contador = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador);
+            contador = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador)
+                    .trim().replace(" ", "");
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(Screen_Incidence.this, "no se pudo obtener numero_serie_contador de tarea", Toast.LENGTH_LONG).show();
@@ -498,7 +499,8 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
         // Create an image file name
 
         String imageFileName = null;
-        String image = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador).trim().replace(" ", "")+"_"+incidencia_X;
+        String image = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador)
+                .trim().replace(" ", "")+"_"+incidencia_X;
         File image_file=null;
         File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas");
         if (!storageDir.exists()) {

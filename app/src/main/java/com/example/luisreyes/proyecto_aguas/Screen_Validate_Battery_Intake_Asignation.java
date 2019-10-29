@@ -386,7 +386,8 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
                     }
                     String contador=null;
                     try {
-                        contador = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador);
+                        contador = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador)
+                                .trim().replace(" ", "");
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
