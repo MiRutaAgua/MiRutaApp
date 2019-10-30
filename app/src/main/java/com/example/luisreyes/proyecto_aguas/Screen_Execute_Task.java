@@ -166,7 +166,8 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         button_geolocalization_screen_exec_task= (Button)findViewById(R.id.button_geolocalization_screen_exec_task);
 
         try {
-            contador = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador);
+            contador = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador)
+            .trim().replace(" ", "");
             numero_serie_viejo = contador;
         } catch (JSONException e) {
             e.printStackTrace();
@@ -727,12 +728,13 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
 
         String contador=null;
         try {
-            contador = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador);
+            contador = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador)
+            .trim().replace(" ", "");
 //            Toast.makeText(Screen_Execute_Task.this, "Contador"+contador, Toast.LENGTH_LONG).show();
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        if(contador != null  && !TextUtils.isEmpty(mCurrentPhotoPath_foto_antes)
+        if(numero_serie_viejo != null  && !TextUtils.isEmpty(mCurrentPhotoPath_foto_antes)
                 && ((new File(mCurrentPhotoPath_foto_antes)).exists())){
             try {
                 Screen_Login_Activity.tarea_JSON.put(DBtareasController.foto_antes_instalacion,
@@ -742,15 +744,16 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                 Toast.makeText(Screen_Execute_Task.this, "No pudo guardar foto_antes_instalacion", Toast.LENGTH_LONG).show();
             }
         }
-        if(contador != null && !TextUtils.isEmpty(mCurrentPhotoPath_foto_lectura) && ((new File(mCurrentPhotoPath_foto_lectura)).exists()) ){
+        if(numero_serie_viejo != null && !TextUtils.isEmpty(mCurrentPhotoPath_foto_lectura) && ((new File(mCurrentPhotoPath_foto_lectura)).exists()) ){
             try {
-                Screen_Login_Activity.tarea_JSON.put(DBtareasController.foto_lectura,numero_serie_viejo +"_foto_lectura.jpg");
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.foto_lectura,
+                        numero_serie_viejo +"_foto_lectura.jpg");
             } catch (JSONException e) {
                 e.printStackTrace();
                 Toast.makeText(Screen_Execute_Task.this, "No pudo guardar foto_lectura", Toast.LENGTH_LONG).show();
             }
         }
-        if(contador != null && !TextUtils.isEmpty(mCurrentPhotoPath_foto_serie)
+        if(numero_serie_viejo != null && !TextUtils.isEmpty(mCurrentPhotoPath_foto_serie)
                 && ((new File(mCurrentPhotoPath_foto_serie)).exists())){
             try {
                 Screen_Login_Activity.tarea_JSON.put(DBtareasController.foto_numero_serie,
@@ -1160,6 +1163,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         }
         else if(type == "upload_image"){
             if(result == null){
+                hideRingDialog();
                 Toast.makeText(this,"No se puede acceder al servidor, no se subio imagen", Toast.LENGTH_LONG).show();
             }
             else {

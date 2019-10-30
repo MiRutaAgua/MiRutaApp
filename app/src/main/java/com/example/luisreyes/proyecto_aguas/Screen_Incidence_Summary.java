@@ -113,7 +113,8 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
         lectura = (EditText)findViewById(R.id.editText_lectura_de_contador_screen_incidence_summary);
 
         try {
-            contador = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador);
+            contador = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador)
+            .trim().replace(" ", "");
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(Screen_Incidence_Summary.this, "No pudo obtenerse contador", Toast.LENGTH_LONG).show();

@@ -168,7 +168,8 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
         }
 
         try {
-            numero_serie_nuevo.setText(Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador).replace("\n",""));
+            numero_serie_nuevo.setText(Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador)
+                    .trim().replace(" ","").replace("\n",""));
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(Screen_Validate.this, "no se pudo obtener numero_serie_contador", Toast.LENGTH_LONG).show();
@@ -702,6 +703,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
             }
         }else if(type == "upload_image"){
             if(result == null){
+                hideRingDialog();
                 Toast.makeText(this,"No se puede acceder al servidor, no se subio imagen", Toast.LENGTH_LONG).show();
             }
             else {
