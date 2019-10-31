@@ -23,6 +23,7 @@ import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -75,8 +76,6 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
     private Button imageButton_editar_firma_cliente_screen_validate,button_compartir_screen_validate, imageView_screen_validate_cerrar_tarea;
     private EditText lectura_ultima_et, lectura_actual_et;
     private TextView textView_calibre_label_screen_validate,numero_serie_nuevo_label, numero_serie_nuevo, textView_calibre_screen_validate,textView_numero_serie_viejo_label,textView_numero_serie_viejo;
-
-
 
     private String current_tag;
     private ProgressDialog progressDialog;
@@ -558,17 +557,68 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
 
         hideRingDialog();
         if(filePath.exists()) {
-            Toast.makeText(this, "PDF creado correctamente "/* + targetPdf*/, Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(Intent.ACTION_SEND ,Uri.parse("mailto: mraguascontadores@gmail.com")); // it's not ACTION_SEND
-            intent.setType("text/plain");
-            intent.putExtra(Intent.EXTRA_SUBJECT, "PDF validar");
-            intent.putExtra(Intent.EXTRA_TEXT, "");
-            intent.putExtra(Intent.EXTRA_STREAM, filePath.getAbsolutePath());
-//            intent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file:"+filePath));
+            try {
+            Toast.makeText(this, "PDF creado correctamente ", Toast.LENGTH_SHORT).show();
+
+////            File f = ...; // Some local file.
+////          Uri uri = Uri.parse("content://"+filePath.getAbsolutePath());
+//            Uri uri2 = Uri.fromFile(filePath);
+//            Uri uri = Uri.parse("content://"+uri2.toString());
+////            Uri uri = FileProvider.getUriForFile(this, "${BuildConfig.APPLICATION_ID}.provider", filePath);
+//            Intent intent = new Intent(Intent.ACTION_SEND);
+//            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+////            intent.putExtra(Intent.EXTRA_SUBJECT, "Subject");
+////            intent.putExtra(Intent.EXTRA_TEXT, "Body");
+//            intent.putExtra(Intent.EXTRA_STREAM, uri);
+//            intent.setType("application/pdf");
+//
+//// You only can add flag FLAG_GRANT_READ_URI_PERMISSION if your app has
+//// android:grantUriPermissions="true" in manifest or see quote below.
+//
+//            startActivity(Intent.createChooser(intent, "Send Email"));
+
+//            Uri uri = Uri.fromFile(filePath);
+//
+//            ArrayList<Uri> imageUris = new ArrayList<Uri>();
+//            imageUris.add(uri); // Add your image URIs here
+//
+//            Intent shareIntent = new Intent();
+//            shareIntent.setAction(Intent.ACTION_SEND_MULTIPLE);
+//            shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, imageUris);
+//            shareIntent.setType("application/pdf");
+//            shareIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+//            startActivity(Intent.createChooser(shareIntent, "Share images to.."));
+
+//                File file_photo = new File(Screen_Execute_Task.mCurrentPhotoPath_foto_despues);
+//            Intent intent = new Intent(Intent.ACTION_SEND ,Uri.parse("mailto: mraguascontadores@gmail.com")); // it's not ACTION_SEND
+//            intent.putExtra(Intent.EXTRA_SUBJECT, "PDF validar");
+//            intent.putExtra(Intent.EXTRA_TEXT, "");
+////            intent.putExtra(Intent.EXTRA_STREAM, filePath.getAbsolutePath());
+////            intent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file:"+filePath));
+//                intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+////                intent.putExtra(Intent.EXTRA_STREAM, Uri.parse("content://com.example.luisreyes.proyecto_aguas/files/Documents/pdf_validar.pdf"));
+//                intent.putExtra(Intent.EXTRA_STREAM, Uri.parse("content://com.example.luisreyes.proyecto_aguas/files/Pictures/fotos_tareas/C14FA0690415_foto_despues_instalacion.jpg"));
+//                //intent.putExtra(Intent.EXTRA_STREAM, Uri.parse(file_photo.getAbsolutePath()));
+////                openMessage("Uri", Uri.parse(file_photo.getAbsolutePath()).toString());
+//                intent.setType("image/jpg");
+////        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // this will make such that when user returns to your app, your app is displayed, instead of the email app.
+//            startActivity(intent);
+                Toast.makeText(this, "PDF creado correctamente " + targetPdf, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(Intent.ACTION_SEND ,Uri.parse("mailto: mraguascontadores@gmail.com")); // it's not ACTION_SEND
+                intent.setType("text/plain");
+                intent.putExtra(Intent.EXTRA_SUBJECT, "PDF validar");
+                intent.putExtra(Intent.EXTRA_TEXT, "Validacion de Instalación");
+                intent.putExtra(Intent.EXTRA_STREAM, filePath.getAbsolutePath());
 //        intent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file:"+filePath.getAbsolutePath()));
 //        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // this will make such that when user returns to your app, your app is displayed, instead of the email app.
-            startActivity(intent);
-        }
+                startActivity(intent);
+            }
+            catch(Exception e) {
+                e.printStackTrace();
+                openMessage("Exception",  e.toString());
+//                Toast.makeText(this, "Exception->\n"+ e.toString(), Toast.LENGTH_SHORT).show();
+            }
+    }
         else{
             Toast.makeText(this, "PDF no creado", Toast.LENGTH_SHORT).show();
         }
@@ -625,6 +675,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                 //String res = String.valueOf(result);
                 if (!firma.equals("null")) {
                     bitmap_firma_cliente = getImageFromString(firma);
+                    saveBitmapImageFirma(bitmap_firma_cliente, "firma");
                     imageButton_firma_cliente_screen_validate.setImageBitmap(bitmap_firma_cliente);
                 }
                 //Toast.makeText(Screen_Validate.this, "Resultado ok: " + res, Toast.LENGTH_LONG).show();
@@ -654,14 +705,22 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                         Toast.makeText(this, "Datos guardados correctamente en el servidor", Toast.LENGTH_LONG).show();
                     }
                     String contador=null;
+                    String firma="firma.jpg";
                     Screen_Execute_Task.lectura_introducida="";
                     try {
                         contador = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador)
                                 .trim().replace(" ", "");
+//                        firma = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.firma_cliente)
+//                                .trim().replace(" ", "");
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
 
+                    if(!TextUtils.isEmpty(firma)
+                            && ((new File(getCompleteFileDir(firma))).exists())) {
+                        images_files.add(getCompleteFileDir(firma));
+                        images_files_names.add(firma);
+                    }
                     if(!TextUtils.isEmpty(Screen_Execute_Task.mCurrentPhotoPath_foto_antes)
                             && ((new File(Screen_Execute_Task.mCurrentPhotoPath_foto_antes)).exists())) {
                         images_files.add(Screen_Execute_Task.mCurrentPhotoPath_foto_antes);
@@ -712,6 +771,71 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                 //showRingDialog("Validando registro...");
             }
         }
+    }
+
+    private String getCompleteFileDir(String filename){
+
+        String numero_interno = null;
+        try {
+            numero_interno = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_interno);
+            String fullDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"
+                    + numero_interno+"/"+filename;
+            return fullDir;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+       return null;
+    }
+    private String saveBitmapImageFirma(Bitmap bitmap, String file_name){
+        String numero_interno = "";
+        File myDir = null;
+        try {
+            numero_interno = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_interno);
+            if(!numero_interno.isEmpty() && numero_interno!=null
+                    && !numero_interno.equals("NULL") && !numero_interno.equals("null")){
+
+                myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"
+                        + numero_interno);
+
+                if(myDir!=null) {
+                    if (!myDir.exists()) {
+                        myDir.mkdirs();
+                        File storageDir2 = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/fotos_tareas");
+                        if (!storageDir2.exists()) {
+                            storageDir2.mkdir();
+                        }
+                    } else {
+                        File[] files = myDir.listFiles();
+                        //ArrayList<String> names = new ArrayList<>();
+                        for (int i = 0; i < files.length; i++) {
+                            //names.add(files[i].getName());
+                            if (files[i].getName().contains(file_name)) {
+                                files[i].delete();
+                            }
+                        }
+                        //Toast.makeText(Screen_User_Data.this, names.toString(), Toast.LENGTH_SHORT).show();
+                    }
+
+                    file_name += ".jpg";
+                    File file = new File(myDir, file_name);
+                    if (file.exists())
+                        file.delete();
+                    try {
+                        FileOutputStream out = new FileOutputStream(file);
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                        out.flush();
+                        out.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    return file.getAbsolutePath();
+                }
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public void openDialog(String tag){
