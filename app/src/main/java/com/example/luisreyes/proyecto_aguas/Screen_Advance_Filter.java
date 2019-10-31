@@ -1026,8 +1026,8 @@ public class Screen_Advance_Filter extends AppCompatActivity {
             lista_filtro_abonado.add("\n  Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado()+"Telefono 1:  "+lista_ordenada_de_tareas.get(i).getTelefono1()
                     +"Telefono 2:  "+lista_ordenada_de_tareas.get(i).getTelefono2());
             lista_filtro_numero_serie.add("\n       Número de Serie:  "+lista_ordenada_de_tareas.get(i).getNumero_serie_contador()
-                    +"\n              Año o Prefijo:  "+lista_ordenada_de_tareas.get(i).getAnno_contador()
-                    +"Número de Abonado:  "+lista_ordenada_de_tareas.get(i).getNumero_abonado());
+                    //+"\n              Año o Prefijo:  "+lista_ordenada_de_tareas.get(i).getAnno_contador()
+                    +"\nNúmero de Abonado:  "+lista_ordenada_de_tareas.get(i).getNumero_abonado());
         }
         if(spinner_filtro_tareas.getSelectedItem().toString().equals("NINGUNO")){
             insertList(lista_contadores);
@@ -1075,8 +1075,8 @@ public class Screen_Advance_Filter extends AppCompatActivity {
                     lista_filtro_abonado.add("\n  Abonado:  "+lista_ordenada_de_tareas_inicial.get(i).getAbonado()+"Telefono 1:  "+lista_ordenada_de_tareas_inicial.get(i).getTelefono1()
                             +"Telefono 2:  "+lista_ordenada_de_tareas_inicial.get(i).getTelefono2());
                     lista_filtro_numero_serie.add("\n       Número de Serie:  "+lista_ordenada_de_tareas_inicial.get(i).getNumero_serie_contador()
-                            +"\n              Año o Prefijo:  "+lista_ordenada_de_tareas_inicial.get(i).getAnno_contador()
-                            +"Número de Abonado:  "+lista_ordenada_de_tareas_inicial.get(i).getNumero_abonado());
+                           // +"\n              Año o Prefijo:  "+lista_ordenada_de_tareas_inicial.get(i).getAnno_contador()
+                            +"\nNúmero de Abonado:  "+lista_ordenada_de_tareas_inicial.get(i).getNumero_abonado());
 //                    lista_filtro_Citas.add("\n        Cita:  "+lista_ordenada_de_tareas_inicial.get(i).getCita()
 //                            +"Abonado:  "+lista_ordenada_de_tareas_inicial.get(i).getAbonado());
                 }

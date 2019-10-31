@@ -518,8 +518,8 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
             Toast.makeText(this, "PDF creado correctamente " + targetPdf, Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(Intent.ACTION_SEND ,Uri.parse("mailto: mraguascontadores@gmail.com")); // it's not ACTION_SEND
             intent.setType("text/plain");
-            intent.putExtra(Intent.EXTRA_SUBJECT, "PDF validar");
-            intent.putExtra(Intent.EXTRA_TEXT, "");
+            intent.putExtra(Intent.EXTRA_SUBJECT, "PDF validar incidencias");
+            intent.putExtra(Intent.EXTRA_TEXT, "Validacion de Incidencia");
             intent.putExtra(Intent.EXTRA_STREAM, filePath.getAbsolutePath());
 //        intent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file:"+filePath.getAbsolutePath()));
 //        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // this will make such that when user returns to your app, your app is displayed, instead of the email app.

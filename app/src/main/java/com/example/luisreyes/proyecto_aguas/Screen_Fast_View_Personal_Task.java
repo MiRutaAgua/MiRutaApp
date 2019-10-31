@@ -108,12 +108,13 @@ public class Screen_Fast_View_Personal_Task extends AppCompatActivity implements
 
                                 String tipo_tarea =jsonObject.getString(DBtareasController.tipo_tarea).replace("\n", "");
                                 String calibre = jsonObject.getString(DBtareasController.calibre_toma).replace("\n", "");
-                                if(tipo_tarea.contains("null") && calibre.contains("null")){
+                                if((tipo_tarea.contains("null") || tipo_tarea.contains("NULL"))
+                                        && (calibre.contains("null") || calibre.contains("NULL"))){
                                     Toast.makeText(this,"Tipo de Tarea y calibre ambos nulos"
                                             +jsonObject.getString(DBtareasController.numero_interno) , Toast.LENGTH_LONG).show();
                                 }else{
                                     My_Fast_View_Task fast_task = new My_Fast_View_Task();
-                                    if(tipo_tarea.contains("null")){
+                                    if(tipo_tarea.contains("null") || tipo_tarea.contains("NULL")){
                                         fast_task.setTipo_tarea("");
                                     }else {
                                         fast_task.setTipo_tarea(tipo_tarea);
@@ -260,7 +261,8 @@ public class Screen_Fast_View_Personal_Task extends AppCompatActivity implements
 
                                 String tipo_tarea =jsonObject.getString(DBtareasController.tipo_tarea).replace("\n", "").replace(" ", "");
                                 String calibre = jsonObject.getString(DBtareasController.calibre_toma).replace("\n", "").replace(" ", "");
-                                if((tipo_tarea.contains("null")|| tipo_tarea.contains("NULL")) &&  (calibre.contains("null"))|| calibre.contains("NULL")){
+                                if((tipo_tarea.contains("null")|| tipo_tarea.contains("NULL"))
+                                        &&  (calibre.contains("null"))|| calibre.contains("NULL")){
                                     Toast.makeText(this,"Tipo de Tarea y calibre ambos nulos"
                                             +jsonObject.getString(DBtareasController.numero_interno) , Toast.LENGTH_LONG).show();
                                 }else{

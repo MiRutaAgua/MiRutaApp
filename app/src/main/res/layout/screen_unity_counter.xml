@@ -159,16 +159,16 @@
             android:layout_marginLeft="25dp"
             android:layout_marginRight="25dp"
             >
+
             <TextView
-                android:layout_weight="1"
-                android:textSize="16sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Tarea                      "
                 android:layout_gravity="left"
                 android:layout_marginLeft="20dp"
-                android:textStyle="bold"
-                />
+                android:layout_weight="1"
+                android:text="Tarea:                     "
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/textView_tipo_tarea_screen_unity_counter"
@@ -190,16 +190,16 @@
             android:layout_marginLeft="25dp"
             android:layout_marginRight="20dp"
             >
+
             <TextView
-                android:layout_weight="1"
-                android:textSize="16sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Direccion:               "
                 android:layout_gravity="left"
                 android:layout_marginLeft="20dp"
-                android:textStyle="bold"
-                />
+                android:layout_weight="1"
+                android:text="Dirección:               "
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_marginRight="20dp"
@@ -348,13 +348,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
+
                     <TextView
-                        android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
-                        android:text="Ubicacion: "
+                        android:layout_height="wrap_content"
+                        android:text="Ubicación: "
                         android:textSize="14sp"
-                        android:textStyle="bold"
-                        />
+                        android:textStyle="bold" />
                     <TextView
                         android:id="@+id/textView_screen_unity_counter_ubicacion"
                         android:layout_height="wrap_content"

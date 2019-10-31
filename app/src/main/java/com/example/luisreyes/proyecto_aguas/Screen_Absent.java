@@ -1,6 +1,7 @@
 package com.example.luisreyes.proyecto_aguas;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
@@ -331,22 +332,24 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
             }
         });
         checkBox_incorrecto_telefono1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @SuppressLint("ResourceAsColor")
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 if(isChecked){
                     telefono1.setTextColor(Color.RED);
                 }else{
-                    telefono1.setTextColor(Color.BLACK);
+                    telefono1.setTextColor(R.color.colorGrayLetters);
                 }
             }
         });
         checkBox_incorrecto_telefono2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @SuppressLint("ResourceAsColor")
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 if(isChecked){
                     telefono2.setTextColor(Color.RED);
                 }else{
-                    telefono2.setTextColor(Color.BLACK);
+                    telefono2.setTextColor(R.color.colorGrayLetters);
                 }
             }
         });

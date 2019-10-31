@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
@@ -66,10 +67,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Dejado nota de aviso"
                 android:layout_gravity="center"
-                android:textSize="16dp"
-                />
+                android:text="Dejado nota de aviso"
+                android:textSize="16dp" />
 
             <CheckBox
                 android:id="@+id/checkbox_nota_de_aviso_screen_absent"
@@ -138,15 +138,16 @@
                 android:orientation="horizontal"
                 android:gravity="center"
                 >
+
                 <TextView
-                    android:layout_weight="1"
+                    android:id="@+id/textView_screen_absent_telefono1"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="53941930"
                     android:layout_gravity="center"
-                    android:textSize="16dp"
-                    android:id="@+id/textView_screen_absent_telefono1"
-                    />
+                    android:layout_weight="1"
+                    android:text="Añadir"
+                    android:textColor="#707070"
+                    android:textSize="16dp" />
                 <CheckBox
                     android:id="@+id/checkbox_no_contesta_1_screen_absent"
                     android:layout_width="wrap_content"
@@ -170,13 +171,13 @@
                 android:gravity="center"
                 >
                 <TextView
-                    android:layout_weight="1"
+                    android:id="@+id/textView_screen_absent_telefono2"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="52416790"
                     android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:text="Añadir"
                     android:textSize="16dp"
-                    android:id="@+id/textView_screen_absent_telefono2"
                     />
                 <CheckBox
                     android:id="@+id/checkbox_no_contesta_2_screen_absent"

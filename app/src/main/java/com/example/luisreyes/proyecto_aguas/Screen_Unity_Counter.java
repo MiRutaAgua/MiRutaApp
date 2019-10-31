@@ -335,11 +335,13 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
                         }
                     }
                 }
-                //Toast.makeText(this, foto_instalacion, Toast.LENGTH_LONG).show();
-                showRingDialog("Obteniendo foto de instalación");
-                String type_script = "download_image";
-                BackgroundWorker backgroundWorker = new BackgroundWorker(this);
-                backgroundWorker.execute(type_script, foto);
+                if(!foto.isEmpty() && foto!=null && !foto.equals("NULL")  && !foto.equals("null")) {
+                    //Toast.makeText(this, foto_instalacion, Toast.LENGTH_LONG).show();
+                    showRingDialog("Obteniendo foto de instalación");
+                    String type_script = "download_image";
+                    BackgroundWorker backgroundWorker = new BackgroundWorker(this);
+                    backgroundWorker.execute(type_script, foto);
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
