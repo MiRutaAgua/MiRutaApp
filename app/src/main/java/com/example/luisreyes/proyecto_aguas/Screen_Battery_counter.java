@@ -300,19 +300,16 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
             try {
                 String foto =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_despues_instalacion);
                 //Toast.makeText(this, foto_instalacion, Toast.LENGTH_LONG).show();
-                if(foto.isEmpty() && foto.equals("null") && foto == null){
-                }else{
+                if(foto.isEmpty() || foto.equals("null") || foto.equals("NULL") || foto == null){
                     foto =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_antes_instalacion);
-                    if(foto.isEmpty() && foto.equals("null") && foto == null){
-                    }else{
+                    if(foto.isEmpty() || foto.equals("null") || foto.equals("NULL") || foto == null){
                         foto =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_lectura);
-                        if(foto.isEmpty() && foto.equals("null") && foto == null){
-                        }else{
+                        if(foto.isEmpty() || foto.equals("null") || foto.equals("NULL") || foto == null){
                             foto =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_numero_serie);
                         }
                     }
                 }
-                if(!foto.isEmpty() && !foto.equals("null") && foto != null){
+                if(!foto.isEmpty() && !foto.equals("null") && !foto.equals("NULL") && foto != null){
                     showRingDialog("Obteniendo foto de contador");
                     String type_script = "download_image";
                     BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Battery_counter.this);

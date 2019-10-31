@@ -232,13 +232,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:layout_marginTop="20dp"
             >
 
-            <ImageView
-                android:layout_width="300dp"
-                android:layout_height="80dp"
+            <Button
                 android:id="@+id/imageView_geolocalizar_screen_insertar_tarea"
-                android:src="@drawable/screen_absent_geolocalizar"/>
+                android:layout_width="300dp"
+                android:layout_height="40dp"
+                android:fontFamily="@font/segoeui"
+                android:text="GEOLOCALIZAR"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:background="@drawable/fondo_boton_azul"/>
         </LinearLayout>
 
 
@@ -246,13 +252,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:layout_marginTop="20dp"
+            android:paddingBottom="40dp"
             >
 
-            <ImageView
-                android:layout_width="300dp"
-                android:layout_height="80dp"
+            <Button
                 android:id="@+id/imageView_agregar_tarea_screen_insertar_tarea"
-                android:src="@drawable/screen_insertar_tarea_agregar"/>
+                android:layout_width="300dp"
+                android:layout_height="40dp"
+                android:fontFamily="@font/segoeui"
+                android:text="AGREGAR"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:background="@drawable/fondo_boton_azul"/>
         </LinearLayout>
 
         <TextView

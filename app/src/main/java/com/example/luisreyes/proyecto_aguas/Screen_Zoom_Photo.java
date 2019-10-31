@@ -176,7 +176,7 @@ public class Screen_Zoom_Photo extends Activity{
                         finish();
                     }
                 });
-                button_cancel_picture_screen_x.startAnimation(myAnim);
+                button_save_picture_screen_x.startAnimation(myAnim);
             }
         });
     }

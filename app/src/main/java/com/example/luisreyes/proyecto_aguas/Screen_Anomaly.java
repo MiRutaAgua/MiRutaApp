@@ -1,8 +1,11 @@
 package com.example.luisreyes.proyecto_aguas;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -18,6 +21,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -50,6 +54,8 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
 	imageView_edit_tipo_fluido_screen_exec_task,
 	imageView_edit_tipo_radio_screen_exec_task;
 
+	Button button_guardar_datos_screen_anomaly;
+
     private HashMap<String,String> mapaTiposDeAnomalias;
 
     private HashMap<String,String> mapaAnomaliasNCI;
@@ -59,6 +65,7 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
     private HashMap<String,String> mapaAnomaliasSI;
     private HashMap<String,String> mapaAnomaliasT;
     private HashMap<String,String> mapaAnomaliasCF;
+    private HashMap<String,String> emptyMap;
 
     private String current_tag;
 
@@ -83,6 +90,8 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
         mapaTiposDeAnomalias.put("EL", "EMISOR LECTURA");
         mapaTiposDeAnomalias.put("SI", "SOLO INSTALAR");
         mapaTiposDeAnomalias.put("R", "REFORMA MAS CONTADOR");
+
+        emptyMap = new HashMap<>();
 
         mapaAnomaliasNCI = new HashMap<>();
         mapaAnomaliasNCI.put("001", "CONTADOR DESTRUIDO");
@@ -134,6 +143,8 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
         mapaAnomaliasCF.put("X14", "EMISOR NO LEIDO (LEER DIRECTAMENTE AL CONTADOR)");
         mapaAnomaliasCF.put("X23", "EMISOR NO FUNCIONA");
 
+        button_guardar_datos_screen_anomaly = (Button)findViewById(R.id.button_guardar_datos_screen_anomaly);
+
         imageView_edit_lectura_nuevo_screen_exec_task = (ImageView) findViewById(R.id.imageView_edit_lectura_nuevo_screen_exec_task);
         imageView_edit_emplazamiento_screen_exec_task = (ImageView)findViewById(R.id.imageView_edit_emplazamiento_screen_exec_task);
         imageView_edit_tipo_fluido_screen_exec_task = (ImageView)findViewById(R.id.imageView_edit_tipo_fluido_screen_exec_task);
@@ -166,6 +177,7 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 String selected = spinner_tipo_anomalia_screen_anomaly
                         .getAdapter().getItem(i).toString();
+//                Toast.makeText(getApplicationContext(), "Selected: "+ selected, Toast.LENGTH_LONG).show();
                 if(!selected.isEmpty() && selected!=null && !selected.equals("Ninguno")) {
                     onTipoDeAnomalia(selected);
                 }
@@ -280,6 +292,56 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
             }
         });
 
+        button_guardar_datos_screen_anomaly.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Anomaly.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        endActivityAnomaly();
+                    }
+                });
+                button_guardar_datos_screen_anomaly.startAnimation(myAnim);
+            }
+
+        });
+    }
+
+    @Override
+    public void onBackPressed() {
+        endActivityAnomaly();
+    }
+
+    public void endActivityAnomaly(){
+        Intent resultIntent = new Intent(Screen_Anomaly.this, Screen_Execute_Task.class);
+        String anomaly = spinner_anomaly.getSelectedItem().toString();
+
+        if(!anomaly.isEmpty() && anomaly!=null && !anomaly.equals("null") && !anomaly.equals("NULL")) {
+            String anomaly_code = anomaly.split(" - ")[0];
+            String anomaly_string = anomaly.split(" - ")[1];
+//            Toast.makeText(this, "Anomaly: " + anomaly_code + anomaly_string, Toast.LENGTH_LONG).show();
+
+            resultIntent.putExtra("anomaly_code", anomaly_code);
+            resultIntent.putExtra("anomaly_string", anomaly_string);
+            setResult(RESULT_OK, resultIntent);
+            finish();
+        }else{
+            setResult(RESULT_CANCELED, resultIntent);
+            finish();
+        }
     }
 
     public void openDialog(String tag){
@@ -326,6 +388,7 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
             }
         }
     }
+
     private void onTipoDeAnomalia(String selected) {
         if(selected.equals("NUEVO CONTADOR INSTALAR")){
             fillListaDesplegable(mapaAnomaliasNCI);
@@ -340,21 +403,22 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
             fillListaDesplegable(mapaAnomaliasLFTD);
         }
         else if(selected.equals("DATOS")){
+            fillListaDesplegable(emptyMap);
         }
         else if(selected.equals("TOMA DE DATOS")){
             fillListaDesplegable(mapaAnomaliasTD);
         }
         else if(selected.equals("INSPECCIÓN")){
-
+            fillListaDesplegable(emptyMap);
         }
         else if(selected.equals("COMPROBAR EMISOR")){
             fillListaDesplegable(mapaAnomaliasCF);
         }
         else if(selected.equals("EMISOR LECTURA")){
-
+            fillListaDesplegable(emptyMap);
         }
         else if(selected.equals("INSPECCIÓN")){
-
+            fillListaDesplegable(emptyMap);
         }
         else if(selected.equals("SOLO INSTALAR")){
             fillListaDesplegable(mapaAnomaliasSI);
@@ -368,7 +432,7 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
             Map.Entry pair = (Map.Entry)it.next();
             //System.out.println(pair.getKey() + " = " + pair.getValue());
             lista_desplegable_tipos_anomalia.add(pair.getKey().toString() + " - " + pair.getValue().toString());
-            it.remove(); // avoids a ConcurrentModificationException
+//            it.remove(); // avoids a ConcurrentModificationException
         }
         ArrayAdapter arrayAdapter_spinner = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista_desplegable_tipos_anomalia);
         spinner_anomaly.setAdapter(arrayAdapter_spinner);

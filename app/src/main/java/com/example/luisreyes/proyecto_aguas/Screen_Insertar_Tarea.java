@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -39,7 +40,7 @@ import java.util.Date;
 public class Screen_Insertar_Tarea extends AppCompatActivity implements TaskCompleted{
 
 
-    private ImageView screen_insertar_tarea_agregar, imageView_geolocalizar_screen_insertar_tarea;
+    private Button screen_insertar_tarea_agregar, imageView_geolocalizar_screen_insertar_tarea;
     private EditText editText_numero_serie_screen_insertar_tarea,
             editText_anno_prefijo_screen_insertar_tarea,
             editText_operario_screen_insertar_tarea,
@@ -85,8 +86,8 @@ public class Screen_Insertar_Tarea extends AppCompatActivity implements TaskComp
         editText_abonado_screen_insertar_tarea = (EditText) findViewById(R.id.editText_abonado_screen_insertar_tarea);
         editText_telefono_screen_insertar_tarea = (EditText) findViewById(R.id.editText_telefono_screen_insertar_tarea);
 
-        screen_insertar_tarea_agregar = (ImageView)findViewById(R.id.imageView_agregar_tarea_screen_insertar_tarea);
-        imageView_geolocalizar_screen_insertar_tarea = (ImageView)findViewById(R.id.imageView_geolocalizar_screen_insertar_tarea);
+        screen_insertar_tarea_agregar = (Button)findViewById(R.id.imageView_agregar_tarea_screen_insertar_tarea);
+        imageView_geolocalizar_screen_insertar_tarea = (Button)findViewById(R.id.imageView_geolocalizar_screen_insertar_tarea);
 
         try {
             editText_operario_screen_insertar_tarea.setText(Screen_Login_Activity.operario_JSON.getString("usuario"));

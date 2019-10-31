@@ -99,6 +99,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
     private static final int CAM_REQUEST_AFT_INT_PHOTO = 1316;
     private static final int REQUEST_LECTOR_SNC = 1317;
     private static final int REQUEST_LECTOR_SNM = 1318;
+    private static final int REQUEST_ANOMALY = 1319;
 
     private Intent intent_open_scan_screen_lector;
 
@@ -109,6 +110,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
     public static String mCurrentPhotoPath_foto_serie = "";
     private ArrayList<String> images_files;
     private ArrayList<String> images_files_names;
+
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -242,7 +244,6 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                 });
                 button_geolocalization_screen_exec_task.startAnimation(myAnim);
             }
-
         });
 
         textView_serial_number_result.setOnClickListener(new View.OnClickListener() {
@@ -424,7 +425,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                     @Override
                     public void onAnimationEnd(Animation arg0) {
                         Intent open_anomaly_screen = new Intent(Screen_Execute_Task.this, Screen_Anomaly.class);
-                        startActivity(open_anomaly_screen);
+                        startActivityForResult(open_anomaly_screen, REQUEST_ANOMALY);
                     }
                 });
                 anomaly_button.startAnimation(myAnim);
@@ -814,6 +815,28 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                     }
                     textView_serial_number_module_result.setVisibility(View.VISIBLE);
                     textView_serial_number_module_result.setText(data_result);
+                }
+            }
+            if (requestCode == REQUEST_ANOMALY) {
+//                Toast.makeText(this, "Anomalia devuelta: ", Toast.LENGTH_LONG).show();
+                String anomaly_code = "";
+                String anomaly_string = "";
+                anomaly_code = data.getStringExtra("anomaly_code");
+                anomaly_string = data.getStringExtra("anomaly_string");
+                if (!anomaly_code.equals("null") &&  !anomaly_code.equals("NULL") && !anomaly_code.isEmpty() && anomaly_code != null) {
+                    if(!DBtareasController.tabla_model) {
+                        try {
+                            Screen_Login_Activity.tarea_JSON.put(DBtareasController.AREALIZAR_devuelta, anomaly_code);//esta es la anomalia devuelta
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(this, "No pudo insertarse numero serie de modulo: " + e.toString(), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                    if(anomaly_code.equals("null") &&  anomaly_code.equals("NULL") && anomaly_code.isEmpty() && anomaly_code == null){
+                        anomaly_string = "";
+                    }
+                    textView_anomalia.setVisibility(View.VISIBLE);
+                    textView_anomalia.setText(anomaly_code + " - " + anomaly_string);
                 }
             }
 

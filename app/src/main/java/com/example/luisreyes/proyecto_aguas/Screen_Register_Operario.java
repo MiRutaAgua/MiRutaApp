@@ -172,10 +172,11 @@ public class Screen_Register_Operario extends AppCompatActivity implements TaskC
                         BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Register_Operario.this);
                         backgroundWorker.execute(type, name, surname, age, telefonos, username_reg, password_reg, image, fecha_hora);
                     } else {
+                        registrando = false;
                         Toast.makeText(Screen_Register_Operario.this, "El usuario " + username_reg + " ya está registrado", Toast.LENGTH_LONG).show();
                     }
                 } else {
-
+                    registrando = false;
                     if (!photo_taken) {
                         Toast.makeText(Screen_Register_Operario.this, "Debe tomarse una foto, presione el icono del camara", Toast.LENGTH_LONG).show();
                     } else {
@@ -248,16 +249,23 @@ public class Screen_Register_Operario extends AppCompatActivity implements TaskC
                 Toast.makeText(Screen_Register_Operario.this,"No se puede acceder al servidor, no se pudo registrar", Toast.LENGTH_LONG).show();
             }
             else {
-                //Toast.makeText(Screen_Register_Operario.this, "Validando registro...", Toast.LENGTH_SHORT).show();
-                if(bitmap_foto!=null) {
-                    showRingDialog("Subiendo foto de operario");
+                if(result.contains("Insert Successful")) {
+                    //Toast.makeText(Screen_Register_Operario.this, "Validando registro...", Toast.LENGTH_SHORT).show();
+                    if (bitmap_foto != null) {
+                        showRingDialog("Subiendo foto de operario");
 
-                    String foto_string = getStringImage(bitmap_foto);
-                    String type_script = "upload_user_image";
-                    BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Register_Operario.this);
-                    backgroundWorker.execute(type_script, foto_string, image);
-                }else{
-                    Toast.makeText(this,"Error subiendo foto, imagen nula", Toast.LENGTH_LONG).show();
+                        String foto_string = getStringImage(bitmap_foto);
+                        String type_script = "upload_user_image";
+                        BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Register_Operario.this);
+                        backgroundWorker.execute(type_script, foto_string, image);
+                    } else {
+                        Toast.makeText(this, "Error subiendo foto, imagen nula", Toast.LENGTH_LONG).show();
+                    }
+                }else if(result.contains("Usuario ya registrado")){
+                    Toast.makeText(this, "No se ha registrado porque el usuario ya existe", Toast.LENGTH_LONG).show();
+                }
+                else{
+                    Toast.makeText(this, "Error registrando operario " + result, Toast.LENGTH_LONG).show();
                 }
             }
         }

@@ -202,6 +202,10 @@ public class Screen_Advance_Filter extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 arrayAdapter_nombre_abonados.getFilter().filter(charSequence);
+//                Toast.makeText(getApplicationContext(), "Cantidad: "+ String.valueOf(arrayAdapter_nombre_abonados.getCount()), Toast.LENGTH_SHORT).show();
+//                if(arrayAdapter_nombre_abonados.getCount() == 1){
+//                    arrayAdapter.getFilter().filter(charSequence);
+//                }
             }
             @Override
             public void afterTextChanged(Editable editable) {
@@ -511,6 +515,34 @@ public class Screen_Advance_Filter extends AppCompatActivity {
         cargarTodasEnLista();
     }
 
+    public  ArrayList<String> getFilter(CharSequence charSequence)
+    {
+        ArrayList<String> filterResultsData = new ArrayList<String>();;
+        if(charSequence == null || charSequence.length() == 0)
+        {
+            return null;
+        }
+        else
+        {
+            ArrayList<String> list = new ArrayList<>();
+            for (int i = 0; i < arrayAdapter_nombre_abonados.getCount(); i++) {
+                String user = arrayAdapter_nombre_abonados.getItem(i).toString();
+                list.add(user);
+            }
+            for(String data : list)
+            {
+                //In this loop, you'll filter through originalData and compare each item to charSequence.
+                //If you find a match, add it to your new ArrayList
+                //I'm not sure how you're going to do comparison, so you'll need to fill out this conditional
+                if(data.toLowerCase().contains(charSequence))
+                {
+                    filterResultsData.add(data);
+                }
+            }
+        }
+        return filterResultsData;
+    }
+
     public static String getBis(JSONObject jsonObject){
         String Bis="";
         String numero_portal="";
@@ -579,9 +611,9 @@ public class Screen_Advance_Filter extends AppCompatActivity {
             try {
                 JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.
                         dBtareasController.get_one_tarea_from_Database(i));
-                String nombre_cliente = jsonObject.getString(DBtareasController.nombre_cliente).replace("\n","");
+                String nombre_cliente = jsonObject.getString(DBtareasController.nombre_cliente).trim();
                 if(!nombre_cliente.equals("null") && !nombre_cliente.isEmpty()
-                        && nombre_cliente.contains(nombre_o_empresa_selected.replace("\n",""))){
+                        && nombre_cliente.contains(nombre_o_empresa_selected.trim())){
                     lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
                 }
             } catch (JSONException e) {

@@ -324,12 +324,22 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
 
         if (checkConection()){
             try {
-                String foto_instalacion =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_despues_instalacion);
+                String foto =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_despues_instalacion);
+                //Toast.makeText(this, foto_instalacion, Toast.LENGTH_LONG).show();
+                if(foto.isEmpty() || foto.equals("null") || foto.equals("NULL") || foto == null){
+                    foto =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_antes_instalacion);
+                    if(foto.isEmpty() || foto.equals("null") || foto.equals("NULL") || foto == null){
+                        foto =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_lectura);
+                        if(foto.isEmpty() || foto.equals("null") || foto.equals("NULL") || foto == null){
+                            foto =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_numero_serie);
+                        }
+                    }
+                }
                 //Toast.makeText(this, foto_instalacion, Toast.LENGTH_LONG).show();
                 showRingDialog("Obteniendo foto de instalación");
                 String type_script = "download_image";
                 BackgroundWorker backgroundWorker = new BackgroundWorker(this);
-                backgroundWorker.execute(type_script,foto_instalacion);
+                backgroundWorker.execute(type_script, foto);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
