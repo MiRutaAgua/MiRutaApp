@@ -291,8 +291,11 @@ public class Screen_Battery_Intake_Asignation extends AppCompatActivity {
         String imageFileName = null;
         String image = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador)
                 .trim().replace(" ", "")+"_"+foto_x;
+        String numero_interno = null;
+        numero_interno = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_interno).trim();
+
         File image_file=null;
-        File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas");
+        File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+numero_interno+"/");
         if (!storageDir.exists()) {
             storageDir.mkdirs();
         }
@@ -467,7 +470,11 @@ public class Screen_Battery_Intake_Asignation extends AppCompatActivity {
             String file_full_name = numero_serie+"_"+key;
             //Toast.makeText(Screen_Incidence.this,"archivo: "+file_full_name, Toast.LENGTH_LONG).show();
 
-            File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas");
+            String numero_interno = null;
+
+            numero_interno = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_interno).trim();
+
+            File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+numero_interno+"/");
             if (!myDir.exists()) {
                 myDir.mkdirs();
             }

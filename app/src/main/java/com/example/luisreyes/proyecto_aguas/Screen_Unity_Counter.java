@@ -130,6 +130,7 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
             if(DBtareasController.tabla_model) {
                 direccion.setText((Screen_Login_Activity.tarea_JSON.getString(DBtareasController.poblacion).trim().replace("null", "").replace("NULL", "") + "   "
                         + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.calle).trim().replace("\n", "").replace("null", "").replace("NULL", "") + "  "
+                        + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero).trim().replace("\n", "").replace("null", "").replace("NULL", "") + "  "
                         + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_edificio).trim().replace("\n", "").replace("null", "").replace("NULL", "")
                         + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.letra_edificio).trim().replace("\n", "").replace("null", "").replace("NULL", "") + "  "
                         + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.piso).trim().replace("\n", "").replace("NULL", "").replace("null", "") + "  "
@@ -139,6 +140,7 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
             else{
                 direccion.setText((Screen_Login_Activity.tarea_JSON.getString(DBtareasController.poblacion).trim().replace("null", "").replace("NULL", "") + "   "
                         + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.calle).trim().replace("\n", "").replace("null", "").replace("NULL", "") + "  "
+                        + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero).trim().replace("\n", "").replace("null", "").replace("NULL", "") + "  "
                         + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.BIS).trim().replace("\n", "").replace("null", "").replace("NULL", "")+"  "
                         + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.piso).trim().replace("\n", "").replace("NULL", "").replace("null", "") + "  "
                         + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.mano).trim().replace("\n", "")).replace("null", "").replace("NULL", ""));
@@ -326,21 +328,29 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
             try {
                 String foto =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_despues_instalacion);
                 //Toast.makeText(this, foto_instalacion, Toast.LENGTH_LONG).show();
-                if(foto.isEmpty() || foto.equals("null") || foto.equals("NULL") || foto == null){
+                if(foto.isEmpty() || foto.contains("null") || foto.contains("NULL") || foto == null){
                     foto =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_antes_instalacion);
-                    if(foto.isEmpty() || foto.equals("null") || foto.equals("NULL") || foto == null){
+                    if(foto.isEmpty() || foto.contains("null") || foto.contains("NULL") || foto == null){
                         foto =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_lectura);
-                        if(foto.isEmpty() || foto.equals("null") || foto.equals("NULL") || foto == null){
+                        if(foto.isEmpty() || foto.contains("null") || foto.contains("NULL") || foto == null){
                             foto =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_numero_serie);
                         }
                     }
                 }
                 if(!foto.isEmpty() && foto!=null && !foto.equals("NULL")  && !foto.equals("null")) {
-                    //Toast.makeText(this, foto_instalacion, Toast.LENGTH_LONG).show();
-                    showRingDialog("Obteniendo foto de instalación");
-                    String type_script = "download_image";
-                    BackgroundWorker backgroundWorker = new BackgroundWorker(this);
-                    backgroundWorker.execute(type_script, foto);
+                    String numero_interno="";
+                    try {
+                        numero_interno=Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_interno);
+                        if(!numero_interno.isEmpty() && numero_interno!=null
+                                && !numero_interno.equals("null") && !numero_interno.equals("NULL")){
+                            showRingDialog("Obteniendo foto de instalación");
+                            String type_script = "download_image";
+                            BackgroundWorker backgroundWorker = new BackgroundWorker(this);
+                            backgroundWorker.execute(type_script, foto, numero_interno);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -348,19 +358,23 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
         }else{
             try {
                 //String foto_instalacion =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_antes_instalacion);
-                String image = null;
+                String image = null, numero_interno = null;
+                numero_interno = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_interno).trim();
                 image = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_despues_instalacion);
-                if(image!=null && !image.equals("null") && !TextUtils.isEmpty(image)) {
-                    File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/fotos_tareas");
-                    if(!storageDir.exists()){
-                        storageDir.mkdir();
-                    }
-                    File[] files = storageDir.listFiles();
-                    for (int i = 0; i < files.length; i++) {
-                        if (files[i].getName().contains(image)) {
-                            //Toast.makeText(this, storageDir +"/" + files[i].getName(), Toast.LENGTH_LONG).show();
-                            imagen_contador.setVisibility(View.VISIBLE);
-                            imagen_contador.setImageBitmap(getPhotoUserLocal(storageDir + "/" + files[i].getName()));
+
+                if(numero_interno!=null && !numero_interno.equals("null") && !TextUtils.isEmpty(numero_interno)) {
+                    if (image != null && !image.equals("null") && !TextUtils.isEmpty(image)) {
+                        File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/fotos_tareas/" + numero_interno + "/");
+                        if (!storageDir.exists()) {
+                            storageDir.mkdir();
+                        }
+                        File[] files = storageDir.listFiles();
+                        for (int i = 0; i < files.length; i++) {
+                            if (files[i].getName().contains(image)) {
+                                //Toast.makeText(this, storageDir +"/" + files[i].getName(), Toast.LENGTH_LONG).show();
+                                imagen_contador.setVisibility(View.VISIBLE);
+                                imagen_contador.setImageBitmap(getPhotoUserLocal(storageDir + "/" + files[i].getName()));
+                            }
                         }
                     }
                 }
@@ -369,7 +383,6 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
                 e.printStackTrace();
             }
         }
-
     }
 
     public Bitmap getPhotoUserLocal(String path){
@@ -409,42 +422,37 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
     private void saveBitmapImage(Bitmap bitmap, String file_name){
 //        file_name = "operario_"+file_name;
         //Toast.makeText(Screen_Unity_Counter.this,file_name, Toast.LENGTH_LONG).show();
+        String numero_interno = null;
 
-        File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas");
-        if (!myDir.exists()) {
-            myDir.mkdirs();
-        }
-        else{
-            File[] files = myDir.listFiles();
-            for(int i=0; i< files.length; i++){
-                if(files[i].getName().contains(file_name)){
-                    files[i].delete();
+        try {
+            numero_interno = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_interno).trim();
+
+            File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+numero_interno+"/");
+            if (!myDir.exists()) {
+                myDir.mkdirs();
+            }
+            else{
+                File[] files = myDir.listFiles();
+                for(int i=0; i< files.length; i++){
+                    if(files[i].getName().contains(file_name)){
+                        files[i].delete();
+                    }
                 }
             }
-        }
-        File file = new File(myDir, file_name);
-        if (file.exists())
-            file.delete();
-        try {
-            FileOutputStream out = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, MainActivity.COMPRESS_QUALITY, out);
-            out.flush();
-            out.close();
-        } catch (Exception e) {
+            File file = new File(myDir, file_name);
+            if (file.exists())
+                file.delete();
+            try {
+                FileOutputStream out = new FileOutputStream(file);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, MainActivity.COMPRESS_QUALITY, out);
+                out.flush();
+                out.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } catch (JSONException e) {
             e.printStackTrace();
         }
-//        if(team_or_personal_task_selection_screen_Activity.dBtareasController != null){
-//            if(team_or_personal_task_selection_screen_Activity.dBtareasController.databasefileExists(this)
-//                    && team_or_personal_task_selection_screen_Activity.dBtareasController.checkForTableExists())
-//            {
-//                try {
-//                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.foto_antes_instalacion, file_name);
-//                    team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea( Screen_Login_Activity.tarea_JSON);
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
     }
 
     @Override

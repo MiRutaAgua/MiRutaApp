@@ -29,6 +29,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Base64;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -401,7 +402,7 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
                 if(sqlite_database_count < 1){
                     insertar_todos = true;
                 }
-                for(int n =0 ; n < lista_operarios.size() ; n++) {
+                for(int n =1 ; n < lista_operarios.size() ; n++) { //el elemento n 0 esta vacio
                     try {
                         JSONArray jsonArray = new JSONArray(lista_operarios.get(n));
                         for (int i = 0; i < jsonArray.length(); i++) {
@@ -448,6 +449,8 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
 
                     } catch (JSONException e) {
                         e.printStackTrace();
+                        Toast.makeText(Screen_Login_Activity.this, "Excepción -> \n"+e.toString(), Toast.LENGTH_SHORT).show();
+                        Log.e("Excepción -> ", lista_operarios.toString());
                     }
                 }
                 updateOperarioInMySQL();

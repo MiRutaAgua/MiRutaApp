@@ -174,6 +174,7 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
                 ArrayList<String> keys = new ArrayList<String>();
                 keys.add("foto");
                 keys.add("nombre");
+                keys.add("numero_interno");
                 ArrayList<String> values = new ArrayList<String>();
                 for (int i = 0; i < keys.size(); i++) {
                     values.add(params[i+1]);
@@ -217,6 +218,7 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
                 return_image = false;
                 ArrayList<String> keys = new ArrayList<String>();
                 keys.add("nombre");
+                keys.add("numero_interno");
                 ArrayList<String> values = new ArrayList<String>();
                 for (int i = 0; i < keys.size(); i++) {
                     values.add(params[i+1]);
@@ -414,7 +416,7 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
                 Screen_Table_Team.lista_tareas = post_Output_Info(keys, values, get_tareas_url, false, true);
 
                 String return_string = "";
-                for(int n =0 ; n < Screen_Table_Team.lista_tareas.size() ; n++) {
+                for(int n =1 ; n < Screen_Table_Team.lista_tareas.size() ; n++) { //el elemento n 0 esta vacio
                     try {
                         JSONArray jsonArray = new JSONArray(Screen_Table_Team.lista_tareas.get(n));
                         for (int i = 0; i < jsonArray.length(); i++) {
@@ -449,7 +451,7 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
                 }
                 ArrayList<String> result = post_Output_Info(keys, values, get_user_data_url, true, true);
                 String return_string = "";
-                for(int n =0 ; n < result.size() ; n++) {
+                for(int n =1 ; n < result.size() ; n++) {
                     try {
                         JSONArray jsonArray = new JSONArray(result.get(n));
                         for (int i = 0; i < jsonArray.length(); i++) {
@@ -483,7 +485,7 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
                 Screen_Login_Activity.lista_operarios = post_Output_Info(keys, values, get_operarios_url, false, true);
 
                 String return_string = "";
-                for(int n =0 ; n < Screen_Login_Activity.lista_operarios.size() ; n++) {
+                for(int n =1 ; n < Screen_Login_Activity.lista_operarios.size() ; n++) {
                     try {
                         JSONArray jsonArray = new JSONArray(Screen_Login_Activity.lista_operarios.get(n));
                         for (int i = 0; i < jsonArray.length(); i++) {

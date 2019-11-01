@@ -22,6 +22,7 @@
             android:orientation="horizontal"
             android:layout_gravity="center">
             >
+
             <ImageView
                 android:id="@+id/label_asignacion_toma_bateria_screen_battery_intake_asignation"
                 android:layout_width="170dp"
@@ -36,7 +37,8 @@
             android:gravity="center"
             android:orientation="vertical"
             android:layout_marginTop="20dp"
-            android:padding="5dp"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
             >
             <Button
                 android:id="@+id/button_foto_instalacion_screen_battery_intake_asignation"
@@ -63,7 +65,8 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="vertical"
-            android:padding="5dp">
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp">
             <Button
                 android:id="@+id/button_foto_lectura_screen_battery_intake_asignation"
                 android:layout_width="266dp"
@@ -90,7 +93,8 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="vertical"
-            android:padding="5dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             >
             <Button
                 android:id="@+id/button_foto_numero_serie_screen_battery_intake_asignation"

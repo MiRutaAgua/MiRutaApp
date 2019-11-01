@@ -362,7 +362,7 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
                     }
                 }
 
-                for(int n =0 ; n < Screen_Table_Team.lista_tareas.size() ; n++) {
+                for(int n =1 ; n < Screen_Table_Team.lista_tareas.size() ; n++) {
                     try {
                         JSONArray jsonArray = new JSONArray(Screen_Table_Team.lista_tareas.get(n));
                         for (int i = 0; i < jsonArray.length(); i++) {

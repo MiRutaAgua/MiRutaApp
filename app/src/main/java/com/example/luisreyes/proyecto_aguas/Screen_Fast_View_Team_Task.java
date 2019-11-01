@@ -172,7 +172,7 @@ public class Screen_Fast_View_Team_Task  extends AppCompatActivity implements Ta
                         Toast.makeText(Screen_Fast_View_Team_Task.this, "Insertando todas las tareas", Toast.LENGTH_LONG).show();
                     }
                 }
-                for(int n =0 ; n < Screen_Table_Team.lista_tareas.size() ; n++) {
+                for(int n =1 ; n < Screen_Table_Team.lista_tareas.size() ; n++) {
                     try {
                         JSONArray jsonArray = new JSONArray(Screen_Table_Team.lista_tareas.get(n));
                         for (int i = 0; i < jsonArray.length(); i++) {

@@ -36,6 +36,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by Alejandro on 11/08/2019.
@@ -313,6 +314,16 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
                     public void onAnimationEnd(Animation arg0) {
 
                         try {
+                            String fecha = DBtareasController.getStringFromFechaHora(new Date());
+                            Screen_Login_Activity.tarea_JSON.put(DBtareasController.date_time_modified, fecha);
+                            if(!DBtareasController.tabla_model) {
+                                Screen_Login_Activity.tarea_JSON.put(DBtareasController.fecha_instalacion, fecha);
+                                Screen_Login_Activity.tarea_JSON.put(DBtareasController.fecha_de_cambio, fecha);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        try {
                             Screen_Login_Activity.tarea_JSON.put(DBtareasController.incidencia,
                                     spinner_lista_de_mal_ubicacion.getSelectedItem().toString());
                         }catch (JSONException e) {
@@ -501,8 +512,12 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
         String imageFileName = null;
         String image = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador)
                 .trim().replace(" ", "")+"_"+incidencia_X;
+
+        String numero_interno = null;
+        numero_interno = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_interno).trim();
+
         File image_file=null;
-        File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas");
+        File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+numero_interno+"/");
         if (!storageDir.exists()) {
             storageDir.mkdirs();
         }
@@ -554,6 +569,7 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
             return null;
         }
     }
+
     private String saveBitmapImage(Bitmap bitmap, String key){
         try {
             bitmap = Bitmap.createScaledBitmap(bitmap, 960, 1280, true);
@@ -562,7 +578,11 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
             String file_full_name = numero_serie+"_"+key;
             //Toast.makeText(Screen_Incidence.this,"archivo: "+file_full_name, Toast.LENGTH_LONG).show();
 
-            File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas");
+            String numero_interno = null;
+
+            numero_interno = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_interno).trim();
+
+            File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+numero_interno+"/");
             if (!myDir.exists()) {
                 myDir.mkdirs();
             }

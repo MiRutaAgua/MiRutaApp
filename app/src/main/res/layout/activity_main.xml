@@ -7,7 +7,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:layout_gravity="center"
-    tools:context="com.example.luisreyes.proyecto_aguas.MainActivity">
+    tools:context="com.example.luisreyes.proyecto_aguas.MainActivity"
+    android:background="@android:color/white"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"

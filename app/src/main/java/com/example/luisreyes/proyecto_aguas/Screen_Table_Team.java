@@ -394,7 +394,7 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
                         Toast.makeText(Screen_Table_Team.this, "Insertando todas las tareas", Toast.LENGTH_LONG).show();
                     }
                 }
-                for(int n =0 ; n < Screen_Table_Team.lista_tareas.size() ; n++) {
+                for(int n =1 ; n < Screen_Table_Team.lista_tareas.size() ; n++) { //el elemento n 0 esta vacio
                     try {
                         JSONArray jsonArray = new JSONArray(Screen_Table_Team.lista_tareas.get(n));
                         for (int i = 0; i < jsonArray.length(); i++) {

@@ -695,10 +695,16 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
     private void guardar_en_JSON_modificaciones() {
 
         try {
-            Screen_Login_Activity.tarea_JSON.put(DBtareasController.date_time_modified, DBtareasController.getStringFromFechaHora(new Date()));
+            String fecha = DBtareasController.getStringFromFechaHora(new Date());
+            Screen_Login_Activity.tarea_JSON.put(DBtareasController.date_time_modified, fecha);
+            if(!DBtareasController.tabla_model) {
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.fecha_instalacion, fecha);
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.fecha_de_cambio, fecha);
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
         if(!TextUtils.isEmpty(textView_observaciones_screen_exec_task.getText().toString())){
             String observaciones = textView_observaciones_screen_exec_task.getText().toString();
             try {
@@ -998,7 +1004,12 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
             String file_full_name = numero_serie+"_"+key;
             //Toast.makeText(Screen_Incidence.this,"archivo: "+file_full_name, Toast.LENGTH_LONG).show();
 
-            File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas");
+            String numero_interno = null;
+
+            numero_interno = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_interno).trim();
+
+            File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+numero_interno+"/");
+
             if (!myDir.exists()) {
                 myDir.mkdirs();
             }
@@ -1111,16 +1122,26 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
             return;
         }
         else {
-            String file_name = null, image_file;
+            String numero_interno = "";
+            try {
+                numero_interno = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_interno).trim();
 
-            file_name = images_files_names.get(images_files.size() - 1);
-            images_files_names.remove(images_files.size() - 1);
-            image_file = images_files.get(images_files.size() - 1);
-            images_files.remove(images_files.size() - 1);
-            String type = "upload_image";
-            BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Execute_Task.this);
-            backgroundWorker.execute(type, Screen_Register_Operario.getStringImage(getPhotoUserLocal(image_file)), file_name);
+                String file_name = null, image_file;
 
+                file_name = images_files_names.get(images_files.size() - 1);
+                images_files_names.remove(images_files.size() - 1);
+                image_file = images_files.get(images_files.size() - 1);
+                images_files.remove(images_files.size() - 1);
+                String type = "upload_image";
+                BackgroundWorker backgroundWorker = new BackgroundWorker(this);
+                backgroundWorker.execute(type, Screen_Register_Operario.getStringImage(getPhotoUserLocal(image_file)), file_name, numero_interno);
+
+            } catch (JSONException e) {
+                images_files.clear();
+                e.printStackTrace();
+                Toast.makeText(this, "Error obteniendo numero interno\n"+ e.toString(), Toast.LENGTH_LONG).show();
+                return;
+            }
         }
     }
     @Override
@@ -1285,8 +1306,11 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         String imageFileName = null;
         String image = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador)
                 .trim().replace(" ", "")+"_"+foto_x;
+        String numero_interno = null;
+        numero_interno = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_interno).trim();
+
         File image_file=null;
-        File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas");
+        File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+numero_interno+"/");
         if (!storageDir.exists()) {
             storageDir.mkdirs();
         }

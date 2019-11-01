@@ -63,19 +63,28 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
     private ImageView foto_instalacion_screen_exec_task;
     private ImageView foto_final_instalacion_screen_exec_task;
     private ImageView foto_numero_de_serie_screen_exec_task;
+    private ImageView imageView_foto_lectura_screen_validate;
     private ImageView imageButton_firma_cliente_screen_validate,
             imageView_edit_serial_number_screen_validate,
             imageView_edit_calibre_screen_validate;
     private LinearLayout llScroll;
     private LinearLayout llScroll_2;
     private LinearLayout llScroll_3;
-    private LinearLayout llScroll_4;
-    boolean bitmap1_no_nulo = false, bitmap2_no_nulo = false,bitmap3_no_nulo = false,bitmap4_no_nulo = true;
-    private Bitmap bitmap_firma_cliente = null, bitmap = null,  bitmap2 = null,bitmap3 = null,bitmap4 = null;
+    private LinearLayout llScroll_4, linearLayout_screen_validate_lectura;
+    boolean bitmap1_no_nulo = true, bitmap2_no_nulo = false,bitmap3_no_nulo = false,bitmap4_no_nulo = false, bitmap5_no_nulo = false;
+    private Bitmap bitmap_firma_cliente = null, bitmap = null,  bitmap2 = null,bitmap3 = null, bitmap4 = null, bitmap5 = null;
     private static final String pdfName = "pdf_validar";
-    private Button imageButton_editar_firma_cliente_screen_validate,button_compartir_screen_validate, imageView_screen_validate_cerrar_tarea;
+    private Button imageButton_editar_firma_cliente_screen_validate,
+            button_compartir_screen_validate,
+            imageView_screen_validate_cerrar_tarea;
     private EditText lectura_ultima_et, lectura_actual_et;
-    private TextView textView_calibre_label_screen_validate,numero_serie_nuevo_label, numero_serie_nuevo, textView_calibre_screen_validate,textView_numero_serie_viejo_label,textView_numero_serie_viejo;
+    private TextView textView_info,
+            textView_calibre_label_screen_validate,
+            numero_serie_nuevo_label,
+            numero_serie_nuevo,
+            textView_calibre_screen_validate,
+            textView_numero_serie_viejo_label
+            ,textView_numero_serie_viejo;
 
     private String current_tag;
     private ProgressDialog progressDialog;
@@ -101,10 +110,13 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
 
         images_files = new ArrayList<>();
         images_files_names = new ArrayList<>();
-        llScroll = (LinearLayout)findViewById(R.id.linearLayout_screen_validate);
-        llScroll_2 = (LinearLayout)findViewById(R.id.linearLayout_screen_validate_2);
-        llScroll_3 = (LinearLayout)findViewById(R.id.linearLayout_screen_validate_3);
-        llScroll_4 = (LinearLayout)findViewById(R.id.linearLayout_screen_validate_4);
+
+        linearLayout_screen_validate_lectura = (LinearLayout)findViewById(R.id.linearLayout_screen_validate_lectura);
+        llScroll_2 = (LinearLayout)findViewById(R.id.linearLayout_screen_validate_foto_antes);
+        llScroll_4 = (LinearLayout)findViewById(R.id.linearLayout_screen_validate_foto_final);
+        llScroll_3 = (LinearLayout)findViewById(R.id.linearLayout_screen_validate_numero_serie);
+        llScroll = (LinearLayout)findViewById(R.id.linearLayout_info_screen_validate_info);
+
         button_compartir_screen_validate  = (Button)findViewById(R.id.button_compartir_screen_validate);
         lectura_ultima_et    = (EditText)findViewById(R.id.editText_lectura_ultima_de_contador_screen_incidence_summary);
         lectura_actual_et    = (EditText)findViewById(R.id.editText_lectura_actual_de_contador_screen_incidence_summary);
@@ -119,6 +131,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
         foto_instalacion_screen_exec_task         = (ImageView)findViewById(R.id.imageView_foto_antes_instalacion_screen_validate);
         foto_final_instalacion_screen_exec_task   = (ImageView)findViewById(R.id.imageView_foto_final_instalacion_screen_validate);
         foto_numero_de_serie_screen_exec_task     = (ImageView)findViewById(R.id.imageView_foto_numero_serie_screen_validate);
+        imageView_foto_lectura_screen_validate    = (ImageView)findViewById(R.id.imageView_foto_lectura_screen_validate);
 
         imageButton_firma_cliente_screen_validate = (ImageView)findViewById(R.id.imageButton_firma_cliente_screen_validate);
         imageButton_editar_firma_cliente_screen_validate = (Button)findViewById(R.id.imageButton_editar_firma_cliente_screen_validate);
@@ -127,6 +140,47 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
         imageView_edit_calibre_screen_validate     = (ImageView)findViewById(R.id.imageView_edit_calibre_screen_validate);
 
         nombre_y_tarea = (TextView) findViewById(R.id.textView_nombre_cliente_y_tarea_screen_validate);
+        textView_info = (TextView) findViewById(R.id.textView_info_screen_validate);
+
+        if(DBtareasController.tabla_model) {
+            try {
+                textView_info.setText((Screen_Login_Activity.tarea_JSON.getString(DBtareasController.poblacion).trim()+ ", "
+                        + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.calle).trim().replace("\n", "") + ",  "
+                        + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero).trim().replace("\n", "") + ",  "
+                        + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_edificio).trim().replace("\n", "")
+                        + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.letra_edificio).trim().replace("\n", "") + ",  "
+                        + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.nombre_cliente).trim().replace("\n", "") + "\nNÚMERO DE ABONADO: "
+                        + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim().replace("\n", "")
+
+                        + "\n\nCAMBIADO POR: "
+                        + Screen_Login_Activity.operario_JSON.getString(DBoperariosController.nombre).trim().replace("\n", "")
+                        + "  "
+                        + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.date_time_modified).trim().replace("\n", "")
+
+                ).replace("null", "").replace("NULL", ""));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        else{
+            try {
+                textView_info.setText((Screen_Login_Activity.tarea_JSON.getString(DBtareasController.poblacion).trim()+ ", "
+                        + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.calle).trim().replace("\n", "") + ",  "
+                        + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero).trim().replace("\n", "") + ",  "
+                        + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.BIS).trim().replace("\n", "") + ",  "
+                        + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.nombre_cliente).trim().replace("\n", "") + "\nNÚMERO DE ABONADO: "
+                        + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim().replace("\n", "")
+
+                        + "\n\nCAMBIADO POR: "
+                        + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.operario).trim().replace("\n", "")
+                        + "  "
+                        + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.fecha_instalacion).trim().replace("\n", "")
+
+                ).replace("null", "").replace("NULL", ""));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
 
         String tipo, calibre, nombre;
         try {
@@ -186,7 +240,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
         if(!Screen_Execute_Task.mCurrentPhotoPath_foto_antes.isEmpty()) {
             Bitmap foto_antes_intalacion_bitmap = getPhotoUserLocal(Screen_Execute_Task.mCurrentPhotoPath_foto_antes);
             if (foto_antes_intalacion_bitmap != null) {
-                bitmap1_no_nulo = true;
+                bitmap2_no_nulo = true;
                 foto_instalacion_screen_exec_task.setVisibility(View.VISIBLE);
                 foto_instalacion_screen_exec_task.setImageBitmap(foto_antes_intalacion_bitmap);
             }
@@ -200,10 +254,19 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
             }
         }
 
+        if(!Screen_Execute_Task.mCurrentPhotoPath_foto_lectura.isEmpty()) {
+            Bitmap foto_lectura_bitmap = getPhotoUserLocal(Screen_Execute_Task.mCurrentPhotoPath_foto_lectura);
+            if (foto_lectura_bitmap != null) {
+                bitmap5_no_nulo = true;
+                imageView_foto_lectura_screen_validate.setVisibility(View.VISIBLE);
+                imageView_foto_lectura_screen_validate.setImageBitmap(foto_lectura_bitmap);
+            }
+        }
+
         if(!Screen_Execute_Task.mCurrentPhotoPath_foto_despues.isEmpty()) {
             Bitmap foto_despues_intalacion_bitmap = getPhotoUserLocal(Screen_Execute_Task.mCurrentPhotoPath_foto_despues);
             if (foto_despues_intalacion_bitmap != null) {
-                bitmap2_no_nulo = true;
+                bitmap4_no_nulo = true;
                 foto_final_instalacion_screen_exec_task.setVisibility(View.VISIBLE);
                 foto_final_instalacion_screen_exec_task.setImageBitmap(foto_despues_intalacion_bitmap);
             }
@@ -245,13 +308,20 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                     @Override
                     public void onAnimationEnd(Animation arg0) {
                         showRingDialog("Creando PDF...");
-                        if(bitmap1_no_nulo)
-                            bitmap = loadBitmapFromView(llScroll, llScroll.getWidth(), llScroll.getHeight());
+
+//                        textView_info.setVisibility(View.VISIBLE);
+
+                        bitmap = loadBitmapFromView(llScroll, llScroll.getWidth(), llScroll.getHeight());
+
                         if(bitmap2_no_nulo)
                             bitmap2 = loadBitmapFromView(llScroll_2, llScroll_2.getWidth(), llScroll_2.getHeight());
                         if(bitmap3_no_nulo)
                             bitmap3 = loadBitmapFromView(llScroll_3, llScroll_3.getWidth(), llScroll_3.getHeight());
-                        bitmap4 = loadBitmapFromView(llScroll_4, llScroll_4.getWidth(), llScroll_4.getHeight());
+                        if(bitmap4_no_nulo)
+                            bitmap4 = loadBitmapFromView(llScroll_4, llScroll_4.getWidth(), llScroll_4.getHeight());
+                        if(bitmap5_no_nulo)
+                            bitmap5 = loadBitmapFromView(linearLayout_screen_validate_lectura,
+                                    linearLayout_screen_validate_lectura.getWidth(), linearLayout_screen_validate_lectura.getHeight());
                         createPdf();
                     }
                 });
@@ -423,15 +493,15 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
             e.printStackTrace();
         }
 
-        if(bitmap_firma_cliente != null){
-            String firma_cliente_string = Screen_Register_Operario.getStringImage(bitmap_firma_cliente);
-            try {
-                Screen_Login_Activity.tarea_JSON.put(DBtareasController.firma_cliente, firma_cliente_string);
-            } catch (JSONException e) {
-                e.printStackTrace();
-                Toast.makeText(Screen_Validate.this, "No pudo guardar de firma", Toast.LENGTH_LONG).show();
-            }
-        }
+//        if(bitmap_firma_cliente != null){
+//            String firma_cliente_string = Screen_Register_Operario.getStringImage(bitmap_firma_cliente);
+//            try {
+//                Screen_Login_Activity.tarea_JSON.put(DBtareasController.firma_cliente, firma_cliente_string);
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//                Toast.makeText(Screen_Validate.this, "No pudo guardar de firma", Toast.LENGTH_LONG).show();
+//            }
+//        }
         if(!TextUtils.isEmpty(lectura_actual_et.getText().toString())){
             try {
                 //Comprobar aqui que la lectura no sea menor que la ultima
@@ -501,15 +571,35 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
         return b;
     }
 
-    private PdfDocument setContentPDF(PdfDocument document, Bitmap bitmap, int w, int h, int page_count){
-        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(w, h, page_count).create();
+    private PdfDocument setContentPDF(PdfDocument document, int w, int h, int page_count) {
+        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(1600, 2400, page_count).create();
         PdfDocument.Page page = document.startPage(pageInfo);
         Canvas canvas = page.getCanvas();
         Paint paint = new Paint();
         canvas.drawPaint(paint);
-        bitmap = Bitmap.createScaledBitmap(bitmap, w, h, true);
+        canvas.drawColor(Color.WHITE);
         paint.setColor(Color.BLUE);
-        canvas.drawBitmap(bitmap, 0, 0 , null);
+
+        bitmap = Bitmap.createScaledBitmap(bitmap, 1000, 400, true);
+        canvas.drawBitmap(bitmap, 150, 40, null);
+
+        if (bitmap2_no_nulo) {
+            bitmap2 = Bitmap.createScaledBitmap(bitmap2, 640, 852, true);
+            canvas.drawBitmap(bitmap2, 150, 500, null);
+        }
+        if (bitmap3_no_nulo) {
+            bitmap3 = Bitmap.createScaledBitmap(bitmap3, 640, 852, true);
+            canvas.drawBitmap(bitmap3, 150, 1400 , null);
+        }
+        if (bitmap4_no_nulo) {
+            bitmap4 = Bitmap.createScaledBitmap(bitmap4, 640, 852, true);
+            canvas.drawBitmap(bitmap4, 810, 1400, null);
+        }
+        if(bitmap5_no_nulo){
+            bitmap5 = Bitmap.createScaledBitmap(bitmap5, 640, 852, true);
+            canvas.drawBitmap(bitmap5, 810, 500 , null);
+        }
+
         document.finishPage(page);
         return document;
     }
@@ -518,23 +608,13 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
         //  Display display = wm.getDefaultDisplay();
         DisplayMetrics displaymetrics = new DisplayMetrics();
         this.getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-        float hight = displaymetrics.heightPixels ;
-        float width = displaymetrics.widthPixels ;
-
+        float hight = displaymetrics.heightPixels;
+        float width = displaymetrics.widthPixels;
         int convertHighet = (int) hight, convertWidth = (int) width;
-
         int page_count = 0;
-//        Resources mResources = getResources();
-//        Bitmap bitmap = BitmapFactory.decodeResource(mResources, R.drawable.screenshot);
 
         PdfDocument document = new PdfDocument();
-        if(bitmap1_no_nulo)
-        document = setContentPDF(document, bitmap, convertWidth, convertHighet, ++page_count);
-        if(bitmap2_no_nulo)
-        document = setContentPDF(document, bitmap2, convertWidth, convertHighet, ++page_count);
-        if(bitmap3_no_nulo)
-        document = setContentPDF(document, bitmap3, convertWidth, convertHighet, ++page_count);
-        document = setContentPDF(document, bitmap4, convertWidth, convertHighet, ++page_count);
+        document = setContentPDF(document, convertWidth, convertHighet, page_count);
         //////////////////////////////////////////////////////////////////////////////////////////////
         // write the document content
         File myDir = new File(String.valueOf(getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)));
@@ -557,60 +637,16 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
 
         hideRingDialog();
         if(filePath.exists()) {
+
             try {
-            Toast.makeText(this, "PDF creado correctamente ", Toast.LENGTH_SHORT).show();
+//                textView_info.setVisibility(View.GONE);
 
-////            File f = ...; // Some local file.
-////          Uri uri = Uri.parse("content://"+filePath.getAbsolutePath());
-//            Uri uri2 = Uri.fromFile(filePath);
-//            Uri uri = Uri.parse("content://"+uri2.toString());
-////            Uri uri = FileProvider.getUriForFile(this, "${BuildConfig.APPLICATION_ID}.provider", filePath);
-//            Intent intent = new Intent(Intent.ACTION_SEND);
-//            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-////            intent.putExtra(Intent.EXTRA_SUBJECT, "Subject");
-////            intent.putExtra(Intent.EXTRA_TEXT, "Body");
-//            intent.putExtra(Intent.EXTRA_STREAM, uri);
-//            intent.setType("application/pdf");
-//
-//// You only can add flag FLAG_GRANT_READ_URI_PERMISSION if your app has
-//// android:grantUriPermissions="true" in manifest or see quote below.
-//
-//            startActivity(Intent.createChooser(intent, "Send Email"));
-
-//            Uri uri = Uri.fromFile(filePath);
-//
-//            ArrayList<Uri> imageUris = new ArrayList<Uri>();
-//            imageUris.add(uri); // Add your image URIs here
-//
-//            Intent shareIntent = new Intent();
-//            shareIntent.setAction(Intent.ACTION_SEND_MULTIPLE);
-//            shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, imageUris);
-//            shareIntent.setType("application/pdf");
-//            shareIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-//            startActivity(Intent.createChooser(shareIntent, "Share images to.."));
-
-//                File file_photo = new File(Screen_Execute_Task.mCurrentPhotoPath_foto_despues);
-//            Intent intent = new Intent(Intent.ACTION_SEND ,Uri.parse("mailto: mraguascontadores@gmail.com")); // it's not ACTION_SEND
-//            intent.putExtra(Intent.EXTRA_SUBJECT, "PDF validar");
-//            intent.putExtra(Intent.EXTRA_TEXT, "");
-////            intent.putExtra(Intent.EXTRA_STREAM, filePath.getAbsolutePath());
-////            intent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file:"+filePath));
-//                intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-////                intent.putExtra(Intent.EXTRA_STREAM, Uri.parse("content://com.example.luisreyes.proyecto_aguas/files/Documents/pdf_validar.pdf"));
-//                intent.putExtra(Intent.EXTRA_STREAM, Uri.parse("content://com.example.luisreyes.proyecto_aguas/files/Pictures/fotos_tareas/C14FA0690415_foto_despues_instalacion.jpg"));
-//                //intent.putExtra(Intent.EXTRA_STREAM, Uri.parse(file_photo.getAbsolutePath()));
-////                openMessage("Uri", Uri.parse(file_photo.getAbsolutePath()).toString());
-//                intent.setType("image/jpg");
-////        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // this will make such that when user returns to your app, your app is displayed, instead of the email app.
-//            startActivity(intent);
-                Toast.makeText(this, "PDF creado correctamente " + targetPdf, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "PDF creado correctamente ", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(Intent.ACTION_SEND ,Uri.parse("mailto: mraguascontadores@gmail.com")); // it's not ACTION_SEND
                 intent.setType("text/plain");
                 intent.putExtra(Intent.EXTRA_SUBJECT, "PDF validar");
-                intent.putExtra(Intent.EXTRA_TEXT, "Validacion de Instalación");
+                intent.putExtra(Intent.EXTRA_TEXT, "Validación de Instalación");
                 intent.putExtra(Intent.EXTRA_STREAM, filePath.getAbsolutePath());
-//        intent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file:"+filePath.getAbsolutePath()));
-//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // this will make such that when user returns to your app, your app is displayed, instead of the email app.
                 startActivity(intent);
             }
             catch(Exception e) {
@@ -618,11 +654,10 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                 openMessage("Exception",  e.toString());
 //                Toast.makeText(this, "Exception->\n"+ e.toString(), Toast.LENGTH_SHORT).show();
             }
-    }
+        }
         else{
             Toast.makeText(this, "PDF no creado", Toast.LENGTH_SHORT).show();
         }
-
     }
     private void openGeneratedPDF(){
         File file = new File(getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)+"/"+pdfName+".pdf");
@@ -652,16 +687,26 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
             return;
         }
         else {
-            String file_name = null, image_file;
+            String numero_interno = "";
+            try {
+                numero_interno = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_interno).trim();
 
-            file_name = images_files_names.get(images_files.size() - 1);
-            images_files_names.remove(images_files.size() - 1);
-            image_file = images_files.get(images_files.size() - 1);
-            images_files.remove(images_files.size() - 1);
-            String type = "upload_image";
-            BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Validate.this);
-            backgroundWorker.execute(type, Screen_Register_Operario.getStringImage(getPhotoUserLocal(image_file)), file_name);
+                String file_name = null, image_file;
 
+                file_name = images_files_names.get(images_files.size() - 1);
+                images_files_names.remove(images_files.size() - 1);
+                image_file = images_files.get(images_files.size() - 1);
+                images_files.remove(images_files.size() - 1);
+                String type = "upload_image";
+                BackgroundWorker backgroundWorker = new BackgroundWorker(this);
+                backgroundWorker.execute(type, Screen_Register_Operario.getStringImage(getPhotoUserLocal(image_file)), file_name, numero_interno);
+
+            } catch (JSONException e) {
+                images_files.clear();
+                e.printStackTrace();
+                Toast.makeText(this, "Error obteniendo numero interno\n"+ e.toString(), Toast.LENGTH_LONG).show();
+                return;
+            }
         }
     }
     @Override
@@ -675,8 +720,15 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                 //String res = String.valueOf(result);
                 if (!firma.equals("null")) {
                     bitmap_firma_cliente = getImageFromString(firma);
-                    saveBitmapImageFirma(bitmap_firma_cliente, "firma");
                     imageButton_firma_cliente_screen_validate.setImageBitmap(bitmap_firma_cliente);
+                    try {
+                        String nombre_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.nombre_cliente).trim().replace(" ", "_");
+                        Screen_Login_Activity.tarea_JSON.put(DBtareasController.firma_cliente,nombre_abonado+"_firma.jpg");
+                        saveBitmapImageFirma(bitmap_firma_cliente, nombre_abonado+"_firma");
+//                        Toast.makeText(Screen_Validate.this, "Resultado ok: " + nombre_abonado+"_firma", Toast.LENGTH_LONG).show();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
                 //Toast.makeText(Screen_Validate.this, "Resultado ok: " + res, Toast.LENGTH_LONG).show();
             }
@@ -704,22 +756,34 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                     if(result.contains("success ok")) {
                         Toast.makeText(this, "Datos guardados correctamente en el servidor", Toast.LENGTH_LONG).show();
                     }
+                    images_files.clear();
+                    images_files_names.clear();
+
                     String contador=null;
-                    String firma="firma.jpg";
+                    String firma="";
                     Screen_Execute_Task.lectura_introducida="";
                     try {
                         contador = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador)
                                 .trim().replace(" ", "");
-//                        firma = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.firma_cliente)
-//                                .trim().replace(" ", "");
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                    try {
+                        firma = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.firma_cliente);
+//                        Toast.makeText(this, "firma -> " + firma, Toast.LENGTH_LONG).show();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+//                        Toast.makeText(this, "No se pudo obtener firma", Toast.LENGTH_LONG).show();
+                    }
+
 
                     if(!TextUtils.isEmpty(firma)
                             && ((new File(getCompleteFileDir(firma))).exists())) {
                         images_files.add(getCompleteFileDir(firma));
                         images_files_names.add(firma);
+                    }else{
+//                        openMessage("No existe", getCompleteFileDir(firma));
+//                        Toast.makeText(this, "No existe" + getCompleteFileDir(firma), Toast.LENGTH_LONG).show();
                     }
                     if(!TextUtils.isEmpty(Screen_Execute_Task.mCurrentPhotoPath_foto_antes)
                             && ((new File(Screen_Execute_Task.mCurrentPhotoPath_foto_antes)).exists())) {
@@ -754,9 +818,9 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                         uploadPhotos();
                     }
                     else{
-                        Intent intent_open_battery_counter = new Intent(this, team_or_personal_task_selection_screen_Activity.class);
-                        startActivity(intent_open_battery_counter);
-                        this.finish();
+//                        Intent intent_open_battery_counter = new Intent(this, team_or_personal_task_selection_screen_Activity.class);
+//                        startActivity(intent_open_battery_counter);
+//                        this.finish();
                     }
                 }
             }
@@ -766,7 +830,8 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                 Toast.makeText(this,"No se puede acceder al servidor, no se subio imagen", Toast.LENGTH_LONG).show();
             }
             else {
-                Toast.makeText(Screen_Validate.this, "Imagen subida", Toast.LENGTH_SHORT).show();
+                openMessage("Result", result);
+                Toast.makeText(Screen_Validate.this, "Imagen subida" + result, Toast.LENGTH_LONG).show();
                 uploadPhotos();
                 //showRingDialog("Validando registro...");
             }
@@ -868,7 +933,6 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
     private void hideRingDialog(){
         progressDialog.dismiss();
     }
-
 
     public Bitmap getPhotoUserLocal(String path){
         File file = new File(path);

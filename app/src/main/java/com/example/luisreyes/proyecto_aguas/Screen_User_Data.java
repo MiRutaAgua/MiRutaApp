@@ -261,11 +261,12 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
             }
         }
         else if(type == "download_user_image") {
-            hideRingDialog();
             if (result == null) {
+                hideRingDialog();
                 Toast.makeText(this, "No se puede acceder al servidor, no se obtuvo foto", Toast.LENGTH_LONG).show();
             }
             else if(result.contains("not success")){
+                hideRingDialog();
                 Toast.makeText(Screen_User_Data.this,"Error de script, no se pudo obtener foto "+result, Toast.LENGTH_LONG).show();
             }
             else {
@@ -276,6 +277,7 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
                     circlImageView_photo.setImageBitmap(bitmap);
                     saveBitmapImage(Screen_Register_Operario.getImageFromString(result), usuario+"_operario");
                 }
+                hideRingDialog();
             }
         }
     }

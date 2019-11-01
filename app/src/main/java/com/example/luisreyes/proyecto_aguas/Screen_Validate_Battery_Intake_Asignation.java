@@ -265,13 +265,13 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
                     DBtareasController.status_tarea);
             if(status_tarea.contains("TO_UPLOAD")) {
                 try {
-                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.status_tarea, "DONE,TO_UPLOAD");
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.status_tarea, "TO_BAT,TO_UPLOAD");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }else{
                 try {
-                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.status_tarea, "DONE");
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.status_tarea, "TO_BAT");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -446,16 +446,26 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
             return;
         }
         else {
-            String file_name = null, image_file;
+            String numero_interno = "";
+            try {
+                numero_interno = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_interno).trim();
 
-            file_name = images_files_names.get(images_files.size() - 1);
-            images_files_names.remove(images_files.size() - 1);
-            image_file = images_files.get(images_files.size() - 1);
-            images_files.remove(images_files.size() - 1);
-            String type = "upload_image";
-            BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Validate_Battery_Intake_Asignation.this);
-            backgroundWorker.execute(type, Screen_Register_Operario.getStringImage(getPhotoUserLocal(image_file)), file_name);
+                String file_name = null, image_file;
 
+                file_name = images_files_names.get(images_files.size() - 1);
+                images_files_names.remove(images_files.size() - 1);
+                image_file = images_files.get(images_files.size() - 1);
+                images_files.remove(images_files.size() - 1);
+                String type = "upload_image";
+                BackgroundWorker backgroundWorker = new BackgroundWorker(this);
+                backgroundWorker.execute(type, Screen_Register_Operario.getStringImage(getPhotoUserLocal(image_file)), file_name, numero_interno);
+
+            } catch (JSONException e) {
+                images_files.clear();
+                e.printStackTrace();
+                Toast.makeText(this, "Error obteniendo numero interno\n"+ e.toString(), Toast.LENGTH_LONG).show();
+                return;
+            }
         }
     }
     private void showRingDialog(String text){
