@@ -58,7 +58,7 @@ public class Screen_Advance_Filter extends AppCompatActivity {
     private ArrayList<MyCounter> lista_ordenada_de_tareas_inicial;
     private LinearLayout layout_filtro_direccion_screen_advance_filter
             ,layout_filtro_datos_privados_screen_advance_filter
-            , layout_filtro_tipo_tarea_screen_advance_filter
+            ,layout_filtro_tipo_tarea_screen_advance_filter
             ,layout_filtro_datos_unicos_screen_advance_filter;
 
     private ArrayAdapter arrayAdapter;

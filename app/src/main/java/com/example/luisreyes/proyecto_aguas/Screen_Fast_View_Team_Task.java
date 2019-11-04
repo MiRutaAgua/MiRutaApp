@@ -102,21 +102,31 @@ public class Screen_Fast_View_Team_Task  extends AppCompatActivity implements Ta
                         try {
                             JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.dBtareasController.get_one_tarea_from_Database(i));
 
-                            String tipo_tarea =jsonObject.getString(DBtareasController.tipo_tarea).replace("\n", "");
-                            String calibre = jsonObject.getString(DBtareasController.calibre_toma).replace("\n", "");
-                            if((tipo_tarea.contains("null") || tipo_tarea.contains("NULL"))
-                                    && (calibre.contains("null") || calibre.contains("NULL"))){
-                                Toast.makeText(this,"Tipo de Tarea y calibre ambos nulos"
-                                        +jsonObject.getString(DBtareasController.numero_interno) , Toast.LENGTH_LONG).show();
-                            }else{
-                                My_Fast_View_Task fast_task = new My_Fast_View_Task();
-                                if(tipo_tarea.contains("null") || tipo_tarea.contains("NULL") ){
-                                    fast_task.setTipo_tarea("");
-                                }else {
-                                    fast_task.setTipo_tarea(tipo_tarea);
+                            String status="";
+                            try {
+                                status = jsonObject.getString(DBtareasController.status_tarea);
+
+                                if(!status.contains("DONE") && !status.contains("done")) {
+                                    String tipo_tarea =jsonObject.getString(DBtareasController.tipo_tarea).replace("\n", "");
+                                    String calibre = jsonObject.getString(DBtareasController.calibre_toma).replace("\n", "");
+                                    if((tipo_tarea.contains("null") || tipo_tarea.contains("NULL"))
+                                            && (calibre.contains("null") || calibre.contains("NULL"))){
+                                        Toast.makeText(this,"Tipo de Tarea y calibre ambos nulos"
+                                                +jsonObject.getString(DBtareasController.numero_interno) , Toast.LENGTH_LONG).show();
+                                    }else{
+                                        My_Fast_View_Task fast_task = new My_Fast_View_Task();
+                                        if(tipo_tarea.contains("null") || tipo_tarea.contains("NULL") ){
+                                            fast_task.setTipo_tarea("");
+                                        }else {
+                                            fast_task.setTipo_tarea(tipo_tarea);
+                                        }
+                                        fast_task.setCalibre(calibre);
+                                        lista_tareas_fast.add(fast_task);
+                                    }
                                 }
-                                fast_task.setCalibre(calibre);
-                                lista_tareas_fast.add(fast_task);
+                            } catch (JSONException e) {
+                                Toast.makeText(getApplicationContext(), "No se pudo obtener estado se tarea\n"+ e.toString(), Toast.LENGTH_LONG).show();
+                                e.printStackTrace();
                             }
 
                         } catch (JSONException e) {
@@ -252,21 +262,31 @@ public class Screen_Fast_View_Team_Task  extends AppCompatActivity implements Ta
                                 }
                             }
 
-                            String tipo_tarea = jsonObject.getString(DBtareasController.tipo_tarea).replace("\n", "").replace(" ", "");
-                            String calibre = jsonObject.getString(DBtareasController.calibre_toma).replace("\n", "").replace(" ", "");
-                            if((tipo_tarea.contains("null")|| tipo_tarea.contains("NULL")) &&  (calibre.contains("null"))|| calibre.contains("NULL")){
-                                Toast.makeText(this,"Tipo de Tarea y calibre ambos nulos"
-                                        +jsonObject.getString(DBtareasController.numero_interno) , Toast.LENGTH_LONG).show();
-                            }else{
-                                My_Fast_View_Task fast_task = new My_Fast_View_Task();
-                                if(tipo_tarea.contains("null") || tipo_tarea.contains("NULL")){
-                                    fast_task.setTipo_tarea("NCI");
-                                }else {
-                                    fast_task.setTipo_tarea(tipo_tarea);
-                                }
-                                fast_task.setCalibre(calibre);
-                                lista_tareas_fast.add(fast_task);
+                            String status="";
+                            try {
+                                status = jsonObject.getString(DBtareasController.status_tarea);
+                            } catch (JSONException e) {
+                                Toast.makeText(getApplicationContext(), "No se pudo obtener estado se tarea\n"+ e.toString(), Toast.LENGTH_LONG).show();
+                                e.printStackTrace();
                             }
+                            if(!status.contains("DONE") && !status.contains("done")) {
+                                String tipo_tarea = jsonObject.getString(DBtareasController.tipo_tarea).replace("\n", "").replace(" ", "");
+                                String calibre = jsonObject.getString(DBtareasController.calibre_toma).replace("\n", "").replace(" ", "");
+                                if((tipo_tarea.contains("null")|| tipo_tarea.contains("NULL")) &&  (calibre.contains("null"))|| calibre.contains("NULL")){
+                                    Toast.makeText(this,"Tipo de Tarea y calibre ambos nulos"
+                                            +jsonObject.getString(DBtareasController.numero_interno) , Toast.LENGTH_LONG).show();
+                                }else{
+                                    My_Fast_View_Task fast_task = new My_Fast_View_Task();
+                                    if(tipo_tarea.contains("null") || tipo_tarea.contains("NULL")){
+                                        fast_task.setTipo_tarea("NCI");
+                                    }else {
+                                        fast_task.setTipo_tarea(tipo_tarea);
+                                    }
+                                    fast_task.setCalibre(calibre);
+                                    lista_tareas_fast.add(fast_task);
+                                }
+                            }
+
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
