@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Intent intent_open_screen_login;
 
-    public static int DB_VERSION = 38;
+    public static int DB_VERSION = 39;
     public static int COMPRESS_QUALITY = 50;
 
     public static double AMPLITUD_BOUNCE = 0.02;

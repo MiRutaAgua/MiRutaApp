@@ -253,18 +253,18 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
             e.printStackTrace();
             Toast.makeText(Screen_Incidence_Summary.this, "no se pudo cambiar observaciones de tarea", Toast.LENGTH_LONG).show();
         }
-        try {
-            String string_firma = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.firma_cliente);
-            if(!TextUtils.isEmpty(string_firma) && !string_firma.equals("null")) {
-                bitmap_firma_cliente = Screen_Register_Operario.getImageFromString(string_firma);
-                if(bitmap_firma_cliente!=null) {
-                    firma_cliente.setImageBitmap(bitmap_firma_cliente);
-                }
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-            Toast.makeText(Screen_Incidence_Summary.this, "no se pudo obtener firma cliente de tarea", Toast.LENGTH_LONG).show();
-        }
+//        try {
+//            String string_firma = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.firma_cliente);
+//            if(!TextUtils.isEmpty(string_firma) && !string_firma.equals("null")) {
+//                bitmap_firma_cliente = Screen_Register_Operario.getImageFromString(string_firma);
+//                if(bitmap_firma_cliente!=null) {
+//                    firma_cliente.setImageBitmap(bitmap_firma_cliente);
+//                }
+//            }
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//            Toast.makeText(Screen_Incidence_Summary.this, "no se pudo obtener firma cliente de tarea", Toast.LENGTH_LONG).show();
+//        }
         try {
             lectura_string = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.lectura_actual);
             if(!TextUtils.isEmpty(lectura_string) && !lectura_string.equals("null")){
@@ -383,6 +383,7 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
                 button_compartir_screen_incidence_summary.startAnimation(myAnim);
             }
         });
+
         cerrar_tarea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -423,15 +424,15 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        if(bitmap_firma_cliente!=null) {
-            try {
-                String firma = Screen_Register_Operario.getStringImage(bitmap_firma_cliente);
-                Screen_Login_Activity.tarea_JSON.put(DBtareasController.firma_cliente, firma);
-            } catch (JSONException e) {
-                e.printStackTrace();
-                Toast.makeText(Screen_Incidence_Summary.this, "no se pudo cambiar firma de cliente", Toast.LENGTH_LONG).show();
-            }
-        }
+//        if(bitmap_firma_cliente!=null) {
+//            try {
+//                String firma = Screen_Register_Operario.getStringImage(bitmap_firma_cliente);
+//                Screen_Login_Activity.tarea_JSON.put(DBtareasController.firma_cliente, firma);
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//                Toast.makeText(Screen_Incidence_Summary.this, "no se pudo cambiar firma de cliente", Toast.LENGTH_LONG).show();
+//            }
+//        }
         if(!(TextUtils.isEmpty(lectura.getText()))) {
             if(!lectura_string.isEmpty() && !lectura_string.equals("null")){
                 String lectura_actual = lectura.getText().toString();
@@ -750,7 +751,7 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
                 if(myDir!=null) {
                     if (!myDir.exists()) {
                         myDir.mkdirs();
-                        File storageDir2 = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/fotos_tareas");
+                        File storageDir2 = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/fotos_tareas/"+numero_interno);
                         if (!storageDir2.exists()) {
                             storageDir2.mkdir();
                         }

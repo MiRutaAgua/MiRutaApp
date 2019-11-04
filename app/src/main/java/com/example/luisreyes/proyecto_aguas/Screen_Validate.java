@@ -830,7 +830,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                 Toast.makeText(this,"No se puede acceder al servidor, no se subio imagen", Toast.LENGTH_LONG).show();
             }
             else {
-                openMessage("Result", result);
+//                openMessage("Result", result);
                 Toast.makeText(Screen_Validate.this, "Imagen subida" + result, Toast.LENGTH_LONG).show();
                 uploadPhotos();
                 //showRingDialog("Validando registro...");
