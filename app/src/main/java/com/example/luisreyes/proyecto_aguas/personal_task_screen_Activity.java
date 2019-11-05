@@ -2,6 +2,7 @@ package com.example.luisreyes.proyecto_aguas;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -29,9 +30,7 @@ public class personal_task_screen_Activity extends AppCompatActivity {
     private Button button_tabla_tareas_operario;
     private Button button_vista_rapida_tareas_operario;
 
-    private Intent intent_open_table_personal;
-
-    private Intent intent_open_table_personal_fast_view;
+    private static ProgressDialog progressDialog;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -47,9 +46,6 @@ public class personal_task_screen_Activity extends AppCompatActivity {
         myToolbar.setBackgroundColor(Color.TRANSPARENT);
         setSupportActionBar(myToolbar);
 
-
-        intent_open_table_personal = new Intent(this, Screen_Table_Personal.class);
-        intent_open_table_personal_fast_view = new Intent(this, Screen_Fast_View_Personal_Task.class);
 
         imageView_logo_personal        = (ImageView) findViewById(R.id.imageView_logo_personal);
         button_tabla_tareas_operario   = (Button) findViewById(R.id.button_tabla_tareas_operarios_screen_personal_task);
@@ -75,6 +71,8 @@ public class personal_task_screen_Activity extends AppCompatActivity {
                     }
                     @Override
                     public void onAnimationEnd(Animation arg0) {
+                        showRingDialog("Buscando Tareas");
+                        Intent intent_open_table_personal = new Intent(getApplicationContext(), Screen_Table_Personal.class);
                         startActivity(intent_open_table_personal);
                         finish();
                     }
@@ -102,6 +100,8 @@ public class personal_task_screen_Activity extends AppCompatActivity {
                     }
                     @Override
                     public void onAnimationEnd(Animation arg0) {
+                        showRingDialog("Buscando Tareas");
+                        Intent intent_open_table_personal_fast_view = new Intent(getApplicationContext(), Screen_Fast_View_Personal_Task.class);
                         startActivity(intent_open_table_personal_fast_view);
                         finish();
                     }
@@ -155,5 +155,14 @@ public class personal_task_screen_Activity extends AppCompatActivity {
         MessageDialog messageDialog = new MessageDialog();
         messageDialog.setTitleAndHint(title, hint);
         messageDialog.show(getSupportFragmentManager(), title);
+    }
+
+
+    private void showRingDialog(String text){
+        progressDialog = ProgressDialog.show(personal_task_screen_Activity.this, "Espere", text, true);
+        progressDialog.setCancelable(true);
+    }
+    public static void hideRingDialog(){
+        progressDialog.dismiss();
     }
 }

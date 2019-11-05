@@ -192,7 +192,7 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
                     }
                     @Override
                     public void onAnimationEnd(Animation arg0) {
-                        Intent intent_open_Screen_advance_filter = new Intent(Screen_Table_Personal.this, Screen_Advance_Filter.class);
+                        Intent intent_open_Screen_advance_filter = new Intent(Screen_Table_Personal.this, Screen_Filter_Tareas.class);
                         startActivity(intent_open_Screen_advance_filter);
                     }
                 });
@@ -293,6 +293,7 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
 
     private void descargarTareas() {
         if(checkConection()){
+            personal_task_screen_Activity.hideRingDialog();
             Screen_Login_Activity.isOnline = true;
             showRingDialog("Actualizando informacion de tareas");
             String type_script = "get_tareas";
@@ -332,6 +333,7 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
                     orderTareastoArrayAdapter();
                 }
             }
+            personal_task_screen_Activity.hideRingDialog();
         }
     }
     @Override
@@ -609,19 +611,29 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
             return;
         }
         else {
-            String file_name = null, image_file;
-            file_name = images_files_names.get(images_files.size() - 1);
-            images_files_names.remove(images_files.size() - 1);
-            image_file = images_files.get(images_files.size() - 1);
-            images_files.remove(images_files.size() - 1);
-            Bitmap bitmap = null;
-            bitmap = getPhotoUserLocal(image_file);
-            if(bitmap!=null) {
-                String type = "upload_image";
-                BackgroundWorker backgroundWorker = new BackgroundWorker(this);
-                backgroundWorker.execute(type, Screen_Register_Operario.getStringImage(bitmap), file_name);
-            }else{
-                updatePhotosInMySQL();
+            String numero_abonado = "";
+            try {
+                numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
+
+                String file_name = null, image_file;
+                file_name = images_files_names.get(images_files.size() - 1);
+                images_files_names.remove(images_files.size() - 1);
+                image_file = images_files.get(images_files.size() - 1);
+                images_files.remove(images_files.size() - 1);
+                Bitmap bitmap = null;
+                bitmap = getPhotoUserLocal(image_file);
+                if(bitmap!=null) {
+                    String type = "upload_image";
+                    BackgroundWorker backgroundWorker = new BackgroundWorker(this);
+                    backgroundWorker.execute(type, Screen_Register_Operario.getStringImage(bitmap), file_name, numero_abonado);
+                }else{
+                    updatePhotosInMySQL();
+                }
+            } catch (JSONException e) {
+                images_files.clear();
+                e.printStackTrace();
+                Toast.makeText(this, "Error obteniendo numero_abonado\n"+ e.toString(), Toast.LENGTH_LONG).show();
+                return;
             }
         }
     }

@@ -693,7 +693,6 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
     }
 
     private void guardar_en_JSON_modificaciones() {
-
         try {
             String fecha = DBtareasController.getStringFromFechaHora(new Date());
             Screen_Login_Activity.tarea_JSON.put(DBtareasController.date_time_modified, fecha);

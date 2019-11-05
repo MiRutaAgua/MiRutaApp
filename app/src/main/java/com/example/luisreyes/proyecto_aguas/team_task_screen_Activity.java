@@ -2,6 +2,7 @@ package com.example.luisreyes.proyecto_aguas;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -17,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.Interpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 
@@ -30,9 +32,7 @@ public class team_task_screen_Activity extends AppCompatActivity {
     private Button button_tabla_tareas_equipo;
     private Button button_vista_rapida_tareas_equipo;
 
-
-    private Intent intent_open_table_team;
-    private Intent intent_open_fast_view_team_tasks;
+    private static ProgressDialog progressDialog;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -48,11 +48,6 @@ public class team_task_screen_Activity extends AppCompatActivity {
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         myToolbar.setBackgroundColor(Color.TRANSPARENT);
         setSupportActionBar(myToolbar);
-
-
-        intent_open_table_team = new Intent(this, Screen_Table_Team.class);
-
-        intent_open_fast_view_team_tasks = new Intent(this, Screen_Fast_View_Team_Task.class);
 
         imageView_logo_team        = (ImageView) findViewById(R.id.imageView_logo_personal);
         button_tabla_tareas_equipo   = (Button) findViewById(R.id.button_tabla_tareas_equipo_screen_team_task);
@@ -78,6 +73,8 @@ public class team_task_screen_Activity extends AppCompatActivity {
                     }
                     @Override
                     public void onAnimationEnd(Animation arg0) {
+                        showRingDialog("Buscando Tareas");
+                        Intent intent_open_table_team = new Intent(getApplicationContext(), Screen_Table_Team.class);
                         startActivity(intent_open_table_team);
                     }
                 });
@@ -105,6 +102,8 @@ public class team_task_screen_Activity extends AppCompatActivity {
                     }
                     @Override
                     public void onAnimationEnd(Animation arg0) {
+                        showRingDialog("Buscando Tareas");
+                        Intent intent_open_fast_view_team_tasks = new Intent(getApplicationContext(), Screen_Fast_View_Team_Task.class);
                         startActivity(intent_open_fast_view_team_tasks);
                     }
                 });
@@ -156,5 +155,13 @@ public class team_task_screen_Activity extends AppCompatActivity {
         MessageDialog messageDialog = new MessageDialog();
         messageDialog.setTitleAndHint(title, hint);
         messageDialog.show(getSupportFragmentManager(), title);
+    }
+
+    private void showRingDialog(String text){
+        progressDialog = ProgressDialog.show(team_task_screen_Activity.this, "Espere", text, true);
+        progressDialog.setCancelable(true);
+    }
+    public static void hideRingDialog(){
+        progressDialog.dismiss();
     }
 }
