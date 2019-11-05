@@ -313,15 +313,15 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
                 }
                 if(!foto.isEmpty() && !foto.equals("null") && !foto.equals("NULL") && foto != null){
 
-                    String numero_interno="";
+                    String numero_abonado="";
                     try {
-                        numero_interno=Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_interno);
-                        if(!numero_interno.isEmpty() && numero_interno!=null
-                                && !numero_interno.equals("null") && !numero_interno.equals("NULL")){
+                        numero_abonado=Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado);
+                        if(!numero_abonado.isEmpty() && numero_abonado!=null
+                                && !numero_abonado.equals("null") && !numero_abonado.equals("NULL")){
                             showRingDialog("Obteniendo foto de instalación");
                             String type_script = "download_image";
                             BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Battery_counter.this);
-                            backgroundWorker.execute(type_script, foto, numero_interno);
+                            backgroundWorker.execute(type_script, foto, numero_abonado);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -333,15 +333,15 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
         }else{
             try {
                 //String foto_instalacion =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_antes_instalacion);
-                String image = null, numero_interno = null;
-                numero_interno = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_interno).trim();
+                String image = null, numero_abonado = null;
+                numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
                 image = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_despues_instalacion);
 
-                if(numero_interno!=null && !numero_interno.equals("null")
-                        && !numero_interno.equals("NULL") && !TextUtils.isEmpty(numero_interno)) {
+                if(numero_abonado!=null && !numero_abonado.equals("null")
+                        && !numero_abonado.equals("NULL") && !TextUtils.isEmpty(numero_abonado)) {
                     if(image!=null && !image.equals("null")
                             && !image.equals("NULL") && !TextUtils.isEmpty(image)) {
-                        File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/fotos_tareas/"+numero_interno+"/");
+                        File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/fotos_tareas/"+numero_abonado+"/");
                         if (!storageDir.exists()) {
                             storageDir.mkdir();
                         }
@@ -411,10 +411,10 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
 //        file_name = "operario_"+file_name;
         //Toast.makeText(Screen_Battery_counter.this,file_name, Toast.LENGTH_LONG).show();
 
-        String numero_interno = null;
+        String numero_abonado = null;
         try {
-            numero_interno = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_interno).trim();
-            File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+numero_interno+"/");
+            numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
+            File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+numero_abonado+"/");
             if (!myDir.exists()) {
                 myDir.mkdirs();
             }

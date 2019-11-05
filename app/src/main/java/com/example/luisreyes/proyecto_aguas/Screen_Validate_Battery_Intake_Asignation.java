@@ -446,9 +446,9 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
             return;
         }
         else {
-            String numero_interno = "";
+            String numero_abonado = "";
             try {
-                numero_interno = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_interno).trim();
+                numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
 
                 String file_name = null, image_file;
 
@@ -458,7 +458,7 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
                 images_files.remove(images_files.size() - 1);
                 String type = "upload_image";
                 BackgroundWorker backgroundWorker = new BackgroundWorker(this);
-                backgroundWorker.execute(type, Screen_Register_Operario.getStringImage(getPhotoUserLocal(image_file)), file_name, numero_interno);
+                backgroundWorker.execute(type, Screen_Register_Operario.getStringImage(getPhotoUserLocal(image_file)), file_name, numero_abonado);
 
             } catch (JSONException e) {
                 images_files.clear();

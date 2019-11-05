@@ -64,7 +64,7 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.screen_advance_filter);
+        setContentView(R.layout.screen_filter_tareas);
 
         lista_desplegable = new ArrayList<String>();
         lista_desplegable.add("NINGUNO");

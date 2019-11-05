@@ -687,9 +687,9 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
             return;
         }
         else {
-            String numero_interno = "";
+            String numero_abonado = "";
             try {
-                numero_interno = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_interno).trim();
+                numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
 
                 String file_name = null, image_file;
 
@@ -699,7 +699,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                 images_files.remove(images_files.size() - 1);
                 String type = "upload_image";
                 BackgroundWorker backgroundWorker = new BackgroundWorker(this);
-                backgroundWorker.execute(type, Screen_Register_Operario.getStringImage(getPhotoUserLocal(image_file)), file_name, numero_interno);
+                backgroundWorker.execute(type, Screen_Register_Operario.getStringImage(getPhotoUserLocal(image_file)), file_name, numero_abonado);
 
             } catch (JSONException e) {
                 images_files.clear();
@@ -840,11 +840,11 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
 
     private String getCompleteFileDir(String filename){
 
-        String numero_interno = null;
+        String numero_abonado = null;
         try {
-            numero_interno = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_interno);
+            numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado);
             String fullDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"
-                    + numero_interno+"/"+filename;
+                    + numero_abonado+"/"+filename;
             return fullDir;
         } catch (JSONException e) {
             e.printStackTrace();
@@ -852,15 +852,15 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
        return null;
     }
     private String saveBitmapImageFirma(Bitmap bitmap, String file_name){
-        String numero_interno = "";
+        String numero_abonado = "";
         File myDir = null;
         try {
-            numero_interno = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_interno);
-            if(!numero_interno.isEmpty() && numero_interno!=null
-                    && !numero_interno.equals("NULL") && !numero_interno.equals("null")){
+            numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado);
+            if(!numero_abonado.isEmpty() && numero_abonado!=null
+                    && !numero_abonado.equals("NULL") && !numero_abonado.equals("null")){
 
                 myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"
-                        + numero_interno);
+                        + numero_abonado);
 
                 if(myDir!=null) {
                     if (!myDir.exists()) {
