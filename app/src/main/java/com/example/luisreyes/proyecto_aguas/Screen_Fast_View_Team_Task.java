@@ -477,7 +477,14 @@ public class Screen_Fast_View_Team_Task  extends AppCompatActivity implements Ta
     }
     public void addPhotos_toUpload() throws JSONException { //luego rellenar en campo de incidencia algo para saber que tiene incidencias
         String foto = "";
-        String path = getExternalFilesDir(Environment.DIRECTORY_PICTURES)+"/fotos_tareas/";
+
+        String numero_abonado = null;
+        try {
+            numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String path = getExternalFilesDir(Environment.DIRECTORY_PICTURES)+"/fotos_tareas"+ numero_abonado+"/";
 
         foto = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_antes_instalacion);
         if(foto!=null && !foto.isEmpty() && !foto.equals("null")){

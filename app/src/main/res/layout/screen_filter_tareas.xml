@@ -17,12 +17,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
         <LinearLayout
-            android:id="@+id/linearLayout"
+            android:id="@+id/layout_filter_screen_filter_tareas"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
             <LinearLayout
-                android:id="@+id/layout_filter_screen_advance_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -243,6 +242,7 @@
                             android:hint="Teléfono"
                             android:textSize="15dp"
                             android:textAlignment="center"
+                            android:inputType="phone"
                             />
                     </LinearLayout>
                 </LinearLayout>
@@ -307,6 +307,7 @@
                             android:hint="Número de abonado"
                             android:layout_gravity="center"
                             android:gravity="center"
+                            android:inputType="number"
                             />
 
                     </LinearLayout>

@@ -76,8 +76,8 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
         String download_image_url;
         String download_user_image_url;
 
-        String server =  "https://server26194.000webhostapp.com/php/";
-//        String server =  "https://server26194.000webhostapp.com/"; //Cambiar a este al enviarselo a Michel
+//        String server =  "https://server26194.000webhostapp.com/php/";
+        String server =  "https://server26194.000webhostapp.com/"; //Cambiar a este al enviarselo a Michel
 
         if(server_online_or_wamp){
 

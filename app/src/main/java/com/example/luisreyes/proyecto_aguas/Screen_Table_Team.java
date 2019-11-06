@@ -563,22 +563,19 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
     public void orderTareastoArrayAdapter(){
         Collections.sort(lista_ordenada_de_tareas);
         for(int i=0; i < lista_ordenada_de_tareas.size(); i++){
-            lista_contadores.add("\nDirección:  "+lista_ordenada_de_tareas.get(i).getDireccion()
-                    +"         Cita:  "+lista_ordenada_de_tareas.get(i).getCita()
-                    +"       Tarea:  "+lista_ordenada_de_tareas.get(i).getTipo_tarea()
-                    +"    Calibre:  "+lista_ordenada_de_tareas.get(i).getCalibre()
-                    +"Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado());
-            lista_filtro_direcciones.add("\nDirección:  "+lista_ordenada_de_tareas.get(i).getDireccion()
-                    +" Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado());
-            lista_filtro_Tareas.add("\n      Tarea:  "+lista_ordenada_de_tareas.get(i).getTipo_tarea()+"   Calibre:  "+lista_ordenada_de_tareas.get(i).getCalibre()
-                    +"Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado());
-            lista_filtro_abonado.add("\n  Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado()+"Telefono 1:  "+lista_ordenada_de_tareas.get(i).getTelefono1()
-                    +"Telefono 2:  "+lista_ordenada_de_tareas.get(i).getTelefono2());
-            lista_filtro_numero_serie.add("\n       Número de Serie:  "+lista_ordenada_de_tareas.get(i).getNumero_serie_contador()
+            lista_contadores.add(Screen_Filter_Tareas.orderCounterForListView(lista_ordenada_de_tareas.get(i)));
+
+            lista_filtro_direcciones.add("\nDirección:  "+lista_ordenada_de_tareas.get(i).getDireccion()+ "\n"
+                    +" Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado()+ "\n");
+            lista_filtro_Tareas.add("\n      Tarea:  "+lista_ordenada_de_tareas.get(i).getTipo_tarea()+"   Calibre:  "+lista_ordenada_de_tareas.get(i).getCalibre()+ "\n"
+                    +"Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado()+ "\n");
+            lista_filtro_abonado.add("\n  Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado()+"Telefono 1:  "+lista_ordenada_de_tareas.get(i).getTelefono1()+ "\n"
+                    +"Telefono 2:  "+lista_ordenada_de_tareas.get(i).getTelefono2()+ "\n");
+            lista_filtro_numero_serie.add("\n       Número de Serie:  "+lista_ordenada_de_tareas.get(i).getNumero_serie_contador()+ "\n"
                     //+"\n              Año o Prefijo:  "+lista_ordenada_de_tareas.get(i).getAnno_contador()
-                    +"\nNúmero de Abonado:  "+lista_ordenada_de_tareas.get(i).getNumero_abonado());
-            lista_filtro_Citas.add("\n        Cita:  "+lista_ordenada_de_tareas.get(i).getCita()
-                    +"Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado());
+                    +"\nNúmero de Abonado:  "+lista_ordenada_de_tareas.get(i).getNumero_abonado()+ "\n");
+            lista_filtro_Citas.add("\n        Cita:  "+lista_ordenada_de_tareas.get(i).getCita()+ "\n"
+                    +"Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado()+ "\n");
         }
         arrayAdapter = new ArrayAdapter(Screen_Table_Team.this, R.layout.list_text_view, lista_contadores);
         arrayAdapter_all = new ArrayAdapter(Screen_Table_Team.this, R.layout.list_text_view, lista_contadores);
@@ -594,7 +591,7 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
                     + jsonObject.getString(DBtareasController.numero_edificio).trim().replace("\n", "")
                     + jsonObject.getString(DBtareasController.letra_edificio).trim().replace("\n", "") + " "
                     + jsonObject.getString(DBtareasController.piso).trim().replace("\n", "") + " "
-                    + jsonObject.getString(DBtareasController.mano).trim().replace("\n", "") + "\n";
+                    + jsonObject.getString(DBtareasController.mano).trim().replace("\n", "");
         }
         else{
             dir = jsonObject.getString(DBtareasController.poblacion).trim() + ", "
@@ -602,7 +599,7 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
                     + jsonObject.getString(DBtareasController.numero).trim().replace("\n", "") + " " //numero de portal
                     + jsonObject.getString(DBtareasController.BIS).trim().replace("\n", "") + " "
                     + jsonObject.getString(DBtareasController.piso).trim().replace("\n", "") + " "
-                    + jsonObject.getString(DBtareasController.mano).trim().replace("\n", "") + "\n";
+                    + jsonObject.getString(DBtareasController.mano).trim().replace("\n", "");
         }
         if(dir.contains("null, null, nullnull")) {
             dir = "No hay dirección\n";
@@ -612,49 +609,49 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
 //                            Toast.makeText(Screen_Table_Team.this, cita, Toast.LENGTH_LONG).show();
         if(!cita.equals("null") && !TextUtils.isEmpty(cita)) {
             cita = cita.split("\n")[0] + "\n"
-                    + "                   " + jsonObject.getString(DBtareasController.nuevo_citas).split("\n")[1] + "\n";
+                    + "                   " + jsonObject.getString(DBtareasController.nuevo_citas).split("\n")[1];
         }else{
-            cita = "No hay cita\n";
+            cita = "No hay cita";
         }
 
-        String abonado = jsonObject.getString(DBtareasController.nombre_cliente).replace("\n", "")+"\n";
+        String abonado = jsonObject.getString(DBtareasController.nombre_cliente).trim();
         if(abonado.equals("null\n")  && !TextUtils.isEmpty(abonado)) {
             abonado = "Desconocido\n";
         }
-        String numero_interno  = jsonObject.getString(DBtareasController.numero_interno).replace("\n", "");
+        String numero_interno  = jsonObject.getString(DBtareasController.numero_interno).trim();
         if(numero_interno.equals("null\n") && !TextUtils.isEmpty(numero_interno)) {
             numero_interno = "-\n";
         }
-        String numero_serie_contador = jsonObject.getString(DBtareasController.numero_serie_contador).replace("\n", "");
+        String numero_serie_contador = jsonObject.getString(DBtareasController.numero_serie_contador).trim();
         if(numero_serie_contador.equals("null\n") && !TextUtils.isEmpty(numero_serie_contador)) {
             numero_serie_contador = "-\n";
         }
-        String anno_contador = jsonObject.getString(DBtareasController.CONTADOR_Prefijo_anno).replace("\n", "")+"\n";
+        String anno_contador = jsonObject.getString(DBtareasController.CONTADOR_Prefijo_anno).trim();
         if(anno_contador.equals("null\n") && !TextUtils.isEmpty(anno_contador)) {
             anno_contador = "-\n";
         }
-        String tipo_tarea = jsonObject.getString(DBtareasController.tipo_tarea).replace("\n", "").replace(" ","")+"\n";
+        String tipo_tarea = jsonObject.getString(DBtareasController.tipo_tarea).replace("\n", "").trim();
         if(tipo_tarea.equals("null\n") && !TextUtils.isEmpty(tipo_tarea)) {
             tipo_tarea = "NCI\n";
         }
-        String calibre = jsonObject.getString(DBtareasController.calibre_toma).replace("\n", "")+"\n";
+        String calibre = jsonObject.getString(DBtareasController.calibre_toma).trim();
         if(calibre.equals("null\n") && !TextUtils.isEmpty(calibre)) {
             calibre = "Desconocido\n";
         }
-        String telefono1 = jsonObject.getString(DBtareasController.telefono1).replace("\n", "")+"\n";
+        String telefono1 = jsonObject.getString(DBtareasController.telefono1).trim();
         if(telefono1.equals("null\n") && !TextUtils.isEmpty(telefono1)) {
             telefono1 = "-\n";
         }
-        String telefono2 = jsonObject.getString(DBtareasController.telefono2).replace("\n", "")+"\n";
+        String telefono2 = jsonObject.getString(DBtareasController.telefono2).trim();
         if(telefono2.equals("null\n") && !TextUtils.isEmpty(telefono2)) {
             telefono2 = "-\n";
         }
-        String numero_abonado = jsonObject.getString(DBtareasController.numero_abonado).replace("\n", "")+"\n";
+        String numero_abonado = jsonObject.getString(DBtareasController.numero_abonado).trim();
         if(numero_abonado.equals("null\n") && !TextUtils.isEmpty(numero_abonado)) {
             numero_abonado = "-\n";
         }
 
-        String fecha_cita = jsonObject.getString(DBtareasController.fecha_hora_cita).replace("\n", "");
+        String fecha_cita = jsonObject.getString(DBtareasController.fecha_hora_cita).trim();
         MyCounter contador = new MyCounter();
         if(fecha_cita!= null && !fecha_cita.equals("null") && !TextUtils.isEmpty(fecha_cita)){
             contador.setDateTime(DBtareasController.getFechaHoraFromString(fecha_cita));
@@ -673,7 +670,6 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
         contador.setTelefono2(telefono2);
         contador.setAbonado(abonado);
         contador.setNumero_abonado(numero_abonado);
-
         return contador;
     }
 
@@ -783,40 +779,47 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
     }
     public void addPhotos_toUpload() throws JSONException { //luego rellenar en campo de incidencia algo para saber que tiene incidencias
         String foto = "";
-        String path = getExternalFilesDir(Environment.DIRECTORY_PICTURES)+"/fotos_tareas/";
+
+        String numero_abonado = null;
+        try {
+            numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String path = getExternalFilesDir(Environment.DIRECTORY_PICTURES)+"/fotos_tareas"+ numero_abonado+"/";
 
         foto = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_antes_instalacion);
-        if(foto!=null && !foto.isEmpty() && !foto.equals("null")){
+        if(foto!=null && !foto.isEmpty() && !foto.equals("null") && !foto.equals("NULL")){
             images_files.add(path+foto);
             images_files_names.add(foto);
         }
         foto = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_lectura);
-        if(foto!=null && !foto.isEmpty() && !foto.equals("null")){
+        if(foto!=null && !foto.isEmpty() && !foto.equals("null")&& !foto.equals("NULL")){
             images_files.add(path+foto);
             images_files_names.add(foto);
         }
         foto = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_numero_serie);
-        if(foto!=null && !foto.isEmpty() && !foto.equals("null")){
+        if(foto!=null && !foto.isEmpty() && !foto.equals("null")&& !foto.equals("NULL")){
             images_files.add(path+foto);
             images_files_names.add(foto);
         }
         foto = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_despues_instalacion);
-        if(foto!=null && !foto.isEmpty() && !foto.equals("null")){
+        if(foto!=null && !foto.isEmpty() && !foto.equals("null")&& !foto.equals("NULL")){
             images_files.add(path+foto);
             images_files_names.add(foto);
         }
         foto = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_incidencia_1);
-        if(foto!=null && !foto.isEmpty() && !foto.equals("null")){
+        if(foto!=null && !foto.isEmpty() && !foto.equals("null")&& !foto.equals("NULL")){
             images_files.add(path+foto);
             images_files_names.add(foto);
         }
         foto = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_incidencia_2);
-        if(foto!=null && !foto.isEmpty() && !foto.equals("null")){
+        if(foto!=null && !foto.isEmpty() && !foto.equals("null")&& !foto.equals("NULL")){
             images_files.add(path+foto);
             images_files_names.add(foto);
         }
         foto = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_incidencia_3);
-        if(foto!=null && !foto.isEmpty() && !foto.equals("null")){
+        if(foto!=null && !foto.isEmpty() && !foto.equals("null")&& !foto.equals("NULL")){
             images_files.add(path+foto);
             images_files_names.add(foto);
         }

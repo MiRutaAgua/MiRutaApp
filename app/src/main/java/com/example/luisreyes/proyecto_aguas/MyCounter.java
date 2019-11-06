@@ -81,16 +81,16 @@ public class MyCounter implements Comparable<MyCounter> {
     }
     public void setCalibre(String calibre) {
         if(!calibre.contains("NULL") && !calibre.contains("null")) {
-            this.calibre = calibre.replace("\n", "").trim()+ " mm\n";
+            this.calibre = calibre.trim()+ "mm";
             if(tipo_tarea.replace("NULL", "").replace("null", "")
-                    .replace("\n", "").trim().isEmpty()){
-                tipo_tarea = "NCI\n";
+                    .trim().isEmpty()){
+                tipo_tarea = "NCI";
             }
         }else{
-            this.calibre = "-\n";
+            this.calibre = "-";
             if(tipo_tarea.replace("NULL", "").replace("null", "")
-                    .replace("\n", "").trim().isEmpty()){
-                tipo_tarea = "-\n";
+                    .trim().isEmpty()){
+                tipo_tarea = "-";
             }
         }
     }

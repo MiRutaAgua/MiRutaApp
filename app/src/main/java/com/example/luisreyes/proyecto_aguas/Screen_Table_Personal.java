@@ -532,23 +532,20 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
     public void orderTareastoArrayAdapter(){
         Collections.sort(lista_ordenada_de_tareas);
         for(int i=0; i < lista_ordenada_de_tareas.size(); i++){
-                lista_contadores.add("\nDirección:  "+lista_ordenada_de_tareas.get(i).getDireccion()
-                        +"         Cita:  "+lista_ordenada_de_tareas.get(i).getCita()
-                        +"       Tarea:  "+lista_ordenada_de_tareas.get(i).getTipo_tarea()
-                        +"    Calibre:  "+lista_ordenada_de_tareas.get(i).getCalibre()
-                        +"Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado());
-                lista_filtro_direcciones.add("\nDirección:  "+lista_ordenada_de_tareas.get(i).getDireccion()
-                        +" Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado());
-                lista_filtro_Tareas.add("\n      Tarea:  "+lista_ordenada_de_tareas.get(i).getTipo_tarea()+"   Calibre:  "+lista_ordenada_de_tareas.get(i).getCalibre()
-                        +"Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado());
-                lista_filtro_abonado.add("\n  Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado()+"Telefono 1:  "+lista_ordenada_de_tareas.get(i).getTelefono1()
-                        +"Telefono 2:  "+lista_ordenada_de_tareas.get(i).getTelefono2());
-                lista_filtro_numero_serie.add("\n       Número de Serie:  "+lista_ordenada_de_tareas.get(i).getNumero_serie_contador()
-                       // +"\n              Año o Prefijo:  "+lista_ordenada_de_tareas.get(i).getAnno_contador()
-                        +"\nNúmero de Abonado:  "+lista_ordenada_de_tareas.get(i).getNumero_abonado());
-                lista_filtro_Citas.add("\n        Cita:  "+lista_ordenada_de_tareas.get(i).getCita()
-                        +"Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado());
-            }
+            lista_contadores.add(Screen_Filter_Tareas.orderCounterForListView(lista_ordenada_de_tareas.get(i)));
+
+            lista_filtro_direcciones.add("\nDirección:  "+lista_ordenada_de_tareas.get(i).getDireccion()+ "\n"
+                    +" Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado()+ "\n");
+            lista_filtro_Tareas.add("\n      Tarea:  "+lista_ordenada_de_tareas.get(i).getTipo_tarea()+"   Calibre:  "+lista_ordenada_de_tareas.get(i).getCalibre()+ "\n"
+                    +"Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado()+ "\n");
+            lista_filtro_abonado.add("\n  Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado()+"Telefono 1:  "+lista_ordenada_de_tareas.get(i).getTelefono1()+ "\n"
+                    +"Telefono 2:  "+lista_ordenada_de_tareas.get(i).getTelefono2()+ "\n");
+            lista_filtro_numero_serie.add("\n       Número de Serie:  "+lista_ordenada_de_tareas.get(i).getNumero_serie_contador()+ "\n"
+                    //+"\n              Año o Prefijo:  "+lista_ordenada_de_tareas.get(i).getAnno_contador()
+                    +"\nNúmero de Abonado:  "+lista_ordenada_de_tareas.get(i).getNumero_abonado()+ "\n");
+            lista_filtro_Citas.add("\n        Cita:  "+lista_ordenada_de_tareas.get(i).getCita()+ "\n"
+                    +"Abonado:  "+lista_ordenada_de_tareas.get(i).getAbonado()+ "\n");
+        }
         arrayAdapter = new ArrayAdapter(this, R.layout.list_text_view, lista_contadores);
         arrayAdapter_all = new ArrayAdapter(this, R.layout.list_text_view, lista_contadores);
         lista_de_contadores_screen_table_personal.setAdapter(arrayAdapter);
@@ -659,7 +656,14 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
     }
     public void addPhotos_toUpload() throws JSONException { //luego rellenar en campo de incidencia algo para saber que tiene incidencias
         String foto = "";
-        String path = getExternalFilesDir(Environment.DIRECTORY_PICTURES)+"/fotos_tareas/";
+
+        String numero_abonado = null;
+        try {
+            numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String path = getExternalFilesDir(Environment.DIRECTORY_PICTURES)+"/fotos_tareas"+ numero_abonado+"/";
 
         foto = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_antes_instalacion);
         if(foto!=null && !foto.isEmpty() && !foto.equals("null")){
