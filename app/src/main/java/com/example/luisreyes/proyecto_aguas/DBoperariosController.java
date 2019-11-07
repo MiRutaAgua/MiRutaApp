@@ -29,19 +29,30 @@ public class DBoperariosController extends SQLiteOpenHelper {
     JSONObject jsonOperarioType = new JSONObject();
     public static final String table_name = "operarios";
 
+    public static final String id = "id";
+    public static final String nombre = "nombre";
+    public static final String apellidos = "apellidos";
+    public static final String edad = "edad";
+    public static final String telefonos = "telefonos";
+    public static final String usuario = "usuario";
+    public static final String clave = "clave";
+    public static final String tareas = "tareas";
+    public static final String date_time_modified = "date_time_modified";
+    public static final String foto = "foto";
+
     public DBoperariosController(Context applicationContext){
         super(applicationContext, database_name, null, MainActivity.DB_VERSION);
         try {
-            jsonOperarioType.put("id", 1);
-            jsonOperarioType.put("nombre", "unknow");
-            jsonOperarioType.put("apellidos", "unknow");
-            jsonOperarioType.put("edad", 0);
-            jsonOperarioType.put("telefonos", "000000");
-            jsonOperarioType.put("usuario", "user");
-            jsonOperarioType.put("clave", "password");
-            jsonOperarioType.put("tareas", "0");
-            jsonOperarioType.put("date_time_modified", "0");
-            jsonOperarioType.put("foto", "null");
+            jsonOperarioType.put(id, 1);
+            jsonOperarioType.put(nombre, "unknow");
+            jsonOperarioType.put(apellidos, "unknow");
+            jsonOperarioType.put(edad, 0);
+            jsonOperarioType.put(telefonos, "000000");
+            jsonOperarioType.put(usuario, "user");
+            jsonOperarioType.put(clave, "password");
+            jsonOperarioType.put(tareas, "0");
+            jsonOperarioType.put(date_time_modified, "0");
+            jsonOperarioType.put(foto, "null");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -49,21 +60,19 @@ public class DBoperariosController extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-
-
         //database_path = sqLiteDatabase.getPath();
         //sqLiteDatabase = SQLiteDatabase.openOrCreateDatabase("database_name", null);
         if(sqLiteDatabase != null) {
-            sqLiteDatabase.execSQL("Create table if not exists " + table_name + " (id integer primary key autoincrement," +
-                    " nombre TEXT, " +
-                    "apellidos TEXT, " +
-                    "edad INTEGER, " +
-                    "telefonos TEXT, " +
-                    "usuario TEXT, " +
-                    "clave TEXT, " +
-                    "tareas TEXT, " +
-                    "date_time_modified TEXT, " +
-                    "foto TEXT" +
+            sqLiteDatabase.execSQL("Create table if not exists " + table_name + " (id integer primary key autoincrement, " +
+                    nombre+"  TEXT, " +
+                    apellidos+"  TEXT, " +
+                    edad+"  INTEGER, " +
+                    telefonos+"  TEXT, " +
+                    usuario+"  TEXT, " +
+                    clave+"  TEXT, " +
+                    tareas+"  TEXT, " +
+                    date_time_modified+"  TEXT, " +
+                    foto+"  TEXT" +
                     ")");
         }
     }
@@ -126,7 +135,7 @@ public class DBoperariosController extends SQLiteOpenHelper {
 
     public String updateOperario(JSONObject json) throws JSONException {
 
-        String id = json.getString("id");
+        String id = json.getString(this.id);
 
         SQLiteDatabase database = this.getWritableDatabase();
 
@@ -150,7 +159,7 @@ public class DBoperariosController extends SQLiteOpenHelper {
     }
 
     public String deleteOperario(JSONObject json) throws JSONException {
-        String id = json.getString("id");
+        String id = json.getString(this.id);
         SQLiteDatabase database = this.getWritableDatabase();
         if(database == null){
             return "null";

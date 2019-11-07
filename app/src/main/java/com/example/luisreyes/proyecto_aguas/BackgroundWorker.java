@@ -36,6 +36,8 @@ import java.util.List;
 
 public class BackgroundWorker extends AsyncTask<String, Void, String> {
 
+    public static boolean server_online_or_wamp = true;
+
     Context context;
 
     AlertDialog alertDialog;
@@ -74,7 +76,10 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
         String download_image_url;
         String download_user_image_url;
 
-        if(Screen_Login_Activity.server_online_or_wamp){
+//        String server =  "https://server26194.000webhostapp.com/php/";
+        String server =  "https://server26194.000webhostapp.com/"; //Cambiar a este al enviarselo a Michel
+
+        if(server_online_or_wamp){
 
 //            ///Importante el https en vez de http
 //            login_url = "https://server26194.webcindario.com/login_operarios.php";  //https://hosting.miarroba.com/webftp.php?id=1875467#!path=%2Fweb
@@ -93,21 +98,21 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
 //            download_user_image_url = "https://server26194.webcindario.com/download_user_image.php";
 //            upload_user_image_url = "https://server26194.webcindario.com/upload_user_image.php";
 
-            login_url = "https://server26194.000webhostapp.com/login_operarios.php";  //https://files.000webhost.com/
-            register_url = "https://server26194.000webhostapp.com/register_operario.php";
-            change_foto_url = "https://server26194.000webhostapp.com/change_foto.php";
-            get_operarios_url = "https://server26194.000webhostapp.com/get_operarios.php";
-            get_user_data_url = "https://server26194.000webhostapp.com/get_one_operario.php";
-            get_one_tarea_url = "https://server26194.000webhostapp.com/get_one_tarea.php";
-            get_tareas_url = "https://server26194.000webhostapp.com/get_tareas.php";
-            create_tarea_url = "https://server26194.000webhostapp.com/create_task.php";
-            update_tarea_url = "https://server26194.000webhostapp.com/update_tarea.php";
-            update_operario_url = "https://server26194.000webhostapp.com/update_operario.php";
-            test_conection_url = "https://server26194.000webhostapp.com/test_database.php";
-            upload_image_url = "https://server26194.000webhostapp.com/upload_image.php";
-            download_image_url = "https://server26194.000webhostapp.com/download_image.php";
-            download_user_image_url = "https://server26194.000webhostapp.com/download_user_image.php";
-            upload_user_image_url = "https://server26194.000webhostapp.com/upload_user_image.php";
+            login_url = server+"login_operarios.php";  //https://files.000webhost.com/
+            register_url = server+"register_operario.php";
+            change_foto_url = server+"change_foto.php";
+            get_operarios_url = server+"get_operarios.php";
+            get_user_data_url = server+"get_one_operario.php";
+            get_one_tarea_url = server+"get_one_tarea.php";
+            get_tareas_url = server+"get_tareas.php";
+            create_tarea_url = server+"create_task.php";
+            update_tarea_url = server+"update_tarea.php";
+            update_operario_url = server+"update_operario.php";
+            test_conection_url = server+"test_database.php";
+            upload_image_url = server+"upload_image.php";
+            download_image_url = server+"download_image.php";
+            download_user_image_url = server+"download_user_image.php";
+            upload_user_image_url = server+"upload_user_image.php";
         }
         else {
 
@@ -127,20 +132,20 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
 //            download_user_image_url = "http://192.168.21.125/download_user_image.php";
 //            upload_user_image_url = "http://192.168.21.125/upload_user_image.php";
             //Mi PC en casa
-            login_url = "http://192.168.137.50/login_operarios.php";
-            register_url = "http://192.168.137.50/register_operario.php";
-            change_foto_url = "http://192.168.137.50/change_foto.php";
-            get_operarios_url = "http://192.168.137.50/get_operarios.php";
-            get_user_data_url = "http://192.168.137.50/get_one_operario.php";
-            get_one_tarea_url = "http://192.168.137.50/get_one_tarea.php";
-            get_tareas_url = "http://192.168.137.50/get_tareas.php";
-            create_tarea_url = "http://192.168.137.50/create_task.php";
-            update_tarea_url = "http://192.168.137.50/update_tarea.php";
-            update_operario_url = "http://192.168.137.50/update_operario.php";
-            upload_image_url = "http://192.168.137.50/upload_image.php";
-            download_image_url = "http://192.168.137.50/download_image.php";
-            download_user_image_url = "http://192.168.137.50/download_user_image.php";
-            upload_user_image_url = "http://192.168.137.50/upload_user_image.php";
+            login_url = "http://192.168.56.1/login_operarios.php";
+            register_url = "http://192.168.56.1/register_operario.php";
+            change_foto_url = "http://192.168.56.1/change_foto.php";
+            get_operarios_url = "http://192.168.56.1/get_operarios.php";
+            get_user_data_url = "http://192.168.56.1/get_one_operario.php";
+            get_one_tarea_url = "http://192.168.56.1/get_one_tarea.php";
+            get_tareas_url = "http://192.168.56.1/get_tareas.php";
+            create_tarea_url = "http://192.168.56.1/create_task.php";
+            update_tarea_url = "http://192.168.56.1/update_tarea.php";
+            update_operario_url = "http://192.168.56.1/update_operario.php";
+            upload_image_url = "http://192.168.56.1/upload_image.php";
+            download_image_url = "http://192.168.56.1/download_image.php";
+            download_user_image_url = "http://192.168.56.1/download_user_image.php";
+            upload_user_image_url = "http://192.168.56.1/upload_user_image.php";
         }
 
 
@@ -169,6 +174,7 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
                 ArrayList<String> keys = new ArrayList<String>();
                 keys.add("foto");
                 keys.add("nombre");
+                keys.add("numero_abonado");
                 ArrayList<String> values = new ArrayList<String>();
                 for (int i = 0; i < keys.size(); i++) {
                     values.add(params[i+1]);
@@ -212,6 +218,7 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
                 return_image = false;
                 ArrayList<String> keys = new ArrayList<String>();
                 keys.add("nombre");
+                keys.add("numero_interno");
                 ArrayList<String> values = new ArrayList<String>();
                 for (int i = 0; i < keys.size(); i++) {
                     values.add(params[i+1]);
@@ -371,7 +378,7 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
             try{
                 return_image = false;
                 ArrayList<String> keys = new ArrayList<String>();
-                keys.add("numero_serie_contador");
+                keys.add(DBtareasController.numero_interno);
                 ArrayList<String> values = new ArrayList<String>();
                 for (int i = 0; i < keys.size(); i++) {
                     values.add(params[i+1]);
@@ -409,7 +416,7 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
                 Screen_Table_Team.lista_tareas = post_Output_Info(keys, values, get_tareas_url, false, true);
 
                 String return_string = "";
-                for(int n =0 ; n < Screen_Table_Team.lista_tareas.size() ; n++) {
+                for(int n =1 ; n < Screen_Table_Team.lista_tareas.size() ; n++) { //el elemento n 0 esta vacio
                     try {
                         JSONArray jsonArray = new JSONArray(Screen_Table_Team.lista_tareas.get(n));
                         for (int i = 0; i < jsonArray.length(); i++) {
@@ -444,7 +451,7 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
                 }
                 ArrayList<String> result = post_Output_Info(keys, values, get_user_data_url, true, true);
                 String return_string = "";
-                for(int n =0 ; n < result.size() ; n++) {
+                for(int n =1 ; n < result.size() ; n++) {
                     try {
                         JSONArray jsonArray = new JSONArray(result.get(n));
                         for (int i = 0; i < jsonArray.length(); i++) {
@@ -478,7 +485,7 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
                 Screen_Login_Activity.lista_operarios = post_Output_Info(keys, values, get_operarios_url, false, true);
 
                 String return_string = "";
-                for(int n =0 ; n < Screen_Login_Activity.lista_operarios.size() ; n++) {
+                for(int n =1 ; n < Screen_Login_Activity.lista_operarios.size() ; n++) {
                     try {
                         JSONArray jsonArray = new JSONArray(Screen_Login_Activity.lista_operarios.get(n));
                         for (int i = 0; i < jsonArray.length(); i++) {

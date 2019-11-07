@@ -131,10 +131,15 @@
         android:gravity="center"
         >
 
-        <ImageView
+        <Button
             android:layout_width="300dp"
-            android:layout_height="80dp"
+            android:layout_height="40dp"
             android:id="@+id/button_screen_register_operario_register"
-            android:src="@drawable/screen_register_operario_registrar"/>
+            android:text="REGISTRAR"
+            android:textSize="16dp"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:background="@drawable/fondo_boton_azul"
+            />
     </LinearLayout>
 </LinearLayout>

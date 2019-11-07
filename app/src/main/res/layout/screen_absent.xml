@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
@@ -66,10 +67,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Dejado nota de aviso"
                 android:layout_gravity="center"
-                android:textSize="16dp"
-                />
+                android:text="Dejado nota de aviso"
+                android:textSize="16dp" />
 
             <CheckBox
                 android:id="@+id/checkbox_nota_de_aviso_screen_absent"
@@ -138,15 +138,16 @@
                 android:orientation="horizontal"
                 android:gravity="center"
                 >
+
                 <TextView
-                    android:layout_weight="1"
+                    android:id="@+id/textView_screen_absent_telefono1"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="53941930"
                     android:layout_gravity="center"
-                    android:textSize="16dp"
-                    android:id="@+id/textView_screen_absent_telefono1"
-                    />
+                    android:layout_weight="1"
+                    android:text="Añadir"
+                    android:textColor="#707070"
+                    android:textSize="16dp" />
                 <CheckBox
                     android:id="@+id/checkbox_no_contesta_1_screen_absent"
                     android:layout_width="wrap_content"
@@ -170,13 +171,13 @@
                 android:gravity="center"
                 >
                 <TextView
-                    android:layout_weight="1"
+                    android:id="@+id/textView_screen_absent_telefono2"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="52416790"
                     android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:text="Añadir"
                     android:textSize="16dp"
-                    android:id="@+id/textView_screen_absent_telefono2"
                     />
                 <CheckBox
                     android:id="@+id/checkbox_no_contesta_2_screen_absent"
@@ -232,6 +233,7 @@
                     android:layout_gravity="center"
                     android:textSize="16dp"
                     android:textStyle="bold"
+                    android:padding="10dp"
                     />
                 <TextView
                     android:layout_marginLeft="30dp"
@@ -240,7 +242,15 @@
                     android:layout_gravity="center"
                     android:text="Toca aquí para cambiar"
                     android:id="@+id/textView_screen_absent_fecha_cita"
+                    android:padding="10dp"
                     />
+                <ImageView
+                    android:id="@+id/imageView_edit_fecha_screen_absent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_edit_blue_24dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -250,22 +260,31 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 >
+
                 <TextView
-                    android:layout_marginTop="3dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Hora"
                     android:layout_gravity="center"
+                    android:padding="10dp"
+                    android:text="Hora"
                     android:textSize="16dp"
-                    android:textStyle="bold"
-                    />
+                    android:textStyle="bold" />
                 <TextView
+                    android:padding="10dp"
                     android:layout_marginLeft="20dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
                     android:text="Toca aquí para cambiar"
                     android:id="@+id/textView_screen_absent_hora_cita"/>
+                <ImageView
+                    android:id="@+id/imageView_edit_hora_screen_absent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="10dp"
+                    android:paddingTop="1dp"
+                    android:src="@drawable/ic_edit_blue_24dp" />
             </LinearLayout>
 
 
@@ -305,6 +324,14 @@
                     android:textSize="16dp"
                     android:id="@+id/textView_screen_absent_Observaciones"
                     />
+                <ImageView
+                    android:id="@+id/imageView_edit_observaciones_screen_absent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="10dp"
+                    android:paddingTop="1dp"
+                    android:src="@drawable/ic_edit_blue_24dp" />
             </LinearLayout>
 
         </LinearLayout>
@@ -315,19 +342,30 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:orientation="vertical"
+            android:paddingBottom="40dp"
             >
 
-            <ImageView
+            <Button
                 android:id="@+id/button_geolocalizar_screen_absent"
                 android:layout_width="273dp"
-                android:layout_height="50dp"
-                android:src="@drawable/screen_absent_geolocalizar" />
-
-            <ImageView
+                android:layout_height="40dp"
+                android:fontFamily="@font/segoeui"
+                android:text="GEOLOCALIZAR"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:background="@drawable/fondo_boton_azul"/>
+            <Button
+                android:layout_marginTop="10dp"
                 android:id="@+id/button_guardar_datos_screen_absent"
                 android:layout_width="273dp"
-                android:layout_height="50dp"
-                android:src="@drawable/screen_absent_guardar_datos" />
+                android:layout_height="40dp"
+                android:fontFamily="@font/segoeui"
+                android:text="GUARDAR DATOS"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:background="@drawable/fondo_boton_azul" />
         </LinearLayout>
 
     </LinearLayout>

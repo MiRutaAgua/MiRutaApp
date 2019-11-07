@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".MapActivity"
+    tools:showIn="@layout/activity_map">
+
+
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <Button android:id="@+id/btnOpciones"
+        android:layout_width="51dp"
+        android:layout_height="54dp"
+        android:layout_alignParentRight="true"
+        android:layout_above="@+id/radio"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/ic_directions_car_black_24dp"
+
+        />
+
+    <Button android:id="@+id/btnlocal"
+        android:layout_width="51dp"
+        android:layout_height="54dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/ic_my_location_blue_50dp"
+        android:layout_below="@+id/radio"
+        android:layout_marginTop="40dp"
+
+        />
+
+    <RadioGroup
+        android:id="@+id/radio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp">
+        <RadioButton
+            app:layout_constraintBottom_toBottomOf="@+id/radio"
+            android:id="@+id/radio1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:button="@drawable/my_checkbox1"
+            android:checked="true"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+
+            />
+
+        <RadioButton
+            android:id="@+id/radio2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:button="@drawable/my_checbox2"
+            android:checked="false"
+            app:layout_constraintTop_toBottomOf="@+id/radio1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp"
+
+            />
+
+
+    </RadioGroup>-->
+
+
+
+    <com.mancj.materialsearchbar.MaterialSearchBar
+        style="@style/MaterialSearchBarLight"
+        app:mt_speechMode="false"
+        app:mt_hint="Search a place"
+        app:mt_maxSuggestionsCount="10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/searchBar"
+        android:layout_margin="16dp"
+        app:mt_navIconEnabled="true"
+        android:elevation="5dp"
+        android:outlineProvider="bounds"
+        app:mt_placeholder="Buscar localizacion"/>
+
+
+
+</RelativeLayout>

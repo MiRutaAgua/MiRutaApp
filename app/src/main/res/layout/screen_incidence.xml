@@ -4,92 +4,122 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:layout_gravity="top"
-    android:paddingBottom="30dp"
-    >
-    <include layout = "@layout/toolbar"
-        android:id="@+id/my_toolbar"
-        />
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:padding="10dp"
-        android:layout_marginTop="20dp"
-        >
-        <ImageView
-            android:id="@+id/label_incidencias_screen_incidence"
-            android:layout_width="140dp"
-            android:layout_height="30dp"
-            android:layout_gravity="center"
-            android:src="@drawable/screen_incidence_incidencias" />
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:layout_marginTop="20dp"
-        >
-
-        <Spinner
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:id="@+id/spinner_instalacion_incorrecta"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"
-            >
-        </Spinner>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:gravity="center"
-        android:layout_gravity="center"
+        android:layout_gravity="top"
+        android:paddingBottom="30dp"
         >
+        <include layout = "@layout/toolbar"
+            android:id="@+id/my_toolbar"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:padding="10dp"
+            android:layout_marginTop="20dp"
+            >
+            <ImageView
+                android:id="@+id/label_incidencias_screen_incidence"
+                android:layout_width="140dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:src="@drawable/screen_incidence_incidencias" />
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/textView_telefonos_screen_incidence"
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="20dp"
+            >
+
+            <Spinner
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:id="@+id/spinner_instalacion_incorrecta"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                >
+            </Spinner>
+
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
             android:layout_gravity="center"
-            android:text="Teléfonos:"
-            android:textSize="18dp"
-            android:textStyle="bold"
-            android:layout_marginTop="30dp" />
+            >
 
-        <TextView
-            android:id="@+id/textView_telefono1_screen_incidence"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="636489090"
-            android:textSize="16dp"
-            android:paddingTop="25dp"/>
+            <TextView
+                android:id="@+id/textView_telefonos_screen_incidence"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Teléfonos:"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:layout_marginTop="30dp" />
 
-        <TextView
-            android:id="@+id/textView_telefono2_screen_incidence"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="636489090"
-            android:textSize="16dp"
-            android:paddingTop="10dp"
-            android:paddingBottom="25dp"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_gravity="center"
+                >
+                <TextView
+                    android:id="@+id/textView_telefono1_screen_incidence"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="636489090"
+                    android:textSize="16dp"
+                    android:padding="10dp"/>
+                <ImageView
+                    android:id="@+id/imageView_edit_phone1_screen_incidence"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="10dp"
+                    android:paddingTop="1dp"
+                    android:src="@drawable/ic_edit_blue_24dp" />
+            </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_gravity="center"
+                >
+                <TextView
+                    android:id="@+id/textView_telefono2_screen_incidence"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="636489090"
+                    android:textSize="16dp"
+                    android:padding="10dp"
+                    />
+                <ImageView
+                    android:id="@+id/imageView_edit_phone2_screen_incidence"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="10dp"
+                    android:paddingTop="1dp"
+                    android:src="@drawable/ic_edit_blue_24dp" />
+            </LinearLayout>
 
-
-    </LinearLayout>
+        </LinearLayout>
 
 
         <LinearLayout
@@ -98,15 +128,19 @@
             android:orientation="vertical"
             android:gravity="center"
             android:layout_gravity="center"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             >
-
-            <ImageView
+            <Button
                 android:id="@+id/imageView_foto1_screen_incidence"
                 android:layout_width="130dp"
-                android:layout_height="54dp"
-                android:layout_gravity="center"
-                android:src="@drawable/screen_incidence_foto1" />
+                android:layout_height="40dp"
+                android:fontFamily="@font/segoeui"
+                android:text="FOTO 1"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:background="@drawable/fondo_boton_azul"
+                />
             <ImageView
                 android:id="@+id/imageView_foto1_image_screen_incidence"
                 android:layout_width="match_parent"
@@ -115,12 +149,18 @@
                 android:src="@drawable/screen_unity_counter_imagen"
                 android:visibility="gone"/>
 
-            <ImageView
+            <Button
                 android:id="@+id/imageView_foto2_screen_incidence"
+                android:layout_marginTop="10dp"
                 android:layout_width="130dp"
-                android:layout_height="54dp"
-                android:layout_gravity="center"
-                android:src="@drawable/screen_incidence_foto2" />
+                android:layout_height="40dp"
+                android:fontFamily="@font/segoeui"
+                android:text="FOTO 2"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:background="@drawable/fondo_boton_azul"
+                />
             <ImageView
                 android:id="@+id/imageView_foto2_image_screen_incidence"
                 android:layout_width="match_parent"
@@ -130,12 +170,17 @@
                 android:visibility="gone"
                 />
 
-            <ImageView
+            <Button
                 android:id="@+id/imageView_foto3_screen_incidence"
+                android:layout_marginTop="10dp"
                 android:layout_width="130dp"
-                android:layout_height="54dp"
-                android:layout_gravity="center"
-                android:src="@drawable/screen_incidence_foto3" />
+                android:layout_height="40dp"
+                android:fontFamily="@font/segoeui"
+                android:text="FOTO 3"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:background="@drawable/fondo_boton_azul"  />
             <ImageView
                 android:id="@+id/imageView_foto3_image_screen_incidence"
                 android:layout_width="match_parent"
@@ -149,51 +194,62 @@
 
 
 
-    <LinearLayout
-        android:layout_marginTop="20dp"
-
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
-        >
-
         <LinearLayout
+            android:layout_marginTop="20dp"
+            android:paddingBottom="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:gravity="center"
             >
 
             <LinearLayout
-                android:layout_marginTop="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:gravity="center"
                 >
-                <ImageView
-                    android:id="@+id/button_geolocalizar_screen_incidence"
-                    android:layout_width="266dp"
-                    android:layout_height="50dp"
-                    android:src="@drawable/screen_incidence_geolocalizar" />
-            </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center"
-                >
-                <ImageView
-                    android:id="@+id/button_firma_del_cliente_screen_incidence"
-                    android:layout_width="266dp"
-                    android:layout_height="50dp"
-                    android:src="@drawable/screen_incidence_firma_del_cliente" />
+                <LinearLayout
+                    android:layout_marginTop="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    >
+                    <Button
+                        android:id="@+id/button_geolocalizar_screen_incidence"
+                        android:layout_width="266dp"
+                        android:layout_height="40dp"
+                        android:fontFamily="@font/segoeui"
+                        android:text="GEOLOCALIZAR"
+                        android:textSize="16dp"
+                        android:textStyle="bold"
+                        android:textColor="@android:color/white"
+                        android:background="@drawable/fondo_boton_azul" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    >
+                    <Button
+                        android:id="@+id/button_firma_del_cliente_screen_incidence"
+                        android:layout_width="266dp"
+                        android:layout_height="40dp"
+                        android:fontFamily="@font/segoeui"
+                        android:text="FIRMA DEL CLIENTE"
+                        android:textSize="16dp"
+                        android:textStyle="bold"
+                        android:textColor="@android:color/white"
+                        android:background="@drawable/fondo_boton_azul"  />
+                </LinearLayout>
+
             </LinearLayout>
 
         </LinearLayout>
-
-</LinearLayout>
-</LinearLayout>
+    </LinearLayout>
 </ScrollView>

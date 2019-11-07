@@ -32,14 +32,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:padding="25dp"
             >
-
-            <ImageView
+            <Button
                 android:id="@+id/button_modo_bateria_screen_unity_counter"
                 android:layout_width="268dp"
-                android:layout_height="100dp"
-                android:src="@drawable/screen_unity_counter_battery_mode"
-                android:text="Modo Batería" />
+                android:layout_height="40dp"
+                android:fontFamily="@font/segoeui"
+                android:text="PASAR A MODO BATERÍA"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:textColor="@color/colorBlueAppRuta"
+                android:background="@drawable/fondo_boton_blanco"/>
         </LinearLayout>
 
 
@@ -48,13 +52,19 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center"
+            android:padding="5dp"
             >
-
-            <ImageView
+            <Button
                 android:id="@+id/button_ejecutar_tarea_screen_unity_counter"
                 android:layout_width="266dp"
-                android:layout_height="50dp"
-                android:src="@drawable/screen_unity_counter_exec_task" />
+                android:layout_height="40dp"
+                android:fontFamily="@font/segoeui"
+                android:text="EJECUTAR TAREA"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:background="@drawable/fondo_boton_azul"
+                />
         </LinearLayout>
 
 
@@ -63,13 +73,20 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center"
+            android:padding="5dp"
             >
 
-            <ImageView
+            <Button
                 android:id="@+id/button_abandonado_ausente_screen_unity_counter"
                 android:layout_width="265dp"
-                android:layout_height="50dp"
-                android:src="@drawable/screen_unity_counter_abonado_ausente" />
+                android:layout_height="40dp"
+                android:fontFamily="@font/segoeui"
+                android:text="ABONADO AUSENTE"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:background="@drawable/fondo_boton_azul"
+                />
         </LinearLayout>
 
 
@@ -78,13 +95,39 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center"
+            android:padding="5dp"
             >
-
-            <ImageView
+            <Button
                 android:id="@+id/button_incidencia_screen_unity_counter"
                 android:layout_width="265dp"
-                android:layout_height="50dp"
-                android:src="@drawable/screen_unity_counter_incidencia" />
+                android:layout_height="40dp"
+                android:fontFamily="@font/segoeui"
+                android:text="INCIDENCIA"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:background="@drawable/fondo_boton_azul"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:padding="5dp"
+            >
+            <Button
+                android:id="@+id/button_geolocalization_screen_unity_counter"
+                android:layout_width="266dp"
+                android:layout_height="40dp"
+                android:fontFamily="@font/segoeui"
+                android:text="GEOLOCALIZACIÓN"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:background="@drawable/fondo_boton_azul"
+                />
         </LinearLayout>
 
         <LinearLayout
@@ -92,11 +135,17 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center"
+            android:padding="5dp"
             >
-            <ImageView
+            <Button
                 android:layout_width="266dp"
-                android:layout_height="50dp"
-                android:src="@drawable/screen_counter_trazar_ruta"
+                android:layout_height="40dp"
+                android:fontFamily="@font/segoeui"
+                android:text="TRAZAR RUTA"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:background="@drawable/fondo_boton_azul"
                 android:id="@+id/button_trazar_ruta_screen_unity_counter"
                 />
         </LinearLayout>
@@ -108,18 +157,49 @@
             android:layout_marginTop="40dp"
             android:gravity="center"
             android:layout_marginLeft="25dp"
-            android:layout_marginRight="20dp"
+            android:layout_marginRight="25dp"
             >
+
             <TextView
-                android:layout_weight="1"
-                android:textSize="15sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Direccion:                "
                 android:layout_gravity="left"
                 android:layout_marginLeft="20dp"
+                android:layout_weight="1"
+                android:text="Tarea:                     "
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
-                />
+            <TextView
+                android:id="@+id/textView_tipo_tarea_screen_unity_counter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
+                android:layout_weight="3"
+                android:fontFamily="sans-serif"
+                android:text="Nuevo Contador Instalar 15mm"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="20dp"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginLeft="20dp"
+                android:layout_weight="1"
+                android:text="Dirección:               "
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_marginRight="20dp"
@@ -143,13 +223,14 @@
             >
             <TextView
                 android:layout_weight="1"
-                android:textSize="15sp"
+                android:textSize="16sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Datos específicos:    "
                 android:layout_gravity="left"
                 android:layout_marginRight="25dp"
                 android:layout_marginLeft="25dp"
+                android:textStyle="bold"
                 />
 
             <TextView
@@ -173,12 +254,13 @@
             >
 
             <TextView
-                android:textSize="15sp"
+                android:textSize="16sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Datos Contador:"
                 android:layout_gravity="left"
                 android:layout_marginLeft="25dp"
+                android:textStyle="bold"
                 />
         </LinearLayout>
 
@@ -209,13 +291,15 @@
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
                         android:text="Serie: "
-                        android:textSize="12sp" />
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        />
                     <TextView
                         android:id="@+id/textView_screen_unity_counter_serie"
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
                         android:text=" C11FA 666666"
-                        android:textSize="12sp"
+                        android:textSize="14sp"
                         />
                 </LinearLayout>
 
@@ -227,13 +311,15 @@
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
                         android:text="Lectura: "
-                        android:textSize="12sp" />
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        />
                     <TextView
                         android:id="@+id/textView_screen_unity_counter_lectura"
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
                         android:text=" 1347 m3"
-                        android:textSize="12sp"
+                        android:textSize="14sp"
                         />
                 </LinearLayout>
 
@@ -245,13 +331,16 @@
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
                         android:text="Calibre: "
-                        android:textSize="12sp" />
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        />
                     <TextView
                         android:id="@+id/textView_screen_unity_counter_calibre"
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
                         android:text=" Calibre 20-190"
-                        android:textSize="12sp"
+                        android:textSize="14sp"
+
                         />
                 </LinearLayout>
 
@@ -259,17 +348,19 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
+
                     <TextView
-                        android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
-                        android:text="Ubicacion: "
-                        android:textSize="12sp" />
+                        android:layout_height="wrap_content"
+                        android:text="Ubicación: "
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
                     <TextView
                         android:id="@+id/textView_screen_unity_counter_ubicacion"
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
                         android:text=" Fregadera"
-                        android:textSize="12sp"
+                        android:textSize="14sp"
                         />
                 </LinearLayout>
 
@@ -281,13 +372,15 @@
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
                         android:text="Acceso: "
-                        android:textSize="12sp" />
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        />
                     <TextView
                         android:id="@+id/textView_screen_unity_counter_acceso"
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
                         android:text=" Garaje"
-                        android:textSize="12sp"
+                        android:textSize="14sp"
                         />
                 </LinearLayout>
 

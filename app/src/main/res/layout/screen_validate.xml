@@ -2,7 +2,9 @@
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,69 +18,83 @@
             />
 
         <LinearLayout
-            android:id="@+id/linearLayout_screen_validate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:orientation="horizontal"
+            android:layout_margin="20dp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            >
+            <TextView
+                android:id="@+id/textView_nombre_cliente_y_tarea_screen_validate"
+                android:text="Camino Angel de la Guarda, 13 1dch"
+                android:textStyle="bold"
+                android:textSize="18dp"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout_info_screen_validate_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="20dp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            >
+            <TextView
+                android:id="@+id/textView_info_screen_validate"
+                android:text="Información"
+                android:textStyle="bold"
+                android:textSize="18dp"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout_screen_validate_foto_antes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="40dp"
             android:gravity="center"
             >
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="20dp"
+                android:orientation="vertical"
                 android:gravity="center"
-                android:layout_gravity="center"
                 >
                 <TextView
-                    android:id="@+id/textView_nombre_cliente_y_tarea_screen_validate"
-                    android:text="Camino Angel de la Guarda, 13 1dch"
-                    android:textStyle="bold"
+                    android:text="Foto Antes de la Instalación"
                     android:textSize="18dp"
-                    android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="40dp"
-                android:gravity="center"
-                >
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
+                    android:paddingBottom="10dp"
                     android:gravity="center"
-                    >
-                    <TextView
-                        android:text="Foto Antes"
-                        android:textSize="18dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingBottom="10dp"
-                        android:gravity="center"
-                        />
-                    <ImageView
+                    />
+                <ImageView
 
-                        android:layout_height="500dp"
-                        android:layout_width="match_parent"
-                        android:src="@drawable/screen_validate_imagen"
-                        android:id="@+id/imageView_foto_antes_instalacion_screen_validate"
-                        android:visibility="gone"
-                        />
-
-                </LinearLayout>
+                    android:layout_height="500dp"
+                    android:layout_width="match_parent"
+                    android:src="@drawable/screen_validate_imagen"
+                    android:id="@+id/imageView_foto_antes_instalacion_screen_validate"
+                    android:visibility="gone"
+                    />
 
             </LinearLayout>
 
         </LinearLayout>
 
+
+
         <LinearLayout
-            android:id="@+id/linearLayout_screen_validate_2"
+            android:id="@+id/linearLayout_screen_validate_foto_final"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -88,14 +104,13 @@
             >
 
             <TextView
-                android:text="Foto Final"
+                android:text="Foto Final de la Instalación"
                 android:textSize="18dp"
                 android:paddingBottom="10dp"
                 android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 />
-
             <ImageView
                 android:id="@+id/imageView_foto_final_instalacion_screen_validate"
                 android:layout_width="match_parent"
@@ -105,7 +120,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/linearLayout_screen_validate_3"
+            android:id="@+id/linearLayout_screen_validate_numero_serie"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -118,7 +133,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Foto Número de serie"
+                android:paddingBottom="10dp"
+                android:text="Foto Número de Serie"
                 android:textSize="18dp"
                 />
             <ImageView
@@ -127,17 +143,51 @@
                 android:src="@drawable/screen_validate_imagen"
                 android:id="@+id/imageView_foto_numero_serie_screen_validate"
                 android:visibility="gone"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_gravity="center"
+            >
             <TextView
                 android:id="@+id/textView_numero_serie_viejo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="F27337"
-                android:textSize="18dp" />
+                android:textSize="18dp"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/linearLayout_screen_validate_lectura"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            >
+            <TextView
+                android:id="@+id/textView_Lectura"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Foto Lectura"
+                android:paddingBottom="10dp"
+                android:textSize="18dp"
+                />
+            <ImageView
+                android:layout_height="500dp"
+                android:layout_width="match_parent"
+                android:src="@drawable/screen_validate_imagen"
+                android:id="@+id/imageView_foto_lectura_screen_validate"
+                android:visibility="gone"/>
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/linearLayout_screen_validate_4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -150,7 +200,6 @@
                 android:layout_marginTop="20dp"
                 android:gravity="center"
                 android:orientation="horizontal"
-
                 >
 
                 <TextView
@@ -231,7 +280,17 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="H19UA133065"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:padding="10dp"/>
+                <ImageView
+                    android:paddingTop="1dp"
+                    android:id="@+id/imageView_edit_serial_number_screen_validate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_edit_blue_24dp"
+                    />
 
             </LinearLayout>
 
@@ -246,9 +305,8 @@
                 <TextView
                     android:id="@+id/textView_calibre_label_screen_validate"
                     android:layout_width="wrap_content"
-
                     android:layout_height="wrap_content"
-                    android:paddingBottom="20dp"
+                    android:padding="10dp"
                     android:text="CALIBRE:"
                     android:textSize="15dp" />
 
@@ -257,10 +315,20 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginLeft="20dp"
+                    android:gravity="center"
                     android:text="15mm"
                     android:textSize="15dp"
-                    android:paddingBottom="20dp"/>
+                    android:padding="10dp"
+                    android:inputType="number"/>
+                <ImageView
+                    android:paddingTop="1dp"
+                    android:id="@+id/imageView_edit_calibre_screen_validate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_edit_blue_24dp"
+                    />
             </LinearLayout>
 
             <LinearLayout
@@ -300,15 +368,17 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="horizontal">
             <Button
                 android:id="@+id/imageButton_editar_firma_cliente_screen_validate"
-                android:layout_width="266dp"
-                android:layout_height="35dp"
-                android:background="@drawable/screen_validate_cambiar_firma" />
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:padding="10dp"
+                android:background="@drawable/ic_edit_blue_24dp"
+                />
         </LinearLayout>
 
         <LinearLayout
@@ -323,8 +393,13 @@
             <Button
                 android:id="@+id/button_compartir_screen_validate"
                 android:layout_width="266dp"
-                android:layout_height="38dp"
-                android:background="@drawable/screen_validate_compartir" />
+                android:layout_height="40dp"
+                android:fontFamily="@font/segoeui"
+                android:text="COMPARTIR"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:background="@drawable/fondo_boton_azul" />
         </LinearLayout>
            <LinearLayout
                 android:layout_width="match_parent"
@@ -336,8 +411,13 @@
             <Button
                 android:id="@+id/button_cerrar_tarea_screen_validate"
                 android:layout_width="266dp"
-                android:layout_height="38dp"
-                android:background="@drawable/screen_validate_cerrar_tarea" />
+                android:layout_height="40dp"
+                android:fontFamily="@font/segoeui"
+                android:text="CERRAR TAREA"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:background="@drawable/fondo_boton_azul" />
         </LinearLayout>
 
     </LinearLayout>

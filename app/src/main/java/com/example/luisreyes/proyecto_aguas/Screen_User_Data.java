@@ -26,6 +26,8 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -147,17 +149,44 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
         button_continuar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent_open_next_screen = new Intent(Screen_User_Data.this, team_or_personal_task_selection_screen_Activity.class);
-                startActivity(intent_open_next_screen);
-                finish();
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_User_Data.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        onContinuer_button();
+                    }
+                });
+                button_continuar.startAnimation(myAnim);
             }
         });
     }
 
+    public void onContinuer_button(){
+        Intent intent_open_next_screen = new Intent(Screen_User_Data.this, team_or_personal_task_selection_screen_Activity.class);
+        startActivity(intent_open_next_screen);
+        finish();
+    }
     public String getSimilarFile(String file_name){
         File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_operarios");
         if (!storageDir.exists()) {
             storageDir.mkdirs();
+            File storageDir2 = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/fotos_tareas");
+            if(!storageDir2.exists()){
+                storageDir2.mkdir();
+            }
         }
         File[] files = storageDir.listFiles();
         for(int i=0; i< files.length;i++) {
@@ -175,12 +204,12 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
             if (resultCode == RESULT_OK) {
                 try {
                     mCurrentPhotoPath = saveBitmapImage(getPhotoUserLocal(mCurrentPhotoPath), Screen_Login_Activity.operario_JSON.getString("usuario")+"_operario");
-                    File file = new File(mCurrentPhotoPath);
                     bitmap_user_photo = null;
                     bitmap_user_photo = getPhotoUserLocal(mCurrentPhotoPath);
-                    circlImageView_photo.setBackgroundColor(Color.TRANSPARENT);
-                    circlImageView_photo.setImageBitmap(bitmap_user_photo);
                     if (bitmap_user_photo != null) {
+                        circlImageView_photo.setBackgroundColor(Color.TRANSPARENT);
+                        circlImageView_photo.setImageBitmap(bitmap_user_photo);
+
                         showRingDialog("Cambiando foto...");
                         //Toast.makeText(this, "Imagen ok", Toast.LENGTH_LONG).show();
                         String type = "upload_user_image";
@@ -232,11 +261,12 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
             }
         }
         else if(type == "download_user_image") {
-            hideRingDialog();
             if (result == null) {
+                hideRingDialog();
                 Toast.makeText(this, "No se puede acceder al servidor, no se obtuvo foto", Toast.LENGTH_LONG).show();
             }
             else if(result.contains("not success")){
+                hideRingDialog();
                 Toast.makeText(Screen_User_Data.this,"Error de script, no se pudo obtener foto "+result, Toast.LENGTH_LONG).show();
             }
             else {
@@ -247,6 +277,7 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
                     circlImageView_photo.setImageBitmap(bitmap);
                     saveBitmapImage(Screen_Register_Operario.getImageFromString(result), usuario+"_operario");
                 }
+                hideRingDialog();
             }
         }
     }
@@ -284,9 +315,14 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
     }
 
     private String saveBitmapImage(Bitmap bitmap, String file_name){
+        bitmap = Bitmap.createScaledBitmap(bitmap, 960, 1280, true);
         File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_operarios");
         if (!myDir.exists()) {
             myDir.mkdirs();
+            File storageDir2 = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/fotos_tareas");
+            if(!storageDir2.exists()){
+                storageDir2.mkdir();
+            }
         }
         else{
             File[] files = myDir.listFiles();
@@ -306,7 +342,7 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
             file.delete();
         try {
             FileOutputStream out = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, MainActivity.COMPRESS_QUALITY, out);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
             out.flush();
             out.close();
         } catch (Exception e) {
@@ -324,6 +360,10 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
         File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_operarios");
         if (!storageDir.exists()) {
             storageDir.mkdirs();
+            File storageDir2 = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/fotos_tareas");
+            if(!storageDir2.exists()){
+                storageDir2.mkdir();
+            }
         }
         image_file = File.createTempFile(
                 image,  /* prefix */

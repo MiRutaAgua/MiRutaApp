@@ -16,7 +16,7 @@ public class My_Fast_View_Task implements Comparable<My_Fast_View_Task> {
     }
 
     public void setCalibre(String calibre) {
-        this.calibre = calibre;
+        this.calibre = calibre.replace("\n","").trim();
         all_string += " "+ this.calibre + " mm";
     }
     public void setCalibreByInt(int calibre) {
@@ -29,15 +29,9 @@ public class My_Fast_View_Task implements Comparable<My_Fast_View_Task> {
     }
 
     public void setTipo_tarea(String tipo_tarea) {
-        this.tipo_tarea = tipo_tarea;
+        this.tipo_tarea = tipo_tarea.replace("\n","").trim();
         all_string += tipo_tarea;
     }
-
-//    public My_Fast_View_Task(String _tipo_tarea, String _calibre) {
-//        calibre = _tipo_tarea;
-//        tipo_tarea = _tipo_tarea;
-//        all_string = tipo_tarea+ "  " +calibre+" mm";
-//    }
 
     private String calibre="";
     private String tipo_tarea="";

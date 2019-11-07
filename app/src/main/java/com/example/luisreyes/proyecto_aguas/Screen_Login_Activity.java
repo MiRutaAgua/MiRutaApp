@@ -15,6 +15,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
+import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -28,10 +29,15 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Base64;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -64,19 +70,27 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
     ArrayList<String> usuarios_to_update = new ArrayList<>();
     public static String currentUser = "";
     public static DBoperariosController dBoperariosController;
+    public static boolean movileModel = true; //for changing camera (PhoneCamera or Screen_Camera)
 
+    boolean login_pendent = false;
     boolean login_press = false;
     public static boolean register_press = false;
 
-    public static boolean server_online_or_wamp = true;
     public static boolean isOnline = true; ///cambiar todas las ocurrencias de esta variable por isOnline
 
     private ProgressDialog progressDialog;
+
+    private Typeface typeface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
+        getWindow().setSoftInputMode( //Para esconder el teclado
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
+        );
+
         setContentView(R.layout.screen_login);
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE)
@@ -86,13 +100,6 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
 
         dBoperariosController = new DBoperariosController(this);
 
-        //Toast.makeText(this, Environment.getExternalStorageDirectory().toString(), Toast.LENGTH_SHORT).show();
-//        if(dBoperariosController.databasefileExists(this)&& dBoperariosController.checkForTableExists()){
-//            Toast.makeText(Screen_Login_Activity.this, "Existe: "+String.valueOf(dBoperariosController.countTableOperarios()), Toast.LENGTH_SHORT).show();
-//        }
-//        else{
-//            Toast.makeText(Screen_Login_Activity.this, "Existe: No existe", Toast.LENGTH_SHORT).show();
-//        }
         tarea_JSON = new JSONObject();
         operario_JSON = new JSONObject();
 
@@ -100,7 +107,6 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
         lineEdit_clave_de_acceso    = (EditText) findViewById(R.id.editText_Clave_Acceso_screen_login);
         button_login                = (Button) findViewById(R.id.button_login_screen_login);
         button_register             = (Button) findViewById(R.id.button_register_screen_login);
-
 
         try {
             operario_JSON.put("id", 1);
@@ -118,24 +124,15 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
             e.printStackTrace();
         }
 
+        typeface = lineEdit_nombre_de_operario.getTypeface();
 
         if(lineEdit_nombre_de_operario.getText().toString().isEmpty()){
             lineEdit_nombre_de_operario.setTypeface(lineEdit_nombre_de_operario.getTypeface(), Typeface.ITALIC);
         }else{
-            lineEdit_nombre_de_operario.setTypeface(null, Typeface.NORMAL);
+            lineEdit_nombre_de_operario.setTypeface(typeface, Typeface.NORMAL);
         }
 
-        if(checkConection()){
-            isOnline = true;
-            showRingDialog("Actualizando informacion de operarios");
-            String type = "get_operarios";
-            BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Login_Activity.this);
-            backgroundWorker.execute(type);
-        }
-        else{
-            isOnline = false;
-            Toast.makeText(this,"No hay conexion a Internet", Toast.LENGTH_LONG).show();
-        }
+        descargarOperarios();
 
         lineEdit_nombre_de_operario.addTextChangedListener(new TextWatcher() {
             @Override
@@ -148,7 +145,7 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
                 if(charSequence.toString().isEmpty()){
                     lineEdit_nombre_de_operario.setTypeface(lineEdit_nombre_de_operario.getTypeface(), Typeface.ITALIC);
                 }else{
-                    lineEdit_nombre_de_operario.setTypeface(null, Typeface.NORMAL);
+                    lineEdit_nombre_de_operario.setTypeface(typeface, Typeface.NORMAL);
                 }
             }
             @Override
@@ -156,85 +153,189 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
 
             }
         });
-
         button_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (checkConection()) {
-                    isOnline = true;
-                    Intent intent_open_register_screen = new Intent(Screen_Login_Activity.this, Screen_Register_Operario.class);
-                    startActivity(intent_open_register_screen);
-                } else {
-                    isOnline = false;
-                    Toast.makeText(Screen_Login_Activity.this, "No puede registrarse sin conexion a Internet", Toast.LENGTH_LONG).show();
-                }
+                playOnOffSound(Screen_Login_Activity.this);
 
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Login_Activity.this, R.anim.bounce);
+
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        if (checkConection()) {
+                            isOnline = true;
+                            Intent intent_open_register_screen = new Intent(Screen_Login_Activity.this, Screen_Register_Operario.class);
+                            startActivity(intent_open_register_screen);
+                        } else {
+                            isOnline = false;
+                            Toast.makeText(Screen_Login_Activity.this, "No puede registrarse sin conexion a Internet", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+                button_register.startAnimation(myAnim);
             }
         });
 
         button_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                playOnOffSound(Screen_Login_Activity.this);
 
-                if(login_press) {
-                }
-                else{
-                    if (!(TextUtils.isEmpty(lineEdit_nombre_de_operario.getText())) && !(TextUtils.isEmpty(lineEdit_clave_de_acceso.getText()))) {
-                        isOnline = checkConection();
-                        login_press = true;
-                        if(isOnline) {
-                            String username = lineEdit_nombre_de_operario.getText().toString();
-                            String password = lineEdit_clave_de_acceso.getText().toString();
-
-                            showRingDialog("Comprobando informacion");
-                            String type = "login";
-                            BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Login_Activity.this);
-                            backgroundWorker.execute(type, username, password);
-                        }else{
-                            //Toast.makeText(Screen_Login_Activity.this, "Comprobando informacion", Toast.LENGTH_SHORT).show();
-                            try {
-                                String json_user = dBoperariosController.get_one_operario_from_Database(lineEdit_nombre_de_operario.getText().toString());
-                                if(!json_user.equals("no existe")) {
-                                    operario_JSON = new JSONObject(json_user);
-                                    if (operario_JSON.getString("clave").equals(lineEdit_clave_de_acceso.getText().toString())) {
-
-                                        Intent intent_open_next_screen = new Intent(Screen_Login_Activity.this, Screen_User_Data.class);
-                                        intent_open_next_screen.putExtra("usuario", json_user);
-                                        startActivity(intent_open_next_screen);
-                                        Toast.makeText(Screen_Login_Activity.this, "Bienvenido", Toast.LENGTH_SHORT).show();
-
-                                    } else {
-                                        Toast.makeText(Screen_Login_Activity.this, "Incorrecta contraseña", Toast.LENGTH_SHORT).show();
-                                    }
-                                }else{
-                                    Toast.makeText(Screen_Login_Activity.this, "No existe usuario "+ lineEdit_nombre_de_operario.getText().toString(), Toast.LENGTH_SHORT).show();
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                                if(!dBoperariosController.databasefileExists(Screen_Login_Activity.this)){
-                                    Toast.makeText(Screen_Login_Activity.this, "No se encuentra base de datos SQLite: "+DBoperariosController.database_name, Toast.LENGTH_SHORT).show();
-                                }
-                                else if(!dBoperariosController.checkForTableExists()){
-                                    Toast.makeText(Screen_Login_Activity.this, "No se encuentra tabla SQLite: "+DBoperariosController.table_name, Toast.LENGTH_SHORT).show();
-                                }
-                                else if(dBoperariosController.countTableOperarios() < 1){
-                                    Toast.makeText(Screen_Login_Activity.this, "Está vacia la tabla SQLite: "+DBoperariosController.table_name+"\nConéctese a Internet para descargarlos", Toast.LENGTH_SHORT).show();
-                                }else {
-                                    Toast.makeText(Screen_Login_Activity.this, "Error accediendo a base de datos SQLite.\nError -> " + e.toString(), Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                            login_press= false;
-                        }
-                    } else {
-                        Toast.makeText(Screen_Login_Activity.this, "Inserte nombre de usuario y contraseña", Toast.LENGTH_SHORT).show();
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Login_Activity.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
                     }
-                }
-
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        onLogin_Button();
+                    }
+                });
+                button_login.startAnimation(myAnim);
             }
         });
     }
+    public static void playOnOffSound(Context context){
+        if(MainActivity.sounds_on) {
+            MediaPlayer mp = MediaPlayer.create(context, R.raw.sound_clicked);
+            mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
 
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    // TODO Auto-generated method stub
+                    mp.release();
+                }
+            });
+            mp.start();
+        }
+    }
 
+    public void onLogin_Button(){
+        if(login_press) {
+        }
+        else{
+            if (!(TextUtils.isEmpty(lineEdit_nombre_de_operario.getText())) && !(TextUtils.isEmpty(lineEdit_clave_de_acceso.getText()))) {
+                isOnline = checkConection();
+                login_press = true;
+                if(isOnline) {
+                    if(dBoperariosController.countTableOperarios() < 1){ //descargar si la tabla esta vacia
+                        login_pendent = true;
+                        descargarOperarios();
+                    }else {
+                        loginOperario();
+                    }
+                }else{
+                    //Toast.makeText(Screen_Login_Activity.this, "Comprobando informacion", Toast.LENGTH_SHORT).show();
+                    try {
+                        String json_user = dBoperariosController.get_one_operario_from_Database(lineEdit_nombre_de_operario.getText().toString());
+                        if(!json_user.equals("no existe")) {
+                            operario_JSON = new JSONObject(json_user);
+                            if (operario_JSON.getString("clave").equals(lineEdit_clave_de_acceso.getText().toString())) {
+
+                                Intent intent_open_next_screen = new Intent(Screen_Login_Activity.this, Screen_User_Data.class);
+                                intent_open_next_screen.putExtra("usuario", json_user);
+                                startActivity(intent_open_next_screen);
+                                Toast.makeText(Screen_Login_Activity.this, "Bienvenido", Toast.LENGTH_SHORT).show();
+
+                            } else {
+                                Toast.makeText(Screen_Login_Activity.this, "Contraseña incorrecta", Toast.LENGTH_SHORT).show();
+                            }
+                        }else{
+                            if(!dBoperariosController.databasefileExists(Screen_Login_Activity.this)){
+                                Toast.makeText(Screen_Login_Activity.this, "No se encuentra base de datos SQLite: "+DBoperariosController.database_name, Toast.LENGTH_SHORT).show();
+                            }
+                            else if(!dBoperariosController.checkForTableExists()){
+                                Toast.makeText(Screen_Login_Activity.this, "No se encuentra tabla SQLite: "+DBoperariosController.table_name, Toast.LENGTH_SHORT).show();
+                            }
+                            else if(dBoperariosController.countTableOperarios() < 1){
+                                Toast.makeText(Screen_Login_Activity.this, "Está vacia la tabla SQLite: "+DBoperariosController.table_name+"\nConéctese a Internet para descargarlos", Toast.LENGTH_SHORT).show();
+                            }else{
+                                Toast.makeText(Screen_Login_Activity.this, "No existe usuario " + lineEdit_nombre_de_operario.getText().toString(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Toast.makeText(Screen_Login_Activity.this, "Error accediendo a base de datos SQLite.\nError -> " + e.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                    login_press= false;
+                }
+            } else {
+                Toast.makeText(Screen_Login_Activity.this, "Inserte nombre de usuario y contraseña", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    public static void bounceButton(Context context, Button button){
+        final Animation myAnim = AnimationUtils.loadAnimation(context, R.anim.bounce);
+        // Use bounce interpolator with amplitude 0.2 and frequency 20
+        MyBounceInterpolator interpolator = new MyBounceInterpolator(0.01, 30);
+        myAnim.setInterpolator(interpolator);
+        myAnim.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation arg0) {
+                // TODO Auto-generated method stub
+//                Toast.makeText(context,"Animacion iniciada", Toast.LENGTH_LONG).show();
+            }
+            @Override
+            public void onAnimationRepeat(Animation arg0) {
+                // TODO Auto-generated method stub
+            }
+            @Override
+            public void onAnimationEnd(Animation arg0) {
+                return;
+            }
+        });
+        button.startAnimation(myAnim);
+    }
+
+    private void descargarOperarios() {
+        if(checkConection()){
+            isOnline = true;
+            showRingDialog("Actualizando informacion de operarios");
+            String type = "get_operarios";
+            BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Login_Activity.this);
+            backgroundWorker.execute(type);
+        }
+        else{
+            isOnline = false;
+            Toast.makeText(this,"No hay conexion a Internet", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void loginOperario(){
+        login_pendent = false;
+        String username = lineEdit_nombre_de_operario.getText().toString();
+        String password = lineEdit_clave_de_acceso.getText().toString();
+
+        showRingDialog("Comprobando informacion");
+        String type = "login";
+        BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Login_Activity.this);
+        backgroundWorker.execute(type, username, password);
+    }
     @Override
     public void onTaskComplete(String type, String result) throws JSONException {
 
@@ -296,14 +397,12 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
             }
             else {
                 Toast.makeText(this,"Informacion de Operarios actualizada correctamente", Toast.LENGTH_LONG).show();
-
                 int sqlite_database_count = dBoperariosController.countTableOperarios();
                 boolean insertar_todos = false;
                 if(sqlite_database_count < 1){
                     insertar_todos = true;
                 }
-                //ArrayList<String> lista_contadores = new ArrayList<>();
-                for(int n =0 ; n < lista_operarios.size() ; n++) {
+                for(int n =1 ; n < lista_operarios.size() ; n++) { //el elemento n 0 esta vacio
                     try {
                         JSONArray jsonArray = new JSONArray(lista_operarios.get(n));
                         for (int i = 0; i < jsonArray.length(); i++) {
@@ -350,10 +449,13 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
 
                     } catch (JSONException e) {
                         e.printStackTrace();
+                        Toast.makeText(Screen_Login_Activity.this, "Excepción -> \n"+e.toString(), Toast.LENGTH_SHORT).show();
+                        Log.e("Excepción -> ", lista_operarios.toString());
                     }
                 }
                 updateOperarioInMySQL();
                 hideRingDialog();
+
                 //Toast.makeText(this,usuarios_to_update.toString()+"\n", Toast.LENGTH_LONG).show();
             }
         }else if(type == "update_operario"){
@@ -368,6 +470,10 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
 
     public void updateOperarioInMySQL() throws JSONException {
         if(usuarios_to_update.isEmpty()){
+            if(login_pendent){
+
+                loginOperario();
+            }
             return;
         }
         else {
@@ -398,7 +504,7 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
 
     private void showRingDialog(String text){
         progressDialog = ProgressDialog.show(Screen_Login_Activity.this, "Espere", text, true);
-        progressDialog.setCancelable(true);
+        progressDialog.setCancelable(false);
     }
     private void hideRingDialog(){
         progressDialog.dismiss();

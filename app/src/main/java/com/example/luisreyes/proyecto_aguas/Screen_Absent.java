@@ -1,6 +1,7 @@
 package com.example.luisreyes.proyecto_aguas;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
@@ -9,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.media.Image;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -26,6 +28,9 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
@@ -58,9 +63,12 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
     int time_picker_repeat=0;
     TextView fecha_cita, hora_cita;
     String fecha_hora_cita="";
-    private ImageView button_guardar_datos_screen_absent, button_geolocalizar_screen_absent;
+    private Button button_guardar_datos_screen_absent, button_geolocalizar_screen_absent;
     private ProgressDialog progressDialog;
 
+    private ImageView imageView_edit_fecha_screen_absent,
+            imageView_edit_hora_screen_absent,
+            imageView_edit_observaciones_screen_absent;
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,8 +84,12 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
         myToolbar.setBackgroundColor(Color.TRANSPARENT);
         setSupportActionBar(myToolbar);
 
-        button_geolocalizar_screen_absent= (ImageView)findViewById(R.id.button_geolocalizar_screen_absent);
-        button_guardar_datos_screen_absent= (ImageView)findViewById(R.id.button_guardar_datos_screen_absent);
+        imageView_edit_fecha_screen_absent = (ImageView) findViewById(R.id.imageView_edit_fecha_screen_absent);
+        imageView_edit_hora_screen_absent = (ImageView) findViewById(R.id.imageView_edit_hora_screen_absent);
+        imageView_edit_observaciones_screen_absent = (ImageView) findViewById(R.id.imageView_edit_observaciones_screen_absent);
+
+        button_geolocalizar_screen_absent= (Button)findViewById(R.id.button_geolocalizar_screen_absent);
+        button_guardar_datos_screen_absent= (Button)findViewById(R.id.button_guardar_datos_screen_absent);
         telefono1 = (TextView)findViewById(R.id.textView_screen_absent_telefono1);
         telefono2 = (TextView)findViewById(R.id.textView_screen_absent_telefono2);
         checkBox_incorrecto_telefono1 = (CheckBox)findViewById(R.id.checkbox_screen_absent_N_incorrecto1);
@@ -91,7 +103,7 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
         observaciones_text = (TextView)findViewById(R.id.textView_screen_absent_Observaciones);
 
         try {
-            String cita = Screen_Login_Activity.tarea_JSON.getString("nuevo_citas");
+            String cita = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.nuevo_citas);
             if(!TextUtils.isEmpty(cita) &&  !cita.equals("null") ) {
                 fecha_cita.setText(cita.split("\n")[0]);
                 hora_cita.setText(cita.split("\n")[1]);
@@ -102,7 +114,7 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
         }
 
         try {
-            String telefonos_datos = Screen_Login_Activity.tarea_JSON.getString("telefonos_cliente");
+            String telefonos_datos = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.telefonos_cliente);
             if(!TextUtils.isEmpty(telefonos_datos) && !telefonos_datos.equals("null")) {
                 if (telefonos_datos.contains("TEL1_INCORRECTO")) {
                     checkBox_incorrecto_telefono1.setChecked(true);
@@ -124,8 +136,8 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
             Toast.makeText(Screen_Absent.this, "No se pudo obtener datos de telefonos", Toast.LENGTH_LONG).show();
         }
         try {
-            String telefono1_string = Screen_Login_Activity.tarea_JSON.getString("telefono1");
-            String telefono2_string = Screen_Login_Activity.tarea_JSON.getString("telefono2");
+            String telefono1_string = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.telefono1);
+            String telefono2_string = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.telefono2);
             if(!TextUtils.isEmpty(telefono1_string)&&  !telefono1_string.equals("null")) {
                 telefono1.setText(telefono1_string);
             }
@@ -137,7 +149,7 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
             Toast.makeText(Screen_Absent.this, "No se pudo obtener numeros telefono", Toast.LENGTH_LONG).show();
         }
         try {
-            String observaciones_string = Screen_Login_Activity.tarea_JSON.getString("observaciones");
+            String observaciones_string = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.observaciones);
             if(!TextUtils.isEmpty(observaciones_string)&&  !observaciones_string.equals("null")) {
                 observaciones_text.setText(observaciones_string);
             }
@@ -145,127 +157,135 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
             e.printStackTrace();
             Toast.makeText(Screen_Absent.this, "No se pudo obtener observaciones", Toast.LENGTH_LONG).show();
         }
+        imageView_edit_observaciones_screen_absent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Absent.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        openDialog();
+                    }
+                });
+                imageView_edit_observaciones_screen_absent.startAnimation(myAnim);
+            }
+        });
+        imageView_edit_fecha_screen_absent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Absent.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        selectDateTimeApointMent();
+                    }
+                });
+                imageView_edit_fecha_screen_absent.startAnimation(myAnim);
+            }
+        });
+
+        imageView_edit_hora_screen_absent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Absent.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        selectDateTimeApointMent();
+                    }
+                });
+                imageView_edit_hora_screen_absent.startAnimation(myAnim);
+            }
+        });
 
         button_geolocalizar_screen_absent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(),MapsActivity.class);
-                startActivity(intent);
+                final Animation myAnim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        Intent intent = new Intent(getApplicationContext(),PermissionsActivity.class);
+                        startActivity(intent);
+                    }
+                });
+                button_geolocalizar_screen_absent.startAnimation(myAnim);
             }
         });
 
         button_guardar_datos_screen_absent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                try {
-                    Screen_Login_Activity.tarea_JSON.put("date_time_modified", DBtareasController.getStringFromFechaHora(new Date()));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                if(checkbox_tocado_en_puerta_screen_absent.isChecked()) {
-                    try {
-                        Screen_Login_Activity.tarea_JSON.put("fechas_tocado_puerta", DBoperariosController.getStringFromFechaHora(new Date())
-                                +"\n"+ Screen_Login_Activity.tarea_JSON.getString("fechas_tocado_puerta"));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Absent.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
                     }
-                }
-                if(checkbox_nota_de_aviso_screen_absent.isChecked()) {
-                    try {
-                        Screen_Login_Activity.tarea_JSON.put("fechas_nota_aviso", DBoperariosController.getStringFromFechaHora(new Date())
-                                +"\n"+ Screen_Login_Activity.tarea_JSON.getString("fechas_nota_aviso"));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
                     }
-                }
-                if(checkBox_incorrecto_telefono1.isChecked()) {
-                    try {
-                        if(!Screen_Login_Activity.tarea_JSON.getString("telefonos_cliente").contains("TEL1_INCORRECTO"))
-                        Screen_Login_Activity.tarea_JSON.put("telefonos_cliente", "TEL1_INCORRECTO" + "\n"+Screen_Login_Activity.tarea_JSON.getString("telefonos_cliente"));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        onCerrar_tarea();
                     }
-                }else{
-                    try {
-                        if(Screen_Login_Activity.tarea_JSON.getString("telefonos_cliente").contains("TEL1_INCORRECTO"))
-                            Screen_Login_Activity.tarea_JSON.put("telefonos_cliente", Screen_Login_Activity.tarea_JSON.getString("telefonos_cliente").replace("TEL1_INCORRECTO",""));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                if(checkBox_incorrecto_telefono2.isChecked()) {
-                    try {
-                        if(!Screen_Login_Activity.tarea_JSON.getString("telefonos_cliente").contains("TEL2_INCORRECTO"))
-                            Screen_Login_Activity.tarea_JSON.put("telefonos_cliente", "TEL2_INCORRECTO" + "\n"+Screen_Login_Activity.tarea_JSON.getString("telefonos_cliente"));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }else{
-                    try {
-                        if(Screen_Login_Activity.tarea_JSON.getString("telefonos_cliente").contains("TEL2_INCORRECTO"))
-                            Screen_Login_Activity.tarea_JSON.put("telefonos_cliente", Screen_Login_Activity.tarea_JSON.getString("telefonos_cliente").replace("TEL2_INCORRECTO",""));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                if(checkbox_no_contesta_1_screen_absent.isChecked()) {
-                    try {
-                        if(!Screen_Login_Activity.tarea_JSON.getString("telefonos_cliente").contains("TEL1_NO_CONTESTA"))
-                            Screen_Login_Activity.tarea_JSON.put("telefonos_cliente", "TEL1_NO_CONTESTA" + "\n"+Screen_Login_Activity.tarea_JSON.getString("telefonos_cliente"));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }else{
-                    try {
-                        if(Screen_Login_Activity.tarea_JSON.getString("telefonos_cliente").contains("TEL1_NO_CONTESTA"))
-                            Screen_Login_Activity.tarea_JSON.put("telefonos_cliente", Screen_Login_Activity.tarea_JSON.getString("telefonos_cliente").replace("TEL1_NO_CONTESTA",""));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                if(checkbox_no_contesta_2_screen_absent.isChecked()) {
-                    try {
-                        if(!Screen_Login_Activity.tarea_JSON.getString("telefonos_cliente").contains("TEL2_NO_CONTESTA"))
-                            Screen_Login_Activity.tarea_JSON.put("telefonos_cliente", "TEL2_NO_CONTESTA" + "\n"+Screen_Login_Activity.tarea_JSON.getString("telefonos_cliente"));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }else{
-                    try {
-                        if(Screen_Login_Activity.tarea_JSON.getString("telefonos_cliente").contains("TEL2_NO_CONTESTA"))
-                            Screen_Login_Activity.tarea_JSON.put("telefonos_cliente", Screen_Login_Activity.tarea_JSON.getString("telefonos_cliente").replace("TEL2_NO_CONTESTA",""));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-//                Toast.makeText(Screen_Absent.this, "Guardando datos", Toast.LENGTH_LONG).show();
-                if(checkConection()) {
-                    showRingDialog("Guardando datos...");
-                    try {
-                        team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea(Screen_Login_Activity.tarea_JSON);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        Toast.makeText(Screen_Absent.this, "No se pudo guardar datos offline", Toast.LENGTH_LONG).show();
-                    }
-                    String type = "update_tarea";
-                    BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Absent.this);
-                    backgroundWorker.execute(type);
-                }else{
-                    try {
-                        team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea(Screen_Login_Activity.tarea_JSON);
-                        Toast.makeText(Screen_Absent.this, "Guardando datos offline, en la proxima conexion se actualizan los datos", Toast.LENGTH_LONG).show();
-                        Intent intent_open_battery_counter = new Intent(Screen_Absent.this, team_or_personal_task_selection_screen_Activity.class);
-                        startActivity(intent_open_battery_counter);
-                        Screen_Absent.this.finish();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        Toast.makeText(Screen_Absent.this, "No se pudo guardar datos offline", Toast.LENGTH_LONG).show();
-                    }
-                }
+                });
+                button_guardar_datos_screen_absent.startAnimation(myAnim);
             }
         });
         telefono1.setOnClickListener(new View.OnClickListener() {
@@ -312,22 +332,24 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
             }
         });
         checkBox_incorrecto_telefono1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @SuppressLint("ResourceAsColor")
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 if(isChecked){
                     telefono1.setTextColor(Color.RED);
                 }else{
-                    telefono1.setTextColor(Color.BLACK);
+                    telefono1.setTextColor(R.color.colorGrayLetters);
                 }
             }
         });
         checkBox_incorrecto_telefono2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @SuppressLint("ResourceAsColor")
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 if(isChecked){
                     telefono2.setTextColor(Color.RED);
                 }else{
-                    telefono2.setTextColor(Color.BLACK);
+                    telefono2.setTextColor(R.color.colorGrayLetters);
                 }
             }
         });
@@ -351,6 +373,155 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
                 openDialog();
             }
         });
+    }
+
+    private void onCerrar_tarea() {
+        try {
+            Screen_Login_Activity.tarea_JSON.put(DBtareasController.date_time_modified, DBtareasController.getStringFromFechaHora(new Date()));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        if(checkbox_tocado_en_puerta_screen_absent.isChecked()) {
+            try {
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.fechas_tocado_puerta, DBoperariosController.getStringFromFechaHora(new Date())
+                        +"\n"+ Screen_Login_Activity.tarea_JSON.getString(DBtareasController.fechas_tocado_puerta));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        if(checkbox_nota_de_aviso_screen_absent.isChecked()) {
+            try {
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.fechas_nota_aviso,
+                        DBoperariosController.getStringFromFechaHora(new Date())
+                                +"\n"+ Screen_Login_Activity.tarea_JSON.getString(DBtareasController.fechas_nota_aviso));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        if(checkBox_incorrecto_telefono1.isChecked()) {
+            try {
+                if(!Screen_Login_Activity.tarea_JSON.getString(DBtareasController.telefonos_cliente).contains("TEL1_INCORRECTO"))
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.telefonos_cliente,
+                            "TEL1_INCORRECTO" + "\n"+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.telefonos_cliente));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }else{
+            try {
+                if(Screen_Login_Activity.tarea_JSON.getString(DBtareasController.telefonos_cliente).contains("TEL1_INCORRECTO"))
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.telefonos_cliente,
+                            Screen_Login_Activity.tarea_JSON.getString(DBtareasController.telefonos_cliente).
+                                    replace("TEL1_INCORRECTO",""));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if(checkBox_incorrecto_telefono2.isChecked()) {
+            try {
+                if(!Screen_Login_Activity.tarea_JSON.getString(DBtareasController.telefonos_cliente).contains("TEL2_INCORRECTO"))
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.telefonos_cliente,
+                            "TEL2_INCORRECTO" + "\n"+Screen_Login_Activity.tarea_JSON.
+                                    getString(DBtareasController.telefonos_cliente));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }else{
+            try {
+                if(Screen_Login_Activity.tarea_JSON.getString(DBtareasController.telefonos_cliente).contains("TEL2_INCORRECTO"))
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.telefonos_cliente,
+                            Screen_Login_Activity.tarea_JSON.getString(DBtareasController.telefonos_cliente).
+                                    replace("TEL2_INCORRECTO",""));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if(checkbox_no_contesta_1_screen_absent.isChecked()) {
+            try {
+                if(!Screen_Login_Activity.tarea_JSON.getString(DBtareasController.telefonos_cliente).contains("TEL1_NO_CONTESTA"))
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.telefonos_cliente,
+                            "TEL1_NO_CONTESTA" + "\n"+Screen_Login_Activity.tarea_JSON.
+                                    getString(DBtareasController.telefonos_cliente));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }else{
+            try {
+                if(Screen_Login_Activity.tarea_JSON.getString(DBtareasController.telefonos_cliente).
+                        contains("TEL1_NO_CONTESTA"))
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.telefonos_cliente,
+                            Screen_Login_Activity.tarea_JSON.getString(
+                                    DBtareasController.telefonos_cliente).replace("TEL1_NO_CONTESTA",""));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if(checkbox_no_contesta_2_screen_absent.isChecked()) {
+            try {
+                if(!Screen_Login_Activity.tarea_JSON.getString(DBtareasController.telefonos_cliente).
+                        contains("TEL2_NO_CONTESTA"))
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.telefonos_cliente, "TEL2_NO_CONTESTA"
+                            + "\n"+Screen_Login_Activity.tarea_JSON.getString(
+                            DBtareasController.telefonos_cliente));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }else{
+            try {
+                if(Screen_Login_Activity.tarea_JSON.getString(
+                        DBtareasController.telefonos_cliente).contains("TEL2_NO_CONTESTA"))
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.telefonos_cliente,
+                            Screen_Login_Activity.tarea_JSON.getString(DBtareasController.telefonos_cliente)
+                                    .replace("TEL2_NO_CONTESTA",""));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        try {
+            String status_tarea = Screen_Login_Activity.tarea_JSON.getString(
+                    DBtareasController.status_tarea);
+            if(status_tarea.contains("TO_UPLOAD")) {
+                try {
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.status_tarea, "DONE,TO_UPLOAD");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }else{
+                try {
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.status_tarea, "DONE");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+//                Toast.makeText(Screen_Absent.this, "Guardando datos", Toast.LENGTH_LONG).show();
+        if(checkConection()) {
+            showRingDialog("Guardando datos...");
+            try {
+                team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea(Screen_Login_Activity.tarea_JSON);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Toast.makeText(Screen_Absent.this, "No se pudo guardar datos offline", Toast.LENGTH_LONG).show();
+            }
+            String type = "update_tarea";
+            BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Absent.this);
+            backgroundWorker.execute(type);
+        }else{
+            try {
+                team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea(Screen_Login_Activity.tarea_JSON);
+                Toast.makeText(Screen_Absent.this, "Guardando datos offline, en la proxima conexion se actualizan los datos", Toast.LENGTH_LONG).show();
+                Intent intent_open_battery_counter = new Intent(Screen_Absent.this, team_or_personal_task_selection_screen_Activity.class);
+                startActivity(intent_open_battery_counter);
+                Screen_Absent.this.finish();
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Toast.makeText(Screen_Absent.this, "No se pudo guardar datos offline", Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     public boolean checkConection(){
@@ -436,8 +607,9 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
             //Toast.makeText(Screen_Absent.this, fecha_hora_cita, Toast.LENGTH_LONG).show();
             //Aqui termina de poner la hora y la fhecha
             try {
-                Screen_Login_Activity.tarea_JSON.put("nuevo_citas", fecha_cita.getText().toString()+"\n"+time_label_string);
-                Screen_Login_Activity.tarea_JSON.put("fecha_hora_cita", fecha_hora_cita);
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.nuevo_citas,
+                        fecha_cita.getText().toString()+"\n"+time_label_string);
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.fecha_hora_cita, fecha_hora_cita);
             } catch (JSONException e) {
                 e.printStackTrace();
                 Toast.makeText(Screen_Absent.this, "No se pudo agregar nueva cita", Toast.LENGTH_LONG).show();
@@ -464,7 +636,7 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
     public void pasarTexto(String observaciones) throws JSONException {
         if(!(TextUtils.isEmpty(observaciones))){
           
-            Screen_Login_Activity.tarea_JSON.put("observaciones", observaciones);
+            Screen_Login_Activity.tarea_JSON.put(DBtareasController.observaciones, observaciones);
             //Toast.makeText(Screen_Absent.this, Screen_Login_Activity.tarea_JSON.toString(), Toast.LENGTH_LONG).show();
 
             observaciones_text.setText(observaciones);
@@ -530,17 +702,13 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
 //                Toast.makeText(Screen_User_Data.this, "Configuracion", Toast.LENGTH_SHORT).show();
                 // User chose the "Favorite" action, mark the current item
                 // as a favorite...
-                try {
-                    openMessage("Tarea","Contador: "+Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador")
-                            +"\nModificacion: "+Screen_Login_Activity.tarea_JSON.getString("date_time_modified")
-                            +"\ncita: "+Screen_Login_Activity.tarea_JSON.getString("nuevo_citas")
-                            +"\nContador: "+Screen_Login_Activity.tarea_JSON.getString("numero_serie_contador"));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(Screen_Absent.this, "No se pudo obtener datos de tarea", Toast.LENGTH_SHORT).show();
-                }
                 return true;
-
+            case R.id.Info_Tarea:
+//                Toast.makeText(Screen_User_Data.this, "Configuracion", Toast.LENGTH_SHORT).show();
+                // User chose the "Favorite" action, mark the current item
+                // as a favorite...
+                openMessage("Tarea", Screen_Battery_counter.get_tarea_info());
+                return true;
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.

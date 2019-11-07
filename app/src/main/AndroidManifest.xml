@@ -2,19 +2,27 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.luisreyes.proyecto_aguas">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.FLASHLIGHT"/>
-    <uses-permission android:name="android.hardware.camera2.full"/>
-    <uses-permission android:name="android.hardware.camera.flash"/>
-    <uses-feature android:name="android.hardware.camera"/>
-    <uses-feature android:name="android.hardware.camera.autofocus"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.CALL_PHONE"/>
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+    <uses-permission android:name="android.hardware.camera2.full" />
+    <uses-permission android:name="android.hardware.camera.flash" />
 
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <!--
+         The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
+         Google Maps Android API v2, but you must specify either coarse or fine
+         location permissions for the 'MyLocation' functionality. 
+    -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -23,7 +31,9 @@
         android:roundIcon="@mipmap/app_logo_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -32,7 +42,7 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"></meta-data>
+                android:resource="@xml/file_paths" />
         </provider>
 
         <activity android:name=".MainActivity">
@@ -42,138 +52,195 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Screen_Login_Activity"
+        <activity
+            android:name=".Screen_Login_Activity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".team_or_personal_task_selection_screen_Activity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Screen_Table_Team"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Screen_Unity_Counter"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Screen_Battery_counter"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".personal_task_screen_Activity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".team_task_screen_Activity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Screen_Table_Personal"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Screen_Fast_View_Team_Task"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Screen_Fast_View_Personal_Task"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Screen_Incidence"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Screen_Incidence_Summary"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Screen_Absent"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Screen_Execute_Task"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Screen_Validate"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Screen_Battery_Intake_Asignation"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".lector"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Screen_Draw_Canvas"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Screen_Validate_Battery_Intake_Asignation"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Screen_Zoom_Photo"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Screen_Register_Operario"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Screen_User_Data"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Screen_Camera"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Screen_Insertar_Tarea"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Screen_Zoom_Firma"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+			
+		<activity android:name=".Screen_Advance_Filter"
             android:configChanges="orientation"
             android:screenOrientation="portrait"></activity>
-        <activity android:name=".team_or_personal_task_selection_screen_Activity"
+        <activity
+            android:name=".Maps_Box"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+			
+			<activity android:name=".PermissionsActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"></activity>
-        <activity android:name=".Screen_Table_Team"
+			
+			<activity android:name=".Screen_Anomaly"
             android:configChanges="orientation"
             android:screenOrientation="portrait"></activity>
-        <activity android:name=".Screen_Unity_Counter"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".Screen_Battery_counter"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".personal_task_screen_Activity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".team_task_screen_Activity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".Screen_Table_Personal"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".Screen_Fast_View_Team_Task"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".Screen_Fast_View_Personal_Task"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".Screen_Incidence"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".Screen_Incidence_Summary"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".Screen_Absent"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".Screen_Execute_Task"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".Screen_Validate"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".Screen_Battery_Intake_Asignation"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".lector"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".Screen_Draw_Canvas"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".Screen_Validate_Battery_Intake_Asignation"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".Screen_Zoom_Photo"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".Screen_Register_Operario"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".Screen_User_Data"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".Screen_Camera"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"
-            ></activity>
-        <activity android:name=".Screen_Insertar_Tarea"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".Screen_Zoom_Firma"
+			
+			<activity android:name=".MapActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"></activity>
 
-        <activity android:name=".MapsActivity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".Maps_Box"
+        <activity android:name=".Screen_Filter_Tareas"
             android:configChanges="orientation"
             android:screenOrientation="portrait"></activity>
 
-        <!--<activity android:name=".Screen_Login_Activity"-->
-           <!--&gt;</activity>-->
-        <!--<activity android:name=".team_or_personal_task_selection_screen_Activity"-->
-            <!--&gt;</activity>-->
-        <!--<activity android:name=".Screen_Table_Team"-->
-            <!--&gt;</activity>-->
-        <!--<activity android:name=".Screen_Unity_Counter"-->
-            <!--&gt;</activity>-->
-        <!--<activity android:name=".Screen_Battery_counter"-->
-            <!--&gt;</activity>-->
-        <!--<activity android:name=".personal_task_screen_Activity"-->
-           <!--&gt;</activity>-->
-        <!--<activity android:name=".team_task_screen_Activity"-->
-           <!--&gt;</activity>-->
-        <!--<activity android:name=".Screen_Table_Personal"-->
-            <!--&gt;</activity>-->
-        <!--<activity android:name=".Screen_Fast_View_Team_Task"-->
-            <!--&gt;</activity>-->
-        <!--<activity android:name=".Screen_Fast_View_Personal_Task"-->
-            <!--&gt;</activity>-->
-        <!--<activity android:name=".Screen_Incidence"-->
-            <!--&gt;</activity>-->
-        <!--<activity android:name=".Screen_Incidence_Summary"-->
-            <!--&gt;</activity>-->
-        <!--<activity android:name=".Screen_Absent"-->
-            <!--&gt;</activity>-->
-        <!--<activity android:name=".Screen_Execute_Task"-->
-           <!--&gt;</activity>-->
-        <!--<activity android:name=".Screen_Validate"-->
-            <!--&gt;</activity>-->
-        <!--<activity android:name=".Screen_Battery_Intake_Asignation"-->
-            <!--&gt;</activity>-->
-        <!--<activity android:name=".lector"-->
-            <!--&gt;</activity>-->
-        <!--<activity android:name=".Screen_Draw_Canvas"-->
-            <!--&gt;</activity>-->
-        <!--<activity android:name=".Screen_Validate_Battery_Intake_Asignation"-->
-            <!--&gt;</activity>-->
-        <!--<activity android:name=".Screen_Zoom_Photo"-->
-            <!--&gt;</activity>-->
-        <!--<activity android:name=".Screen_Register_Operario"-->
-            <!--&gt;</activity>-->
-        <!--<activity android:name=".Screen_User_Data"-->
-            <!--&gt;</activity>-->
-        <!--<activity android:name=".Screen_Camera"-->
-            <!--&gt;</activity>-->
-        <!--<activity android:name=".Screen_Insertar_Tarea"-->
-            <!--&gt;</activity>-->
+
+        <!-- <activity android:name=".Screen_Login_Activity" -->
+        <!-- &gt;</activity> -->
+        <!-- <activity android:name=".team_or_personal_task_selection_screen_Activity" -->
+        <!-- &gt;</activity> -->
+        <!-- <activity android:name=".Screen_Table_Team" -->
+        <!-- &gt;</activity> -->
+        <!-- <activity android:name=".Screen_Unity_Counter" -->
+        <!-- &gt;</activity> -->
+        <!-- <activity android:name=".Screen_Battery_counter" -->
+        <!-- &gt;</activity> -->
+        <!-- <activity android:name=".personal_task_screen_Activity" -->
+        <!-- &gt;</activity> -->
+        <!-- <activity android:name=".team_task_screen_Activity" -->
+        <!-- &gt;</activity> -->
+        <!-- <activity android:name=".Screen_Table_Personal" -->
+        <!-- &gt;</activity> -->
+        <!-- <activity android:name=".Screen_Fast_View_Team_Task" -->
+        <!-- &gt;</activity> -->
+        <!-- <activity android:name=".Screen_Fast_View_Personal_Task" -->
+        <!-- &gt;</activity> -->
+        <!-- <activity android:name=".Screen_Incidence" -->
+        <!-- &gt;</activity> -->
+        <!-- <activity android:name=".Screen_Incidence_Summary" -->
+        <!-- &gt;</activity> -->
+        <!-- <activity android:name=".Screen_Absent" -->
+        <!-- &gt;</activity> -->
+        <!-- <activity android:name=".Screen_Execute_Task" -->
+        <!-- &gt;</activity> -->
+        <!-- <activity android:name=".Screen_Validate" -->
+        <!-- &gt;</activity> -->
+        <!-- <activity android:name=".Screen_Battery_Intake_Asignation" -->
+        <!-- &gt;</activity> -->
+        <!-- <activity android:name=".lector" -->
+        <!-- &gt;</activity> -->
+        <!-- <activity android:name=".Screen_Draw_Canvas" -->
+        <!-- &gt;</activity> -->
+        <!-- <activity android:name=".Screen_Validate_Battery_Intake_Asignation" -->
+        <!-- &gt;</activity> -->
+        <!-- <activity android:name=".Screen_Zoom_Photo" -->
+        <!-- &gt;</activity> -->
+        <!-- <activity android:name=".Screen_Register_Operario" -->
+        <!-- &gt;</activity> -->
+        <!-- <activity android:name=".Screen_User_Data" -->
+        <!-- &gt;</activity> -->
+        <!-- <activity android:name=".Screen_Camera" -->
+        <!-- &gt;</activity> -->
+        <!-- <activity android:name=".Screen_Insertar_Tarea" -->
+        <!-- &gt;</activity> -->
+        <!--
+             The API key for Google Maps-based APIs is defined as a string resource.
+             (See the file "res/values/google_maps_api.xml").
+             Note that the API key is linked to the encryption key used to sign the APK.
+             You need a different API key for each encryption key, including the release key that is used to
+             sign the APK for publishing.
+             You can define the keys for the debug and release targets in src/debug/ and src/release/. 
+        -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+
+        <activity
+            android:name=".MapsActivity"
+            android:label="@string/title_activity_maps"></activity>
     </application>
 
 </manifest>

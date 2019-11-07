@@ -54,6 +54,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.json.JSONException;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileFilter;
@@ -190,9 +193,17 @@ public class Screen_Camera extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.screen_camera);
 
+        String numero_interno = "";
+        try {
+            numero_interno = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_interno).trim();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         photo_name = getIntent().getStringExtra("photo_name");
-        photo_folder = getIntent().getStringExtra("photo_folder");
-        contador = getIntent().getStringExtra("contador");
+        photo_folder = getIntent().getStringExtra("photo_folder")+"/"+numero_interno;
+        contador = getIntent().getStringExtra("contador").trim().replace(" ","");
+
+
 
         orientationListener = new OrientationEventListener(this, SensorManager.SENSOR_DELAY_UI * 10) {
             public void onOrientationChanged(int orientation) {
@@ -405,7 +416,7 @@ public class Screen_Camera extends Activity {
                     }
                     @Override
                     public void onConfigureFailed(@NonNull CameraCaptureSession cameraCaptureSession) {
-
+                        Toast.makeText(Screen_Camera.this, "Fallo la configuracion de la camara", Toast.LENGTH_LONG).show();
                     }
                 }, mBackgroundHandler);
             }
@@ -455,7 +466,7 @@ public class Screen_Camera extends Activity {
 
                 @Override
                 public void onConfigureFailed(@NonNull CameraCaptureSession cameraCaptureSession) {
-                    Toast.makeText(Screen_Camera.this, "Changed", Toast.LENGTH_LONG).show();
+                    Toast.makeText(Screen_Camera.this, "Fallo la configuracion de la camara", Toast.LENGTH_LONG).show();
                 }
             }, null);
         } catch (Exception e) {

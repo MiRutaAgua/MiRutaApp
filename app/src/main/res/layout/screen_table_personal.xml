@@ -28,40 +28,52 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="left">
-
-            <ImageView
-                android:layout_width="220dp"
+            android:gravity="center"
+            android:padding="10dp"
+            >
+            <TextView
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginLeft="70dp"
+                android:text="TAREAS DE OPERARIO"
+                android:textColor="@color/colorBlueAppRuta"
+                android:textStyle="bold"
+                android:fontFamily="@font/segoeui"
+                android:textSize="18dp"
                 android:layout_marginTop="1dp"
                 android:gravity="center"
-                android:src="@drawable/screen_table_personal_icon" />
+                />
+            <Button
+                android:id="@+id/button_advance_filter_table_personal"
+                android:gravity="center"
+                android:layout_marginLeft="20dp"
+                android:foregroundGravity="center"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/ic_filter_list_blue_24dp"
+                />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="left">
+            android:gravity="center">
 
             <EditText
                 android:id="@+id/editText_screen_table_personal_filter"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="20dp"
+                android:padding="10dp"
                 android:hint="filtrar" />
 
             <Spinner
                 android:id="@+id/spinner_filtrar_tareas_screen_table_personal"
                 android:layout_width="168dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="40dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="25dp"></Spinner>
+                android:padding="10dp"
+                ></Spinner>
         </LinearLayout>
 
         <ListView
