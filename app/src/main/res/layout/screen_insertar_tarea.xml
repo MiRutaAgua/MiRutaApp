@@ -44,7 +44,7 @@
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/editText_numero_serie_screen_insertar_tarea"
-                android:hint="Número de Serie"
+                android:hint="Número de Serie con Prefijo"
                 android:imeOptions="actionNext"
                 />
         </LinearLayout>
@@ -101,8 +101,8 @@
             <EditText
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/editText_numero_edificio_screen_insertar_tarea"
-                android:hint="Numero Edificio"
+                android:id="@+id/editText_numero_portal_screen_insertar_tarea"
+                android:hint="Numero Portal"
                 android:imeOptions="actionNext"
                 />
         </LinearLayout>
@@ -115,8 +115,8 @@
             <EditText
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/editText_letra_edificio_screen_insertar_tarea"
-                android:hint="Letra Edificio"
+                android:id="@+id/editText_BIS_screen_insertar_tarea"
+                android:hint="BIS"
                 android:imeOptions="actionNext"
                 />
         </LinearLayout>
@@ -224,6 +224,7 @@
                 android:id="@+id/editText_telefono_screen_insertar_tarea"
                 android:hint="Telefono"
                 android:imeOptions="actionDone"
+                android:inputType="phone"
                 />
         </LinearLayout>
 

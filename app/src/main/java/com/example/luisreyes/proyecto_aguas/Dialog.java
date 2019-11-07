@@ -80,7 +80,7 @@ public class Dialog extends AppCompatDialogFragment {
         title = title_tag;
         if(title_tag.contains("telefono") || title_tag.contains("Tel")){
             inputType = InputType.TYPE_CLASS_PHONE;
-        }else if(title_tag.contains("Lectura") || title_tag.contains("lectura")){
+        }else if(title_tag.contains("Lectura") || title_tag.contains("lectura") || title_tag.contains("calibre") || title_tag.contains("Calibre")){
             inputType = InputType.TYPE_CLASS_NUMBER;
         }
         else{

@@ -291,44 +291,50 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
         telefono1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PhoneCallListener phoneListener = new PhoneCallListener();
-                TelephonyManager telephonyManager = (TelephonyManager) Screen_Absent.this
-                        .getSystemService(Context.TELEPHONY_SERVICE);
-                telephonyManager.listen(phoneListener,
-                        PhoneStateListener.LISTEN_CALL_STATE);
+                String tel = telefono1.getText().toString();
+                if(!tel.isEmpty() && tel.matches("[0-9]+") && tel.length() > 2) {
+                    PhoneCallListener phoneListener = new PhoneCallListener();
+                    TelephonyManager telephonyManager = (TelephonyManager) Screen_Absent.this
+                            .getSystemService(Context.TELEPHONY_SERVICE);
+                    telephonyManager.listen(phoneListener,
+                            PhoneStateListener.LISTEN_CALL_STATE);
 
-                Intent callIntent = new Intent(Intent.ACTION_CALL);
-                callIntent.setData(Uri.parse("tel:"+ telefono1.getText().toString()));
+                    Intent callIntent = new Intent(Intent.ACTION_CALL);
+                    callIntent.setData(Uri.parse("tel:" + telefono1.getText().toString()));
 
-                if (ActivityCompat.checkSelfPermission(Screen_Absent.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
-                    return;
+                    if (ActivityCompat.checkSelfPermission(Screen_Absent.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                        // TODO: Consider calling
+                        //    ActivityCompat#requestPermissions
+                        // here to request the missing permissions, and then overriding
+                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                        //                                          int[] grantResults)
+                        // to handle the case where the user grants the permission. See the documentation
+                        // for ActivityCompat#requestPermissions for more details.
+                        return;
+                    }
+                    startActivity(callIntent);
                 }
-                startActivity(callIntent);
             }
         });
         telefono2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PhoneCallListener phoneListener = new PhoneCallListener();
-                TelephonyManager telephonyManager = (TelephonyManager) Screen_Absent.this
-                        .getSystemService(Context.TELEPHONY_SERVICE);
-                telephonyManager.listen(phoneListener,
-                        PhoneStateListener.LISTEN_CALL_STATE);
+                String tel = telefono2.getText().toString();
+                if(!tel.isEmpty() && tel.matches("[0-9]+") && tel.length() > 2) {
+                    PhoneCallListener phoneListener = new PhoneCallListener();
+                    TelephonyManager telephonyManager = (TelephonyManager) Screen_Absent.this
+                            .getSystemService(Context.TELEPHONY_SERVICE);
+                    telephonyManager.listen(phoneListener,
+                            PhoneStateListener.LISTEN_CALL_STATE);
 
-                Intent callIntent = new Intent(Intent.ACTION_CALL);
-                callIntent.setData(Uri.parse("tel:"+ telefono2.getText().toString()));
+                    Intent callIntent = new Intent(Intent.ACTION_CALL);
+                    callIntent.setData(Uri.parse("tel:" + telefono2.getText().toString()));
 
-                if (ActivityCompat.checkSelfPermission(Screen_Absent.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                    return;
+                    if (ActivityCompat.checkSelfPermission(Screen_Absent.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                        return;
+                    }
+                    startActivity(callIntent);
                 }
-                startActivity(callIntent);
             }
         });
         checkBox_incorrecto_telefono1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

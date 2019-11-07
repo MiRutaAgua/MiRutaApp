@@ -149,7 +149,8 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
                                                     dBtareasController.get_one_tarea_from_Database(lista_ordenada_de_tareas.get(n).getNumero_interno()));
                                             if (jsonObject != null) {
                                                 Screen_Login_Activity.tarea_JSON = jsonObject;
-
+                                                //Toast.makeText(Screen_Table_Team.this, "Tarea JSON ->"+Screen_Login_Activity.tarea_JSON .toString(), Toast.LENGTH_LONG).show();
+                                                //openMessage("JSON", Screen_Login_Activity.tarea_JSON .toString());
                                                 try {
                                                     if(Screen_Login_Activity.tarea_JSON!=null) {
                                                         if (Screen_Login_Activity.tarea_JSON.getString(DBtareasController.operario).equals(
@@ -357,7 +358,6 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
                                 e.printStackTrace();
                             }
 
-
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -413,6 +413,8 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
                         JSONArray jsonArray = new JSONArray(Screen_Table_Team.lista_tareas.get(n));
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                            jsonObject = buscarTelefonosEnObservaciones(jsonObject);
 
                             if (insertar_todas) {
                                 team_or_personal_task_selection_screen_Activity.dBtareasController.insertTarea(jsonObject);
@@ -560,6 +562,36 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
             }
         }
     }
+
+    public static JSONObject buscarTelefonosEnObservaciones(JSONObject jsonObject){
+        String observaciones_string = null;
+        try {
+            observaciones_string = jsonObject.getString(DBtareasController.observaciones).trim().replace(" ","");
+            if(!observaciones_string.isEmpty() && observaciones_string.contains("-")){
+                String telefono1 = observaciones_string.split("-")[0].replace("T", "");
+                String telefono2 = observaciones_string.split("-")[1].replace("T", "");
+
+                if(!telefono1.isEmpty() && telefono1.matches("[0-9]+") && telefono1.length() > 2) {
+                    jsonObject.put(DBtareasController.telefono1, telefono1);
+                }
+                if(!telefono2.isEmpty() && telefono2.matches("[0-9]+") && telefono2.length() > 2) {
+                    jsonObject.put(DBtareasController.telefono2, telefono2);
+                }
+            }
+            else{
+                if(!observaciones_string.isEmpty()) {
+                    String telefono1 = observaciones_string.replace("T", "");
+                    if (telefono1.matches("[0-9]+") && telefono1.length() > 2) {
+                        jsonObject.put(DBtareasController.telefono1, telefono1);
+                    }
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject;
+    }
+
     public void orderTareastoArrayAdapter(){
         Collections.sort(lista_ordenada_de_tareas);
         for(int i=0; i < lista_ordenada_de_tareas.size(); i++){

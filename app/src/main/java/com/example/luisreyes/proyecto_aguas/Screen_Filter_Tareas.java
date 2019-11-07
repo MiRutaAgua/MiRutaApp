@@ -498,16 +498,16 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
             if(counter.getTelefono1().isEmpty() && counter.getTelefono2().isEmpty()){
                 telefonos_string = "";
             }else if(counter.getTelefono1().isEmpty()){
-                telefonos_string = "TELF " +counter.getTelefono2();
+                telefonos_string = "\nTELF " +counter.getTelefono2();
             }else if(counter.getTelefono2().isEmpty()){
-                telefonos_string = "TELF " +counter.getTelefono1();
+                telefonos_string = "\nTELF " +counter.getTelefono1();
             }else{
-                telefonos_string = "TELF " +counter.getTelefono1() + " , " +counter.getTelefono2();
+                telefonos_string = "\nTELF " +counter.getTelefono1() + " , " +counter.getTelefono2();
             }
-            String view = "\n"+counter.getDireccion()+"\n"
+            String view = counter.getDireccion()+"\n"
                     + "ABONADO " + counter.getNumero_abonado() + ", "+counter.getAbonado()+"\n"
-                    + "TAREA " + counter.getTipo_tarea()+", CAL "+counter.getCalibre().trim() + " CONT "+counter.getNumero_serie_contador()+"\n"
-                    + telefonos_string;
+                    + "TAREA " + counter.getTipo_tarea()+", CAL "+counter.getCalibre().trim() + " CONT "+counter.getNumero_serie_contador()
+                    +telefonos_string;
 
             return view;
         }else{

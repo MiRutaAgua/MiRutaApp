@@ -83,7 +83,6 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
         mapaTiposDeTarea.put("SI", "SOLO INSTALAR");
         mapaTiposDeTarea.put("R", "REFORMA MAS CONTADOR");
 
-
         button_geolocalization =(Button) findViewById(R.id.button_geolocalization_screen_battery_counter);
         imagen_contador = (ImageView) findViewById(R.id.imageView_screen_battery_counter_imagen);
         serie = (TextView) findViewById(R.id.textView_screen_battery_counter_serie);
@@ -155,6 +154,7 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
 
         } catch (Exception e) {
             e.printStackTrace();
+            Toast.makeText(getApplicationContext(),"No se obtuvo informacion: "+e.toString(), Toast.LENGTH_LONG).show();
         }
         button_geolocalization.setOnClickListener(new View.OnClickListener() {
             @Override

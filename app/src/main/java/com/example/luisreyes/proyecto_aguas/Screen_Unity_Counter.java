@@ -127,6 +127,8 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
                         +"mm");
             }
 
+            //Toast.makeText(getApplicationContext(), "Tarea JSON ->"+Screen_Login_Activity.tarea_JSON .toString(), Toast.LENGTH_SHORT).show();
+            //openMessage("JSON", Screen_Login_Activity.tarea_JSON .toString());
             if(DBtareasController.tabla_model) {
                 direccion.setText((Screen_Login_Activity.tarea_JSON.getString(DBtareasController.poblacion).trim().replace("null", "").replace("NULL", "") + "   "
                         + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.calle).trim().replace("\n", "").replace("null", "").replace("NULL", "") + "  "
@@ -154,6 +156,7 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
 
         } catch (Exception e) {
             e.printStackTrace();
+            Toast.makeText(getApplicationContext(),"No se obtuvo informacion: "+e.toString(), Toast.LENGTH_LONG).show();
         }
         button_geolocalization.setOnClickListener(new View.OnClickListener() {
             @Override

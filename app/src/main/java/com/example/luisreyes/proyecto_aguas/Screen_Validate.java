@@ -29,6 +29,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -46,8 +47,11 @@ import android.widget.Toast;
 import org.json.JSONException;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -271,21 +275,22 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                 foto_final_instalacion_screen_exec_task.setImageBitmap(foto_despues_intalacion_bitmap);
             }
         }
+
         try {
-            String string_firma = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.firma_cliente);
-            if(!TextUtils.isEmpty(string_firma) && !string_firma.equals("null")) {
-                bitmap_firma_cliente = Screen_Register_Operario.getImageFromString(string_firma);
-                if(bitmap_firma_cliente!=null) {
-                    imageButton_firma_cliente_screen_validate.setImageBitmap(bitmap_firma_cliente);
+            String firma = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.firma_cliente).trim();
+            if(!firma.isEmpty() && !firma.equals("null")&&  !firma.equals("NULL"))  {
+                Bitmap firma_bitmap = getPhotoUserLocal(  getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+
+                        Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim() + "/" + firma);
+                if (firma_bitmap != null) {
+                    imageButton_firma_cliente_screen_validate.setImageBitmap(firma_bitmap);
                 }
             }
         } catch (JSONException e) {
             e.printStackTrace();
-            Toast.makeText(Screen_Validate.this, "no se pudo obtener foto_despues_instalacion", Toast.LENGTH_LONG).show();
         }
-        Bitmap foto_lectura_bitmap = getPhotoUserLocal(Screen_Execute_Task.mCurrentPhotoPath_foto_lectura);
-        Screen_Execute_Task.hideRingDialog();
 
+
+        Screen_Execute_Task.hideRingDialog();
 
         button_compartir_screen_validate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -493,15 +498,6 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
             e.printStackTrace();
         }
 
-//        if(bitmap_firma_cliente != null){
-//            String firma_cliente_string = Screen_Register_Operario.getStringImage(bitmap_firma_cliente);
-//            try {
-//                Screen_Login_Activity.tarea_JSON.put(DBtareasController.firma_cliente, firma_cliente_string);
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//                Toast.makeText(Screen_Validate.this, "No pudo guardar de firma", Toast.LENGTH_LONG).show();
-//            }
-//        }
         if(!TextUtils.isEmpty(lectura_actual_et.getText().toString())){
             try {
                 //Comprobar aqui que la lectura no sea menor que la ultima
@@ -572,37 +568,40 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
     }
 
     private PdfDocument setContentPDF(PdfDocument document, int w, int h, int page_count) {
-        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(1600, 2400, page_count).create();
+        w = 1654;  //A4 4962
+        h = 2339;  //A4 7016
+        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(w , h, page_count).create();
         PdfDocument.Page page = document.startPage(pageInfo);
         Canvas canvas = page.getCanvas();
         Paint paint = new Paint();
         canvas.drawPaint(paint);
         canvas.drawColor(Color.WHITE);
         paint.setColor(Color.BLUE);
-
-        bitmap = Bitmap.createScaledBitmap(bitmap, 1000, 400, true);
-        canvas.drawBitmap(bitmap, 150, 40, null);
+        int w_foto = (int)w*4/11;
+        int h_foto = (int)(w_foto * 1.34);
+        bitmap = Bitmap.createScaledBitmap(bitmap, (int)w/2, (int)h/7, true);
+        canvas.drawBitmap(bitmap, (int)w/10, h/24, null);
 
         if (bitmap2_no_nulo) {
-            bitmap2 = Bitmap.createScaledBitmap(bitmap2, 640, 852, true);
-            canvas.drawBitmap(bitmap2, 150, 500, null);
+            bitmap2 = Bitmap.createScaledBitmap(bitmap2, w_foto, h_foto, true);
+            canvas.drawBitmap(bitmap2, (int)w/10, (int)((h/5)), null);
         }
         if (bitmap3_no_nulo) {
-            bitmap3 = Bitmap.createScaledBitmap(bitmap3, 640, 852, true);
-            canvas.drawBitmap(bitmap3, 150, 1400 , null);
+            bitmap3 = Bitmap.createScaledBitmap(bitmap3, w_foto, h_foto, true);
+            canvas.drawBitmap(bitmap3, (int)w/10, (int)((h*3/5)) , null);
         }
         if (bitmap4_no_nulo) {
-            bitmap4 = Bitmap.createScaledBitmap(bitmap4, 640, 852, true);
-            canvas.drawBitmap(bitmap4, 810, 1400, null);
+            bitmap4 = Bitmap.createScaledBitmap(bitmap4, w_foto, h_foto, true);
+            canvas.drawBitmap(bitmap4, (int)w/2, (int)((h*3/5)), null);
         }
         if(bitmap5_no_nulo){
-            bitmap5 = Bitmap.createScaledBitmap(bitmap5, 640, 852, true);
-            canvas.drawBitmap(bitmap5, 810, 500 , null);
+            bitmap5 = Bitmap.createScaledBitmap(bitmap5, w_foto, h_foto, true);
+            canvas.drawBitmap(bitmap5, (int)w/2, (int)((h/5)) , null);
         }
-
         document.finishPage(page);
         return document;
     }
+
     private void createPdf(){
         WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
         //  Display display = wm.getDefaultDisplay();
@@ -638,9 +637,32 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
         hideRingDialog();
         if(filePath.exists()) {
 
+            try{
+                try {
+                    String numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado);
+                    InputStream in = new FileInputStream(filePath);
+                    OutputStream out = new FileOutputStream(getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+                            + "/fotos_tareas/"+ numero_abonado+"/"+pdfName+".pdf");
+                    // Copy the bits from instream to outstream
+                    byte[] buf = new byte[1024];
+                    int len;
+                    while ((len = in.read(buf)) > 0) {
+                        out.write(buf, 0, len);
+                    }
+                    in.close();
+                    out.close();
+                    Log.e("Copiando Archivo", "Copy file successful.");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
             try {
 //                textView_info.setVisibility(View.GONE);
-
                 Toast.makeText(this, "PDF creado correctamente ", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(Intent.ACTION_SEND ,Uri.parse("mailto: mraguascontadores@gmail.com")); // it's not ACTION_SEND
                 intent.setType("text/plain");
@@ -865,7 +887,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                 if(myDir!=null) {
                     if (!myDir.exists()) {
                         myDir.mkdirs();
-                        File storageDir2 = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/fotos_tareas");
+                        File storageDir2 = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/fotos_tareas/"+ numero_abonado);
                         if (!storageDir2.exists()) {
                             storageDir2.mkdir();
                         }
@@ -1018,5 +1040,15 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
         MessageDialog messageDialog = new MessageDialog();
         messageDialog.setTitleAndHint(title, hint);
         messageDialog.show(getSupportFragmentManager(), title);
+    }
+
+    @Override
+    public void onBackPressed() {
+        foto_instalacion_screen_exec_task.setVisibility(View.GONE);
+        imageView_foto_lectura_screen_validate.setVisibility(View.GONE);
+        foto_numero_de_serie_screen_exec_task.setVisibility(View.GONE);
+        foto_final_instalacion_screen_exec_task.setVisibility(View.GONE);
+        Screen_Validate.this.finish();
+        super.onBackPressed();
     }
 }

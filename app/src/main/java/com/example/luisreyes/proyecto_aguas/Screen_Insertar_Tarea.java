@@ -52,8 +52,8 @@ public class Screen_Insertar_Tarea extends AppCompatActivity implements TaskComp
             editText_calle_screen_insertar_tarea,
             editText_piso_screen_insertar_tarea,
             editText_mano_screen_insertar_tarea,
-            editText_letra_edificio_screen_insertar_tarea,
-            editText_numero_edificio_screen_insertar_tarea;
+            editText_BIS_screen_insertar_tarea,
+            editText_numero_portal_screen_insertar_tarea;
     private TextView textView_screen_insertar_tarea;
     private ProgressDialog progressDialog;
 
@@ -75,8 +75,8 @@ public class Screen_Insertar_Tarea extends AppCompatActivity implements TaskComp
         editText_calle_screen_insertar_tarea = (EditText) findViewById(R.id.editText_calle_screen_insertar_tarea);
         editText_piso_screen_insertar_tarea = (EditText) findViewById(R.id.editText_piso_screen_insertar_tarea);
         editText_mano_screen_insertar_tarea = (EditText) findViewById(R.id.editText_mano_screen_insertar_tarea);
-        editText_letra_edificio_screen_insertar_tarea = (EditText) findViewById(R.id.editText_letra_edificio_screen_insertar_tarea);
-        editText_numero_edificio_screen_insertar_tarea = (EditText) findViewById(R.id.editText_numero_edificio_screen_insertar_tarea);
+        editText_BIS_screen_insertar_tarea = (EditText) findViewById(R.id.editText_BIS_screen_insertar_tarea);
+        editText_numero_portal_screen_insertar_tarea = (EditText) findViewById(R.id.editText_numero_portal_screen_insertar_tarea);
 
         textView_screen_insertar_tarea = (TextView) findViewById(R.id.textView_screen_insertar_tarea);
         editText_numero_serie_screen_insertar_tarea = (EditText) findViewById(R.id.editText_numero_serie_screen_insertar_tarea);
@@ -209,42 +209,54 @@ public class Screen_Insertar_Tarea extends AppCompatActivity implements TaskComp
             Screen_Login_Activity.tarea_JSON.put(DBtareasController.numero_interno, DBtareasController.getStringFromFechaHora(new Date()));
             Screen_Login_Activity.tarea_JSON.put(DBtareasController.CONTADOR_Prefijo_anno, editText_anno_prefijo_screen_insertar_tarea.getText().toString());
             Screen_Login_Activity.tarea_JSON.put(DBtareasController.numero_serie_contador, editText_numero_serie_screen_insertar_tarea.getText().toString());
+
             if(!(TextUtils.isEmpty(editText_poblacion_screen_insertar_tarea.getText().toString())))
                 Screen_Login_Activity.tarea_JSON.put(DBtareasController.poblacion, editText_poblacion_screen_insertar_tarea.getText().toString());
+
             if(!(TextUtils.isEmpty(editText_calle_screen_insertar_tarea.getText().toString())))
                 Screen_Login_Activity.tarea_JSON.put(DBtareasController.calle, editText_calle_screen_insertar_tarea.getText().toString());
+
             if(DBtareasController.tabla_model) {
-                if (!(TextUtils.isEmpty(editText_piso_screen_insertar_tarea.getText().toString())))
-                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.numero_edificio, editText_piso_screen_insertar_tarea.getText().toString());
-                if (!(TextUtils.isEmpty(editText_mano_screen_insertar_tarea.getText().toString())))
-                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.letra_edificio, editText_mano_screen_insertar_tarea.getText().toString());
+                if (!(TextUtils.isEmpty(editText_numero_portal_screen_insertar_tarea.getText().toString())))
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.numero_edificio, editText_numero_portal_screen_insertar_tarea.getText().toString());
+
+                if (!(TextUtils.isEmpty(editText_BIS_screen_insertar_tarea.getText().toString())))
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.letra_edificio, editText_BIS_screen_insertar_tarea.getText().toString());
             }else{
-                if (!(TextUtils.isEmpty(editText_piso_screen_insertar_tarea.getText().toString()))
-                        && !(TextUtils.isEmpty(editText_mano_screen_insertar_tarea.getText().toString())))
-                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.BIS, editText_piso_screen_insertar_tarea.getText().toString()
-                            +editText_mano_screen_insertar_tarea.getText().toString());
+                if (!(TextUtils.isEmpty(editText_numero_portal_screen_insertar_tarea.getText().toString())))
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.numero, editText_numero_portal_screen_insertar_tarea.getText().toString());
+
+                if (!(TextUtils.isEmpty(editText_BIS_screen_insertar_tarea.getText().toString())))
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.BIS, editText_BIS_screen_insertar_tarea.getText().toString());
             }
-            if(!(TextUtils.isEmpty(editText_letra_edificio_screen_insertar_tarea.getText().toString())))
-                Screen_Login_Activity.tarea_JSON.put(DBtareasController.piso, editText_letra_edificio_screen_insertar_tarea.getText().toString());
-            if(!(TextUtils.isEmpty(editText_numero_edificio_screen_insertar_tarea.getText().toString())))
-                Screen_Login_Activity.tarea_JSON.put(DBtareasController.mano, editText_numero_edificio_screen_insertar_tarea.getText().toString());
+
+            if(!(TextUtils.isEmpty(editText_piso_screen_insertar_tarea.getText().toString())))
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.piso, editText_piso_screen_insertar_tarea.getText().toString());
+
+            if(!(TextUtils.isEmpty(editText_mano_screen_insertar_tarea.getText().toString())))
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.mano, editText_mano_screen_insertar_tarea.getText().toString());
 
             Screen_Login_Activity.tarea_JSON.put(DBtareasController.operario, Screen_Login_Activity.operario_JSON.getString("usuario"));
+
             if(!(TextUtils.isEmpty(editText_calibre_screen_insertar_tarea.getText().toString())))
                 Screen_Login_Activity.tarea_JSON.put(DBtareasController.calibre_toma, editText_calibre_screen_insertar_tarea.getText().toString());
+
             if(!(TextUtils.isEmpty(editText_tipo_screen_insertar_tarea.getText().toString()))) {
                 Screen_Login_Activity.tarea_JSON.put(DBtareasController.tipo_tarea, editText_tipo_screen_insertar_tarea.getText().toString());
             }
             else{
                 Screen_Login_Activity.tarea_JSON.put(DBtareasController.tipo_tarea, "");
             }
+
             if(!(TextUtils.isEmpty(editText_abonado_screen_insertar_tarea.getText().toString())))
                 Screen_Login_Activity.tarea_JSON.put(DBtareasController.nombre_cliente, editText_abonado_screen_insertar_tarea.getText().toString());
+
             if(!(TextUtils.isEmpty(editText_telefono_screen_insertar_tarea.getText().toString())))
                 Screen_Login_Activity.tarea_JSON.put(DBtareasController.telefono1, editText_telefono_screen_insertar_tarea.getText().toString());
 
             Screen_Login_Activity.tarea_JSON.put(DBtareasController.date_time_modified, DBtareasController.getStringFromFechaHora(new Date()));
             Screen_Login_Activity.tarea_JSON.put(DBtareasController.status_tarea, "IDLE");
+
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(Screen_Insertar_Tarea.this, "Problemas con JSON", Toast.LENGTH_SHORT).show();
@@ -288,12 +300,13 @@ public class Screen_Insertar_Tarea extends AppCompatActivity implements TaskComp
                 Toast.makeText(Screen_Insertar_Tarea.this, "No se pudo acceder al hosting" + result, Toast.LENGTH_SHORT).show();
             }
             else {
-                Toast.makeText(Screen_Insertar_Tarea.this, "Tarea insertada correctamente", Toast.LENGTH_LONG).show();
+                Toast.makeText(Screen_Insertar_Tarea.this, "Tarea insertada correctamente: Sentencia"+ result, Toast.LENGTH_LONG).show();
+                textView_screen_insertar_tarea.setVisibility(View.VISIBLE);
                 textView_screen_insertar_tarea.setText(result);
 
-                Intent intent_open_task_or_personal_screen = new Intent(Screen_Insertar_Tarea.this, team_or_personal_task_selection_screen_Activity.class);
-                startActivity(intent_open_task_or_personal_screen);
-                Screen_Insertar_Tarea.this.finish();
+//                Intent intent_open_task_or_personal_screen = new Intent(Screen_Insertar_Tarea.this, team_or_personal_task_selection_screen_Activity.class);
+//                startActivity(intent_open_task_or_personal_screen);
+//                Screen_Insertar_Tarea.this.finish();
             }
         }
     }
