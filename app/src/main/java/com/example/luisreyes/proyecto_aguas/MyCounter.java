@@ -58,6 +58,7 @@ public class MyCounter implements Comparable<MyCounter> {
     public void setCita(String cita) {
         this.cita = cita;
     }
+
     public String getAbonado() {
         return abonado;
     }

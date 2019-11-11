@@ -707,7 +707,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         if(!TextUtils.isEmpty(textView_observaciones_screen_exec_task.getText().toString())){
             String observaciones = textView_observaciones_screen_exec_task.getText().toString();
             try {
-                Screen_Login_Activity.tarea_JSON.put(DBtareasController.observaciones,observaciones);
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.observaciones_devueltas,observaciones);
             } catch (JSONException e) {
                 e.printStackTrace();
                 Toast.makeText(Screen_Execute_Task.this, "No pudo guardar observaciones", Toast.LENGTH_LONG).show();
@@ -1088,7 +1088,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
             }
         }else if(tag.contains("Observaciones")){
             if (!(TextUtils.isEmpty(wrote_text))) {
-                Screen_Login_Activity.tarea_JSON.put(DBtareasController.observaciones, wrote_text);
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.observaciones_devueltas, wrote_text);
                 //Toast.makeText(Screen_Execute_Task.this, Screen_Login_Activity.tarea_JSON.toString(), Toast.LENGTH_LONG).show();
                 textView_observaciones_screen_exec_task.setText(wrote_text);
             }
@@ -1384,6 +1384,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         progressDialog.setCancelable(true);
     }
     public static void hideRingDialog(){
+        if(progressDialog!=null)
         progressDialog.dismiss();
     }
 
@@ -1407,7 +1408,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                 // User chose the "Settings" item, show the app settings UI...
                 return true;
 
-            case R.id.Ayuda:
+            case R.id.Tareas:
 //                Toast.makeText(Screen_User_Data.this, "Ayuda", Toast.LENGTH_SHORT).show();
                 // User chose the "Favorite" action, mark the current item
                 // as a favorite...

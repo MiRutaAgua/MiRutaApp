@@ -136,6 +136,9 @@
         <activity android:name=".Screen_Filter_Tareas"
             android:configChanges="orientation"
             android:screenOrientation="portrait"></activity>
+        <activity android:name=".Screen_Filter_Results"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"></activity>
 
         <!--<activity android:name=".Screen_Login_Activity"-->
            <!--&gt;</activity>-->

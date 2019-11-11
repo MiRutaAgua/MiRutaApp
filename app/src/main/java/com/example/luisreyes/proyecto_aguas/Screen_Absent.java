@@ -490,13 +490,13 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
                     DBtareasController.status_tarea);
             if(status_tarea.contains("TO_UPLOAD")) {
                 try {
-                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.status_tarea, "DONE,TO_UPLOAD");
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.status_tarea, "IDLE, CITA,TO_UPLOAD");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }else{
                 try {
-                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.status_tarea, "DONE");
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.status_tarea, "IDLE, CITA");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -642,7 +642,7 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
     public void pasarTexto(String observaciones) throws JSONException {
         if(!(TextUtils.isEmpty(observaciones))){
           
-            Screen_Login_Activity.tarea_JSON.put(DBtareasController.observaciones, observaciones);
+            Screen_Login_Activity.tarea_JSON.put(DBtareasController.observaciones_devueltas, observaciones);
             //Toast.makeText(Screen_Absent.this, Screen_Login_Activity.tarea_JSON.toString(), Toast.LENGTH_LONG).show();
 
             observaciones_text.setText(observaciones);
@@ -676,6 +676,7 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
         progressDialog.setCancelable(true);
     }
     private void hideRingDialog(){
+        if(progressDialog!=null)
         progressDialog.dismiss();
     }
     @Override
@@ -698,7 +699,7 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
                 // User chose the "Settings" item, show the app settings UI...
                 return true;
 
-            case R.id.Ayuda:
+            case R.id.Tareas:
 //                Toast.makeText(Screen_User_Data.this, "Ayuda", Toast.LENGTH_SHORT).show();
                 // User chose the "Favorite" action, mark the current item
                 // as a favorite...

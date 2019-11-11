@@ -59,9 +59,12 @@ import java.util.Date;
  */
 
 @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-public class Screen_Incidence_Summary extends AppCompatActivity implements TaskCompleted {
+public class Screen_Incidence_Summary extends AppCompatActivity implements TaskCompleted, Dialog.DialogListener{
 
-    private ImageView  firma_cliente, foto1, foto2, foto3;
+    private ImageView  firma_cliente, foto1, foto2, foto3,
+            imageView_edit_observaciones_screen_incidence_summary,
+            imageView_edit_nombre_firmante_screen_incidence_summary,
+            imageView_edit_numero_carnet_firmante_screen_incidence_summary;
 
     private Button button_firma_cliente,
             button_compartir_screen_incidence_summary,
@@ -72,7 +75,11 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
     private Bitmap bitmap_firma_cliente = null;
     private TextView observaciones_incidence,
             nombre_y_tarea,
-            textView_informacion_screen_incidence_summary;
+            textView_informacion_screen_incidence_summary,
+            textView_nombre_firmante_screen_incidence_summary,
+            textView_numero_carnet_firmante_screen_incidence_summary,
+            textView_info_observaciones_screen_incidence_summary,
+            textView_info_operario_screen_incidence_summary;
 
     private EditText lectura;
     private String lectura_string = "";
@@ -88,6 +95,8 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
 
     private String contador= "";
     private ArrayList<String> images_files_names;
+    private String text_info;
+    private String tag;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -106,7 +115,7 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
 
         images_files = new ArrayList<>();
         images_files_names = new ArrayList<>();
-        
+
         llScroll = (LinearLayout)findViewById(R.id.linearLayout_screen_incidence_summary);
         llScroll_2 = (LinearLayout)findViewById(R.id.linearLayout_screen_incidence_summary_2);
         llScroll_3 = (LinearLayout)findViewById(R.id.linearLayout_screen_incidence_summary_3);
@@ -115,6 +124,11 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
 
         button_firma_cliente = (Button)findViewById(R.id.imageButton_editar_firma_cliente_screen_incidence_summary);
         button_compartir_screen_incidence_summary = (Button)findViewById(R.id.button_compartir_screen_incidence_summary);
+
+        imageView_edit_observaciones_screen_incidence_summary = (ImageView)findViewById(R.id.imageView_edit_observaciones_screen_incidence_summary);
+        imageView_edit_nombre_firmante_screen_incidence_summary = (ImageView)findViewById(R.id.imageView_edit_nombre_firmante_screen_incidence_summary);
+        imageView_edit_numero_carnet_firmante_screen_incidence_summary = (ImageView)findViewById(R.id.imageView_edit_numero_carnet_firmante_screen_incidence_summary);
+
         firma_cliente = (ImageView)findViewById(R.id.imageButton_firma_cliente_screen_validate);
         foto1 = (ImageView)findViewById(R.id.imageView_foto1_screen_incidence_summary);
         foto2 = (ImageView)findViewById(R.id.imageView_foto2_screen_incidence_summary);
@@ -122,52 +136,62 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
         cerrar_tarea = (Button)findViewById(R.id.button_cerrar_tarea_screen_incidence_sumary);
         observaciones_incidence = (TextView)findViewById(R.id.textView_obsevaciones_screen_incidence_summary);
         nombre_y_tarea = (TextView)findViewById(R.id.textView_nombre_y_tarea_screen_incidence_summary);
+
+        textView_numero_carnet_firmante_screen_incidence_summary = (TextView)findViewById(R.id.textView_numero_carnet_firmante_screen_incidence_summary);
+        textView_nombre_firmante_screen_incidence_summary = (TextView)findViewById(R.id.textView_nombre_firmante_screen_incidence_summary);
         textView_informacion_screen_incidence_summary = (TextView)findViewById(R.id.textView_informacion_screen_incidence_summary);
+        textView_info_observaciones_screen_incidence_summary= (TextView)findViewById(R.id.textView_info_observaciones_screen_incidence_summary);
+                textView_info_operario_screen_incidence_summary= (TextView)findViewById(R.id.textView_info_operario_screen_incidence_summary);
         lectura = (EditText)findViewById(R.id.editText_lectura_de_contador_screen_incidence_summary);
 
         if(DBtareasController.tabla_model) {
             try {
-                textView_informacion_screen_incidence_summary.setText((Screen_Login_Activity.tarea_JSON.getString(DBtareasController.poblacion).trim()+ ", "
+                text_info = ((Screen_Login_Activity.tarea_JSON.getString(DBtareasController.poblacion).trim()+ ", "
                         + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.calle).trim().replace("\n", "") + ",  "
                         + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero).trim().replace("\n", "") + ",  "
                         + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_edificio).trim().replace("\n", "")
                         + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.letra_edificio).trim().replace("\n", "") + ",  "
                         + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.nombre_cliente).trim().replace("\n", "") + "\nNÚMERO DE ABONADO: "
                         + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim().replace("\n", "")
-
-                        + "\n\nCAMBIADO POR: "
-                        + Screen_Login_Activity.operario_JSON.getString(DBoperariosController.nombre).trim().replace("\n", "")
-                        + "  "
-                        + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.date_time_modified).trim().replace("\n", "")
-
-                ).replace("null", "").replace("NULL", ""));
+                ).replace("null", "").replace("NULL", "").replace(" , ", " "));
+                textView_informacion_screen_incidence_summary.setText(text_info);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
         else{
             try {
-                textView_informacion_screen_incidence_summary.setText((Screen_Login_Activity.tarea_JSON.getString(DBtareasController.poblacion).trim()+ ", "
+                text_info = ((Screen_Login_Activity.tarea_JSON.getString(DBtareasController.poblacion).trim()+ ", "
                         + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.calle).trim().replace("\n", "") + ",  "
                         + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero).trim().replace("\n", "") + ",  "
                         + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.BIS).trim().replace("\n", "") + ",  "
                         + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.nombre_cliente).trim().replace("\n", "") + "\nNÚMERO DE ABONADO: "
                         + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim().replace("\n", "")
-
-                        + "\n\nCAMBIADO POR: "
-                        + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.operario).trim().replace("\n", "")
-                        + "  "
-                        + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.fecha_instalacion).trim().replace("\n", "")
-
-                ).replace("null", "").replace("NULL", ""));
+                ).replace("null", "").replace("NULL", "").replace(" , ", " "));
+                textView_informacion_screen_incidence_summary.setText(text_info);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
 
         try {
+            textView_info_operario_screen_incidence_summary.setText("CAMBIADO POR: "
+                    + Screen_Login_Activity.operario_JSON.getString(DBoperariosController.nombre).trim().replace("\n", "")
+                    + "  "
+                    + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.date_time_modified).trim().replace("\n", ""));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            textView_info_observaciones_screen_incidence_summary.setText("OBSERVACIONES: "+Screen_Login_Activity.tarea_JSON.
+                    getString(DBtareasController.observaciones).trim().replace("\n", ""));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
             contador = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador)
-            .trim().replace(" ", "");
+                    .trim().replace(" ", "");
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(Screen_Incidence_Summary.this, "No pudo obtenerse contador", Toast.LENGTH_LONG).show();
@@ -272,6 +296,88 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
             e.printStackTrace();
             Toast.makeText(Screen_Incidence_Summary.this, "no se pudo obtener actual lectura de contador", Toast.LENGTH_LONG).show();
         }
+
+        imageView_edit_observaciones_screen_incidence_summary.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Incidence_Summary.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        openDialog("Observaciones","...");
+                    }
+                });
+                imageView_edit_observaciones_screen_incidence_summary.startAnimation(myAnim);
+            }
+        });
+
+        imageView_edit_numero_carnet_firmante_screen_incidence_summary.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Incidence_Summary.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        openDialog("Número de carnet","...");
+                    }
+                });
+                imageView_edit_numero_carnet_firmante_screen_incidence_summary.startAnimation(myAnim);
+            }
+        });
+
+        imageView_edit_nombre_firmante_screen_incidence_summary.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Incidence_Summary.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        openDialog("Nombre del firmante","...");
+                    }
+                });
+                imageView_edit_nombre_firmante_screen_incidence_summary.startAnimation(myAnim);
+            }
+        });
+
         firma_cliente.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -337,6 +443,7 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
         button_compartir_screen_incidence_summary.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                llScroll_4.setVisibility(View.VISIBLE);
                 Screen_Login_Activity.playOnOffSound(getApplicationContext());
                 final Animation myAnim = AnimationUtils.loadAnimation(Screen_Incidence_Summary.this, R.anim.bounce);
                 // Use bounce interpolator with amplitude 0.2 and frequency 20
@@ -354,9 +461,13 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
                     }
                     @Override
                     public void onAnimationEnd(Animation arg0) {
+
                         showRingDialog("Creando PDF...");
 
-//                        textView_informacion_screen_incidence_summary.setVisibility(View.VISIBLE);
+                        bitmap4 = loadBitmapFromView(llScroll_4, llScroll_4.getWidth(), llScroll_4.getHeight());
+
+//                        textView_informacion_screen_incidence_summary.setText("");
+                        textView_informacion_screen_incidence_summary.setVisibility(View.INVISIBLE);
 
                         if(bitmap1_no_nulo)
                             bitmap = loadBitmapFromView(llScroll, llScroll.getWidth(), llScroll.getHeight());
@@ -367,8 +478,6 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
                         if(bitmap5_no_nulo)
                             bitmap5 = loadBitmapFromView(linearLayout_screen_incidence_summary_firma,
                                     linearLayout_screen_incidence_summary_firma.getWidth(), linearLayout_screen_incidence_summary_firma.getHeight());
-
-                        bitmap4 = loadBitmapFromView(llScroll_4, llScroll_4.getWidth(), llScroll_4.getHeight());
 
                         createPdf();
                     }
@@ -406,6 +515,37 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
 
     }
 
+    public void openDialog(String title, String hint){
+        tag=title;
+        Dialog dialog = new Dialog();
+        dialog.setTitleAndHint(title, hint);
+        dialog.show(getSupportFragmentManager(), title);
+    }
+
+    @Override
+    public void pasarTexto(String wrote_text) throws JSONException {
+        if(tag.contains("Observaciones")){
+            if (!(TextUtils.isEmpty(wrote_text))) {
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.observaciones, wrote_text);
+                //Toast.makeText(Screen_Execute_Task.this, Screen_Login_Activity.tarea_JSON.toString(), Toast.LENGTH_LONG).show();
+                observaciones_incidence.setText(wrote_text);
+                textView_info_observaciones_screen_incidence_summary.setText("OBSERVACIONES: " + wrote_text);
+            }
+        }else if(tag.equals("Nombre del firmante")){
+            if (!(TextUtils.isEmpty(wrote_text))) {
+//                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.nombre_firmante, wrote_text);
+//                    textView_nombre_firmante_screen_incidence_summary.setVisibility(View.VISIBLE);
+                textView_nombre_firmante_screen_incidence_summary.setText(wrote_text);
+
+            }
+        }else if(tag.equals("Número de carnet")){
+            if (!(TextUtils.isEmpty(wrote_text))) {
+//                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.numero_carnet_firmante, wrote_text);
+//                    textView_numero_carnet_firmante_screen_incidence_summary.setVisibility(View.VISIBLE);
+                textView_numero_carnet_firmante_screen_incidence_summary.setText(wrote_text);
+            }
+        }
+    }
     private void onCerrar_Tarea() {
         try {
             String fecha = DBtareasController.getStringFromFechaHora(new Date());
@@ -528,7 +668,7 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
         paint.setColor(Color.BLUE);
         int w_foto = (int)w*4/11;
         int h_foto = (int)(w_foto * 1.34);
-        bitmap4 = Bitmap.createScaledBitmap(bitmap4, (int)w/2, (int)h/7, true);
+        bitmap4 = Bitmap.createScaledBitmap(bitmap4, (int)(w*2/3), (int)(h/12), true);
         canvas.drawBitmap(bitmap4, (int)w/10, (int)h/24, null);
 
         if (bitmap1_no_nulo) {
@@ -544,7 +684,7 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
             canvas.drawBitmap(bitmap3, (int)w/10, (int)((h*3/5)) , null);
         }
         if (bitmap5_no_nulo) {
-            bitmap5 = Bitmap.createScaledBitmap(bitmap5,  w_foto, h_foto, true);
+            bitmap5 = Bitmap.createScaledBitmap(bitmap5,  w_foto, (int)(h_foto*2/3), true);
             canvas.drawBitmap(bitmap5, (int)w/2, (int)((h*3/5)) , null);
         }
         document.finishPage(page);
@@ -584,9 +724,11 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
         document.close();
 
         hideRingDialog();
+
+        llScroll_4.setVisibility(View.INVISIBLE);
         if(filePath.exists()) {
             try {
-//                textView_informacion_screen_incidence_summary.setVisibility(View.GONE);
+                textView_informacion_screen_incidence_summary.setVisibility(View.GONE);
                 try{
                     try {
                         String numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado);
@@ -879,7 +1021,8 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
         progressDialog.setCancelable(true);
     }
     private void hideRingDialog(){
-        progressDialog.dismiss();
+        if(progressDialog!=null)
+            progressDialog.dismiss();
     }
 
     @Override
@@ -902,7 +1045,7 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
                 // User chose the "Settings" item, show the app settings UI...
                 return true;
 
-            case R.id.Ayuda:
+            case R.id.Tareas:
 //                Toast.makeText(Screen_User_Data.this, "Ayuda", Toast.LENGTH_SHORT).show();
                 // User chose the "Favorite" action, mark the current item
                 // as a favorite...

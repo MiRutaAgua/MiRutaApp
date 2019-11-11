@@ -78,7 +78,7 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
 
     public static boolean isOnline = true; ///cambiar todas las ocurrencias de esta variable por isOnline
 
-    private ProgressDialog progressDialog;
+    private ProgressDialog progressDialog = null;
 
     private Typeface typeface;
 
@@ -507,7 +507,9 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
         progressDialog.setCancelable(false);
     }
     private void hideRingDialog(){
-        progressDialog.dismiss();
+        if(progressDialog!=null) {
+            progressDialog.dismiss();
+        }
     }
 
 }

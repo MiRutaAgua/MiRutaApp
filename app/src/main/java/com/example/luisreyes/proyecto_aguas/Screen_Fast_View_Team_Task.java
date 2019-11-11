@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -20,8 +21,11 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -66,9 +70,6 @@ public class Screen_Fast_View_Team_Task  extends AppCompatActivity implements Ta
         myToolbar.setBackgroundColor(Color.TRANSPARENT);
         setSupportActionBar(myToolbar);
 
-
-        lista_de_contadores_screen_fast_view_table_team = (ListView) findViewById(R.id.listView_contadores_screen_fast_view_team_task);
-
         lista_to_display = new ArrayList<String>();
         lista_tareas_fast = new ArrayList<My_Fast_View_Task>();
         lista_cantidades = new ArrayList<>();
@@ -76,6 +77,39 @@ public class Screen_Fast_View_Team_Task  extends AppCompatActivity implements Ta
         images_files = new ArrayList<String>();
         tareas_to_upload = new ArrayList<String>();
         tareas_to_update = new ArrayList<String>();
+
+        lista_de_contadores_screen_fast_view_table_team = (ListView) findViewById(R.id.listView_contadores_screen_fast_view_team_task);
+
+        lista_de_contadores_screen_fast_view_table_team.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String object_click = lista_de_contadores_screen_fast_view_table_team.getAdapter().getItem(i).toString();
+                if(!object_click.isEmpty()) {
+                    if (object_click.contains(" ")) {
+                        String[] split_string = object_click.split(" ");
+                        Log.e("Split", split_string.toString());
+                        Log.e("Split length", String.valueOf(split_string.length));
+                        if (split_string.length > 3) {
+                            String tipo_tarea = object_click.split(" ")[split_string.length-3].trim();
+                            String calibre = object_click.split(" ")[split_string.length-2].trim();
+                            Log.e("calibre", calibre);
+                            Log.e("tipo_tarea", tipo_tarea);
+
+                            Intent open_Filter_Results = new Intent(Screen_Fast_View_Team_Task.this, Screen_Filter_Results.class);
+                            open_Filter_Results.putExtra("filter_type", "TIPO_TAREA");
+                            open_Filter_Results.putExtra("tipo_tarea", tipo_tarea);
+                            open_Filter_Results.putExtra("calibre", calibre);
+                            open_Filter_Results.putExtra("poblacion", "");
+                            open_Filter_Results.putExtra("calle", "");
+                            open_Filter_Results.putExtra("portales", "");
+                            open_Filter_Results.putExtra("limitar_a_operario", false);
+                            startActivity(open_Filter_Results);
+                        }
+                    }
+
+                }
+            }
+        });
 
         try {
             subirTareasSiExisten();
@@ -190,6 +224,10 @@ public class Screen_Fast_View_Team_Task  extends AppCompatActivity implements Ta
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
 
+                            if(Screen_Filter_Tareas.checkIfTaskIsDone(jsonObject)){
+                                continue;
+                            }
+                            jsonObject = Screen_Table_Team.buscarTelefonosEnObservaciones(jsonObject);
                             if (insertar_todas) {
                                 team_or_personal_task_selection_screen_Activity.dBtareasController.insertTarea(jsonObject);
                             }
@@ -565,6 +603,7 @@ public class Screen_Fast_View_Team_Task  extends AppCompatActivity implements Ta
         progressDialog.setCancelable(false);
     }
     public static void hideRingDialog(){
+        if(progressDialog!=null)
         progressDialog.dismiss();
     }
     @Override
@@ -587,7 +626,7 @@ public class Screen_Fast_View_Team_Task  extends AppCompatActivity implements Ta
                 // User chose the "Settings" item, show the app settings UI...
                 return true;
 
-            case R.id.Ayuda:
+            case R.id.Tareas:
 //                Toast.makeText(Screen_User_Data.this, "Ayuda", Toast.LENGTH_SHORT).show();
                 // User chose the "Favorite" action, mark the current item
                 // as a favorite...

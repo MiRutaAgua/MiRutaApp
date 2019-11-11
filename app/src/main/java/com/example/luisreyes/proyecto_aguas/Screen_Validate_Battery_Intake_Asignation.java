@@ -335,7 +335,7 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
         if(current_tag.contains("observaciones")) {
             if (!(TextUtils.isEmpty(wrote_string))) {
 
-                Screen_Login_Activity.tarea_JSON.put(DBtareasController.observaciones, wrote_string);
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.observaciones_devueltas, wrote_string);
                 observaciones.setText(wrote_string);
             }
         }else if(current_tag.contains("Número de Serie")){
@@ -473,6 +473,7 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
         progressDialog.setCancelable(true);
     }
     private void hideRingDialog(){
+        if(progressDialog!=null)
         progressDialog.dismiss();
     }
 
@@ -511,7 +512,7 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
                 // User chose the "Settings" item, show the app settings UI...
                 return true;
 
-            case R.id.Ayuda:
+            case R.id.Tareas:
 //                Toast.makeText(Screen_User_Data.this, "Ayuda", Toast.LENGTH_SHORT).show();
                 // User chose the "Favorite" action, mark the current item
                 // as a favorite...

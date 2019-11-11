@@ -68,7 +68,7 @@ public class Screen_Register_Operario extends AppCompatActivity implements TaskC
 
     ImageView capture_Photo;
     private String image;
-    private ProgressDialog progressDialog;
+    private ProgressDialog progressDialog = null;
     boolean registrando = false;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -379,7 +379,9 @@ public class Screen_Register_Operario extends AppCompatActivity implements TaskC
         progressDialog.setCancelable(true);
     }
     private void hideRingDialog(){
-        progressDialog.dismiss();
+        if(progressDialog!=null) {
+            progressDialog.dismiss();
+        }
     }
 
     @Override
@@ -402,7 +404,7 @@ public class Screen_Register_Operario extends AppCompatActivity implements TaskC
                 // User chose the "Settings" item, show the app settings UI...
                 return true;
 
-            case R.id.Ayuda:
+            case R.id.Tareas:
 //                Toast.makeText(Screen_User_Data.this, "Ayuda", Toast.LENGTH_SHORT).show();
                 // User chose the "Favorite" action, mark the current item
                 // as a favorite...

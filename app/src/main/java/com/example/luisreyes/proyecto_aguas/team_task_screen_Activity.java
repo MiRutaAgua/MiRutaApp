@@ -32,7 +32,7 @@ public class team_task_screen_Activity extends AppCompatActivity {
     private Button button_tabla_tareas_equipo;
     private Button button_vista_rapida_tareas_equipo;
 
-    private static ProgressDialog progressDialog;
+    private static ProgressDialog progressDialog = null;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -49,6 +49,8 @@ public class team_task_screen_Activity extends AppCompatActivity {
         myToolbar.setBackgroundColor(Color.TRANSPARENT);
         setSupportActionBar(myToolbar);
 
+//        openMessage("info", String.valueOf(team_or_personal_task_selection_screen_Activity.dBtareasController
+//        .countTableTareas()));
         imageView_logo_team        = (ImageView) findViewById(R.id.imageView_logo_personal);
         button_tabla_tareas_equipo   = (Button) findViewById(R.id.button_tabla_tareas_equipo_screen_team_task);
         button_vista_rapida_tareas_equipo = (Button) findViewById(R.id.button_vista_tareas_equipo_screen_team_task);
@@ -76,6 +78,7 @@ public class team_task_screen_Activity extends AppCompatActivity {
                         showRingDialog("Buscando Tareas");
                         Intent intent_open_table_team = new Intent(getApplicationContext(), Screen_Table_Team.class);
                         startActivity(intent_open_table_team);
+                        team_task_screen_Activity.this.finish();
                     }
                 });
                 button_tabla_tareas_equipo.startAnimation(myAnim);
@@ -131,10 +134,12 @@ public class team_task_screen_Activity extends AppCompatActivity {
                 // User chose the "Settings" item, show the app settings UI...
                 return true;
 
-            case R.id.Ayuda:
+            case R.id.Tareas:
 //                Toast.makeText(Screen_User_Data.this, "Ayuda", Toast.LENGTH_SHORT).show();
                 // User chose the "Favorite" action, mark the current item
                 // as a favorite...
+                Intent intent= new Intent(this, Screen_Table_Team.class);
+                startActivity(intent);
                 return true;
 
             case R.id.Configuracion:
@@ -162,6 +167,8 @@ public class team_task_screen_Activity extends AppCompatActivity {
         progressDialog.setCancelable(true);
     }
     public static void hideRingDialog(){
-        progressDialog.dismiss();
+        if(progressDialog!=null) {
+            progressDialog.dismiss();
+        }
     }
 }

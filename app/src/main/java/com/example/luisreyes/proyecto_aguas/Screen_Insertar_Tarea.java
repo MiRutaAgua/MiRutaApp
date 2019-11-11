@@ -331,6 +331,7 @@ public class Screen_Insertar_Tarea extends AppCompatActivity implements TaskComp
         progressDialog.setCancelable(true);
     }
     private void hideRingDialog(){
+        if(progressDialog!=null)
         progressDialog.dismiss();
     }
 }

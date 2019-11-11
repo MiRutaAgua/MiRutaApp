@@ -11,7 +11,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center"
-        android:paddingBottom="60dp"
         >
         <include layout = "@layout/toolbar"
             android:id="@+id/my_toolbar"
@@ -37,31 +36,10 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/linearLayout_info_screen_validate_info"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_margin="20dp"
-            android:gravity="center"
-            android:layout_gravity="center"
-            >
-            <TextView
-                android:id="@+id/textView_info_screen_validate"
-                android:text="Información"
-                android:textStyle="bold"
-                android:textSize="18dp"
-                android:layout_gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
-        </LinearLayout>
-
-        <LinearLayout
             android:id="@+id/linearLayout_screen_validate_foto_antes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="40dp"
             android:gravity="center"
             >
             <LinearLayout
@@ -120,7 +98,6 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/linearLayout_screen_validate_numero_serie"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -332,35 +309,96 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/linearLayout_screen_validate_firma"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="30dp"
-                android:gravity="left"
-                android:layout_gravity="left"
-                >
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="left"
-                    android:gravity="left"
-                    android:text="Firma"
-                    android:textStyle="bold"
-                    android:textSize="20dp"
-                    android:layout_marginLeft="45dp"/>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="110dp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:orientation="horizontal">
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    >
+                    <TextView
+                        android:text="NOMBRE DEL FIRMANTE:"
+                        android:textSize="14dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textStyle="bold"
+                        android:padding="5dp"
+                        />
+                    <TextView
+                        android:id="@+id/textView_nombre_firmante_screen_validate"
+                        android:text="..."
+                        android:textSize="15dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:padding="5dp"
+                        />
+                    <ImageView
+                        android:paddingTop="1dp"
+                        android:id="@+id/imageView_edit_nombre_firmante_screen_validate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:padding="10dp"
+                        android:src="@drawable/ic_edit_blue_24dp"
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
 
+                    android:gravity="center"
+                    >
+                    <TextView
+                        android:text="NÚMERO DE CARNET:"
+                        android:textSize="14dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textStyle="bold"
+                        android:padding="5dp"
+                        />
+                    <TextView
+                        android:id="@+id/textView_numero_carnet_firmante_screen_validate"
+                        android:text="..."
+                        android:textSize="14dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:padding="5dp"
+                        />
+                    <ImageView
+                        android:paddingTop="1dp"
+                        android:id="@+id/imageView_edit_numero_carnet_firmante_screen_validate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:padding="10dp"
+                        android:src="@drawable/ic_edit_blue_24dp"
+                        />
+                </LinearLayout>
+                <TextView
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="FIRMA"
+                    android:textStyle="bold"
+                    android:textSize="15dp"
+                    />
                 <ImageView
                     android:id="@+id/imageButton_firma_cliente_screen_validate"
                     android:layout_width="278dp"
-                    android:layout_height="150dp"
+                    android:layout_height="110dp"
                     android:src="@drawable/screen_validate_firma_imagen" />
             </LinearLayout>
 
@@ -401,13 +439,13 @@
                 android:textColor="@android:color/white"
                 android:background="@drawable/fondo_boton_azul" />
         </LinearLayout>
-           <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="horizontal"
-               android:padding="5dp"
-               >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="5dp"
+            >
             <Button
                 android:id="@+id/button_cerrar_tarea_screen_validate"
                 android:layout_width="266dp"
@@ -420,5 +458,47 @@
                 android:background="@drawable/fondo_boton_azul" />
         </LinearLayout>
 
+
+        <LinearLayout
+            android:id="@+id/linearLayout_info_screen_validate_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="80dp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:visibility="invisible"
+            >
+            <TextView
+                android:id="@+id/textView_info_screen_validate"
+                android:text=".."
+                android:textStyle="bold"
+                android:textSize="10dp"
+                android:textColor="@android:color/black"
+                android:layout_gravity="left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+            <TextView
+                android:id="@+id/textView_info_observaciones_screen_validate"
+                android:text="..."
+                android:textStyle="bold"
+                android:textSize="10dp"
+                android:textColor="@android:color/black"
+                android:layout_gravity="left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+            <TextView
+                android:id="@+id/textView_info_operario_screen_validate"
+                android:text="..."
+                android:textStyle="bold"
+                android:textSize="10dp"
+                android:layout_gravity="left"
+                android:textColor="@android:color/black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+        </LinearLayout>
     </LinearLayout>
 </ScrollView>

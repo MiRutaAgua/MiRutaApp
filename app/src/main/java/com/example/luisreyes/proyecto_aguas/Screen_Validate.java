@@ -70,25 +70,33 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
     private ImageView imageView_foto_lectura_screen_validate;
     private ImageView imageButton_firma_cliente_screen_validate,
             imageView_edit_serial_number_screen_validate,
-            imageView_edit_calibre_screen_validate;
-    private LinearLayout llScroll;
-    private LinearLayout llScroll_2;
-    private LinearLayout llScroll_3;
-    private LinearLayout llScroll_4, linearLayout_screen_validate_lectura;
-    boolean bitmap1_no_nulo = true, bitmap2_no_nulo = false,bitmap3_no_nulo = false,bitmap4_no_nulo = false, bitmap5_no_nulo = false;
+            imageView_edit_calibre_screen_validate,
+            imageView_edit_nombre_firmante_screen_validate,
+            imageView_edit_numero_carnet_firmante_screen_validate;
+
+    private LinearLayout llScroll_final,
+    llScroll_antes,
+    llScroll_firma ,
+    llScroll_lectura ,
+    llScroll_info;
+
+    boolean bitmap1_no_nulo = true, bitmap_antes_no_nulo = false,bitmap_despues_no_nulo = false,bitmap_lectura_no_nulo = false, bitmap_firma_no_nulo = false;
     private Bitmap bitmap_firma_cliente = null, bitmap = null,  bitmap2 = null,bitmap3 = null, bitmap4 = null, bitmap5 = null;
     private static final String pdfName = "pdf_validar";
     private Button imageButton_editar_firma_cliente_screen_validate,
             button_compartir_screen_validate,
             imageView_screen_validate_cerrar_tarea;
     private EditText lectura_ultima_et, lectura_actual_et;
-    private TextView textView_info,
+    private TextView textView_info, textView_info_observaciones_screen_validate,
             textView_calibre_label_screen_validate,
             numero_serie_nuevo_label,
             numero_serie_nuevo,
             textView_calibre_screen_validate,
-            textView_numero_serie_viejo_label
-            ,textView_numero_serie_viejo;
+            textView_numero_serie_viejo_label,
+            textView_numero_serie_viejo,
+            textView_nombre_firmante_screen_validate,
+            textView_info_operario_screen_validate,
+            textView_numero_carnet_firmante_screen_validate;
 
     private String current_tag;
     private ProgressDialog progressDialog;
@@ -115,11 +123,11 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
         images_files = new ArrayList<>();
         images_files_names = new ArrayList<>();
 
-        linearLayout_screen_validate_lectura = (LinearLayout)findViewById(R.id.linearLayout_screen_validate_lectura);
-        llScroll_2 = (LinearLayout)findViewById(R.id.linearLayout_screen_validate_foto_antes);
-        llScroll_4 = (LinearLayout)findViewById(R.id.linearLayout_screen_validate_foto_final);
-        llScroll_3 = (LinearLayout)findViewById(R.id.linearLayout_screen_validate_numero_serie);
-        llScroll = (LinearLayout)findViewById(R.id.linearLayout_info_screen_validate_info);
+        llScroll_final = (LinearLayout)findViewById(R.id.linearLayout_screen_validate_foto_final);
+        llScroll_antes = (LinearLayout)findViewById(R.id.linearLayout_screen_validate_foto_antes);
+        llScroll_firma = (LinearLayout)findViewById(R.id.linearLayout_screen_validate_firma);
+        llScroll_lectura = (LinearLayout)findViewById(R.id.linearLayout_screen_validate_lectura);
+        llScroll_info = (LinearLayout)findViewById(R.id.linearLayout_info_screen_validate_info);
 
         button_compartir_screen_validate  = (Button)findViewById(R.id.button_compartir_screen_validate);
         lectura_ultima_et    = (EditText)findViewById(R.id.editText_lectura_ultima_de_contador_screen_incidence_summary);
@@ -130,6 +138,8 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
         textView_calibre_label_screen_validate = (TextView)findViewById(R.id.textView_calibre_label_screen_validate);
         textView_numero_serie_viejo_label = (TextView)findViewById(R.id.textView_numero_serie_viejo_label);
         textView_numero_serie_viejo = (TextView)findViewById(R.id.textView_numero_serie_viejo);
+        textView_nombre_firmante_screen_validate = (TextView)findViewById(R.id.textView_nombre_firmante_screen_validate);
+        textView_numero_carnet_firmante_screen_validate = (TextView)findViewById(R.id.textView_numero_carnet_firmante_screen_validate);
 
         imageView_screen_validate_cerrar_tarea    = (Button)findViewById(R.id.button_cerrar_tarea_screen_validate);
         foto_instalacion_screen_exec_task         = (ImageView)findViewById(R.id.imageView_foto_antes_instalacion_screen_validate);
@@ -137,6 +147,8 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
         foto_numero_de_serie_screen_exec_task     = (ImageView)findViewById(R.id.imageView_foto_numero_serie_screen_validate);
         imageView_foto_lectura_screen_validate    = (ImageView)findViewById(R.id.imageView_foto_lectura_screen_validate);
 
+        imageView_edit_numero_carnet_firmante_screen_validate = (ImageView)findViewById(R.id.imageView_edit_numero_carnet_firmante_screen_validate);
+        imageView_edit_nombre_firmante_screen_validate = (ImageView)findViewById(R.id.imageView_edit_nombre_firmante_screen_validate);
         imageButton_firma_cliente_screen_validate = (ImageView)findViewById(R.id.imageButton_firma_cliente_screen_validate);
         imageButton_editar_firma_cliente_screen_validate = (Button)findViewById(R.id.imageButton_editar_firma_cliente_screen_validate);
 
@@ -145,6 +157,10 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
 
         nombre_y_tarea = (TextView) findViewById(R.id.textView_nombre_cliente_y_tarea_screen_validate);
         textView_info = (TextView) findViewById(R.id.textView_info_screen_validate);
+        textView_info_observaciones_screen_validate = (TextView) findViewById(R.id.textView_info_observaciones_screen_validate);
+        textView_info_operario_screen_validate= (TextView) findViewById(R.id.textView_info_operario_screen_validate);
+
+        llScroll_info.setVisibility(View.INVISIBLE);
 
         if(DBtareasController.tabla_model) {
             try {
@@ -155,13 +171,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                         + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.letra_edificio).trim().replace("\n", "") + ",  "
                         + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.nombre_cliente).trim().replace("\n", "") + "\nNÚMERO DE ABONADO: "
                         + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim().replace("\n", "")
-
-                        + "\n\nCAMBIADO POR: "
-                        + Screen_Login_Activity.operario_JSON.getString(DBoperariosController.nombre).trim().replace("\n", "")
-                        + "  "
-                        + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.date_time_modified).trim().replace("\n", "")
-
-                ).replace("null", "").replace("NULL", ""));
+                ).replace("null", "").replace("NULL", "").replace(" , ", ""));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -174,16 +184,25 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                         + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.BIS).trim().replace("\n", "") + ",  "
                         + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.nombre_cliente).trim().replace("\n", "") + "\nNÚMERO DE ABONADO: "
                         + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim().replace("\n", "")
-
-                        + "\n\nCAMBIADO POR: "
-                        + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.operario).trim().replace("\n", "")
-                        + "  "
-                        + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.fecha_instalacion).trim().replace("\n", "")
-
-                ).replace("null", "").replace("NULL", ""));
+                ).replace("null", "").replace("NULL", "").replace(" , ", ""));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        }
+
+        try {
+            textView_info_operario_screen_validate.setText("CAMBIADO POR: "
+                    + Screen_Login_Activity.operario_JSON.getString(DBoperariosController.nombre).trim().replace("\n", "")
+                    + "  "
+                    + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.date_time_modified).trim().replace("\n", ""));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            textView_info_observaciones_screen_validate.setText("OBSERVACIONES: "+Screen_Login_Activity.tarea_JSON.
+                    getString(DBtareasController.observaciones).trim().replace("\n", ""));
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
 
         String tipo, calibre, nombre;
@@ -244,7 +263,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
         if(!Screen_Execute_Task.mCurrentPhotoPath_foto_antes.isEmpty()) {
             Bitmap foto_antes_intalacion_bitmap = getPhotoUserLocal(Screen_Execute_Task.mCurrentPhotoPath_foto_antes);
             if (foto_antes_intalacion_bitmap != null) {
-                bitmap2_no_nulo = true;
+                bitmap_antes_no_nulo = true;
                 foto_instalacion_screen_exec_task.setVisibility(View.VISIBLE);
                 foto_instalacion_screen_exec_task.setImageBitmap(foto_antes_intalacion_bitmap);
             }
@@ -252,7 +271,6 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
         if(!Screen_Execute_Task.mCurrentPhotoPath_foto_serie.isEmpty()) {
             Bitmap foto_numero_serie_bitmap = getPhotoUserLocal(Screen_Execute_Task.mCurrentPhotoPath_foto_serie);
             if (foto_numero_serie_bitmap != null) {
-                bitmap3_no_nulo = true;
                 foto_numero_de_serie_screen_exec_task.setVisibility(View.VISIBLE);
                 foto_numero_de_serie_screen_exec_task.setImageBitmap(foto_numero_serie_bitmap);
             }
@@ -261,7 +279,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
         if(!Screen_Execute_Task.mCurrentPhotoPath_foto_lectura.isEmpty()) {
             Bitmap foto_lectura_bitmap = getPhotoUserLocal(Screen_Execute_Task.mCurrentPhotoPath_foto_lectura);
             if (foto_lectura_bitmap != null) {
-                bitmap5_no_nulo = true;
+                bitmap_lectura_no_nulo = true;
                 imageView_foto_lectura_screen_validate.setVisibility(View.VISIBLE);
                 imageView_foto_lectura_screen_validate.setImageBitmap(foto_lectura_bitmap);
             }
@@ -270,18 +288,18 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
         if(!Screen_Execute_Task.mCurrentPhotoPath_foto_despues.isEmpty()) {
             Bitmap foto_despues_intalacion_bitmap = getPhotoUserLocal(Screen_Execute_Task.mCurrentPhotoPath_foto_despues);
             if (foto_despues_intalacion_bitmap != null) {
-                bitmap4_no_nulo = true;
+                bitmap_despues_no_nulo = true;
                 foto_final_instalacion_screen_exec_task.setVisibility(View.VISIBLE);
                 foto_final_instalacion_screen_exec_task.setImageBitmap(foto_despues_intalacion_bitmap);
             }
         }
-
         try {
             String firma = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.firma_cliente).trim();
             if(!firma.isEmpty() && !firma.equals("null")&&  !firma.equals("NULL"))  {
                 Bitmap firma_bitmap = getPhotoUserLocal(  getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+
                         Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim() + "/" + firma);
                 if (firma_bitmap != null) {
+                    bitmap_firma_no_nulo = true;
                     imageButton_firma_cliente_screen_validate.setImageBitmap(firma_bitmap);
                 }
             }
@@ -289,12 +307,12 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
             e.printStackTrace();
         }
 
-
         Screen_Execute_Task.hideRingDialog();
 
         button_compartir_screen_validate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                llScroll_info.setVisibility(View.VISIBLE);
                 Screen_Login_Activity.playOnOffSound(getApplicationContext());
                 final Animation myAnim = AnimationUtils.loadAnimation(Screen_Validate.this, R.anim.bounce);
                 // Use bounce interpolator with amplitude 0.2 and frequency 20
@@ -316,22 +334,34 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
 
 //                        textView_info.setVisibility(View.VISIBLE);
 
-                        bitmap = loadBitmapFromView(llScroll, llScroll.getWidth(), llScroll.getHeight());
+                        bitmap = loadBitmapFromView(llScroll_info, llScroll_info.getWidth(), llScroll_info.getHeight());
 
-                        if(bitmap2_no_nulo)
-                            bitmap2 = loadBitmapFromView(llScroll_2, llScroll_2.getWidth(), llScroll_2.getHeight());
-                        if(bitmap3_no_nulo)
-                            bitmap3 = loadBitmapFromView(llScroll_3, llScroll_3.getWidth(), llScroll_3.getHeight());
-                        if(bitmap4_no_nulo)
-                            bitmap4 = loadBitmapFromView(llScroll_4, llScroll_4.getWidth(), llScroll_4.getHeight());
-                        if(bitmap5_no_nulo)
-                            bitmap5 = loadBitmapFromView(linearLayout_screen_validate_lectura,
-                                    linearLayout_screen_validate_lectura.getWidth(), linearLayout_screen_validate_lectura.getHeight());
+                        if(bitmap_antes_no_nulo)
+                            bitmap2 = loadBitmapFromView(llScroll_antes, llScroll_antes.getWidth(), llScroll_antes.getHeight());
+                        if(bitmap_despues_no_nulo)
+                            bitmap3 = loadBitmapFromView(llScroll_final, llScroll_final.getWidth(), llScroll_final.getHeight());
+                        if(bitmap_lectura_no_nulo)
+                            bitmap4 = loadBitmapFromView(llScroll_lectura, llScroll_lectura.getWidth(), llScroll_lectura.getHeight());
+                        if(bitmap_firma_no_nulo)
+                            bitmap5 = loadBitmapFromView(llScroll_firma, llScroll_firma.getWidth(), llScroll_firma.getHeight());
                         createPdf();
                     }
                 });
                 button_compartir_screen_validate.startAnimation(myAnim);
 
+            }
+        });
+
+        imageView_edit_nombre_firmante_screen_validate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openDialog("Nombre del firmante");
+            }
+        });
+        imageView_edit_numero_carnet_firmante_screen_validate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openDialog("Número de carnet");
             }
         });
 
@@ -570,7 +600,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
     private PdfDocument setContentPDF(PdfDocument document, int w, int h, int page_count) {
         w = 1654;  //A4 4962
         h = 2339;  //A4 7016
-        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(w , h, page_count).create();
+        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(1600, 2400, page_count).create();
         PdfDocument.Page page = document.startPage(pageInfo);
         Canvas canvas = page.getCanvas();
         Paint paint = new Paint();
@@ -579,29 +609,29 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
         paint.setColor(Color.BLUE);
         int w_foto = (int)w*4/11;
         int h_foto = (int)(w_foto * 1.34);
-        bitmap = Bitmap.createScaledBitmap(bitmap, (int)w/2, (int)h/7, true);
+        bitmap = Bitmap.createScaledBitmap(bitmap, (int)(w*2/3), (int)h/12, true);
         canvas.drawBitmap(bitmap, (int)w/10, h/24, null);
 
-        if (bitmap2_no_nulo) {
+        if (bitmap_antes_no_nulo) {
             bitmap2 = Bitmap.createScaledBitmap(bitmap2, w_foto, h_foto, true);
             canvas.drawBitmap(bitmap2, (int)w/10, (int)((h/5)), null);
         }
-        if (bitmap3_no_nulo) {
+        if (bitmap_despues_no_nulo) {
             bitmap3 = Bitmap.createScaledBitmap(bitmap3, w_foto, h_foto, true);
-            canvas.drawBitmap(bitmap3, (int)w/10, (int)((h*3/5)) , null);
+            canvas.drawBitmap(bitmap3, (int)w/2, (int)((h/5)) , null);
         }
-        if (bitmap4_no_nulo) {
+        if (bitmap_lectura_no_nulo) {
             bitmap4 = Bitmap.createScaledBitmap(bitmap4, w_foto, h_foto, true);
-            canvas.drawBitmap(bitmap4, (int)w/2, (int)((h*3/5)), null);
+            canvas.drawBitmap(bitmap4, (int)w/10, (int)((h*3/5)), null);
         }
-        if(bitmap5_no_nulo){
-            bitmap5 = Bitmap.createScaledBitmap(bitmap5, w_foto, h_foto, true);
-            canvas.drawBitmap(bitmap5, (int)w/2, (int)((h/5)) , null);
+        if(bitmap_firma_no_nulo){
+            bitmap5 = Bitmap.createScaledBitmap(bitmap5, w_foto, (int)(h_foto*2/3), true);
+            canvas.drawBitmap(bitmap5, (int)w/2, (int)((h*3/5)) , null);
         }
+
         document.finishPage(page);
         return document;
     }
-
     private void createPdf(){
         WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
         //  Display display = wm.getDefaultDisplay();
@@ -635,8 +665,10 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
         document.close();
 
         hideRingDialog();
-        if(filePath.exists()) {
 
+        llScroll_info.setVisibility(View.INVISIBLE);
+
+        if(filePath.exists()) {
             try{
                 try {
                     String numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado);
@@ -663,6 +695,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
 
             try {
 //                textView_info.setVisibility(View.GONE);
+
                 Toast.makeText(this, "PDF creado correctamente ", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(Intent.ACTION_SEND ,Uri.parse("mailto: mraguascontadores@gmail.com")); // it's not ACTION_SEND
                 intent.setType("text/plain");
@@ -702,6 +735,16 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
     public void uploadPhotos(){
         if(images_files.isEmpty()){
             hideRingDialog();
+            if(team_or_personal_task_selection_screen_Activity.dBtareasController != null) {
+                try {
+                    team_or_personal_task_selection_screen_Activity.dBtareasController.deleteTarea(Screen_Login_Activity.tarea_JSON);
+                } catch (JSONException e) {
+                    Toast.makeText(Screen_Validate.this, "No se pudo borrar tarea local " + e.toString(), Toast.LENGTH_LONG).show();
+                    e.printStackTrace();
+                }
+            }else{
+                Toast.makeText(this, "No hay tabla donde borrar", Toast.LENGTH_LONG).show();
+            }
             Toast.makeText(Screen_Validate.this, "Actualizada tarea correctamente", Toast.LENGTH_LONG).show();
             Intent intent_open_battery_counter = new Intent(Screen_Validate.this, team_or_personal_task_selection_screen_Activity.class);
             startActivity(intent_open_battery_counter);
@@ -726,7 +769,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
             } catch (JSONException e) {
                 images_files.clear();
                 e.printStackTrace();
-                Toast.makeText(this, "Error obteniendo numero interno\n"+ e.toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Error obteniendo numero_abonado\n"+ e.toString(), Toast.LENGTH_LONG).show();
                 return;
             }
         }
@@ -741,6 +784,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                 //int result = data.getIntExtra("result", 0);
                 //String res = String.valueOf(result);
                 if (!firma.equals("null")) {
+                    bitmap_firma_no_nulo= true;
                     bitmap_firma_cliente = getImageFromString(firma);
                     imageButton_firma_cliente_screen_validate.setImageBitmap(bitmap_firma_cliente);
                     try {
@@ -840,9 +884,19 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                         uploadPhotos();
                     }
                     else{
-//                        Intent intent_open_battery_counter = new Intent(this, team_or_personal_task_selection_screen_Activity.class);
-//                        startActivity(intent_open_battery_counter);
-//                        this.finish();
+                        if(team_or_personal_task_selection_screen_Activity.dBtareasController != null) {
+                            try {
+                                team_or_personal_task_selection_screen_Activity.dBtareasController.deleteTarea(Screen_Login_Activity.tarea_JSON);
+                            } catch (JSONException e) {
+                                Toast.makeText(Screen_Validate.this, "No se pudo borrar tarea local " + e.toString(), Toast.LENGTH_LONG).show();
+                                e.printStackTrace();
+                            }
+                        }else{
+                            Toast.makeText(this, "No hay tabla donde borrar", Toast.LENGTH_LONG).show();
+                        }
+                        Intent intent_open_battery_counter = new Intent(this, team_or_personal_task_selection_screen_Activity.class);
+                        startActivity(intent_open_battery_counter);
+                        this.finish();
                     }
                 }
             }
@@ -871,7 +925,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
         } catch (JSONException e) {
             e.printStackTrace();
         }
-       return null;
+        return null;
     }
     private String saveBitmapImageFirma(Bitmap bitmap, String file_name){
         String numero_abonado = "";
@@ -887,7 +941,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                 if(myDir!=null) {
                     if (!myDir.exists()) {
                         myDir.mkdirs();
-                        File storageDir2 = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/fotos_tareas/"+ numero_abonado);
+                        File storageDir2 = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/fotos_tareas");
                         if (!storageDir2.exists()) {
                             storageDir2.mkdir();
                         }
@@ -935,15 +989,30 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
     public void pasarTexto(String wrote_string) throws JSONException {
         if(current_tag.contains("Numero de Serie Nuevo")) {
             if (!(TextUtils.isEmpty(wrote_string))) {
-
                 Screen_Login_Activity.tarea_JSON.put(DBtareasController.numero_serie_contador, wrote_string);
                 numero_serie_nuevo.setText(wrote_string);
             }
         }else if(current_tag.contains("Calibre Real")){
             if (!(TextUtils.isEmpty(wrote_string))) {
-
                 Screen_Login_Activity.tarea_JSON.put(DBtareasController.calibre_real, wrote_string);
                 textView_calibre_screen_validate.setText(wrote_string);
+            }
+        }else if(current_tag.contains("Observaciones")){
+            if (!(TextUtils.isEmpty(wrote_string))) {
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.observaciones_devueltas, wrote_string);
+                textView_info_observaciones_screen_validate.setText("OBSERVACIONES: "+wrote_string);
+            }
+        }else if(current_tag.equals("Nombre del firmante")){
+            if (!(TextUtils.isEmpty(wrote_string))) {
+//                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.nombre_firmante, wrote_text);
+//                    textView_nombre_firmante_screen_incidence_summary.setVisibility(View.VISIBLE);
+                textView_nombre_firmante_screen_validate.setText(wrote_string);
+            }
+        }else if(current_tag.equals("Número de carnet")){
+            if (!(TextUtils.isEmpty(wrote_string))) {
+//                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.numero_carnet_firmante, wrote_text);
+//                    textView_numero_carnet_firmante_screen_incidence_summary.setVisibility(View.VISIBLE);
+                textView_numero_carnet_firmante_screen_validate.setText(wrote_string);
             }
         }
     }
@@ -1010,7 +1079,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                 // User chose the "Settings" item, show the app settings UI...
                 return true;
 
-            case R.id.Ayuda:
+            case R.id.Tareas:
 //                Toast.makeText(Screen_User_Data.this, "Ayuda", Toast.LENGTH_SHORT).show();
                 // User chose the "Favorite" action, mark the current item
                 // as a favorite...
@@ -1044,11 +1113,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
 
     @Override
     public void onBackPressed() {
-        foto_instalacion_screen_exec_task.setVisibility(View.GONE);
-        imageView_foto_lectura_screen_validate.setVisibility(View.GONE);
-        foto_numero_de_serie_screen_exec_task.setVisibility(View.GONE);
-        foto_final_instalacion_screen_exec_task.setVisibility(View.GONE);
-        Screen_Validate.this.finish();
+        finish();
         super.onBackPressed();
     }
 }

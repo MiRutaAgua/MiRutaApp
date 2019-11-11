@@ -83,11 +83,11 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
         mapaTiposDeAnomalias.put("T", "BAJA O CORTE DE SUMINISTRO");
         mapaTiposDeAnomalias.put("TBDN", "BAJA O CORTE DE SUMINISTRO");
         mapaTiposDeAnomalias.put("LFTD", "LIMPIEZA DE FILTRO Y TOMA DE DATOS");
-        mapaTiposDeAnomalias.put("D", "DATOS");
+        //mapaTiposDeAnomalias.put("D", "DATOS");
         mapaTiposDeAnomalias.put("TD", "TOMA DE DATOS");
-        mapaTiposDeAnomalias.put("I", "INSPECCIÓN");
+        //mapaTiposDeAnomalias.put("I", "INSPECCIÓN");
         mapaTiposDeAnomalias.put("CF", "COMPROBAR EMISOR");
-        mapaTiposDeAnomalias.put("EL", "EMISOR LECTURA");
+        //mapaTiposDeAnomalias.put("EL", "EMISOR LECTURA");
         mapaTiposDeAnomalias.put("SI", "SOLO INSTALAR");
         mapaTiposDeAnomalias.put("R", "REFORMA MAS CONTADOR");
 
@@ -166,7 +166,7 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
             if(!lista_desplegable_tipos_anomalia.contains(pair.getValue().toString())) {
                 lista_desplegable_tipos_anomalia.add(pair.getValue().toString());
             }
-            it.remove(); // avoids a ConcurrentModificationException
+            //it.remove(); // avoids a ConcurrentModificationException
         }
 
         ArrayAdapter arrayAdapter_spinner = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista_desplegable_tipos_anomalia);
@@ -465,7 +465,7 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
                 // User chose the "Settings" item, show the app settings UI...
                 return true;
 
-            case R.id.Ayuda:
+            case R.id.Tareas:
 //                Toast.makeText(Screen_User_Data.this, "Ayuda", Toast.LENGTH_SHORT).show();
                 // User chose the "Favorite" action, mark the current item
                 // as a favorite...

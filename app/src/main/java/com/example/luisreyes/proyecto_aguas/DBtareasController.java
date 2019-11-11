@@ -129,7 +129,7 @@ public class DBtareasController extends SQLiteOpenHelper {
 
     public DBtareasController(Context applicationContext){
         super(applicationContext, database_name, null,  MainActivity.DB_VERSION);
-        Log.e("Ejecutando: ", "Constructor");
+//        Log.e("Ejecutando: ", "Constructor");
         setTable_model();
         try {
             if(tabla_model) {
@@ -279,7 +279,7 @@ public class DBtareasController extends SQLiteOpenHelper {
             }
 
             jsonTareaType_empty = jsonTareaType;
-            Log.e("Mostrando form JSON:",jsonTareaType.toString());
+//            Log.e("Mostrando form JSON:",jsonTareaType.toString());
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -526,7 +526,7 @@ public class DBtareasController extends SQLiteOpenHelper {
             contentValues.put(keys.get(n), json.getString(keys.get(n)));
         }
         database.insert(table_name, null, contentValues);
-        Log.e("Insertando JSON:",json.toString());
+//        Log.e("Insertando JSON:",json.toString());
     }
 
     public String updateTarea(JSONObject json, String key) throws JSONException {
@@ -673,7 +673,7 @@ public class DBtareasController extends SQLiteOpenHelper {
                     jsonTareaType.put(keys.get(n), c.getString(n));
                 }
                 c.close();
-                Log.e("Obteniendo JSON by NI:",jsonTareaType.toString());
+//                Log.e("Obteniendo JSON by NI:",jsonTareaType.toString());
                 return jsonTareaType.toString();
             }else{
                 c.close();
@@ -707,7 +707,7 @@ public class DBtareasController extends SQLiteOpenHelper {
                     jsonTareaType.put(keys.get(n), c.getString(n));
                 }
                 c.close();
-                Log.e("Obteniendo JSON by id:",jsonTareaType.toString());
+//                Log.e("Obteniendo JSON by id:",jsonTareaType.toString());
                 return jsonTareaType.toString();
             }else{
                 c.close();

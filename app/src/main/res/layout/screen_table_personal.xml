@@ -6,8 +6,8 @@
 
     <LinearLayout
         android:id="@+id/linearLayout2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
         <include
@@ -38,7 +38,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:text="TAREAS DE OPERARIO"
-                android:textColor="@color/colorBlueAppRuta"
+                android:textColor="@color/colorGrayLetters"
                 android:textStyle="bold"
                 android:fontFamily="@font/segoeui"
                 android:textSize="18dp"
@@ -59,31 +59,41 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center">
+            android:gravity="left">
 
             <EditText
+                android:layout_marginLeft="20dp"
                 android:id="@+id/editText_screen_table_personal_filter"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
+                android:hint="filtrar"
                 android:padding="10dp"
-                android:hint="filtrar" />
-
-            <Spinner
-                android:id="@+id/spinner_filtrar_tareas_screen_table_personal"
-                android:layout_width="168dp"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                ></Spinner>
+                />
+            <Button
+                android:layout_marginLeft="70dp"
+                android:id="@+id/button_filtrar_citas_screen_table_personal"
+                android:layout_width="100dp"
+                android:layout_height="35dp"
+                android:fontFamily="@font/segoeui"
+                android:text="CITAS"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:textColor="@color/colorGrayLetters"
+                android:background="@drawable/fondo_boton_blanco"
+                android:drawableLeft="@drawable/ic_visibility_off_blue_24dp"
+                android:textAlignment="center"
+                android:paddingLeft="10dp"
+                />
         </LinearLayout>
 
         <ListView
             android:id="@+id/listView_contadores_screen_table_personal"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="1dp">
-
+            android:layout_marginTop="20dp"
+            android:theme="@style/AppTheme"
+            >
         </ListView>
-
 
     </LinearLayout>
 

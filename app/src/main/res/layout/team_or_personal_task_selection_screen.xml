@@ -1,66 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:gravity="center">
-    <include layout = "@layout/toolbar"
-        android:id="@+id/my_toolbar"
-        />
-
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
         android:gravity="center"
-        android:orientation="horizontal"
-        android:padding="1dp">
-
-        <ImageView
-            android:id="@+id/imageView_logo"
-            android:layout_width="wrap_content"
-            android:layout_height="193dp"
-            android:layout_gravity="center"
-            android:src="@drawable/screen_tareas_icon_tareas" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:layout_marginTop="20dip"
-        android:layout_marginLeft="35dp"
-        android:layout_marginRight="10dp"
-        android:padding="5dp"
+        android:orientation="vertical"
         >
-
-
-        <Button
-            android:id="@+id/button_tarea_equipo"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:background="@drawable/screen_tareas_tareas_equipo"
+        <include layout = "@layout/toolbar"
+            android:id="@+id/my_toolbar"
             />
-    </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:layout_marginLeft="35dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
-        android:padding="5dp"
-        >
-
-        <Button
-            android:id="@+id/button_tarea_personal"
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="53dp"
-            android:background="@drawable/screen_tareas_tareas_operario"
-            />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="60dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="1dp">
+
+            <ImageView
+                android:id="@+id/imageView_logo"
+                android:layout_width="wrap_content"
+                android:layout_height="193dp"
+                android:layout_gravity="center"
+                android:src="@drawable/screen_tareas_icon_tareas" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="20dip"
+            android:layout_marginLeft="35dp"
+            android:layout_marginRight="10dp"
+            android:padding="5dp"
+            >
+
+
+            <Button
+                android:id="@+id/button_tarea_equipo"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:background="@drawable/screen_tareas_tareas_equipo"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginLeft="35dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:padding="5dp"
+            >
+
+            <Button
+                android:id="@+id/button_tarea_personal"
+                android:layout_width="wrap_content"
+                android:layout_height="53dp"
+                android:background="@drawable/screen_tareas_tareas_operario"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_citas_vencidas_team_or_personal_task_screen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="1dp"
+            android:visibility="gone"
+            >
+            <Button
+                android:id="@+id/button_notification_team_or_personal_task_screen"
+                android:gravity="center"
+                android:foregroundGravity="center"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/ic_error_blue_24dp"
+                />
+            <TextView
+                android:id="@+id/textView_citas__team_or_personal_task_screen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif"
+                android:text="Algunas citas se han vencido"
+                android:textSize="17dp"
+                android:padding="10dp"
+                android:textColor="@color/colorBlueAppRuta"/>
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+</ScrollView>

@@ -418,6 +418,7 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
         progressDialog.setCancelable(true);
     }
     private void hideRingDialog(){
+        if(progressDialog!=null)
         progressDialog.dismiss();
     }
 
@@ -441,7 +442,7 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
                 // User chose the "Settings" item, show the app settings UI...
                 return true;
 
-            case R.id.Ayuda:
+            case R.id.Tareas:
                 Toast.makeText(Screen_User_Data.this, "Ayuda", Toast.LENGTH_SHORT).show();
                 // User chose the "Favorite" action, mark the current item
                 // as a favorite...
