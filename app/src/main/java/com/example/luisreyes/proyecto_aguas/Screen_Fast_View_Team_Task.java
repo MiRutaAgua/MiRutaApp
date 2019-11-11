@@ -656,4 +656,10 @@ public class Screen_Fast_View_Team_Task  extends AppCompatActivity implements Ta
         messageDialog.setTitleAndHint(title, hint);
         messageDialog.show(getSupportFragmentManager(), title);
     }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        super.onBackPressed();
+    }
 }

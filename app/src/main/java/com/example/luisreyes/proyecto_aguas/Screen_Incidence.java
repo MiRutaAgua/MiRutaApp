@@ -676,4 +676,9 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
         messageDialog.setTitleAndHint(title, hint);
         messageDialog.show(getSupportFragmentManager(), title);
     }
+    @Override
+    public void onBackPressed() {
+        finish();
+        super.onBackPressed();
+    }
 }

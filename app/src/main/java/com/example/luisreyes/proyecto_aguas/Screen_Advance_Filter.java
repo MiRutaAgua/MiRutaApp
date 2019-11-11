@@ -1092,4 +1092,10 @@ public class Screen_Advance_Filter extends AppCompatActivity {
         messageDialog.setTitleAndHint(title, hint);
         messageDialog.show(getSupportFragmentManager(), title);
     }
+
+    @Override
+    public void onBackPressed() {
+        this.finish();
+        super.onBackPressed();
+    }
 }

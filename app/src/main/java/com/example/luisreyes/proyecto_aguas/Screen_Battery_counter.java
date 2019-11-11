@@ -579,4 +579,10 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
             return "null";
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        super.onBackPressed();
+    }
 }

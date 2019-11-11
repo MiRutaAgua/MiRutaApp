@@ -334,4 +334,10 @@ public class Screen_Insertar_Tarea extends AppCompatActivity implements TaskComp
         if(progressDialog!=null)
         progressDialog.dismiss();
     }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        super.onBackPressed();
+    }
 }

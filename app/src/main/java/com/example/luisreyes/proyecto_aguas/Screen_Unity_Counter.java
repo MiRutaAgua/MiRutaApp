@@ -562,4 +562,10 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
         messageDialog.setTitleAndHint(title, hint);
         messageDialog.show(getSupportFragmentManager(), title);
     }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        super.onBackPressed();
+    }
 }

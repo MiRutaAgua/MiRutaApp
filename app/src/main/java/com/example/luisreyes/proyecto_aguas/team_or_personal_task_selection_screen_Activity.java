@@ -308,5 +308,9 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
         messageDialog.setTitleAndHint(title, hint);
         messageDialog.show(getSupportFragmentManager(), title);
     }
-
+    @Override
+    public void onBackPressed() {
+        finish();
+        super.onBackPressed();
+    }
 }

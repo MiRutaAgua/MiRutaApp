@@ -250,4 +250,9 @@ public class Screen_Zoom_Photo extends Activity{
 //        return true;
 //    }//-------------------------------------------------------------------------------------------------------------------
 
+    @Override
+    public void onBackPressed() {
+        finish();
+        super.onBackPressed();
+    }
 }

@@ -512,4 +512,10 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        finish();
+        super.onBackPressed();
+    }
+
 }

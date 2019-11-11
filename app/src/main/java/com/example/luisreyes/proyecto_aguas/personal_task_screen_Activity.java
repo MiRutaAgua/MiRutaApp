@@ -166,4 +166,10 @@ public class personal_task_screen_Activity extends AppCompatActivity {
         if(progressDialog!=null)
         progressDialog.dismiss();
     }
+
+    @Override
+    public void onBackPressed() {
+        this.finish();
+        super.onBackPressed();
+    }
 }

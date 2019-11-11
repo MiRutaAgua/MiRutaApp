@@ -1435,5 +1435,9 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
         messageDialog.setTitleAndHint(title, hint);
         messageDialog.show(getSupportFragmentManager(), title);
     }
-
+    @Override
+    public void onBackPressed() {
+        finish();
+        super.onBackPressed();
+    }
 }

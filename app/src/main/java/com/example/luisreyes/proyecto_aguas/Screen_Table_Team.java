@@ -1068,4 +1068,10 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
         messageDialog.setTitleAndHint(title, hint);
         messageDialog.show(getSupportFragmentManager(), title);
     }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        super.onBackPressed();
+    }
 }

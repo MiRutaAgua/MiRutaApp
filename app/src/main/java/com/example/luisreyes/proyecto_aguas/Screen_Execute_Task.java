@@ -1439,4 +1439,10 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         messageDialog.setTitleAndHint(title, hint);
         messageDialog.show(getSupportFragmentManager(), title);
     }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        super.onBackPressed();
+    }
 }

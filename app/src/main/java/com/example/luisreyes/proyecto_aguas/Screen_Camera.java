@@ -736,4 +736,10 @@ public class Screen_Camera extends Activity {
         mBackgroundThread.start();
         mBackgroundHandler= new Handler(mBackgroundThread.getLooper());
     }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        super.onBackPressed();
+    }
 }

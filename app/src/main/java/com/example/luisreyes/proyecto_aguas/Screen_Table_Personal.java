@@ -881,4 +881,10 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
         messageDialog.setTitleAndHint(title, hint);
         messageDialog.show(getSupportFragmentManager(), title);
     }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        super.onBackPressed();
+    }
 }

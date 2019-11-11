@@ -660,4 +660,10 @@ public class Screen_Fast_View_Personal_Task extends AppCompatActivity implements
         messageDialog.setTitleAndHint(title, hint);
         messageDialog.show(getSupportFragmentManager(), title);
     }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        super.onBackPressed();
+    }
 }

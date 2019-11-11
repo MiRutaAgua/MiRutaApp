@@ -89,4 +89,9 @@ public class Screen_Zoom_Firma extends AppCompatActivity {
 //        SGD.onTouchEvent(event);
 //        return true;
 //    }
+@Override
+public void onBackPressed() {
+    finish();
+    super.onBackPressed();
+}
 }

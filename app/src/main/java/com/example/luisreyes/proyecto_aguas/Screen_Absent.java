@@ -729,4 +729,10 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
         messageDialog.setTitleAndHint(title, hint);
         messageDialog.show(getSupportFragmentManager(), title);
     }
+
+    @Override
+    public void onBackPressed() {
+        this.finish();
+        super.onBackPressed();
+    }
 }

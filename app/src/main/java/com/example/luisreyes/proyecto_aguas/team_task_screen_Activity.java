@@ -171,4 +171,9 @@ public class team_task_screen_Activity extends AppCompatActivity {
             progressDialog.dismiss();
         }
     }
+    @Override
+    public void onBackPressed() {
+        finish();
+        super.onBackPressed();
+    }
 }

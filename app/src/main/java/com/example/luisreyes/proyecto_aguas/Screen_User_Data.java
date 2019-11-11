@@ -467,4 +467,10 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
         messageDialog.setTitleAndHint(title, hint);
         messageDialog.show(getSupportFragmentManager(), title);
     }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        super.onBackPressed();
+    }
 }

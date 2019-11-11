@@ -607,5 +607,11 @@ public class Screen_Filter_Results extends AppCompatActivity {
         textView_listView_type_screen_filter_results.setText("RESULTADOS: "+
                 String.valueOf(listView_contadores_screen_advance_results.getCount()));
     }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        super.onBackPressed();
+    }
 }
 

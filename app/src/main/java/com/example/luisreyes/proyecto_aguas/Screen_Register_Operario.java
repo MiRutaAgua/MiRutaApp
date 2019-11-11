@@ -429,4 +429,10 @@ public class Screen_Register_Operario extends AppCompatActivity implements TaskC
         messageDialog.setTitleAndHint(title, hint);
         messageDialog.show(getSupportFragmentManager(), title);
     }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        super.onBackPressed();
+    }
 }
