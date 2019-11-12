@@ -123,6 +123,20 @@ public class DBtareasController extends SQLiteOpenHelper {
     public static String numero_serie_modulo = "numero_serie_modulo";
     public static String ubicacion_en_bateria = "ubicacion_en_bateria";
     public static String incidencia = "incidencia";
+
+
+    public static String ID_FINCA = "ID_FINCA";
+    public static String COMENTARIOS = "COMENTARIOS";
+    public static String DNI_CIF_COMUNIDAD = "DNI_CIF_COMUNIDAD";
+    public static String TARIFA = "TARIFA";
+    public static String TOTAL_CONTADORES = "TOTAL_CONTADORES";
+    public static String C_CANAL = "C_CANAL";
+    public static String C_LYC = "C_LYC";
+    public static String C_AGRUPA = "C_AGRUPA";
+    public static String DNI_CIF_ABONADO = "DNI_CIF_ABONADO";
+    public static String C_COMUNERO = "C_COMUNERO";
+    public static String MENSAJE_LIBRE = "fecha_de_cambio";
+
     public static String date_time_modified = "date_time_modified";
     public static String status_tarea = "status_tarea";
     public static String numero_edificio = "numero_edificio";
@@ -279,6 +293,19 @@ public class DBtareasController extends SQLiteOpenHelper {
                 jsonTareaType.put(numero_serie_modulo, "null");
                 jsonTareaType.put(ubicacion_en_bateria, "null");
                 jsonTareaType.put(incidencia, "null");
+
+                jsonTareaType.put(ID_FINCA, "null");
+                jsonTareaType.put(COMENTARIOS, "null");
+                jsonTareaType.put(DNI_CIF_COMUNIDAD, "null");
+                jsonTareaType.put(TARIFA, "null");
+                jsonTareaType.put(TOTAL_CONTADORES, "null");
+                jsonTareaType.put(C_CANAL, "null");
+                jsonTareaType.put(C_LYC, "null");
+                jsonTareaType.put(C_AGRUPA, "null");
+                jsonTareaType.put(DNI_CIF_ABONADO, "null");
+                jsonTareaType.put(C_COMUNERO, "null");
+                jsonTareaType.put(MENSAJE_LIBRE, "null");
+
                 jsonTareaType.put(date_time_modified, "null");
                 jsonTareaType.put(status_tarea, "null");
             }
@@ -440,6 +467,19 @@ public class DBtareasController extends SQLiteOpenHelper {
                         numero_serie_modulo + " TEXT, " +
                         ubicacion_en_bateria + " TEXT, " +
                         incidencia + " TEXT, " +
+
+                        ID_FINCA + " TEXT, " +
+                        COMENTARIOS + " TEXT, " +
+                        DNI_CIF_COMUNIDAD + " TEXT, " +
+                        TARIFA + " TEXT, " +
+                        TOTAL_CONTADORES + " TEXT, " +
+                        C_CANAL + " TEXT, " +
+                        C_LYC + " TEXT, " +
+                        C_AGRUPA + " TEXT, " +
+                        DNI_CIF_ABONADO + " TEXT, " +
+                        C_COMUNERO + " TEXT, " +
+                        MENSAJE_LIBRE + " TEXT, " +
+
                         date_time_modified + " TEXT, " +
                         status_tarea + " TEXT" +
                         ")");
