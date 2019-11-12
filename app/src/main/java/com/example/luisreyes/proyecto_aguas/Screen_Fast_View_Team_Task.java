@@ -66,6 +66,9 @@ public class Screen_Fast_View_Team_Task  extends AppCompatActivity implements Ta
         super.onCreate(savedInstanceState);
         setContentView(R.layout.screen_fast_view_team_tasks);
 
+        if(team_or_personal_task_selection_screen_Activity.dBtareasController == null) {
+            team_or_personal_task_selection_screen_Activity.dBtareasController = new DBtareasController(this);
+        }
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         myToolbar.setBackgroundColor(Color.TRANSPARENT);
         setSupportActionBar(myToolbar);

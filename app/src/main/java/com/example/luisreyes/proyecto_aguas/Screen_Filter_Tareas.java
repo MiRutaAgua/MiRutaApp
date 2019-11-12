@@ -48,6 +48,7 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
     private static final int SELECTING_CALLES = 2;
     private static final int SELECTING_TAREA= 3;
 
+    private static final int SEARCH_GEOLOCALIZACION = 24;
     private static final int SEARCH_DIRECTION= 18;
     private static final int SEARCH_TIPO_TAREA = 19;
     private static final int SEARCH_TELEPHONES = 20;
@@ -80,7 +81,8 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
                     ,layout_filter_screen_advance_list,
             layout_listView_contadores_screen_advance_filter,
             layout_filtro_tipo_tareas_dir_screen_filter_tareas,
-            layout_filtro_dir_tipo_tareas_screen_filter_tareas;
+            layout_filtro_dir_tipo_tareas_screen_filter_tareas,
+            layout_filtro_geolocalizacion_screen_advance_filter;
 
     private ListView listView_contadores_screen_advance_filter;
     private ArrayAdapter arrayAdapter_all;
@@ -101,7 +103,8 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
             editText_nombre_abonado_screen_advance_filter,
             editText_telefono_screen_advance_filter,
             editText_poblacion_screen_advance_filter,
-            editText_calle_screen_advance_filter;
+            editText_calle_screen_advance_filter,
+            editText_geolocalizacion_screen_filter_tareas;
 
     private ProgressDialog progressDialog;
     private ArrayList<MyCounter> lista_ordenada_de_tareas;
@@ -109,9 +112,14 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
     private boolean desde_equipo = true;
     private String desde = "EQUIPO";
 
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.screen_filter_tareas);
+
+        if(team_or_personal_task_selection_screen_Activity.dBtareasController == null) {
+            team_or_personal_task_selection_screen_Activity.dBtareasController = new DBtareasController(this);
+        }
 
         desde = getIntent().getStringExtra("desde");
         if(desde.equals("EQUIPO")){
@@ -129,6 +137,7 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
         lista_desplegable.add("DIRECCIÓN");
         //lista_desplegable.add("DATOS PRIVADOS");
         lista_desplegable.add("TIPO DE TAREA");
+        lista_desplegable.add("GEOLOCALIZACIÓN");
         //lista_desplegable.add("DATOS ÚNICOS");
 
         mapaTiposDeTarea = new HashMap<>();
@@ -155,6 +164,7 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
         spinner_filtro_tipo_tarea_dir_screen_filter_tareas = (Spinner) findViewById(R.id.spinner_filtro_tipo_tarea_dir_screen_filter_tareas);
         spinner_filtro_calibre_dir_screen_filter_tareas = (Spinner) findViewById(R.id.spinner_filtro_calibre_dir_screen_filter_tareas);
 
+        editText_geolocalizacion_screen_filter_tareas = (AutoCompleteTextView)findViewById(R.id.editText_geolocalizacion_screen_filter_tareas);
         editText_poblacion_screen_advance_filter = (AutoCompleteTextView)findViewById(R.id.editText_poblacion_screen_filter_tareas);
         editText_calle_screen_advance_filter = (AutoCompleteTextView)findViewById(R.id.editText_calle_screen_filter_tareas);
         editText_nombre_abonado_screen_advance_filter = (AutoCompleteTextView)findViewById(R.id.editText_nombre_abonado_screen_filter_tareas);
@@ -162,6 +172,7 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
         editText_numero_abonado = (AutoCompleteTextView)findViewById(R.id.editText_numero_abonado_screen_filter_tareas);
         editText_numero_serie   = (AutoCompleteTextView)findViewById(R.id.editText_numero_serie_screen_filter_tareas);
 
+        layout_filtro_geolocalizacion_screen_advance_filter = (LinearLayout) findViewById(R.id.layout_filtro_geolocalizacion_screen_advance_filter);
         layout_filtro_dir_tipo_tareas_screen_filter_tareas = (LinearLayout) findViewById(R.id.layout_filtro_dir_tipo_tareas_screen_filter_tareas);
         layout_filtro_tipo_tareas_dir_screen_filter_tareas = (LinearLayout) findViewById(R.id.layout_filtro_tipo_tareas_dir_screen_filter_tareas);
         layout_filter_screen_advance_list = (LinearLayout) findViewById(R.id.layout_filter_screen_filter_tareas);
@@ -501,6 +512,12 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
                     layout_filtro_tipo_tarea_screen_advance_filter.setVisibility(View.VISIBLE);
                     fillFilterTiposTareas();
                 }
+                else if(lista_desplegable.get(i).contains("GEOLOCALIZACIÓN")){
+                    hideAllFilters();
+                    layout_filtro_geolocalizacion_screen_advance_filter.setVisibility(View.VISIBLE);
+                    fillFilterGeolocalizacion();
+                    layout_filtro_accept_filter_screen_advance_filter.setVisibility(View.VISIBLE);
+                }
                 else if(lista_desplegable.get(i).contains("DATOS ÚNICOS")){
                     hideAllFilters();
                     layout_filtro_datos_unicos_screen_advance_filter.setVisibility(View.VISIBLE);
@@ -532,6 +549,35 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
             Screen_Table_Personal.hideRingDialog();
             Log.e("Desde", "Personal");
         }
+    }
+
+    private void fillFilterGeolocalizacion() {
+        ArrayList<String> lista_desplegable = new ArrayList<String>();
+        for (int i = 1; i <= team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas(); i++) {
+            try {
+                JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.
+                        dBtareasController.get_one_tarea_from_Database(i));
+                if(!desde_equipo) {
+                    if (!checkIfOperarioTask(jsonObject)) {
+                        continue;
+                    }
+                }
+                if(!checkIfTaskIsDone(jsonObject)) {
+                    String geolocalizacion = jsonObject.getString(DBtareasController.codigo_de_geolocalizacion).trim();
+                    if (!geolocalizacion.equals("null") && !geolocalizacion.equals("NULL")  && !geolocalizacion.isEmpty()) {
+                        if (!lista_desplegable.contains(geolocalizacion)) {
+                            lista_desplegable.add(geolocalizacion);
+                        }
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        Collections.sort(lista_desplegable, String.CASE_INSENSITIVE_ORDER);
+        ArrayAdapter arrayAdapter = new ArrayAdapter(this, R.layout.list_text_view_short_info, lista_desplegable);
+        current_action_button_filter = SEARCH_GEOLOCALIZACION;
+        editText_geolocalizacion_screen_filter_tareas.setAdapter(arrayAdapter);
     }
 
     private void fillListWithTareasAndCalibres(String tarea_selected,String calibre_selected) {
@@ -836,6 +882,28 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
             startActivity(open_Filter_Results);
 //            openMessage("Seleccionados: ", portales_selected.toString());
        }
+        if(current_action_button_filter == SEARCH_GEOLOCALIZACION){
+            String geolocalizacion = editText_geolocalizacion_screen_filter_tareas.getText().toString().trim();
+
+            if(!geolocalizacion.isEmpty()){
+                Intent open_Filter_Results = new Intent(Screen_Filter_Tareas.this, Screen_Filter_Results.class);
+                open_Filter_Results.putExtra("filter_type", "GEOLOCALIZACION");
+                open_Filter_Results.putExtra("tipo_tarea", "");
+                open_Filter_Results.putExtra("calibre", "");
+                open_Filter_Results.putExtra("poblacion", "");
+                open_Filter_Results.putExtra("calle", "");
+                open_Filter_Results.putExtra("portales", "");
+                open_Filter_Results.putExtra("geolocalizacion", geolocalizacion);
+                open_Filter_Results.putExtra("limitar_a_operario", !desde_equipo);
+                startActivity(open_Filter_Results);
+            }
+            else{
+                Toast.makeText(Screen_Filter_Tareas.this, "Debe insertar código", Toast.LENGTH_LONG).show();
+                return;
+            }
+
+//            openMessage("Seleccionados: ", portales_selected.toString());
+        }
         else if(current_action_button_filter == SEARCH_TIPO_TAREA){
             String tipo_selected = spinner_filtro_tipo_tarea_screen_advance_filter.getSelectedItem().toString();
             ArrayList<String> calibres_selected = new ArrayList<String>();
@@ -937,10 +1005,10 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
                             String telefono1 = jsonObject.getString(DBtareasController.telefono1).replace("\n","").replace(" ","");
                             String telefono2 = jsonObject.getString(DBtareasController.telefono2).replace("\n","").replace(" ","");
                             String telefonos = "";
-                            if(!telefono1.equals("null") && !telefono1.isEmpty()) {
+                            if(!telefono1.equals("null") && !telefono1.equals("NULL") && !telefono1.isEmpty()) {
                                 telefonos = "Tel1: " + telefono1 + "   ";
                             }
-                            if(!telefono2.equals("null") && !telefono2.isEmpty()) {
+                            if(!telefono2.equals("null")  && !telefono2.equals("NULL") && !telefono2.isEmpty()) {
                                 telefonos += "Tel2: " + telefono2;
                             }
                             if(telefonos.equals(telefono_selected)){
@@ -1088,7 +1156,7 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
                 }
                 if(!checkIfTaskIsDone(jsonObject)) {
                     String abonados = jsonObject.getString(DBtareasController.numero_abonado).replace("\n", "").replace(" ", "");
-                    if (!abonados.equals("null") && !abonados.isEmpty()) {
+                    if (!abonados.equals("null") && !abonados.equals("NULL")&& !abonados.isEmpty()) {
                         if (!lista_desplegable.contains(abonados)) {
                             lista_desplegable.add(abonados);
                         }
@@ -1116,7 +1184,7 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
                 }
                 if(!checkIfTaskIsDone(jsonObject)) {
                     String serie = jsonObject.getString(DBtareasController.numero_serie_contador).replace("\n", "").replace(" ", "");
-                    if (!serie.equals("null") && !serie.isEmpty()) {
+                    if (!serie.equals("null") && !serie.equals("NULL") && !serie.isEmpty()) {
                         if (!lista_desplegable.contains(serie)) {
                             lista_desplegable.add(serie);
                         }
@@ -1142,13 +1210,13 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
                     String telefono1 = jsonObject.getString(DBtareasController.telefono1).replace("\n", "").replace(" ", "");
                     String telefono2 = jsonObject.getString(DBtareasController.telefono2).replace("\n", "").replace(" ", "");
                     String telefonos = "";
-                    if (!telefono1.equals("null") && !telefono1.isEmpty()) {
+                    if (!telefono1.equals("null") && !telefono1.equals("NULL")  && !telefono1.isEmpty()) {
                         telefonos = "Tel1: " + telefono1 + "   ";
                     }
-                    if (!telefono2.equals("null") && !telefono2.isEmpty()) {
+                    if (!telefono2.equals("null") && !telefono2.equals("NULL") && !telefono2.isEmpty()) {
                         telefonos += "Tel2: " + telefono2;
                     }
-                    if (!telefonos.equals("null") && !telefonos.isEmpty()) {
+                    if (!telefonos.equals("null") && !telefonos.equals("NULL") && !telefonos.isEmpty()) {
                         if (!lista_desplegable.contains(telefonos)) {
                             lista_desplegable.add(telefonos);
                         }
@@ -1424,6 +1492,7 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
         if(((LinearLayout) layout_filtro_checkboxes_screen_advance_filter).getChildCount() > 0)
             ((LinearLayout) layout_filtro_checkboxes_screen_advance_filter).removeAllViews();
 
+        layout_filtro_geolocalizacion_screen_advance_filter.setVisibility(View.GONE);
         layout_filtro_direccion_screen_advance_filter.setVisibility(View.GONE);
         layout_filtro_datos_privados_screen_advance_filter.setVisibility(View.GONE);
         layout_filtro_tipo_tarea_screen_advance_filter.setVisibility(View.GONE);

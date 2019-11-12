@@ -60,13 +60,13 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
             textView_serial_number_result,
             textView_serial_number_module_result,
             telefonos, telefono1, telefono2,
-            textView_anomalia;
+            textView_anomalia,
+            textView_codigo_geolocalization_screen_exec_task;
 
     private String tag="";
     private Button button_scan_serial_number_screen_exec_task;
 
     private Button button_scan_module_screen_exec_task,
-            observaciones_button,
     anomaly_button,
             button_guardar_datos;
 
@@ -76,7 +76,9 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
     private ImageView imageView_edit_phone1_screen_exec_task,
             imageView_edit_phone2_screen_exec_task,
             imageView_edit_serial_number_screen_exec_task,
-            imageView_edit_serial_number_module_screen_exec_task;
+            imageView_edit_serial_number_module_screen_exec_task,
+            button_codigo_geolocalization_screen_exec_task,
+            observaciones_button;
 
     private Button button_instalation_photo_screen_exec_task;
     private ImageView instalation_photo_screen_exec_task;
@@ -144,6 +146,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         lectura_editText = (EditText)findViewById(R.id.editText_lectura_screen_exec_task);
         textView_serial_number_result = (TextView)findViewById(R.id.textView_serial_number_screen_exec_task);
         textView_serial_number_module_result = (TextView)findViewById(R.id.textView_module_number_screen_exec_task);
+        textView_codigo_geolocalization_screen_exec_task = (TextView)findViewById(R.id.textView_codigo_geolocalization_screen_exec_task);
 
         textView_anomalia = (TextView) findViewById(R.id.textView_anomalia_screen_exec_task);
         telefonos = (TextView) findViewById(R.id.textView_phones_screen_exec_task);
@@ -157,12 +160,13 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         read_photo_screen_exec_task = (ImageView)findViewById(R.id.read_photo_screen_exec_task);
         serial_number_photo_screen_exec_task = (ImageView)findViewById(R.id.serial_number_photo_screen_exec_task);
         after_instalation_photo_screen_exec_task = (ImageView)findViewById(R.id.final_instalation_photo_screen_exec_task);
+        button_codigo_geolocalization_screen_exec_task = (ImageView)findViewById(R.id.button_codigo_geolocalization_screen_exec_task);
 
         button_scan_serial_number_screen_exec_task= (Button)findViewById(R.id.button_scan_serial_number_screen_exec_task);
         button_scan_module_screen_exec_task= (Button)findViewById(R.id.button_scan_module_screen_exec_task);
         button_validate_screen_exec_task          = (Button)findViewById(R.id.button_validate_screen_exec_task);
         button_guardar_datos = (Button)findViewById(R.id.button_guardar_datos_screen_exec_task);
-        observaciones_button = (Button)findViewById(R.id.button_observations_screen_exec_task);
+        observaciones_button = (ImageView)findViewById(R.id.button_observations_screen_exec_task);
         anomaly_button = (Button)findViewById(R.id.button_anomalia_screen_exec_task);
         textView_observaciones_screen_exec_task = (TextView)findViewById(R.id.textView_observaciones_screen_exec_task);
         button_geolocalization_screen_exec_task= (Button)findViewById(R.id.button_geolocalization_screen_exec_task);
@@ -291,7 +295,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                     }
                     @Override
                     public void onAnimationEnd(Animation arg0) {
-                        openDialog("Numero Serie","Escriba aqui número serie");
+                        openDialog("Número Serie","Escriba aqui número serie");
                     }
                 });
                 imageView_edit_serial_number_screen_exec_task.startAnimation(myAnim);
@@ -317,13 +321,38 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                     }
                     @Override
                     public void onAnimationEnd(Animation arg0) {
-                        openDialog("Numero Serie de Modulo","Escriba número serie de modulo");
+                        openDialog("Número Serie de Modulo","Escriba número serie de modulo");
                     }
                 });
                 imageView_edit_serial_number_module_screen_exec_task.startAnimation(myAnim);
             }
         });
 
+        button_codigo_geolocalization_screen_exec_task.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Execute_Task.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        openDialog("Código de geolocalización","...");
+                    }
+                });
+                button_codigo_geolocalization_screen_exec_task.startAnimation(myAnim);
+            }
+        });
         textView_serial_number_module_result.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1092,7 +1121,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                 //Toast.makeText(Screen_Execute_Task.this, Screen_Login_Activity.tarea_JSON.toString(), Toast.LENGTH_LONG).show();
                 textView_observaciones_screen_exec_task.setText(wrote_text);
             }
-        }else if(tag.equals("Numero Serie")){
+        }else if(tag.equals("Número Serie")){
             if (!(TextUtils.isEmpty(wrote_text))) {
                 if (!(TextUtils.isEmpty(wrote_text))) {
                     Screen_Login_Activity.tarea_JSON.put(DBtareasController.numero_serie_contador, wrote_text);
@@ -1100,12 +1129,20 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                     textView_serial_number_result.setText(wrote_text);
                 }
             }
-        }else if(tag.equals("Numero Serie de Modulo")){
+        }else if(tag.equals("Número Serie de Modulo")){
             if (!(TextUtils.isEmpty(wrote_text))) {
                 if (!(TextUtils.isEmpty(wrote_text))) {
                     Screen_Login_Activity.tarea_JSON.put(DBtareasController.numero_serie_modulo, wrote_text);
                     textView_serial_number_module_result.setVisibility(View.VISIBLE);
                     textView_serial_number_module_result.setText(wrote_text);
+                }
+            }
+        }else if(tag.equals("Código de geolocalización")){
+            if (!(TextUtils.isEmpty(wrote_text))) {
+                if (!(TextUtils.isEmpty(wrote_text))) {
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.codigo_de_geolocalizacion, wrote_text);
+                    textView_codigo_geolocalization_screen_exec_task.setVisibility(View.VISIBLE);
+                    textView_codigo_geolocalization_screen_exec_task.setText(wrote_text);
                 }
             }
         }

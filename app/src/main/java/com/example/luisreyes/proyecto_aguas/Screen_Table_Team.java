@@ -96,6 +96,10 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if(team_or_personal_task_selection_screen_Activity.dBtareasController == null) {
+            team_or_personal_task_selection_screen_Activity.dBtareasController = new DBtareasController(this);
+        }
+
         getWindow().setSoftInputMode( //Para esconder el teclado
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
         );

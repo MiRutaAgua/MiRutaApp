@@ -59,7 +59,15 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
 
     private ImageView imagen_contador;
 
-    private TextView tipo_tarea, direccion, datosEspecificos, serie, lectura, acceso, ubicacion,calibre;
+    private TextView tipo_tarea,
+            direccion,
+            datosEspecificos,
+            serie,
+            lectura,
+            acceso,
+            ubicacion,
+            calibre,
+            textView_numero_abonado_screen_unity_counter;
     private HashMap<String, String> mapaTiposDeTarea;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -90,6 +98,7 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
         button_geolocalization=(Button) findViewById(R.id.button_geolocalization_screen_unity_counter);
         imagen_contador = (ImageView) findViewById(R.id.imageView_screen_unity_counter_imagen);
         serie = (TextView) findViewById(R.id.textView_screen_unity_counter_serie);
+        textView_numero_abonado_screen_unity_counter= (TextView) findViewById(R.id.textView_numero_abonado_screen_unity_counter);
         lectura = (TextView) findViewById(R.id.textView_screen_unity_counter_lectura);
         acceso = (TextView) findViewById(R.id.textView_screen_unity_counter_acceso);
         ubicacion = (TextView) findViewById(R.id.textView_screen_unity_counter_ubicacion);
@@ -160,6 +169,12 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
         } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(getApplicationContext(),"No se obtuvo informacion: "+e.toString(), Toast.LENGTH_LONG).show();
+        }
+        try {
+            textView_numero_abonado_screen_unity_counter.setText(Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado));
+        } catch (JSONException e) {
+            Log.e("Excepcion", "Error al cargar numero de abonado");
+            e.printStackTrace();
         }
         button_geolocalization.setOnClickListener(new View.OnClickListener() {
             @Override

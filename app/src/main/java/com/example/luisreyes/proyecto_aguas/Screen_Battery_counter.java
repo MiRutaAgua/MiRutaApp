@@ -22,6 +22,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -54,7 +55,17 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
 
     private ImageView imagen_contador;
 
-    private TextView tipo_tarea, direccion, datosEspecificos, serie, lectura, acceso, ubicacion,calibre, ubicacion_bateria;
+    private TextView tipo_tarea,
+            direccion,
+            datosEspecificos,
+            serie,
+            lectura,
+            acceso,
+            ubicacion,
+            calibre,
+            ubicacion_bateria,
+            textView_numero_abonado_screen_battery_counter;
+
     private ProgressDialog progressDialog;
     private HashMap<String, String> mapaTiposDeTarea;
 
@@ -69,7 +80,7 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
         setSupportActionBar(myToolbar);
 
         mapaTiposDeTarea = new HashMap<>();
-        mapaTiposDeTarea.put("", "NUEVO CONTADOR INSTALAR");
+//        mapaTiposDeTarea.put("", "NUEVO CONTADOR INSTALAR");
         mapaTiposDeTarea.put("NCI", "NUEVO CONTADOR INSTALAR");
         mapaTiposDeTarea.put("U", "USADO CONTADOR INSTALAR");
         mapaTiposDeTarea.put("T", "BAJA O CORTE DE SUMINISTRO");
@@ -85,6 +96,7 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
 
         button_geolocalization =(Button) findViewById(R.id.button_geolocalization_screen_battery_counter);
         imagen_contador = (ImageView) findViewById(R.id.imageView_screen_battery_counter_imagen);
+        textView_numero_abonado_screen_battery_counter = (TextView) findViewById(R.id.textView_screen_battery_counter_serie);
         serie = (TextView) findViewById(R.id.textView_screen_battery_counter_serie);
         lectura = (TextView) findViewById(R.id.textView_screen_battery_counter_lectura);
         acceso = (TextView) findViewById(R.id.textView_screen_battery_counter_acceso);
@@ -155,6 +167,13 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
         } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(getApplicationContext(),"No se obtuvo informacion: "+e.toString(), Toast.LENGTH_LONG).show();
+        }
+
+        try {
+            textView_numero_abonado_screen_battery_counter.setText(Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado));
+        } catch (JSONException e) {
+            Log.e("Excepcion", "Error al cargar numero de abonado");
+            e.printStackTrace();
         }
         button_geolocalization.setOnClickListener(new View.OnClickListener() {
             @Override

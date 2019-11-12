@@ -446,6 +446,8 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
                 Toast.makeText(Screen_User_Data.this, "Ayuda", Toast.LENGTH_SHORT).show();
                 // User chose the "Favorite" action, mark the current item
                 // as a favorite...
+                Intent intent= new Intent(this, Screen_Table_Team.class);
+                startActivity(intent);
                 return true;
 
             case R.id.Configuracion:

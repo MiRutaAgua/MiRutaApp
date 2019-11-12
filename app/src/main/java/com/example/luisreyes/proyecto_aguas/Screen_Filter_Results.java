@@ -56,7 +56,7 @@ public class Screen_Filter_Results extends AppCompatActivity {
 
     private ArrayList<String> calles_filtradas_en_tipo_tarea;
 
-    private String tipo_filtro, tipo_tarea, calibre, poblacion, calle;
+    private String tipo_filtro, tipo_tarea, calibre, poblacion, calle, geolocalizacion;
     private ArrayList<String> portales, calibres_list;
 
     private TextView textView_listView_type_screen_filter_results;
@@ -65,6 +65,10 @@ public class Screen_Filter_Results extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.screen_filter_results);
+
+        if(team_or_personal_task_selection_screen_Activity.dBtareasController == null) {
+            team_or_personal_task_selection_screen_Activity.dBtareasController = new DBtareasController(this);
+        }
 
         mapaTiposDeTarea = new HashMap<>();
         mapaTiposDeTarea.put("", "NUEVO CONTADOR INSTALAR");
@@ -83,15 +87,21 @@ public class Screen_Filter_Results extends AppCompatActivity {
 
         lista_ordenada_de_tareas = new ArrayList<>();
         calles_filtradas_en_tipo_tarea = new ArrayList<>();
-
+        String portales_string="";
         Log.e("Obteniendo parametros", "filter_type");
-        tipo_filtro = getIntent().getStringExtra("filter_type");
-        tipo_tarea = getIntent().getStringExtra("tipo_tarea");
-        calibre = getIntent().getStringExtra("calibre");
-        poblacion = getIntent().getStringExtra("poblacion");
-        calle = getIntent().getStringExtra("calle");
-        String portales_string = getIntent().getStringExtra("portales");
-        limitar_a_operario = getIntent().getBooleanExtra("limitar_a_operario", false);
+        try {
+            tipo_filtro = getIntent().getStringExtra("filter_type");
+            tipo_tarea = getIntent().getStringExtra("tipo_tarea");
+            calibre = getIntent().getStringExtra("calibre");
+            poblacion = getIntent().getStringExtra("poblacion");
+            calle = getIntent().getStringExtra("calle");
+            portales_string = getIntent().getStringExtra("portales");
+            geolocalizacion = getIntent().getStringExtra("geolocalizacion");
+            limitar_a_operario = getIntent().getBooleanExtra("limitar_a_operario", false);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
         textView_listView_type_screen_filter_results=  (TextView) findViewById(R.id.textView_listView_type_screen_filter_results);
 
@@ -275,13 +285,80 @@ public class Screen_Filter_Results extends AppCompatActivity {
                     fillListViewWithDirectionsResults();
                 }
             }
-        }else if(tipo_filtro.equals("CITAS_VENCIDAS")) {
+        }
+        else if(tipo_filtro.equals("GEOLOCALIZACION")) {
+            layout_filtro_direccion_screen_filter_tareas.setVisibility(View.GONE);
+            layout_filtro_tipo_tareas_screen_filter_results.setVisibility(View.VISIBLE);
+            fillListViewWithGeolocalizacionResults();
+        }
+        else if(tipo_filtro.equals("CITAS_VENCIDAS")) {
             layout_filtro_direccion_screen_filter_tareas.setVisibility(View.VISIBLE);
             layout_filtro_tipo_tareas_screen_filter_results.setVisibility(View.GONE);
             fillListViewWithCitasVencidasResults();
         }
 
     }
+
+    private void fillListViewWithGeolocalizacionResults() {
+        ArrayList<String> tipos_tareas_selected = new ArrayList<String>();
+        tipos_tareas_selected.add("TODAS");
+        ArrayList<String> calibres_selected = new ArrayList<String>();
+        calibres_selected.add("TODOS");
+        lista_ordenada_de_tareas.clear();
+        for (int i = 1; i <= team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas(); i++) {
+            try {
+                JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.dBtareasController.get_one_tarea_from_Database(i));
+                String status="";
+                try {
+                    if(limitar_a_operario) {
+                        if (!Screen_Filter_Tareas.checkIfOperarioTask(jsonObject)) {
+                            continue;
+                        }
+                    }
+                    status = jsonObject.getString(DBtareasController.status_tarea);
+                    if(!status.contains("DONE") && !status.contains("done")) {
+                        if(jsonObject.getString(DBtareasController.codigo_de_geolocalizacion).trim().contains(geolocalizacion)){
+                            lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
+                            if (!calibres_selected.contains( jsonObject.getString(DBtareasController.calibre_toma).trim())) {
+                                calibres_selected.add(jsonObject.getString(DBtareasController.calibre_toma).trim());
+                            }
+                            String tipo = jsonObject.getString(DBtareasController.tipo_tarea);
+                            if(mapaTiposDeTarea.containsKey(tipo)) {
+                                if (!tipos_tareas_selected.contains(mapaTiposDeTarea.get(tipo))) {
+                                    tipos_tareas_selected.add(mapaTiposDeTarea.get(tipo));
+                                }
+                            }
+                            else if(tipo.contains("T") && tipo.contains("\"")){
+                                tipo = "BAJA O CORTE DE SUMINISTRO";
+                                if (!tipos_tareas_selected.contains(tipo)) {
+                                    tipos_tareas_selected.add(tipo);
+                                }
+                            }
+                            else if(tipo.contains("LFTD")){
+                                tipo = "LIMPIEZA DE FILTRO Y TOMA DE DATOS";
+                                if (!tipos_tareas_selected.contains(tipo)) {
+                                    tipos_tareas_selected.add(tipo);
+                                }
+                            }
+                        }
+                    }
+                } catch (JSONException e) {
+                    Toast.makeText(getApplicationContext(), "No se pudo obtener estado se tarea\n"+ e.toString(), Toast.LENGTH_LONG).show();
+                    e.printStackTrace();
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        ArrayAdapter arrayAdapter = new ArrayAdapter(this, R.layout.spinner_text_view,tipos_tareas_selected);
+        ArrayAdapter arrayAdapter2 = new ArrayAdapter(this, R.layout.spinner_text_view,calibres_selected);
+        spinner_filtro_tipo_tarea_screen_filter_results.setAdapter(arrayAdapter);
+        spinner_filtro_calibre_screen_filter_results.setAdapter(arrayAdapter2);
+        orderTareastoArrayAdapter();
+        arrayAdapter_salva_calibreAndTareas = (ArrayAdapter) listView_contadores_screen_advance_results.getAdapter();
+    }
+
     private void fillListWithCalleAndPoblacion(String selected_calle) {
         ArrayList<String> list_adapter_filtrado = new ArrayList<>();
         ArrayList<String> list_adapter_temp = new ArrayList<>();

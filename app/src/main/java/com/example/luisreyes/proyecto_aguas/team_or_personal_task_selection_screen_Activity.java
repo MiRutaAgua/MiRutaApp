@@ -43,7 +43,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
 
     NotificationCompat.Builder mBuilder;
 
-    public static DBtareasController dBtareasController;
+    public static DBtareasController dBtareasController = null;
 
     private ImageView imageView_logo;
     private Button button_tarea_equipo;
@@ -87,7 +87,9 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
         myToolbar.setBackgroundColor(Color.TRANSPARENT);
         setSupportActionBar(myToolbar);
 
-        dBtareasController = new DBtareasController(this);
+        if(dBtareasController == null) {
+            dBtareasController = new DBtareasController(this);
+        }
 
         tareas_con_citas_obsoletas = new ArrayList<>();
 

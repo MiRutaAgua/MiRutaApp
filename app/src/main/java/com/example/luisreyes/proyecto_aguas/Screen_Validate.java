@@ -72,7 +72,8 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
             imageView_edit_serial_number_screen_validate,
             imageView_edit_calibre_screen_validate,
             imageView_edit_nombre_firmante_screen_validate,
-            imageView_edit_numero_carnet_firmante_screen_validate;
+            imageView_edit_numero_carnet_firmante_screen_validate,
+            imageView_edit_lectura_contador_nuevo_screen_validate;
 
     private LinearLayout llScroll_final,
     llScroll_antes,
@@ -96,7 +97,8 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
             textView_numero_serie_viejo,
             textView_nombre_firmante_screen_validate,
             textView_info_operario_screen_validate,
-            textView_numero_carnet_firmante_screen_validate;
+            textView_numero_carnet_firmante_screen_validate,
+            textView_lectura_contador_nuevo_screen_validate;
 
     private String current_tag;
     private ProgressDialog progressDialog;
@@ -147,6 +149,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
         foto_numero_de_serie_screen_exec_task     = (ImageView)findViewById(R.id.imageView_foto_numero_serie_screen_validate);
         imageView_foto_lectura_screen_validate    = (ImageView)findViewById(R.id.imageView_foto_lectura_screen_validate);
 
+        imageView_edit_lectura_contador_nuevo_screen_validate = (ImageView)findViewById(R.id.imageView_edit_lectura_contador_nuevo_screen_validate);
         imageView_edit_numero_carnet_firmante_screen_validate = (ImageView)findViewById(R.id.imageView_edit_numero_carnet_firmante_screen_validate);
         imageView_edit_nombre_firmante_screen_validate = (ImageView)findViewById(R.id.imageView_edit_nombre_firmante_screen_validate);
         imageButton_firma_cliente_screen_validate = (ImageView)findViewById(R.id.imageButton_firma_cliente_screen_validate);
@@ -158,7 +161,8 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
         nombre_y_tarea = (TextView) findViewById(R.id.textView_nombre_cliente_y_tarea_screen_validate);
         textView_info = (TextView) findViewById(R.id.textView_info_screen_validate);
         textView_info_observaciones_screen_validate = (TextView) findViewById(R.id.textView_info_observaciones_screen_validate);
-        textView_info_operario_screen_validate= (TextView) findViewById(R.id.textView_info_operario_screen_validate);
+        textView_info_operario_screen_validate = (TextView) findViewById(R.id.textView_info_operario_screen_validate);
+        textView_lectura_contador_nuevo_screen_validate = (TextView) findViewById(R.id.textView_lectura_contador_nuevo_screen_validate);
 
         llScroll_info.setVisibility(View.INVISIBLE);
 
@@ -352,6 +356,12 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
             }
         });
 
+        imageView_edit_lectura_contador_nuevo_screen_validate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openDialog("Lectura de contador nuevo");
+            }
+        });
         imageView_edit_nombre_firmante_screen_validate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1013,6 +1023,12 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
 //                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.numero_carnet_firmante, wrote_text);
 //                    textView_numero_carnet_firmante_screen_incidence_summary.setVisibility(View.VISIBLE);
                 textView_numero_carnet_firmante_screen_validate.setText(wrote_string);
+            }
+        }else if(current_tag.equals("Lectura de contador nuevo")){
+            if (!(TextUtils.isEmpty(wrote_string))) {
+//                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.numero_carnet_firmante, wrote_text);
+//                    textView_numero_carnet_firmante_screen_incidence_summary.setVisibility(View.VISIBLE);
+                textView_lectura_contador_nuevo_screen_validate.setText(wrote_string);
             }
         }
     }

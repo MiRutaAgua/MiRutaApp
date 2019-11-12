@@ -648,7 +648,7 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
             if (!(TextUtils.isEmpty(wrote_string))) {
 
                 if(!DBtareasController.tabla_model) {
-                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_devuelta, wrote_string);
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_contador_nuevo, wrote_string);
                 }
                 textView_lectura_nuevo_screen_exec_task.setText(wrote_string);
             }

@@ -59,9 +59,8 @@ public class DBtareasController extends SQLiteOpenHelper {
     public static String poblacion = "MUNICIPIO";
     public static String nombre_cliente = "NOMBRE_ABONADO";
     public static String numero_abonado = "Numero_de_ABONADO";
-//    public static String nombre_firmante = "NOMBRE_FIRMANTE";
-//    public static String numero_carnet_firmante = "NUMERO_CARNET_FIRMANTE";
-    //    public static final String CODLEC = "CODLEC";
+    public static String nombre_firmante = "NOMBRE_FIRMANTE";
+    public static String numero_carnet_firmante = "NUMERO_CARNET_FIRMANTE";
     public static String FECEMISIO = "FECEMISIO";
     public static String FECULTREP = "FECULTREP";
     public static String OBSERVA = "OBSERVA";//----------------------------------------------------------
@@ -70,10 +69,9 @@ public class DBtareasController extends SQLiteOpenHelper {
     public static String INDICE = "INDICE";
     public static String emplazamiento_devuelto = "EMPLAZADV";
     public static String RESTO_EM = "RESTO_EM";
-    //    public static final String LECT_LEV = "LECT_LEV";
     public static String lectura_ultima = "CODLEC";//---------------
     public static String lectura_actual = "LECT_LEV";//----------------
-//    public static String lectura_contador_nuevo = "LECT_LEV";//----------------Cambiar esto------------------------------------------------------------
+    public static String lectura_contador_nuevo = "LECTURA_CONTADOR_NUEVO";
     public static String observaciones_devueltas = "OBSERVADV";
     public static String TIPO = "TIPO";
     public static String Estado = "Estado";
@@ -217,6 +215,8 @@ public class DBtareasController extends SQLiteOpenHelper {
                 jsonTareaType.put(poblacion, "null");
                 jsonTareaType.put(nombre_cliente, "null");
                 jsonTareaType.put(numero_abonado, "null");
+                jsonTareaType.put(nombre_firmante, "null");
+                jsonTareaType.put(numero_carnet_firmante, "null");
                 jsonTareaType.put(lectura_ultima, "null");
                 jsonTareaType.put(FECEMISIO, "null");
                 jsonTareaType.put(FECULTREP, "null");
@@ -227,6 +227,7 @@ public class DBtareasController extends SQLiteOpenHelper {
                 jsonTareaType.put(emplazamiento_devuelto, "null");
                 jsonTareaType.put(RESTO_EM, "null");
                 jsonTareaType.put(lectura_actual, "null");
+                jsonTareaType.put(lectura_contador_nuevo, "null");
                 jsonTareaType.put(observaciones_devueltas, "null");
                 jsonTareaType.put(TIPO, "null");
                 jsonTareaType.put(Estado, "null");
@@ -253,7 +254,7 @@ public class DBtareasController extends SQLiteOpenHelper {
                 jsonTareaType.put(tipoRadio, "null");
                 jsonTareaType.put(marcaR, "null");
                 jsonTareaType.put(codigo_de_localizacion, "null");
-                //                jsonTareaType.put(codigo_de_geolocalizacion, "null");
+                jsonTareaType.put(codigo_de_geolocalizacion, "null");
                 jsonTareaType.put(geolocalizacion, "null");
                 jsonTareaType.put(foto_antes_instalacion, "null");
                 jsonTareaType.put(foto_numero_serie, "null");
@@ -375,6 +376,8 @@ public class DBtareasController extends SQLiteOpenHelper {
                         poblacion + " TEXT, " +
                         nombre_cliente + " TEXT, " +
                         numero_abonado + " TEXT, " +
+                        nombre_firmante+" TEXT, " +
+                        numero_carnet_firmante+" TEXT, " +
                         lectura_ultima + " TEXT, " +
                         FECEMISIO + " TEXT, " +
                         FECULTREP + " TEXT, " +
@@ -385,6 +388,7 @@ public class DBtareasController extends SQLiteOpenHelper {
                         emplazamiento_devuelto + " TEXT, " +
                         RESTO_EM + " TEXT, " +
                         lectura_actual + " TEXT, " +
+                        lectura_contador_nuevo + " TEXT, " +
                         observaciones_devueltas + " TEXT, " +
                         TIPO + " TEXT, " +
                         Estado + " TEXT, " +
@@ -411,7 +415,7 @@ public class DBtareasController extends SQLiteOpenHelper {
                         tipoRadio + " TEXT, " +
                         marcaR + " TEXT, " +
                         codigo_de_localizacion + " TEXT, " +
-                        //                        codigo_de_geolocalizacion+" TEXT, " +
+                        codigo_de_geolocalizacion+" TEXT, " +
                         geolocalizacion + " TEXT, " +
                         foto_antes_instalacion + " TEXT, " +
                         foto_numero_serie + " TEXT, " +
