@@ -74,6 +74,7 @@ public class DBtareasController extends SQLiteOpenHelper {
     public static String lectura_contador_nuevo = "LECTURA_CONTADOR_NUEVO";
     public static String observaciones_devueltas = "OBSERVADV";
     public static String TIPO = "TIPO";
+    public static String TIPO_devuelto = "TIPO_DEVUELTO";
     public static String Estado = "Estado";
     public static String marca_devuelta = "MARCADV";
     public static String calibre_real = "CALIBREDV";
@@ -90,12 +91,14 @@ public class DBtareasController extends SQLiteOpenHelper {
     public static String operario = "OPERARIO";
     public static String observaciones = "observaciones";
     public static String TIPOFLUIDO = "TIPOFLUIDO";//-------------------------------------------------------------------------------
+    public static String TIPOFLUIDO_devuelto = "TIPOFLUIDO_DEVUELTO";
     public static String idexport = "idexport";
     public static String fech_facturacion = "fech_facturacion";
     public static String fech_cierrenew = "fech_cierrenew";
     public static String fech_informacionnew = "fech_informacionnew";
     public static String f_instnew = "f_instnew";
     public static String tipoRadio = "tipoRadio";
+    public static String tipoRadio_devuelto = "TIPORADIO_DEVUELTO";
     public static String marcaR = "marcaR";
     public static String codigo_de_localizacion = "codigo_de_localizacion";
     public static String codigo_de_geolocalizacion = "codigo_de_geolocalizacion";
@@ -123,8 +126,6 @@ public class DBtareasController extends SQLiteOpenHelper {
     public static String numero_serie_modulo = "numero_serie_modulo";
     public static String ubicacion_en_bateria = "ubicacion_en_bateria";
     public static String incidencia = "incidencia";
-
-
     public static String ID_FINCA = "ID_FINCA";
     public static String COMENTARIOS = "COMENTARIOS";
     public static String DNI_CIF_COMUNIDAD = "DNI_CIF_COMUNIDAD";
@@ -135,8 +136,7 @@ public class DBtareasController extends SQLiteOpenHelper {
     public static String C_AGRUPA = "C_AGRUPA";
     public static String DNI_CIF_ABONADO = "DNI_CIF_ABONADO";
     public static String C_COMUNERO = "C_COMUNERO";
-    public static String MENSAJE_LIBRE = "fecha_de_cambio";
-
+    public static String MENSAJE_LIBRE = "MENSAJE_LIBRE";
     public static String date_time_modified = "date_time_modified";
     public static String status_tarea = "status_tarea";
     public static String numero_edificio = "numero_edificio";
@@ -147,62 +147,6 @@ public class DBtareasController extends SQLiteOpenHelper {
 //        Log.e("Ejecutando: ", "Constructor");
         setTable_model();
         try {
-            if(tabla_model) {
-                jsonTareaType.put(id, 1);
-                jsonTareaType.put(numero_interno, "null");
-                jsonTareaType.put(poblacion, "null");
-                jsonTareaType.put(calle, "null");
-                jsonTareaType.put(numero_edificio, "null");
-                jsonTareaType.put(letra_edificio, "null");
-                jsonTareaType.put(piso, "null");
-                jsonTareaType.put(mano, "null");
-                jsonTareaType.put(CONTADOR_Prefijo_anno, "null");
-                jsonTareaType.put(numero_serie_contador, "null");
-                jsonTareaType.put(tipo_tarea, "null");
-                jsonTareaType.put(calibre_toma, "null");
-                jsonTareaType.put(calibre_real, "null");
-                jsonTareaType.put(operario, "null");
-                jsonTareaType.put(emplazamiento, "null");
-                jsonTareaType.put(observaciones, "null");
-                jsonTareaType.put(actividad, "null");
-                jsonTareaType.put(nombre_cliente, "null");
-                jsonTareaType.put(numero_abonado, "null");
-                jsonTareaType.put(telefonos_cliente, "null");
-                jsonTareaType.put(telefono1, "null");
-                jsonTareaType.put(telefono2, "null");
-                jsonTareaType.put(fechas_tocado_puerta, "null");
-                jsonTareaType.put(fechas_nota_aviso, "null");
-                jsonTareaType.put(acceso, "null");
-                jsonTareaType.put(resultado, "null");
-                jsonTareaType.put(nuevo_citas, "null");
-                jsonTareaType.put(fecha_hora_cita, "null");
-                jsonTareaType.put(fecha_de_cambio, "null");
-                jsonTareaType.put(zona, "null");
-                jsonTareaType.put(ruta, "null");
-                jsonTareaType.put(marca_contador, "null");
-                jsonTareaType.put(codigo_de_localizacion, "null");
-                jsonTareaType.put(foto_antes_instalacion, "null");
-                jsonTareaType.put(foto_numero_serie, "null");
-                jsonTareaType.put(foto_lectura, "null");
-                jsonTareaType.put(foto_despues_instalacion, "null");
-                jsonTareaType.put(numero_serie_modulo, "null");
-                jsonTareaType.put(firma_cliente, "null");
-                jsonTareaType.put(lectura_ultima, "null");
-                jsonTareaType.put(lectura_actual, "null");
-                jsonTareaType.put(geolocalizacion, "null");
-                jsonTareaType.put(ubicacion_en_bateria, "null");
-                jsonTareaType.put(incidencia, "null");
-                jsonTareaType.put(foto_incidencia_1, "null");
-                jsonTareaType.put(foto_incidencia_2, "null");
-                jsonTareaType.put(foto_incidencia_3, "null");
-                jsonTareaType.put(propiedad, "null");
-                jsonTareaType.put(reparacion, "null");
-                jsonTareaType.put(numero, "null");
-                jsonTareaType.put(ruedas, "null");
-                jsonTareaType.put(date_time_modified, "null");
-                jsonTareaType.put(status_tarea, "null");
-            }
-            else {
                 jsonTareaType.put(id, 1);
                 jsonTareaType.put(idOrdenCABB, "null");
                 jsonTareaType.put(FechImportacion, "null");
@@ -244,6 +188,7 @@ public class DBtareasController extends SQLiteOpenHelper {
                 jsonTareaType.put(lectura_contador_nuevo, "null");
                 jsonTareaType.put(observaciones_devueltas, "null");
                 jsonTareaType.put(TIPO, "null");
+                jsonTareaType.put(TIPO_devuelto, "null");
                 jsonTareaType.put(Estado, "null");
                 jsonTareaType.put(marca_devuelta, "null");
                 jsonTareaType.put(calibre_real, "null");
@@ -260,12 +205,14 @@ public class DBtareasController extends SQLiteOpenHelper {
                 jsonTareaType.put(operario, "null");
                 jsonTareaType.put(observaciones, "null");
                 jsonTareaType.put(TIPOFLUIDO, "null");
+                jsonTareaType.put(TIPOFLUIDO_devuelto, "null");
                 jsonTareaType.put(idexport, "null");
                 jsonTareaType.put(fech_facturacion, "null");
                 jsonTareaType.put(fech_cierrenew, "null");
                 jsonTareaType.put(fech_informacionnew, "null");
                 jsonTareaType.put(f_instnew, "null");
                 jsonTareaType.put(tipoRadio, "null");
+                jsonTareaType.put(tipoRadio_devuelto, "null");
                 jsonTareaType.put(marcaR, "null");
                 jsonTareaType.put(codigo_de_localizacion, "null");
                 jsonTareaType.put(codigo_de_geolocalizacion, "null");
@@ -293,7 +240,6 @@ public class DBtareasController extends SQLiteOpenHelper {
                 jsonTareaType.put(numero_serie_modulo, "null");
                 jsonTareaType.put(ubicacion_en_bateria, "null");
                 jsonTareaType.put(incidencia, "null");
-
                 jsonTareaType.put(ID_FINCA, "null");
                 jsonTareaType.put(COMENTARIOS, "null");
                 jsonTareaType.put(DNI_CIF_COMUNIDAD, "null");
@@ -305,12 +251,9 @@ public class DBtareasController extends SQLiteOpenHelper {
                 jsonTareaType.put(DNI_CIF_ABONADO, "null");
                 jsonTareaType.put(C_COMUNERO, "null");
                 jsonTareaType.put(MENSAJE_LIBRE, "null");
-
                 jsonTareaType.put(date_time_modified, "null");
                 jsonTareaType.put(status_tarea, "null");
-            }
 
-            jsonTareaType_empty = jsonTareaType;
 //            Log.e("Mostrando form JSON:",jsonTareaType.toString());
 
         } catch (JSONException e) {
@@ -321,62 +264,6 @@ public class DBtareasController extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         if(sqLiteDatabase != null) {
-            if(tabla_model){
-                sqLiteDatabase.execSQL("Create table if not exists " + table_name + " (id integer primary key autoincrement, " +
-                    numero_interno+" TEXT, " +
-                    poblacion+" TEXT, " +
-                    calle+" TEXT, " +
-                    numero_edificio+" TEXT, " +
-                    letra_edificio+" TEXT, " +
-                    piso+" TEXT, " +
-                    mano+" TEXT, " +
-                    CONTADOR_Prefijo_anno+" TEXT, " +
-                    numero_serie_contador+" TEXT, " +
-                    tipo_tarea+" TEXT, " +
-                    calibre_toma+" TEXT, " +
-                    calibre_real+" TEXT, " +
-                    operario+" TEXT, " +
-                    emplazamiento+" TEXT, " +
-                    observaciones+" TEXT, " +
-                    actividad+" TEXT, " +
-                    nombre_cliente+" TEXT, " +
-                    numero_abonado+" TEXT, " +
-                    telefonos_cliente+" TEXT, " +
-                    telefono1+" TEXT, " +
-                    telefono2+" TEXT, " +
-                    fechas_tocado_puerta+" TEXT, " +
-                    fechas_nota_aviso+" TEXT, " +
-                    acceso+" TEXT, " +
-                    resultado+" TEXT, " +
-                    nuevo_citas+" TEXT, " +
-                    fecha_hora_cita+" TEXT, " +
-                    fecha_de_cambio+" TEXT, " +
-                    zona+" TEXT, " +
-                    ruta+" TEXT, " +
-                    marca_contador+" TEXT, " +
-                    codigo_de_localizacion+" TEXT, " +
-                    foto_antes_instalacion+" TEXT, " +
-                    foto_numero_serie+" TEXT, " +
-                    foto_lectura+" TEXT, " +
-                    foto_despues_instalacion+" TEXT, " +
-                    numero_serie_modulo+" TEXT, " +
-                    firma_cliente+" TEXT, " +
-                    lectura_ultima+" TEXT, " +
-                    lectura_actual+" TEXT, " +
-                    geolocalizacion+" INTEGER, " +
-                    ubicacion_en_bateria+" TEXT, " +
-                    incidencia+" TEXT, " +
-                    foto_incidencia_1+" TEXT, " +
-                    foto_incidencia_2+" TEXT, " +
-                    foto_incidencia_3+" TEXT, " +
-                    propiedad+" TEXT, " +
-                    reparacion+" TEXT, " +
-                    numero+" TEXT, " +
-                    ruedas+" TEXT, " +
-                    date_time_modified+" TEXT, " +
-                    status_tarea+" TEXT" +
-                        ")");
-            }else {
                 sqLiteDatabase.execSQL("Create table if not exists " + table_name + " (id integer primary key autoincrement, " +
                         idOrdenCABB + " TEXT, " +
                         FechImportacion + " TEXT, " +
@@ -418,6 +305,7 @@ public class DBtareasController extends SQLiteOpenHelper {
                         lectura_contador_nuevo + " TEXT, " +
                         observaciones_devueltas + " TEXT, " +
                         TIPO + " TEXT, " +
+                        TIPO_devuelto + " TEXT, " +
                         Estado + " TEXT, " +
                         marca_devuelta + " TEXT, " +
                         calibre_real + " TEXT, " +
@@ -434,12 +322,14 @@ public class DBtareasController extends SQLiteOpenHelper {
                         operario + " TEXT, " +
                         observaciones + " TEXT, " +
                         TIPOFLUIDO + " TEXT, " +
+                        TIPOFLUIDO_devuelto + " TEXT, " +
                         idexport + " TEXT, " +
                         fech_facturacion + " TEXT, " +
                         fech_cierrenew + " TEXT, " +
                         fech_informacionnew + " TEXT, " +
                         f_instnew + " TEXT, " +
                         tipoRadio + " TEXT, " +
+                        tipoRadio_devuelto + " TEXT, " +
                         marcaR + " TEXT, " +
                         codigo_de_localizacion + " TEXT, " +
                         codigo_de_geolocalizacion+" TEXT, " +
@@ -467,7 +357,6 @@ public class DBtareasController extends SQLiteOpenHelper {
                         numero_serie_modulo + " TEXT, " +
                         ubicacion_en_bateria + " TEXT, " +
                         incidencia + " TEXT, " +
-
                         ID_FINCA + " TEXT, " +
                         COMENTARIOS + " TEXT, " +
                         DNI_CIF_COMUNIDAD + " TEXT, " +
@@ -479,11 +368,10 @@ public class DBtareasController extends SQLiteOpenHelper {
                         DNI_CIF_ABONADO + " TEXT, " +
                         C_COMUNERO + " TEXT, " +
                         MENSAJE_LIBRE + " TEXT, " +
-
                         date_time_modified + " TEXT, " +
                         status_tarea + " TEXT" +
                         ")");
-            }
+
         }
     }
 
@@ -492,6 +380,123 @@ public class DBtareasController extends SQLiteOpenHelper {
         //Esta funcion se ejecuta cuando cambia el formato de la tabla
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS "+ table_name);
         onCreate(sqLiteDatabase);
+    }
+
+    public static JSONObject setEmptyJSON(JSONObject jsonTareaType){
+        try {
+            jsonTareaType.put(id, 1);
+            jsonTareaType.put(idOrdenCABB, "");
+            jsonTareaType.put(FechImportacion, "");
+            jsonTareaType.put(numero_interno, "");
+            jsonTareaType.put(ANOMALIA, "");
+            jsonTareaType.put(AREALIZAR, "");//numero de portal
+            jsonTareaType.put(INTERVENCION, "");
+            jsonTareaType.put(reparacion, "");
+            jsonTareaType.put(propiedad, "");
+            jsonTareaType.put(CONTADOR_Prefijo_anno, "");
+            jsonTareaType.put(numero_serie_contador, "");
+            jsonTareaType.put(marca_contador, "");
+            jsonTareaType.put(calibre_toma, "");
+            jsonTareaType.put(ruedas, "");
+            jsonTareaType.put(fecha_instalacion, "");
+            jsonTareaType.put(actividad, "");
+            jsonTareaType.put(emplazamiento, "");
+            jsonTareaType.put(acceso, "");
+            jsonTareaType.put(calle, "");
+            jsonTareaType.put(numero, "");//numero de portal
+            jsonTareaType.put(BIS, "");
+            jsonTareaType.put(piso, "");
+            jsonTareaType.put(mano, "");
+            jsonTareaType.put(poblacion, "");
+            jsonTareaType.put(nombre_cliente, "");
+            jsonTareaType.put(numero_abonado, "");
+            jsonTareaType.put(nombre_firmante, "");
+            jsonTareaType.put(numero_carnet_firmante, "");
+            jsonTareaType.put(lectura_ultima, "");
+            jsonTareaType.put(FECEMISIO, "");
+            jsonTareaType.put(FECULTREP, "");
+            jsonTareaType.put(OBSERVA, "");
+            jsonTareaType.put(RS, "");
+            jsonTareaType.put(F_INST, "");
+            jsonTareaType.put(INDICE, "");
+            jsonTareaType.put(emplazamiento_devuelto, "");
+            jsonTareaType.put(RESTO_EM, "");
+            jsonTareaType.put(lectura_actual, "");
+            jsonTareaType.put(lectura_contador_nuevo, "");
+            jsonTareaType.put(observaciones_devueltas, "");
+            jsonTareaType.put(TIPO, "");
+            jsonTareaType.put(TIPO_devuelto, "");
+            jsonTareaType.put(Estado, "");
+            jsonTareaType.put(marca_devuelta, "");
+            jsonTareaType.put(calibre_real, "");
+            jsonTareaType.put(RUEDASDV, "");
+            jsonTareaType.put(LARGO, "");
+            jsonTareaType.put(largo_devuelto, "");//numero de portal
+            jsonTareaType.put(numero_serie_contador_devuelto, "");
+            jsonTareaType.put(CONTADOR_Prefijo_anno_devuelto, "");
+            jsonTareaType.put(AREALIZAR_devuelta, "");
+            jsonTareaType.put(intervencion_devuelta, "");
+            jsonTareaType.put(RESTEMPLAZA, "");
+            jsonTareaType.put(FECH_CIERRE, "");
+            jsonTareaType.put(TIPORDEN, "");
+            jsonTareaType.put(operario, "");
+            jsonTareaType.put(observaciones, "");
+            jsonTareaType.put(TIPOFLUIDO, "");
+            jsonTareaType.put(TIPOFLUIDO_devuelto, "");
+            jsonTareaType.put(idexport, "");
+            jsonTareaType.put(fech_facturacion, "");
+            jsonTareaType.put(fech_cierrenew, "");
+            jsonTareaType.put(fech_informacionnew, "");
+            jsonTareaType.put(f_instnew, "");
+            jsonTareaType.put(tipoRadio, "");
+            jsonTareaType.put(tipoRadio_devuelto, "");
+            jsonTareaType.put(marcaR, "");
+            jsonTareaType.put(codigo_de_localizacion, "");
+            jsonTareaType.put(codigo_de_geolocalizacion, "");
+            jsonTareaType.put(geolocalizacion, "");
+            jsonTareaType.put(foto_antes_instalacion, "");
+            jsonTareaType.put(foto_numero_serie, "");
+            jsonTareaType.put(foto_lectura, "");
+            jsonTareaType.put(foto_despues_instalacion, "");
+            jsonTareaType.put(foto_incidencia_1, "");
+            jsonTareaType.put(foto_incidencia_2, "");
+            jsonTareaType.put(foto_incidencia_3, "");
+            jsonTareaType.put(firma_cliente, "");
+            jsonTareaType.put(tipo_tarea, "");
+            jsonTareaType.put(telefonos_cliente, "");
+            jsonTareaType.put(telefono1, "");
+            jsonTareaType.put(telefono2, "");
+            jsonTareaType.put(fechas_tocado_puerta, "");
+            jsonTareaType.put(fechas_nota_aviso, "");
+            jsonTareaType.put(resultado, "");
+            jsonTareaType.put(nuevo_citas, "");
+            jsonTareaType.put(fecha_hora_cita, "");
+            jsonTareaType.put(fecha_de_cambio, "");
+            jsonTareaType.put(zona, "");
+            jsonTareaType.put(ruta, "");
+            jsonTareaType.put(numero_serie_modulo, "");
+            jsonTareaType.put(ubicacion_en_bateria, "");
+            jsonTareaType.put(incidencia, "");
+            jsonTareaType.put(ID_FINCA, "");
+            jsonTareaType.put(COMENTARIOS, "");
+            jsonTareaType.put(DNI_CIF_COMUNIDAD, "");
+            jsonTareaType.put(TARIFA, "");
+            jsonTareaType.put(TOTAL_CONTADORES, "");
+            jsonTareaType.put(C_CANAL, "");
+            jsonTareaType.put(C_LYC, "");
+            jsonTareaType.put(C_AGRUPA, "");
+            jsonTareaType.put(DNI_CIF_ABONADO, "");
+            jsonTareaType.put(C_COMUNERO, "");
+            jsonTareaType.put(MENSAJE_LIBRE, "");
+            jsonTareaType.put(date_time_modified, "");
+            jsonTareaType.put(status_tarea, "");
+
+            return jsonTareaType;
+        } catch (JSONException e) {
+            Log.e("Error", "Error vaciando json");
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public void setTable_model(){
@@ -550,12 +555,6 @@ public class DBtareasController extends SQLiteOpenHelper {
             date_time_modified = "date_time_modified";
             status_tarea = "status_tarea";
         }
-    }
-    public void setJsonTarea(JSONObject json){
-        jsonTareaType = json;
-    }
-    public JSONObject getJsonTarea(){
-        return jsonTareaType_empty;
     }
 
     public void insertTarea(JSONObject json) throws JSONException {

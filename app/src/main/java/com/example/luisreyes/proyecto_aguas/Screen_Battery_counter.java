@@ -576,15 +576,16 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
         String n = "";
         try{
             n = "Tipo:\n  "+tipo_tarea + " "+calibre
-                    +"\n\nDireccion:\n  "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.poblacion).trim()
+                    +"\n\nDirección:\n  "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.poblacion).trim()
                     +", "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.calle).trim()
                     +", "+Screen_Advance_Filter.getBis(Screen_Login_Activity.tarea_JSON).trim()
                     +"\n\nAbonado:\n  "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.nombre_cliente)
+                    +"\n\nNumero de abonado:  "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado)
                     +"\n\nContador:\n  "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador)
                     +"\n\nCita:  "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.nuevo_citas)
-                    +"\n\nlectura Ultima: "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.lectura_ultima)
-                    +"\nlectura Actual: "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.lectura_actual)
-                    //+"\nCodigo_Localizacion: "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.codigo_de_localizacion)
+                    +"\n\nLectura última: "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.lectura_ultima)
+                    +"\nLectura actual: "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.lectura_actual)
+                    +"\nCodigo de geolocalización: "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.codigo_de_geolocalizacion)
                     //+"\ngeolocalizacion: "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.geolocalizacion)
                     +"\n\nModificacion:\n"+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.date_time_modified)
                     +"\n\nEstado: "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.status_tarea);

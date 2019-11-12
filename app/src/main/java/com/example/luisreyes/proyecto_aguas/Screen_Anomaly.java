@@ -53,14 +53,17 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
 	textView_tipo_fluido_screen_exec_task,
 	textView_tipo_radio_screen_exec_task,
             textView_resultado_screen_exec_task,
-            textView_numero_serie_nuevo_screen_exec_task;
+            textView_numero_serie_nuevo_screen_exec_task,
+            textView_tipo_o_clase_contador_screen_exec_task;
+
 
 	private ImageView imageView_edit_lectura_nuevo_screen_exec_task,
     imageView_edit_emplazamiento_screen_exec_task,
 	imageView_edit_tipo_fluido_screen_exec_task,
 	imageView_edit_tipo_radio_screen_exec_task,
             imageView_edit_resultado_screen_exec_task,
-            imageView_edit_numero_serie_nuevo_screen_exec_task;
+            imageView_edit_numero_serie_nuevo_screen_exec_task,
+            imageView_edit_tipo_o_clase_contador_screen_exec_task;
 
 	Button button_guardar_datos_screen_anomaly;
 
@@ -262,6 +265,7 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
 
         button_guardar_datos_screen_anomaly = (Button)findViewById(R.id.button_guardar_datos_screen_anomaly);
 
+        imageView_edit_tipo_o_clase_contador_screen_exec_task = (ImageView) findViewById(R.id.imageView_edit_tipo_o_clase_contador_screen_exec_task);
         imageView_edit_resultado_screen_exec_task = (ImageView) findViewById(R.id.imageView_edit_resultado_screen_exec_task);
         imageView_edit_numero_serie_nuevo_screen_exec_task= (ImageView) findViewById(R.id.imageView_edit_numero_serie_nuevo_screen_exec_task);
         imageView_edit_lectura_nuevo_screen_exec_task = (ImageView) findViewById(R.id.imageView_edit_lectura_nuevo_screen_exec_task);
@@ -272,6 +276,7 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
         textView_resultado_screen_exec_task = (TextView) findViewById(R.id.textView_resultado_screen_exec_task);
         textView_numero_serie_nuevo_screen_exec_task = (TextView) findViewById(R.id.textView_numero_serie_nuevo_screen_exec_task);
 
+        textView_tipo_o_clase_contador_screen_exec_task = (TextView) findViewById(R.id.textView_tipo_o_clase_contador_screen_exec_task);
         textView_lectura_nuevo_screen_exec_task = (TextView) findViewById(R.id.textView_lectura_nuevo_screen_exec_task);
         textView_emplazamiento_screen_exec_task = (TextView) findViewById(R.id.textView_resto_emplazamiento_screen_exec_task);
         textView_tipo_fluido_screen_exec_task = (TextView) findViewById(R.id.textView_tipo_fluido_screen_exec_task);
@@ -503,6 +508,32 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
                 imageView_edit_emplazamiento_screen_exec_task.startAnimation(myAnim);
             }
         });
+        imageView_edit_tipo_o_clase_contador_screen_exec_task.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
+                final Animation myAnim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        openDialog("Tipo o clase de contador");
+                    }
+                });
+                imageView_edit_tipo_o_clase_contador_screen_exec_task.startAnimation(myAnim);
+            }
+        });
         imageView_edit_tipo_fluido_screen_exec_task.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -652,11 +683,20 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
                 }
                 textView_lectura_nuevo_screen_exec_task.setText(wrote_string);
             }
-        }else if(current_tag.contains("Tipo de Fluido")){
+        }else if(current_tag.contains("Tipo o clase de contador")){
             if (!(TextUtils.isEmpty(wrote_string))) {
 
                 if(!DBtareasController.tabla_model) {
-                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.TIPOFLUIDO, wrote_string);
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.TIPO_devuelto, wrote_string);
+                }
+                textView_tipo_o_clase_contador_screen_exec_task.setText(wrote_string);
+            }
+        }
+        else if(current_tag.contains("Tipo de Fluido")){
+            if (!(TextUtils.isEmpty(wrote_string))) {
+
+                if(!DBtareasController.tabla_model) {
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.TIPOFLUIDO_devuelto, wrote_string);
                 }
                 textView_tipo_fluido_screen_exec_task.setText(wrote_string);
             }
@@ -664,7 +704,7 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
             if (!(TextUtils.isEmpty(wrote_string))) {
 
                 if(!DBtareasController.tabla_model) {
-                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.tipoRadio, wrote_string);
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.tipoRadio_devuelto, wrote_string);
                 }
                 textView_tipo_radio_screen_exec_task.setText(wrote_string);
             }

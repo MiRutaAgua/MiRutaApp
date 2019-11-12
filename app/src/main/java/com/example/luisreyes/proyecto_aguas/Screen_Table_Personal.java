@@ -276,6 +276,7 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
             public void onClick(View view) {
                 Intent intent_open_Screen_Insertar_Tarea = new Intent(Screen_Table_Personal.this, Screen_Insertar_Tarea.class);
                 startActivity(intent_open_Screen_Insertar_Tarea);
+                Screen_Table_Personal.this.finish();
             }
         });
 
@@ -432,12 +433,12 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
                 }
             }
             personal_task_screen_Activity.hideRingDialog();
-        }
-        if(lista_ordenada_de_tareas.isEmpty()){
-            openMessage("Información", "No hay tareas asignadas a este operario");
-        }else{
-            openMessage("Información", "Existen "+String.valueOf(lista_ordenada_de_tareas.size())
-                    +" tareas pendientes");
+            if(lista_ordenada_de_tareas.isEmpty()){
+                openMessage("Información", "No hay tareas asignadas a este operario");
+            }else{
+                openMessage("Información", "Existen "+String.valueOf(lista_ordenada_de_tareas.size())
+                        +" tareas pendientes");
+            }
         }
     }
     @Override
@@ -581,8 +582,12 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
                 orderTareastoArrayAdapter();
                 hideRingDialog();
                 Toast.makeText(Screen_Table_Personal.this,"Tareas descargadas correctamente.", Toast.LENGTH_LONG).show();
-                openMessage("Información", "Existen "+String.valueOf(lista_ordenada_de_tareas.size())
-                        +" tareas pendientes");
+                if(lista_ordenada_de_tareas.isEmpty()){
+                    openMessage("Información", "No hay tareas asignadas a este operario");
+                }else{
+                    openMessage("Información", "Existen "+String.valueOf(lista_ordenada_de_tareas.size())
+                            +" tareas pendientes");
+                }
                 if(!tareas_to_update.isEmpty()) {
                     showRingDialog("Actualizando tareas en Internet...");
                     updateTareaInMySQL();

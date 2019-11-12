@@ -260,6 +260,7 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
             public void onClick(View view) {
                 Intent intent_open_Screen_Insertar_Tarea = new Intent(Screen_Table_Team.this, Screen_Insertar_Tarea.class);
                 startActivity(intent_open_Screen_Insertar_Tarea);
+                Screen_Table_Team.this.finish();
             }
         });
         button_advance_filter_table_team.setOnClickListener(new View.OnClickListener() {
@@ -423,8 +424,12 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
                 }
             }
             team_task_screen_Activity.hideRingDialog();
-            openMessage("Información", "Existen "+String.valueOf(lista_ordenada_de_tareas.size())
-            +" tareas pendientes");
+            if(lista_ordenada_de_tareas.isEmpty()){
+                openMessage("Información", "No hay tareas para mostrar");
+            }else{
+                openMessage("Información", "Existen "+String.valueOf(lista_ordenada_de_tareas.size())
+                        +" tareas pendientes");
+            }
         }
     }
 
@@ -567,8 +572,12 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
 
                 hideRingDialog();
                 Toast.makeText(Screen_Table_Team.this,"Tareas descargadas correctamente", Toast.LENGTH_LONG).show();
-                openMessage("Información", "Existen "+String.valueOf(lista_ordenada_de_tareas.size())
-                        +" tareas pendientes");
+                if(lista_ordenada_de_tareas.isEmpty()){
+                    openMessage("Información", "No hay tareas asignadas a este operario");
+                }else{
+                    openMessage("Información", "Existen "+String.valueOf(lista_ordenada_de_tareas.size())
+                            +" tareas pendientes");
+                }
                 if(!tareas_to_update.isEmpty()) {
                     showRingDialog("Actualizando tareas en Internet...");
 //                    openMessage("Tareas", tareas_to_update.toString());
@@ -624,8 +633,9 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
     }
 
     public static boolean checkIfDateisDeprecated(JSONObject jsonObject){//retorna true cuando cita esta vencida
-        String cita = null;
+        String cita = null, numero_interno = "null";
         try {
+            numero_interno = jsonObject.getString(DBtareasController.numero_interno).trim();
             cita = jsonObject.getString(DBtareasController.fecha_hora_cita).trim();
             if(!cita.isEmpty() && cita!=null && !cita.equals("NULL") && !cita.equals("null")) {
                 Date now = new Date();
@@ -639,7 +649,7 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
             }
             return false;
         } catch (JSONException e) {
-            Log.e("Excepcion", "Error obteniendo cita");
+            Log.e("Excepcion", "Error obteniendo cita" +" " +numero_interno+"  " + e.toString());
             e.printStackTrace();
             return false;
         }

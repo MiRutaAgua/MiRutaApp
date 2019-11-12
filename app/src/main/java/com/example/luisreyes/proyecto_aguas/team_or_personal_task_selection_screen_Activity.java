@@ -231,6 +231,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
     }
 
     public void setNotificationCitasObsoletas(){
+        if(team_or_personal_task_selection_screen_Activity.dBtareasController!=null)
         if(team_or_personal_task_selection_screen_Activity.dBtareasController.databasefileExists(this)){
             if(team_or_personal_task_selection_screen_Activity.dBtareasController.checkForTableExists()){
                 for (int i = 1; i <= team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas(); i++) {

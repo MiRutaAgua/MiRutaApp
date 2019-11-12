@@ -51,13 +51,13 @@ public class Notification_Service extends Service {
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(Notification_Service.this)
-                        .setSmallIcon(R.drawable.app_logo_web)
+                        .setSmallIcon(R.drawable.app_icon)
                         //.setLargeIcon(iconoLargo)                               //BitmapFactory.decodeResource(getResources(),R.mipmap.transferir))
                         //.setSound((Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.monedas_2)))////sonido
                         .setLights(color,3000,3000)
                         .setContentTitle("Mi Ruta")
                         //.setColorized(true)
-                        .setColor(getResources().getColor(R.color.white))
+                        .setColor(getResources().getColor(R.color.colorBlueAppRuta))
                         //.setContent(contentView)
                         .setContentText("Existen tareas con citas vencidas")
                         //.setContentText(amount + " " + currency)
@@ -86,7 +86,7 @@ public class Notification_Service extends Service {
                     .build();
             // channel.setSound(uri,att);
             mNotifyMgr.createNotificationChannel(channel);
-            mBuilder.setChannelId(channelId);
+            mBuilder.setChannel(channelId);
 
             Notification.Builder mBuilder2 =  new Notification.Builder(getApplicationContext(), channelId)
                     .setSmallIcon(R.drawable.app_logo_web)
