@@ -347,7 +347,7 @@ public class Screen_Filter_Results extends AppCompatActivity {
             arrayAdapter_salva_calles = (ArrayAdapter)listView_contadores_screen_advance_results.getAdapter();
             textView_listView_type_screen_filter_results.setText("RESULTADOS: " + String.valueOf(
                     listView_contadores_screen_advance_results.getAdapter().getCount()));
-            ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item,calles);
+            ArrayAdapter arrayAdapter = new ArrayAdapter(this, R.layout.spinner_text_view,calles);
             spinner_filtro_calle_screen_filter_results.setAdapter(arrayAdapter);
 
         }
@@ -487,7 +487,7 @@ public class Screen_Filter_Results extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-        ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item,poblaciones_selected);
+        ArrayAdapter arrayAdapter = new ArrayAdapter(this, R.layout.spinner_text_view,poblaciones_selected);
         spinner_filtro_poblacion_screen_filter_results.setAdapter(arrayAdapter);
         orderTareastoArrayAdapter();
         arrayAdapter_salva_poblacion = (ArrayAdapter) listView_contadores_screen_advance_results.getAdapter();
@@ -546,8 +546,8 @@ public class Screen_Filter_Results extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-        ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item,tipos_tareas_selected);
-        ArrayAdapter arrayAdapter2 = new ArrayAdapter(this, android.R.layout.simple_spinner_item,calibres_selected);
+        ArrayAdapter arrayAdapter = new ArrayAdapter(this, R.layout.spinner_text_view,tipos_tareas_selected);
+        ArrayAdapter arrayAdapter2 = new ArrayAdapter(this, R.layout.spinner_text_view,calibres_selected);
         spinner_filtro_tipo_tarea_screen_filter_results.setAdapter(arrayAdapter);
         spinner_filtro_calibre_screen_filter_results.setAdapter(arrayAdapter2);
         orderTareastoArrayAdapter();
@@ -588,7 +588,7 @@ public class Screen_Filter_Results extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-        ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item,poblaciones_selected);
+        ArrayAdapter arrayAdapter = new ArrayAdapter(this, R.layout.spinner_text_view,poblaciones_selected);
         spinner_filtro_poblacion_screen_filter_results.setAdapter(arrayAdapter);
         orderTareastoArrayAdapter();
         arrayAdapter_salva_poblacion = (ArrayAdapter) listView_contadores_screen_advance_results.getAdapter();

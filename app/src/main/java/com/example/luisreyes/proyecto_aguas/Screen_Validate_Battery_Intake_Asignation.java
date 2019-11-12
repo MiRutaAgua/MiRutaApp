@@ -298,8 +298,12 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
             BackgroundWorker backgroundWorker = new BackgroundWorker(this);
             backgroundWorker.execute(type);
         } else{
-            if(!error)
+            if(!error) {
                 Toast.makeText(this, "No hay conexion se guardaron los datos en el telefono", Toast.LENGTH_LONG).show();
+                Intent intent_open_battery_counter = new Intent(this, Screen_Battery_counter.class);
+                startActivity(intent_open_battery_counter);
+                this.finish();
+            }
         }
     }
     public Bitmap getPhotoUserLocal(String path){

@@ -59,6 +59,8 @@ public class DBtareasController extends SQLiteOpenHelper {
     public static String poblacion = "MUNICIPIO";
     public static String nombre_cliente = "NOMBRE_ABONADO";
     public static String numero_abonado = "Numero_de_ABONADO";
+//    public static String nombre_firmante = "NOMBRE_FIRMANTE";
+//    public static String numero_carnet_firmante = "NUMERO_CARNET_FIRMANTE";
     //    public static final String CODLEC = "CODLEC";
     public static String FECEMISIO = "FECEMISIO";
     public static String FECULTREP = "FECULTREP";
@@ -71,7 +73,7 @@ public class DBtareasController extends SQLiteOpenHelper {
     //    public static final String LECT_LEV = "LECT_LEV";
     public static String lectura_ultima = "CODLEC";//---------------
     public static String lectura_actual = "LECT_LEV";//----------------
-    public static String lectura_devuelta = "LECT_LEV";//----------------Cambiar esto------------------------------------------------------------
+//    public static String lectura_contador_nuevo = "LECT_LEV";//----------------Cambiar esto------------------------------------------------------------
     public static String observaciones_devueltas = "OBSERVADV";
     public static String TIPO = "TIPO";
     public static String Estado = "Estado";
@@ -98,6 +100,7 @@ public class DBtareasController extends SQLiteOpenHelper {
     public static String tipoRadio = "tipoRadio";
     public static String marcaR = "marcaR";
     public static String codigo_de_localizacion = "codigo_de_localizacion";
+    public static String codigo_de_geolocalizacion = "codigo_de_geolocalizacion";
     public static String geolocalizacion = "geolocalizacion";
     public static String foto_antes_instalacion = "foto_antes_instalacion";
     public static String foto_numero_serie = "foto_numero_serie";
@@ -250,6 +253,7 @@ public class DBtareasController extends SQLiteOpenHelper {
                 jsonTareaType.put(tipoRadio, "null");
                 jsonTareaType.put(marcaR, "null");
                 jsonTareaType.put(codigo_de_localizacion, "null");
+                //                jsonTareaType.put(codigo_de_geolocalizacion, "null");
                 jsonTareaType.put(geolocalizacion, "null");
                 jsonTareaType.put(foto_antes_instalacion, "null");
                 jsonTareaType.put(foto_numero_serie, "null");
@@ -407,6 +411,7 @@ public class DBtareasController extends SQLiteOpenHelper {
                         tipoRadio + " TEXT, " +
                         marcaR + " TEXT, " +
                         codigo_de_localizacion + " TEXT, " +
+                        //                        codigo_de_geolocalizacion+" TEXT, " +
                         geolocalizacion + " TEXT, " +
                         foto_antes_instalacion + " TEXT, " +
                         foto_numero_serie + " TEXT, " +

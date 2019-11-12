@@ -108,7 +108,7 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
         lista_desplegable.add("PENDIENTE DE SOLUCIONAR");
         lista_desplegable.add("NO QUIERE CAMBIAR");
         lista_desplegable.add("NO HAY ACCESO");
-        ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista_desplegable);
+        ArrayAdapter arrayAdapter = new ArrayAdapter(this, R.layout.spinner_text_view, lista_desplegable);
         spinner_lista_de_mal_ubicacion.setAdapter(arrayAdapter);
 
         try {

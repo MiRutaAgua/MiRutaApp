@@ -30,7 +30,7 @@
                 android:textSize="20dp"
                 android:textStyle="bold"
                 android:fontFamily="@font/segoeui"
-                android:textColor="@color/colorBlueAppRuta"
+                android:textColor="@color/colorGrayLetters"
                 />
         </LinearLayout>
 
@@ -56,6 +56,8 @@
                 android:id="@+id/spinner_tipo_anomalia_screen_anomaly"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
                 >
             </Spinner>
         </LinearLayout>
@@ -82,6 +84,8 @@
                 android:id="@+id/spinner_anomalias_screen_anomaly"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
                 >
             </Spinner>
         </LinearLayout>
@@ -228,22 +232,37 @@
                 android:fontFamily="@font/segoeui"
                 android:textColor="@color/colorBlueAppRuta"
                 />
+            <Spinner
+                android:id="@+id/spinner_emplazamiento_screen_anomaly"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                >
+            </Spinner>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:orientation="horizontal">
-
                 <TextView
-                    android:id="@+id/textView_emplazamiento_screen_exec_task"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="        "
+                    android:text="RESTO:   "
+                    android:textStyle="bold"
+                    android:textColor="@color/colorBlueAppRuta"
                     android:textSize="18dp" />
+                <TextView
+                    android:id="@+id/textView_resto_emplazamiento_screen_exec_task"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text=""
+                    android:textSize="15dp" />
 
                 <ImageView
-                    android:id="@+id/imageView_edit_emplazamiento_screen_exec_task"
+                    android:id="@+id/imageView_edit_resto_emplazamiento_screen_exec_task"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"

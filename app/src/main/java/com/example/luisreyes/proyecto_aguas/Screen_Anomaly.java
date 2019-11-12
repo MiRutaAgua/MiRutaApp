@@ -13,6 +13,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,7 +30,9 @@ import android.widget.Toast;
 
 import org.json.JSONException;
 
+import java.text.Bidi;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -42,7 +45,8 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
 
 
     private Spinner spinner_anomaly,
-            spinner_tipo_anomalia_screen_anomaly;
+            spinner_tipo_anomalia_screen_anomaly,
+            spinner_emplazamiento_screen_anomaly;
 			
 	private TextView textView_lectura_nuevo_screen_exec_task,
 	textView_emplazamiento_screen_exec_task,
@@ -62,6 +66,8 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
 
     private HashMap<String,String> mapaTiposDeResultados;
     private HashMap<String,String> mapaTiposDeAnomalias;
+    private HashMap<String,String> mapaTiposDeEmplazamiento;
+    private HashMap<String,String> mapaTiposDeRestoEmplazamiento;
 
     private HashMap<String,String> mapaAnomaliasNCI;
     private HashMap<String,String> mapaAnomaliasLFTD;
@@ -70,6 +76,8 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
     private HashMap<String,String> mapaAnomaliasSI;
     private HashMap<String,String> mapaAnomaliasT;
     private HashMap<String,String> mapaAnomaliasCF;
+    private HashMap<String,String> mapaAnomaliasEL;
+    private HashMap<String,String> mapaAnomaliasI;
     private HashMap<String,String> emptyMap;
 
     private String current_tag;
@@ -81,6 +89,61 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         myToolbar.setBackgroundColor(Color.TRANSPARENT);
         setSupportActionBar(myToolbar);
+
+        mapaTiposDeEmplazamiento = new HashMap<>();
+        mapaTiposDeEmplazamiento.put("AC", "Acera");
+        mapaTiposDeEmplazamiento.put("AR", "Arqueta");
+        mapaTiposDeEmplazamiento.put("BA", "Batería Cuarto de Contadores");
+        mapaTiposDeEmplazamiento.put("BT", "Batería Escalera");
+        mapaTiposDeEmplazamiento.put("CA", "Caldera");
+        mapaTiposDeEmplazamiento.put("CB", "Combinado");
+        mapaTiposDeEmplazamiento.put("CO", "Cocina");
+        mapaTiposDeEmplazamiento.put("ES", "Escalera");
+        mapaTiposDeEmplazamiento.put("FA", "Fachada");
+        mapaTiposDeEmplazamiento.put("FR", "Fregadera");
+        mapaTiposDeEmplazamiento.put("GA", "Garaje");
+        mapaTiposDeEmplazamiento.put("KA", "Calle");
+        mapaTiposDeEmplazamiento.put("LO", "Local");
+        mapaTiposDeEmplazamiento.put("NI", "Nicho");
+        mapaTiposDeEmplazamiento.put("PA", "Patio");
+        mapaTiposDeEmplazamiento.put("SO", "Sotano");
+        mapaTiposDeEmplazamiento.put("TE", "Terraza");
+        mapaTiposDeEmplazamiento.put("TR", "Trastero");
+        mapaTiposDeEmplazamiento.put("VE", "Ventana");
+        mapaTiposDeEmplazamiento.put("WC", "W.C.");
+        mapaTiposDeEmplazamiento.put("CS", "Caseta");
+        mapaTiposDeEmplazamiento.put("CU", "Cuadra");
+        mapaTiposDeEmplazamiento.put("HA", "Hall");
+        mapaTiposDeEmplazamiento.put("TX", "Txoko");
+        mapaTiposDeEmplazamiento.put("PR", "Pared");
+
+        mapaTiposDeRestoEmplazamiento = new HashMap<>();
+        mapaTiposDeRestoEmplazamiento.put("AC", "ERA");
+        mapaTiposDeRestoEmplazamiento.put("AR", "QUETA");
+        mapaTiposDeRestoEmplazamiento.put("BA", "Batería Cuarto de Contadores");
+        mapaTiposDeRestoEmplazamiento.put("BT", "Batería Escalera"); //preguntar por este
+        mapaTiposDeRestoEmplazamiento.put("CA", "LDERA");
+        mapaTiposDeRestoEmplazamiento.put("CB", "INADO");
+        mapaTiposDeRestoEmplazamiento.put("CO", "CINA");
+        mapaTiposDeRestoEmplazamiento.put("ES", "CALERA");
+        mapaTiposDeRestoEmplazamiento.put("FA", "CHADA");
+        mapaTiposDeRestoEmplazamiento.put("FR", "EGADERA");
+        mapaTiposDeRestoEmplazamiento.put("GA", "RAJE");
+        mapaTiposDeRestoEmplazamiento.put("KA", "LLE");
+        mapaTiposDeRestoEmplazamiento.put("LO", "CAL");
+        mapaTiposDeRestoEmplazamiento.put("NI", "CHO");
+        mapaTiposDeRestoEmplazamiento.put("PA", "TIO");
+        mapaTiposDeRestoEmplazamiento.put("SO", "TANO");
+        mapaTiposDeRestoEmplazamiento.put("TE", "RRAZA");
+        mapaTiposDeRestoEmplazamiento.put("TR", "ASTERO");
+        mapaTiposDeRestoEmplazamiento.put("VE", "NTANA");
+        mapaTiposDeRestoEmplazamiento.put("WC", "W.C.");
+        mapaTiposDeRestoEmplazamiento.put("CS", "SETA");
+        mapaTiposDeRestoEmplazamiento.put("CU", "ADRA");
+        mapaTiposDeRestoEmplazamiento.put("HA", "LL");
+        mapaTiposDeRestoEmplazamiento.put("TX", "OKO");
+        mapaTiposDeRestoEmplazamiento.put("PR", "ED");
+
 
         mapaTiposDeResultados = new HashMap<>();
         mapaTiposDeResultados.put("036", "012");
@@ -111,9 +174,10 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
         mapaTiposDeResultados.put("NX2", "994");
         mapaTiposDeResultados.put("NX0", "994");
         mapaTiposDeResultados.put("LHC", "991");
-        mapaTiposDeResultados.put("X15", "996");
-        mapaTiposDeResultados.put("NX2", "994");
-        mapaTiposDeResultados.put("NX0", "994");
+        mapaTiposDeResultados.put("M21", "979-980-981-982");
+        mapaTiposDeResultados.put("III", "DII");
+        mapaTiposDeResultados.put("R30", "997");
+        mapaTiposDeResultados.put("003", "903");
 
         mapaTiposDeAnomalias = new HashMap<>();
         mapaTiposDeAnomalias.put("NCI", "NUEVO CONTADOR INSTALAR");
@@ -123,15 +187,17 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
         mapaTiposDeAnomalias.put("LFTD", "LIMPIEZA DE FILTRO Y TOMA DE DATOS");
         //mapaTiposDeAnomalias.put("D", "DATOS");
         mapaTiposDeAnomalias.put("TD", "TOMA DE DATOS");
-        //mapaTiposDeAnomalias.put("I", "INSPECCIÓN");
+        mapaTiposDeAnomalias.put("I", "INSPECCIÓN");
         mapaTiposDeAnomalias.put("CF", "COMPROBAR EMISOR");
-        //mapaTiposDeAnomalias.put("EL", "EMISOR LECTURA");
+        mapaTiposDeAnomalias.put("EL", "EMISOR LECTURA");
         mapaTiposDeAnomalias.put("SI", "SOLO INSTALAR");
-        mapaTiposDeAnomalias.put("R", "REFORMA MAS CONTADOR");
+        //mapaTiposDeAnomalias.put("R", "REFORMA MAS CONTADOR");
 
         emptyMap = new HashMap<>();
 
         mapaAnomaliasNCI = new HashMap<>();
+        mapaAnomaliasNCI.put("S01", "SUMINISTRO POR CAMBIO DE CALIBRE");
+        mapaAnomaliasNCI.put("S02", "SUMINISTRO POR IMPAGO DE CONTADOR");
         mapaAnomaliasNCI.put("001", "CONTADOR DESTRUIDO");
         mapaAnomaliasNCI.put("002", "CUENTA AL REVES");
         mapaAnomaliasNCI.put("004", "AGUJAS SUELTAS O ROTAS");
@@ -148,17 +214,20 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
         mapaAnomaliasNCI.put("C33", "ALTA LEGALIZACION");
         mapaAnomaliasNCI.put("CVF", "CONTADOR A VERIFICAR");
         mapaAnomaliasNCI.put("APC", "ANALISIS DE PARQUE DE CONTADORES");
+        mapaAnomaliasNCI.put("NZ0", "CTD Y EMISORA RENOVADOS");
         mapaAnomaliasNCI.put("NZ2", "SUSTITUIR CONTADOR EMISOR");
         mapaAnomaliasNCI.put("Z21", "CAMBIOS MASIVOS");
 
         mapaAnomaliasLFTD = new HashMap<>();
         mapaAnomaliasLFTD.put("023", "REPARACION URGENTE");
+        mapaAnomaliasLFTD.put("Z23", "REPARACION CTD Y EMISOR");
 
         mapaAnomaliasTD= new HashMap<>();
         mapaAnomaliasTD.put("027", "CORRECCION DE DATOS DE CONTADOR");
         mapaAnomaliasTD.put("A32", "ALTA CONTADOR INSTALADO");
         mapaAnomaliasTD.put("C32", "LEGALIZACION CONTADOR INSTALADO");
         mapaAnomaliasTD.put("Z21", "CAMBIOS MASIVOS");
+        mapaAnomaliasTD.put("LHC", "LECTURA HISTORICA. WB-DB-RF");
 
         mapaAnomaliasU = new HashMap<>();
         mapaAnomaliasU.put("A31", "ALTA CONTADOR DE BAJA");
@@ -167,6 +236,8 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
         mapaAnomaliasSI.put("010", "SALIDERO EN LO RACORES");
         mapaAnomaliasSI.put("023", "REPARACION URGENTE");
         mapaAnomaliasSI.put("A30", "ALTA SOLO INSTALAR");
+        mapaAnomaliasSI.put("003", "INSTALADO AL REVÉS");
+        mapaAnomaliasSI.put("R30", "REINSTALAR UBICACIÓN CORRECTA");
 
         mapaAnomaliasT = new HashMap<>();
         mapaAnomaliasT.put("035", "BAJA PROVISIONAL DE OFICIO");
@@ -177,16 +248,24 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
 
         mapaAnomaliasCF = new HashMap<>();
         mapaAnomaliasCF.put("X12", "ALARMA DE LA RADIO");
-        mapaAnomaliasCF.put("X13", "EMISOR NO LEIDO (LEER A DISTANCIA)");
-        mapaAnomaliasCF.put("X14", "EMISOR NO LEIDO (LEER DIRECTAMENTE AL CONTADOR)");
-        mapaAnomaliasCF.put("X23", "EMISOR NO FUNCIONA");
+        mapaAnomaliasCF.put("X15", "EMPAREJAR DATO RADIO Y MEC");
+        mapaAnomaliasCF.put("NX2", "RENOVACIÓN DE EMISORA");
+        mapaAnomaliasCF.put("NX0", "EMISORA RENOVADA. INFORMA CIA");
+
+        mapaAnomaliasEL = new HashMap<>();
+        mapaAnomaliasEL.put("X13", "RADIO NO RECIBIDA. VISITA P.");
+        mapaAnomaliasEL.put("X14", "RADIO NO RECIBIDA. HAY LECT.");
+
+        mapaAnomaliasI = new HashMap<>();
+        mapaAnomaliasI.put("M21", "PREPARACIÓN RENOVACIÓN PERIÓDICA");
+        mapaAnomaliasI.put("III", "INFORME INSTALACIÓN INTERIOR");
 
         button_guardar_datos_screen_anomaly = (Button)findViewById(R.id.button_guardar_datos_screen_anomaly);
 
-        imageView_edit_numero_serie_nuevo_screen_exec_task= (ImageView) findViewById(R.id.imageView_edit_numero_serie_nuevo_screen_exec_task);
+        imageView_edit_resultado_screen_exec_task = (ImageView) findViewById(R.id.imageView_edit_resultado_screen_exec_task);
         imageView_edit_numero_serie_nuevo_screen_exec_task= (ImageView) findViewById(R.id.imageView_edit_numero_serie_nuevo_screen_exec_task);
         imageView_edit_lectura_nuevo_screen_exec_task = (ImageView) findViewById(R.id.imageView_edit_lectura_nuevo_screen_exec_task);
-        imageView_edit_emplazamiento_screen_exec_task = (ImageView)findViewById(R.id.imageView_edit_emplazamiento_screen_exec_task);
+        imageView_edit_emplazamiento_screen_exec_task = (ImageView)findViewById(R.id.imageView_edit_resto_emplazamiento_screen_exec_task);
         imageView_edit_tipo_fluido_screen_exec_task = (ImageView)findViewById(R.id.imageView_edit_tipo_fluido_screen_exec_task);
         imageView_edit_tipo_radio_screen_exec_task = (ImageView)findViewById(R.id.imageView_edit_tipo_radio_screen_exec_task);
 
@@ -194,12 +273,13 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
         textView_numero_serie_nuevo_screen_exec_task = (TextView) findViewById(R.id.textView_numero_serie_nuevo_screen_exec_task);
 
         textView_lectura_nuevo_screen_exec_task = (TextView) findViewById(R.id.textView_lectura_nuevo_screen_exec_task);
-        textView_emplazamiento_screen_exec_task = (TextView) findViewById(R.id.textView_emplazamiento_screen_exec_task);
+        textView_emplazamiento_screen_exec_task = (TextView) findViewById(R.id.textView_resto_emplazamiento_screen_exec_task);
         textView_tipo_fluido_screen_exec_task = (TextView) findViewById(R.id.textView_tipo_fluido_screen_exec_task);
         textView_tipo_radio_screen_exec_task = (TextView) findViewById(R.id.textView_tipo_radio_screen_exec_task);
 
         spinner_anomaly = (Spinner)findViewById(R.id.spinner_anomalias_screen_anomaly);
         spinner_tipo_anomalia_screen_anomaly = (Spinner)findViewById(R.id.spinner_tipo_anomalia_screen_anomaly);
+        spinner_emplazamiento_screen_anomaly = (Spinner)findViewById(R.id.spinner_emplazamiento_screen_anomaly);
 
         ArrayList<String> lista_desplegable_tipos_anomalia = new ArrayList<>();
         Iterator it = mapaTiposDeAnomalias.entrySet().iterator();
@@ -211,19 +291,108 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
             }
             //it.remove(); // avoids a ConcurrentModificationException
         }
+        Collections.sort(lista_desplegable_tipos_anomalia);
+        lista_desplegable_tipos_anomalia.add(0,"NINGUNA");
 
-        ArrayAdapter arrayAdapter_spinner = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista_desplegable_tipos_anomalia);
+        ArrayList<String> lista_desplegable_emplazamientos = new ArrayList<>();
+        it = mapaTiposDeEmplazamiento.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            //System.out.println(pair.getKey() + " = " + pair.getValue());
+            if(!lista_desplegable_emplazamientos.contains(pair.getKey().toString() + " - " + pair.getValue().toString())) {
+                lista_desplegable_emplazamientos.add(pair.getKey().toString() + " - " +pair.getValue().toString());
+            }
+
+            //it.remove(); // avoids a ConcurrentModificationException
+        }
+        Collections.sort(lista_desplegable_emplazamientos);
+        lista_desplegable_emplazamientos.add(0,"NINGUNO");
+
+        ArrayAdapter arrayAdapter_spinner = new ArrayAdapter(this, R.layout.spinner_text_view, lista_desplegable_tipos_anomalia);
         spinner_tipo_anomalia_screen_anomaly.setAdapter(arrayAdapter_spinner);
 
+        ArrayAdapter arrayAdapter_spinner_emplazamiento = new ArrayAdapter(this, R.layout.spinner_text_view, lista_desplegable_emplazamientos);
+        spinner_emplazamiento_screen_anomaly.setAdapter(arrayAdapter_spinner_emplazamiento);
+
+        spinner_emplazamiento_screen_anomaly.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String selected = spinner_emplazamiento_screen_anomaly
+                        .getAdapter().getItem(i).toString();
+//                Toast.makeText(getApplicationContext(), "Selected: "+ selected, Toast.LENGTH_LONG).show();
+                if(!selected.isEmpty() && selected!=null && selected.contains(" - ") && !selected.equals("NINGUNO")) {
+                    String emplazamiento = selected.split(" - ")[0];
+                    if(mapaTiposDeRestoEmplazamiento.containsKey(emplazamiento)){
+                        if(emplazamiento.equals("BA") || emplazamiento.equals("BT")){
+                            textView_emplazamiento_screen_exec_task.setText("");
+                            try {
+                                String resto_ubicacion = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.ubicacion_en_bateria);
+                                if(!resto_ubicacion.isEmpty() && !resto_ubicacion.equals("null") && !resto_ubicacion.equals("NULL") && resto_ubicacion!=null){
+                                    resto_ubicacion = resto_ubicacion.replace("BA", "");
+                                    textView_emplazamiento_screen_exec_task.setText(resto_ubicacion);
+                                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.RESTO_EM, resto_ubicacion);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        else {
+                            String resto = mapaTiposDeRestoEmplazamiento.get(emplazamiento);
+                            textView_emplazamiento_screen_exec_task.setText(resto);
+                            try {
+                                Screen_Login_Activity.tarea_JSON.put(DBtareasController.RESTO_EM, resto);
+                            } catch (JSONException e) {
+                                Log.e("Excepcion", "No se pudo setear emplazamiento");
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                    try {
+                        Screen_Login_Activity.tarea_JSON.put(DBtareasController.emplazamiento_devuelto, emplazamiento);
+                    } catch (JSONException e) {
+                        Log.e("Excepcion", "No se pudo setear emplazamiento");
+                        e.printStackTrace();
+                    }
+                }else{
+                    if(selected.equals("NINGUNO")){
+                        textView_emplazamiento_screen_exec_task.setText("");
+
+                    }
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
         spinner_tipo_anomalia_screen_anomaly.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 String selected = spinner_tipo_anomalia_screen_anomaly
                         .getAdapter().getItem(i).toString();
 //                Toast.makeText(getApplicationContext(), "Selected: "+ selected, Toast.LENGTH_LONG).show();
-                if(!selected.isEmpty() && selected!=null && !selected.equals("Ninguno")) {
+                if(!selected.isEmpty() && selected!=null && !selected.equals("NINGUNA")) {
                     onTipoDeAnomalia(selected);
                 }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
+        spinner_anomaly.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String selected = spinner_anomaly
+                        .getAdapter().getItem(i).toString();
+                if(!selected.isEmpty() && selected.contains(" - ")){
+                    String anomaly = selected.split(" - ")[0].trim();
+                    if(mapaTiposDeResultados.containsKey(anomaly)){
+                        textView_resultado_screen_exec_task.setText(mapaTiposDeResultados.get(anomaly));
+                    }
+                    else{
+                        textView_resultado_screen_exec_task.setText("");
+                    }
+                }
+//
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -423,17 +592,34 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
 
     public void endActivityAnomaly(){
         Intent resultIntent = new Intent(Screen_Anomaly.this, Screen_Execute_Task.class);
-        String anomaly = spinner_anomaly.getSelectedItem().toString();
+        if(spinner_anomaly.getSelectedItem()!=null) {
+            String anomaly = spinner_anomaly.getSelectedItem().toString();
 
-        if(!anomaly.isEmpty() && anomaly!=null && !anomaly.equals("null") && !anomaly.equals("NULL") && anomaly.contains(" - ")) {
-            String anomaly_code = anomaly.split(" - ")[0];
-            String anomaly_string = anomaly.split(" - ")[1];
+
+
+            if (!anomaly.isEmpty() && anomaly != null && !anomaly.equals("null") && !anomaly.equals("NULL") && anomaly.contains(" - ")) {
+                String anomaly_code = anomaly.split(" - ")[0];
+                String anomaly_string = anomaly.split(" - ")[1];
 //            Toast.makeText(this, "Anomaly: " + anomaly_code + anomaly_string, Toast.LENGTH_LONG).show();
 
-            resultIntent.putExtra("anomaly_code", anomaly_code);
-            resultIntent.putExtra("anomaly_string", anomaly_string);
-            setResult(RESULT_OK, resultIntent);
-            finish();
+                resultIntent.putExtra("anomaly_code", anomaly_code);
+                resultIntent.putExtra("anomaly_string", anomaly_string);
+                String resultado = textView_resultado_screen_exec_task.getText().toString();
+                if (!resultado.isEmpty()) {
+                    try {
+                        Screen_Login_Activity.tarea_JSON.put(DBtareasController.resultado, resultado);
+                    } catch (JSONException e) {
+                        Log.e("Excepcion", "no se pudo insertar resultado");
+                        e.printStackTrace();
+                    }
+                }
+                setResult(RESULT_OK, resultIntent);
+                finish();
+            }
+            else{
+                setResult(RESULT_CANCELED, resultIntent);
+                finish();
+            }
         }else{
             setResult(RESULT_CANCELED, resultIntent);
             finish();
@@ -454,7 +640,7 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
             if (!(TextUtils.isEmpty(wrote_string))) {
 
                 if(!DBtareasController.tabla_model) {
-                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.emplazamiento_devuelto, wrote_string);
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.RESTO_EM, wrote_string);
                 }
                 textView_emplazamiento_screen_exec_task.setText(wrote_string);
             }
@@ -522,16 +708,13 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
             fillListaDesplegable(mapaAnomaliasTD);
         }
         else if(selected.equals("INSPECCIÓN")){
-            fillListaDesplegable(emptyMap);
+            fillListaDesplegable(mapaAnomaliasI);
         }
         else if(selected.equals("COMPROBAR EMISOR")){
             fillListaDesplegable(mapaAnomaliasCF);
         }
         else if(selected.equals("EMISOR LECTURA")){
-            fillListaDesplegable(emptyMap);
-        }
-        else if(selected.equals("INSPECCIÓN")){
-            fillListaDesplegable(emptyMap);
+            fillListaDesplegable(mapaAnomaliasEL);
         }
         else if(selected.equals("SOLO INSTALAR")){
             fillListaDesplegable(mapaAnomaliasSI);
@@ -547,7 +730,7 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
             lista_desplegable_tipos_anomalia.add(pair.getKey().toString() + " - " + pair.getValue().toString());
 //            it.remove(); // avoids a ConcurrentModificationException
         }
-        ArrayAdapter arrayAdapter_spinner = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista_desplegable_tipos_anomalia);
+        ArrayAdapter arrayAdapter_spinner = new ArrayAdapter(this, R.layout.spinner_text_view, lista_desplegable_tipos_anomalia);
         spinner_anomaly.setAdapter(arrayAdapter_spinner);
     }
 

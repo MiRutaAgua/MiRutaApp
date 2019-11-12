@@ -10,6 +10,8 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -124,7 +126,7 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
 
         lista_desplegable = new ArrayList<String>();
         lista_desplegable.add("NINGUNO");
-        lista_desplegable.add("DIRECCION");
+        lista_desplegable.add("DIRECCIÓN");
         //lista_desplegable.add("DATOS PRIVADOS");
         lista_desplegable.add("TIPO DE TAREA");
         //lista_desplegable.add("DATOS ÚNICOS");
@@ -176,7 +178,7 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
         textView_checkboxes_type = (TextView) findViewById(R.id.textView_checkboxes_type);
         button_filtrar = (Button) findViewById(R.id.button_fitrar_screen_filter_tareas);
 
-        ArrayAdapter arrayAdapter_spinner = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista_desplegable);
+        ArrayAdapter arrayAdapter_spinner = new ArrayAdapter(this, R.layout.spinner_text_view, lista_desplegable);
         spinner_filtro_tareas.setAdapter(arrayAdapter_spinner);
 
         button_filtrar.setOnClickListener(new View.OnClickListener() {
@@ -489,7 +491,7 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
                 if(lista_desplegable.get(i).contains("NINGUNO")){
                     hideAllFilters();
                 }
-                else if(lista_desplegable.get(i).contains("DIRECCION")){
+                else if(lista_desplegable.get(i).contains("DIRECCIÓN")){
                     hideAllFilters();
                     layout_filtro_direccion_screen_advance_filter.setVisibility(View.VISIBLE);
                     fillFilterPoblacion();
@@ -637,7 +639,7 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
             listView_contadores_screen_advance_filter.setAdapter( new ArrayAdapter(this, R.layout.list_text_view,list_adapter_filtrado));
             arrayAdapter_salva_calles = (ArrayAdapter)listView_contadores_screen_advance_filter.getAdapter();
             textView_listView_type.setText("RESULTADOS: " + String.valueOf(listView_contadores_screen_advance_filter.getAdapter().getCount()));
-            ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item,calles);
+            ArrayAdapter arrayAdapter = new ArrayAdapter(this, R.layout.spinner_text_view,calles);
             spinner_filtro_calle_screen_filter_tareas.setAdapter(arrayAdapter);
 
         }
@@ -907,7 +909,7 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
                     e.printStackTrace();
                 }
             }
-            ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item,poblaciones_selected);
+            ArrayAdapter arrayAdapter = new ArrayAdapter(this, R.layout.spinner_text_view,poblaciones_selected);
             spinner_filtro_poblacion_screen_filter_tareas.setAdapter(arrayAdapter);
             layout_filtro_tipo_tareas_dir_screen_filter_tareas.setVisibility(View.VISIBLE);
             layout_filtro_dir_tipo_tareas_screen_filter_tareas.setVisibility(View.GONE);
@@ -1126,7 +1128,7 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
         }
         Collections.sort(lista_desplegable, String.CASE_INSENSITIVE_ORDER);
         lista_desplegable.add(0,"Ninguno");
-        ArrayAdapter arrayAdapter_numero_serie = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista_desplegable);
+        ArrayAdapter arrayAdapter_numero_serie = new ArrayAdapter(this, R.layout.spinner_text_view, lista_desplegable);
         editText_numero_serie.setAdapter(arrayAdapter_numero_serie);
     }
 
@@ -1299,7 +1301,7 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
         }
         Collections.sort(lista_desplegable, String.CASE_INSENSITIVE_ORDER);
         lista_desplegable.add(0,"Ninguno");
-        ArrayAdapter arrayAdapter_spinner = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, lista_desplegable);
+        ArrayAdapter arrayAdapter_spinner = new ArrayAdapter<String>(this, R.layout.spinner_text_view, lista_desplegable);
         spinner_filtro_tipo_tarea_screen_advance_filter.setAdapter(arrayAdapter_spinner);
     }
 
@@ -1428,7 +1430,47 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
         layout_filtro_datos_unicos_screen_advance_filter.setVisibility(View.GONE);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.Contactar:
+//                Toast.makeText(Screen_User_Data.this, "Seleccionó la opción settings", Toast.LENGTH_SHORT).show();
+                openMessage("Contactar",
+                        /*+"\nAdrian Nieves: 1331995adrian@gmail.com"
+                        +"\nJorge G. Perez: yoyi1991@gmail.com"*/
+                        "\n   Michel Morales: mraguas@gmail.com"
+                                +"\n\n       Luis A. Reyes: inglreyesm@gmail.com");
+                // User chose the "Settings" item, show the app settings UI...
+                return true;
+
+            case R.id.Tareas:
+//                Toast.makeText(Screen_User_Data.this, "Ayuda", Toast.LENGTH_SHORT).show();
+                // User chose the "Favorite" action, mark the current item
+                // as a favorite...
+                Intent intent= new Intent(this, Screen_Table_Team.class);
+                startActivity(intent);
+                return true;
+
+            case R.id.Configuracion:
+//                Toast.makeText(Screen_User_Data.this, "Configuracion", Toast.LENGTH_SHORT).show();
+                // User chose the "Favorite" action, mark the current item
+                // as a favorite...
+                return true;
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
+    }
 
     public void openMessage(String title, String hint){
         MessageDialog messageDialog = new MessageDialog();
