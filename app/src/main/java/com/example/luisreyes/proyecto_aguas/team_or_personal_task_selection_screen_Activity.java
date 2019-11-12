@@ -260,6 +260,8 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
         }
         if(!tareas_con_citas_obsoletas.isEmpty()){
             layout_citas_vencidas_team_or_personal_task_screen.setVisibility(View.VISIBLE);
+            Intent serviceIntent = new Intent(this, Notification_Service.class);
+            startService(serviceIntent);
         }
     }
 
