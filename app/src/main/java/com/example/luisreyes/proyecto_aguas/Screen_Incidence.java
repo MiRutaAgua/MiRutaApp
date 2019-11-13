@@ -518,9 +518,9 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
         numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
 
         File image_file=null;
-        File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+numero_abonado+"/");
+        File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+numero_abonado);
         if (!storageDir.exists()) {
-            storageDir.mkdirs();
+            storageDir.mkdir();
         }
 
         File[] files = storageDir.listFiles();
@@ -583,9 +583,9 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
 
             numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
 
-            File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+numero_abonado+"/");
+            File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+numero_abonado);
             if (!myDir.exists()) {
-                myDir.mkdirs();
+                myDir.mkdir();
             }
             else{
                 File[] files = myDir.listFiles();

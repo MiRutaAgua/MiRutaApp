@@ -53,7 +53,8 @@ public class Screen_Insertar_Tarea extends AppCompatActivity implements TaskComp
             editText_anno_prefijo_screen_insertar_tarea,
             editText_operario_screen_insertar_tarea,
             editText_calibre_screen_insertar_tarea,
-            editText_abonado_screen_insertar_tarea,
+            editText_nombre_abonado_screen_insertar_tarea,
+            editText_numero_abonado_screen_insertar_tarea,
             editText_telefono_screen_insertar_tarea,
             editText_poblacion_screen_insertar_tarea,
             editText_calle_screen_insertar_tarea,
@@ -125,7 +126,8 @@ public class Screen_Insertar_Tarea extends AppCompatActivity implements TaskComp
         editText_operario_screen_insertar_tarea = (EditText) findViewById(R.id.editText_operario_screen_insertar_tarea);
         editText_calibre_screen_insertar_tarea = (EditText) findViewById(R.id.editText_calibre_screen_insertar_tarea);
         spinner_tipo_screen_insertar_tarea = (Spinner) findViewById(R.id.spinner_tipo_screen_insertar_tarea);
-        editText_abonado_screen_insertar_tarea = (EditText) findViewById(R.id.editText_abonado_screen_insertar_tarea);
+        editText_nombre_abonado_screen_insertar_tarea = (EditText) findViewById(R.id.editText_nombre_abonado_screen_insertar_tarea);
+        editText_numero_abonado_screen_insertar_tarea = (EditText) findViewById(R.id.editText_numero_abonado_screen_insertar_tarea);
         editText_telefono_screen_insertar_tarea = (EditText) findViewById(R.id.editText_telefono_screen_insertar_tarea);
 
         screen_insertar_tarea_agregar = (Button)findViewById(R.id.imageView_agregar_tarea_screen_insertar_tarea);
@@ -139,7 +141,6 @@ public class Screen_Insertar_Tarea extends AppCompatActivity implements TaskComp
             numero_interno_exite = true;
             String fecha = DBtareasController.getStringFromFechaHora(new Date());
             Screen_Login_Activity.tarea_JSON.put(DBtareasController.numero_interno, fecha);
-            Screen_Login_Activity.tarea_JSON.put(DBtareasController.numero_abonado, fecha);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -211,42 +212,46 @@ public class Screen_Insertar_Tarea extends AppCompatActivity implements TaskComp
 
     public  void onInsertar_tarea() {
         if (!(TextUtils.isEmpty(editText_numero_serie_screen_insertar_tarea.getText().toString()))) {
-            if (!team_or_personal_task_selection_screen_Activity.dBtareasController.checkIfTareaExists(
-                    editText_numero_serie_screen_insertar_tarea.getText().toString())) {
-                if (checkConection()) {
-                    guardar_modificaciones();
-                    textView_screen_insertar_tarea.setText(Screen_Login_Activity.tarea_JSON.toString());
-                    showRingDialog("Insertando tarea...");
-                    try {
-                        team_or_personal_task_selection_screen_Activity.dBtareasController.insertTarea(Screen_Login_Activity.tarea_JSON);
-                    } catch (JSONException e) {
-                        Log.e("Error", "insertTarea online");
-                        e.printStackTrace();
-                    }
-                    String type_script = "create_tarea";
-                    BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Insertar_Tarea.this);
-                    backgroundWorker.execute(type_script);
-                } else {
-                    guardar_modificaciones();
-                    textView_screen_insertar_tarea.setText(Screen_Login_Activity.tarea_JSON.toString());
-                    try {
-                        Screen_Login_Activity.tarea_JSON.put(DBtareasController.status_tarea, "TO_UPLOAD");
-                        team_or_personal_task_selection_screen_Activity.dBtareasController.insertTarea(Screen_Login_Activity.tarea_JSON);
-                        Toast.makeText(Screen_Insertar_Tarea.this, "Insertando Tarea Offline", Toast.LENGTH_LONG).show();
+            if (!(TextUtils.isEmpty(editText_numero_abonado_screen_insertar_tarea.getText().toString()))) {
+                if (!team_or_personal_task_selection_screen_Activity.dBtareasController.checkIfTareaExists(
+                        editText_numero_serie_screen_insertar_tarea.getText().toString())) {
+                    if (checkConection()) {
+                        guardar_modificaciones();
+                        textView_screen_insertar_tarea.setText(Screen_Login_Activity.tarea_JSON.toString());
+                        showRingDialog("Insertando tarea...");
+                        try {
+                            team_or_personal_task_selection_screen_Activity.dBtareasController.insertTarea(Screen_Login_Activity.tarea_JSON);
+                        } catch (JSONException e) {
+                            Log.e("Error", "insertTarea online");
+                            e.printStackTrace();
+                        }
+                        String type_script = "create_tarea";
+                        BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Insertar_Tarea.this);
+                        backgroundWorker.execute(type_script);
+                    } else {
+                        guardar_modificaciones();
+                        textView_screen_insertar_tarea.setText(Screen_Login_Activity.tarea_JSON.toString());
+                        try {
+                            Screen_Login_Activity.tarea_JSON.put(DBtareasController.status_tarea, "TO_UPLOAD");
+                            team_or_personal_task_selection_screen_Activity.dBtareasController.insertTarea(Screen_Login_Activity.tarea_JSON);
+                            Toast.makeText(Screen_Insertar_Tarea.this, "Insertando Tarea Offline", Toast.LENGTH_LONG).show();
 //                        numero_interno_exite = false;
 
-                        Intent intent_open_task_or_personal_screen = new Intent(Screen_Insertar_Tarea.this, team_or_personal_task_selection_screen_Activity.class);
-                        startActivity(intent_open_task_or_personal_screen);
-                        Screen_Insertar_Tarea.this.finish();
+                            Intent intent_open_task_or_personal_screen = new Intent(Screen_Insertar_Tarea.this, team_or_personal_task_selection_screen_Activity.class);
+                            startActivity(intent_open_task_or_personal_screen);
+                            Screen_Insertar_Tarea.this.finish();
 
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        Log.e("Error", "insertTarea Offline");
-                        Toast.makeText(Screen_Insertar_Tarea.this, "Problemas con JSON en Offline", Toast.LENGTH_LONG).show();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.e("Error", "insertTarea Offline");
+                            Toast.makeText(Screen_Insertar_Tarea.this, "Problemas con JSON en Offline", Toast.LENGTH_LONG).show();
+                        }
                     }
+                } else {
+                    Toast.makeText(Screen_Insertar_Tarea.this, " El contador ya existe", Toast.LENGTH_LONG).show();
                 }
             }else{
-                Toast.makeText(Screen_Insertar_Tarea.this, " El contador ya existe", Toast.LENGTH_LONG).show();
+                Toast.makeText(Screen_Insertar_Tarea.this, "Inserte número de abonado", Toast.LENGTH_LONG).show();
             }
         }
         else{
@@ -318,8 +323,11 @@ public class Screen_Insertar_Tarea extends AppCompatActivity implements TaskComp
                 Screen_Login_Activity.tarea_JSON.put(DBtareasController.tipo_tarea, "");
             }
 
-            if(!(TextUtils.isEmpty(editText_abonado_screen_insertar_tarea.getText().toString())))
-                Screen_Login_Activity.tarea_JSON.put(DBtareasController.nombre_cliente, editText_abonado_screen_insertar_tarea.getText().toString());
+            if(!(TextUtils.isEmpty(editText_nombre_abonado_screen_insertar_tarea.getText().toString())))
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.nombre_cliente, editText_nombre_abonado_screen_insertar_tarea.getText().toString());
+
+            if(!(TextUtils.isEmpty(editText_numero_abonado_screen_insertar_tarea.getText().toString())))
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.numero_abonado, editText_numero_abonado_screen_insertar_tarea.getText().toString());
 
             if(!(TextUtils.isEmpty(editText_telefono_screen_insertar_tarea.getText().toString())))
                 Screen_Login_Activity.tarea_JSON.put(DBtareasController.telefono1, editText_telefono_screen_insertar_tarea.getText().toString());

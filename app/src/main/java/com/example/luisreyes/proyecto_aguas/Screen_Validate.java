@@ -550,7 +550,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                 }
                 Integer lectura_actual_int = Integer.parseInt(lect_string);
                 Integer lectura_last_int = Integer.parseInt(lect_last_string);
-                if(lectura_actual_int.compareTo(lectura_last_int)>0){
+                if(lectura_actual_int.compareTo(lectura_last_int)>=0){
                     Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_ultima, lect_last_string);
                     Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_actual, lect_string);
 
@@ -1014,19 +1014,19 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
             }
         }else if(current_tag.equals("Nombre del firmante")){
             if (!(TextUtils.isEmpty(wrote_string))) {
-//                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.nombre_firmante, wrote_text);
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.nombre_firmante, wrote_string);
 //                    textView_nombre_firmante_screen_incidence_summary.setVisibility(View.VISIBLE);
                 textView_nombre_firmante_screen_validate.setText(wrote_string);
             }
         }else if(current_tag.equals("Número de carnet")){
             if (!(TextUtils.isEmpty(wrote_string))) {
-//                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.numero_carnet_firmante, wrote_text);
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.numero_carnet_firmante, wrote_string);
 //                    textView_numero_carnet_firmante_screen_incidence_summary.setVisibility(View.VISIBLE);
                 textView_numero_carnet_firmante_screen_validate.setText(wrote_string);
             }
         }else if(current_tag.equals("Lectura de contador nuevo")){
             if (!(TextUtils.isEmpty(wrote_string))) {
-//                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.numero_carnet_firmante, wrote_text);
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_contador_nuevo, wrote_string);
 //                    textView_numero_carnet_firmante_screen_incidence_summary.setVisibility(View.VISIBLE);
                 textView_lectura_contador_nuevo_screen_validate.setText(wrote_string);
             }

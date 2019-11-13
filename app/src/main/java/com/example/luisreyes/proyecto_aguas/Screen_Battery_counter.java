@@ -66,6 +66,8 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
             ubicacion_bateria,
             textView_numero_abonado_screen_battery_counter;
 
+    private String foto;
+
     private ProgressDialog progressDialog;
     private HashMap<String, String> mapaTiposDeTarea;
 
@@ -320,7 +322,7 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
 
         if (checkConection()){
             try {
-                String foto =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_despues_instalacion);
+                foto =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_despues_instalacion);
                 //Toast.makeText(this, foto_instalacion, Toast.LENGTH_LONG).show();
                 if(foto.isEmpty() || foto.contains("null") || foto.contains("NULL") || foto == null){
                     foto =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_antes_instalacion);
@@ -355,13 +357,22 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
                 //String foto_instalacion =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_antes_instalacion);
                 String image = null, numero_abonado = null;
                 numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
-                image = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_despues_instalacion);
-
+                image =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_despues_instalacion);
+                //Toast.makeText(this, foto_instalacion, Toast.LENGTH_LONG).show();
+                if(image.isEmpty() || image.contains("null") || image.contains("NULL") || image == null){
+                    image =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_antes_instalacion);
+                    if(image.isEmpty() || image.contains("null") || image.contains("NULL") || image == null){
+                        image =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_lectura);
+                        if(image.isEmpty() || image.contains("null") || image.contains("NULL") || image == null){
+                            image =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_numero_serie);
+                        }
+                    }
+                }
                 if(numero_abonado!=null && !numero_abonado.equals("null")
                         && !numero_abonado.equals("NULL") && !TextUtils.isEmpty(numero_abonado)) {
                     if(image!=null && !image.equals("null")
                             && !image.equals("NULL") && !TextUtils.isEmpty(image)) {
-                        File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/fotos_tareas/"+numero_abonado+"/");
+                        File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/fotos_tareas/"+numero_abonado);
                         if (!storageDir.exists()) {
                             storageDir.mkdir();
                         }
@@ -418,8 +429,7 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
                     if(bitmap!= null) {
                         imagen_contador.setVisibility(View.VISIBLE);
                         imagen_contador.setImageBitmap(bitmap);
-                        saveBitmapImage(bitmap, Screen_Login_Activity.tarea_JSON.getString(
-                                DBtareasController.foto_despues_instalacion));
+                        saveBitmapImage(bitmap, foto);
                         Toast.makeText(Screen_Battery_counter.this, "Imagen descargada", Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -434,9 +444,9 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
         String numero_abonado = null;
         try {
             numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
-            File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+numero_abonado+"/");
+            File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+numero_abonado);
             if (!myDir.exists()) {
-                myDir.mkdirs();
+                myDir.mkdir();
             }
             else{
                 File[] files = myDir.listFiles();

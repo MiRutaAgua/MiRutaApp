@@ -182,7 +182,7 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
     public String getSimilarFile(String file_name){
         File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_operarios");
         if (!storageDir.exists()) {
-            storageDir.mkdirs();
+            storageDir.mkdir();
             File storageDir2 = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/fotos_tareas");
             if(!storageDir2.exists()){
                 storageDir2.mkdir();
@@ -318,7 +318,7 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
         bitmap = Bitmap.createScaledBitmap(bitmap, 960, 1280, true);
         File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_operarios");
         if (!myDir.exists()) {
-            myDir.mkdirs();
+            myDir.mkdir();
             File storageDir2 = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/fotos_tareas");
             if(!storageDir2.exists()){
                 storageDir2.mkdir();
@@ -359,7 +359,7 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
         File image_file=null;
         File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_operarios");
         if (!storageDir.exists()) {
-            storageDir.mkdirs();
+            storageDir.mkdir();
             File storageDir2 = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/fotos_tareas");
             if(!storageDir2.exists()){
                 storageDir2.mkdir();

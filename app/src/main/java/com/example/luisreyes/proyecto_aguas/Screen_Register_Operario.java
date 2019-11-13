@@ -327,7 +327,7 @@ public class Screen_Register_Operario extends AppCompatActivity implements TaskC
         File image_file=null;
         File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_operarios");
         if (!storageDir.exists()) {
-            storageDir.mkdirs();
+            storageDir.mkdir();
         }
         image_file = File.createTempFile(
                 image,  /* prefix */

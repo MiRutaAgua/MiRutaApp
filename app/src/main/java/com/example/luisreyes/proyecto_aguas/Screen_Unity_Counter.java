@@ -57,6 +57,7 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
             button_exec_task_screen_unity_counter,
             button_geolocalization;
 
+    private String foto;
     private ImageView imagen_contador;
 
     private TextView tipo_tarea,
@@ -255,6 +256,7 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
                     public void onAnimationEnd(Animation arg0) {
                         Intent intent_open_battery_intake_asignation = new Intent(Screen_Unity_Counter.this, Screen_Battery_Intake_Asignation.class);
                         startActivity(intent_open_battery_intake_asignation);
+                        Screen_Unity_Counter.this.finish();
                     }
                 });
                 button_modo_battery.startAnimation(myAnim);
@@ -348,7 +350,7 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
 
         if (checkConection()){
             try {
-                String foto =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_despues_instalacion);
+                foto =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_despues_instalacion);
                 //Toast.makeText(this, foto_instalacion, Toast.LENGTH_LONG).show();
                 if(foto.isEmpty() || foto.contains("null") || foto.contains("NULL") || foto == null){
                     foto =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_antes_instalacion);
@@ -384,7 +386,7 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
                 //String foto_instalacion =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_antes_instalacion);
                 String  numero_abonado = null;
                 numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
-                String foto =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_despues_instalacion);
+                foto =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_despues_instalacion);
                 //Toast.makeText(this, foto_instalacion, Toast.LENGTH_LONG).show();
                 if(foto.isEmpty() || foto.contains("null") || foto.contains("NULL") || foto == null){
                     foto =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_antes_instalacion);
@@ -398,7 +400,7 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
 
                 if(numero_abonado!=null && !numero_abonado.equals("null") && !TextUtils.isEmpty(numero_abonado)) {
                     if (foto != null && !foto.equals("null") && !foto.equals("NULL") && !TextUtils.isEmpty(foto)) {
-                        File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/fotos_tareas/" + numero_abonado + "/");
+                        File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/fotos_tareas/" + numero_abonado);
                         if (!storageDir.exists()) {
                             storageDir.mkdir();
                             Log.e("No existe directorio", storageDir.getAbsolutePath());
@@ -463,9 +465,9 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
         try {
             numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
 
-            File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+numero_abonado+"/");
+            File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+numero_abonado);
             if (!myDir.exists()) {
-                myDir.mkdirs();
+                myDir.mkdir();
             }
             else{
                 File[] files = myDir.listFiles();
@@ -509,8 +511,7 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
                     if (bitmap != null) {
                         imagen_contador.setVisibility(View.VISIBLE);
                         imagen_contador.setImageBitmap(bitmap);
-                        saveBitmapImage(bitmap, Screen_Login_Activity.tarea_JSON.getString(
-                                DBtareasController.foto_despues_instalacion));
+                        saveBitmapImage(bitmap, foto);
                     }
                 }
             }
@@ -583,7 +584,7 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
 
     @Override
     public void onBackPressed() {
-        finish();
         super.onBackPressed();
+        finish();
     }
 }
