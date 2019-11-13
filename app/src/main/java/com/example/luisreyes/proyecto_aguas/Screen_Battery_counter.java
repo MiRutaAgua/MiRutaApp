@@ -580,14 +580,14 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
                     +", "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.calle).trim()
                     +", "+Screen_Advance_Filter.getBis(Screen_Login_Activity.tarea_JSON).trim()
                     +"\n\nAbonado:\n  "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.nombre_cliente)
-                    +"\n\nNumero de abonado:  "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado)
+                    +"\n\nNúmero de abonado:  "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado)
                     +"\n\nContador:\n  "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador)
                     +"\n\nCita:  "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.nuevo_citas)
                     +"\n\nLectura última: "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.lectura_ultima)
                     +"\nLectura actual: "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.lectura_actual)
-                    +"\nCodigo de geolocalización: "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.codigo_de_geolocalizacion)
+                    +"\n\nCódigo de geolocalización: "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.codigo_de_geolocalizacion)
                     //+"\ngeolocalizacion: "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.geolocalizacion)
-                    +"\n\nModificacion:\n"+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.date_time_modified)
+                    +"\n\nModificación:\n"+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.date_time_modified)
                     +"\n\nEstado: "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.status_tarea);
         } catch (JSONException e) {
             e.printStackTrace();

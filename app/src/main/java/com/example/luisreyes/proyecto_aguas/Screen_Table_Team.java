@@ -90,6 +90,7 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
     private Button agregar_tarea, button_advance_filter_table_team;
 
     private int lite_count = -10;
+    private boolean subiendo_fotos = false;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -321,7 +322,10 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
             public void afterTextChanged(Editable editable) {
             }
         });
-        
+
+        if(checkConection()){
+            team_task_screen_Activity.hideRingDialog();
+        }
         try {
             subirTareasSiExisten();
         } catch (JSONException e) {
@@ -383,7 +387,6 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
 
     private void descargarTareas() {
         if(checkConection()){
-            team_task_screen_Activity.hideRingDialog();
             Screen_Login_Activity.isOnline = true;
             showRingDialog("Actualizando información de tareas");
             String type_script = "get_tareas";
@@ -572,17 +575,19 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
 
                 hideRingDialog();
                 Toast.makeText(Screen_Table_Team.this,"Tareas descargadas correctamente", Toast.LENGTH_LONG).show();
-                if(lista_ordenada_de_tareas.isEmpty()){
-                    openMessage("Información", "No hay tareas asignadas a este operario");
-                }else{
-                    openMessage("Información", "Existen "+String.valueOf(lista_ordenada_de_tareas.size())
-                            +" tareas pendientes");
-                }
+
                 if(!tareas_to_update.isEmpty()) {
                     showRingDialog("Actualizando tareas en Internet...");
 //                    openMessage("Tareas", tareas_to_update.toString());
                     updateTareaInMySQL();
                     return;
+                }else{
+                    if(lista_ordenada_de_tareas.isEmpty()){
+                        openMessage("Información", "No hay tareas asignadas a este operario");
+                    }else{
+                        openMessage("Información", "Existen "+String.valueOf(lista_ordenada_de_tareas.size())
+                                +" tareas pendientes");
+                    }
                 }
 
             }
@@ -599,7 +604,7 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
                     } else {
                         String numero_interno = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_interno);
                         if(!numero_interno.isEmpty() && numero_interno!=null && !numero_interno.equals("null")) {
-                            showRingDialog("Subiedo fotos de tarea "
+                            showRingDialog("Actualizando fotos de tarea "
                                     + numero_interno);
                             updatePhotosInMySQL();
                         }
@@ -613,11 +618,16 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
             }
             else {
                 Toast.makeText(this, "Imagen subida", Toast.LENGTH_SHORT).show();
-                updatePhotosInMySQL();
+                if(subiendo_fotos){
+                    uploadPhotosInMySQL();
+                }else {
+                    updatePhotosInMySQL();
+                }
                 //showRingDialog("Validando registro...");
             }
         }
         else if(type == "create_tarea"){
+            hideRingDialog();
             if(result == null){
                 Toast.makeText(this,"No se pudo establecer conexión con el servidor", Toast.LENGTH_LONG).show();
             }
@@ -626,7 +636,13 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
                     team_or_personal_task_selection_screen_Activity.
                             dBtareasController.updateTarea(jsonObjectSalvaLite);
                 }
-                upLoadTareaInMySQL();
+//                upLoadTareaInMySQL();
+                String numero_interno = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_interno);
+                if(!numero_interno.isEmpty() && numero_interno!=null && !numero_interno.equals("null")) {
+                    showRingDialog("Subiendo fotos de tarea "
+                            + numero_interno);
+                    uploadPhotosInMySQL();
+                }
                 return;
             }
         }
@@ -851,10 +867,12 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
             }
         }
         if(!tareas_to_upload.isEmpty() && checkConection()) {
+            subiendo_fotos = true;
             showRingDialog("Insertando Tareas creadas offline en Servidor...");
             upLoadTareaInMySQL();
             return;
         }else{
+            subiendo_fotos = false;
             descargarTareas();
         }
     }
@@ -862,11 +880,14 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
     public void upLoadTareaInMySQL() throws JSONException {
         if(tareas_to_upload.isEmpty()){
             hideRingDialog();
+            Log.e("upLoadTareaInMySQL", "Tareas subidas en internet");
             Toast.makeText(this, "Tareas subidas en internet", Toast.LENGTH_SHORT).show();
+            subiendo_fotos=false;
             descargarTareas();
             return;
         }
         else {
+            Log.e("upLoadTareaInMySQL", "subiendo tarea");
             JSONObject jsonObject_Lite = new JSONObject(team_or_personal_task_selection_screen_Activity
                     .dBtareasController.get_one_tarea_from_Database(
                     tareas_to_upload.get(tareas_to_upload.size() - 1)));
@@ -880,20 +901,57 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
             String type_script = "create_tarea";
             BackgroundWorker backgroundWorker = new BackgroundWorker(this);
             Screen_Login_Activity.tarea_JSON = jsonObject_Lite;
-//            team_or_personal_task_selection_screen_Activity.
-//                    dBtareasController.updateTarea(jsonObject_Lite);
+            addPhotos_toUpload();
             backgroundWorker.execute(type_script);
+        }
+    }
+
+    public void uploadPhotosInMySQL() throws JSONException {
+        if(images_files.isEmpty()){
+            hideRingDialog();
+            Log.e("uploadPhotosInMySQL", "Fotos subidas en internet");
+            upLoadTareaInMySQL();
+            return;
+        }
+        else {
+
+            Log.e("uploadPhotosInMySQL", "subiendo Fotos");
+            String numero_abonado = "";
+            try {
+                numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
+
+                String file_name = null, image_file;
+                file_name = images_files_names.get(images_files.size() - 1);
+                images_files_names.remove(images_files.size() - 1);
+                image_file = images_files.get(images_files.size() - 1);
+                images_files.remove(images_files.size() - 1);
+                Bitmap bitmap = null;
+                bitmap = getPhotoUserLocal(image_file);
+                if(bitmap!=null) {
+                    String type = "upload_image";
+                    BackgroundWorker backgroundWorker = new BackgroundWorker(this);
+                    backgroundWorker.execute(type, Screen_Register_Operario.getStringImage(bitmap), file_name, numero_abonado);
+                }else{
+                    uploadPhotosInMySQL();
+                }
+            } catch (JSONException e) {
+                images_files.clear();
+                e.printStackTrace();
+                Toast.makeText(this, "Error obteniendo numero_abonado\n"+ e.toString(), Toast.LENGTH_LONG).show();
+                return;
+            }
         }
     }
 
     public void updatePhotosInMySQL() throws JSONException {
         if(images_files.isEmpty()){
             hideRingDialog();
+            Log.e("updatePhotosInMySQL", "Fotos actualizadas en internet");
             updateTareaInMySQL();
             return;
         }
         else {
-
+            Log.e("updatePhotosInMySQL", "actualizando fotos en internet");
             String numero_abonado = "";
             try {
                 numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
@@ -923,10 +981,18 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
     public void updateTareaInMySQL() throws JSONException {
         if(tareas_to_update.isEmpty()){
             hideRingDialog();
+            Log.e("updateTareaInMySQL", "Tareas actualizadas en internet");
+            if(lista_ordenada_de_tareas.isEmpty()){
+                openMessage("Información", "No hay tareas asignadas a este operario");
+            }else{
+                openMessage("Información", "Existen "+String.valueOf(lista_ordenada_de_tareas.size())
+                        +" tareas pendientes");
+            }
             Toast.makeText(this, "Tareas actualizadas en internet", Toast.LENGTH_SHORT).show();
             return;
         }
         else {
+            Log.e("updateTareaInMySQL", "actualizando tarea");
             images_files.clear();
             images_files_names.clear();
             JSONObject jsonObject_Lite = new JSONObject(team_or_personal_task_selection_screen_Activity.dBtareasController.get_one_tarea_from_Database(
@@ -1028,7 +1094,9 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
     }
     public static void hideRingDialog(){
         if(progressDialog!=null) {
-            progressDialog.dismiss();
+            if (progressDialog.isShowing()) {
+                progressDialog.dismiss();
+            }
         }
     }
 

@@ -521,7 +521,9 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
     }
     private void hideRingDialog(){
         if(progressDialog!=null) {
-            progressDialog.dismiss();
+            if (progressDialog.isShowing()) {
+                progressDialog.dismiss();
+            }
         }
     }
 

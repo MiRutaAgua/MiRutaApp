@@ -380,7 +380,9 @@ public class Screen_Register_Operario extends AppCompatActivity implements TaskC
     }
     private void hideRingDialog(){
         if(progressDialog!=null) {
-            progressDialog.dismiss();
+            if (progressDialog.isShowing()) {
+                progressDialog.dismiss();
+            }
         }
     }
 

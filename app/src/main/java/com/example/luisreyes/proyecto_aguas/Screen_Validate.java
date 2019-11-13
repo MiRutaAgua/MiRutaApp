@@ -1038,7 +1038,11 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
         progressDialog.setCancelable(true);
     }
     private void hideRingDialog(){
-        progressDialog.dismiss();
+        if(progressDialog!=null) {
+            if (progressDialog.isShowing()) {
+                progressDialog.dismiss();
+            }
+        }
     }
 
     public Bitmap getPhotoUserLocal(String path){

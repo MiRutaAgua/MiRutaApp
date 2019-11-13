@@ -60,6 +60,8 @@ public class Screen_Fast_View_Team_Task  extends AppCompatActivity implements Ta
     private int lite_count = -10;
     private JSONObject jsonObjectSalvaLite =null;
 
+    private boolean subiendo_fotos = false;
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +116,9 @@ public class Screen_Fast_View_Team_Task  extends AppCompatActivity implements Ta
             }
         });
 
+        if(checkConection()){
+            team_task_screen_Activity.hideRingDialog();
+        }
         try {
             subirTareasSiExisten();
         } catch (JSONException e) {
@@ -123,7 +128,6 @@ public class Screen_Fast_View_Team_Task  extends AppCompatActivity implements Ta
     }
     private void descargarTareas() {
         if(checkConection()){
-            team_task_screen_Activity.hideRingDialog();
             Screen_Login_Activity.isOnline = true;
             showRingDialog("Actualizando informacion de tareas");
             String type_script = "get_tareas";
@@ -393,7 +397,11 @@ public class Screen_Fast_View_Team_Task  extends AppCompatActivity implements Ta
             }
             else {
                 Toast.makeText(this, "Imagen subida", Toast.LENGTH_SHORT).show();
-                updatePhotosInMySQL();
+                if(subiendo_fotos){
+                    uploadPhotosInMySQL();
+                }else {
+                    updatePhotosInMySQL();
+                }
                 //showRingDialog("Validando registro...");
             }
         }
@@ -406,7 +414,13 @@ public class Screen_Fast_View_Team_Task  extends AppCompatActivity implements Ta
                     team_or_personal_task_selection_screen_Activity.
                             dBtareasController.updateTarea(jsonObjectSalvaLite);
                 }
-                upLoadTareaInMySQL();
+//                upLoadTareaInMySQL();
+                String numero_interno = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_interno);
+                if(!numero_interno.isEmpty() && numero_interno!=null && !numero_interno.equals("null")) {
+                    showRingDialog("Subiendo fotos de tarea "
+                            + numero_interno);
+                    uploadPhotosInMySQL();
+                }
                 return;
             }
         }
@@ -428,10 +442,12 @@ public class Screen_Fast_View_Team_Task  extends AppCompatActivity implements Ta
             }
         }
         if(!tareas_to_upload.isEmpty() && checkConection()) {
+            subiendo_fotos = true;
             showRingDialog("Insertando Tareas creadas offline en Servidor...");
             upLoadTareaInMySQL();
             return;
         }else{
+            subiendo_fotos = false;
             descargarTareas();
         }
     }
@@ -439,11 +455,14 @@ public class Screen_Fast_View_Team_Task  extends AppCompatActivity implements Ta
     public void upLoadTareaInMySQL() throws JSONException {
         if(tareas_to_upload.isEmpty()){
             hideRingDialog();
+            Log.e("upLoadTareaInMySQL", "Tareas subidas en internet");
             Toast.makeText(this, "Tareas subidas en internet", Toast.LENGTH_SHORT).show();
+            subiendo_fotos=false;
             descargarTareas();
             return;
         }
         else {
+            Log.e("upLoadTareaInMySQL", "subiendo tarea");
             JSONObject jsonObject_Lite = new JSONObject(team_or_personal_task_selection_screen_Activity
                     .dBtareasController.get_one_tarea_from_Database(
                             tareas_to_upload.get(tareas_to_upload.size() - 1)));
@@ -457,11 +476,47 @@ public class Screen_Fast_View_Team_Task  extends AppCompatActivity implements Ta
             String type_script = "create_tarea";
             BackgroundWorker backgroundWorker = new BackgroundWorker(this);
             Screen_Login_Activity.tarea_JSON = jsonObject_Lite;
-//            team_or_personal_task_selection_screen_Activity.
-//                    dBtareasController.updateTarea(jsonObject_Lite);
+            addPhotos_toUpload();
             backgroundWorker.execute(type_script);
         }
     }
+    public void uploadPhotosInMySQL() throws JSONException {
+        if(images_files.isEmpty()){
+            hideRingDialog();
+            Log.e("uploadPhotosInMySQL", "Fotos subidas en internet");
+            upLoadTareaInMySQL();
+            return;
+        }
+        else {
+
+            Log.e("uploadPhotosInMySQL", "subiendo Fotos");
+            String numero_abonado = "";
+            try {
+                numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
+
+                String file_name = null, image_file;
+                file_name = images_files_names.get(images_files.size() - 1);
+                images_files_names.remove(images_files.size() - 1);
+                image_file = images_files.get(images_files.size() - 1);
+                images_files.remove(images_files.size() - 1);
+                Bitmap bitmap = null;
+                bitmap = getPhotoUserLocal(image_file);
+                if(bitmap!=null) {
+                    String type = "upload_image";
+                    BackgroundWorker backgroundWorker = new BackgroundWorker(this);
+                    backgroundWorker.execute(type, Screen_Register_Operario.getStringImage(bitmap), file_name, numero_abonado);
+                }else{
+                    uploadPhotosInMySQL();
+                }
+            } catch (JSONException e) {
+                images_files.clear();
+                e.printStackTrace();
+                Toast.makeText(this, "Error obteniendo numero_abonado\n"+ e.toString(), Toast.LENGTH_LONG).show();
+                return;
+            }
+        }
+    }
+
     public void updatePhotosInMySQL() throws JSONException {
         if(images_files.isEmpty()){
             hideRingDialog();
@@ -516,52 +571,49 @@ public class Screen_Fast_View_Team_Task  extends AppCompatActivity implements Ta
             backgroundWorker.execute(type_script);
         }
     }
+    public void addPhotos_names_and_files(String path, String foto){
+        if(new File(path+foto).exists()) {
+            if (foto != null && !foto.isEmpty() && !foto.equals("null") && !foto.equals("NULL")) {
+                images_files.add(path + foto);
+                images_files_names.add(foto);
+                Log.e("Añadiendo", foto);
+            }
+        }else{
+            Log.e("No encontrada", foto);
+        }
+    }
     public void addPhotos_toUpload() throws JSONException { //luego rellenar en campo de incidencia algo para saber que tiene incidencias
         String foto = "";
-
         String numero_abonado = null;
+
+        Log.e("Entrando a funcion", "addPhotos_toUpload");
         try {
             numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        String path = getExternalFilesDir(Environment.DIRECTORY_PICTURES)+"/fotos_tareas"+ numero_abonado+"/";
+        String path = getExternalFilesDir(Environment.DIRECTORY_PICTURES)+"/fotos_tareas/"+ numero_abonado+"/";
 
         foto = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_antes_instalacion);
-        if(foto!=null && !foto.isEmpty() && !foto.equals("null")){
-            images_files.add(path+foto);
-            images_files_names.add(foto);
-        }
+        addPhotos_names_and_files(path, foto);
+
         foto = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_lectura);
-        if(foto!=null && !foto.isEmpty() && !foto.equals("null")){
-            images_files.add(path+foto);
-            images_files_names.add(foto);
-        }
+        addPhotos_names_and_files(path, foto);
+
         foto = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_numero_serie);
-        if(foto!=null && !foto.isEmpty() && !foto.equals("null")){
-            images_files.add(path+foto);
-            images_files_names.add(foto);
-        }
+        addPhotos_names_and_files(path, foto);
+
         foto = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_despues_instalacion);
-        if(foto!=null && !foto.isEmpty() && !foto.equals("null")){
-            images_files.add(path+foto);
-            images_files_names.add(foto);
-        }
+        addPhotos_names_and_files(path, foto);
+
         foto = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_incidencia_1);
-        if(foto!=null && !foto.isEmpty() && !foto.equals("null")){
-            images_files.add(path+foto);
-            images_files_names.add(foto);
-        }
+        addPhotos_names_and_files(path, foto);
+
         foto = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_incidencia_2);
-        if(foto!=null && !foto.isEmpty() && !foto.equals("null")){
-            images_files.add(path+foto);
-            images_files_names.add(foto);
-        }
+        addPhotos_names_and_files(path, foto);
+
         foto = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_incidencia_3);
-        if(foto!=null && !foto.isEmpty() && !foto.equals("null")){
-            images_files.add(path+foto);
-            images_files_names.add(foto);
-        }
+        addPhotos_names_and_files(path, foto);
     }
 
     public Bitmap getPhotoUserLocal(String path){
@@ -569,10 +621,10 @@ public class Screen_Fast_View_Team_Task  extends AppCompatActivity implements Ta
         if(file.exists()) {
             Bitmap bitmap = null;
             try {
-                bitmap =Bitmap.createScaledBitmap(MediaStore.Images.Media
-                        .getBitmap(this.getContentResolver(), Uri.fromFile(file)), 512, 512, true);
-//                bitmap = MediaStore.Images.Media
-//                        .getBitmap(this.getContentResolver(), Uri.fromFile(file));
+//                bitmap =Bitmap.createScaledBitmap(MediaStore.Images.Media
+//                        .getBitmap(this.getContentResolver(), Uri.fromFile(file)), 512, 512, true);
+                bitmap = MediaStore.Images.Media
+                        .getBitmap(this.getContentResolver(), Uri.fromFile(file));
             } catch (IOException e) {
                 e.printStackTrace();
             }

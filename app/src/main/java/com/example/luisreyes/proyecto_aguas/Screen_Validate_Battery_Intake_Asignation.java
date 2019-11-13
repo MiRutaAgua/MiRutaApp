@@ -477,8 +477,11 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
         progressDialog.setCancelable(true);
     }
     private void hideRingDialog(){
-        if(progressDialog!=null)
-        progressDialog.dismiss();
+        if(progressDialog!=null) {
+            if (progressDialog.isShowing()) {
+                progressDialog.dismiss();
+            }
+        }
     }
 
     public boolean checkConection(){

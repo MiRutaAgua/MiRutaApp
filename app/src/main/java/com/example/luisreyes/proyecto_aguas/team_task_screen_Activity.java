@@ -168,7 +168,9 @@ public class team_task_screen_Activity extends AppCompatActivity {
     }
     public static void hideRingDialog(){
         if(progressDialog!=null) {
-            progressDialog.dismiss();
+            if(progressDialog.isShowing()) {
+                progressDialog.dismiss();
+            }
         }
     }
     @Override
