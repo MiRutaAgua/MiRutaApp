@@ -195,8 +195,9 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
                     }
                     @Override
                     public void onAnimationEnd(Animation arg0) {
-                        Intent intent_open_MapsActivity = new Intent(getApplicationContext(), PermissionsActivity.class);
-                        startActivity(intent_open_MapsActivity);
+                        Intent intent = new Intent(getApplicationContext(), PermissionsActivity.class);
+                        intent.putExtra("INSERTANDO", false);
+                        startActivity(intent);
                     }
                 });
                 button_geolocalization.startAnimation(myAnim);

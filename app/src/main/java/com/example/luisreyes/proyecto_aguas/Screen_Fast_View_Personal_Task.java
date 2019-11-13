@@ -129,6 +129,7 @@ public class Screen_Fast_View_Personal_Task extends AppCompatActivity implements
     }
 
     private void descargarTareas() {
+        boolean alguna_cita_obsoleta = false;
         if(checkConection()){
             Screen_Login_Activity.isOnline = true;
             showRingDialog("Actualizando informacion de tareas");
@@ -146,6 +147,10 @@ public class Screen_Fast_View_Personal_Task extends AppCompatActivity implements
                         try {
                             JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.dBtareasController.get_one_tarea_from_Database(i));
 
+                            if(Screen_Table_Team.checkIfDateisDeprecated(jsonObject)){
+                                Log.e("Cita Obsoleta", jsonObject.getString(DBtareasController.nuevo_citas));
+                                alguna_cita_obsoleta = true;
+                            }
                             String status="";
                             try {
                                 status = jsonObject.getString(DBtareasController.status_tarea);
@@ -208,6 +213,10 @@ public class Screen_Fast_View_Personal_Task extends AppCompatActivity implements
                 Toast.makeText(this,"No existe tabla en SQlite", Toast.LENGTH_LONG).show();
             }
             personal_task_screen_Activity.hideRingDialog();
+            if(alguna_cita_obsoleta){
+                Intent serviceIntent = new Intent(this, Notification_Service.class);
+                startService(serviceIntent);
+            }
         }
     }
     @Override
@@ -230,7 +239,8 @@ public class Screen_Fast_View_Personal_Task extends AppCompatActivity implements
                         Toast.makeText(Screen_Fast_View_Personal_Task.this, "Insertando todas las tareas", Toast.LENGTH_LONG).show();
                     }
                 }
-                for(int n =1 ; n < Screen_Table_Team.lista_tareas.size() ; n++) {
+                boolean alguna_cita_obsoleta =false;
+                for(int n = 1; n < Screen_Table_Team.lista_tareas.size() ; n++) {
                     try {
                         JSONArray jsonArray = new JSONArray(Screen_Table_Team.lista_tareas.get(n));
                         for (int i = 0; i < jsonArray.length(); i++) {
@@ -238,6 +248,10 @@ public class Screen_Fast_View_Personal_Task extends AppCompatActivity implements
 
                             if(Screen_Filter_Tareas.checkIfTaskIsDone(jsonObject)){
                                 continue;
+                            }
+                            if(Screen_Table_Team.checkIfDateisDeprecated(jsonObject)){
+                                Log.e("Cita Obsoleta", jsonObject.getString(DBtareasController.nuevo_citas));
+                                alguna_cita_obsoleta = true;
                             }
                             jsonObject = Screen_Table_Team.buscarTelefonosEnObservaciones(jsonObject);
                             if (insertar_todas) {
@@ -365,6 +379,10 @@ public class Screen_Fast_View_Personal_Task extends AppCompatActivity implements
                             lista_to_display.add(lista_cantidades.get(c).toString()+"  "+lista_tareas_fast.get(i).getAll_string());
                         }
                     }
+                }
+                if(alguna_cita_obsoleta){
+                    Intent serviceIntent = new Intent(this, Notification_Service.class);
+                    startService(serviceIntent);
                 }
                 lista_to_display.add(0,"Resumen de Tareas de Operario");
 //                Toast.makeText(this,lista_cantidades.toString(), Toast.LENGTH_LONG).show();

@@ -255,7 +255,8 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
                     }
                     @Override
                     public void onAnimationEnd(Animation arg0) {
-                        Intent intent = new Intent(getApplicationContext(),PermissionsActivity.class);
+                        Intent intent = new Intent(getApplicationContext(), PermissionsActivity.class);
+                        intent.putExtra("INSERTANDO", false);
                         startActivity(intent);
                     }
                 });

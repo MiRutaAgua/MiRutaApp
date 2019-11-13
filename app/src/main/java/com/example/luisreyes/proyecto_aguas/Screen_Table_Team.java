@@ -386,6 +386,9 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
     }
 
     private void descargarTareas() {
+
+        boolean alguna_cita_obsoleta = false;
+
         if(checkConection()){
             Screen_Login_Activity.isOnline = true;
             showRingDialog("Actualizando información de tareas");
@@ -406,6 +409,7 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
 
                             if(checkIfDateisDeprecated(jsonObject)){
                                 Log.e("Cita Obsoleta", jsonObject.getString(DBtareasController.nuevo_citas));
+                                alguna_cita_obsoleta = true;
                             }
                             String status="";
                             try {
@@ -432,6 +436,10 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
             }else{
                 openMessage("Información", "Existen "+String.valueOf(lista_ordenada_de_tareas.size())
                         +" tareas pendientes");
+            }
+            if(alguna_cita_obsoleta){
+                Intent serviceIntent = new Intent(this, Notification_Service.class);
+                startService(serviceIntent);
             }
         }
     }
@@ -470,7 +478,8 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
                         Toast.makeText(Screen_Table_Team.this, "Insertando todas las tareas", Toast.LENGTH_LONG).show();
                     }
                 }
-                for(int n =1 ; n < Screen_Table_Team.lista_tareas.size() ; n++) { //el elemento n 0 esta vacio
+                boolean alguna_cita_obsoleta = false;
+                for(int n = 1; n < Screen_Table_Team.lista_tareas.size() ; n++) { //el elemento n 0 esta vacio
                     try {
                         JSONArray jsonArray = new JSONArray(Screen_Table_Team.lista_tareas.get(n));
                         for (int i = 0; i < jsonArray.length(); i++) {
@@ -478,6 +487,10 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
 
                             if(Screen_Filter_Tareas.checkIfTaskIsDone(jsonObject)){
                                 continue;
+                            }
+                            if(checkIfDateisDeprecated(jsonObject)){
+                                Log.e("Cita Obsoleta", jsonObject.getString(DBtareasController.nuevo_citas));
+                                alguna_cita_obsoleta = true;
                             }
                             jsonObject = buscarTelefonosEnObservaciones(jsonObject);
                             if (insertar_todas) {
@@ -552,9 +565,6 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
                                     }
                                 }
                             }
-                            if(checkIfDateisDeprecated(jsonObject)){
-                                Log.e("Cita Obsoleta", jsonObject.getString(DBtareasController.nuevo_citas));
-                            }
                             String status="";
                             try {
                                 status = jsonObject.getString(DBtareasController.status_tarea);
@@ -573,6 +583,10 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
                 }
                 orderTareastoArrayAdapter();
 
+                if(alguna_cita_obsoleta){
+                    Intent serviceIntent = new Intent(this, Notification_Service.class);
+                    startService(serviceIntent);
+                }
                 hideRingDialog();
                 Toast.makeText(Screen_Table_Team.this,"Tareas descargadas correctamente", Toast.LENGTH_LONG).show();
 

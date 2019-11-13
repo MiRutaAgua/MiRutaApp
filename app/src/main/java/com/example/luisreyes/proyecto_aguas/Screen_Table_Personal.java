@@ -396,6 +396,7 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
     }
 
     private void descargarTareas() {
+        boolean alguna_cita_obsoleta = false;
         if(checkConection()){
             Screen_Login_Activity.isOnline = true;
             showRingDialog("Actualizando información de tareas");
@@ -413,6 +414,11 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
                     for (int i = 1; i <= team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas(); i++) {
                         try {
                             JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.dBtareasController.get_one_tarea_from_Database(i));
+
+                            if(Screen_Table_Team.checkIfDateisDeprecated(jsonObject)){
+                                Log.e("Cita Obsoleta", jsonObject.getString(DBtareasController.nuevo_citas));
+                                alguna_cita_obsoleta = true;
+                            }
 
                             String status="";
                             try {
@@ -442,6 +448,10 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
             }else{
                 openMessage("Información", "Existen "+String.valueOf(lista_ordenada_de_tareas.size())
                         +" tareas pendientes");
+            }
+            if(alguna_cita_obsoleta){
+                Intent serviceIntent = new Intent(this, Notification_Service.class);
+                startService(serviceIntent);
             }
         }
     }
@@ -479,7 +489,8 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
                     }
                 }
 
-                for(int n =1 ; n < Screen_Table_Team.lista_tareas.size() ; n++) {
+                boolean alguna_cita_obsoleta = false;
+                for(int n = 1; n < Screen_Table_Team.lista_tareas.size() ; n++) {
                     try {
                         JSONArray jsonArray = new JSONArray(Screen_Table_Team.lista_tareas.get(n));
                         for (int i = 0; i < jsonArray.length(); i++) {
@@ -487,6 +498,10 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
 
                             if(Screen_Filter_Tareas.checkIfTaskIsDone(jsonObject)){
                                 continue;
+                            }
+                            if(Screen_Table_Team.checkIfDateisDeprecated(jsonObject)){
+                                Log.e("Cita Obsoleta", jsonObject.getString(DBtareasController.nuevo_citas));
+                                alguna_cita_obsoleta = true;
                             }
                             jsonObject = Screen_Table_Team.buscarTelefonosEnObservaciones(jsonObject);
 
@@ -585,6 +600,10 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
                 }
                 orderTareastoArrayAdapter();
                 hideRingDialog();
+                if(alguna_cita_obsoleta){
+                    Intent serviceIntent = new Intent(this, Notification_Service.class);
+                    startService(serviceIntent);
+                }
                 Toast.makeText(Screen_Table_Personal.this,"Tareas descargadas correctamente.", Toast.LENGTH_LONG).show();
 
                 if(!tareas_to_update.isEmpty()) {

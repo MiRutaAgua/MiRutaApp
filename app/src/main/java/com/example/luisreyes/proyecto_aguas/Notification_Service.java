@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.AudioAttributes;
 import android.os.Build;
@@ -52,11 +53,11 @@ public class Notification_Service extends Service {
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(Notification_Service.this)
                         .setSmallIcon(R.drawable.app_icon)
-                        //.setLargeIcon(iconoLargo)                               //BitmapFactory.decodeResource(getResources(),R.mipmap.transferir))
+                        .setLargeIcon(BitmapFactory.decodeResource(getResources(),R.drawable.app_icon))                               //BitmapFactory.decodeResource(getResources(),R.mipmap.transferir))
                         //.setSound((Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.monedas_2)))////sonido
                         .setLights(color,3000,3000)
                         .setContentTitle("Mi Ruta")
-                        //.setColorized(true)
+                        .setColorized(true)
                         .setColor(getResources().getColor(R.color.colorBlueAppRuta))
                         //.setContent(contentView)
                         .setContentText("Existen tareas con citas vencidas")
@@ -68,7 +69,7 @@ public class Notification_Service extends Service {
         //.setAutoCancel(true);
 
 
-        int mNotificationId = channel++;
+        int mNotificationId = channel;
         NotificationManager mNotifyMgr =
                 (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
@@ -86,13 +87,15 @@ public class Notification_Service extends Service {
                     .build();
             // channel.setSound(uri,att);
             mNotifyMgr.createNotificationChannel(channel);
-            mBuilder.setChannel(channelId);
+            mBuilder.setChannelId(channelId);
 
             Notification.Builder mBuilder2 =  new Notification.Builder(getApplicationContext(), channelId)
-                    .setSmallIcon(R.drawable.app_logo_web)
-                    //.setLargeIcon(iconoLargo)
+                    .setSmallIcon(R.drawable.app_icon)
+                    .setLargeIcon(BitmapFactory.decodeResource(getResources(),R.drawable.app_icon))
                     //.setSound((Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.monedas_2)))
-                    .setLights(Color.BLUE,3000,3000)
+                    //.setLights(Color.BLUE,3000,3000)
+                    .setColor(getResources().getColor(R.color.colorBlueAppRuta))
+                    .setColorized(true)
                     .setVibrate(new long[] {100, 250, 100, 500})
                     .setAutoCancel(true)
                     .setOnlyAlertOnce(false)

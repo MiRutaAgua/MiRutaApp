@@ -271,7 +271,8 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
                     @Override
                     public void onAnimationEnd(Animation arg0) {
 
-                        Intent intent = new Intent(getApplicationContext(),PermissionsActivity.class);
+                        Intent intent = new Intent(getApplicationContext(), PermissionsActivity.class);
+                        intent.putExtra("INSERTANDO", false);
                         startActivity(intent);
                     }
                 });

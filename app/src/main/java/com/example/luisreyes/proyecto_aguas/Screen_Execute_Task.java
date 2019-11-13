@@ -242,8 +242,9 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                     }
                     @Override
                     public void onAnimationEnd(Animation arg0) {
-                        Intent intent_open_MapsActivity = new Intent(getApplicationContext(), PermissionsActivity.class);
-                        startActivity(intent_open_MapsActivity);
+                        Intent intent = new Intent(getApplicationContext(), PermissionsActivity.class);
+                        intent.putExtra("INSERTANDO", false);
+                        startActivity(intent);
                     }
                 });
                 button_geolocalization_screen_exec_task.startAnimation(myAnim);
