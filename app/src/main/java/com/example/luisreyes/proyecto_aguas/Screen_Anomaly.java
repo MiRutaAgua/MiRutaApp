@@ -71,6 +71,7 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
     private HashMap<String,String> mapaTiposDeAnomalias;
     private HashMap<String,String> mapaTiposDeEmplazamiento;
     private HashMap<String,String> mapaTiposDeRestoEmplazamiento;
+    private HashMap<String,String> mapaTiposDeMarca;
 
     private HashMap<String,String> mapaAnomaliasNCI;
     private HashMap<String,String> mapaAnomaliasLFTD;
@@ -147,12 +148,78 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
         mapaTiposDeRestoEmplazamiento.put("TX", "OKO");
         mapaTiposDeRestoEmplazamiento.put("PR", "ED");
 
+        mapaTiposDeMarca = new HashMap<>();
+        mapaTiposDeMarca.put("ELSTER-HELIX 4000", "001");
+        mapaTiposDeMarca.put("ELSTER - DELAUNET C", "002");
+        mapaTiposDeMarca.put("ELSTER - ZENIT S200", "003");
+        mapaTiposDeMarca.put("004", "004"); //preguntar por este
+        mapaTiposDeMarca.put("005", "005");
+        mapaTiposDeMarca.put("006", "006");
+        mapaTiposDeMarca.put("007", "007");
+        mapaTiposDeMarca.put("008", "008");
+        mapaTiposDeMarca.put("009", "009");
+        mapaTiposDeMarca.put("010", "010"); //preguntar por este
+        mapaTiposDeMarca.put("011", "011");
+        mapaTiposDeMarca.put("CB", "012");
+        mapaTiposDeMarca.put("CO", "013");
+        mapaTiposDeMarca.put("AR", "014");
+        mapaTiposDeMarca.put("BA", "015");
+        mapaTiposDeMarca.put("BT", "016"); //preguntar por este
+        mapaTiposDeMarca.put("CA", "017");
+        mapaTiposDeMarca.put("CB", "018");
+        mapaTiposDeMarca.put("CO", "019");
+        mapaTiposDeMarca.put("001", "020");
+        mapaTiposDeMarca.put("001", "021");
+        mapaTiposDeMarca.put("002", "022");
+        mapaTiposDeMarca.put("003", "023");
+        mapaTiposDeMarca.put("004", "024"); //preguntar por este
+        mapaTiposDeMarca.put("005", "025");
+        mapaTiposDeMarca.put("006", "026");
+        mapaTiposDeMarca.put("007", "027");
+        mapaTiposDeMarca.put("008", "028");
+        mapaTiposDeMarca.put("009", "029");
+        mapaTiposDeMarca.put("010", "030"); //preguntar por este
+        mapaTiposDeMarca.put("011", "031");
+        mapaTiposDeMarca.put("CB", "032");
+        mapaTiposDeMarca.put("CO", "033");
+        mapaTiposDeMarca.put("AR", "034");
+        mapaTiposDeMarca.put("BA", "035");
+        mapaTiposDeMarca.put("BT", "036"); //preguntar por este
+        mapaTiposDeMarca.put("CA", "037");
+        mapaTiposDeMarca.put("CB", "038");
+        mapaTiposDeMarca.put("CO", "039");
+        mapaTiposDeMarca.put("CO", "040");
+        mapaTiposDeMarca.put("001", "041");
+        mapaTiposDeMarca.put("002", "042");
+        mapaTiposDeMarca.put("003", "043");
+        mapaTiposDeMarca.put("004", "044"); //preguntar por este
+        mapaTiposDeMarca.put("005", "045");
+        mapaTiposDeMarca.put("006", "046");
+        mapaTiposDeMarca.put("007", "047");
+        mapaTiposDeMarca.put("008", "048");
+        mapaTiposDeMarca.put("009", "049");
+        mapaTiposDeMarca.put("010", "050"); //preguntar por este
+        mapaTiposDeMarca.put("011", "051");
+        mapaTiposDeMarca.put("CB", "052");
+        mapaTiposDeMarca.put("CO", "053");
+        mapaTiposDeMarca.put("AR", "054");
+        mapaTiposDeMarca.put("BA", "055");
+        mapaTiposDeMarca.put("BT", "056"); //preguntar por este
+        mapaTiposDeMarca.put("CA", "057");
+        mapaTiposDeMarca.put("CB", "058");
+        mapaTiposDeMarca.put("CO", "059");
+        mapaTiposDeMarca.put("001", "060");
+        mapaTiposDeMarca.put("001", "061");
+        mapaTiposDeMarca.put("002", "062");
+        mapaTiposDeMarca.put("003", "063");
+        mapaTiposDeMarca.put("004", "070"); //preguntar por este
+
 
         mapaTiposDeResultados = new HashMap<>();
         mapaTiposDeResultados.put("036", "012");
         mapaTiposDeResultados.put("037", "012");
         mapaTiposDeResultados.put("039", "012");
-//        mapaTiposDeAnomalias.put("036", "11"); //preguntar por este
+//        mapaTiposDeAnomalias.put("036", "11"); //preguntar por este  //añadir opciones a escoger
         mapaTiposDeResultados.put("A30", "002");
         mapaTiposDeResultados.put("A31", "002");
         mapaTiposDeResultados.put("A32", "002");
@@ -285,6 +352,13 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
         spinner_anomaly = (Spinner)findViewById(R.id.spinner_anomalias_screen_anomaly);
         spinner_tipo_anomalia_screen_anomaly = (Spinner)findViewById(R.id.spinner_tipo_anomalia_screen_anomaly);
         spinner_emplazamiento_screen_anomaly = (Spinner)findViewById(R.id.spinner_emplazamiento_screen_anomaly);
+
+        try {
+            textView_numero_serie_nuevo_screen_exec_task.setText(
+                    Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador_devuelto));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         ArrayList<String> lista_desplegable_tipos_anomalia = new ArrayList<>();
         Iterator it = mapaTiposDeAnomalias.entrySet().iterator();

@@ -839,7 +839,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                     String firma="";
                     Screen_Execute_Task.lectura_introducida="";
                     try {
-                        contador = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador)
+                        contador = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador_devuelto)
                                 .trim().replace(" ", "");
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -953,7 +953,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                         myDir.mkdirs();
                         File storageDir2 = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/fotos_tareas");
                         if (!storageDir2.exists()) {
-                            storageDir2.mkdir();
+                            storageDir2.mkdirs();
                         }
                     } else {
                         File[] files = myDir.listFiles();
@@ -999,7 +999,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
     public void pasarTexto(String wrote_string) throws JSONException {
         if(current_tag.contains("Numero de Serie Nuevo")) {
             if (!(TextUtils.isEmpty(wrote_string))) {
-                Screen_Login_Activity.tarea_JSON.put(DBtareasController.numero_serie_contador, wrote_string);
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.numero_serie_contador_devuelto, wrote_string);
                 numero_serie_nuevo.setText(wrote_string);
             }
         }else if(current_tag.contains("Calibre Real")){

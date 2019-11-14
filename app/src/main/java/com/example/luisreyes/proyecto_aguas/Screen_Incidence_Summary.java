@@ -913,7 +913,7 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
                         myDir.mkdirs();
                         File storageDir2 = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/fotos_tareas/"+numero_abonado);
                         if (!storageDir2.exists()) {
-                            storageDir2.mkdir();
+                            storageDir2.mkdirs();
                         }
                     } else {
                         File[] files = myDir.listFiles();

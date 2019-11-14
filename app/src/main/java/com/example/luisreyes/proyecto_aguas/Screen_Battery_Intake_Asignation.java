@@ -297,7 +297,7 @@ public class Screen_Battery_Intake_Asignation extends AppCompatActivity {
         File image_file=null;
         File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+numero_abonado);
         if (!storageDir.exists()) {
-            storageDir.mkdir();
+            storageDir.mkdirs();
         }
         File[] files = storageDir.listFiles();
         for(int i=0; i< files.length;i++){
@@ -476,7 +476,7 @@ public class Screen_Battery_Intake_Asignation extends AppCompatActivity {
 
             File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+numero_abonado);
             if (!myDir.exists()) {
-                myDir.mkdir();
+                myDir.mkdirs();
             }
             else{
                 File[] files = myDir.listFiles();

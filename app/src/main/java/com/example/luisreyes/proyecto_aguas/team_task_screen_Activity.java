@@ -13,6 +13,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -51,6 +52,9 @@ public class team_task_screen_Activity extends AppCompatActivity {
 
 //        openMessage("info", String.valueOf(team_or_personal_task_selection_screen_Activity.dBtareasController
 //        .countTableTareas()));
+        Log.e("Tareas en offline", String.valueOf(team_or_personal_task_selection_screen_Activity.dBtareasController
+        .countTableTareas()));
+
         imageView_logo_team        = (ImageView) findViewById(R.id.imageView_logo_personal);
         button_tabla_tareas_equipo   = (Button) findViewById(R.id.button_tabla_tareas_equipo_screen_team_task);
         button_vista_rapida_tareas_equipo = (Button) findViewById(R.id.button_vista_tareas_equipo_screen_team_task);

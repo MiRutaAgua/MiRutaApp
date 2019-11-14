@@ -727,7 +727,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
             String fecha = DBtareasController.getStringFromFechaHora(new Date());
             Screen_Login_Activity.tarea_JSON.put(DBtareasController.date_time_modified, fecha);
             if(!DBtareasController.tabla_model) {
-                Screen_Login_Activity.tarea_JSON.put(DBtareasController.fecha_instalacion, fecha);
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.F_INST, fecha);
                 Screen_Login_Activity.tarea_JSON.put(DBtareasController.fecha_de_cambio, fecha);
             }
         } catch (JSONException e) {
@@ -831,7 +831,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                     textView_serial_number_result.setText(data_result);
                     contador = data_result;
                     try {
-                        Screen_Login_Activity.tarea_JSON.put(DBtareasController.numero_serie_contador, data_result);
+                        Screen_Login_Activity.tarea_JSON.put(DBtareasController.numero_serie_contador_devuelto, data_result);
                     } catch (JSONException e) {
                         e.printStackTrace();
                         Toast.makeText(this, "No pudo insertarse numero serie: " + e.toString(), Toast.LENGTH_LONG).show();
@@ -1028,8 +1028,15 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
     private String saveBitmapImage(Bitmap bitmap, String key){
         try {
             bitmap = Bitmap.createScaledBitmap(bitmap, 960, 1280, true);
-            String numero_serie = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador)
-                    .trim().replace(" ","");
+            String numero_serie="";
+            if(key.contains("despues")){
+                 numero_serie = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador_devuelto)
+                        .trim().replace(" ","");
+            }
+            else {
+                 numero_serie = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador)
+                        .trim().replace(" ", "");
+            }
             String file_full_name = numero_serie+"_"+key;
             //Toast.makeText(Screen_Incidence.this,"archivo: "+file_full_name, Toast.LENGTH_LONG).show();
 
@@ -1040,7 +1047,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
             File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+numero_abonado);
 
             if (!myDir.exists()) {
-                myDir.mkdir();
+                myDir.mkdirs();
             }
             else{
                 File[] files = myDir.listFiles();
@@ -1107,12 +1114,14 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         if(tag.contains("Telefono 1")) {
             if (!(TextUtils.isEmpty(wrote_text))) {
                 Screen_Login_Activity.tarea_JSON.put(DBtareasController.telefono1, wrote_text);
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.MENSAJE_LIBRE, "#"+wrote_text+"#");
                 //Toast.makeText(Screen_Execute_Task.this, Screen_Login_Activity.tarea_JSON.toString(), Toast.LENGTH_LONG).show();
                 telefono1.setText(wrote_text);
             }
         }else if(tag.contains("Telefono 2")){
             if (!(TextUtils.isEmpty(wrote_text))) {
                 Screen_Login_Activity.tarea_JSON.put(DBtareasController.telefono2, wrote_text);
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.MENSAJE_LIBRE, "#"+wrote_text+"#");
                 //Toast.makeText(Screen_Execute_Task.this, Screen_Login_Activity.tarea_JSON.toString(), Toast.LENGTH_LONG).show();
                 telefono2.setText(wrote_text);
             }
@@ -1125,7 +1134,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         }else if(tag.equals("Número Serie")){
             if (!(TextUtils.isEmpty(wrote_text))) {
                 if (!(TextUtils.isEmpty(wrote_text))) {
-                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.numero_serie_contador, wrote_text);
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.numero_serie_contador_devuelto, wrote_text);
                     textView_serial_number_result.setVisibility(View.VISIBLE);
                     textView_serial_number_result.setText(wrote_text);
                 }
@@ -1341,15 +1350,23 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         // Create an image file name
 
         String imageFileName = null;
-        String image = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador)
-                .trim().replace(" ", "")+"_"+foto_x;
+        String image = "";
+
+        if(foto_x.contains("despues")){
+            image = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador_devuelto)
+                    .trim().replace(" ", "") + "_" + foto_x;
+        }else {
+            image = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador)
+                    .trim().replace(" ", "") + "_" + foto_x;
+        }
+
         String numero_abonado = null;
         numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
 
         File image_file=null;
         File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+numero_abonado);
         if (!storageDir.exists()) {
-            storageDir.mkdir();
+            storageDir.mkdirs();
         }
         File[] files = storageDir.listFiles();
         for(int i=0; i< files.length;i++){
