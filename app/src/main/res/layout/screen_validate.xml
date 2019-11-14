@@ -204,7 +204,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:gravity="center"
-                    android:inputType="number"/>
+                    android:inputType="number"
+                    android:enabled="false"/>
             </LinearLayout>
 
             <LinearLayout

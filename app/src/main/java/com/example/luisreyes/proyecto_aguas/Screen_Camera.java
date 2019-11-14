@@ -329,7 +329,7 @@ public class Screen_Camera extends Activity {
 
                 File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+"/"+photo_folder);
                 if(!myDir.exists()){
-                    myDir.mkdir();
+                    myDir.mkdirs();
                 }
                 else{
                     File[] files = myDir.listFiles();

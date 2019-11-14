@@ -402,7 +402,7 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
                     if (foto != null && !foto.equals("null") && !foto.equals("NULL") && !TextUtils.isEmpty(foto)) {
                         File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/fotos_tareas/" + numero_abonado);
                         if (!storageDir.exists()) {
-                            storageDir.mkdir();
+                            storageDir.mkdirs();
                             Log.e("No existe directorio", storageDir.getAbsolutePath());
                         }
                         File[] files = storageDir.listFiles();
@@ -467,7 +467,7 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
 
             File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+numero_abonado);
             if (!myDir.exists()) {
-                myDir.mkdir();
+                myDir.mkdirs();
             }
             else{
                 File[] files = myDir.listFiles();

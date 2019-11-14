@@ -375,7 +375,7 @@
                 android:layout_width="266dp"
                 android:layout_height="40dp"
                 android:fontFamily="@font/segoeui"
-                android:text="ANOMALÍA"
+                android:text="DATOS DE INSTALACIÓN"
                 android:textSize="16dp"
                 android:textStyle="bold"
                 android:textColor="@android:color/white"

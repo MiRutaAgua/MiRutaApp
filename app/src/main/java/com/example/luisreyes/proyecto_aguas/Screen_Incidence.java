@@ -313,12 +313,11 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
                     }
                     @Override
                     public void onAnimationEnd(Animation arg0) {
-
                         try {
                             String fecha = DBtareasController.getStringFromFechaHora(new Date());
                             Screen_Login_Activity.tarea_JSON.put(DBtareasController.date_time_modified, fecha);
                             if(!DBtareasController.tabla_model) {
-                                Screen_Login_Activity.tarea_JSON.put(DBtareasController.fecha_instalacion, fecha);
+                                Screen_Login_Activity.tarea_JSON.put(DBtareasController.F_INST, fecha);
                                 Screen_Login_Activity.tarea_JSON.put(DBtareasController.fecha_de_cambio, fecha);
                             }
                         } catch (JSONException e) {
@@ -331,7 +330,6 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
                             e.printStackTrace();
                             Toast.makeText(Screen_Incidence.this, "No se pudo insetar texto incidencia en JSON tarea", Toast.LENGTH_LONG).show();
                         }
-
                         Intent intent_open_incidence_summary = new Intent(Screen_Incidence.this, Screen_Incidence_Summary.class);
                         startActivity(intent_open_incidence_summary);
                     }
@@ -354,9 +352,11 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
             if(Dialog.getTitle() == "telefono1"){
                 telefono1.setText((CharSequence) telefono);
                 Screen_Login_Activity.tarea_JSON.put(DBtareasController.telefono1, telefono1.getText().toString());
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.MENSAJE_LIBRE, "#"+telefono+"#");
             }else if(Dialog.getTitle() == "telefono2"){
                 telefono2.setText((CharSequence) telefono);
                 Screen_Login_Activity.tarea_JSON.put(DBtareasController.telefono2, telefono2.getText().toString());
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.MENSAJE_LIBRE, "#"+telefono+"#");
             }
         }
     }
@@ -520,7 +520,7 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
         File image_file=null;
         File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+numero_abonado);
         if (!storageDir.exists()) {
-            storageDir.mkdir();
+            storageDir.mkdirs();
         }
 
         File[] files = storageDir.listFiles();
@@ -585,7 +585,7 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
 
             File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+numero_abonado);
             if (!myDir.exists()) {
-                myDir.mkdir();
+                myDir.mkdirs();
             }
             else{
                 File[] files = myDir.listFiles();

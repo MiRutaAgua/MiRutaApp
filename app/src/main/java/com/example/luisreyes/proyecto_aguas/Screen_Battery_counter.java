@@ -374,7 +374,7 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
                             && !image.equals("NULL") && !TextUtils.isEmpty(image)) {
                         File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/fotos_tareas/"+numero_abonado);
                         if (!storageDir.exists()) {
-                            storageDir.mkdir();
+                            storageDir.mkdirs();
                         }
                         File[] files = storageDir.listFiles();
                         for (int i = 0; i < files.length; i++) {
@@ -446,7 +446,7 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
             numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
             File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+numero_abonado);
             if (!myDir.exists()) {
-                myDir.mkdir();
+                myDir.mkdirs();
             }
             else{
                 File[] files = myDir.listFiles();

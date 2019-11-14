@@ -1128,11 +1128,28 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
     }
     public static boolean checkIfTaskIsDone(JSONObject jsonObject){//devuelve true si la tarea ya esta hecha
         String status="";
+        String numero_interno;
         try {
             status = jsonObject.getString(DBtareasController.status_tarea);
             if(!status.contains("DONE") && !status.contains("done")) {
                 return false;
             }else{
+                if(team_or_personal_task_selection_screen_Activity.dBtareasController != null) {
+                    numero_interno =  jsonObject.getString(DBtareasController.numero_interno);
+                    if(team_or_personal_task_selection_screen_Activity.dBtareasController.checkIfTareaExists(numero_interno)) {
+                        try {
+                            String tarea = team_or_personal_task_selection_screen_Activity.dBtareasController.get_one_tarea_from_Database(numero_interno);
+                            JSONObject tarea_jsonObject = new JSONObject(tarea);
+                            team_or_personal_task_selection_screen_Activity.dBtareasController.deleteTarea(tarea_jsonObject);
+                            Log.e("borrada tarea",numero_interno);
+                        } catch (JSONException e) {
+                            Log.e("Error","No hay tabla donde borrar");
+                            e.printStackTrace();
+                        }
+                    }
+                }else{
+                    Log.e("Error","No hay tabla donde borrar");
+                }
                 return true;
             }
         } catch (JSONException e) {
