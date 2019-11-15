@@ -193,12 +193,22 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                 e.printStackTrace();
             }
         }
-
         try {
+
             textView_info_operario_screen_validate.setText("CAMBIADO POR: "
                     + Screen_Login_Activity.operario_JSON.getString(DBoperariosController.nombre).trim().replace("\n", "")
-                    + "  "
-                    + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.date_time_modified).trim().replace("\n", ""));
+                    + "  " + Screen_Login_Activity.operario_JSON.getString(DBoperariosController.apellidos).trim().replace("\n", "")
+                    + "  " + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.date_time_modified).trim().replace("\n", ""));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            String lectura_string = Screen_Login_Activity.tarea_JSON.
+                    getString(DBtareasController.lectura_contador_nuevo).trim();
+            if(!lectura_string.isEmpty()&& !lectura_string.equals("NULL")
+                    && !lectura_string.equals("null")) {
+                textView_lectura_contador_nuevo_screen_validate.setText(lectura_string);
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -248,14 +258,18 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
         }
 
         try {
-            numero_serie_nuevo.setText(Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador)
-                    .trim().replace(" ","").replace("\n",""));
+            String numero_serie_nuevo_string =Screen_Login_Activity.tarea_JSON.
+                    getString(DBtareasController.numero_serie_contador_devuelto).trim();
+            if(!numero_serie_nuevo_string.isEmpty()&& !numero_serie_nuevo_string.equals("NULL")
+                    && !numero_serie_nuevo_string.equals("null")) {
+                numero_serie_nuevo.setText(numero_serie_nuevo_string);
+            }
+            textView_numero_serie_viejo.setText(Screen_Login_Activity.tarea_JSON.
+                    getString(DBtareasController.numero_serie_contador).trim());
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(Screen_Validate.this, "no se pudo obtener numero_serie_contador", Toast.LENGTH_LONG).show();
         }
-        textView_numero_serie_viejo.setText(Screen_Execute_Task.numero_serie_viejo.replace("\n",""));
-
         try {
             textView_calibre_screen_validate.setText(Screen_Login_Activity.tarea_JSON.
                     getString(DBtareasController.calibre_toma).replace("\n",""));

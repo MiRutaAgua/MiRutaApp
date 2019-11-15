@@ -354,8 +354,12 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
         spinner_emplazamiento_screen_anomaly = (Spinner)findViewById(R.id.spinner_emplazamiento_screen_anomaly);
 
         try {
-            textView_numero_serie_nuevo_screen_exec_task.setText(
-                    Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador_devuelto));
+            String numero_serie_nuevo_string =Screen_Login_Activity.tarea_JSON.
+                    getString(DBtareasController.numero_serie_contador_devuelto).trim();
+            if(!numero_serie_nuevo_string.isEmpty()&& !numero_serie_nuevo_string.equals("NULL")
+                    && !numero_serie_nuevo_string.equals("null")) {
+                textView_numero_serie_nuevo_screen_exec_task.setText(numero_serie_nuevo_string);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

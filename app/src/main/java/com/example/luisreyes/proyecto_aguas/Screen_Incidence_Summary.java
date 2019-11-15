@@ -177,8 +177,8 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
         try {
             textView_info_operario_screen_incidence_summary.setText("CAMBIADO POR: "
                     + Screen_Login_Activity.operario_JSON.getString(DBoperariosController.nombre).trim().replace("\n", "")
-                    + "  "
-                    + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.date_time_modified).trim().replace("\n", ""));
+                    + "  " + Screen_Login_Activity.operario_JSON.getString(DBoperariosController.apellidos).trim().replace("\n", "")
+                    + "  " + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.date_time_modified).trim().replace("\n", ""));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -466,9 +466,6 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
 
                         bitmap4 = loadBitmapFromView(llScroll_4, llScroll_4.getWidth(), llScroll_4.getHeight());
 
-//                        textView_informacion_screen_incidence_summary.setText("");
-                        textView_informacion_screen_incidence_summary.setVisibility(View.INVISIBLE);
-
                         if(bitmap1_no_nulo)
                             bitmap = loadBitmapFromView(llScroll, llScroll.getWidth(), llScroll.getHeight());
                         if(bitmap2_no_nulo)
@@ -728,7 +725,6 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
         llScroll_4.setVisibility(View.INVISIBLE);
         if(filePath.exists()) {
             try {
-                textView_informacion_screen_incidence_summary.setVisibility(View.GONE);
                 try{
                     try {
                         String numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado);
