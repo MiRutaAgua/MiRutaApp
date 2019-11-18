@@ -67,9 +67,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-
             >
-
             <EditText
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
@@ -83,7 +81,6 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             >
-
             <EditText
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
@@ -102,7 +99,7 @@
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/editText_numero_portal_screen_insertar_tarea"
-                android:hint="Numero Portal"
+                android:hint="Número Portal"
                 android:imeOptions="actionNext"
                 />
         </LinearLayout>
