@@ -1,9 +1,11 @@
 package com.example.luisreyes.proyecto_aguas;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -678,32 +680,49 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
     public void onGuardar_Datos(){
         guardar_en_JSON_modificaciones();
         if(!(TextUtils.isEmpty(lectura_editText.getText()))) {
-            if(!lectura_string.isEmpty() && !lectura_string.equals("null")){
-                String lectura_actual = lectura_editText.getText().toString();
-                if(Integer.parseInt(lectura_actual) >= Integer.parseInt(lectura_string)){
-                    try {
-                        Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_ultima, lectura_string);
-                        Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_actual, lectura_actual);
-                        saveData();
+            if(!lectura_string.isEmpty()) {
+                if (!lectura_string.equals("null") && !lectura_string.equals("NULL")) {
+                    String lectura_actual = lectura_editText.getText().toString();
+                    if (Integer.parseInt(lectura_actual) >= Integer.parseInt(lectura_string)) {
+                        try {
+                            Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_ultima, lectura_string);
+                            Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_actual, lectura_actual);
+                            saveData();
 
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(Screen_Execute_Task.this, "no se pudo cambiar lectura de contador", Toast.LENGTH_LONG).show();
+                        }
+                    } else {
+                        Toast.makeText(Screen_Execute_Task.this, "La lectura del contador debe ser mayor que la ultima registrada", Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    try {
+                        Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_actual, lectura_editText.getText().toString());
+                        saveData();
                     } catch (JSONException e) {
                         e.printStackTrace();
                         Toast.makeText(Screen_Execute_Task.this, "no se pudo cambiar lectura de contador", Toast.LENGTH_LONG).show();
                     }
-                }else{
-                    Toast.makeText(Screen_Execute_Task.this, "La lectura del contador debe ser mayor que la ultima registrada", Toast.LENGTH_LONG).show();
-                }
-            }else {
-                try {
-                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_actual, lectura_editText.getText().toString());
-                    saveData();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(Screen_Execute_Task.this, "no se pudo cambiar lectura de contador", Toast.LENGTH_LONG).show();
                 }
             }
         }else{
-            Toast.makeText(Screen_Execute_Task.this, "Inserte la lectura del contador", Toast.LENGTH_LONG).show();
+            new AlertDialog.Builder(Screen_Execute_Task.this)
+                    .setTitle("Lectura Faltante")
+                    .setMessage("No ha insertado lectura\n¿Desea guardar esta tarea?")
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            saveData();
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    }).show();
+//            Toast.makeText(Screen_Execute_Task.this, "Inserte la lectura del contador", Toast.LENGTH_LONG).show();
         }
     }
     public void saveData() {
