@@ -55,13 +55,17 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
 	private TextView textView_lectura_nuevo_screen_exec_task,
 	textView_emplazamiento_screen_exec_task,
             textView_resultado_screen_exec_task,
+            textView_ruedas_screen_exec_task,
+            textView_longitud_screen_exec_task,
             textView_numero_serie_nuevo_screen_exec_task;
 
 
 	private ImageView imageView_edit_lectura_nuevo_screen_exec_task,
     imageView_edit_emplazamiento_screen_exec_task,
             imageView_edit_resultado_screen_exec_task,
-            imageView_edit_numero_serie_nuevo_screen_exec_task;
+            imageView_edit_numero_serie_nuevo_screen_exec_task,
+            imageView_edit_ruedas_screen_exec_task,
+    imageView_edit_longitud_screen_exec_task;
 
 	Button button_guardar_datos_screen_anomaly;
 
@@ -347,6 +351,12 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
         mapaAnomaliasI.put("M21", "PREPARACIÓN RENOVACIÓN PERIÓDICA");
         mapaAnomaliasI.put("III", "INFORME INSTALACIÓN INTERIOR");
 
+        ArrayList<String> lista_tipo_radio= new ArrayList<>();
+        lista_tipo_radio.add("NINGUNO");
+        lista_tipo_radio.add("R3");
+        lista_tipo_radio.add("R4");
+        lista_tipo_radio.add("W4");
+
         ArrayList<String> lista_tipo_fluido= new ArrayList<>();
         lista_tipo_fluido.add("NINGUNO");
         lista_tipo_fluido.add("FRIA");
@@ -360,10 +370,16 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
 
         button_guardar_datos_screen_anomaly = (Button)findViewById(R.id.button_guardar_datos_screen_anomaly);
 
+        imageView_edit_ruedas_screen_exec_task = (ImageView) findViewById(R.id.imageView_edit_ruedas_screen_exec_task);
+        imageView_edit_longitud_screen_exec_task= (ImageView) findViewById(R.id.imageView_edit_longitud_screen_exec_task);
+
         imageView_edit_resultado_screen_exec_task = (ImageView) findViewById(R.id.imageView_edit_resultado_screen_exec_task);
         imageView_edit_numero_serie_nuevo_screen_exec_task= (ImageView) findViewById(R.id.imageView_edit_numero_serie_nuevo_screen_exec_task);
         imageView_edit_lectura_nuevo_screen_exec_task = (ImageView) findViewById(R.id.imageView_edit_lectura_nuevo_screen_exec_task);
         imageView_edit_emplazamiento_screen_exec_task = (ImageView)findViewById(R.id.imageView_edit_resto_emplazamiento_screen_exec_task);
+
+        textView_ruedas_screen_exec_task = (TextView) findViewById(R.id.textView_ruedas_screen_exec_task);
+        textView_longitud_screen_exec_task = (TextView) findViewById(R.id.textView_longitud_screen_exec_task);
 
         textView_resultado_screen_exec_task = (TextView) findViewById(R.id.textView_resultado_screen_exec_task);
         textView_numero_serie_nuevo_screen_exec_task = (TextView) findViewById(R.id.textView_numero_serie_nuevo_screen_exec_task);
@@ -411,7 +427,6 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
             if(!lista_desplegable_emplazamientos.contains(pair.getKey().toString() + " - " + pair.getValue().toString())) {
                 lista_desplegable_emplazamientos.add(pair.getKey().toString() + " - " +pair.getValue().toString());
             }
-
             //it.remove(); // avoids a ConcurrentModificationException
         }
         Collections.sort(lista_desplegable_emplazamientos);
@@ -443,6 +458,73 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
         ArrayAdapter arrayAdapter_spinner_fluido = new ArrayAdapter(this, R.layout.spinner_text_view, lista_tipo_fluido);
         spinner_tipo_fluido_screen_anomaly.setAdapter(arrayAdapter_spinner_fluido);
 
+        ArrayAdapter arrayAdapter_spinner_radio = new ArrayAdapter(this, R.layout.spinner_text_view, lista_tipo_radio);
+        spinner_tipo_radio_screen_anomaly.setAdapter(arrayAdapter_spinner_radio);
+
+        spinner_clase_contador_screen_anomaly.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String selected = spinner_clase_contador_screen_anomaly
+                        .getSelectedItem().toString();
+//                Toast.makeText(getApplicationContext(), "Selected: "+ selected, Toast.LENGTH_LONG).show();
+                if(!selected.isEmpty() && selected!=null && !selected.equals("NINGUNO")) {
+                    if(selected.contains(" - ")) {
+                        String codigo = selected.split(" - ")[0];
+                        String descripcion = selected.split(" - ")[1];
+                        try {
+                            Screen_Login_Activity.tarea_JSON.put(DBtareasController.
+                                    TIPO_devuelto, selected); //este es la clse del contador
+                        } catch (JSONException e) {
+                            Log.e("Excepcion", "no se pudo insertar TIPO_devuelto");
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
+        spinner_tipo_radio_screen_anomaly.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String selected = spinner_tipo_radio_screen_anomaly
+                        .getSelectedItem().toString();
+//                Toast.makeText(getApplicationContext(), "Selected: "+ selected, Toast.LENGTH_LONG).show();
+                if(!selected.isEmpty() && selected!=null && !selected.equals("NINGUNO")) {
+                    try {
+                        Screen_Login_Activity.tarea_JSON.put(DBtareasController.
+                                tipoRadio_devuelto, selected);
+                    } catch (JSONException e) {
+                        Log.e("Excepcion", "no se pudo insertar tipoRadio_devuelto");
+                        e.printStackTrace();
+                    }
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
+        spinner_tipo_fluido_screen_anomaly.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String selected = spinner_tipo_fluido_screen_anomaly
+                        .getSelectedItem().toString();
+//                Toast.makeText(getApplicationContext(), "Selected: "+ selected, Toast.LENGTH_LONG).show();
+                if(!selected.isEmpty() && selected!=null && !selected.equals("NINGUNO")) {
+                    try {
+                        Screen_Login_Activity.tarea_JSON.put(DBtareasController.
+                                TIPOFLUIDO_devuelto, selected);
+                    } catch (JSONException e) {
+                        Log.e("Excepcion", "no se pudo insertar TIPOFLUIDO_devuelto");
+                        e.printStackTrace();
+                    }
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
         spinner_emplazamiento_screen_anomaly.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -528,6 +610,58 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
             }
         });
 
+        imageView_edit_ruedas_screen_exec_task.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
+                final Animation myAnim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        openDialog("Ruedas");
+                    }
+                });
+                imageView_edit_ruedas_screen_exec_task.startAnimation(myAnim);
+            }
+        });
+        imageView_edit_longitud_screen_exec_task.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
+                final Animation myAnim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        openDialog("Longitud");
+                    }
+                });
+                imageView_edit_longitud_screen_exec_task.startAnimation(myAnim);
+            }
+        });
         imageView_edit_numero_serie_nuevo_screen_exec_task.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -745,6 +879,24 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
                     Screen_Login_Activity.tarea_JSON.put(DBtareasController.resultado, wrote_string);
                 }
                 textView_resultado_screen_exec_task.setText(wrote_string);
+            }
+        }
+        else if(current_tag.contains("Ruedas")){
+            if (!(TextUtils.isEmpty(wrote_string))) {
+
+                if(!DBtareasController.tabla_model) {
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.ruedas, wrote_string);
+                }
+                textView_ruedas_screen_exec_task.setText(wrote_string);
+            }
+        }
+        else if(current_tag.contains("Longitud")){
+            if (!(TextUtils.isEmpty(wrote_string))) {
+
+                if(!DBtareasController.tabla_model) {
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.largo_devuelto, wrote_string);
+                }
+                textView_longitud_screen_exec_task.setText(wrote_string);
             }
         }
     }
