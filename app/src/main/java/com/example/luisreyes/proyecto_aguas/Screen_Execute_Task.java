@@ -127,6 +127,11 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         setContentView(R.layout.screen_execute_task);
 
 
+        mCurrentPhotoPath_foto_antes = "";
+        mCurrentPhotoPath_foto_lectura= "";
+        mCurrentPhotoPath_foto_despues = "";
+        mCurrentPhotoPath_foto_serie = "";
+
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
@@ -680,30 +685,28 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
     public void onGuardar_Datos(){
         guardar_en_JSON_modificaciones();
         if(!(TextUtils.isEmpty(lectura_editText.getText()))) {
-            if(!lectura_string.isEmpty()) {
-                if (!lectura_string.equals("null") && !lectura_string.equals("NULL")) {
-                    String lectura_actual = lectura_editText.getText().toString();
-                    if (Integer.parseInt(lectura_actual) >= Integer.parseInt(lectura_string)) {
-                        try {
-                            Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_ultima, lectura_string);
-                            Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_actual, lectura_actual);
-                            saveData();
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Toast.makeText(Screen_Execute_Task.this, "no se pudo cambiar lectura de contador", Toast.LENGTH_LONG).show();
-                        }
-                    } else {
-                        Toast.makeText(Screen_Execute_Task.this, "La lectura del contador debe ser mayor que la ultima registrada", Toast.LENGTH_LONG).show();
-                    }
-                } else {
+            if (!lectura_string.equals("null") && !lectura_string.equals("NULL") && !lectura_string.isEmpty()) {
+                String lectura_actual = lectura_editText.getText().toString();
+                if (Integer.parseInt(lectura_actual) >= Integer.parseInt(lectura_string)) {
                     try {
-                        Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_actual, lectura_editText.getText().toString());
+                        Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_ultima, lectura_string);
+                        Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_actual, lectura_actual);
                         saveData();
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                         Toast.makeText(Screen_Execute_Task.this, "no se pudo cambiar lectura de contador", Toast.LENGTH_LONG).show();
                     }
+                } else {
+                    Toast.makeText(Screen_Execute_Task.this, "La lectura del contador debe ser mayor que la ultima registrada", Toast.LENGTH_LONG).show();
+                }
+            } else {
+                try {
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_actual, lectura_editText.getText().toString());
+                    saveData();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(Screen_Execute_Task.this, "no se pudo cambiar lectura de contador", Toast.LENGTH_LONG).show();
                 }
             }
         }else{
@@ -745,8 +748,12 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
             BackgroundWorker backgroundWorker = new BackgroundWorker(this);
             backgroundWorker.execute(type);
         } else{
-            if(!error)
+            if(!error) {
                 Toast.makeText(this, "No hay conexion se guardaron los datos en el telefono", Toast.LENGTH_LONG).show();
+                Intent intent_open_task_or_personal_screen = new Intent(Screen_Execute_Task.this, team_or_personal_task_selection_screen_Activity.class);
+                startActivity(intent_open_task_or_personal_screen);
+                finishesThisClass();
+            }
         }
     }
 
@@ -890,6 +897,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                     if(!DBtareasController.tabla_model) {
                         try {
                             Screen_Login_Activity.tarea_JSON.put(DBtareasController.AREALIZAR_devuelta, anomaly_code);//esta es la anomalia devuelta
+                            Screen_Login_Activity.tarea_JSON.put(DBtareasController.intervencion_devuelta, anomaly_string);
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Toast.makeText(this, "No pudo insertarse numero serie de modulo: " + e.toString(), Toast.LENGTH_LONG).show();
@@ -1192,7 +1200,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
             Toast.makeText(Screen_Execute_Task.this, "Actualizada tarea correctamente", Toast.LENGTH_SHORT).show();
             Intent intent_open_task_or_personal_screen = new Intent(Screen_Execute_Task.this, team_or_personal_task_selection_screen_Activity.class);
             startActivity(intent_open_task_or_personal_screen);
-            Screen_Execute_Task.this.finish();
+            finishesThisClass();
             return;
         }
         else {
@@ -1273,7 +1281,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                         }else{
                             Intent intent_open_task_or_personal_screen = new Intent(Screen_Execute_Task.this, team_or_personal_task_selection_screen_Activity.class);
                             startActivity(intent_open_task_or_personal_screen);
-                            Screen_Execute_Task.this.finish();
+                            finishesThisClass();
                         }
                     }
                 }
@@ -1525,7 +1533,15 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
 
     @Override
     public void onBackPressed() {
-        finish();
+        finishesThisClass();
         super.onBackPressed();
+    }
+
+    public void finishesThisClass(){
+        mCurrentPhotoPath_foto_antes = "";
+        mCurrentPhotoPath_foto_lectura= "";
+        mCurrentPhotoPath_foto_despues = "";
+        mCurrentPhotoPath_foto_serie = "";
+        finish();
     }
 }

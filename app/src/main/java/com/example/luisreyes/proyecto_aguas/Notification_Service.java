@@ -1,5 +1,6 @@
 package com.example.luisreyes.proyecto_aguas;
 
+import android.app.Application;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -36,14 +37,20 @@ public class Notification_Service extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        Intent notificationIntent = new Intent(this, Screen_Filter_Results.class);
-        notificationIntent.putExtra("filter_type", "CITAS_VENCIDAS");
-        notificationIntent.putExtra("tipo_tarea", "");
-        notificationIntent.putExtra("calibre", "");
-        notificationIntent.putExtra("poblacion", "");
-        notificationIntent.putExtra("calle", "");
-        notificationIntent.putExtra("portales", "");
-        notificationIntent.putExtra("limitar_a_operario", false);
+        Intent notificationIntent;
+
+        if(MyApplication.isActivityVisible()) {
+            notificationIntent = new Intent(this, Screen_Filter_Results.class);
+            notificationIntent.putExtra("filter_type", "CITAS_VENCIDAS");
+            notificationIntent.putExtra("tipo_tarea", "");
+            notificationIntent.putExtra("calibre", "");
+            notificationIntent.putExtra("poblacion", "");
+            notificationIntent.putExtra("calle", "");
+            notificationIntent.putExtra("portales", "");
+            notificationIntent.putExtra("limitar_a_operario", false);
+        }else{
+            notificationIntent = new Intent(this, MainActivity.class);
+        }
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this,
                 0, notificationIntent, 0);
@@ -108,12 +115,8 @@ public class Notification_Service extends Service {
             mNotifyMgr.notify(mNotificationId, mBuilder.build());
             // startForeground(1, mBuilder.build());
         }
-
-
-
         //do heavy work on a background thread
         //stopSelf();
-
         return START_NOT_STICKY;
     }
 
@@ -126,5 +129,23 @@ public class Notification_Service extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         return null;
+    }
+
+
+    public static class MyApplication extends Application {
+
+        public static boolean isActivityVisible() {
+            return activityVisible;
+        }
+
+        public static void activityResumed() {
+            activityVisible = true;
+        }
+
+        public static void activityPaused() {
+            activityVisible = false;
+        }
+
+        private static boolean activityVisible;
     }
 }

@@ -731,9 +731,15 @@ public class Screen_Fast_View_Personal_Task extends AppCompatActivity implements
     }
 
     public void openMessage(String title, String hint){
-        MessageDialog messageDialog = new MessageDialog();
-        messageDialog.setTitleAndHint(title, hint);
-        messageDialog.show(getSupportFragmentManager(), title);
+        MessageDialog messageDialog = null;
+        try {
+            messageDialog = new MessageDialog();
+            messageDialog.setTitleAndHint(title, hint);
+            messageDialog.show(getSupportFragmentManager(), title);
+        } catch (Exception e) {
+            Log.e("Error abriendo mensaje", e.toString());
+            e.printStackTrace();
+        }
     }
 
     @Override

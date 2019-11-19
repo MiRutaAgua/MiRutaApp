@@ -79,6 +79,9 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
         myToolbar.setBackgroundColor(Color.TRANSPARENT);
         setSupportActionBar(myToolbar);
 
+        mCurrentPhotoPath_incidencia_1 = "";
+        mCurrentPhotoPath_incidencia_2 = "";
+        mCurrentPhotoPath_incidencia_3 = "";
 
         button_geolocalizar_screen_incidence = (Button)findViewById(R.id.button_geolocalizar_screen_incidence);
 
@@ -679,7 +682,13 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
     }
     @Override
     public void onBackPressed() {
-        finish();
+        finishThisClass();
         super.onBackPressed();
+    }
+    public void finishThisClass(){
+        mCurrentPhotoPath_incidencia_1 = "";
+        mCurrentPhotoPath_incidencia_2 = "";
+        mCurrentPhotoPath_incidencia_3 = "";
+        finish();
     }
 }

@@ -871,36 +871,41 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                             && ((new File(getCompleteFileDir(firma))).exists())) {
                         images_files.add(getCompleteFileDir(firma));
                         images_files_names.add(firma);
+                        Log.v("mCurrent_foto_antes", images_files_names.toString());
                     }else{
 //                        openMessage("No existe", getCompleteFileDir(firma));
 //                        Toast.makeText(this, "No existe" + getCompleteFileDir(firma), Toast.LENGTH_LONG).show();
                     }
                     if(!TextUtils.isEmpty(Screen_Execute_Task.mCurrentPhotoPath_foto_antes)
                             && ((new File(Screen_Execute_Task.mCurrentPhotoPath_foto_antes)).exists())) {
-                        images_files.add(Screen_Execute_Task.mCurrentPhotoPath_foto_antes);
                         if(Screen_Execute_Task.numero_serie_viejo!=null && !TextUtils.isEmpty(Screen_Execute_Task.numero_serie_viejo)){
+                            images_files.add(Screen_Execute_Task.mCurrentPhotoPath_foto_antes);
                             images_files_names.add(Screen_Execute_Task.numero_serie_viejo.trim().replace(" ", "")+"_foto_antes_instalacion.jpg");
+                            Log.v("mCurrent_foto_antes", images_files_names.toString());
                         }
                     }
                     if(!TextUtils.isEmpty(Screen_Execute_Task.mCurrentPhotoPath_foto_lectura)
                             && ((new File(Screen_Execute_Task.mCurrentPhotoPath_foto_lectura)).exists())) {
-                        images_files.add(Screen_Execute_Task.mCurrentPhotoPath_foto_lectura);
                         if(Screen_Execute_Task.numero_serie_viejo!=null && !TextUtils.isEmpty(Screen_Execute_Task.numero_serie_viejo)){
+                            images_files.add(Screen_Execute_Task.mCurrentPhotoPath_foto_lectura);
                             images_files_names.add(Screen_Execute_Task.numero_serie_viejo.trim().replace(" ", "")+"_foto_numero_serie.jpg");
+                            Log.v("mCurren_foto_lectura", images_files_names.toString());
                         }
                     }
                     if(!TextUtils.isEmpty(Screen_Execute_Task.mCurrentPhotoPath_foto_serie)
                             && ((new File(Screen_Execute_Task.mCurrentPhotoPath_foto_serie)).exists())) {
-                        images_files.add(Screen_Execute_Task.mCurrentPhotoPath_foto_serie);
                         if(Screen_Execute_Task.numero_serie_viejo!=null && !TextUtils.isEmpty(Screen_Execute_Task.numero_serie_viejo)){
+                            images_files.add(Screen_Execute_Task.mCurrentPhotoPath_foto_serie);
                             images_files_names.add(Screen_Execute_Task.numero_serie_viejo.trim().replace(" ", "")+"_foto_lectura.jpg");
+                            Log.v("mCurrent_foto_serie", images_files_names.toString());
                         }
                     }
                     if(!TextUtils.isEmpty(Screen_Execute_Task.mCurrentPhotoPath_foto_despues)
                             && ((new File(Screen_Execute_Task.mCurrentPhotoPath_foto_despues)).exists())) {
-                        images_files.add(Screen_Execute_Task.mCurrentPhotoPath_foto_despues);
-                        if(contador!=null && !TextUtils.isEmpty(contador)){
-                            images_files_names.add(contador+"_foto_despues_instalacion.jpg");
+                       if(contador!=null && !TextUtils.isEmpty(contador)){
+                           images_files.add(Screen_Execute_Task.mCurrentPhotoPath_foto_despues);
+                           images_files_names.add(contador+"_foto_despues_instalacion.jpg");
+                            Log.v("mCurrent_foto_despues", images_files_names.toString());
                         }
                     }
                     if(!images_files_names.isEmpty() && !images_files.isEmpty()) {

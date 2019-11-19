@@ -156,67 +156,67 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
         mapaTiposDeMarca.put("ELSTER-HELIX 4000", "001");
         mapaTiposDeMarca.put("ELSTER - DELAUNET C", "002");
         mapaTiposDeMarca.put("ELSTER - ZENIT S200", "003");
-        mapaTiposDeMarca.put("004", "004"); //preguntar por este
-        mapaTiposDeMarca.put("005", "005");
-        mapaTiposDeMarca.put("006", "006");
-        mapaTiposDeMarca.put("007", "007");
-        mapaTiposDeMarca.put("008", "008");
-        mapaTiposDeMarca.put("009", "009");
-        mapaTiposDeMarca.put("010", "010"); //preguntar por este
-        mapaTiposDeMarca.put("011", "011");
-        mapaTiposDeMarca.put("CB", "012");
-        mapaTiposDeMarca.put("CO", "013");
-        mapaTiposDeMarca.put("AR", "014");
-        mapaTiposDeMarca.put("BA", "015");
-        mapaTiposDeMarca.put("BT", "016"); //preguntar por este
-        mapaTiposDeMarca.put("CA", "017");
-        mapaTiposDeMarca.put("CB", "018");
-        mapaTiposDeMarca.put("CO", "019");
-        mapaTiposDeMarca.put("001", "020");
-        mapaTiposDeMarca.put("001", "021");
-        mapaTiposDeMarca.put("002", "022");
-        mapaTiposDeMarca.put("003", "023");
-        mapaTiposDeMarca.put("004", "024"); //preguntar por este
-        mapaTiposDeMarca.put("005", "025");
-        mapaTiposDeMarca.put("006", "026");
-        mapaTiposDeMarca.put("007", "027");
-        mapaTiposDeMarca.put("008", "028");
-        mapaTiposDeMarca.put("009", "029");
-        mapaTiposDeMarca.put("010", "030"); //preguntar por este
-        mapaTiposDeMarca.put("011", "031");
-        mapaTiposDeMarca.put("CB", "032");
-        mapaTiposDeMarca.put("CO", "033");
-        mapaTiposDeMarca.put("AR", "034");
-        mapaTiposDeMarca.put("BA", "035");
-        mapaTiposDeMarca.put("BT", "036"); //preguntar por este
-        mapaTiposDeMarca.put("CA", "037");
-        mapaTiposDeMarca.put("CB", "038");
-        mapaTiposDeMarca.put("CO", "039");
-        mapaTiposDeMarca.put("CO", "040");
-        mapaTiposDeMarca.put("001", "041");
-        mapaTiposDeMarca.put("002", "042");
-        mapaTiposDeMarca.put("003", "043");
-        mapaTiposDeMarca.put("004", "044"); //preguntar por este
-        mapaTiposDeMarca.put("005", "045");
-        mapaTiposDeMarca.put("006", "046");
-        mapaTiposDeMarca.put("007", "047");
-        mapaTiposDeMarca.put("008", "048");
-        mapaTiposDeMarca.put("009", "049");
-        mapaTiposDeMarca.put("010", "050"); //preguntar por este
-        mapaTiposDeMarca.put("011", "051");
-        mapaTiposDeMarca.put("CB", "052");
-        mapaTiposDeMarca.put("CO", "053");
-        mapaTiposDeMarca.put("AR", "054");
-        mapaTiposDeMarca.put("BA", "055");
-        mapaTiposDeMarca.put("BT", "056"); //preguntar por este
-        mapaTiposDeMarca.put("CA", "057");
-        mapaTiposDeMarca.put("CB", "058");
-        mapaTiposDeMarca.put("CO", "059");
-        mapaTiposDeMarca.put("001", "060");
-        mapaTiposDeMarca.put("001", "061");
-        mapaTiposDeMarca.put("002", "062");
-        mapaTiposDeMarca.put("003", "063");
-        mapaTiposDeMarca.put("004", "070"); //preguntar por este
+        mapaTiposDeMarca.put("ITRON - FLOSTAR M", "004"); //preguntar por este
+        mapaTiposDeMarca.put("ITRON - MSD CYBLE", "005");
+        mapaTiposDeMarca.put("ELSTER - COSMOS WPW", "006");
+        mapaTiposDeMarca.put("SAPPEL -AQUILA V3 V4", "007");
+        mapaTiposDeMarca.put("SAPPEL - ALTAIR V3 V4", "008");
+        mapaTiposDeMarca.put("ITRON - MSD NO CYBLE", "009");
+        mapaTiposDeMarca.put("ELSTER - S130", "010"); //preguntar por este
+        mapaTiposDeMarca.put("ITRON - TR", "011");
+        mapaTiposDeMarca.put("ITRON - MEDIS CYBLE", "012");
+        mapaTiposDeMarca.put("ITRON - WOLTMANN", "013");
+        mapaTiposDeMarca.put("ITRON - WOLTEX", "014");
+        mapaTiposDeMarca.put("ITRON - CTWV", "015");
+        mapaTiposDeMarca.put("ITRON - COMBINADO", "016"); //preguntar por este
+        mapaTiposDeMarca.put("ELSTER - DELAUNET EXTRA", "017");
+        mapaTiposDeMarca.put("ELSTER - S200 NO REED", "018");
+        mapaTiposDeMarca.put("ELSTER - S100", "019");
+        mapaTiposDeMarca.put("ELSTER - S150", "020");
+        mapaTiposDeMarca.put("ELSTER - WOLTMANN NO REED", "021");
+        mapaTiposDeMarca.put("ITRON - MEDIS UNIMAG", "022");
+        mapaTiposDeMarca.put("ITRON -TA.3F", "023");
+        mapaTiposDeMarca.put("SENSUS - CONTAGUA-DN_13_1", "024"); //preguntar por este
+        mapaTiposDeMarca.put("ITRON - FLODIS", "025");
+        mapaTiposDeMarca.put("EBRO - EBRO", "026");
+        mapaTiposDeMarca.put("ITRON - NARVAL", "027");
+        mapaTiposDeMarca.put("BRUNATA - BRUNATA", "028");
+        mapaTiposDeMarca.put("WEHRLE - WEHRLE", "029");
+        mapaTiposDeMarca.put("JANZ - CONTHIDRA", "030"); //preguntar por este
+        mapaTiposDeMarca.put("SISMA - SISMA", "031");
+        mapaTiposDeMarca.put("LORENZ - LORENZ", "032");
+        mapaTiposDeMarca.put("?", "033");
+        mapaTiposDeMarca.put("SENSUS - MEISTREAM", "034");
+        mapaTiposDeMarca.put("SIEMENS - MAG 8000", "035");
+        mapaTiposDeMarca.put("SAPPEL - AQUARIUS", "036"); //preguntar por este
+        mapaTiposDeMarca.put("ITRON - IRRIMAG", "037");
+        mapaTiposDeMarca.put("ISTA - DOMAQUA", "038");
+        mapaTiposDeMarca.put("ELSTER - S220 STANDARD", "039");
+        mapaTiposDeMarca.put("ELSTER - Y250RI", "040");
+        mapaTiposDeMarca.put("ELSTER - S220_100", "041");
+        mapaTiposDeMarca.put("ITRON - AQUADIS PLUS", "042");
+        mapaTiposDeMarca.put("ELSTER -  WAI R1000 - R12", "043");
+        mapaTiposDeMarca.put("SENSUS - 620C", "044"); //preguntar por este
+        mapaTiposDeMarca.put("POWOGAZ - JS CLASE C", "045");
+        mapaTiposDeMarca.put("POWOGAZ - WI INCENDIOS", "046");
+        mapaTiposDeMarca.put("ARAD-OCTAVE", "047");
+        mapaTiposDeMarca.put("ELSTER - H5000", "048");
+        mapaTiposDeMarca.put("ELSTER - Y290", "049");
+        mapaTiposDeMarca.put("ELSTER - V200", "050"); //preguntar por este
+        mapaTiposDeMarca.put("ELSTER - Y250MRI", "051");
+        mapaTiposDeMarca.put("SAPPEL - WP-MFD", "052");
+        mapaTiposDeMarca.put("ITRON - INTELLIS", "053");
+        mapaTiposDeMarca.put("SAPPEL - HYDRUS", "054");
+        mapaTiposDeMarca.put("ELSTER - CSJ_S2000", "055");
+        mapaTiposDeMarca.put("ELSTER - R 1200", "056"); //preguntar por este
+        mapaTiposDeMarca.put("ELSTER-Y290M", "057");
+        mapaTiposDeMarca.put("ELSTER-M120", "058");
+        mapaTiposDeMarca.put("SAPPEL-WP G_ESFERA ESTANDAR", "059");
+        mapaTiposDeMarca.put("GENERICO-DN:13-15-20 MM", "060");
+        mapaTiposDeMarca.put("GENERICO-DN:25-30-40 MM", "061");
+        mapaTiposDeMarca.put("GENERICO-DN:50-65-80-100", "062");
+        mapaTiposDeMarca.put("GENERICO-DN:125-150-200 M", "063");
+        mapaTiposDeMarca.put("SV_RTK-CRONOS", "070"); //preguntar por este
 
         mapaTiposDeClase= new HashMap<>();
         mapaTiposDeClase.put("B", "Fijo en Boca de Riego");
@@ -440,11 +440,24 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
             if(!lista_desplegable_clases.contains(pair.getKey().toString() + " - " + pair.getValue().toString())) {
                 lista_desplegable_clases.add(pair.getKey().toString() + " - " +pair.getValue().toString());
             }
-
             //it.remove(); // avoids a ConcurrentModificationException
         }
-        Collections.sort(lista_desplegable_clases);
-        lista_desplegable_clases.add(0,"NINGUNO");
+
+        ArrayList<String> lista_desplegable_marcas = new ArrayList<>();
+        it = mapaTiposDeMarca.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            //System.out.println(pair.getKey() + " = " + pair.getValue());
+            if(!lista_desplegable_marcas.contains(pair.getKey().toString() + " - " + pair.getValue().toString())) {
+                lista_desplegable_marcas.add(pair.getKey().toString() + " - " +pair.getValue().toString());
+            }
+            //it.remove(); // avoids a ConcurrentModificationException
+        }
+        Collections.sort(lista_desplegable_marcas);
+        lista_desplegable_marcas.add(0,"NINGUNA");
+
+        ArrayAdapter arrayAdapter_spinner_marcas = new ArrayAdapter(this, R.layout.spinner_text_view, lista_desplegable_marcas);
+        spinner_marca_screen_anomaly.setAdapter(arrayAdapter_spinner_marcas);
 
         ArrayAdapter arrayAdapter_spinner_clase = new ArrayAdapter(this, R.layout.spinner_text_view, lista_desplegable_clases);
         spinner_clase_contador_screen_anomaly.setAdapter(arrayAdapter_spinner_clase);
@@ -460,6 +473,31 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
 
         ArrayAdapter arrayAdapter_spinner_radio = new ArrayAdapter(this, R.layout.spinner_text_view, lista_tipo_radio);
         spinner_tipo_radio_screen_anomaly.setAdapter(arrayAdapter_spinner_radio);
+
+        spinner_marca_screen_anomaly.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String selected = spinner_marca_screen_anomaly
+                        .getSelectedItem().toString();
+//                Toast.makeText(getApplicationContext(), "Selected: "+ selected, Toast.LENGTH_LONG).show();
+                if(!selected.isEmpty() && selected!=null && !selected.equals("NINGUNA")) {
+                    if(selected.contains(" - ")) {
+                        String codigo_marca = selected.split(" - ")[0];
+                        String marca = selected.split(" - ")[1];
+                        try {
+                            Screen_Login_Activity.tarea_JSON.put(DBtareasController.
+                                    marca_devuelta, selected); //este es la clse del contador
+                        } catch (JSONException e) {
+                            Log.e("Excepcion", "no se pudo insertar marca_devuelta");
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
 
         spinner_clase_contador_screen_anomaly.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -885,7 +923,7 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
             if (!(TextUtils.isEmpty(wrote_string))) {
 
                 if(!DBtareasController.tabla_model) {
-                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.ruedas, wrote_string);
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.RUEDASDV, wrote_string);
                 }
                 textView_ruedas_screen_exec_task.setText(wrote_string);
             }
