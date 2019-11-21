@@ -308,7 +308,10 @@ public class Screen_Filter_Results extends AppCompatActivity {
         for (int i = 1; i <= team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas(); i++) {
             try {
                 JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.dBtareasController.get_one_tarea_from_Database(i));
-                String status="";
+                if(!team_or_personal_task_selection_screen_Activity.checkGestor(jsonObject)){
+                    continue;
+                }
+                 String status="";
                 try {
                     if(limitar_a_operario) {
                         if (!Screen_Filter_Tareas.checkIfOperarioTask(jsonObject)) {
@@ -395,6 +398,9 @@ public class Screen_Filter_Results extends AppCompatActivity {
                 try {
                     JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.
                             dBtareasController.get_one_tarea_from_Database(i));
+                    if(!team_or_personal_task_selection_screen_Activity.checkGestor(jsonObject)){
+                        continue;
+                    }
                     if(limitar_a_operario){
                         if(!Screen_Filter_Tareas.checkIfOperarioTask(jsonObject)){
                             continue;
@@ -539,6 +545,9 @@ public class Screen_Filter_Results extends AppCompatActivity {
             try {
                 JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.
                         dBtareasController.get_one_tarea_from_Database(i));
+                if(!team_or_personal_task_selection_screen_Activity.checkGestor(jsonObject)){
+                    continue;
+                }
                 if(limitar_a_operario) {
                     if (!Screen_Filter_Tareas.checkIfOperarioTask(jsonObject)) {
                         continue;
@@ -578,6 +587,9 @@ public class Screen_Filter_Results extends AppCompatActivity {
         for (int i = 1; i <= team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas(); i++) {
             try {
                 JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.dBtareasController.get_one_tarea_from_Database(i));
+                if(!team_or_personal_task_selection_screen_Activity.checkGestor(jsonObject)){
+                    continue;
+                }
                 String status="";
                 try {
                     if(limitar_a_operario) {
@@ -638,6 +650,9 @@ public class Screen_Filter_Results extends AppCompatActivity {
             try {
                 JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.
                         dBtareasController.get_one_tarea_from_Database(i));
+                if(!team_or_personal_task_selection_screen_Activity.checkGestor(jsonObject)){
+                    continue;
+                }
                 if(limitar_a_operario) {
                     if (!Screen_Filter_Tareas.checkIfOperarioTask(jsonObject)) {
                         continue;

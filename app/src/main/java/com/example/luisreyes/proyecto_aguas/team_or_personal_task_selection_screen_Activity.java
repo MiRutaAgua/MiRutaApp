@@ -22,10 +22,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.support.v7.widget.Toolbar;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +36,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 
 /**
@@ -45,6 +50,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
 
     public static DBtareasController dBtareasController = null;
 
+    public static String gestor_seleccionado = "TODOS";
     private ImageView imageView_logo;
     private Button button_tarea_equipo;
     private Button button_tarea_personal, button_notification_team_or_personal_task_screen;
@@ -53,30 +59,13 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
     private Intent personal_task_screen;
     private LinearLayout layout_citas_vencidas_team_or_personal_task_screen;
     public static ArrayList<String> tareas_con_citas_obsoletas;
+    private Spinner spinner_filtro_gestor_screen_team_or_personal;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.team_or_personal_task_selection_screen);
-
-//        NotificationManager mNotifyMgr =(NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
-//
-//        int icono = R.mipmap.ic_launcher;
-//        Intent intent=new Intent(this, Screen_Table_Team.class);
-//        PendingIntent pendingIntent = PendingIntent.
-//                getActivity(this, 0,
-//                        intent, PendingIntent.FLAG_UPDATE_CURRENT);
-//
-//        mBuilder =new NotificationCompat.Builder(getApplicationContext())
-//                .setContentIntent(pendingIntent)
-//                .setSmallIcon(icono)
-//                .setContentTitle("Aviso de Mi Ruta")
-//                .setContentText("Algunas citas se han vendido")
-//                .setVibrate(new long[] {100, 250, 100, 500});
-////                .setAutoCancel(true);
-//
-//        mNotifyMgr.notify(12184816, mBuilder.build());
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -92,6 +81,8 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
         }
 
         tareas_con_citas_obsoletas = new ArrayList<>();
+
+        spinner_filtro_gestor_screen_team_or_personal= (Spinner) findViewById(R.id.spinner_filtro_gestor_screen_team_or_personal);
 
         textView_citas__team_or_personal_task_screen= (TextView) findViewById(R.id.textView_citas__team_or_personal_task_screen);
         button_notification_team_or_personal_task_screen= (Button) findViewById(R.id.button_notification_team_or_personal_task_screen);
@@ -227,45 +218,125 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
             }
         });
 
+        spinner_filtro_gestor_screen_team_or_personal.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String gestor = spinner_filtro_gestor_screen_team_or_personal
+                        .getSelectedItem().toString();
+                if(!gestor.isEmpty() && gestor!=null) {
+                    gestor_seleccionado = gestor;
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
+
         setNotificationCitasObsoletas();
+
+        lookForGestors();
     }
 
-    public void setNotificationCitasObsoletas(){
+    public static boolean checkGestor(JSONObject jsonObject){
+        if(gestor_seleccionado.equals("TODOS")){
+            return true;
+        }
+        try {
+            String gestor_de_tarea = jsonObject.getString(DBtareasController.GESTOR).trim();
+            if(!gestor_de_tarea.isEmpty() && !gestor_de_tarea.equals("NULL")
+                    && !gestor_de_tarea.equals("null")) {
+                if (gestor_seleccionado.equals(gestor_de_tarea)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }else{
+                if(gestor_seleccionado.equals("SIN GESTOR")){
+                    return true;
+                }else {
+                    return false;
+                }
+            }
+        } catch (JSONException e) {
+            Log.e("Excepcion", "No se pudo ontener gestor");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public void lookForGestors(){
+        ArrayList<String> gestores = new ArrayList<>();
         if(team_or_personal_task_selection_screen_Activity.dBtareasController!=null)
         if(team_or_personal_task_selection_screen_Activity.dBtareasController.databasefileExists(this)){
             if(team_or_personal_task_selection_screen_Activity.dBtareasController.checkForTableExists()){
                 for (int i = 1; i <= team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas(); i++) {
                     try {
-                        JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.dBtareasController.get_one_tarea_from_Database(i));
-
-                        if(Screen_Table_Team.checkIfDateisDeprecated(jsonObject)){
-                            String status="";
-                            try {
-                                status = jsonObject.getString(DBtareasController.status_tarea);
-
-                                if(!status.contains("DONE") && !status.contains("done")) {
-                                    tareas_con_citas_obsoletas.add( jsonObject.getString(DBtareasController.numero_interno));
+                        JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.
+                                dBtareasController.get_one_tarea_from_Database(i));
+                        String gestor = "";
+                        try {
+                            gestor = jsonObject.getString(DBtareasController.GESTOR).trim();
+                            if(!gestor.equals("NULL") && !gestor.equals("null") && !gestor.isEmpty()) {
+                                if(!gestores.contains(gestor)){
+                                    gestores.add(gestor);
                                 }
-                            } catch (JSONException e) {
-                                Toast.makeText(this, "No se pudo obtener estado se tarea\n"+ e.toString(), Toast.LENGTH_LONG).show();
-                                e.printStackTrace();
+                            }else{
+                                if(!gestores.contains("SIN GESTOR")){
+                                    gestores.add("SIN GESTOR");
+                                }
                             }
-                            Log.e("Cita Obsoleta", jsonObject.getString(DBtareasController.nuevo_citas));
+                        } catch (JSONException e) {
+                            Log.e("Excepcion gestor", "No se pudo obtener gestor\n" + e.toString());
+                            e.printStackTrace();
                         }
-
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
             }
         }
-        if(!tareas_con_citas_obsoletas.isEmpty()){
-            layout_citas_vencidas_team_or_personal_task_screen.setVisibility(View.VISIBLE);
-            Intent serviceIntent = new Intent(this, Notification_Service.class);
-            startService(serviceIntent);
+        if(!gestores.isEmpty()){
+            Collections.sort(gestores);
+            gestores.add(0, "TODOS");
+
+        }else{
+            gestores.add(0, "TODOS");
         }
+        ArrayAdapter gestores_adapter = new ArrayAdapter(this, R.layout.spinner_text_view, gestores);
+        spinner_filtro_gestor_screen_team_or_personal.setAdapter(gestores_adapter);
     }
 
+    public void setNotificationCitasObsoletas() {
+        if (team_or_personal_task_selection_screen_Activity.dBtareasController != null) {
+            if (team_or_personal_task_selection_screen_Activity.dBtareasController.databasefileExists(this)) {
+                if (team_or_personal_task_selection_screen_Activity.dBtareasController.checkForTableExists()) {
+                    for (int i = 1; i <= team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas(); i++) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.dBtareasController.get_one_tarea_from_Database(i));
+
+                            if (Screen_Table_Team.checkIfDateisDeprecated(jsonObject)) {
+                                String status = "";
+                                try {
+                                    status = jsonObject.getString(DBtareasController.status_tarea);
+
+                                    if (!status.contains("DONE") && !status.contains("done")) {
+                                        tareas_con_citas_obsoletas.add(jsonObject.getString(DBtareasController.numero_interno));
+                                    }
+                                } catch (JSONException e) {
+                                    Toast.makeText(this, "No se pudo obtener estado se tarea\n" + e.toString(), Toast.LENGTH_LONG).show();
+                                    e.printStackTrace();
+                                }
+                                Log.e("Cita Obsoleta", jsonObject.getString(DBtareasController.nuevo_citas));
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        }
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

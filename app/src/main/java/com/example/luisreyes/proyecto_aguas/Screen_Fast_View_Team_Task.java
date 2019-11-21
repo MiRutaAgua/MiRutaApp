@@ -149,6 +149,9 @@ public class Screen_Fast_View_Team_Task  extends AppCompatActivity implements Ta
                                 Log.e("Cita Obsoleta", jsonObject.getString(DBtareasController.nuevo_citas));
                                 alguna_cita_obsoleta = true;
                             }
+                           if(!team_or_personal_task_selection_screen_Activity.checkGestor(jsonObject)){
+                                continue;
+                            }
                             String status="";
                             try {
                                 status = jsonObject.getString(DBtareasController.status_tarea);
@@ -322,7 +325,7 @@ public class Screen_Fast_View_Team_Task  extends AppCompatActivity implements Ta
                                     }
                                 }
                             }
-
+                            if(team_or_personal_task_selection_screen_Activity.checkGestor(jsonObject)){
                             String status="";
                             try {
                                 status = jsonObject.getString(DBtareasController.status_tarea);
@@ -347,7 +350,7 @@ public class Screen_Fast_View_Team_Task  extends AppCompatActivity implements Ta
                                     lista_tareas_fast.add(fast_task);
                                 }
                             }
-
+                            }
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

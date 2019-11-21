@@ -419,7 +419,9 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
                                 Log.e("Cita Obsoleta", jsonObject.getString(DBtareasController.nuevo_citas));
                                 alguna_cita_obsoleta = true;
                             }
-
+                            if(!team_or_personal_task_selection_screen_Activity.checkGestor(jsonObject)){
+                                continue;
+                            }
                             String status="";
                             try {
                                 status = jsonObject.getString(DBtareasController.status_tarea);
@@ -578,20 +580,22 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
                                     }
 
                             }
-                            String status="";
-                            try {
-                                status = jsonObject.getString(DBtareasController.status_tarea);
-                            } catch (JSONException e) {
-                                Toast.makeText(getApplicationContext(), "No se pudo obtener estado se tarea\n"+ e.toString(), Toast.LENGTH_LONG).show();
-                                e.printStackTrace();
-                            }
-                            if(!status.contains("DONE") && !status.contains("done")) {
-                                if(jsonObject.getString(DBtareasController.operario).equals(
-                                        Screen_Login_Activity.operario_JSON.getString("usuario"))) {
-                                    lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
+
+                            if(team_or_personal_task_selection_screen_Activity.checkGestor(jsonObject)){
+                                String status="";
+                                try {
+                                    status = jsonObject.getString(DBtareasController.status_tarea);
+                                } catch (JSONException e) {
+                                    Toast.makeText(getApplicationContext(), "No se pudo obtener estado se tarea\n"+ e.toString(), Toast.LENGTH_LONG).show();
+                                    e.printStackTrace();
+                                }
+                                if(!status.contains("DONE") && !status.contains("done")) {
+                                    if(jsonObject.getString(DBtareasController.operario).equals(
+                                            Screen_Login_Activity.operario_JSON.getString("usuario"))) {
+                                        lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
+                                    }
                                 }
                             }
-
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

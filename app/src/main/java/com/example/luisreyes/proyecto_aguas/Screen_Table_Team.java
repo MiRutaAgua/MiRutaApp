@@ -127,7 +127,6 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
 
 //        ArrayAdapter arrayAdapter_spinner = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista_desplegable);
 //        spinner_filtro_tareas.setAdapter(arrayAdapter_spinner);
-
         images_files_names = new ArrayList<String>();
         images_files = new ArrayList<String>();
         tareas_to_upload = new ArrayList<String>();
@@ -297,7 +296,6 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
         editText_filter.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -410,6 +408,8 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
                             if(checkIfDateisDeprecated(jsonObject)){
                                 Log.e("Cita Obsoleta", jsonObject.getString(DBtareasController.nuevo_citas));
                                 alguna_cita_obsoleta = true;
+                            }if(!team_or_personal_task_selection_screen_Activity.checkGestor(jsonObject)){
+                                continue;
                             }
                             String status="";
                             try {
@@ -565,6 +565,7 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
                                     }
                                 }
                             }
+                            if(team_or_personal_task_selection_screen_Activity.checkGestor(jsonObject)){
                             String status="";
                             try {
                                 status = jsonObject.getString(DBtareasController.status_tarea);
@@ -575,7 +576,9 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
                             if(!status.contains("DONE") && !status.contains("done")) {
                                 lista_ordenada_de_tareas.add(orderTareaFromJSON(jsonObject));
                             }
-                        }
+                           }
+                      }
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                         //Toast.makeText(Screen_Table_Team.this,e.toString(), Toast.LENGTH_LONG).show();

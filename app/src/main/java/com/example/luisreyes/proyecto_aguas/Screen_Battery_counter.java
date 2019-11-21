@@ -563,8 +563,8 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
         mapaTiposDeTarea.put("EL", "EMISOR LECTURA");
         mapaTiposDeTarea.put("SI", "SOLO INSTALAR");
         mapaTiposDeTarea.put("R", "REFORMA MAS CONTADOR");
-        String tipo_tarea = null;
-        String calibre = null;
+        String tipo_tarea = "";
+        String calibre = "";
         try {
             tipo_tarea = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.tipo_tarea).
                     trim().replace("\n","");
@@ -602,8 +602,8 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
                     //+"\ngeolocalizacion: "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.geolocalizacion)
                     +"\n\nModificación:\n"+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.date_time_modified)
                     +"\n\nUrl Google:\n "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.url_geolocalizacion)
-                    +"\n\nNº Interno: "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.url_geolocalizacion)
-                    +"\n\nEstado: "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.status_tarea);
+                    +"\n\nNº Interno: "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_interno)
+                    +"\n\nEstado de Tarea: "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.status_tarea);
         } catch (JSONException e) {
             e.printStackTrace();
             return "No se pudo obtener datos de tarea";
