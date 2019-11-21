@@ -29,6 +29,7 @@ import android.support.v7.widget.Toolbar;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -1098,21 +1099,38 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
             if (file.exists())
                 file.delete();
             try {
-                FileOutputStream out = new FileOutputStream(file);
-                bitmap.compress(Bitmap.CompressFormat.JPEG, MainActivity.COMPRESS_QUALITY, out);
 
-//                ExifInterface exif=new ExifInterface(file.toString());
-//
-////                Log.d("EXIF value", exif.getAttribute(ExifInterface.TAG_ORIENTATION));
-//                if(exif.getAttribute(ExifInterface.TAG_ORIENTATION).equalsIgnoreCase("6")){
-//                    bitmap= rotate(bitmap, 90);
-//                } else if(exif.getAttribute(ExifInterface.TAG_ORIENTATION).equalsIgnoreCase("8")){
-//                    bitmap= rotate(bitmap, 270);
-//                } else if(exif.getAttribute(ExifInterface.TAG_ORIENTATION).equalsIgnoreCase("3")){
-//                    bitmap= rotate(bitmap, 180);
-//                } else if(exif.getAttribute(ExifInterface.TAG_ORIENTATION).equalsIgnoreCase("0")){
-//                    bitmap= rotate(bitmap, 90);
-//                }
+                FileOutputStream out = new FileOutputStream(file);
+
+                ExifInterface ei = new ExifInterface(file.getAbsolutePath());
+                int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                        ExifInterface.ORIENTATION_UNDEFINED);
+
+//                Bitmap rotatedBitmap = null;
+                switch(orientation) {
+
+                    case ExifInterface.ORIENTATION_ROTATE_90:
+                        bitmap = rotateImage(bitmap, 90);
+                        Log.e("Orientation", "90");
+                        break;
+
+                    case ExifInterface.ORIENTATION_ROTATE_180:
+                        bitmap = rotateImage(bitmap, 180);
+                        Log.e("Orientation", "180");
+                        break;
+
+                    case ExifInterface.ORIENTATION_ROTATE_270:
+                        bitmap = rotateImage(bitmap, 270);
+                        Log.e("Orientation", "180");
+                        break;
+
+                    case ExifInterface.ORIENTATION_NORMAL:
+                    default:
+                        bitmap = bitmap;
+//                        Log.e("Orientation", "normal");
+                }
+
+                bitmap.compress(Bitmap.CompressFormat.JPEG, MainActivity.COMPRESS_QUALITY, out);
 
                 out.flush();
                 out.close();
@@ -1126,6 +1144,14 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
             e.printStackTrace();
         }
         return null;
+    }
+
+
+    public static Bitmap rotateImage(Bitmap source, float angle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
+                matrix, true);
     }
 
     public static Bitmap rotate(Bitmap bitmap, int degree) {

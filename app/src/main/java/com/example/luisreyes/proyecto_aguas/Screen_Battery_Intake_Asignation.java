@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,6 +16,7 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -492,7 +495,37 @@ public class Screen_Battery_Intake_Asignation extends AppCompatActivity {
                 file.delete();
             try {
                 FileOutputStream out = new FileOutputStream(file);
+
+                ExifInterface ei = new ExifInterface(file.getAbsolutePath());
+                int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                        ExifInterface.ORIENTATION_UNDEFINED);
+
+//                Bitmap rotatedBitmap = null;
+                switch(orientation) {
+
+                    case ExifInterface.ORIENTATION_ROTATE_90:
+                        bitmap = rotateImage(bitmap, 90);
+                        Log.e("Orientation", "90");
+                        break;
+
+                    case ExifInterface.ORIENTATION_ROTATE_180:
+                        bitmap = rotateImage(bitmap, 180);
+                        Log.e("Orientation", "180");
+                        break;
+
+                    case ExifInterface.ORIENTATION_ROTATE_270:
+                        bitmap = rotateImage(bitmap, 270);
+                        Log.e("Orientation", "180");
+                        break;
+
+                    case ExifInterface.ORIENTATION_NORMAL:
+                    default:
+                        bitmap = bitmap;
+//                        Log.e("Orientation", "normal");
+                }
+
                 bitmap.compress(Bitmap.CompressFormat.JPEG, MainActivity.COMPRESS_QUALITY, out);
+
                 out.flush();
                 out.close();
             } catch (Exception e) {
@@ -514,6 +547,14 @@ public class Screen_Battery_Intake_Asignation extends AppCompatActivity {
         }
         return null;
     }
+
+    public static Bitmap rotateImage(Bitmap source, float angle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
+                matrix, true);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

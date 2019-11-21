@@ -514,8 +514,15 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
             @Override
             public void onClick(View view) {
                 Intent intent_zoom_firma = new Intent(Screen_Validate.this, Screen_Zoom_Firma.class);
-                if(bitmap_firma_cliente != null) {
-                    String foto = Screen_Register_Operario.getStringImage(bitmap_firma_cliente);
+                String firma = "";
+                try {
+                    firma = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.firma_cliente)
+                            .trim();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                if(!TextUtils.isEmpty(firma) && bitmap_firma_cliente != null){
+                    String foto = getCompleteFileDir(firma);
                     intent_zoom_firma.putExtra("zooming_photo", foto);
                     startActivity(intent_zoom_firma);
                 }
@@ -809,15 +816,17 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                 //String res = String.valueOf(result);
                 if (!firma.equals("null")) {
                     bitmap_firma_no_nulo= true;
-                    bitmap_firma_cliente = getImageFromString(firma);
-                    imageButton_firma_cliente_screen_validate.setImageBitmap(bitmap_firma_cliente);
-                    try {
-                        String nombre_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.nombre_cliente).trim().replace(" ", "_");
-                        Screen_Login_Activity.tarea_JSON.put(DBtareasController.firma_cliente,nombre_abonado+"_firma.jpg");
-                        saveBitmapImageFirma(bitmap_firma_cliente, nombre_abonado+"_firma");
-//                        Toast.makeText(Screen_Validate.this, "Resultado ok: " + nombre_abonado+"_firma", Toast.LENGTH_LONG).show();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                    bitmap_firma_cliente = getPhotoUserLocal(firma);
+                    if(bitmap_firma_cliente!=null) {
+                        imageButton_firma_cliente_screen_validate.setImageBitmap(bitmap_firma_cliente);
+//                        try {
+//                            String nombre_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.nombre_cliente).trim().replace(" ", "_");
+//                            Screen_Login_Activity.tarea_JSON.put(DBtareasController.firma_cliente, nombre_abonado + "_firma.jpg");
+//                            saveBitmapImageFirma(bitmap_firma_cliente, nombre_abonado + "_firma");
+////                        Toast.makeText(Screen_Validate.this, "Resultado ok: " + nombre_abonado+"_firma", Toast.LENGTH_LONG).show();
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
                     }
                 }
                 //Toast.makeText(Screen_Validate.this, "Resultado ok: " + res, Toast.LENGTH_LONG).show();
@@ -970,7 +979,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                 if(myDir!=null) {
                     if (!myDir.exists()) {
                         myDir.mkdirs();
-                        File storageDir2 = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/fotos_tareas");
+                        File storageDir2 = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/fotos_tareas/"+ numero_abonado);
                         if (!storageDir2.exists()) {
                             storageDir2.mkdirs();
                         }

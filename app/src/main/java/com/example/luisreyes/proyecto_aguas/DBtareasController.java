@@ -37,6 +37,7 @@ public class DBtareasController extends SQLiteOpenHelper {
     public static String idOrdenCABB = "idOrdenCABB";//siempre es 3 para su empresa
     public static String FechImportacion = "FechImportacion";
     public static String numero_interno = "NUMIN"; //identificador unico de tarea
+    public static String GESTOR = "GESTOR"; //campo para saber la empresa empladora del trabajo a realizar
     public static String ANOMALIA = "ANOMALIA"; //codigo de anomalia enviada en la orden
     public static String AREALIZAR = "AREALIZAR";// orden precisa de lo que hay que hacer enviada significado de anomalia
     public static String INTERVENCION = "INTERVENCI";//orden mas general de lo que hay que hacer enviada
@@ -103,6 +104,7 @@ public class DBtareasController extends SQLiteOpenHelper {
     public static String codigo_de_localizacion = "codigo_de_localizacion";
     public static String codigo_de_geolocalizacion = "codigo_de_geolocalizacion";
     public static String geolocalizacion = "geolocalizacion";
+    public static String url_geolocalizacion = "url_geolocalizacion";
     public static String foto_antes_instalacion = "foto_antes_instalacion";
     public static String foto_numero_serie = "foto_numero_serie";
     public static String foto_lectura = "foto_lectura";
@@ -151,6 +153,7 @@ public class DBtareasController extends SQLiteOpenHelper {
                 jsonTareaType.put(idOrdenCABB, "null");
                 jsonTareaType.put(FechImportacion, "null");
                 jsonTareaType.put(numero_interno, "null");
+            jsonTareaType.put(GESTOR, "null");
                 jsonTareaType.put(ANOMALIA, "null");
                 jsonTareaType.put(AREALIZAR, "null");//numero de portal
                 jsonTareaType.put(INTERVENCION, "null");
@@ -217,6 +220,7 @@ public class DBtareasController extends SQLiteOpenHelper {
                 jsonTareaType.put(codigo_de_localizacion, "null");
                 jsonTareaType.put(codigo_de_geolocalizacion, "null");
                 jsonTareaType.put(geolocalizacion, "null");
+            jsonTareaType.put(url_geolocalizacion, "null");
                 jsonTareaType.put(foto_antes_instalacion, "null");
                 jsonTareaType.put(foto_numero_serie, "null");
                 jsonTareaType.put(foto_lectura, "null");
@@ -268,6 +272,7 @@ public class DBtareasController extends SQLiteOpenHelper {
                         idOrdenCABB + " TEXT, " +
                         FechImportacion + " TEXT, " +
                         numero_interno + " TEXT, " +
+                        GESTOR + " TEXT, " +
                         ANOMALIA + " TEXT, " +
                         AREALIZAR + " TEXT, " +
                         INTERVENCION + " TEXT, " +
@@ -334,6 +339,7 @@ public class DBtareasController extends SQLiteOpenHelper {
                         codigo_de_localizacion + " TEXT, " +
                         codigo_de_geolocalizacion+" TEXT, " +
                         geolocalizacion + " TEXT, " +
+                        url_geolocalizacion + " TEXT, " +
                         foto_antes_instalacion + " TEXT, " +
                         foto_numero_serie + " TEXT, " +
                         foto_lectura + " TEXT, " +
@@ -454,6 +460,7 @@ public class DBtareasController extends SQLiteOpenHelper {
             jsonTareaType.put(codigo_de_localizacion, "");
             jsonTareaType.put(codigo_de_geolocalizacion, "");
             jsonTareaType.put(geolocalizacion, "");
+            jsonTareaType.put(url_geolocalizacion, "");
             jsonTareaType.put(foto_antes_instalacion, "");
             jsonTareaType.put(foto_numero_serie, "");
             jsonTareaType.put(foto_lectura, "");

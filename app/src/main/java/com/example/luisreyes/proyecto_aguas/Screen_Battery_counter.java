@@ -550,6 +550,7 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
 
     public static String get_tarea_info(){
         HashMap<String, String> mapaTiposDeTarea = new HashMap<>();
+        mapaTiposDeTarea.put("", "NUEVO CONTADOR INSTALAR");
         mapaTiposDeTarea.put("NCI", "NUEVO CONTADOR INSTALAR");
         mapaTiposDeTarea.put("U", "USADO CONTADOR INSTALAR");
         mapaTiposDeTarea.put("T", "BAJA O CORTE DE SUMINISTRO");
@@ -587,6 +588,7 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
         String n = "";
         try{
             n = "Tipo:\n  "+tipo_tarea + " "+calibre
+                    +"\n\nGestor: "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.GESTOR).trim()
                     +"\n\nDirección:\n  "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.poblacion).trim()
                     +", "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.calle).trim()
                     +", "+Screen_Advance_Filter.getBis(Screen_Login_Activity.tarea_JSON).trim()
@@ -599,6 +601,8 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
                     +"\n\nCódigo de geolocalización: "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.codigo_de_geolocalizacion)
                     //+"\ngeolocalizacion: "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.geolocalizacion)
                     +"\n\nModificación:\n"+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.date_time_modified)
+                    +"\n\nUrl Google:\n "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.url_geolocalizacion)
+                    +"\n\nNº Interno: "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.url_geolocalizacion)
                     +"\n\nEstado: "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.status_tarea);
         } catch (JSONException e) {
             e.printStackTrace();

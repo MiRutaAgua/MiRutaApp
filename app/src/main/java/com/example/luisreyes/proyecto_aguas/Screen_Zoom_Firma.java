@@ -33,16 +33,13 @@ public class Screen_Zoom_Firma extends AppCompatActivity {
 
         String foto = getIntent().getStringExtra("zooming_photo");
 
-
-
         imageView_photo = (ImageView) findViewById(R.id.imageView_screen_zoom_photo);
 
         if(foto!=null && !TextUtils.isEmpty(foto)) {
-            bitmap_photo = Screen_Register_Operario.getImageFromString(foto);
+            bitmap_photo = getPhotoUserLocal(foto);
             if (bitmap_photo != null) {
                 imageView_photo.setImageBitmap(bitmap_photo);
             }
-
         }
 //        SGD = new ScaleGestureDetector(this, new ScaleListener());
 
@@ -89,9 +86,10 @@ public class Screen_Zoom_Firma extends AppCompatActivity {
 //        SGD.onTouchEvent(event);
 //        return true;
 //    }
-@Override
-public void onBackPressed() {
-    finish();
-    super.onBackPressed();
-}
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        super.onBackPressed();
+    }
 }

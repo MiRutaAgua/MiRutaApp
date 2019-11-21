@@ -269,6 +269,20 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
             }
         }
         try {
+            String firma = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.firma_cliente).trim();
+            if(!firma.isEmpty() && !firma.equals("null")&&  !firma.equals("NULL"))  {
+                bitmap_firma_cliente = getPhotoUserLocal(  getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+
+                        Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim() + "/" + firma);
+                if (bitmap_firma_cliente != null) {
+                    bitmap5_no_nulo=true;
+                    firma_cliente.setImageBitmap(bitmap_firma_cliente);
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
             observaciones_incidence.setText(Screen_Login_Activity.tarea_JSON.getString(DBtareasController.incidencia));
         } catch (JSONException e) {
             e.printStackTrace();
@@ -399,8 +413,15 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
                     @Override
                     public void onAnimationEnd(Animation arg0) {
                         Intent intent_zoom_firma = new Intent(Screen_Incidence_Summary.this, Screen_Zoom_Firma.class);
-                        if(bitmap_firma_cliente != null) {
-                            String foto = Screen_Register_Operario.getStringImage(bitmap_firma_cliente);
+                        String firma = "";
+                        try {
+                            firma = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.firma_cliente)
+                                    .trim();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        if(!TextUtils.isEmpty(firma) && bitmap_firma_cliente != null){
+                            String foto = getCompleteFileDir(firma);
                             intent_zoom_firma.putExtra("zooming_photo", foto);
                             startActivity(intent_zoom_firma);
                         }
@@ -776,14 +797,16 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
             //String res = String.valueOf(result);
             if(!firma.equals("null")) {
                 bitmap5_no_nulo=true;
-                bitmap_firma_cliente = getImageFromString(firma);
-                firma_cliente.setImageBitmap(bitmap_firma_cliente);
-                try {
-                    String nombre_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.nombre_cliente).trim().replace(" ", "_");
-                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.firma_cliente,nombre_abonado+"_firma.jpg");
-                    saveBitmapImageFirma(bitmap_firma_cliente, nombre_abonado+"_firma");
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                bitmap_firma_cliente = getPhotoUserLocal(firma);
+                if(bitmap_firma_cliente!=null) {
+                    firma_cliente.setImageBitmap(bitmap_firma_cliente);
+//                    try {
+//                        String nombre_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.nombre_cliente).trim().replace(" ", "_");
+//                        Screen_Login_Activity.tarea_JSON.put(DBtareasController.firma_cliente,nombre_abonado+"_firma.jpg");
+//                        saveBitmapImageFirma(bitmap_firma_cliente, nombre_abonado+"_firma");
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
                 }
             }
             //Toast.makeText(Screen_Validate.this, "Resultado ok: " + res, Toast.LENGTH_LONG).show();
