@@ -671,6 +671,9 @@ public class Screen_Fast_View_Personal_Task extends AppCompatActivity implements
 
         foto = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_incidencia_3);
         addPhotos_names_and_files(path, foto);
+
+        foto = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.firma_cliente);
+        addPhotos_names_and_files(path, foto);
     }
 
     public Bitmap getPhotoUserLocal(String path){
