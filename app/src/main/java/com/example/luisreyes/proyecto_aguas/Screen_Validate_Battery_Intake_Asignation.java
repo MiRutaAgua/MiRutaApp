@@ -265,13 +265,13 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
                     DBtareasController.status_tarea);
             if(status_tarea.contains("TO_UPLOAD")) {
                 try {
-                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.status_tarea, "TO_BAT,TO_UPLOAD");
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.status_tarea, "TO_BAT, TO_UPLOAD");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }else{
                 try {
-                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.status_tarea, "TO_BAT");
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.status_tarea, "TO_BAT, TO_UPDATE");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -292,7 +292,7 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
             error = true;
             Toast.makeText(this, "No hay tabla donde guardar", Toast.LENGTH_LONG).show();
         }
-        if(checkConection()) {
+        if(checkConection() && team_or_personal_task_selection_screen_Activity.sincronizacion_automatica) {
             showRingDialog("Guardando Datos...");
             String type = "update_tarea";
             BackgroundWorker backgroundWorker = new BackgroundWorker(this);

@@ -448,9 +448,6 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
                             photo1.setImageBitmap(getPhotoUserLocal(mCurrentPhotoPath_incidencia_1));
                         }
                     }
-//            mCurrentPhotoPath_incidencia_1 = saveBitmapImage(getPhotoUserLocal(mCurrentPhotoPath_incidencia_1), "foto_incidencia_1");
-//            photo1.setVisibility(View.VISIBLE);
-//            photo1.setImageBitmap(getPhotoUserLocal(mCurrentPhotoPath_incidencia_1));
                 }
                 if (requestCode == CAM_REQUEST_2_PHOTO_FULL_SIZE) {
                     if (!TextUtils.isEmpty(data.getStringExtra("photo_path")) && data.getStringExtra("photo_path") != null) {
@@ -461,9 +458,6 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
                             photo2.setImageBitmap(getPhotoUserLocal(mCurrentPhotoPath_incidencia_2));
                         }
                     }
-//                mCurrentPhotoPath_incidencia_2 = saveBitmapImage(getPhotoUserLocal(mCurrentPhotoPath_incidencia_2), "foto_incidencia_2");
-//                photo2.setVisibility(View.VISIBLE);
-//                photo2.setImageBitmap(getPhotoUserLocal(mCurrentPhotoPath_incidencia_2));
                 }
                 if (requestCode == CAM_REQUEST_3_PHOTO_FULL_SIZE) {
                     if (!TextUtils.isEmpty(data.getStringExtra("photo_path")) && data.getStringExtra("photo_path") != null) {
@@ -474,9 +468,6 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
                             photo3.setImageBitmap(bitmap);
                         }
                     }
-//                mCurrentPhotoPath_incidencia_3 = saveBitmapImage(getPhotoUserLocal(mCurrentPhotoPath_incidencia_3), "foto_incidencia_3");
-//                photo3.setVisibility(View.VISIBLE);
-//                photo3.setImageBitmap(getPhotoUserLocal(mCurrentPhotoPath_incidencia_3));
                 }
             }
         }
@@ -617,7 +608,6 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
 
 //                Bitmap rotatedBitmap = null;
                 switch(orientation) {
-
                     case ExifInterface.ORIENTATION_ROTATE_90:
                         bitmap = rotateImage(bitmap, 90);
                         Log.e("Orientation", "90");

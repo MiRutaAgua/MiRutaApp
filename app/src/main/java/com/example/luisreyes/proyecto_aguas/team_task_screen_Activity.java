@@ -179,7 +179,8 @@ public class team_task_screen_Activity extends AppCompatActivity {
     }
     @Override
     public void onBackPressed() {
+        Intent open_screen_team_or_task= new Intent(this, team_or_personal_task_selection_screen_Activity.class);
+        startActivity(open_screen_team_or_task);
         finish();
-        super.onBackPressed();
     }
 }

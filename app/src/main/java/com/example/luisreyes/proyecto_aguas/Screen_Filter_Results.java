@@ -77,13 +77,13 @@ public class Screen_Filter_Results extends AppCompatActivity {
         mapaTiposDeTarea.put("T", "BAJA O CORTE DE SUMINISTRO");
         mapaTiposDeTarea.put("TBDN", "BAJA O CORTE DE SUMINISTRO");
         mapaTiposDeTarea.put("LFTD", "LIMPIEZA DE FILTRO Y TOMA DE DATOS");
-//        mapaTiposDeTarea.put("D", "DATOS");
+        //mapaTiposDeTarea.put("D", "DATOS");
         mapaTiposDeTarea.put("TD", "TOMA DE DATOS");
-//        mapaTiposDeTarea.put("I", "INSPECCIÓN");
+        mapaTiposDeTarea.put("I", "INSPECCIÓN");
         mapaTiposDeTarea.put("CF", "COMPROBAR EMISOR");
-//        mapaTiposDeTarea.put("EL", "EMISOR LECTURA");
+        mapaTiposDeTarea.put("EL", "EMISOR LECTURA");
         mapaTiposDeTarea.put("SI", "SOLO INSTALAR");
-        mapaTiposDeTarea.put("R", "REFORMA MAS CONTADOR");
+        //mapaTiposDeTarea.put("R", "REFORMA MAS CONTADOR");
 
         lista_ordenada_de_tareas = new ArrayList<>();
         calles_filtradas_en_tipo_tarea = new ArrayList<>();
@@ -513,7 +513,7 @@ public class Screen_Filter_Results extends AppCompatActivity {
         }
         Log.e("Tarea Converted", tarea_selected);
         if(tipotarea.isEmpty()){
-            return null;
+            return "NCI";
         }
         else {
             return tipotarea;

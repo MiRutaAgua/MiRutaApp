@@ -665,6 +665,16 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
             @Override
             public void onClick(View view) {
                 Screen_Login_Activity.playOnOffSound(getApplicationContext());
+                String numero_serie_devuelto = "";
+                try {
+                    numero_serie_devuelto = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador_devuelto).trim();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                if(numero_serie_devuelto.isEmpty() || numero_serie_devuelto.equals("null") || numero_serie_devuelto.equals("NULL")){
+                    Toast.makeText(Screen_Execute_Task.this, "Inserte o escanee el número de serie nuevo", Toast.LENGTH_LONG).show();
+                    return;
+                }
                 if(Screen_Login_Activity.movileModel){
                     try {
                         dispatchTakePictureIntent(CAM_REQUEST_AFT_INT_PHOTO);
@@ -733,6 +743,11 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         boolean error=false;
         if(team_or_personal_task_selection_screen_Activity.dBtareasController != null) {
             try {
+                String status = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.status_tarea) ;
+                if(!status.contains("TO_UPDATE")){
+                    status = status + ", TO_UPDATE";
+                }
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.status_tarea, status);
                 team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea(Screen_Login_Activity.tarea_JSON);
             } catch (JSONException e) {
                 Toast.makeText(this, "No se pudo guardar tarea local " + e.toString(), Toast.LENGTH_LONG).show();
@@ -743,14 +758,14 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
             error = true;
             Toast.makeText(this, "No hay tabla donde guardar", Toast.LENGTH_LONG).show();
         }
-        if(checkConection()) {
+        if(checkConection() && team_or_personal_task_selection_screen_Activity.sincronizacion_automatica) {
             showRingDialog("Guardando Datos...");
             String type = "update_tarea";
             BackgroundWorker backgroundWorker = new BackgroundWorker(this);
             backgroundWorker.execute(type);
         } else{
             if(!error) {
-                Toast.makeText(this, "No hay conexion se guardaron los datos en el telefono", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Se guardaron los datos en el teléfono", Toast.LENGTH_LONG).show();
                 Intent intent_open_task_or_personal_screen = new Intent(Screen_Execute_Task.this, team_or_personal_task_selection_screen_Activity.class);
                 startActivity(intent_open_task_or_personal_screen);
                 finishesThisClass();
@@ -800,7 +815,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
 
         String contador=null;
         try {
-            contador = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador)
+            contador = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador_devuelto)
             .trim().replace(" ", "");
 //            Toast.makeText(Screen_Execute_Task.this, "Contador"+contador, Toast.LENGTH_LONG).show();
         } catch (JSONException e) {
@@ -1326,54 +1341,6 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         }
     }
 
-//    private void dispatchTakePictureIntent(int request) throws JSONException {
-//        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//        // Ensure that there's a camera activity to handle the intent
-//        //if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-//            // Create the File where the photo should go
-//            File photoFile = null;
-//            try {
-//                if(request == CAM_REQUEST_INST_PHOTO){
-//                    photoFile = createImageFile("foto_antes_instalacion");
-//                }
-//                else if(request == CAM_REQUEST_SN_PHOTO){
-//                    photoFile = createImageFile("foto_numero_serie");
-//                }
-//                else if(request == CAM_REQUEST_READ_PHOTO){
-//                    photoFile = createImageFile("foto_lectura");
-//                }
-//                else if(request == CAM_REQUEST_AFT_INT_PHOTO){
-//                    photoFile = createImageFile("foto_despues_instalacion");
-//                }
-//            } catch (IOException ex) {
-//                // Error occurred while creating the File
-//                Toast.makeText(this, "No se pudo crear el archivo", Toast.LENGTH_LONG).show();
-//            }
-//            // Continue only if the File was successfully created
-//            Camera camera = Camera.open();
-//            Camera.Parameters params = camera.getParameters();
-//            List<Camera.Size> sizes = params.getSupportedPictureSizes();
-//
-//            Toast.makeText(this, String.valueOf(sizes.get(sizes.size()-3).height) + "  " + String.valueOf(sizes.get(sizes.size()-3).width), Toast.LENGTH_LONG).show();
-//
-//            if (photoFile != null) {
-//                Uri photoURI = FileProvider.getUriForFile(this,
-//                        "com.example.luisreyes.proyecto_aguas.fileprovider",
-//                        photoFile);
-//                //takePictureIntent.setType("image/*");
-//                takePictureIntent.putExtra("crop", true);
-//                takePictureIntent.putExtra("outputX", 240);
-//                takePictureIntent.putExtra("outputY", 320);
-////                takePictureIntent.putExtra("aspectX", 1);
-////                takePictureIntent.putExtra("aspectY", 1);
-//                takePictureIntent.putExtra("scale", true);
-//                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-//                takePictureIntent.putExtra("outputFormat",
-//                        Bitmap.CompressFormat.JPEG.toString());
-//                startActivityForResult(takePictureIntent, request);
-//            }
-//        //}
-//    }
 
     private void dispatchTakePictureIntent(int request) throws JSONException {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);

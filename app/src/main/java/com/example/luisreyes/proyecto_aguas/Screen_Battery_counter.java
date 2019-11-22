@@ -82,7 +82,7 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
         setSupportActionBar(myToolbar);
 
         mapaTiposDeTarea = new HashMap<>();
-//        mapaTiposDeTarea.put("", "NUEVO CONTADOR INSTALAR");
+        mapaTiposDeTarea.put("", "NUEVO CONTADOR INSTALAR");
         mapaTiposDeTarea.put("NCI", "NUEVO CONTADOR INSTALAR");
         mapaTiposDeTarea.put("U", "USADO CONTADOR INSTALAR");
         mapaTiposDeTarea.put("T", "BAJA O CORTE DE SUMINISTRO");

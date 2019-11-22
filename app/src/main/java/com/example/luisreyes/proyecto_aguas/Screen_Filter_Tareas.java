@@ -149,11 +149,11 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
         mapaTiposDeTarea.put("LFTD", "LIMPIEZA DE FILTRO Y TOMA DE DATOS");
 //        mapaTiposDeTarea.put("D", "DATOS");
         mapaTiposDeTarea.put("TD", "TOMA DE DATOS");
-//        mapaTiposDeTarea.put("I", "INSPECCIÓN");
+        mapaTiposDeTarea.put("I", "INSPECCIÓN");
         mapaTiposDeTarea.put("CF", "COMPROBAR EMISOR");
-//        mapaTiposDeTarea.put("EL", "EMISOR LECTURA");
+        mapaTiposDeTarea.put("EL", "EMISOR LECTURA");
         mapaTiposDeTarea.put("SI", "SOLO INSTALAR");
-        mapaTiposDeTarea.put("R", "REFORMA MAS CONTADOR");
+//        mapaTiposDeTarea.put("R", "REFORMA MAS CONTADOR");
 
         layout_listView_contadores_screen_advance_filter = (LinearLayout) findViewById(R.id.layout_listView_contadores_screen_filter_tareas);
         listView_contadores_screen_advance_filter = (ListView)findViewById(R.id.listView_contadores_screen_filter_tareas);

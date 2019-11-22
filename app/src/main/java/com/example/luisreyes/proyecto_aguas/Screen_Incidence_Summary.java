@@ -621,13 +621,13 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
                     DBtareasController.status_tarea);
             if(status_tarea.contains("TO_UPLOAD")) {
                 try {
-                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.status_tarea, "DONE,TO_UPLOAD");
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.status_tarea, "DONE, TO_UPLOAD");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }else{
                 try {
-                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.status_tarea, "DONE");
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.status_tarea, "DONE, TO_UPDATE");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -636,7 +636,7 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
             e.printStackTrace();
         }
 
-        if(checkConection()) {
+        if(checkConection() && team_or_personal_task_selection_screen_Activity.sincronizacion_automatica) {
             boolean error=saveTaskLocal();
             showRingDialog("Guardando Incidencias...");
             String type = "update_tarea";
@@ -644,8 +644,12 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
             backgroundWorker.execute(type);
         } else{
             boolean error=saveTaskLocal();
-            if(!error)
+            if(!error) {
                 Toast.makeText(Screen_Incidence_Summary.this, "No hay conexion se guardaron los datos en el telefono", Toast.LENGTH_LONG).show();
+                Intent intent_open_battery_counter = new Intent(this, team_or_personal_task_selection_screen_Activity.class);
+                startActivity(intent_open_battery_counter);
+                this.finish();
+            }
         }
     }
 

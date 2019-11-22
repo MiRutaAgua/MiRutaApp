@@ -242,7 +242,7 @@ android:layout_height="match_parent">
         android:gravity="center"
         android:orientation="vertical">
         <TextView
-            android:text="NÚMERO SE SERIE"
+            android:text="NÚMERO DE SERIE"
             android:textSize="15dp"
             android:textStyle="bold"
             android:textColor="@color/colorBlueAppRuta"

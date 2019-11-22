@@ -282,11 +282,15 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
             }
         });
 
-        if(checkConection()){
+        if(checkConection() && team_or_personal_task_selection_screen_Activity.sincronizacion_automatica){
             personal_task_screen_Activity.hideRingDialog();
         }
         try {
-            subirTareasSiExisten();
+            if(team_or_personal_task_selection_screen_Activity.sincronizacion_automatica) {
+                subirTareasSiExisten();
+            }else{
+                descargarTareas();
+            }
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(this, "Error al subir tareas -> \n"+e.toString(), Toast.LENGTH_LONG).show();
@@ -397,7 +401,7 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
 
     private void descargarTareas() {
         boolean alguna_cita_obsoleta = false;
-        if(checkConection()){
+        if(checkConection() && team_or_personal_task_selection_screen_Activity.sincronizacion_automatica){
             Screen_Login_Activity.isOnline = true;
             showRingDialog("Actualizando información de tareas");
             String type_script = "get_tareas";
@@ -405,9 +409,10 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
             backgroundWorker.execute(type_script);
         }
         else{
-            Screen_Login_Activity.isOnline = false;
-            Toast.makeText(this,"No hay conexion a Internet, Cargando tareas desactualizadas de Base de datos", Toast.LENGTH_LONG).show();
-
+            if(team_or_personal_task_selection_screen_Activity.sincronizacion_automatica) {
+                Screen_Login_Activity.isOnline = false;
+                Toast.makeText(this, "No hay conexion a Internet, Cargando tareas desactualizadas de Base de datos", Toast.LENGTH_LONG).show();
+            }
             if(team_or_personal_task_selection_screen_Activity.dBtareasController.databasefileExists(this)){
                 if(team_or_personal_task_selection_screen_Activity.dBtareasController.checkForTableExists()){
                     lista_ordenada_de_tareas.clear();
@@ -731,8 +736,8 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
             tareas_to_upload.remove(tareas_to_upload.size() - 1);
 
             //jsonObject_Lite.put("status_tarea", jsonObject_Lite.getString("status_tarea").replace("TO_UPLOAD", ""));
-            jsonObject_Lite.put("status_tarea", "IDLE");
-            jsonObject_Lite.put("date_time_modified", DBtareasController.getStringFromFechaHora(new Date()));
+            jsonObject_Lite.put(DBtareasController.status_tarea, "IDLE");
+            jsonObject_Lite.put(DBtareasController.date_time_modified, DBtareasController.getStringFromFechaHora(new Date()));
             jsonObjectSalvaLite = jsonObject_Lite;
 
             String type_script = "create_tarea";
@@ -986,7 +991,8 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
 
     @Override
     public void onBackPressed() {
+        Intent open_screen_team_or_task= new Intent(this, team_or_personal_task_selection_screen_Activity.class);
+        startActivity(open_screen_team_or_task);
         finish();
-        super.onBackPressed();
     }
 }

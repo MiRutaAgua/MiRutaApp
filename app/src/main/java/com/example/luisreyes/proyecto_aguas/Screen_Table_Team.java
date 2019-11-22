@@ -321,11 +321,15 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
             }
         });
 
-        if(checkConection()){
+        if(checkConection() && team_or_personal_task_selection_screen_Activity.sincronizacion_automatica){
             team_task_screen_Activity.hideRingDialog();
         }
         try {
-            subirTareasSiExisten();
+            if(team_or_personal_task_selection_screen_Activity.sincronizacion_automatica) {
+                subirTareasSiExisten();
+            }else{
+                descargarTareas();
+            }
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(this, "Error al subir tareas -> \n"+e.toString(), Toast.LENGTH_LONG).show();
@@ -387,7 +391,7 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
 
         boolean alguna_cita_obsoleta = false;
 
-        if(checkConection()){
+        if(checkConection() && team_or_personal_task_selection_screen_Activity.sincronizacion_automatica){
             Screen_Login_Activity.isOnline = true;
             showRingDialog("Actualizando información de tareas");
             String type_script = "get_tareas";
@@ -395,13 +399,14 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
             backgroundWorker.execute(type_script);
         }
         else{
-            Screen_Login_Activity.isOnline = false;
-            Toast.makeText(this,"No hay conexión a Internet, Cargando tareas desactualizadas de Base de datos", Toast.LENGTH_LONG).show();
-
+            if(team_or_personal_task_selection_screen_Activity.sincronizacion_automatica) {
+                Screen_Login_Activity.isOnline = false;
+                Toast.makeText(this, "No hay conexion a Internet, Cargando tareas desactualizadas de Base de datos", Toast.LENGTH_LONG).show();
+            }
             if(team_or_personal_task_selection_screen_Activity.dBtareasController.databasefileExists(this)){
                 if(team_or_personal_task_selection_screen_Activity.dBtareasController.checkForTableExists()){
                     lista_ordenada_de_tareas.clear();
-                    for (int i = 1; i <= team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas(); i++) {
+                    for (int i = 0; i <= team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas(); i++) {
                         try {
                             JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.dBtareasController.get_one_tarea_from_Database(i));
 
@@ -911,8 +916,8 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
             tareas_to_upload.remove(tareas_to_upload.size() - 1);
 
             //jsonObject_Lite.put("status_tarea", jsonObject_Lite.getString("status_tarea").replace("TO_UPLOAD", ""));
-            jsonObject_Lite.put("status_tarea", "IDLE");
-            jsonObject_Lite.put("date_time_modified", DBtareasController.getStringFromFechaHora(new Date()));
+            jsonObject_Lite.put(DBtareasController.status_tarea, "IDLE");
+            jsonObject_Lite.put(DBtareasController.date_time_modified, DBtareasController.getStringFromFechaHora(new Date()));
             jsonObjectSalvaLite = jsonObject_Lite;
 
             String type_script = "create_tarea";
@@ -1067,6 +1072,9 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
 
         foto = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_incidencia_3);
         addPhotos_names_and_files(path, foto);
+
+        foto = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.firma_cliente);
+        addPhotos_names_and_files(path, foto);
     }
 
     public Bitmap getPhotoUserLocal(String path){
@@ -1176,7 +1184,8 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
 
     @Override
     public void onBackPressed() {
+        Intent open_screen_team_or_task= new Intent(this, team_or_personal_task_selection_screen_Activity.class);
+        startActivity(open_screen_team_or_task);
         finish();
-        super.onBackPressed();
     }
 }
