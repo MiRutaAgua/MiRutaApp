@@ -86,6 +86,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
     private JSONObject jsonObjectSalvaLite = null;
     private boolean subiendo_fotos = false;
     private boolean sync_pressed=false;
+    private int cantidad_tareas_offline = 0;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -267,50 +268,50 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
             }
         });
 
-        textView_sync_team_or_personal_task_screen.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(sync_pressed){
-                    return;
-                }
-                sync_pressed = true;
-                Screen_Login_Activity.playOnOffSound(getApplicationContext());
-                final Animation myAnim = AnimationUtils.loadAnimation(team_or_personal_task_selection_screen_Activity.this, R.anim.bounce);
-                // Use bounce interpolator with amplitude 0.2 and frequency 20
-                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
-                myAnim.setInterpolator(interpolator);
-                myAnim.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation arg0) {
-                        // TODO Auto-generated method stub
-//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
-                    }
-                    @Override
-                    public void onAnimationRepeat(Animation arg0) {
-                        // TODO Auto-generated method stub
-                    }
-                    @Override
-                    public void onAnimationEnd(Animation arg0) {
-                        if(checkConection()){
-                            try {
-                                Log.e("checkConection", "Subiendo");
-                                subirTareasSiExisten();
-                            } catch (JSONException e) {
-                                sync_pressed = false;
-                                Log.e("Error subiendo", e.toString());
-                                Toast.makeText(getApplicationContext(), "Error subiendo", Toast.LENGTH_LONG).show();
-                                e.printStackTrace();
-                            }
-                        }else{
-                            sync_pressed = false;
-                            Toast.makeText(getApplicationContext(), "No hay conexión a internet", Toast.LENGTH_LONG).show();
-                            Log.e("Error conexion", "No hay conexión a internet");
-                        }
-                    }
-                });
-                textView_sync_team_or_personal_task_screen.startAnimation(myAnim);
-            }
-        });
+//        textView_sync_team_or_personal_task_screen.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if(sync_pressed){
+//                    return;
+//                }
+//                sync_pressed = true;
+//                Screen_Login_Activity.playOnOffSound(getApplicationContext());
+//                final Animation myAnim = AnimationUtils.loadAnimation(team_or_personal_task_selection_screen_Activity.this, R.anim.bounce);
+//                // Use bounce interpolator with amplitude 0.2 and frequency 20
+//                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+//                myAnim.setInterpolator(interpolator);
+//                myAnim.setAnimationListener(new Animation.AnimationListener() {
+//                    @Override
+//                    public void onAnimationStart(Animation arg0) {
+//                        // TODO Auto-generated method stub
+////                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+//                    }
+//                    @Override
+//                    public void onAnimationRepeat(Animation arg0) {
+//                        // TODO Auto-generated method stub
+//                    }
+//                    @Override
+//                    public void onAnimationEnd(Animation arg0) {
+//                        if(checkConection()){
+//                            try {
+//                                Log.e("checkConection", "Subiendo");
+//                                subirTareasSiExisten();
+//                            } catch (JSONException e) {
+//                                sync_pressed = false;
+//                                Log.e("Error subiendo", e.toString());
+//                                Toast.makeText(getApplicationContext(), "Error subiendo", Toast.LENGTH_LONG).show();
+//                                e.printStackTrace();
+//                            }
+//                        }else{
+//                            sync_pressed = false;
+//                            Toast.makeText(getApplicationContext(), "No hay conexión a internet", Toast.LENGTH_LONG).show();
+//                            Log.e("Error conexion", "No hay conexión a internet");
+//                        }
+//                    }
+//                });
+//                textView_sync_team_or_personal_task_screen.startAnimation(myAnim);
+//            }
+//        });
         button_sync_team_or_personal_task_screen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -318,7 +319,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                     return;
                 }
                 sync_pressed = true;
-                Screen_Login_Activity.playOnOffSound(getApplicationContext());
+//                Screen_Login_Activity.playOnOffSound(getApplicationContext());
                 final Animation myAnim = AnimationUtils.loadAnimation(team_or_personal_task_selection_screen_Activity.this, R.anim.bounce);
                 // Use bounce interpolator with amplitude 0.2 and frequency 20
                 MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
@@ -359,20 +360,34 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
         setNotificationCitasObsoletas();
 
         lookForGestors();
+
+        Log.e("Cant_tareas_oofline", String.valueOf(cantidad_tareas_offline));
     }
 
     public void subirTareasSiExisten() throws JSONException {
         if (team_or_personal_task_selection_screen_Activity.dBtareasController.checkForTableExists()) {
             Log.e("subirTareasSiExisten", "Llenando tareas_to_upload");
             tareas_to_upload.clear();
-            for (int i = 0; i <= team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas(); i++) {
+            if (team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas() > 0) {
+                ArrayList<String> tareas = new ArrayList<>();
                 try {
-                    JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.dBtareasController.get_one_tarea_from_Database(i));
-                    String status_tarea = jsonObject.getString(DBtareasController.status_tarea);
-                    if(status_tarea.contains("TO_UPLOAD")){
-                        tareas_to_upload.add(jsonObject.getString(DBtareasController.numero_interno));
+                    tareas = team_or_personal_task_selection_screen_Activity.
+                            dBtareasController.get_all_tareas_from_Database();
+                    for (int i = 0; i < tareas.size(); i++) {
+                        JSONObject jsonObject = null;
+                        try {
+                            jsonObject = new JSONObject(tareas.get(i));
+                            String status_tarea = jsonObject.getString(DBtareasController.status_tarea);
+                            if (status_tarea.contains("TO_UPLOAD")) {
+                                tareas_to_upload.add(jsonObject.getString(DBtareasController.numero_interno));
+                            }
+                        } catch (JSONException e) {
+                            Log.e("Excepcion", "Elemento i = " + String.valueOf(i));
+                            e.printStackTrace();
+                        }
                     }
                 } catch (JSONException e) {
+                    Log.e("Excp subirTareasSiE...", "No se pudo obtener tareas");
                     e.printStackTrace();
                 }
             }
@@ -620,6 +635,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
 
     private void descargarTareas() {
         if(checkConection()){
+            Log.e("descargarTareas", "Hay conexion");
             Screen_Login_Activity.isOnline = true;
             showRingDialog("Actualizando información de tareas");
             String type_script = "get_tareas";
@@ -674,27 +690,36 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
         if(team_or_personal_task_selection_screen_Activity.dBtareasController!=null)
         if(team_or_personal_task_selection_screen_Activity.dBtareasController.databasefileExists(this)){
             if(team_or_personal_task_selection_screen_Activity.dBtareasController.checkForTableExists()){
-                for (int i = 0; i <= team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas(); i++) {
+                if(team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas()>0) {
+                    ArrayList<String> tareas = new ArrayList<>();
                     try {
-                        JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.
-                                dBtareasController.get_one_tarea_from_Database(i));
-                        String gestor = "";
-                        try {
-                            gestor = jsonObject.getString(DBtareasController.GESTOR).trim();
-                            if(!gestor.equals("NULL") && !gestor.equals("null") && !gestor.isEmpty()) {
-                                if(!gestores.contains(gestor)){
-                                    gestores.add(gestor);
+                        tareas = team_or_personal_task_selection_screen_Activity.
+                                dBtareasController.get_all_tareas_from_Database();
+                        for (int i = 0; i < tareas.size(); i++) {
+                            try {
+                                JSONObject jsonObject = new JSONObject(tareas.get(i));
+                                String gestor = "";
+                                try {
+                                    gestor = jsonObject.getString(DBtareasController.GESTOR).trim();
+                                    if (!gestor.equals("NULL") && !gestor.equals("null") && !gestor.isEmpty()) {
+                                        if (!gestores.contains(gestor)) {
+                                            gestores.add(gestor);
+                                        }
+                                    } else {
+                                        if (!gestores.contains("SIN GESTOR")) {
+                                            gestores.add("SIN GESTOR");
+                                        }
+                                    }
+                                } catch (JSONException e) {
+                                    Log.e("Excepcion gestor", "No se pudo obtener gestor\n" + e.toString());
+                                    e.printStackTrace();
                                 }
-                            }else{
-                                if(!gestores.contains("SIN GESTOR")){
-                                    gestores.add("SIN GESTOR");
-                                }
+                            } catch (JSONException e) {
+                                Log.e("Excp lookForGestors", "Elemento i = " + String.valueOf(i));
+                                e.printStackTrace();
                             }
-                        } catch (JSONException e) {
-                            Log.e("Excepcion gestor", "No se pudo obtener gestor\n" + e.toString());
-                            e.printStackTrace();
                         }
-                    } catch (JSONException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
@@ -729,33 +754,44 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
         }
     }
 
-    public void setNotificationCitasObsoletas() {
+    public void setNotificationCitasObsoletas(){
         int count_sync=0;
         if (team_or_personal_task_selection_screen_Activity.dBtareasController != null) {
             if (team_or_personal_task_selection_screen_Activity.dBtareasController.databasefileExists(this)) {
                 if (team_or_personal_task_selection_screen_Activity.dBtareasController.checkForTableExists()) {
-                    for (int i = 0; i <= team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas(); i++) {
+                    if(team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas()>0) {
+                        ArrayList<String> tareas = new ArrayList<>();
                         try {
-                            JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.dBtareasController.get_one_tarea_from_Database(i));
-
-                            if(checkIfIsToUpdateOrUpLoad(jsonObject)){
-                                count_sync++;
-                            }
-                            if (Screen_Table_Team.checkIfDateisDeprecated(jsonObject)) {
-                                String status = "";
+                            tareas = team_or_personal_task_selection_screen_Activity.
+                                    dBtareasController.get_all_tareas_from_Database();
+                            for (int i = 0; i < tareas.size(); i++) {
+                                JSONObject jsonObject = null;
                                 try {
-                                    status = jsonObject.getString(DBtareasController.status_tarea);
-                                    if (!status.contains("DONE") && !status.contains("done")) {
-                                        tareas_con_citas_obsoletas.add(jsonObject.getString(DBtareasController.numero_interno));
+                                    jsonObject = new JSONObject(tareas.get(i));
+                                    if(checkIfIsToUpdateOrUpLoad(jsonObject)){
+                                        count_sync++;
                                     }
-                                } catch (JSONException e) {
-                                    Toast.makeText(this, "No se pudo obtener estado se tarea\n" + e.toString(), Toast.LENGTH_LONG).show();
+                                    if (Screen_Table_Team.checkIfDateisDeprecated(jsonObject)) {
+                                        String status = "";
+                                        try {
+                                            status = jsonObject.getString(DBtareasController.status_tarea);
+                                            if (!status.contains("DONE") && !status.contains("done")) {
+                                                tareas_con_citas_obsoletas.add(jsonObject.getString(DBtareasController.numero_interno));
+                                            }
+                                        } catch (JSONException e) {
+                                            Toast.makeText(this, "No se pudo obtener estado se tarea\n" + e.toString(), Toast.LENGTH_LONG).show();
+                                            e.printStackTrace();
+                                        }
+                                        Log.e("Cita Obsoleta", jsonObject.getString(DBtareasController.nuevo_citas));
+                                    }
+                                }  catch (JSONException e) {
+                                    Log.e("Excp setNotificati...", "Elemento i = "+ String.valueOf(i));
+                                    Log.v("JSONString:", tareas.get(i));
                                     e.printStackTrace();
                                 }
-                                Log.e("Cita Obsoleta", jsonObject.getString(DBtareasController.nuevo_citas));
                             }
-
                         } catch (JSONException e) {
+                            Log.e("Excp setNotificati...", "No se pudo obtener tareas ");
                             e.printStackTrace();
                         }
                     }
@@ -894,15 +930,16 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                                 }
                                 else {
                                     String date_MySQL_string = null;
+                                    Log.e("Tareas existe: ", jsonObject.getString(DBtareasController.numero_interno));
                                     try {
-                                        date_MySQL_string = jsonObject.getString(DBtareasController.date_time_modified).replace("\n", "");
+                                        date_MySQL_string = jsonObject.getString(DBtareasController.date_time_modified).trim();
                                         Date date_MySQL=null;
                                         if(!TextUtils.isEmpty(date_MySQL_string)){
                                             date_MySQL = team_or_personal_task_selection_screen_Activity.dBtareasController.getFechaHoraFromString(date_MySQL_string);
                                         }
                                         JSONObject jsonObject_Lite = new JSONObject(team_or_personal_task_selection_screen_Activity.dBtareasController.get_one_tarea_from_Database(
-                                                jsonObject.getString(DBtareasController.numero_interno).replace("\n", "")));
-                                        String date_SQLite_string = jsonObject_Lite.getString("date_time_modified").replace("\n", "");
+                                                jsonObject.getString(DBtareasController.numero_interno).trim()));
+                                        String date_SQLite_string = jsonObject_Lite.getString(DBtareasController.date_time_modified).trim();
                                         Date date_SQLite = null;
 //                                    Toast.makeText(Screen_Table_Team.this, date_SQLite_string, Toast.LENGTH_LONG).show();
 
@@ -912,6 +949,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                                         if (date_SQLite == null) {
                                             if (date_MySQL != null) {
                                                 team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea(jsonObject, DBtareasController.numero_interno);
+                                                Log.e("Updating", DBtareasController.numero_interno);
                                             } else {
                                                 Toast.makeText(this, "Fechas ambas nulas", Toast.LENGTH_LONG).show();
                                             }
@@ -933,10 +971,8 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                                         else { //si ninguna de la dos son nulas
 
                                             if (date_MySQL.after(date_SQLite)) {//MySQL mas actualizada
-                                                team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea(jsonObject, DBtareasController.numero_interno);
-
-                                                //Toast.makeText(Screen_Table_Team.this, "tarea actualizadas: "+String.valueOf(tareas_actualizadas_count), Toast.LENGTH_LONG).show();
-
+                                                team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea(jsonObject,  DBtareasController.numero_interno);
+                                                Log.e("Updating", DBtareasController.numero_interno);
                                             } else if (date_MySQL.before(date_SQLite)) {//SQLite mas actualizada
                                                 //aqui actualizar MySQL con la DB SQLite
                                                 try {
@@ -954,7 +990,6 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                                 }
                             }
                         }
-
                     } catch (JSONException e) {
                         e.printStackTrace();
                         //Toast.makeText(Screen_Table_Team.this,e.toString(), Toast.LENGTH_LONG).show();
@@ -1030,7 +1065,6 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                 if(jsonObjectSalvaLite!=null) {
                     dBtareasController.updateTarea(jsonObjectSalvaLite);
                 }
-//                upLoadTareaInMySQL();
                 String numero_interno = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_interno);
                 if(!numero_interno.isEmpty() && numero_interno!=null && !numero_interno.equals("null")) {
                     showRingDialog("Subiendo fotos de tarea "

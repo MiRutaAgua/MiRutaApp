@@ -607,14 +607,23 @@ public class Screen_Advance_Filter extends AppCompatActivity {
 
     private void onSelectedNombreAbonadosEmpresa(String nombre_o_empresa_selected) {
         lista_ordenada_de_tareas.clear();
-        for (int i = 1; i <= team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas(); i++) {
+        if (team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas() > 0) {
+            ArrayList<String> tareas = new ArrayList<>();
             try {
-                JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.
-                        dBtareasController.get_one_tarea_from_Database(i));
-                String nombre_cliente = jsonObject.getString(DBtareasController.nombre_cliente).trim();
-                if(!nombre_cliente.equals("null") && !nombre_cliente.isEmpty()
-                        && nombre_cliente.contains(nombre_o_empresa_selected.trim())){
-                    lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
+                tareas = team_or_personal_task_selection_screen_Activity.
+                        dBtareasController.get_all_tareas_from_Database();
+                for (int i = 0; i < tareas.size(); i++) {
+                    JSONObject jsonObject = null;
+                    try {
+                        jsonObject = new JSONObject(tareas.get(i));
+                        String nombre_cliente = jsonObject.getString(DBtareasController.nombre_cliente).trim();
+                        if (!nombre_cliente.equals("null") && !nombre_cliente.isEmpty()
+                                && nombre_cliente.contains(nombre_o_empresa_selected.trim())) {
+                            lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -623,22 +632,31 @@ public class Screen_Advance_Filter extends AppCompatActivity {
     }
     private void onSelectedTelefonos(String telefono_selected) {
         lista_ordenada_de_tareas.clear();
-        for (int i = 1; i <= team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas(); i++) {
+        if (team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas() > 0) {
+            ArrayList<String> tareas = new ArrayList<>();
             try {
-                JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.
-                        dBtareasController.get_one_tarea_from_Database(i));
-                String telefono1 = jsonObject.getString(DBtareasController.telefono1).replace("\n","").replace(" ","");
-                String telefono2 = jsonObject.getString(DBtareasController.telefono2).replace("\n","").replace(" ","");
-                String telefonos = "";
-                if(!telefono1.equals("null") && !telefono1.isEmpty()) {
-                    telefonos = "Tel1: " + telefono1 + "   ";
-                }
-                if(!telefono2.equals("null") && !telefono2.isEmpty()) {
-                    telefonos += "Tel2: " + telefono2;
-                }
-                if(!telefonos.equals("null") && !telefonos.isEmpty()) {
-                    if (telefonos.contains(telefono_selected.replace("\n",""))) {
-                        lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
+                tareas = team_or_personal_task_selection_screen_Activity.
+                        dBtareasController.get_all_tareas_from_Database();
+                for (int i = 0; i < tareas.size(); i++) {
+                    JSONObject jsonObject = null;
+                    try {
+                        jsonObject = new JSONObject(tareas.get(i));
+                        String telefono1 = jsonObject.getString(DBtareasController.telefono1).replace("\n", "").replace(" ", "");
+                        String telefono2 = jsonObject.getString(DBtareasController.telefono2).replace("\n", "").replace(" ", "");
+                        String telefonos = "";
+                        if (!telefono1.equals("null") && !telefono1.isEmpty()) {
+                            telefonos = "Tel1: " + telefono1 + "   ";
+                        }
+                        if (!telefono2.equals("null") && !telefono2.isEmpty()) {
+                            telefonos += "Tel2: " + telefono2;
+                        }
+                        if (!telefonos.equals("null") && !telefonos.isEmpty()) {
+                            if (telefonos.contains(telefono_selected.replace("\n", ""))) {
+                                lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
+                            }
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
                 }
             } catch (JSONException e) {
@@ -649,78 +667,106 @@ public class Screen_Advance_Filter extends AppCompatActivity {
     private void fillFilterNombreAbonadosEmpresa() {
         ArrayList<String> lista_desplegable = new ArrayList<String>();
         lista_ordenada_de_tareas.clear();
-        for (int i = 1; i <= team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas(); i++) {
+        if (team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas() > 0) {
+            ArrayList<String> tareas = new ArrayList<>();
             try {
-                JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.
-                        dBtareasController.get_one_tarea_from_Database(i));
-                String nombre_cliente = jsonObject.getString(DBtareasController.nombre_cliente).replace("\n","");
-                if(!nombre_cliente.equals("null") && !nombre_cliente.isEmpty()){
-                    if(!lista_desplegable.contains(nombre_cliente)) {
-                        lista_desplegable.add(nombre_cliente);
+                tareas = team_or_personal_task_selection_screen_Activity.
+                        dBtareasController.get_all_tareas_from_Database();
+                for (int i = 0; i < tareas.size(); i++) {
+                    JSONObject jsonObject = null;
+                    try {
+                        jsonObject = new JSONObject(tareas.get(i));
+                        String nombre_cliente = jsonObject.getString(DBtareasController.nombre_cliente).replace("\n", "");
+                        if (!nombre_cliente.equals("null") && !nombre_cliente.isEmpty()) {
+                            if (!lista_desplegable.contains(nombre_cliente)) {
+                                lista_desplegable.add(nombre_cliente);
+                            }
+                            lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                    lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
                 }
+                Collections.sort(lista_desplegable, String.CASE_INSENSITIVE_ORDER);
+                lista_desplegable.add(0, "Ninguno");
+                arrayAdapter_nombre_abonados = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista_desplegable) {
+                    public View getView(int position, View convertView, ViewGroup parent) {
+                        View v = super.getView(position, convertView, parent);
+                        ((TextView) v).setTextSize(16);
+                        return v;
+                    }
+
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        View v = super.getDropDownView(position, convertView, parent);
+                        ((TextView) v).setGravity(Gravity.CENTER);
+                        return v;
+                    }
+                };
+                spinner_filtro_nombre_abonado_screen_advance_filter.setAdapter(arrayAdapter_nombre_abonados);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
-        Collections.sort(lista_desplegable, String.CASE_INSENSITIVE_ORDER);
-        lista_desplegable.add(0,"Ninguno");
-        arrayAdapter_nombre_abonados = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista_desplegable){
-            public View getView(int position, View convertView,ViewGroup parent) {
-                View v = super.getView(position, convertView, parent);
-                ((TextView) v).setTextSize(16);
-                return v;
-            }
-            public View getDropDownView(int position, View convertView,ViewGroup parent) {
-                View v = super.getDropDownView(position, convertView,parent);
-                ((TextView) v).setGravity(Gravity.CENTER);
-                return v;
-            }
-        };
-        spinner_filtro_nombre_abonado_screen_advance_filter.setAdapter(arrayAdapter_nombre_abonados);
     }
     private void fillFilterTelefonos() {
         ArrayList<String> lista_desplegable = new ArrayList<String>();
         lista_ordenada_de_tareas.clear();
-        for (int i = 1; i <= team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas(); i++) {
+        if (team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas() > 0) {
+            ArrayList<String> tareas = new ArrayList<>();
             try {
-                JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.
-                        dBtareasController.get_one_tarea_from_Database(i));
-                String telefono1 = jsonObject.getString(DBtareasController.telefono1).replace("\n","").replace(" ","");
-                String telefono2 = jsonObject.getString(DBtareasController.telefono2).replace("\n","").replace(" ","");
-                String telefonos = "";
-                if(!telefono1.equals("null") && !telefono1.isEmpty()) {
-                    telefonos = "Tel1: " + telefono1 + "   ";
-                }
-                if(!telefono2.equals("null") && !telefono2.isEmpty()) {
-                    telefonos += "Tel2: " + telefono2;
-                }
-                if(!telefonos.equals("null") && !telefonos.isEmpty()){
-                    if(!lista_desplegable.contains(telefonos)) {
-                        lista_desplegable.add(telefonos);
+                tareas = team_or_personal_task_selection_screen_Activity.
+                        dBtareasController.get_all_tareas_from_Database();
+                for (int i = 0; i < tareas.size(); i++) {
+                    JSONObject jsonObject = null;
+                    try {
+                        jsonObject = new JSONObject(tareas.get(i));
+                        String telefono1 = jsonObject.getString(DBtareasController.telefono1).replace("\n", "").replace(" ", "");
+                        String telefono2 = jsonObject.getString(DBtareasController.telefono2).replace("\n", "").replace(" ", "");
+                        String telefonos = "";
+                        if (!telefono1.equals("null") && !telefono1.isEmpty()) {
+                            telefonos = "Tel1: " + telefono1 + "   ";
+                        }
+                        if (!telefono2.equals("null") && !telefono2.isEmpty()) {
+                            telefonos += "Tel2: " + telefono2;
+                        }
+                        if (!telefonos.equals("null") && !telefonos.isEmpty()) {
+                            if (!lista_desplegable.contains(telefonos)) {
+                                lista_desplegable.add(telefonos);
+                            }
+                            lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                    lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
                 }
+                Collections.sort(lista_desplegable, String.CASE_INSENSITIVE_ORDER);
+                lista_desplegable.add(0, "Ninguno");
+                arrayAdapter_numero_telefonos = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista_desplegable);
+                spinner_filtro_telefonos_screen_advance_filter.setAdapter(arrayAdapter_numero_telefonos);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
-        Collections.sort(lista_desplegable, String.CASE_INSENSITIVE_ORDER);
-        lista_desplegable.add(0,"Ninguno");
-        arrayAdapter_numero_telefonos = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista_desplegable);
-        spinner_filtro_telefonos_screen_advance_filter.setAdapter(arrayAdapter_numero_telefonos);
     }
 
     private void onSelectedNumeroSerie(String serie_selected) {
         lista_ordenada_de_tareas.clear();
-        for (int i = 1; i <= team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas(); i++) {
+        if (team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas() > 0) {
+            ArrayList<String> tareas = new ArrayList<>();
             try {
-                JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.
-                        dBtareasController.get_one_tarea_from_Database(i));
-                String serie = jsonObject.getString(DBtareasController.numero_serie_contador).replace("\n","").replace(" ","");
-                if(!serie.equals("null") && !serie.isEmpty() && serie.contains(serie_selected.replace("\n",""))){
-                    lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
+                tareas = team_or_personal_task_selection_screen_Activity.
+                        dBtareasController.get_all_tareas_from_Database();
+                for (int i = 0; i < tareas.size(); i++) {
+                    JSONObject jsonObject = null;
+                    try {
+                        jsonObject = new JSONObject(tareas.get(i));
+                        String serie = jsonObject.getString(DBtareasController.numero_serie_contador).replace("\n", "").replace(" ", "");
+                        if (!serie.equals("null") && !serie.isEmpty() && serie.contains(serie_selected.replace("\n", ""))) {
+                            lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -729,13 +775,22 @@ public class Screen_Advance_Filter extends AppCompatActivity {
     }
     private void onSelectedNumeroAbonado(String numero_selected) {
         lista_ordenada_de_tareas.clear();
-        for (int i = 1; i <= team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas(); i++) {
+        if (team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas() > 0) {
+            ArrayList<String> tareas = new ArrayList<>();
             try {
-                JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.
-                        dBtareasController.get_one_tarea_from_Database(i));
-                String abonados = jsonObject.getString(DBtareasController.numero_abonado).replace("\n","").replace(" ","");
-                if(!abonados.equals("null") && !abonados.isEmpty() && abonados.contains(numero_selected.replace("\n",""))){
-                    lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
+                tareas = team_or_personal_task_selection_screen_Activity.
+                        dBtareasController.get_all_tareas_from_Database();
+                for (int i = 0; i < tareas.size(); i++) {
+                    JSONObject jsonObject = null;
+                    try {
+                        jsonObject = new JSONObject(tareas.get(i));
+                        String abonados = jsonObject.getString(DBtareasController.numero_abonado).replace("\n", "").replace(" ", "");
+                        if (!abonados.equals("null") && !abonados.isEmpty() && abonados.contains(numero_selected.replace("\n", ""))) {
+                            lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -745,70 +800,98 @@ public class Screen_Advance_Filter extends AppCompatActivity {
     private void fillFilterNumerosAbonados() {
         ArrayList<String> lista_desplegable = new ArrayList<String>();
         lista_ordenada_de_tareas.clear();
-        for (int i = 1; i <= team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas(); i++) {
+        if (team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas() > 0) {
+            ArrayList<String> tareas = new ArrayList<>();
             try {
-                JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.
-                        dBtareasController.get_one_tarea_from_Database(i));
-                String abonados = jsonObject.getString(DBtareasController.numero_abonado).replace("\n","").replace(" ","");
-                if(!abonados.equals("null") && !abonados.isEmpty()){
-                    if(!lista_desplegable.contains(abonados)) {
-                        lista_desplegable.add(abonados);
-                    }
+                tareas = team_or_personal_task_selection_screen_Activity.
+                        dBtareasController.get_all_tareas_from_Database();
+                for (int i = 0; i < tareas.size(); i++) {
+                    JSONObject jsonObject = null;
+                    try {
+                        jsonObject = new JSONObject(tareas.get(i));
+                        String abonados = jsonObject.getString(DBtareasController.numero_abonado).replace("\n", "").replace(" ", "");
+                        if (!abonados.equals("null") && !abonados.isEmpty()) {
+                            if (!lista_desplegable.contains(abonados)) {
+                                lista_desplegable.add(abonados);
+                            }
 //                    openMessage("lista_desplegable", lista_desplegable.toString());
-                    lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
+                            lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
+                Collections.sort(lista_desplegable, String.CASE_INSENSITIVE_ORDER);
+                lista_desplegable.add(0, "Ninguno");
+                arrayAdapter_numero_abonados = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista_desplegable);
+                spinner_filtro_abonado_screen_advance_filter.setAdapter(arrayAdapter_numero_abonados);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
-        Collections.sort(lista_desplegable, String.CASE_INSENSITIVE_ORDER);
-        lista_desplegable.add(0,"Ninguno");
-        arrayAdapter_numero_abonados = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista_desplegable);
-        spinner_filtro_abonado_screen_advance_filter.setAdapter(arrayAdapter_numero_abonados);
     }
+
     private void fillFilterNumerosSerie() {
         ArrayList<String> lista_desplegable = new ArrayList<String>();
         lista_ordenada_de_tareas.clear();
-        for (int i = 1; i <= team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas(); i++) {
+        if (team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas() > 0) {
+            ArrayList<String> tareas = new ArrayList<>();
             try {
-                JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.
-                        dBtareasController.get_one_tarea_from_Database(i));
-                String serie = jsonObject.getString(DBtareasController.numero_serie_contador).replace("\n","").replace(" ","");
-                if(!serie.equals("null") && !serie.isEmpty()){
-                    if(!lista_desplegable.contains(serie)) {
-                        lista_desplegable.add(serie);
+                tareas = team_or_personal_task_selection_screen_Activity.
+                        dBtareasController.get_all_tareas_from_Database();
+                for (int i = 0; i < tareas.size(); i++) {
+                    JSONObject jsonObject = null;
+                    try {
+                        jsonObject = new JSONObject(tareas.get(i));
+                        String serie = jsonObject.getString(DBtareasController.numero_serie_contador).replace("\n", "").replace(" ", "");
+                        if (!serie.equals("null") && !serie.isEmpty()) {
+                            if (!lista_desplegable.contains(serie)) {
+                                lista_desplegable.add(serie);
+                            }
+                            lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                    lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
                 }
+                Collections.sort(lista_desplegable, String.CASE_INSENSITIVE_ORDER);
+                lista_desplegable.add(0, "Ninguno");
+                arrayAdapter_numero_serie = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista_desplegable);
+                spinner_filtro_serie_screen_advance_filter.setAdapter(arrayAdapter_numero_serie);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
-        Collections.sort(lista_desplegable, String.CASE_INSENSITIVE_ORDER);
-        lista_desplegable.add(0,"Ninguno");
-        arrayAdapter_numero_serie = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista_desplegable);
-        spinner_filtro_serie_screen_advance_filter.setAdapter(arrayAdapter_numero_serie);
     }
 
     private void onSelectedCalibre(String tipo_tarea_selected, String calibre_selected) {
         lista_ordenada_de_tareas.clear();
-        for (int i = 1; i <= team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas(); i++) {
+        if (team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas() > 0) {
+            ArrayList<String> tareas = new ArrayList<>();
             try {
-                JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.
-                        dBtareasController.get_one_tarea_from_Database(i));
-                String tipo_tarea = jsonObject.getString(DBtareasController.tipo_tarea).
-                        replace(" ","").replace("\n","");
-                String calibre = jsonObject.getString(DBtareasController.calibre_toma).
-                        replace(" ","").replace("\n","");
+                tareas = team_or_personal_task_selection_screen_Activity.
+                        dBtareasController.get_all_tareas_from_Database();
+                for (int i = 0; i < tareas.size(); i++) {
+                    JSONObject jsonObject = null;
+                    try {
+                        jsonObject = new JSONObject(tareas.get(i));
+                        String tipo_tarea = jsonObject.getString(DBtareasController.tipo_tarea).
+                                replace(" ", "").replace("\n", "");
+                        String calibre = jsonObject.getString(DBtareasController.calibre_toma).
+                                replace(" ", "").replace("\n", "");
 
-                if(mapaTiposDeTarea.containsKey(tipo_tarea)) {
-                    if (mapaTiposDeTarea.get(tipo_tarea).equals(tipo_tarea_selected) && calibre.equals(calibre_selected.replace("\n",""))) {
-                        lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
-                    }
-                }else if(tipo_tarea.contains("T") && tipo_tarea.contains("\"")){
-                    tipo_tarea = "BAJA O CORTE DE SUMINISTRO";
-                    if (tipo_tarea.equals(tipo_tarea_selected) && calibre.equals(calibre_selected.replace("\n",""))) {
-                        lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
+                        if (mapaTiposDeTarea.containsKey(tipo_tarea)) {
+                            if (mapaTiposDeTarea.get(tipo_tarea).equals(tipo_tarea_selected) && calibre.equals(calibre_selected.replace("\n", ""))) {
+                                lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
+                            }
+                        } else if (tipo_tarea.contains("T") && tipo_tarea.contains("\"")) {
+                            tipo_tarea = "BAJA O CORTE DE SUMINISTRO";
+                            if (tipo_tarea.equals(tipo_tarea_selected) && calibre.equals(calibre_selected.replace("\n", ""))) {
+                                lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
+                            }
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
                 }
             } catch (JSONException e) {
@@ -819,80 +902,98 @@ public class Screen_Advance_Filter extends AppCompatActivity {
     private void fillFilterTiposTareas() {
         ArrayList<String> lista_desplegable = new ArrayList<String>();
         lista_ordenada_de_tareas.clear();
-        for (int i = 1; i <= team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas(); i++) {
+        if (team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas() > 0) {
+            ArrayList<String> tareas = new ArrayList<>();
             try {
-                JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.
-                        dBtareasController.get_one_tarea_from_Database(i));
-                String tipo_tarea = jsonObject.getString(DBtareasController.tipo_tarea).replace("\n","").replace(" ","");
-                String calibre = jsonObject.getString(DBtareasController.calibre_toma).replace("\n","").replace(" ","");
-                if((tipo_tarea.equals("null") && calibre.isEmpty()) || (tipo_tarea.isEmpty() && calibre.isEmpty())
-                        || (tipo_tarea.isEmpty() && calibre.equals("null")) || (tipo_tarea.equals("null") && calibre.equals("null"))  ){
-                }else {
-                    String tipo = "";
-                    if(mapaTiposDeTarea.containsKey(tipo_tarea)) {
-                        tipo = mapaTiposDeTarea.get(tipo_tarea);
-                        if (tipo != null && !tipo.isEmpty() && !tipo.equals("null")) {
-                            if(!lista_desplegable.contains(tipo)) {
-                                lista_desplegable.add(tipo);
+                tareas = team_or_personal_task_selection_screen_Activity.
+                        dBtareasController.get_all_tareas_from_Database();
+                for (int i = 0; i < tareas.size(); i++) {
+                    JSONObject jsonObject = null;
+                    try {
+                        jsonObject = new JSONObject(tareas.get(i));
+                        String tipo_tarea = jsonObject.getString(DBtareasController.tipo_tarea).replace("\n", "").replace(" ", "");
+                        String calibre = jsonObject.getString(DBtareasController.calibre_toma).replace("\n", "").replace(" ", "");
+                        if ((tipo_tarea.equals("null") && calibre.isEmpty()) || (tipo_tarea.isEmpty() && calibre.isEmpty())
+                                || (tipo_tarea.isEmpty() && calibre.equals("null")) || (tipo_tarea.equals("null") && calibre.equals("null"))) {
+                        } else {
+                            String tipo = "";
+                            if (mapaTiposDeTarea.containsKey(tipo_tarea)) {
+                                tipo = mapaTiposDeTarea.get(tipo_tarea);
+                                if (tipo != null && !tipo.isEmpty() && !tipo.equals("null")) {
+                                    if (!lista_desplegable.contains(tipo)) {
+                                        lista_desplegable.add(tipo);
+                                    }
+                                    lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
+                                }
+                            } else if (tipo_tarea.contains("T") && tipo_tarea.contains("\"")) {
+                                tipo = "BAJA O CORTE DE SUMINISTRO";
+                                if (!lista_desplegable.contains(tipo)) {
+                                    lista_desplegable.add(tipo);
+                                }
+                                lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
                             }
-                            lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
                         }
-                    }else if(tipo_tarea.contains("T") && tipo_tarea.contains("\"")){
-                        tipo = "BAJA O CORTE DE SUMINISTRO";
-                        if(!lista_desplegable.contains(tipo)) {
-                            lista_desplegable.add(tipo);
-                        }
-                        lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
                 }
+                Collections.sort(lista_desplegable, String.CASE_INSENSITIVE_ORDER);
+                lista_desplegable.add(0, "Ninguno");
+                ArrayAdapter arrayAdapter_spinner = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, lista_desplegable);
+                spinner_filtro_tipo_tarea_screen_advance_filter.setAdapter(arrayAdapter_spinner);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
-        Collections.sort(lista_desplegable, String.CASE_INSENSITIVE_ORDER);
-        lista_desplegable.add(0,"Ninguno");
-        ArrayAdapter arrayAdapter_spinner = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, lista_desplegable);
-        spinner_filtro_tipo_tarea_screen_advance_filter.setAdapter(arrayAdapter_spinner);
     }
     private void fillFilterCalibres(String tipo_tarea_item) {
         ArrayList<String> lista_desplegable = new ArrayList<String>();
         lista_ordenada_de_tareas.clear();
-        for (int i = 1; i <= team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas(); i++) {
+        if (team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas() > 0) {
+            ArrayList<String> tareas = new ArrayList<>();
             try {
-                JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.
-                        dBtareasController.get_one_tarea_from_Database(i));
-                String tipo_tarea = jsonObject.getString(DBtareasController.tipo_tarea).replace("\n","").replace(" ","");
-                String calibre = jsonObject.getString(DBtareasController.calibre_toma).replace("\n","").replace(" ","");
-                if((tipo_tarea.equals("null") && calibre.isEmpty()) || (tipo_tarea.isEmpty() && calibre.isEmpty())
-                        || (tipo_tarea.isEmpty() && calibre.equals("null")) || (tipo_tarea.equals("null") && calibre.equals("null"))  ){
-                }else {
-                    String tipo = "";
-                    if(mapaTiposDeTarea.containsKey(tipo_tarea)) {
-                        tipo = mapaTiposDeTarea.get(tipo_tarea);
-                        if (tipo.equals(tipo_tarea_item)) {
-                            if (!lista_desplegable.contains(calibre)) {
-                                lista_desplegable.add(calibre);
+                tareas = team_or_personal_task_selection_screen_Activity.
+                        dBtareasController.get_all_tareas_from_Database();
+                for (int i = 0; i < tareas.size(); i++) {
+                    JSONObject jsonObject = null;
+                    try {
+                        jsonObject = new JSONObject(tareas.get(i));
+                        String tipo_tarea = jsonObject.getString(DBtareasController.tipo_tarea).replace("\n", "").replace(" ", "");
+                        String calibre = jsonObject.getString(DBtareasController.calibre_toma).replace("\n", "").replace(" ", "");
+                        if ((tipo_tarea.equals("null") && calibre.isEmpty()) || (tipo_tarea.isEmpty() && calibre.isEmpty())
+                                || (tipo_tarea.isEmpty() && calibre.equals("null")) || (tipo_tarea.equals("null") && calibre.equals("null"))) {
+                        } else {
+                            String tipo = "";
+                            if (mapaTiposDeTarea.containsKey(tipo_tarea)) {
+                                tipo = mapaTiposDeTarea.get(tipo_tarea);
+                                if (tipo.equals(tipo_tarea_item)) {
+                                    if (!lista_desplegable.contains(calibre)) {
+                                        lista_desplegable.add(calibre);
+                                    }
+                                    lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
+                                }
+                            } else if (tipo_tarea.contains("T") && tipo_tarea.contains("\"")) {
+                                tipo = "BAJA O CORTE DE SUMINISTRO";
+                                if (tipo.equals(tipo_tarea_item)) {
+                                    if (!lista_desplegable.contains(calibre)) {
+                                        lista_desplegable.add(calibre);
+                                    }
+                                    lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
+                                }
                             }
-                            lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
                         }
-                    }else if(tipo_tarea.contains("T") && tipo_tarea.contains("\"")){
-                        tipo = "BAJA O CORTE DE SUMINISTRO";
-                        if (tipo.equals(tipo_tarea_item)) {
-                            if (!lista_desplegable.contains(calibre)) {
-                                lista_desplegable.add(calibre);
-                            }
-                            lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
-                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
                 }
+                Collections.sort(lista_desplegable, String.CASE_INSENSITIVE_ORDER);
+                lista_desplegable.add(0, "Ninguno");
+                ArrayAdapter arrayAdapter_spinner = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista_desplegable);
+                spinner_filtro_calibre_screen_advance_filter.setAdapter(arrayAdapter_spinner);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
-        Collections.sort(lista_desplegable, String.CASE_INSENSITIVE_ORDER);
-        lista_desplegable.add(0,"Ninguno");
-        ArrayAdapter arrayAdapter_spinner = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista_desplegable);
-        spinner_filtro_calibre_screen_advance_filter.setAdapter(arrayAdapter_spinner);
     }
     public void hideAllFilters(){
         layout_filtro_direccion_screen_advance_filter.setVisibility(View.GONE);
@@ -903,109 +1004,146 @@ public class Screen_Advance_Filter extends AppCompatActivity {
 
     private void onSelectedDirection(String poblacion_selected, String calle_selected, String bis_selected) {
         lista_ordenada_de_tareas.clear();
-        for (int i = 1; i <= team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas(); i++) {
+        if (team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas() > 0) {
+            ArrayList<String> tareas = new ArrayList<>();
             try {
-                JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.
-                        dBtareasController.get_one_tarea_from_Database(i));
-                String poblacion = jsonObject.getString(DBtareasController.poblacion).
-                        replace(" ","").replace("\n","");
-                poblacion_selected = poblacion_selected.replace(" ","").replace("\n","");
-                String calle = jsonObject.getString(DBtareasController.calle).
-                        replace(" ","").replace("\n","");
-                calle_selected = calle_selected.replace(" ","").replace("\n","");
+                tareas = team_or_personal_task_selection_screen_Activity.
+                        dBtareasController.get_all_tareas_from_Database();
+                for (int i = 0; i < tareas.size(); i++) {
+                    JSONObject jsonObject = null;
+                    try {
+                        jsonObject = new JSONObject(tareas.get(i));
+                        String poblacion = jsonObject.getString(DBtareasController.poblacion).
+                                replace(" ", "").replace("\n", "");
+                        poblacion_selected = poblacion_selected.replace(" ", "").replace("\n", "");
+                        String calle = jsonObject.getString(DBtareasController.calle).
+                                replace(" ", "").replace("\n", "");
+                        calle_selected = calle_selected.replace(" ", "").replace("\n", "");
 
-                String Bis = getBis(jsonObject);
-                if(poblacion.equals(poblacion_selected) && calle.equals(calle_selected) && Bis.equals(bis_selected.replace("\n",""))){
-                    lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-    public void fillFilterPoblacion(){
-        ArrayList<String> lista_desplegable = new ArrayList<String>();
-        lista_ordenada_de_tareas.clear();
-        for (int i = 1; i <= team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas(); i++) {
-            try {
-                JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.
-                        dBtareasController.get_one_tarea_from_Database(i));
-                String poblacion = jsonObject.getString(DBtareasController.poblacion).replace("\n","");
-                if(!poblacion.equals("null") && !poblacion.isEmpty()){
-                    if(!lista_desplegable.contains(poblacion)) {
-                        lista_desplegable.add(poblacion);
+                        String Bis = getBis(jsonObject);
+                        if (poblacion.equals(poblacion_selected) && calle.equals(calle_selected) && Bis.equals(bis_selected.replace("\n", ""))) {
+                            lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                    lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
-        Collections.sort(lista_desplegable, String.CASE_INSENSITIVE_ORDER);
-        lista_desplegable.add(0,"Ninguno");
-        ArrayAdapter arrayAdapter_spinner = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista_desplegable);
-        spinner_filtro_poblacion_screen_advance_filter.setAdapter(arrayAdapter_spinner);
     }
-    public void fillFilterCalles(String poblacion_item){
+    public void fillFilterPoblacion() {
         ArrayList<String> lista_desplegable = new ArrayList<String>();
         lista_ordenada_de_tareas.clear();
-        for (int i = 1; i <= team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas(); i++) {
+        if (team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas() > 0) {
+            ArrayList<String> tareas = new ArrayList<>();
             try {
-                JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.
-                        dBtareasController.get_one_tarea_from_Database(i));
-                String poblacion = jsonObject.getString(DBtareasController.poblacion).replace("\n","").replace(" ", "");
-                if(!poblacion.equals("null") && !poblacion.isEmpty()){
-                    if(poblacion.equals(poblacion_item.replace(" ", ""))) {
-                        String calle = jsonObject.getString(DBtareasController.calle);
-                        if (!calle.equals("null") && !calle.isEmpty()) {
-                            if(!lista_desplegable.contains(calle)) {
-                                lista_desplegable.add(calle);
+                tareas = team_or_personal_task_selection_screen_Activity.
+                        dBtareasController.get_all_tareas_from_Database();
+                for (int i = 0; i < tareas.size(); i++) {
+                    JSONObject jsonObject = null;
+                    try {
+                        jsonObject = new JSONObject(tareas.get(i));
+                        String poblacion = jsonObject.getString(DBtareasController.poblacion).replace("\n", "");
+                        if (!poblacion.equals("null") && !poblacion.isEmpty()) {
+                            if (!lista_desplegable.contains(poblacion)) {
+                                lista_desplegable.add(poblacion);
                             }
                             lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
                         }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
                 }
+                Collections.sort(lista_desplegable, String.CASE_INSENSITIVE_ORDER);
+                lista_desplegable.add(0, "Ninguno");
+                ArrayAdapter arrayAdapter_spinner = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista_desplegable);
+                spinner_filtro_poblacion_screen_advance_filter.setAdapter(arrayAdapter_spinner);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
-        Collections.sort(lista_desplegable, String.CASE_INSENSITIVE_ORDER);
-        lista_desplegable.add(0,"Ninguno");
-        ArrayAdapter arrayAdapter_spinner = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista_desplegable);
-        spinner_filtro_calles_screen_advance_filter.setAdapter(arrayAdapter_spinner);
     }
-    public void fillFilterBis(String poblacion_item, String calle_item){
+    public void fillFilterCalles(String poblacion_item) {
+        ArrayList<String> lista_desplegable = new ArrayList<String>();
+        lista_ordenada_de_tareas.clear();
+        if (team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas() > 0) {
+            ArrayList<String> tareas = new ArrayList<>();
+            try {
+                tareas = team_or_personal_task_selection_screen_Activity.
+                        dBtareasController.get_all_tareas_from_Database();
+                for (int i = 0; i < tareas.size(); i++) {
+                    JSONObject jsonObject = null;
+                    try {
+                        jsonObject = new JSONObject(tareas.get(i));
+                        String poblacion = jsonObject.getString(DBtareasController.poblacion).replace("\n", "").replace(" ", "");
+                        if (!poblacion.equals("null") && !poblacion.isEmpty()) {
+                            if (poblacion.equals(poblacion_item.replace(" ", ""))) {
+                                String calle = jsonObject.getString(DBtareasController.calle);
+                                if (!calle.equals("null") && !calle.isEmpty()) {
+                                    if (!lista_desplegable.contains(calle)) {
+                                        lista_desplegable.add(calle);
+                                    }
+                                    lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
+                                }
+                            }
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                Collections.sort(lista_desplegable, String.CASE_INSENSITIVE_ORDER);
+                lista_desplegable.add(0, "Ninguno");
+                ArrayAdapter arrayAdapter_spinner = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista_desplegable);
+                spinner_filtro_calles_screen_advance_filter.setAdapter(arrayAdapter_spinner);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    public void fillFilterBis(String poblacion_item, String calle_item) {
         ArrayList<String> lista_desplegable = new ArrayList<String>();
         ArrayList<String> lista_tareas = new ArrayList<String>();
         lista_ordenada_de_tareas.clear();
-        for (int i = 1; i <= team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas(); i++) {
+        if (team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas() > 0) {
+            ArrayList<String> tareas = new ArrayList<>();
             try {
-                JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.
-                        dBtareasController.get_one_tarea_from_Database(i));
-                String poblacion = jsonObject.getString(DBtareasController.poblacion).
-                        replace(" ","").replace("\n","");
-                String calle = jsonObject.getString(DBtareasController.calle).
-                        replace(" ","").replace("\n","");;
+                tareas = team_or_personal_task_selection_screen_Activity.
+                        dBtareasController.get_all_tareas_from_Database();
+                for (int i = 0; i < tareas.size(); i++) {
+                    JSONObject jsonObject = null;
+                    try {
+                        jsonObject = new JSONObject(tareas.get(i));
+                        String poblacion = jsonObject.getString(DBtareasController.poblacion).
+                                replace(" ", "").replace("\n", "");
+                        String calle = jsonObject.getString(DBtareasController.calle).
+                                replace(" ", "").replace("\n", "");
+                        ;
 
-                if(!poblacion.equals("null") && !poblacion.isEmpty() && !calle.equals("null") && !calle.isEmpty()){
-                    if(poblacion.equals(poblacion_item.replace(" ", "")) && calle.equals(calle_item.replace(" ", "")) ) {
-                        String Bis = getBis(jsonObject);
-                        if (!Bis.contains("null") && !Bis.isEmpty() ){
-                            if(!lista_desplegable.contains(Bis)) {
-                                lista_desplegable.add(Bis);
+                        if (!poblacion.equals("null") && !poblacion.isEmpty() && !calle.equals("null") && !calle.isEmpty()) {
+                            if (poblacion.equals(poblacion_item.replace(" ", "")) && calle.equals(calle_item.replace(" ", ""))) {
+                                String Bis = getBis(jsonObject);
+                                if (!Bis.contains("null") && !Bis.isEmpty()) {
+                                    if (!lista_desplegable.contains(Bis)) {
+                                        lista_desplegable.add(Bis);
+                                    }
+                                    lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
+                                }
                             }
-                            lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
                         }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
                 }
+                Collections.sort(lista_desplegable, String.CASE_INSENSITIVE_ORDER);
+                lista_desplegable.add(0, "Ninguno");
+                ArrayAdapter arrayAdapter_spinner = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista_desplegable);
+                spinner_filtro_bis_screen_screen_advance_filter.setAdapter(arrayAdapter_spinner);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
-        Collections.sort(lista_desplegable, String.CASE_INSENSITIVE_ORDER);
-        lista_desplegable.add(0,"Ninguno");
-        ArrayAdapter arrayAdapter_spinner = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista_desplegable);
-        spinner_filtro_bis_screen_screen_advance_filter.setAdapter(arrayAdapter_spinner);
     }
 
     public void fillTareasList(){
@@ -1051,37 +1189,47 @@ public class Screen_Advance_Filter extends AppCompatActivity {
     }
 
     public void cargarTodasEnLista(){
-        if(team_or_personal_task_selection_screen_Activity.dBtareasController.databasefileExists(this)){
-            if(team_or_personal_task_selection_screen_Activity.dBtareasController.checkForTableExists()){
+        if(team_or_personal_task_selection_screen_Activity.dBtareasController.databasefileExists(this)) {
+            if (team_or_personal_task_selection_screen_Activity.dBtareasController.checkForTableExists()) {
                 lista_ordenada_de_tareas_inicial.clear();
-                for (int i = 1; i <= team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas(); i++) {
+                if (team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas() > 0) {
+                    ArrayList<String> tareas = new ArrayList<>();
                     try {
-                        JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.dBtareasController.get_one_tarea_from_Database(i));
-                        lista_ordenada_de_tareas_inicial.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
+                        tareas = team_or_personal_task_selection_screen_Activity.
+                                dBtareasController.get_all_tareas_from_Database();
+                        for (int i = 0; i < tareas.size(); i++) {
+                            JSONObject jsonObject = null;
+                            try {
+                                jsonObject = new JSONObject(tareas.get(i));
+                                lista_ordenada_de_tareas_inicial.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
 
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        Collections.sort(lista_ordenada_de_tareas_inicial);
+                        for (int i = 0; i < lista_ordenada_de_tareas_inicial.size(); i++) {
+                            lista_contadores.add("\nDirección:  " + lista_ordenada_de_tareas_inicial.get(i).getDireccion()
+//                            +"         Cita:  "+lista_ordenada_de_tareas.get(i).getCita()
+                                    + "Abonado:  " + lista_ordenada_de_tareas_inicial.get(i).getAbonado());
+                            lista_filtro_direcciones.add("\nDirección:  " + lista_ordenada_de_tareas_inicial.get(i).getDireccion()
+                                    + " Abonado:  " + lista_ordenada_de_tareas_inicial.get(i).getAbonado());
+                            lista_filtro_Tareas.add("\n      Tarea:  " + lista_ordenada_de_tareas_inicial.get(i).getTipo_tarea() + "   Calibre:  " + lista_ordenada_de_tareas_inicial.get(i).getCalibre()
+                                    + "Abonado:  " + lista_ordenada_de_tareas_inicial.get(i).getAbonado());
+                            lista_filtro_abonado.add("\n  Abonado:  " + lista_ordenada_de_tareas_inicial.get(i).getAbonado() + "Telefono 1:  " + lista_ordenada_de_tareas_inicial.get(i).getTelefono1()
+                                    + "Telefono 2:  " + lista_ordenada_de_tareas_inicial.get(i).getTelefono2());
+                            lista_filtro_numero_serie.add("\n       Número de Serie:  " + lista_ordenada_de_tareas_inicial.get(i).getNumero_serie_contador()
+                                    // +"\n              Año o Prefijo:  "+lista_ordenada_de_tareas_inicial.get(i).getAnno_contador()
+                                    + "\nNúmero de Abonado:  " + lista_ordenada_de_tareas_inicial.get(i).getNumero_abonado());
+//                    lista_filtro_Citas.add("\n        Cita:  "+lista_ordenada_de_tareas_inicial.get(i).getCita()
+//                            +"Abonado:  "+lista_ordenada_de_tareas_inicial.get(i).getAbonado());
+                        }
+                        arrayAdapter = new ArrayAdapter(this, R.layout.list_text_view, lista_contadores);
+                        listView_contadores_screen_advance_filter.setAdapter(arrayAdapter);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
-                Collections.sort(lista_ordenada_de_tareas_inicial);
-                for(int i=0; i < lista_ordenada_de_tareas_inicial.size(); i++){
-                    lista_contadores.add("\nDirección:  "+lista_ordenada_de_tareas_inicial.get(i).getDireccion()
-//                            +"         Cita:  "+lista_ordenada_de_tareas.get(i).getCita()
-                            +"Abonado:  "+lista_ordenada_de_tareas_inicial.get(i).getAbonado());
-                    lista_filtro_direcciones.add("\nDirección:  "+lista_ordenada_de_tareas_inicial.get(i).getDireccion()
-                            +" Abonado:  "+lista_ordenada_de_tareas_inicial.get(i).getAbonado());
-                    lista_filtro_Tareas.add("\n      Tarea:  "+lista_ordenada_de_tareas_inicial.get(i).getTipo_tarea()+"   Calibre:  "+lista_ordenada_de_tareas_inicial.get(i).getCalibre()
-                            +"Abonado:  "+lista_ordenada_de_tareas_inicial.get(i).getAbonado());
-                    lista_filtro_abonado.add("\n  Abonado:  "+lista_ordenada_de_tareas_inicial.get(i).getAbonado()+"Telefono 1:  "+lista_ordenada_de_tareas_inicial.get(i).getTelefono1()
-                            +"Telefono 2:  "+lista_ordenada_de_tareas_inicial.get(i).getTelefono2());
-                    lista_filtro_numero_serie.add("\n       Número de Serie:  "+lista_ordenada_de_tareas_inicial.get(i).getNumero_serie_contador()
-                           // +"\n              Año o Prefijo:  "+lista_ordenada_de_tareas_inicial.get(i).getAnno_contador()
-                            +"\nNúmero de Abonado:  "+lista_ordenada_de_tareas_inicial.get(i).getNumero_abonado());
-//                    lista_filtro_Citas.add("\n        Cita:  "+lista_ordenada_de_tareas_inicial.get(i).getCita()
-//                            +"Abonado:  "+lista_ordenada_de_tareas_inicial.get(i).getAbonado());
-                }
-                arrayAdapter = new ArrayAdapter(this, R.layout.list_text_view, lista_contadores);
-                listView_contadores_screen_advance_filter.setAdapter(arrayAdapter);
             }
         }
     }

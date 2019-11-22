@@ -36,7 +36,7 @@ import java.util.List;
 
 public class BackgroundWorker extends AsyncTask<String, Void, String> {
 
-    public static boolean server_online_or_wamp = true;  //true internet, false wamp
+    public static boolean server_online_or_wamp = false;  //true internet, false wamp
 
     Context context;
 

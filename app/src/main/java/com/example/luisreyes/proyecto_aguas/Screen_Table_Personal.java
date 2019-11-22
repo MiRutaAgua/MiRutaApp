@@ -302,23 +302,33 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
         ArrayList<MyCounter> lista_ordenada_de_contadores = new ArrayList<>();
         if(team_or_personal_task_selection_screen_Activity.dBtareasController.databasefileExists(this)){
             if(team_or_personal_task_selection_screen_Activity.dBtareasController.checkForTableExists()){
-                for (int i = 1; i <= team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas(); i++) {
+                if (team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas() > 0) {
+                    ArrayList<String> tareas = new ArrayList<>();
                     try {
-                        JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.dBtareasController.get_one_tarea_from_Database(i));
-                        if(jsonObject.getString(DBtareasController.operario).trim().equals(Screen_Login_Activity.operario_JSON.getString(DBoperariosController.usuario))) {
-                            String status = "";
+                        tareas = team_or_personal_task_selection_screen_Activity.
+                                dBtareasController.get_all_tareas_from_Database();
+                        for (int i = 0; i < tareas.size(); i++) {
+                            JSONObject jsonObject = null;
                             try {
-                                status = jsonObject.getString(DBtareasController.status_tarea);
-                                if (!status.contains("DONE") && !status.contains("done")) {
-                                    String cita = jsonObject.getString(DBtareasController.nuevo_citas).trim();
-                                    if (!cita.isEmpty() && !cita.equals("null") && !cita.equals("NULL") && !cita.contains("No hay cita")) {
-                                        if (cita.contains(cita_seleccionada)) {
-                                            lista_ordenada_de_contadores.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
+                                jsonObject = new JSONObject(tareas.get(i));
+                                if (jsonObject.getString(DBtareasController.operario).trim().equals(Screen_Login_Activity.operario_JSON.getString(DBoperariosController.usuario))) {
+                                    String status = "";
+                                    try {
+                                        status = jsonObject.getString(DBtareasController.status_tarea);
+                                        if (!status.contains("DONE") && !status.contains("done")) {
+                                            String cita = jsonObject.getString(DBtareasController.nuevo_citas).trim();
+                                            if (!cita.isEmpty() && !cita.equals("null") && !cita.equals("NULL") && !cita.contains("No hay cita")) {
+                                                if (cita.contains(cita_seleccionada)) {
+                                                    lista_ordenada_de_contadores.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
+                                                }
+                                            }
                                         }
+                                    } catch (JSONException e) {
+                                        Toast.makeText(getApplicationContext(), "No se pudo obtener estado se tarea\n" + e.toString(), Toast.LENGTH_LONG).show();
+                                        e.printStackTrace();
                                     }
                                 }
                             } catch (JSONException e) {
-                                Toast.makeText(getApplicationContext(), "No se pudo obtener estado se tarea\n" + e.toString(), Toast.LENGTH_LONG).show();
                                 e.printStackTrace();
                             }
                         }
@@ -416,32 +426,42 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
             if(team_or_personal_task_selection_screen_Activity.dBtareasController.databasefileExists(this)){
                 if(team_or_personal_task_selection_screen_Activity.dBtareasController.checkForTableExists()){
                     lista_ordenada_de_tareas.clear();
-                    for (int i = 1; i <= team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas(); i++) {
+                    if (team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas() > 0) {
+                        ArrayList<String> tareas = new ArrayList<>();
                         try {
-                            JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.dBtareasController.get_one_tarea_from_Database(i));
+                            tareas = team_or_personal_task_selection_screen_Activity.
+                                    dBtareasController.get_all_tareas_from_Database();
+                            for (int i = 0; i < tareas.size(); i++) {
+                                JSONObject jsonObject = null;
+                                try {
+                                    jsonObject = new JSONObject(tareas.get(i));
 
-                            if(Screen_Table_Team.checkIfDateisDeprecated(jsonObject)){
-                                Log.e("Cita Obsoleta", jsonObject.getString(DBtareasController.nuevo_citas));
-                                alguna_cita_obsoleta = true;
-                            }
-                            if(!team_or_personal_task_selection_screen_Activity.checkGestor(jsonObject)){
-                                continue;
-                            }
-                            String status="";
-                            try {
-                                status = jsonObject.getString(DBtareasController.status_tarea);
-                                if(!status.contains("DONE") && !status.contains("done")) {
-                                    if(jsonObject.getString(DBtareasController.operario).equals(
-                                            Screen_Login_Activity.operario_JSON.getString("usuario"))) {
-
-                                        lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
+                                    if (Screen_Table_Team.checkIfDateisDeprecated(jsonObject)) {
+                                        Log.e("Cita Obsoleta", jsonObject.getString(DBtareasController.nuevo_citas));
+                                        alguna_cita_obsoleta = true;
                                     }
-                                }
-                            } catch (JSONException e) {
-                                Toast.makeText(getApplicationContext(), "No se pudo obtener estado se tarea\n"+ e.toString(), Toast.LENGTH_LONG).show();
-                                e.printStackTrace();
-                            }
+                                    if (!team_or_personal_task_selection_screen_Activity.checkGestor(jsonObject)) {
+                                        continue;
+                                    }
+                                    String status = "";
+                                    try {
+                                        status = jsonObject.getString(DBtareasController.status_tarea);
+                                        if (!status.contains("DONE") && !status.contains("done")) {
+                                            if (jsonObject.getString(DBtareasController.operario).equals(
+                                                    Screen_Login_Activity.operario_JSON.getString("usuario"))) {
 
+                                                lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
+                                            }
+                                        }
+                                    } catch (JSONException e) {
+                                        Toast.makeText(getApplicationContext(), "No se pudo obtener estado se tarea\n" + e.toString(), Toast.LENGTH_LONG).show();
+                                        e.printStackTrace();
+                                    }
+
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -696,14 +716,24 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
     public void subirTareasSiExisten() throws JSONException {
         if (team_or_personal_task_selection_screen_Activity.dBtareasController.checkForTableExists()) {
             tareas_to_upload.clear();
-            for (int i = 1; i <= team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas(); i++) {
+            if (team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas() > 0) {
+                ArrayList<String> tareas = new ArrayList<>();
                 try {
-                    JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.dBtareasController.get_one_tarea_from_Database(i));
-                    String status_tarea = jsonObject.getString(DBtareasController.status_tarea);
-                    if(status_tarea.contains("TO_UPLOAD")){
-                        tareas_to_upload.add(jsonObject.getString(DBtareasController.numero_interno));
+                    tareas = team_or_personal_task_selection_screen_Activity.
+                            dBtareasController.get_all_tareas_from_Database();
+                    for (int i = 0; i < tareas.size(); i++) {
+                        JSONObject jsonObject = null;
+                        try {
+                            jsonObject = new JSONObject(tareas.get(i));
+                            String status_tarea = jsonObject.getString(DBtareasController.status_tarea);
+                            if (status_tarea.contains("TO_UPLOAD")) {
+                                tareas_to_upload.add(jsonObject.getString(DBtareasController.numero_interno));
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
-                } catch (JSONException e) {
+                }catch (JSONException e) {
                     e.printStackTrace();
                 }
             }

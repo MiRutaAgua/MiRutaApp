@@ -585,7 +585,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                     }else{
                         boolean error = saveTaskLocal();
                         if(!error) {
-                            Toast.makeText(Screen_Validate.this, "No hay conexion se guardaron los datos en el telefono", Toast.LENGTH_LONG).show();
+                            Toast.makeText(Screen_Validate.this, "Se guardaron los datos en el telefono", Toast.LENGTH_LONG).show();
                             Intent intent_open_battery_counter = new Intent(this, team_or_personal_task_selection_screen_Activity.class);
                             startActivity(intent_open_battery_counter);
                             this.finish();
