@@ -372,12 +372,42 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
                     }
                     @Override
                     public void onAnimationEnd(Animation arg0) {
-                        layout_filtro_accept_filter_screen_advance_filter.setVisibility(View.GONE);
-                        textView_listView_type.setText("CALLES");
-                        layout_listView_contadores_screen_advance_filter.setVisibility(View.VISIBLE);
+                        String poblacion = textView_poblacion_screen_filter_tareas.getText().toString();
+                        if(poblacion!= null && !poblacion.isEmpty() && !poblacion.equals("...")) {
+                            onSelectedPoblacion(poblacion);
+                        }
                     }
                 });
                 textView_calle_screen_filter_tareas.startAnimation(myAnim);
+            }
+        });
+
+        textView_poblacion_screen_filter_tareas.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
+                final Animation myAnim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        hideAllFilters();
+                        layout_filtro_direccion_screen_advance_filter.setVisibility(View.VISIBLE);
+                        fillFilterPoblacion();
+                    }
+                });
+                textView_poblacion_screen_filter_tareas.startAnimation(myAnim);
             }
         });
 
@@ -950,7 +980,13 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
             for(int i=0; i< layout_filtro_checkboxes_screen_advance_filter.getChildCount(); i++){
                 CheckBox cb = ((CheckBox)layout_filtro_checkboxes_screen_advance_filter.getChildAt(i));
                 if(cb.isChecked()) {
-                    calibres_selected.add(cb.getText().toString());
+                    String string = cb.getText().toString();
+                    if(string.equals("0")){
+                        calibres_selected.add("");
+                    }
+                    else {
+                        calibres_selected.add(string);
+                    }
                 }
             }
             lista_ordenada_de_tareas.clear();
@@ -1430,22 +1466,49 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
                                 if (mapaTiposDeTarea.containsKey(tipo_tarea)) {
                                     tipo = mapaTiposDeTarea.get(tipo_tarea);
                                     if (tipo.equals(tipo_tarea_item)) {
-                                        if (!lista_desplegable.contains(Integer.parseInt(calibre))) {
-                                            lista_desplegable.add(Integer.parseInt(calibre));
+                                        Integer integer= null;
+                                        try {
+                                            integer = Integer.parseInt(calibre);
+                                            if (!lista_desplegable.contains(integer)) {
+                                                lista_desplegable.add(Integer.parseInt(calibre));
+                                            }
+                                        } catch (NumberFormatException e) {
+                                            if (!lista_desplegable.contains(0)) {
+                                                lista_desplegable.add(0);
+                                            }
+                                            e.printStackTrace();
                                         }
                                     }
                                 } else if (tipo_tarea.contains("T") && tipo_tarea.contains("\"")) {
                                     tipo = "BAJA O CORTE DE SUMINISTRO";
                                     if (tipo.equals(tipo_tarea_item)) {
-                                        if (!lista_desplegable.contains(Integer.parseInt(calibre))) {
-                                            lista_desplegable.add(Integer.parseInt(calibre));
+                                        Integer integer= null;
+                                        try {
+                                            integer = Integer.parseInt(calibre);
+                                            if (!lista_desplegable.contains(integer)) {
+                                                lista_desplegable.add(Integer.parseInt(calibre));
+                                            }
+                                        } catch (NumberFormatException e) {
+                                            if (!lista_desplegable.contains(0)) {
+                                                lista_desplegable.add(0);
+                                            }
+                                            e.printStackTrace();
                                         }
                                     }
                                 } else if (tipo_tarea.contains("LFTD")) {
                                     tipo = "LIMPIEZA DE FILTRO Y TOMA DE DATOS";
                                     if (tipo.equals(tipo_tarea_item)) {
-                                        if (!lista_desplegable.contains(Integer.parseInt(calibre))) {
-                                            lista_desplegable.add(Integer.parseInt(calibre));
+                                        Integer integer= null;
+                                        try {
+                                            integer = Integer.parseInt(calibre);
+                                            if (!lista_desplegable.contains(integer)) {
+                                                lista_desplegable.add(Integer.parseInt(calibre));
+                                            }
+                                        } catch (NumberFormatException e) {
+                                            if (!lista_desplegable.contains(0)) {
+                                                lista_desplegable.add(0);
+                                            }
+                                            e.printStackTrace();
                                         }
                                     }
                                 }
@@ -1495,12 +1558,14 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
                             String tipo_tarea = jsonObject.getString(DBtareasController.tipo_tarea).trim();
                             String calibre = jsonObject.getString(DBtareasController.calibre_toma).trim();
                             if ((tipo_tarea.equals("null") && calibre.isEmpty()) || (tipo_tarea.isEmpty() && calibre.isEmpty())
-                                    || (tipo_tarea.isEmpty() && calibre.equals("null")) || (tipo_tarea.equals("null") && calibre.equals("null"))) {
+                                    || (tipo_tarea.isEmpty() && calibre.equals("null"))  || (tipo_tarea.isEmpty() && calibre.equals("NULL"))
+                                    || (tipo_tarea.equals("null") && calibre.equals("null"))||  (tipo_tarea.equals("NULL") && calibre.isEmpty())
+                                    || (tipo_tarea.equals("NULL") && calibre.equals("NULL"))) {
                             } else {
                                 String tipo = "";
                                 if (mapaTiposDeTarea.containsKey(tipo_tarea)) {
                                     tipo = mapaTiposDeTarea.get(tipo_tarea);
-                                    if (tipo != null && !tipo.isEmpty() && !tipo.equals("null")) {
+                                    if (tipo != null && !tipo.isEmpty() && !tipo.equals("null") && !tipo.equals("NULL")) {
                                         if (!lista_desplegable.contains(tipo)) {
                                             lista_desplegable.add(tipo);
                                         }

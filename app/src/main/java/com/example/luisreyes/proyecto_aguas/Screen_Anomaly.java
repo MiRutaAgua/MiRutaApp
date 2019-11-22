@@ -442,6 +442,8 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
             }
             //it.remove(); // avoids a ConcurrentModificationException
         }
+        Collections.sort(lista_desplegable_clases);
+        lista_desplegable_clases.add(0,"NINGUNA");
 
         ArrayList<String> lista_desplegable_marcas = new ArrayList<>();
         it = mapaTiposDeMarca.entrySet().iterator();
@@ -505,7 +507,7 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
                 String selected = spinner_clase_contador_screen_anomaly
                         .getSelectedItem().toString();
 //                Toast.makeText(getApplicationContext(), "Selected: "+ selected, Toast.LENGTH_LONG).show();
-                if(!selected.isEmpty() && selected!=null && !selected.equals("NINGUNO")) {
+                if(!selected.isEmpty() && selected!=null && !selected.equals("NINGUNA")) {
                     if(selected.contains(" - ")) {
                         String codigo = selected.split(" - ")[0];
                         String descripcion = selected.split(" - ")[1];

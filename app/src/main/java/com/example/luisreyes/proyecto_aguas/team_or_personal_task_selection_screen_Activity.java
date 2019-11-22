@@ -268,50 +268,50 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
             }
         });
 
-//        textView_sync_team_or_personal_task_screen.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if(sync_pressed){
-//                    return;
-//                }
-//                sync_pressed = true;
-//                Screen_Login_Activity.playOnOffSound(getApplicationContext());
-//                final Animation myAnim = AnimationUtils.loadAnimation(team_or_personal_task_selection_screen_Activity.this, R.anim.bounce);
-//                // Use bounce interpolator with amplitude 0.2 and frequency 20
-//                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
-//                myAnim.setInterpolator(interpolator);
-//                myAnim.setAnimationListener(new Animation.AnimationListener() {
-//                    @Override
-//                    public void onAnimationStart(Animation arg0) {
-//                        // TODO Auto-generated method stub
-////                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
-//                    }
-//                    @Override
-//                    public void onAnimationRepeat(Animation arg0) {
-//                        // TODO Auto-generated method stub
-//                    }
-//                    @Override
-//                    public void onAnimationEnd(Animation arg0) {
-//                        if(checkConection()){
-//                            try {
-//                                Log.e("checkConection", "Subiendo");
-//                                subirTareasSiExisten();
-//                            } catch (JSONException e) {
-//                                sync_pressed = false;
-//                                Log.e("Error subiendo", e.toString());
-//                                Toast.makeText(getApplicationContext(), "Error subiendo", Toast.LENGTH_LONG).show();
-//                                e.printStackTrace();
-//                            }
-//                        }else{
-//                            sync_pressed = false;
-//                            Toast.makeText(getApplicationContext(), "No hay conexión a internet", Toast.LENGTH_LONG).show();
-//                            Log.e("Error conexion", "No hay conexión a internet");
-//                        }
-//                    }
-//                });
-//                textView_sync_team_or_personal_task_screen.startAnimation(myAnim);
-//            }
-//        });
+        textView_sync_team_or_personal_task_screen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(sync_pressed){
+                    return;
+                }
+                sync_pressed = true;
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
+                final Animation myAnim = AnimationUtils.loadAnimation(team_or_personal_task_selection_screen_Activity.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        if(checkConection()){
+                            try {
+                                Log.e("checkConection", "Subiendo");
+                                subirTareasSiExisten();
+                            } catch (JSONException e) {
+                                sync_pressed = false;
+                                Log.e("Error subiendo", e.toString());
+                                Toast.makeText(getApplicationContext(), "Error subiendo", Toast.LENGTH_LONG).show();
+                                e.printStackTrace();
+                            }
+                        }else{
+                            sync_pressed = false;
+                            Toast.makeText(getApplicationContext(), "No hay conexión a internet", Toast.LENGTH_LONG).show();
+                            Log.e("Error conexion", "No hay conexión a internet");
+                        }
+                    }
+                });
+                textView_sync_team_or_personal_task_screen.startAnimation(myAnim);
+            }
+        });
         button_sync_team_or_personal_task_screen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -722,6 +722,12 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+                }
+                else{
+                    textView_sync_team_or_personal_task_screen.setText("NO HAY TAREAS");
+                    //textView_sync_team_or_personal_task_screen.setTextColor(getResources().getColor(R.color.colorBlueAppRuta));
+                    button_sync_team_or_personal_task_screen.setBackground(getResources().
+                            getDrawable(R.drawable.ic_sync_problem_blue_24dp));
                 }
             }
         }
