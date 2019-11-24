@@ -936,7 +936,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                                 }
                                 else {
                                     String date_MySQL_string = null;
-                                    Log.e("Tareas existe: ", jsonObject.getString(DBtareasController.numero_interno));
+//                                    Log.e("Tareas existe: ", jsonObject.getString(DBtareasController.numero_interno));
                                     try {
                                         date_MySQL_string = jsonObject.getString(DBtareasController.date_time_modified).trim();
                                         Date date_MySQL=null;
@@ -955,7 +955,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                                         if (date_SQLite == null) {
                                             if (date_MySQL != null) {
                                                 team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea(jsonObject, DBtareasController.numero_interno);
-                                                Log.e("Updating", DBtareasController.numero_interno);
+                                                Log.e("Updating", jsonObject.getString(DBtareasController.numero_interno));
                                             } else {
                                                 Toast.makeText(this, "Fechas ambas nulas", Toast.LENGTH_LONG).show();
                                             }
@@ -978,7 +978,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
 
                                             if (date_MySQL.after(date_SQLite)) {//MySQL mas actualizada
                                                 team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea(jsonObject,  DBtareasController.numero_interno);
-                                                Log.e("Updating", DBtareasController.numero_interno);
+                                                Log.e("Updating", jsonObject.getString(DBtareasController.numero_interno));
                                             } else if (date_MySQL.before(date_SQLite)) {//SQLite mas actualizada
                                                 //aqui actualizar MySQL con la DB SQLite
                                                 try {

@@ -452,7 +452,7 @@
                 <ImageView
                     android:id="@+id/imageButton_firma_cliente_screen_validate"
                     android:layout_width="278dp"
-                    android:layout_height="110dp"
+                    android:layout_height="145dp"
                     android:src="@drawable/screen_validate_firma_imagen" />
             </LinearLayout>
 

@@ -122,6 +122,9 @@ public class Screen_Filter_Results extends AppCompatActivity {
                         .getSelectedItem().toString();
                 String calibre_selected = spinner_filtro_calibre_screen_filter_results
                         .getSelectedItem().toString();
+                if(calibre_selected.equals("?")){
+                    calibre_selected = " ";
+                }
                 if(!tarea_selected.isEmpty() && tarea_selected!=null) {
                     fillListWithTareasAndCalibres(tarea_selected, calibre_selected);
                     Log.e("Selecciona Tipo", tarea_selected);
@@ -136,9 +139,12 @@ public class Screen_Filter_Results extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 String calibre_selected = spinner_filtro_calibre_screen_filter_results
                         .getSelectedItem().toString();
+                if(calibre_selected.equals("?")){
+                    calibre_selected = " ";
+                }
                 String tarea_selected = spinner_filtro_tipo_tarea_screen_filter_results
                         .getSelectedItem().toString();
-                if(!calibre_selected.isEmpty() && calibre_selected!=null) {
+                if(calibre_selected!=null) {
                     fillListWithTareasAndCalibres(tarea_selected, calibre_selected);
                     Log.e("Selecciona Calibre", calibre_selected+"mm");
                 }
@@ -328,8 +334,12 @@ public class Screen_Filter_Results extends AppCompatActivity {
                             if (!status.contains("DONE") && !status.contains("done")) {
                                 if (jsonObject.getString(DBtareasController.codigo_de_geolocalizacion).trim().contains(geolocalizacion)) {
                                     lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
-                                    if (!calibres_selected.contains(jsonObject.getString(DBtareasController.calibre_toma).trim())) {
-                                        calibres_selected.add(jsonObject.getString(DBtareasController.calibre_toma).trim());
+                                    String cal =jsonObject.getString(DBtareasController.calibre_toma).trim();
+                                    if(cal.isEmpty()){
+                                        cal = "?";
+                                    }
+                                    if (!calibres_selected.contains(cal)) {
+                                        calibres_selected.add(cal);
                                     }
                                     String tipo = jsonObject.getString(DBtareasController.tipo_tarea);
                                     if (mapaTiposDeTarea.containsKey(tipo)) {
@@ -501,6 +511,7 @@ public class Screen_Filter_Results extends AppCompatActivity {
         }else if(!tarea_selected.equals("TODAS") && !calibre_selected.equals("TODOS") ){
             tarea_selected = getTipoTareaFromValue(tarea_selected);
             Log.e("Tarea Selected", tarea_selected);
+            Log.e("calibre Selected", calibre_selected+ "mm");
             for(int i=0; i < arrayAdapter_salva_calibreAndTareas.getCount(); i++) {
                 Log.e("Tipo Simplificado", tarea_selected);
                 if (arrayAdapter_salva_calibreAndTareas.getItem(i).toString().
@@ -635,8 +646,12 @@ public class Screen_Filter_Results extends AppCompatActivity {
                                         && jsonObject.getString(DBtareasController.calle).trim().equals(calle)
                                         && portales.contains(jsonObject.getString(DBtareasController.numero).trim())) {
                                     lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
-                                    if (!calibres_selected.contains(jsonObject.getString(DBtareasController.calibre_toma).trim())) {
-                                        calibres_selected.add(jsonObject.getString(DBtareasController.calibre_toma).trim());
+                                    String cal =jsonObject.getString(DBtareasController.calibre_toma).trim();
+                                    if(cal.isEmpty()){
+                                        cal = "?";
+                                    }
+                                    if (!calibres_selected.contains(cal)) {
+                                        calibres_selected.add(cal);
                                     }
                                     String tipo = jsonObject.getString(DBtareasController.tipo_tarea);
                                     if (mapaTiposDeTarea.containsKey(tipo)) {
@@ -701,17 +716,19 @@ public class Screen_Filter_Results extends AppCompatActivity {
                             String tipo = jsonObject.getString(DBtareasController.tipo_tarea).trim();
                             String cal = jsonObject.getString(DBtareasController.calibre_toma).trim();
                             if (!tipo.equals("null") && !tipo.equals("NULL") && !tipo.isEmpty()) {
-                                if (!cal.equals("null") && !cal.equals("NULL") && !cal.isEmpty()) {
-                                    if (calibre.equals(cal) && tipo_tarea.equals(tipo)) {
-                                        lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
-                                        if (!poblaciones_selected.contains(jsonObject.getString(DBtareasController.poblacion))) {
-                                            poblaciones_selected.add(jsonObject.getString(DBtareasController.poblacion));
-                                        }
-                                        if (!calles_filtradas_en_tipo_tarea.contains(jsonObject.getString(DBtareasController.calle))) {
-                                            calles_filtradas_en_tipo_tarea.add(jsonObject.getString(DBtareasController.calle));
-                                        }
+                                if (cal.equals("null") ||  cal.equals("NULL") ||  cal.isEmpty()) {
+                                    cal ="?";
+                                }
+                                if (calibre.equals(cal) && tipo_tarea.equals(tipo)) {
+                                    lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
+                                    if (!poblaciones_selected.contains(jsonObject.getString(DBtareasController.poblacion))) {
+                                        poblaciones_selected.add(jsonObject.getString(DBtareasController.poblacion));
+                                    }
+                                    if (!calles_filtradas_en_tipo_tarea.contains(jsonObject.getString(DBtareasController.calle))) {
+                                        calles_filtradas_en_tipo_tarea.add(jsonObject.getString(DBtareasController.calle));
                                     }
                                 }
+
                             }
                         }
                     } catch (JSONException e) {

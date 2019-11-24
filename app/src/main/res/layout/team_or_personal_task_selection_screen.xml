@@ -120,7 +120,7 @@
                 android:id="@+id/textView_sync_team_or_personal_task_screen"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="sans-serif"
+
                 android:text="SINCRONIZAR"
                 android:textSize="17dp"
                 android:padding="10dp"
@@ -148,7 +148,7 @@
                 android:id="@+id/textView_citas__team_or_personal_task_screen"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="sans-serif"
+
                 android:text="Algunas citas se han vencido"
                 android:textSize="17dp"
                 android:padding="10dp"

@@ -981,7 +981,7 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
                 CheckBox cb = ((CheckBox)layout_filtro_checkboxes_screen_advance_filter.getChildAt(i));
                 if(cb.isChecked()) {
                     String string = cb.getText().toString();
-                    if(string.equals("0")){
+                    if(string.equals("?")){
                         calibres_selected.add("");
                     }
                     else {
@@ -1525,9 +1525,15 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
 
         if(!lista_desplegable.isEmpty()){
             Collections.sort(lista_desplegable);
-            for(int i = 0; i < lista_desplegable.size(); i++){
+            for(int i = 0; i < lista_desplegable.size(); i++) {
                 CheckBox cb = new CheckBox(getApplicationContext());
-                cb.setText(lista_desplegable.get(i).toString());
+                String cal = lista_desplegable.get(i).toString();
+                if(cal.equals("0")){
+                    cb.setText("?");
+                }
+                else {
+                    cb.setText(cal);
+                }
                 Log.e("i: ", lista_desplegable.get(i).toString());
                 cb.setLayoutParams(params);
                 layout_filtro_checkboxes_screen_advance_filter.addView(cb);

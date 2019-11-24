@@ -186,6 +186,9 @@ public class Screen_Fast_View_Personal_Task extends AppCompatActivity implements
                                                     } else {
                                                         fast_task.setTipo_tarea(tipo_tarea);
                                                     }
+                                                    if (calibre.isEmpty() || calibre.contains("null") || calibre.contains("NULL")){
+                                                        calibre = "?";
+                                                    }
                                                     fast_task.setCalibre(calibre);
                                                     lista_tareas_fast.add(fast_task);
                                                 }
@@ -369,6 +372,9 @@ public class Screen_Fast_View_Personal_Task extends AppCompatActivity implements
                                             fast_task.setTipo_tarea("NCI");
                                         }else {
                                             fast_task.setTipo_tarea(tipo_tarea);
+                                        }
+                                        if (calibre.isEmpty() || calibre.contains("null") || calibre.contains("NULL")){
+                                            calibre = "?";
                                         }
                                         fast_task.setCalibre(calibre);
                                         lista_tareas_fast.add(fast_task);

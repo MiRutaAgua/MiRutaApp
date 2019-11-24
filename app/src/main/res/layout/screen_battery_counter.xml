@@ -174,7 +174,7 @@
                     android:id="@+id/textView_tipo_tarea_screen_battery_counter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif"
+
                     android:text="Nuevo Contador Instalar 15mm"
                     android:textSize="13sp" />
             </LinearLayout>
@@ -201,7 +201,7 @@
                     android:id="@+id/textView_numero_abonado_screen_battery_counter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif"
+
                     android:text="023 456"
                     android:textSize="15sp" />
             </LinearLayout>

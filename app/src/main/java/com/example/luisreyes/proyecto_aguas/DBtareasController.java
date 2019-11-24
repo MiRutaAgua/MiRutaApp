@@ -900,4 +900,17 @@ public class DBtareasController extends SQLiteOpenHelper {
             return date_time;
         }
     }
+
+
+    public static Date getFechaHoraFromString(String fechaHora_String, String format){
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        Date date_time = new Date();
+        try {
+            date_time = sdf.parse(fechaHora_String);
+            return date_time;
+        } catch (ParseException ex) {
+            Log.e("Excp getFecha...", "no se pudo parsear fecha: "+ ex.toString());
+            return date_time;
+        }
+    }
 }

@@ -34,6 +34,7 @@ public class MessageDialog extends AppCompatDialogFragment {
         View view = inflater.inflate(R.layout.message_dialog, null);
         builder.setView(view)
                 .setTitle(title)
+                .setIcon(getResources().getDrawable(R.drawable.ic_info_blue_black_24dp))
                 .setPositiveButton("aceptar", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
