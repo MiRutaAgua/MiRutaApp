@@ -66,7 +66,7 @@ public class DBtareasController extends SQLiteOpenHelper {
     public static String FECULTREP = "FECULTREP";
     public static String OBSERVA = "OBSERVA";//----------------------------------------------------------
     public static String RS = "RS";
-    public static String F_INST = "F_INST";
+    public static String F_INST = "F_INST"; //fecha de instalacionde contador nuevo
     public static String INDICE = "INDICE";
     public static String emplazamiento_devuelto = "EMPLAZADV";
     public static String RESTO_EM = "RESTO_EM";

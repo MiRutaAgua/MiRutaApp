@@ -2,8 +2,10 @@ package com.example.luisreyes.proyecto_aguas;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -569,37 +571,56 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
             String fecha = DBtareasController.getStringFromFechaHora(new Date());
             Screen_Login_Activity.tarea_JSON.put(DBtareasController.date_time_modified, fecha);
             if(!DBtareasController.tabla_model) {
-                Screen_Login_Activity.tarea_JSON.put(DBtareasController.fecha_instalacion, fecha);
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.F_INST, fecha);
                 Screen_Login_Activity.tarea_JSON.put(DBtareasController.fecha_de_cambio, fecha);
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
-//        if(bitmap_firma_cliente!=null) {
-//            try {
-//                String firma = Screen_Register_Operario.getStringImage(bitmap_firma_cliente);
-//                Screen_Login_Activity.tarea_JSON.put(DBtareasController.firma_cliente, firma);
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//                Toast.makeText(Screen_Incidence_Summary.this, "no se pudo cambiar firma de cliente", Toast.LENGTH_LONG).show();
-//            }
-//        }
+
         if(!(TextUtils.isEmpty(lectura.getText()))) {
             if(!lectura_string.isEmpty() && !lectura_string.equals("null")){
                 String lectura_actual = lectura.getText().toString();
-                if(Integer.parseInt(lectura_actual) > Integer.parseInt(lectura_string)){
-                    try {
-                        Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_ultima, lectura_string);
-                        Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_actual, lectura_actual);
+                Integer lectura_ultima_registrada_int = Integer.parseInt(lectura_string);
+                Integer lectura_insertada_int = Integer.parseInt(lectura_actual);
 
-                        saveData();
+                if (lectura_insertada_int >= lectura_ultima_registrada_int) {
+                    if(lectura_insertada_int > 100) {
+                        new AlertDialog.Builder(this)
+                                .setTitle("Lectura muy grande")
+                                .setMessage("La lectura es mayor que 100m3\n¿Desea guardar con esta lectura?")
+                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        insertarLecturas(lectura_insertada_int.toString(), lectura_ultima_registrada_int.toString());
+                                    }
+                                })
+                                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
 
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        Toast.makeText(Screen_Incidence_Summary.this, "no se pudo cambiar lectura de contador", Toast.LENGTH_LONG).show();
+                                    }
+                                }).show();
+                    }else {
+                        insertarLecturas(lectura_insertada_int.toString(), lectura_ultima_registrada_int.toString());
                     }
-                }else{
-                    Toast.makeText(Screen_Incidence_Summary.this, "La lectura del contador debe ser mayor que la ultima registrada", Toast.LENGTH_LONG).show();
+                } else {
+                    new AlertDialog.Builder(this)
+                            .setTitle("Lectura menor")
+                            .setMessage("La lectura insertada es menor a la última registrada\n¿Desea guardar con esta lectura menor?")
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    insertarLecturas(lectura_insertada_int.toString(), lectura_ultima_registrada_int.toString());
+                                }
+                            })
+                            .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                }
+                            }).show();
+//                        Toast.makeText(Screen_Incidence_Summary.this, "La lectura del contador debe ser mayor que la ultima registrada", Toast.LENGTH_LONG).show();
                 }
             }else {
                 try {
@@ -611,7 +632,35 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
                 }
             }
         }else{
-            Toast.makeText(Screen_Incidence_Summary.this, "Inserte la lectura del contador", Toast.LENGTH_LONG).show();
+            new AlertDialog.Builder(this)
+                .setTitle("Sin Lectura")
+                .setMessage("No ha ingresado la lectura del contador\n¿Desea guardar esta tarea sin lectura?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        saveData();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                }).show();
+//            Toast.makeText(Screen_Incidence_Summary.this, "Inserte la lectura del contador", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void insertarLecturas(String lect_insertada, String ultima_lectura_registrada){
+        try {
+            Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_ultima, ultima_lectura_registrada);
+            Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_actual, lect_insertada);
+
+            saveData();
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Toast.makeText(Screen_Incidence_Summary.this, "no se pudo cambiar lectura de contador", Toast.LENGTH_LONG).show();
         }
     }
 

@@ -231,34 +231,94 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
             Toast.makeText(Screen_Validate_Battery_Intake_Asignation.this, "Error date_time_modified "+e.toString(), Toast.LENGTH_LONG).show();
         }
 
-        String ultima = lectura_anterior.getText().toString();
-        String actual = lectura_ultima.getText().toString();
-        if(!ultima.isEmpty() && !ultima.equals("null") && ultima!=null){
-            Integer ultimaInt = Integer.parseInt(ultima);
-            Integer actualInt = Integer.parseInt(actual);
-            if(actualInt > ultimaInt){
+        String lectura_ultima_registrada = lectura_anterior.getText().toString();
+        String lectura_insertada = lectura_ultima.getText().toString();
+
+        if(!lectura_insertada.isEmpty() && !lectura_ultima_registrada.equals("null") && lectura_ultima_registrada!=null ) {
+            if (!lectura_ultima_registrada.isEmpty() && !lectura_ultima_registrada.equals("null") && lectura_ultima_registrada != null) {
+                Integer ultimaInt = Integer.parseInt(lectura_ultima_registrada);
+                Integer actualInt = Integer.parseInt(lectura_insertada);
+
+                if (actualInt >= ultimaInt) {
+                    if (actualInt > 100) {
+                        new AlertDialog.Builder(this)
+                                .setTitle("Lectura muy grande")
+                                .setMessage("La lectura es mayor que 100m3\n¿Desea guardar con esta lectura?")
+                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        salvarLecturas(lectura_insertada, lectura_ultima_registrada);
+                                        saveData();
+                                    }
+                                })
+                                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                                    }
+                                }).show();
+                    } else {
+                        salvarLecturas(lectura_insertada, lectura_ultima_registrada);
+                        saveData();
+                    }
+
+                } else {
+                    new AlertDialog.Builder(this)
+                            .setTitle("Lectura menor")
+                            .setMessage("La lectura insertada es menor a la última registrada\n¿Desea guardar con esta lectura menor?")
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    salvarLecturas(lectura_insertada, lectura_ultima_registrada);
+                                    saveData();
+                                }
+                            })
+                            .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                }
+                            }).show();
+                    Toast.makeText(Screen_Validate_Battery_Intake_Asignation.this, "La lectura del contador debe ser mayor que la ultima registrada", Toast.LENGTH_LONG).show();
+                }
+            } else {
                 try {
-                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_ultima, ultima);
-                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_actual, actual);
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_actual, lectura_insertada);
                     saveData();
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Toast.makeText(Screen_Validate_Battery_Intake_Asignation.this, "No se pudo salvar datos, "+e.toString(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(Screen_Validate_Battery_Intake_Asignation.this, "No se pudo salvar datos, " + e.toString(), Toast.LENGTH_LONG).show();
                 }
-            }else {
-                Toast.makeText(Screen_Validate_Battery_Intake_Asignation.this, "La lectura del contador debe ser mayor que la ultima registrada", Toast.LENGTH_LONG).show();
             }
         }else{
-            try {
-                Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_actual, actual);
-                saveData();
-            } catch (JSONException e) {
-                e.printStackTrace();
-                Toast.makeText(Screen_Validate_Battery_Intake_Asignation.this, "No se pudo salvar datos, "+e.toString(), Toast.LENGTH_LONG).show();
-            }
+            new AlertDialog.Builder(this)
+                    .setTitle("Sin Lectura")
+                    .setMessage("No ha ingresado la lectura del contador\n¿Desea guardar esta tarea sin lectura?")
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            saveData();
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    }).show();
+
         }
     }
 
+    public void salvarLecturas(String lectura_insertada, String lectura_ultima_registrada){
+        try {
+            Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_ultima, lectura_ultima_registrada);
+            Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_actual, lectura_insertada);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Toast.makeText(Screen_Validate_Battery_Intake_Asignation.this, "No se pudo salvar datos, "+e.toString(), Toast.LENGTH_LONG).show();
+        }
+    }
     public void saveData() {
         try {
             String status_tarea = Screen_Login_Activity.tarea_JSON.getString(
