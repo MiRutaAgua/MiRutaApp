@@ -102,7 +102,9 @@ public class Screen_Fast_View_Team_Task  extends AppCompatActivity implements Ta
 
                             Intent open_Filter_Results = new Intent(Screen_Fast_View_Team_Task.this, Screen_Filter_Results.class);
                             open_Filter_Results.putExtra("filter_type", "TIPO_TAREA");
+                            Log.e("tipo_tarea enviado", tipo_tarea);
                             open_Filter_Results.putExtra("tipo_tarea", tipo_tarea);
+                            Log.e("calibre enviado", calibre);
                             open_Filter_Results.putExtra("calibre", calibre);
                             open_Filter_Results.putExtra("poblacion", "");
                             open_Filter_Results.putExtra("calle", "");
