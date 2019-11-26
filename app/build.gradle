@@ -27,7 +27,6 @@ android {
     }
 
 
-
     lintOptions {
         checkReleaseBuilds false
 
@@ -54,6 +53,8 @@ dependencies {
 
     implementation 'com.mapbox.mapboxsdk:mapbox-android-navigation-ui:0.39.0'
     implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:7.3.2'
+    //implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:8.5.0'
+    //implementation 'com.mapbox.mapboxsdk:mapbox-android-navigation-ui:0.42.0'
 
     implementation 'com.karumi:dexter:5.0.0'
     implementation 'com.google.android.gms:play-services-maps:16.1.0'

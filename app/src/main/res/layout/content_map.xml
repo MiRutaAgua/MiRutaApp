@@ -20,7 +20,7 @@
         android:layout_width="51dp"
         android:layout_height="54dp"
         android:layout_alignParentRight="true"
-        android:layout_above="@+id/radio"
+        android:layout_above="@+id/btnhome"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="16dp"
@@ -30,53 +30,74 @@
 
     <Button android:id="@+id/btnlocal"
         android:layout_width="51dp"
-        android:layout_height="54dp"
+        android:layout_height="51dp"
         android:layout_alignParentRight="true"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="16dp"
         android:background="@drawable/ic_my_location_blue_50dp"
-        android:layout_below="@+id/radio"
+        android:layout_below="@+id/btnhand"
         android:layout_marginTop="40dp"
 
         />
 
-    <RadioGroup
-        android:id="@+id/radio"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <Button android:id="@+id/btnhome"
+        android:layout_width="51dp"
+        android:layout_height="51dp"
         android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp">
-        <RadioButton
-            app:layout_constraintBottom_toBottomOf="@+id/radio"
-            android:id="@+id/radio1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:button="@drawable/my_checkbox1"
-            android:checked="true"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+        android:layout_centerInParent="true"
+        android:layout_marginRight="16dp"
+        android:background="@drawable/ic_home_blue_24dp"
 
-            />
+        />
 
-        <RadioButton
-            android:id="@+id/radio2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:button="@drawable/my_checbox2"
-            android:checked="false"
-            app:layout_constraintTop_toBottomOf="@+id/radio1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="16dp"
+    <Button android:id="@+id/btnhand"
+        android:layout_width="51dp"
+        android:layout_height="51dp"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/btnhome"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/ic_location_off_black_50dp"
 
-            />
+        />
+
+    <!--<RadioGroup-->
+        <!--android:id="@+id/radio"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:layout_marginEnd="16dp"-->
+        <!--android:layout_marginRight="16dp">-->
+        <!--<RadioButton-->
+            <!--app:layout_constraintBottom_toBottomOf="@+id/radio"-->
+            <!--android:id="@+id/radio1"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:button="@drawable/my_checkbox1"-->
+            <!--android:checked="true"-->
+            <!--app:layout_constraintTop_toTopOf="parent"-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--app:layout_constraintEnd_toEndOf="parent"-->
+
+            <!--/>-->
+
+        <!--<RadioButton-->
+            <!--android:id="@+id/radio2"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:button="@drawable/my_checbox2"-->
+            <!--android:checked="false"-->
+            <!--app:layout_constraintTop_toBottomOf="@+id/radio1"-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--app:layout_constraintEnd_toEndOf="parent"-->
+            <!--android:layout_marginTop="16dp"-->
+
+            <!--/>-->
 
 
-    </RadioGroup>-->
+    <!--</RadioGroup>-->
 
 
 

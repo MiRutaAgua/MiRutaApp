@@ -9,15 +9,23 @@
         android:layout_width="400dp"
         />
 
+    <item android:id="@+id/Tareas"
+        android:title="Tareas"
+        app:showAsAction="never"
+        android:layout_width="400dp"
+        android:icon="@drawable/ic_home_blue_24dp"
+        />
+
+    <item android:id="@+id/Principal"
+        android:title="Principal"
+        app:showAsAction="never"
+        android:layout_width="400dp"
+        android:icon="@drawable/ic_home_blue_24dp"
+        />
+
     <item
         android:id="@+id/Configuracion"
         android:title="Configuracion"
-        app:showAsAction="never"
-        android:layout_width="400dp"
-        />
-
-    <item android:id="@+id/Ayuda"
-        android:title="Ayuda"
         app:showAsAction="never"
         android:layout_width="400dp"
         />

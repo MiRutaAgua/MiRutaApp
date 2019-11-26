@@ -2,8 +2,10 @@ package com.example.luisreyes.proyecto_aguas;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -21,6 +23,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,10 +35,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -44,7 +49,7 @@ import java.util.HashMap;
 
 public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompleted{
 
-    private ProgressDialog progressDialog;
+    private ProgressDialog progressDialog = null;
 
     private Button button_modo_battery;
 
@@ -54,9 +59,18 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
             button_exec_task_screen_unity_counter,
             button_geolocalization;
 
+    private String foto;
     private ImageView imagen_contador;
 
-    private TextView tipo_tarea, direccion, datosEspecificos, serie, lectura, acceso, ubicacion,calibre;
+    private TextView tipo_tarea,
+            direccion,
+            datosEspecificos,
+            serie,
+            lectura,
+            acceso,
+            ubicacion,
+            calibre,
+            textView_numero_abonado_screen_unity_counter;
     private HashMap<String, String> mapaTiposDeTarea;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -87,6 +101,7 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
         button_geolocalization=(Button) findViewById(R.id.button_geolocalization_screen_unity_counter);
         imagen_contador = (ImageView) findViewById(R.id.imageView_screen_unity_counter_imagen);
         serie = (TextView) findViewById(R.id.textView_screen_unity_counter_serie);
+        textView_numero_abonado_screen_unity_counter= (TextView) findViewById(R.id.textView_numero_abonado_screen_unity_counter);
         lectura = (TextView) findViewById(R.id.textView_screen_unity_counter_lectura);
         acceso = (TextView) findViewById(R.id.textView_screen_unity_counter_acceso);
         ubicacion = (TextView) findViewById(R.id.textView_screen_unity_counter_ubicacion);
@@ -127,6 +142,8 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
                         +"mm");
             }
 
+            //Toast.makeText(getApplicationContext(), "Tarea JSON ->"+Screen_Login_Activity.tarea_JSON .toString(), Toast.LENGTH_SHORT).show();
+            //openMessage("JSON", Screen_Login_Activity.tarea_JSON .toString());
             if(DBtareasController.tabla_model) {
                 direccion.setText((Screen_Login_Activity.tarea_JSON.getString(DBtareasController.poblacion).trim().replace("null", "").replace("NULL", "") + "   "
                         + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.calle).trim().replace("\n", "").replace("null", "").replace("NULL", "") + "  "
@@ -154,6 +171,13 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
 
         } catch (Exception e) {
             e.printStackTrace();
+            Toast.makeText(getApplicationContext(),"No se obtuvo informacion: "+e.toString(), Toast.LENGTH_LONG).show();
+        }
+        try {
+            textView_numero_abonado_screen_unity_counter.setText(Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado));
+        } catch (JSONException e) {
+            Log.e("Excepcion", "Error al cargar numero de abonado");
+            e.printStackTrace();
         }
         button_geolocalization.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -176,8 +200,9 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
                     }
                     @Override
                     public void onAnimationEnd(Animation arg0) {
-                        Intent intent_open_MapsActivity = new Intent(getApplicationContext(), PermissionsActivity.class);
-                        startActivity(intent_open_MapsActivity);
+                        Intent intent = new Intent(getApplicationContext(), PermissionsActivity.class);
+                        intent.putExtra("INSERTANDO", false);
+                        startActivity(intent);
                     }
                 });
                 button_geolocalization.startAnimation(myAnim);
@@ -233,6 +258,7 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
                     public void onAnimationEnd(Animation arg0) {
                         Intent intent_open_battery_intake_asignation = new Intent(Screen_Unity_Counter.this, Screen_Battery_Intake_Asignation.class);
                         startActivity(intent_open_battery_intake_asignation);
+                        Screen_Unity_Counter.this.finish();
                     }
                 });
                 button_modo_battery.startAnimation(myAnim);
@@ -326,7 +352,7 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
 
         if (checkConection()){
             try {
-                String foto =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_despues_instalacion);
+                foto =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_despues_instalacion);
                 //Toast.makeText(this, foto_instalacion, Toast.LENGTH_LONG).show();
                 if(foto.isEmpty() || foto.contains("null") || foto.contains("NULL") || foto == null){
                     foto =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_antes_instalacion);
@@ -340,9 +366,11 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
                 if(!foto.isEmpty() && foto!=null && !foto.equals("NULL")  && !foto.equals("null")) {
                     String numero_abonado="";
                     try {
-                        numero_abonado=Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado);
+                        numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado);
                         if(!numero_abonado.isEmpty() && numero_abonado!=null
                                 && !numero_abonado.equals("null") && !numero_abonado.equals("NULL")){
+
+                            Log.e("Buscando", foto);
                             showRingDialog("Obteniendo foto de instalación");
                             String type_script = "download_image";
                             BackgroundWorker backgroundWorker = new BackgroundWorker(this);
@@ -358,20 +386,32 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
         }else{
             try {
                 //String foto_instalacion =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_antes_instalacion);
-                String image = null, numero_abonado = null;
+                String  numero_abonado = null;
                 numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
-                image = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_despues_instalacion);
+                foto =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_despues_instalacion);
+                //Toast.makeText(this, foto_instalacion, Toast.LENGTH_LONG).show();
+                if(foto.isEmpty() || foto.contains("null") || foto.contains("NULL") || foto == null){
+                    foto =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_antes_instalacion);
+                    if(foto.isEmpty() || foto.contains("null") || foto.contains("NULL") || foto == null){
+                        foto =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_lectura);
+                        if(foto.isEmpty() || foto.contains("null") || foto.contains("NULL") || foto == null){
+                            foto =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_numero_serie);
+                        }
+                    }
+                }
 
                 if(numero_abonado!=null && !numero_abonado.equals("null") && !TextUtils.isEmpty(numero_abonado)) {
-                    if (image != null && !image.equals("null") && !TextUtils.isEmpty(image)) {
-                        File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/fotos_tareas/" + numero_abonado + "/");
+                    if (foto != null && !foto.equals("null") && !foto.equals("NULL") && !TextUtils.isEmpty(foto)) {
+                        File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/fotos_tareas/" + numero_abonado);
                         if (!storageDir.exists()) {
-                            storageDir.mkdir();
+                            storageDir.mkdirs();
+                            Log.e("No existe directorio", storageDir.getAbsolutePath());
                         }
                         File[] files = storageDir.listFiles();
                         for (int i = 0; i < files.length; i++) {
-                            if (files[i].getName().contains(image)) {
+                            if (files[i].getName().contains(foto)) {
                                 //Toast.makeText(this, storageDir +"/" + files[i].getName(), Toast.LENGTH_LONG).show();
+                                Log.e("Imagen encontrada", storageDir.getAbsolutePath());
                                 imagen_contador.setVisibility(View.VISIBLE);
                                 imagen_contador.setImageBitmap(getPhotoUserLocal(storageDir + "/" + files[i].getName()));
                             }
@@ -427,7 +467,7 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
         try {
             numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
 
-            File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+numero_abonado+"/");
+            File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+numero_abonado);
             if (!myDir.exists()) {
                 myDir.mkdirs();
             }
@@ -463,14 +503,18 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
                 Toast.makeText(this, "No se puede acceder al servidor, no se obtuvo foto instalacion", Toast.LENGTH_LONG).show();
             }
             else {
-                //Toast.makeText(Screen_Unity_Counter.this, "Foto de obtenida", Toast.LENGTH_SHORT).show();
-                Bitmap bitmap = null;
-                bitmap = Screen_Register_Operario.getImageFromString(result);
-                if(bitmap!= null) {
-                    imagen_contador.setVisibility(View.VISIBLE);
-                    imagen_contador.setImageBitmap(bitmap);
-                    saveBitmapImage(bitmap, Screen_Login_Activity.tarea_JSON.getString(
-                            DBtareasController.foto_despues_instalacion));
+                if(result.contains("not success")){
+                    Toast.makeText(this, "Error obteniendo datos, no se obtuvo foto instalacion\n"+ result, Toast.LENGTH_LONG).show();
+                }else {
+                    Log.e("Obtenida", "Foto instalación");
+                    //Toast.makeText(Screen_Unity_Counter.this, "Foto de obtenida", Toast.LENGTH_SHORT).show();
+                    Bitmap bitmap = null;
+                    bitmap = Screen_Register_Operario.getImageFromString(result);
+                    if (bitmap != null) {
+                        imagen_contador.setVisibility(View.VISIBLE);
+                        imagen_contador.setImageBitmap(bitmap);
+                        saveBitmapImage(bitmap, foto);
+                    }
                 }
             }
         }
@@ -480,7 +524,11 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
         progressDialog.setCancelable(true);
     }
     private void hideRingDialog(){
-        progressDialog.dismiss();
+        if(progressDialog!=null) {
+            if (progressDialog.isShowing()) {
+                progressDialog.dismiss();
+            }
+        }
     }
 
     @Override
@@ -503,7 +551,7 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
                 // User chose the "Settings" item, show the app settings UI...
                 return true;
 
-            case R.id.Ayuda:
+            case R.id.Tareas:
 //                Toast.makeText(Screen_User_Data.this, "Ayuda", Toast.LENGTH_SHORT).show();
                 // User chose the "Favorite" action, mark the current item
                 // as a favorite...
@@ -534,5 +582,24 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
         MessageDialog messageDialog = new MessageDialog();
         messageDialog.setTitleAndHint(title, hint);
         messageDialog.show(getSupportFragmentManager(), title);
+    }
+
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setTitle("Saliendo de tarea")
+                .setMessage("Los cambios en esta tarea se perderan\n¿Desea salir de esta tarea?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        finish();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                }).show();
     }
 }

@@ -185,7 +185,7 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
             storageDir.mkdirs();
             File storageDir2 = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/fotos_tareas");
             if(!storageDir2.exists()){
-                storageDir2.mkdir();
+                storageDir2.mkdirs();
             }
         }
         File[] files = storageDir.listFiles();
@@ -321,7 +321,7 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
             myDir.mkdirs();
             File storageDir2 = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/fotos_tareas");
             if(!storageDir2.exists()){
-                storageDir2.mkdir();
+                storageDir2.mkdirs();
             }
         }
         else{
@@ -362,7 +362,7 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
             storageDir.mkdirs();
             File storageDir2 = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/fotos_tareas");
             if(!storageDir2.exists()){
-                storageDir2.mkdir();
+                storageDir2.mkdirs();
             }
         }
         image_file = File.createTempFile(
@@ -418,7 +418,11 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
         progressDialog.setCancelable(true);
     }
     private void hideRingDialog(){
-        progressDialog.dismiss();
+        if(progressDialog!=null) {
+            if (progressDialog.isShowing()) {
+                progressDialog.dismiss();
+            }
+        }
     }
 
     @Override
@@ -441,10 +445,12 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
                 // User chose the "Settings" item, show the app settings UI...
                 return true;
 
-            case R.id.Ayuda:
+            case R.id.Tareas:
                 Toast.makeText(Screen_User_Data.this, "Ayuda", Toast.LENGTH_SHORT).show();
                 // User chose the "Favorite" action, mark the current item
                 // as a favorite...
+                Intent intent= new Intent(this, Screen_Table_Team.class);
+                startActivity(intent);
                 return true;
 
             case R.id.Configuracion:
@@ -465,5 +471,11 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
         MessageDialog messageDialog = new MessageDialog();
         messageDialog.setTitleAndHint(title, hint);
         messageDialog.show(getSupportFragmentManager(), title);
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        super.onBackPressed();
     }
 }

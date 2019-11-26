@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -20,8 +21,11 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -56,11 +60,17 @@ public class Screen_Fast_View_Personal_Task extends AppCompatActivity implements
     private int lite_count;
     private JSONObject jsonObjectSalvaLite = null;
 
+    private boolean subiendo_fotos = false;
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.screen_fast_view_personal_task);
+
+        if(team_or_personal_task_selection_screen_Activity.dBtareasController == null) {
+            team_or_personal_task_selection_screen_Activity.dBtareasController = new DBtareasController(this);
+        }
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         myToolbar.setBackgroundColor(Color.TRANSPARENT);
@@ -77,8 +87,45 @@ public class Screen_Fast_View_Personal_Task extends AppCompatActivity implements
         tareas_to_upload = new ArrayList<String>();
         tareas_to_update = new ArrayList<String>();
 
+        lista_de_contadores_screen_table_personal.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String object_click = lista_de_contadores_screen_table_personal.getAdapter().getItem(i).toString();
+                if(!object_click.isEmpty()) {
+                    if (object_click.contains(" ")) {
+                        String[] split_string = object_click.split(" ");
+                        Log.e("Split", String.valueOf(split_string.length));
+                        if (split_string.length > 3) {
+                            String tipo_tarea = object_click.split(" ")[split_string.length-3].trim();
+                            String calibre = object_click.split(" ")[split_string.length-2].trim();
+                            Log.e("calibre", calibre);
+                            Log.e("tipo_tarea", tipo_tarea);
+
+                            Intent open_Filter_Results = new Intent(Screen_Fast_View_Personal_Task.this, Screen_Filter_Results.class);
+                            open_Filter_Results.putExtra("filter_type", "TIPO_TAREA");
+                            open_Filter_Results.putExtra("tipo_tarea", tipo_tarea);
+                            open_Filter_Results.putExtra("calibre", calibre);
+                            open_Filter_Results.putExtra("poblacion", "");
+                            open_Filter_Results.putExtra("calle", "");
+                            open_Filter_Results.putExtra("portales", "");
+                            open_Filter_Results.putExtra("limitar_a_operario", true);
+                            startActivity(open_Filter_Results);
+                        }
+                    }
+
+                }
+            }
+        });
+
+        if(checkConection() && team_or_personal_task_selection_screen_Activity.sincronizacion_automatica){
+            personal_task_screen_Activity.hideRingDialog();
+        }
         try {
-            subirTareasSiExisten();
+            if(team_or_personal_task_selection_screen_Activity.sincronizacion_automatica) {
+                subirTareasSiExisten();
+            }else{
+                descargarTareas();
+            }
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(this, "Error al subir tareas -> \n"+e.toString(), Toast.LENGTH_LONG).show();
@@ -86,8 +133,8 @@ public class Screen_Fast_View_Personal_Task extends AppCompatActivity implements
     }
 
     private void descargarTareas() {
-        if(checkConection()){
-            personal_task_screen_Activity.hideRingDialog();
+        boolean alguna_cita_obsoleta = false;
+        if(checkConection() && team_or_personal_task_selection_screen_Activity.sincronizacion_automatica){
             Screen_Login_Activity.isOnline = true;
             showRingDialog("Actualizando informacion de tareas");
             String type_script = "get_tareas";
@@ -95,49 +142,70 @@ public class Screen_Fast_View_Personal_Task extends AppCompatActivity implements
             backgroundWorker.execute(type_script);
         }
         else{
-            Screen_Login_Activity.isOnline = false;
-            Toast.makeText(this,"No hay conexion a Internet, Cargando tareas desactualizadas de Base de datos", Toast.LENGTH_LONG).show();
+            if(team_or_personal_task_selection_screen_Activity.sincronizacion_automatica) {
+                Screen_Login_Activity.isOnline = false;
+                Toast.makeText(this, "No hay conexion a Internet, Cargando tareas desactualizadas de Base de datos", Toast.LENGTH_LONG).show();
+            }
             if(team_or_personal_task_selection_screen_Activity.dBtareasController.databasefileExists(this)){
                 if(team_or_personal_task_selection_screen_Activity.dBtareasController.checkForTableExists()){
                     lista_tareas_fast.clear();
-                    for (int i = 1; i <= team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas(); i++) {
+                    if (team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas() > 0) {
+                        ArrayList<String> tareas = new ArrayList<>();
                         try {
-                            JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.dBtareasController.get_one_tarea_from_Database(i));
-
-                            String status="";
-                            try {
-                                status = jsonObject.getString(DBtareasController.status_tarea);
-
-                                if(!status.contains("DONE") && !status.contains("done")) {
-                                    if(jsonObject.getString(DBtareasController.operario).replace("\n", "").equals(
-                                            Screen_Login_Activity.operario_JSON.getString("usuario").replace("\n", ""))){
-
-                                        String tipo_tarea =jsonObject.getString(DBtareasController.tipo_tarea).replace("\n", "");
-                                        String calibre = jsonObject.getString(DBtareasController.calibre_toma).replace("\n", "");
-                                        if((tipo_tarea.contains("null") || tipo_tarea.contains("NULL"))
-                                                && (calibre.contains("null") || calibre.contains("NULL"))){
-                                            Toast.makeText(this,"Tipo de Tarea y calibre ambos nulos"
-                                                    +jsonObject.getString(DBtareasController.numero_interno) , Toast.LENGTH_LONG).show();
-                                        }else{
-                                            My_Fast_View_Task fast_task = new My_Fast_View_Task();
-                                            if(tipo_tarea.contains("null") || tipo_tarea.contains("NULL")){
-                                                fast_task.setTipo_tarea("");
-                                            }else {
-                                                fast_task.setTipo_tarea(tipo_tarea);
-                                            }
-                                            fast_task.setCalibre(calibre);
-                                            lista_tareas_fast.add(fast_task);
-                                        }
+                            tareas = team_or_personal_task_selection_screen_Activity.
+                                    dBtareasController.get_all_tareas_from_Database();
+                            for (int i = 0; i < tareas.size(); i++) {
+                                JSONObject jsonObject = null;
+                                try {
+                                    jsonObject = new JSONObject(tareas.get(i));
+                                    if (Screen_Table_Team.checkIfDateisDeprecated(jsonObject)) {
+                                        Log.e("Cita Obsoleta", jsonObject.getString(DBtareasController.nuevo_citas));
+                                        alguna_cita_obsoleta = true;
                                     }
-                                }
-                            } catch (JSONException e) {
-                                Toast.makeText(getApplicationContext(), "No se pudo obtener estado se tarea\n"+ e.toString(), Toast.LENGTH_LONG).show();
-                                e.printStackTrace();
-                            }
+                                    if (!team_or_personal_task_selection_screen_Activity.checkGestor(jsonObject)) {
+                                        continue;
+                                    }
+                                    String status = "";
+                                    try {
+                                        status = jsonObject.getString(DBtareasController.status_tarea);
 
+                                        if (!status.contains("DONE") && !status.contains("done")) {
+                                            if (jsonObject.getString(DBtareasController.operario).replace("\n", "").equals(
+                                                    Screen_Login_Activity.operario_JSON.getString("usuario").replace("\n", ""))) {
+
+                                                String tipo_tarea = jsonObject.getString(DBtareasController.tipo_tarea).replace("\n", "");
+                                                String calibre = jsonObject.getString(DBtareasController.calibre_toma).replace("\n", "");
+                                                if ((tipo_tarea.contains("null") || tipo_tarea.contains("NULL"))
+                                                        && (calibre.contains("null") || calibre.contains("NULL"))) {
+                                                    Toast.makeText(this, "Tipo de Tarea y calibre ambos nulos"
+                                                            + jsonObject.getString(DBtareasController.numero_interno), Toast.LENGTH_LONG).show();
+                                                } else {
+                                                    My_Fast_View_Task fast_task = new My_Fast_View_Task();
+                                                    if (tipo_tarea.isEmpty() || tipo_tarea.contains("null") || tipo_tarea.contains("NULL")) {
+                                                        fast_task.setTipo_tarea("NCI");
+                                                    } else {
+                                                        fast_task.setTipo_tarea(tipo_tarea);
+                                                    }
+                                                    if (calibre.isEmpty() || calibre.contains("null") || calibre.contains("NULL")){
+                                                        calibre = "?";
+                                                    }
+                                                    fast_task.setCalibre(calibre);
+                                                    lista_tareas_fast.add(fast_task);
+                                                }
+                                            }
+                                        }
+                                    } catch (JSONException e) {
+                                        Toast.makeText(getApplicationContext(), "No se pudo obtener estado se tarea\n" + e.toString(), Toast.LENGTH_LONG).show();
+                                        e.printStackTrace();
+                                    }
+
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                    Toast.makeText(this, "Error no pudo obtener tipo de tarea : " + e.toString(), Toast.LENGTH_LONG).show();
+                                }
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(this,"Error no pudo obtener tipo de tarea : "+e.toString(), Toast.LENGTH_LONG).show();
                         }
                     }
                     Collections.sort(lista_tareas_fast);
@@ -166,6 +234,10 @@ public class Screen_Fast_View_Personal_Task extends AppCompatActivity implements
                 Toast.makeText(this,"No existe tabla en SQlite", Toast.LENGTH_LONG).show();
             }
             personal_task_screen_Activity.hideRingDialog();
+            if(alguna_cita_obsoleta){
+                Intent serviceIntent = new Intent(this, Notification_Service.class);
+                startService(serviceIntent);
+            }
         }
     }
     @Override
@@ -188,12 +260,21 @@ public class Screen_Fast_View_Personal_Task extends AppCompatActivity implements
                         Toast.makeText(Screen_Fast_View_Personal_Task.this, "Insertando todas las tareas", Toast.LENGTH_LONG).show();
                     }
                 }
-                for(int n =1 ; n < Screen_Table_Team.lista_tareas.size() ; n++) {
+                boolean alguna_cita_obsoleta =false;
+                for(int n = 1; n < Screen_Table_Team.lista_tareas.size() ; n++) {
                     try {
                         JSONArray jsonArray = new JSONArray(Screen_Table_Team.lista_tareas.get(n));
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
 
+                            if(Screen_Filter_Tareas.checkIfTaskIsDone(jsonObject)){
+                                continue;
+                            }
+                            if(Screen_Table_Team.checkIfDateisDeprecated(jsonObject)){
+                                Log.e("Cita Obsoleta", jsonObject.getString(DBtareasController.nuevo_citas));
+                                alguna_cita_obsoleta = true;
+                            }
+                            jsonObject = Screen_Table_Team.buscarTelefonosEnObservaciones(jsonObject);
                             if (insertar_todas) {
                                 team_or_personal_task_selection_screen_Activity.dBtareasController.insertTarea(jsonObject);
                             }
@@ -268,7 +349,7 @@ public class Screen_Fast_View_Personal_Task extends AppCompatActivity implements
                                     }
                                 }
                             }
-
+                            if(team_or_personal_task_selection_screen_Activity.checkGestor(jsonObject)){
                             String status="";
                             try {
                                 status = jsonObject.getString(DBtareasController.status_tarea);
@@ -287,15 +368,19 @@ public class Screen_Fast_View_Personal_Task extends AppCompatActivity implements
                                                 +jsonObject.getString(DBtareasController.numero_interno) , Toast.LENGTH_LONG).show();
                                     }else{
                                         My_Fast_View_Task fast_task = new My_Fast_View_Task();
-                                        if(tipo_tarea.contains("null") || tipo_tarea.contains("NULL")){
+                                        if(tipo_tarea.isEmpty() || tipo_tarea.contains("null") || tipo_tarea.contains("NULL")){
                                             fast_task.setTipo_tarea("NCI");
                                         }else {
                                             fast_task.setTipo_tarea(tipo_tarea);
+                                        }
+                                        if (calibre.isEmpty() || calibre.contains("null") || calibre.contains("NULL")){
+                                            calibre = "?";
                                         }
                                         fast_task.setCalibre(calibre);
                                         lista_tareas_fast.add(fast_task);
                                     }
                                 }
+                            }
                             }
                         }
                     } catch (JSONException e) {
@@ -319,6 +404,10 @@ public class Screen_Fast_View_Personal_Task extends AppCompatActivity implements
                             lista_to_display.add(lista_cantidades.get(c).toString()+"  "+lista_tareas_fast.get(i).getAll_string());
                         }
                     }
+                }
+                if(alguna_cita_obsoleta){
+                    Intent serviceIntent = new Intent(this, Notification_Service.class);
+                    startService(serviceIntent);
                 }
                 lista_to_display.add(0,"Resumen de Tareas de Operario");
 //                Toast.makeText(this,lista_cantidades.toString(), Toast.LENGTH_LONG).show();
@@ -360,7 +449,11 @@ public class Screen_Fast_View_Personal_Task extends AppCompatActivity implements
             }
             else {
                 Toast.makeText(this, "Imagen subida", Toast.LENGTH_SHORT).show();
-                updatePhotosInMySQL();
+                if(subiendo_fotos){
+                    uploadPhotosInMySQL();
+                }else {
+                    updatePhotosInMySQL();
+                }
                 //showRingDialog("Validando registro...");
             }
         }
@@ -373,7 +466,13 @@ public class Screen_Fast_View_Personal_Task extends AppCompatActivity implements
                     team_or_personal_task_selection_screen_Activity.
                             dBtareasController.updateTarea(jsonObjectSalvaLite);
                 }
-                upLoadTareaInMySQL();
+//                upLoadTareaInMySQL();
+                String numero_interno = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_interno);
+                if(!numero_interno.isEmpty() && numero_interno!=null && !numero_interno.equals("null")) {
+                    showRingDialog("Subiendo fotos de tarea "
+                            + numero_interno);
+                    uploadPhotosInMySQL();
+                }
                 return;
             }
         }
@@ -382,23 +481,35 @@ public class Screen_Fast_View_Personal_Task extends AppCompatActivity implements
     public void subirTareasSiExisten() throws JSONException {
         if (team_or_personal_task_selection_screen_Activity.dBtareasController.checkForTableExists()) {
             tareas_to_upload.clear();
-            for (int i = 1; i <= team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas(); i++) {
+            if (team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas() > 0) {
+                ArrayList<String> tareas = new ArrayList<>();
                 try {
-                    JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.dBtareasController.get_one_tarea_from_Database(i));
-                    String status_tarea = jsonObject.getString(DBtareasController.status_tarea);
-                    if(status_tarea.contains("TO_UPLOAD")){
-                        tareas_to_upload.add(jsonObject.getString(DBtareasController.numero_interno));
+                    tareas = team_or_personal_task_selection_screen_Activity.
+                            dBtareasController.get_all_tareas_from_Database();
+                    for (int i = 0; i < tareas.size(); i++) {
+                        JSONObject jsonObject = null;
+                        try {
+                            jsonObject = new JSONObject(tareas.get(i));
+                            String status_tarea = jsonObject.getString(DBtareasController.status_tarea);
+                            if (status_tarea.contains("TO_UPLOAD")) {
+                                tareas_to_upload.add(jsonObject.getString(DBtareasController.numero_interno));
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
-                } catch (JSONException e) {
+                }catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
         }
         if(!tareas_to_upload.isEmpty() && checkConection()) {
+            subiendo_fotos = true;
             showRingDialog("Insertando Tareas creadas offline en Servidor...");
             upLoadTareaInMySQL();
             return;
         }else{
+            subiendo_fotos = false;
             descargarTareas();
         }
     }
@@ -406,29 +517,68 @@ public class Screen_Fast_View_Personal_Task extends AppCompatActivity implements
     public void upLoadTareaInMySQL() throws JSONException {
         if(tareas_to_upload.isEmpty()){
             hideRingDialog();
+            Log.e("upLoadTareaInMySQL", "Tareas subidas en internet");
             Toast.makeText(this, "Tareas subidas en internet", Toast.LENGTH_SHORT).show();
+            subiendo_fotos=false;
             descargarTareas();
             return;
         }
         else {
+            Log.e("upLoadTareaInMySQL", "subiendo tarea");
             JSONObject jsonObject_Lite = new JSONObject(team_or_personal_task_selection_screen_Activity
                     .dBtareasController.get_one_tarea_from_Database(
                             tareas_to_upload.get(tareas_to_upload.size() - 1)));
             tareas_to_upload.remove(tareas_to_upload.size() - 1);
 
             //jsonObject_Lite.put("status_tarea", jsonObject_Lite.getString("status_tarea").replace("TO_UPLOAD", ""));
-            jsonObject_Lite.put("status_tarea", "IDLE");
-            jsonObject_Lite.put("date_time_modified", DBtareasController.getStringFromFechaHora(new Date()));
+            jsonObject_Lite.put(DBtareasController.status_tarea, "IDLE");
+            jsonObject_Lite.put(DBtareasController.date_time_modified, DBtareasController.getStringFromFechaHora(new Date()));
             jsonObjectSalvaLite = jsonObject_Lite;
 
             String type_script = "create_tarea";
             BackgroundWorker backgroundWorker = new BackgroundWorker(this);
             Screen_Login_Activity.tarea_JSON = jsonObject_Lite;
-//            team_or_personal_task_selection_screen_Activity.
-//                    dBtareasController.updateTarea(jsonObject_Lite);
+            addPhotos_toUpload();
             backgroundWorker.execute(type_script);
         }
     }
+    public void uploadPhotosInMySQL() throws JSONException {
+        if(images_files.isEmpty()){
+            hideRingDialog();
+            Log.e("uploadPhotosInMySQL", "Fotos subidas en internet");
+            upLoadTareaInMySQL();
+            return;
+        }
+        else {
+
+            Log.e("uploadPhotosInMySQL", "subiendo Fotos");
+            String numero_abonado = "";
+            try {
+                numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
+
+                String file_name = null, image_file;
+                file_name = images_files_names.get(images_files.size() - 1);
+                images_files_names.remove(images_files.size() - 1);
+                image_file = images_files.get(images_files.size() - 1);
+                images_files.remove(images_files.size() - 1);
+                Bitmap bitmap = null;
+                bitmap = getPhotoUserLocal(image_file);
+                if(bitmap!=null) {
+                    String type = "upload_image";
+                    BackgroundWorker backgroundWorker = new BackgroundWorker(this);
+                    backgroundWorker.execute(type, Screen_Register_Operario.getStringImage(bitmap), file_name, numero_abonado);
+                }else{
+                    uploadPhotosInMySQL();
+                }
+            } catch (JSONException e) {
+                images_files.clear();
+                e.printStackTrace();
+                Toast.makeText(this, "Error obteniendo numero_abonado\n"+ e.toString(), Toast.LENGTH_LONG).show();
+                return;
+            }
+        }
+    }
+
     public void updatePhotosInMySQL() throws JSONException {
         if(images_files.isEmpty()){
             hideRingDialog();
@@ -483,52 +633,53 @@ public class Screen_Fast_View_Personal_Task extends AppCompatActivity implements
             backgroundWorker.execute(type_script);
         }
     }
+
+    public void addPhotos_names_and_files(String path, String foto){
+        if(new File(path+foto).exists()) {
+            if (foto != null && !foto.isEmpty() && !foto.equals("null") && !foto.equals("NULL")) {
+                images_files.add(path + foto);
+                images_files_names.add(foto);
+                Log.e("Añadiendo", foto);
+            }
+        }else{
+            Log.e("No encontrada", foto);
+        }
+    }
     public void addPhotos_toUpload() throws JSONException { //luego rellenar en campo de incidencia algo para saber que tiene incidencias
         String foto = "";
-
         String numero_abonado = null;
+
+        Log.e("Entrando a funcion", "addPhotos_toUpload");
         try {
             numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        String path = getExternalFilesDir(Environment.DIRECTORY_PICTURES)+"/fotos_tareas"+ numero_abonado+"/";
+        String path = getExternalFilesDir(Environment.DIRECTORY_PICTURES)+"/fotos_tareas/"+ numero_abonado+"/";
 
         foto = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_antes_instalacion);
-        if(foto!=null && !foto.isEmpty() && !foto.equals("null")){
-            images_files.add(path+foto);
-            images_files_names.add(foto);
-        }
+        addPhotos_names_and_files(path, foto);
+
         foto = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_lectura);
-        if(foto!=null && !foto.isEmpty() && !foto.equals("null")){
-            images_files.add(path+foto);
-            images_files_names.add(foto);
-        }
+        addPhotos_names_and_files(path, foto);
+
         foto = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_numero_serie);
-        if(foto!=null && !foto.isEmpty() && !foto.equals("null")){
-            images_files.add(path+foto);
-            images_files_names.add(foto);
-        }
+        addPhotos_names_and_files(path, foto);
+
         foto = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_despues_instalacion);
-        if(foto!=null && !foto.isEmpty() && !foto.equals("null")){
-            images_files.add(path+foto);
-            images_files_names.add(foto);
-        }
+        addPhotos_names_and_files(path, foto);
+
         foto = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_incidencia_1);
-        if(foto!=null && !foto.isEmpty() && !foto.equals("null")){
-            images_files.add(path+foto);
-            images_files_names.add(foto);
-        }
+        addPhotos_names_and_files(path, foto);
+
         foto = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_incidencia_2);
-        if(foto!=null && !foto.isEmpty() && !foto.equals("null")){
-            images_files.add(path+foto);
-            images_files_names.add(foto);
-        }
+        addPhotos_names_and_files(path, foto);
+
         foto = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_incidencia_3);
-        if(foto!=null && !foto.isEmpty() && !foto.equals("null")){
-            images_files.add(path+foto);
-            images_files_names.add(foto);
-        }
+        addPhotos_names_and_files(path, foto);
+
+        foto = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.firma_cliente);
+        addPhotos_names_and_files(path, foto);
     }
 
     public Bitmap getPhotoUserLocal(String path){
@@ -536,10 +687,10 @@ public class Screen_Fast_View_Personal_Task extends AppCompatActivity implements
         if(file.exists()) {
             Bitmap bitmap = null;
             try {
-                bitmap =Bitmap.createScaledBitmap(MediaStore.Images.Media
-                        .getBitmap(this.getContentResolver(), Uri.fromFile(file)), 512, 512, true);
-//                bitmap = MediaStore.Images.Media
-//                        .getBitmap(this.getContentResolver(), Uri.fromFile(file));
+//                bitmap =Bitmap.createScaledBitmap(MediaStore.Images.Media
+//                        .getBitmap(this.getContentResolver(), Uri.fromFile(file)), 512, 512, true);
+                bitmap = MediaStore.Images.Media
+                        .getBitmap(this.getContentResolver(), Uri.fromFile(file));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -573,6 +724,7 @@ public class Screen_Fast_View_Personal_Task extends AppCompatActivity implements
         progressDialog.setCancelable(false);
     }
     public static void hideRingDialog(){
+        if(progressDialog!=null)
         progressDialog.dismiss();
     }
 
@@ -596,7 +748,7 @@ public class Screen_Fast_View_Personal_Task extends AppCompatActivity implements
                 // User chose the "Settings" item, show the app settings UI...
                 return true;
 
-            case R.id.Ayuda:
+            case R.id.Tareas:
 //                Toast.makeText(Screen_User_Data.this, "Ayuda", Toast.LENGTH_SHORT).show();
                 // User chose the "Favorite" action, mark the current item
                 // as a favorite...
@@ -617,8 +769,21 @@ public class Screen_Fast_View_Personal_Task extends AppCompatActivity implements
     }
 
     public void openMessage(String title, String hint){
-        MessageDialog messageDialog = new MessageDialog();
-        messageDialog.setTitleAndHint(title, hint);
-        messageDialog.show(getSupportFragmentManager(), title);
+        MessageDialog messageDialog = null;
+        try {
+            messageDialog = new MessageDialog();
+            messageDialog.setTitleAndHint(title, hint);
+            messageDialog.show(getSupportFragmentManager(), title);
+        } catch (Exception e) {
+            Log.e("Error abriendo mensaje", e.toString());
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent open_screen_team_or_task= new Intent(this, team_or_personal_task_selection_screen_Activity.class);
+        startActivity(open_screen_team_or_task);
+        finish();
     }
 }

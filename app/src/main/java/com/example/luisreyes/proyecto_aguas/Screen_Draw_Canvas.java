@@ -6,12 +6,18 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import org.json.JSONException;
+
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 
 /**
@@ -51,15 +57,31 @@ public class Screen_Draw_Canvas extends Activity {
                         }else if(caller==CANVAS_REQUEST_INC_SUMMARY) {
                             resultIntent = new Intent(Screen_Draw_Canvas.this, Screen_Incidence_Summary.class);
                         }
-                        int result = 3;
+//                        int result = 3;
                         bitmap_firma = (Bitmap)canvas.getDrawingCache();
                         String img_compress="null";
                         if(bitmap_firma!=null) {
-                            img_compress = getStringImage(bitmap_firma);
+//                            img_compress = getStringImage(bitmap_firma);
+                            String nombre_abonado = null;
+                            try {
+                                nombre_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.nombre_cliente).trim().replace(" ", "_");
+                                Screen_Login_Activity.tarea_JSON.put(DBtareasController.firma_cliente,nombre_abonado+"_firma.jpg");
+                                String path = saveBitmapImageFirma(bitmap_firma, nombre_abonado+"_firma");
+                                resultIntent.putExtra("firma_cliente", path);
+                            } catch (JSONException e) {
+                                Log.e("Excepcion", "Error obteniedo nombre_cliente");
+                                resultIntent.putExtra("firma_cliente", "null");
+                                e.printStackTrace();
+                            }
                         }
-                        resultIntent.putExtra("firma_cliente", img_compress);
+                        else{
+                            Log.e("Error", "Error obteniedo firma_cliente null");
+                            resultIntent.putExtra("firma_cliente", "null");
+                        }
+
                         //resultIntent.putExtra("result", result);
                         setResult(RESULT_OK, resultIntent);
+                        canvas.setDrawingCacheEnabled(false);
                         finish();
                     }
                 })
@@ -78,6 +100,7 @@ public class Screen_Draw_Canvas extends Activity {
                         resultIntent.putExtra("firma_cliente", img_compress);
                         //resultIntent.putExtra("result", result);
                         setResult(RESULT_OK, resultIntent);
+                        canvas.setDrawingCacheEnabled(false);
                         finish();
                     }
                 }).show();
@@ -89,5 +112,57 @@ public class Screen_Draw_Canvas extends Activity {
         byte[] imageBytes = baos.toByteArray();
         String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
         return encodedImage;
+    }
+
+    private String saveBitmapImageFirma(Bitmap bitmap, String file_name){
+        String numero_abonado = "";
+        File myDir = null;
+        try {
+            numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado);
+            if(!numero_abonado.isEmpty() && numero_abonado!=null
+                    && !numero_abonado.equals("NULL") && !numero_abonado.equals("null")){
+
+                myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"
+                        + numero_abonado);
+
+                if(myDir!=null) {
+                    if (!myDir.exists()) {
+                        myDir.mkdirs();
+                        File storageDir2 = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/fotos_tareas/"+ numero_abonado);
+                        if (!storageDir2.exists()) {
+                            storageDir2.mkdirs();
+                        }
+                    } else {
+                        File[] files = myDir.listFiles();
+                        //ArrayList<String> names = new ArrayList<>();
+                        for (int i = 0; i < files.length; i++) {
+                            //names.add(files[i].getName());
+                            if (files[i].getName().contains(file_name)) {
+                                files[i].delete();
+                            }
+                        }
+                        //Toast.makeText(Screen_User_Data.this, names.toString(), Toast.LENGTH_SHORT).show();
+                    }
+
+                    file_name += ".jpg";
+                    File file = new File(myDir, file_name);
+                    if (file.exists())
+                        file.delete();
+                    try {
+                        FileOutputStream out = new FileOutputStream(file);
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                        out.flush();
+                        out.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    return file.getAbsolutePath();
+                }
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

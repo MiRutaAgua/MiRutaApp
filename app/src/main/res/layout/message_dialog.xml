@@ -3,13 +3,19 @@
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:padding="16dp">
 
+    <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
     <TextView
         android:id="@+id/textView_layout_dialog"
         android:hint="Mensaje"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="16dp"
-        android:textColor="#202020"
+        android:textColor="#404040"
         />
-
+    </ScrollView>
 </RelativeLayout>

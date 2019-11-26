@@ -78,7 +78,7 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
 
     public static boolean isOnline = true; ///cambiar todas las ocurrencias de esta variable por isOnline
 
-    private ProgressDialog progressDialog;
+    private ProgressDialog progressDialog = null;
 
     private Typeface typeface;
 
@@ -249,7 +249,7 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
                         loginOperario();
                     }
                 }else{
-                    //Toast.makeText(Screen_Login_Activity.this, "Comprobando informacion", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(Screen_Login_Activity.this, "Comprobando información", Toast.LENGTH_SHORT).show();
                     try {
                         String json_user = dBoperariosController.get_one_operario_from_Database(lineEdit_nombre_de_operario.getText().toString());
                         if(!json_user.equals("no existe")) {
@@ -315,7 +315,7 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
     private void descargarOperarios() {
         if(checkConection()){
             isOnline = true;
-            showRingDialog("Actualizando informacion de operarios");
+            showRingDialog("Actualizando información de operarios");
             String type = "get_operarios";
             BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Login_Activity.this);
             backgroundWorker.execute(type);
@@ -331,7 +331,7 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
         String username = lineEdit_nombre_de_operario.getText().toString();
         String password = lineEdit_clave_de_acceso.getText().toString();
 
-        showRingDialog("Comprobando informacion");
+        showRingDialog("Comprobando información");
         String type = "login";
         BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Login_Activity.this);
         backgroundWorker.execute(type, username, password);
@@ -396,7 +396,7 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
                 hideRingDialog();
             }
             else {
-                Toast.makeText(this,"Informacion de Operarios actualizada correctamente", Toast.LENGTH_LONG).show();
+                Toast.makeText(this,"Información de Operarios actualizada correctamente", Toast.LENGTH_LONG).show();
                 int sqlite_database_count = dBoperariosController.countTableOperarios();
                 boolean insertar_todos = false;
                 if(sqlite_database_count < 1){
@@ -507,7 +507,15 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
         progressDialog.setCancelable(false);
     }
     private void hideRingDialog(){
-        progressDialog.dismiss();
+        if(progressDialog!=null) {
+            progressDialog.dismiss();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        super.onBackPressed();
     }
 
 }

@@ -7,7 +7,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:layout_gravity="center"
-    android:gravity="top">
+    android:gravity="top"
+    android:background="@android:color/white"
+    >
 
     <include layout = "@layout/toolbar"
         android:id="@+id/my_toolbar"

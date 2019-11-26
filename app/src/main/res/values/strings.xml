@@ -6,7 +6,7 @@
     <string name="access_token">sk.eyJ1IjoiMTMxOTk1YWRyaWFuIiwiYSI6ImNrMWNhM3RkaDBicTIzaXBtaGdjbGJlZzYifQ.4BmFI-iLpURRilwF24A-RA</string>
     <string name="navigation_guidance_day" translatable="false">mapbox://styles/mapbox/navigation-guidance-day-v4"</string>
     <string name="title_activity_maps">Map</string>
-    <string name="google_maps_api">AIzaSyB9UQKePdMZ53SZuTxgqKCrvh_wwXFTaVk</string>
+    <string name="google_maps_api">AIzaSyCxh6aEUChvA1lvCm__f1-MY449hRYV8Yo</string>
 
 
 </resources>

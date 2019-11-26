@@ -329,7 +329,7 @@ public class Screen_Camera extends Activity {
 
                 File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+"/"+photo_folder);
                 if(!myDir.exists()){
-                    myDir.mkdir();
+                    myDir.mkdirs();
                 }
                 else{
                     File[] files = myDir.listFiles();
@@ -735,5 +735,11 @@ public class Screen_Camera extends Activity {
         mBackgroundThread = new HandlerThread("Camera Background");
         mBackgroundThread.start();
         mBackgroundHandler= new Handler(mBackgroundThread.getLooper());
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        super.onBackPressed();
     }
 }

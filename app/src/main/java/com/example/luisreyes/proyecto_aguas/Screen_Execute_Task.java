@@ -1,9 +1,11 @@
 package com.example.luisreyes.proyecto_aguas;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -27,6 +29,7 @@ import android.support.v7.widget.Toolbar;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -60,13 +63,13 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
             textView_serial_number_result,
             textView_serial_number_module_result,
             telefonos, telefono1, telefono2,
-            textView_anomalia;
+            textView_anomalia,
+            textView_codigo_geolocalization_screen_exec_task;
 
     private String tag="";
     private Button button_scan_serial_number_screen_exec_task;
 
     private Button button_scan_module_screen_exec_task,
-            observaciones_button,
     anomaly_button,
             button_guardar_datos;
 
@@ -76,7 +79,9 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
     private ImageView imageView_edit_phone1_screen_exec_task,
             imageView_edit_phone2_screen_exec_task,
             imageView_edit_serial_number_screen_exec_task,
-            imageView_edit_serial_number_module_screen_exec_task;
+            imageView_edit_serial_number_module_screen_exec_task,
+            button_codigo_geolocalization_screen_exec_task,
+            observaciones_button;
 
     private Button button_instalation_photo_screen_exec_task;
     private ImageView instalation_photo_screen_exec_task;
@@ -123,6 +128,11 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         setContentView(R.layout.screen_execute_task);
 
 
+        mCurrentPhotoPath_foto_antes = "";
+        mCurrentPhotoPath_foto_lectura= "";
+        mCurrentPhotoPath_foto_despues = "";
+        mCurrentPhotoPath_foto_serie = "";
+
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
@@ -144,6 +154,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         lectura_editText = (EditText)findViewById(R.id.editText_lectura_screen_exec_task);
         textView_serial_number_result = (TextView)findViewById(R.id.textView_serial_number_screen_exec_task);
         textView_serial_number_module_result = (TextView)findViewById(R.id.textView_module_number_screen_exec_task);
+        textView_codigo_geolocalization_screen_exec_task = (TextView)findViewById(R.id.textView_codigo_geolocalization_screen_exec_task);
 
         textView_anomalia = (TextView) findViewById(R.id.textView_anomalia_screen_exec_task);
         telefonos = (TextView) findViewById(R.id.textView_phones_screen_exec_task);
@@ -157,12 +168,13 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         read_photo_screen_exec_task = (ImageView)findViewById(R.id.read_photo_screen_exec_task);
         serial_number_photo_screen_exec_task = (ImageView)findViewById(R.id.serial_number_photo_screen_exec_task);
         after_instalation_photo_screen_exec_task = (ImageView)findViewById(R.id.final_instalation_photo_screen_exec_task);
+        button_codigo_geolocalization_screen_exec_task = (ImageView)findViewById(R.id.button_codigo_geolocalization_screen_exec_task);
 
         button_scan_serial_number_screen_exec_task= (Button)findViewById(R.id.button_scan_serial_number_screen_exec_task);
         button_scan_module_screen_exec_task= (Button)findViewById(R.id.button_scan_module_screen_exec_task);
         button_validate_screen_exec_task          = (Button)findViewById(R.id.button_validate_screen_exec_task);
         button_guardar_datos = (Button)findViewById(R.id.button_guardar_datos_screen_exec_task);
-        observaciones_button = (Button)findViewById(R.id.button_observations_screen_exec_task);
+        observaciones_button = (ImageView)findViewById(R.id.button_observations_screen_exec_task);
         anomaly_button = (Button)findViewById(R.id.button_anomalia_screen_exec_task);
         textView_observaciones_screen_exec_task = (TextView)findViewById(R.id.textView_observaciones_screen_exec_task);
         button_geolocalization_screen_exec_task= (Button)findViewById(R.id.button_geolocalization_screen_exec_task);
@@ -174,6 +186,15 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(Screen_Execute_Task.this, "no se pudo obtener numero_serie_contador de tarea", Toast.LENGTH_LONG).show();
+        }
+        try {
+            String codigo = Screen_Login_Activity.tarea_JSON.getString(
+                    DBtareasController.codigo_de_geolocalizacion).trim();
+            if(!codigo.isEmpty() && !codigo.equals("NULL") && !codigo.equals("null"))
+                textView_codigo_geolocalization_screen_exec_task.setText(codigo);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Toast.makeText(Screen_Execute_Task.this, "no se pudo obtener codigo_de_geolocalizacion de tarea", Toast.LENGTH_LONG).show();
         }
         try {
             textView_observaciones_screen_exec_task.setText(Screen_Login_Activity.tarea_JSON.getString(
@@ -238,8 +259,9 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                     }
                     @Override
                     public void onAnimationEnd(Animation arg0) {
-                        Intent intent_open_MapsActivity = new Intent(getApplicationContext(), PermissionsActivity.class);
-                        startActivity(intent_open_MapsActivity);
+                        Intent intent = new Intent(getApplicationContext(), PermissionsActivity.class);
+                        intent.putExtra("INSERTANDO", false);
+                        startActivity(intent);
                     }
                 });
                 button_geolocalization_screen_exec_task.startAnimation(myAnim);
@@ -291,7 +313,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                     }
                     @Override
                     public void onAnimationEnd(Animation arg0) {
-                        openDialog("Numero Serie","Escriba aqui número serie");
+                        openDialog("Número Serie","Escriba aqui número serie");
                     }
                 });
                 imageView_edit_serial_number_screen_exec_task.startAnimation(myAnim);
@@ -317,13 +339,38 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                     }
                     @Override
                     public void onAnimationEnd(Animation arg0) {
-                        openDialog("Numero Serie de Modulo","Escriba número serie de modulo");
+                        openDialog("Número Serie de Modulo","Escriba número serie de modulo");
                     }
                 });
                 imageView_edit_serial_number_module_screen_exec_task.startAnimation(myAnim);
             }
         });
 
+        button_codigo_geolocalization_screen_exec_task.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Execute_Task.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        openDialog("Código de geolocalización","...");
+                    }
+                });
+                button_codigo_geolocalization_screen_exec_task.startAnimation(myAnim);
+            }
+        });
         textView_serial_number_module_result.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -618,6 +665,16 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
             @Override
             public void onClick(View view) {
                 Screen_Login_Activity.playOnOffSound(getApplicationContext());
+                String numero_serie_devuelto = "";
+                try {
+                    numero_serie_devuelto = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador_devuelto).trim();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                if(numero_serie_devuelto.isEmpty() || numero_serie_devuelto.equals("null") || numero_serie_devuelto.equals("NULL")){
+                    Toast.makeText(Screen_Execute_Task.this, "Inserte o escanee el número de serie nuevo", Toast.LENGTH_LONG).show();
+                    return;
+                }
                 if(Screen_Login_Activity.movileModel){
                     try {
                         dispatchTakePictureIntent(CAM_REQUEST_AFT_INT_PHOTO);
@@ -639,9 +696,9 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
     public void onGuardar_Datos(){
         guardar_en_JSON_modificaciones();
         if(!(TextUtils.isEmpty(lectura_editText.getText()))) {
-            if(!lectura_string.isEmpty() && !lectura_string.equals("null")){
+            if (!lectura_string.equals("null") && !lectura_string.equals("NULL") && !lectura_string.isEmpty()) {
                 String lectura_actual = lectura_editText.getText().toString();
-                if(Integer.parseInt(lectura_actual) > Integer.parseInt(lectura_string)){
+                if (Integer.parseInt(lectura_actual) >= Integer.parseInt(lectura_string)) {
                     try {
                         Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_ultima, lectura_string);
                         Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_actual, lectura_actual);
@@ -651,10 +708,10 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                         e.printStackTrace();
                         Toast.makeText(Screen_Execute_Task.this, "no se pudo cambiar lectura de contador", Toast.LENGTH_LONG).show();
                     }
-                }else{
+                } else {
                     Toast.makeText(Screen_Execute_Task.this, "La lectura del contador debe ser mayor que la ultima registrada", Toast.LENGTH_LONG).show();
                 }
-            }else {
+            } else {
                 try {
                     Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_actual, lectura_editText.getText().toString());
                     saveData();
@@ -664,13 +721,33 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                 }
             }
         }else{
-            Toast.makeText(Screen_Execute_Task.this, "Inserte la lectura del contador", Toast.LENGTH_LONG).show();
+            new AlertDialog.Builder(Screen_Execute_Task.this)
+                    .setTitle("Lectura Faltante")
+                    .setMessage("No ha insertado lectura\n¿Desea guardar esta tarea?")
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            saveData();
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    }).show();
+//            Toast.makeText(Screen_Execute_Task.this, "Inserte la lectura del contador", Toast.LENGTH_LONG).show();
         }
     }
     public void saveData() {
         boolean error=false;
         if(team_or_personal_task_selection_screen_Activity.dBtareasController != null) {
             try {
+                String status = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.status_tarea) ;
+                if(!status.contains("TO_UPDATE")){
+                    status = status + ", TO_UPDATE";
+                }
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.status_tarea, status);
                 team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea(Screen_Login_Activity.tarea_JSON);
             } catch (JSONException e) {
                 Toast.makeText(this, "No se pudo guardar tarea local " + e.toString(), Toast.LENGTH_LONG).show();
@@ -681,14 +758,18 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
             error = true;
             Toast.makeText(this, "No hay tabla donde guardar", Toast.LENGTH_LONG).show();
         }
-        if(checkConection()) {
+        if(checkConection() && team_or_personal_task_selection_screen_Activity.sincronizacion_automatica) {
             showRingDialog("Guardando Datos...");
             String type = "update_tarea";
             BackgroundWorker backgroundWorker = new BackgroundWorker(this);
             backgroundWorker.execute(type);
         } else{
-            if(!error)
-                Toast.makeText(this, "No hay conexion se guardaron los datos en el telefono", Toast.LENGTH_LONG).show();
+            if(!error) {
+                Toast.makeText(this, "Se guardaron los datos en el teléfono", Toast.LENGTH_LONG).show();
+                Intent intent_open_task_or_personal_screen = new Intent(Screen_Execute_Task.this, team_or_personal_task_selection_screen_Activity.class);
+                startActivity(intent_open_task_or_personal_screen);
+                finishesThisClass();
+            }
         }
     }
 
@@ -697,7 +778,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
             String fecha = DBtareasController.getStringFromFechaHora(new Date());
             Screen_Login_Activity.tarea_JSON.put(DBtareasController.date_time_modified, fecha);
             if(!DBtareasController.tabla_model) {
-                Screen_Login_Activity.tarea_JSON.put(DBtareasController.fecha_instalacion, fecha);
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.F_INST, fecha);
                 Screen_Login_Activity.tarea_JSON.put(DBtareasController.fecha_de_cambio, fecha);
             }
         } catch (JSONException e) {
@@ -707,7 +788,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         if(!TextUtils.isEmpty(textView_observaciones_screen_exec_task.getText().toString())){
             String observaciones = textView_observaciones_screen_exec_task.getText().toString();
             try {
-                Screen_Login_Activity.tarea_JSON.put(DBtareasController.observaciones,observaciones);
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.observaciones_devueltas,observaciones);
             } catch (JSONException e) {
                 e.printStackTrace();
                 Toast.makeText(Screen_Execute_Task.this, "No pudo guardar observaciones", Toast.LENGTH_LONG).show();
@@ -734,7 +815,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
 
         String contador=null;
         try {
-            contador = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador)
+            contador = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador_devuelto)
             .trim().replace(" ", "");
 //            Toast.makeText(Screen_Execute_Task.this, "Contador"+contador, Toast.LENGTH_LONG).show();
         } catch (JSONException e) {
@@ -801,7 +882,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                     textView_serial_number_result.setText(data_result);
                     contador = data_result;
                     try {
-                        Screen_Login_Activity.tarea_JSON.put(DBtareasController.numero_serie_contador, data_result);
+                        Screen_Login_Activity.tarea_JSON.put(DBtareasController.numero_serie_contador_devuelto, data_result);
                     } catch (JSONException e) {
                         e.printStackTrace();
                         Toast.makeText(this, "No pudo insertarse numero serie: " + e.toString(), Toast.LENGTH_LONG).show();
@@ -832,6 +913,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                     if(!DBtareasController.tabla_model) {
                         try {
                             Screen_Login_Activity.tarea_JSON.put(DBtareasController.AREALIZAR_devuelta, anomaly_code);//esta es la anomalia devuelta
+                            Screen_Login_Activity.tarea_JSON.put(DBtareasController.intervencion_devuelta, anomaly_string);
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Toast.makeText(this, "No pudo insertarse numero serie de modulo: " + e.toString(), Toast.LENGTH_LONG).show();
@@ -998,8 +1080,15 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
     private String saveBitmapImage(Bitmap bitmap, String key){
         try {
             bitmap = Bitmap.createScaledBitmap(bitmap, 960, 1280, true);
-            String numero_serie = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador)
-                    .trim().replace(" ","");
+            String numero_serie="";
+            if(key.contains("despues")){
+                 numero_serie = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador_devuelto)
+                        .trim().replace(" ","");
+            }
+            else {
+                 numero_serie = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador)
+                        .trim().replace(" ", "");
+            }
             String file_full_name = numero_serie+"_"+key;
             //Toast.makeText(Screen_Incidence.this,"archivo: "+file_full_name, Toast.LENGTH_LONG).show();
 
@@ -1007,7 +1096,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
 
             numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
 
-            File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+numero_abonado+"/");
+            File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+numero_abonado);
 
             if (!myDir.exists()) {
                 myDir.mkdirs();
@@ -1025,21 +1114,38 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
             if (file.exists())
                 file.delete();
             try {
-                FileOutputStream out = new FileOutputStream(file);
-                bitmap.compress(Bitmap.CompressFormat.JPEG, MainActivity.COMPRESS_QUALITY, out);
 
-//                ExifInterface exif=new ExifInterface(file.toString());
-//
-////                Log.d("EXIF value", exif.getAttribute(ExifInterface.TAG_ORIENTATION));
-//                if(exif.getAttribute(ExifInterface.TAG_ORIENTATION).equalsIgnoreCase("6")){
-//                    bitmap= rotate(bitmap, 90);
-//                } else if(exif.getAttribute(ExifInterface.TAG_ORIENTATION).equalsIgnoreCase("8")){
-//                    bitmap= rotate(bitmap, 270);
-//                } else if(exif.getAttribute(ExifInterface.TAG_ORIENTATION).equalsIgnoreCase("3")){
-//                    bitmap= rotate(bitmap, 180);
-//                } else if(exif.getAttribute(ExifInterface.TAG_ORIENTATION).equalsIgnoreCase("0")){
-//                    bitmap= rotate(bitmap, 90);
-//                }
+                FileOutputStream out = new FileOutputStream(file);
+
+                ExifInterface ei = new ExifInterface(file.getAbsolutePath());
+                int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                        ExifInterface.ORIENTATION_UNDEFINED);
+
+//                Bitmap rotatedBitmap = null;
+                switch(orientation) {
+
+                    case ExifInterface.ORIENTATION_ROTATE_90:
+                        bitmap = rotateImage(bitmap, 90);
+                        Log.e("Orientation", "90");
+                        break;
+
+                    case ExifInterface.ORIENTATION_ROTATE_180:
+                        bitmap = rotateImage(bitmap, 180);
+                        Log.e("Orientation", "180");
+                        break;
+
+                    case ExifInterface.ORIENTATION_ROTATE_270:
+                        bitmap = rotateImage(bitmap, 270);
+                        Log.e("Orientation", "180");
+                        break;
+
+                    case ExifInterface.ORIENTATION_NORMAL:
+                    default:
+                        bitmap = bitmap;
+//                        Log.e("Orientation", "normal");
+                }
+
+                bitmap.compress(Bitmap.CompressFormat.JPEG, MainActivity.COMPRESS_QUALITY, out);
 
                 out.flush();
                 out.close();
@@ -1053,6 +1159,14 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
             e.printStackTrace();
         }
         return null;
+    }
+
+
+    public static Bitmap rotateImage(Bitmap source, float angle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
+                matrix, true);
     }
 
     public static Bitmap rotate(Bitmap bitmap, int degree) {
@@ -1077,35 +1191,45 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         if(tag.contains("Telefono 1")) {
             if (!(TextUtils.isEmpty(wrote_text))) {
                 Screen_Login_Activity.tarea_JSON.put(DBtareasController.telefono1, wrote_text);
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.MENSAJE_LIBRE, "#"+wrote_text+"#");
                 //Toast.makeText(Screen_Execute_Task.this, Screen_Login_Activity.tarea_JSON.toString(), Toast.LENGTH_LONG).show();
                 telefono1.setText(wrote_text);
             }
         }else if(tag.contains("Telefono 2")){
             if (!(TextUtils.isEmpty(wrote_text))) {
                 Screen_Login_Activity.tarea_JSON.put(DBtareasController.telefono2, wrote_text);
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.MENSAJE_LIBRE, "#"+wrote_text+"#");
                 //Toast.makeText(Screen_Execute_Task.this, Screen_Login_Activity.tarea_JSON.toString(), Toast.LENGTH_LONG).show();
                 telefono2.setText(wrote_text);
             }
         }else if(tag.contains("Observaciones")){
             if (!(TextUtils.isEmpty(wrote_text))) {
-                Screen_Login_Activity.tarea_JSON.put(DBtareasController.observaciones, wrote_text);
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.observaciones_devueltas, wrote_text);
                 //Toast.makeText(Screen_Execute_Task.this, Screen_Login_Activity.tarea_JSON.toString(), Toast.LENGTH_LONG).show();
                 textView_observaciones_screen_exec_task.setText(wrote_text);
             }
-        }else if(tag.equals("Numero Serie")){
+        }else if(tag.equals("Número Serie")){
             if (!(TextUtils.isEmpty(wrote_text))) {
                 if (!(TextUtils.isEmpty(wrote_text))) {
-                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.numero_serie_contador, wrote_text);
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.numero_serie_contador_devuelto, wrote_text);
                     textView_serial_number_result.setVisibility(View.VISIBLE);
                     textView_serial_number_result.setText(wrote_text);
                 }
             }
-        }else if(tag.equals("Numero Serie de Modulo")){
+        }else if(tag.equals("Número Serie de Modulo")){
             if (!(TextUtils.isEmpty(wrote_text))) {
                 if (!(TextUtils.isEmpty(wrote_text))) {
                     Screen_Login_Activity.tarea_JSON.put(DBtareasController.numero_serie_modulo, wrote_text);
                     textView_serial_number_module_result.setVisibility(View.VISIBLE);
                     textView_serial_number_module_result.setText(wrote_text);
+                }
+            }
+        }else if(tag.equals("Código de geolocalización")){
+            if (!(TextUtils.isEmpty(wrote_text))) {
+                if (!(TextUtils.isEmpty(wrote_text))) {
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.codigo_de_geolocalizacion, wrote_text);
+                    textView_codigo_geolocalization_screen_exec_task.setVisibility(View.VISIBLE);
+                    textView_codigo_geolocalization_screen_exec_task.setText(wrote_text);
                 }
             }
         }
@@ -1117,7 +1241,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
             Toast.makeText(Screen_Execute_Task.this, "Actualizada tarea correctamente", Toast.LENGTH_SHORT).show();
             Intent intent_open_task_or_personal_screen = new Intent(Screen_Execute_Task.this, team_or_personal_task_selection_screen_Activity.class);
             startActivity(intent_open_task_or_personal_screen);
-            Screen_Execute_Task.this.finish();
+            finishesThisClass();
             return;
         }
         else {
@@ -1198,7 +1322,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                         }else{
                             Intent intent_open_task_or_personal_screen = new Intent(Screen_Execute_Task.this, team_or_personal_task_selection_screen_Activity.class);
                             startActivity(intent_open_task_or_personal_screen);
-                            Screen_Execute_Task.this.finish();
+                            finishesThisClass();
                         }
                     }
                 }
@@ -1217,54 +1341,6 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         }
     }
 
-//    private void dispatchTakePictureIntent(int request) throws JSONException {
-//        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//        // Ensure that there's a camera activity to handle the intent
-//        //if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-//            // Create the File where the photo should go
-//            File photoFile = null;
-//            try {
-//                if(request == CAM_REQUEST_INST_PHOTO){
-//                    photoFile = createImageFile("foto_antes_instalacion");
-//                }
-//                else if(request == CAM_REQUEST_SN_PHOTO){
-//                    photoFile = createImageFile("foto_numero_serie");
-//                }
-//                else if(request == CAM_REQUEST_READ_PHOTO){
-//                    photoFile = createImageFile("foto_lectura");
-//                }
-//                else if(request == CAM_REQUEST_AFT_INT_PHOTO){
-//                    photoFile = createImageFile("foto_despues_instalacion");
-//                }
-//            } catch (IOException ex) {
-//                // Error occurred while creating the File
-//                Toast.makeText(this, "No se pudo crear el archivo", Toast.LENGTH_LONG).show();
-//            }
-//            // Continue only if the File was successfully created
-//            Camera camera = Camera.open();
-//            Camera.Parameters params = camera.getParameters();
-//            List<Camera.Size> sizes = params.getSupportedPictureSizes();
-//
-//            Toast.makeText(this, String.valueOf(sizes.get(sizes.size()-3).height) + "  " + String.valueOf(sizes.get(sizes.size()-3).width), Toast.LENGTH_LONG).show();
-//
-//            if (photoFile != null) {
-//                Uri photoURI = FileProvider.getUriForFile(this,
-//                        "com.example.luisreyes.proyecto_aguas.fileprovider",
-//                        photoFile);
-//                //takePictureIntent.setType("image/*");
-//                takePictureIntent.putExtra("crop", true);
-//                takePictureIntent.putExtra("outputX", 240);
-//                takePictureIntent.putExtra("outputY", 320);
-////                takePictureIntent.putExtra("aspectX", 1);
-////                takePictureIntent.putExtra("aspectY", 1);
-//                takePictureIntent.putExtra("scale", true);
-//                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-//                takePictureIntent.putExtra("outputFormat",
-//                        Bitmap.CompressFormat.JPEG.toString());
-//                startActivityForResult(takePictureIntent, request);
-//            }
-//        //}
-//    }
 
     private void dispatchTakePictureIntent(int request) throws JSONException {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -1303,13 +1379,21 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         // Create an image file name
 
         String imageFileName = null;
-        String image = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador)
-                .trim().replace(" ", "")+"_"+foto_x;
+        String image = "";
+
+        if(foto_x.contains("despues")){
+            image = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador_devuelto)
+                    .trim().replace(" ", "") + "_" + foto_x;
+        }else {
+            image = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador)
+                    .trim().replace(" ", "") + "_" + foto_x;
+        }
+
         String numero_abonado = null;
         numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
 
         File image_file=null;
-        File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+numero_abonado+"/");
+        File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+numero_abonado);
         if (!storageDir.exists()) {
             storageDir.mkdirs();
         }
@@ -1384,6 +1468,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         progressDialog.setCancelable(true);
     }
     public static void hideRingDialog(){
+        if(progressDialog!=null)
         progressDialog.dismiss();
     }
 
@@ -1407,7 +1492,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                 // User chose the "Settings" item, show the app settings UI...
                 return true;
 
-            case R.id.Ayuda:
+            case R.id.Tareas:
 //                Toast.makeText(Screen_User_Data.this, "Ayuda", Toast.LENGTH_SHORT).show();
                 // User chose the "Favorite" action, mark the current item
                 // as a favorite...
@@ -1437,5 +1522,19 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         MessageDialog messageDialog = new MessageDialog();
         messageDialog.setTitleAndHint(title, hint);
         messageDialog.show(getSupportFragmentManager(), title);
+    }
+
+    @Override
+    public void onBackPressed() {
+        finishesThisClass();
+        super.onBackPressed();
+    }
+
+    public void finishesThisClass(){
+        mCurrentPhotoPath_foto_antes = "";
+        mCurrentPhotoPath_foto_lectura= "";
+        mCurrentPhotoPath_foto_despues = "";
+        mCurrentPhotoPath_foto_serie = "";
+        finish();
     }
 }

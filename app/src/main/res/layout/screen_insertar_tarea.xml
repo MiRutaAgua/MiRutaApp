@@ -44,7 +44,7 @@
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/editText_numero_serie_screen_insertar_tarea"
-                android:hint="Número de Serie"
+                android:hint="Número de Serie con Prefijo"
                 android:imeOptions="actionNext"
                 />
         </LinearLayout>
@@ -67,9 +67,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-
             >
-
             <EditText
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
@@ -83,7 +81,6 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             >
-
             <EditText
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
@@ -101,8 +98,8 @@
             <EditText
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/editText_numero_edificio_screen_insertar_tarea"
-                android:hint="Numero Edificio"
+                android:id="@+id/editText_numero_portal_screen_insertar_tarea"
+                android:hint="Número Portal"
                 android:imeOptions="actionNext"
                 />
         </LinearLayout>
@@ -115,8 +112,8 @@
             <EditText
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/editText_letra_edificio_screen_insertar_tarea"
-                android:hint="Letra Edificio"
+                android:id="@+id/editText_BIS_screen_insertar_tarea"
+                android:hint="BIS"
                 android:imeOptions="actionNext"
                 />
         </LinearLayout>
@@ -169,6 +166,49 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             >
+            <EditText
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/editText_nombre_abonado_screen_insertar_tarea"
+                android:hint="Nombre de Abonado"
+                android:imeOptions="actionNext"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            >
+            <EditText
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/editText_numero_abonado_screen_insertar_tarea"
+                android:hint="Número de Abonado"
+                android:imeOptions="actionNext"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            >
+            <EditText
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/editText_telefono_screen_insertar_tarea"
+                android:hint="Telefono"
+                android:imeOptions="actionDone"
+                android:inputType="phone"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            >
 
             <EditText
                 android:layout_width="300dp"
@@ -184,49 +224,27 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:orientation="vertical"
+            android:layout_marginTop="10dp"
             >
-
-            <EditText
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TIPO DE TAREA"
+                android:textColor="@color/colorBlueAppRuta"
+                android:textStyle="bold"
+                android:fontFamily="@font/segoeui"
+                android:textSize="15dp"
+                android:gravity="center"
+                android:layout_gravity="center"
+                />
+            <Spinner
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/editText_tipo_screen_insertar_tarea"
+                android:id="@+id/spinner_tipo_screen_insertar_tarea"
                 android:hint="Tipo de Tarea"
-                android:imeOptions="actionNext"
                 />
         </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            >
-
-            <EditText
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/editText_abonado_screen_insertar_tarea"
-                android:hint="Abonado"
-                android:imeOptions="actionNext"
-                />
-        </LinearLayout>
-
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            >
-
-            <EditText
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/editText_telefono_screen_insertar_tarea"
-                android:hint="Telefono"
-                android:imeOptions="actionDone"
-                />
-        </LinearLayout>
-
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -56,7 +56,8 @@ public class Maps_Box extends AppCompatActivity implements OnMapReadyCallback, M
     DirectionsRoute currentRoute;
     private Point destinationPoint;
     private Point originPoint;
-    private LatLng coordenates;
+    private LatLng coordenates = new LatLng(0,0);
+    private LatLng coordenates_pump = new LatLng(0,0);
     View view;
     private LatLng home;
     private boolean mapa = false;
@@ -77,9 +78,13 @@ public class Maps_Box extends AppCompatActivity implements OnMapReadyCallback, M
     public void startNavigationBtnClick(View v)
     {
         if (mapa){
+
+
+
             try {
-                String coor = Screen_Login_Activity.tarea_JSON.getString("geolocalizacion");
-                Toast.makeText(Maps_Box.this, coor, Toast.LENGTH_LONG).show();
+                String coor = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.geolocalizacion).trim();
+                String coor1 = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.codigo_de_localizacion).trim();
+                //Toast.makeText(Maps_Box.this, coor, Toast.LENGTH_LONG).show();
                 if (coor.contains(",") && (!coor.contains("null")) && (!coor.contains("NULL"))    && (locationComponent.getLastKnownLocation() != null) ){
                     String[] parts = coor.split(",");
                     String part1 = parts[0]; //obtiene: latitud
@@ -88,17 +93,62 @@ public class Maps_Box extends AppCompatActivity implements OnMapReadyCallback, M
                     latitud_h = Double.parseDouble(part1);
                     longitud_h = Double.parseDouble(part2);
                     coordenates = new LatLng(latitud_h,longitud_h);
-                    Toast.makeText(Maps_Box.this, coor, Toast.LENGTH_LONG).show();
-
                     Toast.makeText(Maps_Box.this, "Cargando Ruta", Toast.LENGTH_LONG).show();
-
-                    getcoor();
+                    getcoor();}else {
+                    if (coor1.contains(",") && (!coor1.contains("null")) && (!coor1.contains("NULL"))    && (locationComponent.getLastKnownLocation() != null) ){
+                        String[] parts1 = coor1.split(",");
+                        String part11 = parts1[0]; //obtiene: latitud
+                        String part12 = parts1[1]; //obtiene: longitud
+                        double latitud_h, longitud_h;
+                        latitud_h = Double.parseDouble(part11);
+                        longitud_h = Double.parseDouble(part12);
+                        coordenates = new LatLng(latitud_h,longitud_h);
+                        Toast.makeText(Maps_Box.this, "Cargando Ruta", Toast.LENGTH_LONG).show();
+                        getcoor();
+                    }
                 }
+
+
+                   // Toast.makeText(Maps_Box.this, coor, Toast.LENGTH_LONG).show();
+                   // }
+
+//                String coor1 = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.codigo_de_localizacion).trim();
+//                //Toast.makeText(Maps_Box.this, coor, Toast.LENGTH_LONG).show();
+//                if (coor1.contains(",") && (!coor1.contains("null")) && (!coor1.contains("NULL"))    && (locationComponent.getLastKnownLocation() != null) ){
+//                    String[] parts = coor.split(",");
+//                    String part1 = parts[0]; //obtiene: latitud
+//                    String part2 = parts[1]; //obtiene: longitud
+//                    double latitud_h, longitud_h;
+//                    latitud_h = Double.parseDouble(part1);
+//                    longitud_h = Double.parseDouble(part2);
+//                    coordenates_pump = new LatLng(latitud_h,longitud_h);
+//                    // Toast.makeText(Maps_Box.this, coor, Toast.LENGTH_LONG).show();
+//                }
+//
+//                if (coordenates.getLatitude() != 0.0 && coordenates.getLongitude() !=0.0){
+//                    Toast.makeText(Maps_Box.this, "Cargando Ruta", Toast.LENGTH_LONG).show();
+//
+//                    getcoor();
+//                }else {
+//                    if (coordenates_pump.getLatitude() != 0.0 && coordenates_pump.getLongitude() !=0.0){
+//                        Toast.makeText(Maps_Box.this, "Cargando Ruta", Toast.LENGTH_LONG).show();
+//                        coordenates = coordenates_pump;
+//                        getcoor();
+//
+                    //}
+//                }
+
+
+
+
+
+
 
             } catch (JSONException e) {
                 e.printStackTrace();
                 Toast.makeText(Maps_Box.this, "No pudo Obtener geolocalizacion", Toast.LENGTH_LONG).show();
-            }}
+            }
+        }
         else{
             Toast.makeText(Maps_Box.this, "Espere a q cargue el mapa", Toast.LENGTH_LONG).show();}
 

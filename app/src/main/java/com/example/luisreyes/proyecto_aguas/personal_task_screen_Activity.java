@@ -131,7 +131,7 @@ public class personal_task_screen_Activity extends AppCompatActivity {
                 // User chose the "Settings" item, show the app settings UI...
                 return true;
 
-            case R.id.Ayuda:
+            case R.id.Tareas:
 //                Toast.makeText(Screen_User_Data.this, "Ayuda", Toast.LENGTH_SHORT).show();
                 // User chose the "Favorite" action, mark the current item
                 // as a favorite...
@@ -163,6 +163,14 @@ public class personal_task_screen_Activity extends AppCompatActivity {
         progressDialog.setCancelable(true);
     }
     public static void hideRingDialog(){
+        if(progressDialog!=null)
         progressDialog.dismiss();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent open_screen_team_or_task= new Intent(this, team_or_personal_task_selection_screen_Activity.class);
+        startActivity(open_screen_team_or_task);
+        finish();
     }
 }

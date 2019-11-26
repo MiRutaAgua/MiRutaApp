@@ -2,8 +2,10 @@ package com.example.luisreyes.proyecto_aguas;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -22,6 +24,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -54,7 +57,19 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
 
     private ImageView imagen_contador;
 
-    private TextView tipo_tarea, direccion, datosEspecificos, serie, lectura, acceso, ubicacion,calibre, ubicacion_bateria;
+    private TextView tipo_tarea,
+            direccion,
+            datosEspecificos,
+            serie,
+            lectura,
+            acceso,
+            ubicacion,
+            calibre,
+            ubicacion_bateria,
+            textView_numero_abonado_screen_battery_counter;
+
+    private String foto;
+
     private ProgressDialog progressDialog;
     private HashMap<String, String> mapaTiposDeTarea;
 
@@ -83,9 +98,9 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
         mapaTiposDeTarea.put("SI", "SOLO INSTALAR");
         mapaTiposDeTarea.put("R", "REFORMA MAS CONTADOR");
 
-
         button_geolocalization =(Button) findViewById(R.id.button_geolocalization_screen_battery_counter);
         imagen_contador = (ImageView) findViewById(R.id.imageView_screen_battery_counter_imagen);
+        textView_numero_abonado_screen_battery_counter = (TextView) findViewById(R.id.textView_screen_battery_counter_serie);
         serie = (TextView) findViewById(R.id.textView_screen_battery_counter_serie);
         lectura = (TextView) findViewById(R.id.textView_screen_battery_counter_lectura);
         acceso = (TextView) findViewById(R.id.textView_screen_battery_counter_acceso);
@@ -155,6 +170,14 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
 
         } catch (Exception e) {
             e.printStackTrace();
+            Toast.makeText(getApplicationContext(),"No se obtuvo informacion: "+e.toString(), Toast.LENGTH_LONG).show();
+        }
+
+        try {
+            textView_numero_abonado_screen_battery_counter.setText(Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado));
+        } catch (JSONException e) {
+            Log.e("Excepcion", "Error al cargar numero de abonado");
+            e.printStackTrace();
         }
         button_geolocalization.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -176,8 +199,9 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
                     }
                     @Override
                     public void onAnimationEnd(Animation arg0) {
-                        Intent intent_open_MapsActivity = new Intent(getApplicationContext(), PermissionsActivity.class);
-                        startActivity(intent_open_MapsActivity);
+                        Intent intent = new Intent(getApplicationContext(), PermissionsActivity.class);
+                        intent.putExtra("INSERTANDO", false);
+                        startActivity(intent);
                     }
                 });
                 button_geolocalization.startAnimation(myAnim);
@@ -300,7 +324,7 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
 
         if (checkConection()){
             try {
-                String foto =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_despues_instalacion);
+                foto =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_despues_instalacion);
                 //Toast.makeText(this, foto_instalacion, Toast.LENGTH_LONG).show();
                 if(foto.isEmpty() || foto.contains("null") || foto.contains("NULL") || foto == null){
                     foto =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_antes_instalacion);
@@ -335,15 +359,24 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
                 //String foto_instalacion =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_antes_instalacion);
                 String image = null, numero_abonado = null;
                 numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
-                image = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_despues_instalacion);
-
+                image =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_despues_instalacion);
+                //Toast.makeText(this, foto_instalacion, Toast.LENGTH_LONG).show();
+                if(image.isEmpty() || image.contains("null") || image.contains("NULL") || image == null){
+                    image =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_antes_instalacion);
+                    if(image.isEmpty() || image.contains("null") || image.contains("NULL") || image == null){
+                        image =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_lectura);
+                        if(image.isEmpty() || image.contains("null") || image.contains("NULL") || image == null){
+                            image =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_numero_serie);
+                        }
+                    }
+                }
                 if(numero_abonado!=null && !numero_abonado.equals("null")
                         && !numero_abonado.equals("NULL") && !TextUtils.isEmpty(numero_abonado)) {
                     if(image!=null && !image.equals("null")
                             && !image.equals("NULL") && !TextUtils.isEmpty(image)) {
-                        File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/fotos_tareas/"+numero_abonado+"/");
+                        File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/fotos_tareas/"+numero_abonado);
                         if (!storageDir.exists()) {
-                            storageDir.mkdir();
+                            storageDir.mkdirs();
                         }
                         File[] files = storageDir.listFiles();
                         for (int i = 0; i < files.length; i++) {
@@ -398,8 +431,7 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
                     if(bitmap!= null) {
                         imagen_contador.setVisibility(View.VISIBLE);
                         imagen_contador.setImageBitmap(bitmap);
-                        saveBitmapImage(bitmap, Screen_Login_Activity.tarea_JSON.getString(
-                                DBtareasController.foto_despues_instalacion));
+                        saveBitmapImage(bitmap, foto);
                         Toast.makeText(Screen_Battery_counter.this, "Imagen descargada", Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -414,7 +446,7 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
         String numero_abonado = null;
         try {
             numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
-            File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+numero_abonado+"/");
+            File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+numero_abonado);
             if (!myDir.exists()) {
                 myDir.mkdirs();
             }
@@ -468,6 +500,7 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
         progressDialog.setCancelable(true);
     }
     private void hideRingDialog(){
+        if(progressDialog!=null)
         progressDialog.dismiss();
     }
 
@@ -491,19 +524,12 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
                 // User chose the "Settings" item, show the app settings UI...
                 return true;
 
-            case R.id.Ayuda:
+            case R.id.Tareas:
 //                Toast.makeText(Screen_User_Data.this, "Ayuda", Toast.LENGTH_SHORT).show();
                 // User chose the "Favorite" action, mark the current item
                 // as a favorite...
                 return true;
 
-            case R.id.Configuracion:
-//                Toast.makeText(Screen_User_Data.this, "Configuracion", Toast.LENGTH_SHORT).show();
-                // User chose the "Favorite" action, mark the current item
-                // as a favorite...
-                    openMessage("Tarea", Screen_Battery_counter.get_tarea_info());
-
-                return true;
             case R.id.Info_Tarea:
 //                Toast.makeText(Screen_User_Data.this, "Configuracion", Toast.LENGTH_SHORT).show();
                 // User chose the "Favorite" action, mark the current item
@@ -526,6 +552,7 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
 
     public static String get_tarea_info(){
         HashMap<String, String> mapaTiposDeTarea = new HashMap<>();
+        mapaTiposDeTarea.put("", "NUEVO CONTADOR INSTALAR");
         mapaTiposDeTarea.put("NCI", "NUEVO CONTADOR INSTALAR");
         mapaTiposDeTarea.put("U", "USADO CONTADOR INSTALAR");
         mapaTiposDeTarea.put("T", "BAJA O CORTE DE SUMINISTRO");
@@ -538,8 +565,8 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
         mapaTiposDeTarea.put("EL", "EMISOR LECTURA");
         mapaTiposDeTarea.put("SI", "SOLO INSTALAR");
         mapaTiposDeTarea.put("R", "REFORMA MAS CONTADOR");
-        String tipo_tarea = null;
-        String calibre = null;
+        String tipo_tarea = "";
+        String calibre = "";
         try {
             tipo_tarea = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.tipo_tarea).
                     trim().replace("\n","");
@@ -563,18 +590,22 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
         String n = "";
         try{
             n = "Tipo:\n  "+tipo_tarea + " "+calibre
-                    +"\n\nDireccion:\n  "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.poblacion).trim()
+                    +"\n\nGestor: "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.GESTOR).trim()
+                    +"\n\nDirección:\n  "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.poblacion).trim()
                     +", "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.calle).trim()
                     +", "+Screen_Advance_Filter.getBis(Screen_Login_Activity.tarea_JSON).trim()
                     +"\n\nAbonado:\n  "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.nombre_cliente)
+                    +"\n\nNúmero de abonado:  "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado)
                     +"\n\nContador:\n  "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador)
                     +"\n\nCita:  "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.nuevo_citas)
-                    +"\n\nlectura Ultima: "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.lectura_ultima)
-                    +"\nlectura Actual: "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.lectura_actual)
-                    //+"\nCodigo_Localizacion: "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.codigo_de_localizacion)
+                    +"\n\nLectura última: "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.lectura_ultima)
+                    +"\nLectura actual: "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.lectura_actual)
+                    +"\n\nCódigo de geolocalización: "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.codigo_de_geolocalizacion)
                     //+"\ngeolocalizacion: "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.geolocalizacion)
-                    +"\n\nModificacion:\n"+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.date_time_modified)
-                    +"\n\nEstado: "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.status_tarea);
+                    +"\n\nModificación:\n"+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.date_time_modified)
+                    +"\n\nUrl Google:\n "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.url_geolocalizacion)
+                    +"\n\nNº Interno: "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_interno)
+                    +"\n\nEstado de Tarea: "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.status_tarea);
         } catch (JSONException e) {
             e.printStackTrace();
             return "No se pudo obtener datos de tarea";
@@ -584,5 +615,24 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
         }else{
             return "null";
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setTitle("Saliendo de tarea")
+                .setMessage("Los cambios en esta tarea se perderan\n¿Desea salir de esta tarea?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        finish();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                }).show();
     }
 }

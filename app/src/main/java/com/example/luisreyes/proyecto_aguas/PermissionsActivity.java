@@ -31,8 +31,20 @@ public class PermissionsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_permissions);
 
         if(ContextCompat.checkSelfPermission(PermissionsActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-            startActivity(new Intent(PermissionsActivity.this, MapActivity.class));
-            finish();
+            boolean insertando = getIntent().getBooleanExtra("INSERTANDO",false);
+            if(insertando){
+                Intent intent = new Intent(getApplicationContext(), MapActivity.class);
+                intent.putExtra("INSERTANDO", true);
+                startActivity(intent);
+                finish();
+
+            }
+
+            else{
+
+                startActivity(new Intent(PermissionsActivity.this, MapActivity.class));
+            finish();}
+
             return;
         }
 

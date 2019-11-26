@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,6 +20,7 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -79,6 +82,9 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
         myToolbar.setBackgroundColor(Color.TRANSPARENT);
         setSupportActionBar(myToolbar);
 
+        mCurrentPhotoPath_incidencia_1 = "";
+        mCurrentPhotoPath_incidencia_2 = "";
+        mCurrentPhotoPath_incidencia_3 = "";
 
         button_geolocalizar_screen_incidence = (Button)findViewById(R.id.button_geolocalizar_screen_incidence);
 
@@ -108,7 +114,7 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
         lista_desplegable.add("PENDIENTE DE SOLUCIONAR");
         lista_desplegable.add("NO QUIERE CAMBIAR");
         lista_desplegable.add("NO HAY ACCESO");
-        ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista_desplegable);
+        ArrayAdapter arrayAdapter = new ArrayAdapter(this, R.layout.spinner_text_view, lista_desplegable);
         spinner_lista_de_mal_ubicacion.setAdapter(arrayAdapter);
 
         try {
@@ -271,7 +277,8 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
                     @Override
                     public void onAnimationEnd(Animation arg0) {
 
-                        Intent intent = new Intent(getApplicationContext(),PermissionsActivity.class);
+                        Intent intent = new Intent(getApplicationContext(), PermissionsActivity.class);
+                        intent.putExtra("INSERTANDO", false);
                         startActivity(intent);
                     }
                 });
@@ -312,12 +319,11 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
                     }
                     @Override
                     public void onAnimationEnd(Animation arg0) {
-
                         try {
                             String fecha = DBtareasController.getStringFromFechaHora(new Date());
                             Screen_Login_Activity.tarea_JSON.put(DBtareasController.date_time_modified, fecha);
                             if(!DBtareasController.tabla_model) {
-                                Screen_Login_Activity.tarea_JSON.put(DBtareasController.fecha_instalacion, fecha);
+                                Screen_Login_Activity.tarea_JSON.put(DBtareasController.F_INST, fecha);
                                 Screen_Login_Activity.tarea_JSON.put(DBtareasController.fecha_de_cambio, fecha);
                             }
                         } catch (JSONException e) {
@@ -330,7 +336,6 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
                             e.printStackTrace();
                             Toast.makeText(Screen_Incidence.this, "No se pudo insetar texto incidencia en JSON tarea", Toast.LENGTH_LONG).show();
                         }
-
                         Intent intent_open_incidence_summary = new Intent(Screen_Incidence.this, Screen_Incidence_Summary.class);
                         startActivity(intent_open_incidence_summary);
                     }
@@ -353,9 +358,11 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
             if(Dialog.getTitle() == "telefono1"){
                 telefono1.setText((CharSequence) telefono);
                 Screen_Login_Activity.tarea_JSON.put(DBtareasController.telefono1, telefono1.getText().toString());
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.MENSAJE_LIBRE, "#"+telefono+"#");
             }else if(Dialog.getTitle() == "telefono2"){
                 telefono2.setText((CharSequence) telefono);
                 Screen_Login_Activity.tarea_JSON.put(DBtareasController.telefono2, telefono2.getText().toString());
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.MENSAJE_LIBRE, "#"+telefono+"#");
             }
         }
     }
@@ -441,9 +448,6 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
                             photo1.setImageBitmap(getPhotoUserLocal(mCurrentPhotoPath_incidencia_1));
                         }
                     }
-//            mCurrentPhotoPath_incidencia_1 = saveBitmapImage(getPhotoUserLocal(mCurrentPhotoPath_incidencia_1), "foto_incidencia_1");
-//            photo1.setVisibility(View.VISIBLE);
-//            photo1.setImageBitmap(getPhotoUserLocal(mCurrentPhotoPath_incidencia_1));
                 }
                 if (requestCode == CAM_REQUEST_2_PHOTO_FULL_SIZE) {
                     if (!TextUtils.isEmpty(data.getStringExtra("photo_path")) && data.getStringExtra("photo_path") != null) {
@@ -454,9 +458,6 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
                             photo2.setImageBitmap(getPhotoUserLocal(mCurrentPhotoPath_incidencia_2));
                         }
                     }
-//                mCurrentPhotoPath_incidencia_2 = saveBitmapImage(getPhotoUserLocal(mCurrentPhotoPath_incidencia_2), "foto_incidencia_2");
-//                photo2.setVisibility(View.VISIBLE);
-//                photo2.setImageBitmap(getPhotoUserLocal(mCurrentPhotoPath_incidencia_2));
                 }
                 if (requestCode == CAM_REQUEST_3_PHOTO_FULL_SIZE) {
                     if (!TextUtils.isEmpty(data.getStringExtra("photo_path")) && data.getStringExtra("photo_path") != null) {
@@ -467,9 +468,6 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
                             photo3.setImageBitmap(bitmap);
                         }
                     }
-//                mCurrentPhotoPath_incidencia_3 = saveBitmapImage(getPhotoUserLocal(mCurrentPhotoPath_incidencia_3), "foto_incidencia_3");
-//                photo3.setVisibility(View.VISIBLE);
-//                photo3.setImageBitmap(getPhotoUserLocal(mCurrentPhotoPath_incidencia_3));
                 }
             }
         }
@@ -517,7 +515,7 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
         numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
 
         File image_file=null;
-        File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+numero_abonado+"/");
+        File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+numero_abonado);
         if (!storageDir.exists()) {
             storageDir.mkdirs();
         }
@@ -582,7 +580,7 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
 
             numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
 
-            File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+numero_abonado+"/");
+            File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+numero_abonado);
             if (!myDir.exists()) {
                 myDir.mkdirs();
             }
@@ -603,6 +601,34 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
                 file.delete();
             try {
                 FileOutputStream out = new FileOutputStream(file);
+
+                ExifInterface ei = new ExifInterface(file.getAbsolutePath());
+                int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                        ExifInterface.ORIENTATION_UNDEFINED);
+
+//                Bitmap rotatedBitmap = null;
+                switch(orientation) {
+                    case ExifInterface.ORIENTATION_ROTATE_90:
+                        bitmap = rotateImage(bitmap, 90);
+                        Log.e("Orientation", "90");
+                        break;
+
+                    case ExifInterface.ORIENTATION_ROTATE_180:
+                        bitmap = rotateImage(bitmap, 180);
+                        Log.e("Orientation", "180");
+                        break;
+
+                    case ExifInterface.ORIENTATION_ROTATE_270:
+                        bitmap = rotateImage(bitmap, 270);
+                        Log.e("Orientation", "180");
+                        break;
+
+                    case ExifInterface.ORIENTATION_NORMAL:
+                    default:
+                        bitmap = bitmap;
+//                        Log.e("Orientation", "normal");
+                }
+
                 bitmap.compress(Bitmap.CompressFormat.JPEG, MainActivity.COMPRESS_QUALITY, out);
                 out.flush();
                 out.close();
@@ -613,17 +639,18 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
             if(team_or_personal_task_selection_screen_Activity.dBtareasController != null){
                     team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea(Screen_Login_Activity.tarea_JSON);
             }
-//            else if(Screen_Table_Personal.dBtareasController != null){
-//                if(Screen_Table_Personal.dBtareasController.databasefileExists(this) && Screen_Table_Personal.dBtareasController.checkForTableExists())
-//                {
-//                    Screen_Table_Personal.dBtareasController.updateTarea(Screen_Login_Activity.tarea_JSON);
-//                }
-//            }
             return file.getAbsolutePath();
         } catch (JSONException e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static Bitmap rotateImage(Bitmap source, float angle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
+                matrix, true);
     }
 
     @Override
@@ -646,7 +673,7 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
                 // User chose the "Settings" item, show the app settings UI...
                 return true;
 
-            case R.id.Ayuda:
+            case R.id.Tareas:
 //                Toast.makeText(Screen_User_Data.this, "Ayuda", Toast.LENGTH_SHORT).show();
                 // User chose the "Favorite" action, mark the current item
                 // as a favorite...
@@ -675,5 +702,16 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
         MessageDialog messageDialog = new MessageDialog();
         messageDialog.setTitleAndHint(title, hint);
         messageDialog.show(getSupportFragmentManager(), title);
+    }
+    @Override
+    public void onBackPressed() {
+        finishThisClass();
+        super.onBackPressed();
+    }
+    public void finishThisClass(){
+        mCurrentPhotoPath_incidencia_1 = "";
+        mCurrentPhotoPath_incidencia_2 = "";
+        mCurrentPhotoPath_incidencia_3 = "";
+        finish();
     }
 }

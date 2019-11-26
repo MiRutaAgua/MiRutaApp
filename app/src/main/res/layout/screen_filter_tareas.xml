@@ -102,12 +102,23 @@
                                 android:textSize="17dp"
                                 android:textColor="@color/colorBlueAppRuta"
                                 />
-                            <Spinner
-                                android:id="@+id/spinner_filtro_poblacion_screen_advance_filter"
-                                android:layout_width="160dp"
+                            <TextView
+                                android:id="@+id/textView_poblacion_screen_filter_tareas"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:text="..."
+                                android:textStyle="bold"
+                                android:textSize="14dp"
+                                />
+                            <AutoCompleteTextView
+                                android:id="@+id/editText_poblacion_screen_filter_tareas"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Filtrar"
+                                android:textSize="15dp"
                                 android:textAlignment="center"
-                                ></Spinner>
+                                android:inputType="text"
+                                />
                         </LinearLayout>
 
                         <LinearLayout
@@ -133,6 +144,15 @@
                                 android:text="..."
                                 android:textStyle="bold"
                                 android:textSize="14dp"
+                                />
+                            <AutoCompleteTextView
+                                android:id="@+id/editText_calle_screen_filter_tareas"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Filtrar"
+                                android:textSize="15dp"
+                                android:textAlignment="center"
+                                android:inputType="text"
                                 />
                         </LinearLayout>
                     </LinearLayout>
@@ -188,6 +208,38 @@
                     </LinearLayout>
                 </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:layout_marginTop="40dp"
+                    android:id="@+id/layout_filtro_geolocalizacion_screen_advance_filter"
+                    >
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        >
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="CÓDIGO DE GEOLOCALIZACIÓN"
+                            android:textStyle="bold"
+                            android:textSize="17dp"
+                            android:textColor="@color/colorBlueAppRuta"
+                            />
+                        <AutoCompleteTextView
+                            android:id="@+id/editText_geolocalizacion_screen_filter_tareas"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Código"
+                            android:textSize="15dp"
+                            android:textAlignment="center"
+                            />
+                    </LinearLayout>
+                </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -309,7 +361,6 @@
                             android:gravity="center"
                             android:inputType="number"
                             />
-
                     </LinearLayout>
 
                     <LinearLayout
@@ -395,14 +446,155 @@
 
         </ScrollView>
 
-        <ListView
-            android:id="@+id/listView_contadores_screen_advance_filter"
+        <LinearLayout
+            android:id="@+id/layout_listView_contadores_screen_filter_tareas"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone"
             android:layout_marginTop="10dp"
             >
-        </ListView>
-
+            <LinearLayout
+                android:id="@+id/layout_filtro_tipo_tareas_dir_screen_filter_tareas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:orientation="horizontal"
+                android:padding="10dp"
+                android:visibility="gone"
+                >
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="POBLACIÓN"
+                        android:textStyle="bold"
+                        android:textSize="14dp"
+                        android:textColor="@color/colorBlueAppRuta"
+                        />
+                    <Spinner
+                        android:id="@+id/spinner_filtro_poblacion_screen_filter_tareas"
+                        android:layout_width="120dp"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        ></Spinner>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="CALLE"
+                        android:textStyle="bold"
+                        android:textSize="14dp"
+                        android:textColor="@color/colorBlueAppRuta"
+                        />
+                    <Spinner
+                        android:id="@+id/spinner_filtro_calle_screen_filter_tareas"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        ></Spinner>
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/layout_filtro_dir_tipo_tareas_screen_filter_tareas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:orientation="horizontal"
+                android:padding="10dp"
+                android:visibility="gone"
+                >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="TIPOS DE TAREA"
+                        android:textStyle="bold"
+                        android:textSize="14dp"
+                        android:textColor="@color/colorBlueAppRuta"
+                        />
+                    <Spinner
+                        android:id="@+id/spinner_filtro_tipo_tarea_dir_screen_filter_tareas"
+                        android:layout_width="220dp"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        ></Spinner>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="CALIBRE"
+                        android:textStyle="bold"
+                        android:textSize="14dp"
+                        android:textColor="@color/colorBlueAppRuta"
+                        />
+                    <Spinner
+                        android:id="@+id/spinner_filtro_calibre_dir_screen_filter_tareas"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        ></Spinner>
+                </LinearLayout>
+            </LinearLayout>
+            <TextView
+                android:layout_marginTop="5dp"
+                android:id="@+id/textView_listView_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="POBLACIONES"
+                android:textStyle="bold"
+                android:textSize="16dp"
+                android:textColor="@color/colorBlueAppRuta"
+                />
+            <ListView
+                android:id="@+id/listView_contadores_screen_filter_tareas"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                >
+            </ListView>
+        </LinearLayout>
 
     </LinearLayout>
 
