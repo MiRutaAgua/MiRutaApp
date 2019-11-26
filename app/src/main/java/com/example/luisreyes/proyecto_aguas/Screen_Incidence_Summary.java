@@ -1150,7 +1150,10 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        if(!team_or_personal_task_selection_screen_Activity.dBtareasController.saveChangesInTarea()){
+            Toast.makeText(getApplicationContext(), "No se pudo guardar cambios", Toast.LENGTH_SHORT).show();
+        }
         this.finish();
+        super.onBackPressed();
     }
 }

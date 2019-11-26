@@ -534,6 +534,9 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                         if(!TextUtils.isEmpty(lectura_editText.getText().toString())) {
                             lectura_introducida = lectura_editText.getText().toString();
                         }
+                        if(!team_or_personal_task_selection_screen_Activity.dBtareasController.saveChangesInTarea()){
+                            Toast.makeText(getApplicationContext(), "No se pudo guardar cambios", Toast.LENGTH_SHORT).show();
+                        }
                         showRingDialog("Validando...");
                         Intent intent_open_screen_validate = new Intent(Screen_Execute_Task.this, Screen_Validate.class);
                         startActivity(intent_open_screen_validate);
@@ -1526,6 +1529,9 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
 
     @Override
     public void onBackPressed() {
+        if(!team_or_personal_task_selection_screen_Activity.dBtareasController.saveChangesInTarea()){
+            Toast.makeText(getApplicationContext(), "No se pudo guardar cambios", Toast.LENGTH_SHORT).show();
+        }
         finishesThisClass();
         super.onBackPressed();
     }

@@ -603,6 +603,9 @@ public class Screen_Battery_Intake_Asignation extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        if(!team_or_personal_task_selection_screen_Activity.dBtareasController.saveChangesInTarea()){
+            Toast.makeText(getApplicationContext(), "No se pudo guardar cambios", Toast.LENGTH_SHORT).show();
+        }
         finish();
         super.onBackPressed();
     }

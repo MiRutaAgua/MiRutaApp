@@ -588,17 +588,20 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
     public void onBackPressed() {
         new AlertDialog.Builder(this)
                 .setTitle("Saliendo de tarea")
-                .setMessage("Los cambios en esta tarea se perderan\n¿Desea salir de esta tarea?")
+                .setMessage("¿Desea guardar cambios de esta tarea?")
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        if(!team_or_personal_task_selection_screen_Activity.dBtareasController.saveChangesInTarea()){
+                            Toast.makeText(getApplicationContext(), "No se pudo guardar cambios", Toast.LENGTH_SHORT).show();
+                        }
                         finish();
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-
+                        finish();
                     }
                 }).show();
     }

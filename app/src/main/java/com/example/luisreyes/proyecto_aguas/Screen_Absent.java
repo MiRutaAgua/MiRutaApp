@@ -25,6 +25,7 @@ import android.support.v7.widget.Toolbar;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -391,25 +392,31 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
         });
     }
 
-    private void onCerrar_tarea() {
-        try {
-            Screen_Login_Activity.tarea_JSON.put(DBtareasController.date_time_modified, DBtareasController.getStringFromFechaHora(new Date()));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+    private void guardarCambiosDeCheckBoxes(){
         if(checkbox_tocado_en_puerta_screen_absent.isChecked()) {
             try {
-                Screen_Login_Activity.tarea_JSON.put(DBtareasController.fechas_tocado_puerta, DBoperariosController.getStringFromFechaHora(new Date())
-                        +"\n"+ Screen_Login_Activity.tarea_JSON.getString(DBtareasController.fechas_tocado_puerta));
+                Date date =  new Date();
+                date.setSeconds(0);
+                String fechaString = DBoperariosController.getStringFromFechaHora(date);
+                String fechas = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.fechas_tocado_puerta);
+                if(!fechas.contains(fechaString)){
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.fechas_tocado_puerta, fechaString
+                            +"\n"+ Screen_Login_Activity.tarea_JSON.getString(DBtareasController.fechas_tocado_puerta));
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
         if(checkbox_nota_de_aviso_screen_absent.isChecked()) {
             try {
-                Screen_Login_Activity.tarea_JSON.put(DBtareasController.fechas_nota_aviso,
-                        DBoperariosController.getStringFromFechaHora(new Date())
-                                +"\n"+ Screen_Login_Activity.tarea_JSON.getString(DBtareasController.fechas_nota_aviso));
+                Date date =  new Date();
+                date.setSeconds(0);
+                String fechaString = DBoperariosController.getStringFromFechaHora(date);
+                String fechas = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.fechas_nota_aviso);
+                if(!fechas.contains(fechaString)){
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.fechas_nota_aviso, fechaString
+                            +"\n"+ Screen_Login_Activity.tarea_JSON.getString(DBtareasController.fechas_nota_aviso));
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -495,6 +502,16 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
                 e.printStackTrace();
             }
         }
+    }
+
+    private void onCerrar_tarea() {
+        try {
+            Screen_Login_Activity.tarea_JSON.put(DBtareasController.date_time_modified, DBtareasController.getStringFromFechaHora(new Date()));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        guardarCambiosDeCheckBoxes();
+
         try {
             String status_tarea = Screen_Login_Activity.tarea_JSON.getString(
                     DBtareasController.status_tarea);
@@ -626,6 +643,7 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
                 Screen_Login_Activity.tarea_JSON.put(DBtareasController.nuevo_citas,
                         fecha_cita.getText().toString()+"\n"+time_label_string);
                 Screen_Login_Activity.tarea_JSON.put(DBtareasController.fecha_hora_cita, fecha_hora_cita);
+
             } catch (JSONException e) {
                 e.printStackTrace();
                 Toast.makeText(Screen_Absent.this, "No se pudo agregar nueva cita", Toast.LENGTH_LONG).show();
@@ -752,6 +770,10 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
 
     @Override
     public void onBackPressed() {
+        guardarCambiosDeCheckBoxes();
+        if(!team_or_personal_task_selection_screen_Activity.dBtareasController.saveChangesInTarea()){
+            Toast.makeText(Screen_Absent.this, "No se pudo guardar cambios", Toast.LENGTH_SHORT).show();
+        }
         this.finish();
         super.onBackPressed();
     }
