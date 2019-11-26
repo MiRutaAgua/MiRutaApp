@@ -83,20 +83,7 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
         myToolbar.setBackgroundColor(Color.TRANSPARENT);
         setSupportActionBar(myToolbar);
 
-        mapaTiposDeTarea = new HashMap<>();
-        mapaTiposDeTarea.put("", "NUEVO CONTADOR INSTALAR");
-        mapaTiposDeTarea.put("NCI", "NUEVO CONTADOR INSTALAR");
-        mapaTiposDeTarea.put("U", "USADO CONTADOR INSTALAR");
-        mapaTiposDeTarea.put("T", "BAJA O CORTE DE SUMINISTRO");
-        mapaTiposDeTarea.put("TBDN", "BAJA O CORTE DE SUMINISTRO");
-        mapaTiposDeTarea.put("LFTD", "LIMPIEZA DE FILTRO Y TOMA DE DATOS");
-        mapaTiposDeTarea.put("D", "DATOS");
-        mapaTiposDeTarea.put("TD", "TOMA DE DATOS");
-        mapaTiposDeTarea.put("I", "INSPECCIÓN");
-        mapaTiposDeTarea.put("CF", "COMPROBAR EMISOR");
-        mapaTiposDeTarea.put("EL", "EMISOR LECTURA");
-        mapaTiposDeTarea.put("SI", "SOLO INSTALAR");
-        mapaTiposDeTarea.put("R", "REFORMA MAS CONTADOR");
+        mapaTiposDeTarea = Tabla_de_Codigos.mapaTiposDeAnomalias;
 
         button_geolocalization=(Button) findViewById(R.id.button_geolocalization_screen_unity_counter);
         imagen_contador = (ImageView) findViewById(R.id.imageView_screen_unity_counter_imagen);

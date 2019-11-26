@@ -24,6 +24,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,6 +45,9 @@ import java.util.Map;
 public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogListener{
 
 
+    private LinearLayout linearlayout_resultado_screen_anomaly,
+            linearlayout_seleccion_resultado_screen_anomaly;
+
     private Spinner spinner_anomaly,
             spinner_tipo_anomalia_screen_anomaly,
             spinner_emplazamiento_screen_anomaly,
@@ -51,7 +55,8 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
     spinner_tipo_fluido_screen_anomaly,
     spinner_tipo_radio_screen_anomaly,
     spinner_marca_screen_anomaly;
-			
+    private Spinner spinner_resultado_screen_anomaly;
+
 	private TextView textView_lectura_nuevo_screen_exec_task,
 	textView_emplazamiento_screen_exec_task,
             textView_resultado_screen_exec_task,
@@ -90,6 +95,7 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
 
     private String current_tag;
 
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.screen_anomaly);
@@ -115,22 +121,14 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
         mapaAnomaliasEL = Tabla_de_Codigos.mapaAnomaliasEL;
         mapaAnomaliasI = Tabla_de_Codigos.mapaAnomaliasI;
 
-        ArrayList<String> lista_tipo_radio= new ArrayList<>();
-        lista_tipo_radio.add("NINGUNO");
-        lista_tipo_radio.add("R3");
-        lista_tipo_radio.add("R4");
-        lista_tipo_radio.add("W4");
+        ArrayList<String> lista_tipo_radio= Tabla_de_Codigos.lista_tipo_radio;
 
-        ArrayList<String> lista_tipo_fluido= new ArrayList<>();
-        lista_tipo_fluido.add("NINGUNO");
-        lista_tipo_fluido.add("FRIA");
-        lista_tipo_fluido.add("CALIENTE");
-        lista_tipo_fluido.add("ENERGIA");
-        lista_tipo_fluido.add("ELECTRONICO");
-        lista_tipo_fluido.add("MBUS");
-        lista_tipo_fluido.add("GAS");
-        lista_tipo_fluido.add("FRIGORIAS");
-        lista_tipo_fluido.add("GENERAL");
+        ArrayList<String> lista_tipo_fluido= Tabla_de_Codigos.lista_tipo_fluido;
+
+        linearlayout_resultado_screen_anomaly = (LinearLayout) findViewById(R.id.linearlayout_resultado_screen_anomaly);
+        linearlayout_seleccion_resultado_screen_anomaly = (LinearLayout) findViewById(R.id.linearlayout_seleccion_resultado_screen_anomaly);
+
+        spinner_resultado_screen_anomaly = (Spinner) findViewById(R.id.spinner_resultado_screen_anomaly);
 
         button_guardar_datos_screen_anomaly = (Button)findViewById(R.id.button_guardar_datos_screen_anomaly);
 
@@ -393,6 +391,23 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
             public void onNothingSelected(AdapterView<?> adapterView) {
             }
         });
+
+        spinner_resultado_screen_anomaly.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String selected = spinner_resultado_screen_anomaly
+                        .getAdapter().getItem(i).toString();
+//                Toast.makeText(getApplicationContext(), "Selected: "+ selected, Toast.LENGTH_LONG).show();
+                if(selected.contains(" - ")) {
+                    String resultado = selected.split(" - ")[0];
+                    textView_resultado_screen_exec_task.setText(resultado);
+                    Log.e("Resultado: ", resultado);
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
         spinner_anomaly.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -400,8 +415,64 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
                         .getAdapter().getItem(i).toString();
                 if(!selected.isEmpty() && selected.contains(" - ")){
                     String anomaly = selected.split(" - ")[0].trim();
+
+                    Log.e("anomalia seleccionada", anomaly);
+
                     if(mapaTiposDeResultados.containsKey(anomaly)){
-                        textView_resultado_screen_exec_task.setText(mapaTiposDeResultados.get(anomaly));
+                        Log.e("anomalia seleccionada", "encontrada en mapa");
+                        ArrayList<String> lista_resultados = new ArrayList<>();
+                        ArrayAdapter resultados_adapter;
+
+                        linearlayout_resultado_screen_anomaly.setVisibility(View.GONE);
+                        linearlayout_seleccion_resultado_screen_anomaly.setVisibility(View.VISIBLE);
+
+                        if(anomaly.equals("036")){
+                            Log.e("anomalia_gestor 036", "012 011 017");
+                            lista_resultados.add("012 - BAJA EJECUTADA / Contador depositado en almacén");
+                            lista_resultados.add("011 - BAJA EJECUTADA / Contador entregado al abonado");
+                            lista_resultados.add("017 - Taponado con junta ciega y se mantiene contador");
+                            resultados_adapter = new ArrayAdapter(getApplicationContext(), R.layout.spinner_text_view, lista_resultados);
+                            spinner_resultado_screen_anomaly.setAdapter(resultados_adapter);
+                        }
+                        else if(anomaly.equals("A33")){
+                            linearlayout_resultado_screen_anomaly.setVisibility(View.VISIBLE);
+                            linearlayout_seleccion_resultado_screen_anomaly.setVisibility(View.GONE);
+                            try {
+                                Log.e("anomalia_gestor A33", "002");
+                                String anomalia_gestor = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.ANOMALIA).trim();
+                                if(anomalia_gestor.equals("A30")){
+                                    textView_resultado_screen_exec_task.setText("002");
+                                    Log.e("anomalia_gestor", "A30");
+                                }
+                                else if(anomalia_gestor.equals("A31")){
+                                    textView_resultado_screen_exec_task.setText("002");
+                                    Log.e("anomalia_gestor", "A31");
+                                }
+                                else if(anomalia_gestor.equals("A33")){
+                                    textView_resultado_screen_exec_task.setText("002");
+                                    Log.e("anomalia_gestor", "A33");
+                                }else {
+                                    textView_resultado_screen_exec_task.setText("002");
+                                    Log.e("anomalia_gestor", "else");
+                                }
+                            } catch (JSONException e) {
+                                Log.e("spinner_anomaly.setOnI", "No se pudo obtener anomalia del gestor");
+                                textView_resultado_screen_exec_task.setText("");
+                                e.printStackTrace();
+                            }
+                        }
+                        else if(anomaly.equals("A32")){
+                            Log.e("anomalia_gestor 032", "002 SR2");
+                            lista_resultados.add("002 - Toma datos");
+                            lista_resultados.add("SR2 - Toma datos RADIO");
+                            resultados_adapter = new ArrayAdapter(getApplicationContext(), R.layout.spinner_text_view, lista_resultados);
+                            spinner_resultado_screen_anomaly.setAdapter(resultados_adapter);
+                        }
+                        else{
+                            linearlayout_resultado_screen_anomaly.setVisibility(View.VISIBLE);
+                            linearlayout_seleccion_resultado_screen_anomaly.setVisibility(View.GONE);
+                            textView_resultado_screen_exec_task.setText(mapaTiposDeResultados.get(anomaly));
+                        }
                     }
                     else{
                         textView_resultado_screen_exec_task.setText("");

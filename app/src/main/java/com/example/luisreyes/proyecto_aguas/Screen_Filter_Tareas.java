@@ -140,20 +140,7 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
         lista_desplegable.add("GEOLOCALIZACIÓN");
         //lista_desplegable.add("DATOS ÚNICOS");
 
-        mapaTiposDeTarea = new HashMap<>();
-        mapaTiposDeTarea.put("", "NUEVO CONTADOR INSTALAR");
-        mapaTiposDeTarea.put("NCI", "NUEVO CONTADOR INSTALAR");
-        mapaTiposDeTarea.put("U", "USADO CONTADOR INSTALAR");
-        mapaTiposDeTarea.put("T", "BAJA O CORTE DE SUMINISTRO");
-        mapaTiposDeTarea.put("TBDN", "BAJA O CORTE DE SUMINISTRO");
-        mapaTiposDeTarea.put("LFTD", "LIMPIEZA DE FILTRO Y TOMA DE DATOS");
-//        mapaTiposDeTarea.put("D", "DATOS");
-        mapaTiposDeTarea.put("TD", "TOMA DE DATOS");
-        mapaTiposDeTarea.put("I", "INSPECCIÓN");
-        mapaTiposDeTarea.put("CF", "COMPROBAR EMISOR");
-        mapaTiposDeTarea.put("EL", "EMISOR LECTURA");
-        mapaTiposDeTarea.put("SI", "SOLO INSTALAR");
-//        mapaTiposDeTarea.put("R", "REFORMA MAS CONTADOR");
+        mapaTiposDeTarea = Tabla_de_Codigos.mapaTiposDeAnomalias;
 
         layout_listView_contadores_screen_advance_filter = (LinearLayout) findViewById(R.id.layout_listView_contadores_screen_filter_tareas);
         listView_contadores_screen_advance_filter = (ListView)findViewById(R.id.listView_contadores_screen_filter_tareas);

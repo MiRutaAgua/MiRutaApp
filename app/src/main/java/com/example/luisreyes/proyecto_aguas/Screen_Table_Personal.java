@@ -122,7 +122,6 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
 //        lista_desplegable.add("TIPO DE TAREA");
 //        lista_desplegable.add("DATOS ÚNICOS");
 //        lista_desplegable.add("CITAS");
-
 //        ArrayAdapter arrayAdapter_spinner = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista_desplegable);
 //        spinner_filtro_tareas.setAdapter(arrayAdapter_spinner);
 

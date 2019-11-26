@@ -1,5 +1,6 @@
 package com.example.luisreyes.proyecto_aguas;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -27,7 +28,28 @@ public class Tabla_de_Codigos {
     public static HashMap<String,String> mapaAnomaliasI;
     public static HashMap<String,String> emptyMap;
 
+    public static ArrayList<String> lista_tipo_radio;
+    public static ArrayList<String> lista_tipo_fluido;
+
     public Tabla_de_Codigos(){
+
+        lista_tipo_radio= new ArrayList<>();
+        lista_tipo_radio.add("NINGUNO");
+        lista_tipo_radio.add("R3");
+        lista_tipo_radio.add("R4");
+        lista_tipo_radio.add("W4");
+
+        lista_tipo_fluido= new ArrayList<>();
+        lista_tipo_fluido.add("NINGUNO");
+        lista_tipo_fluido.add("FRIA");
+        lista_tipo_fluido.add("CALIENTE");
+        lista_tipo_fluido.add("ENERGIA");
+        lista_tipo_fluido.add("ELECTRONICO");
+        lista_tipo_fluido.add("MBUS");
+        lista_tipo_fluido.add("GAS");
+        lista_tipo_fluido.add("FRIGORIAS");
+        lista_tipo_fluido.add("GENERAL");
+
         mapaTiposDeEmplazamiento = new HashMap<>();
         mapaTiposDeEmplazamiento.put("AC", "Acera");
         mapaTiposDeEmplazamiento.put("AR", "Arqueta");
@@ -166,11 +188,10 @@ public class Tabla_de_Codigos {
 //        mapaTiposDeTipoRadio.put("Z21", "CAMBIOS MASIVOS");
 //        mapaTiposDeTipoRadio.put("LHC", "LECTURA HISTORICA. WB-DB-RF");
 
-    mapaTiposDeResultados = new HashMap<>();
+        mapaTiposDeResultados = new HashMap<>();
         mapaTiposDeResultados.put("036", "012");
         mapaTiposDeResultados.put("037", "012");
         mapaTiposDeResultados.put("039", "012");
-//        mapaTiposDeAnomalias.put("036", "11"); //preguntar por este  //añadir opciones a escoger
         mapaTiposDeResultados.put("A30", "002");
         mapaTiposDeResultados.put("A31", "002");
         mapaTiposDeResultados.put("A32", "002");
@@ -200,7 +221,8 @@ public class Tabla_de_Codigos {
         mapaTiposDeResultados.put("R30", "997");
         mapaTiposDeResultados.put("003", "903");
 
-    mapaTiposDeAnomalias = new HashMap<>();
+        mapaTiposDeAnomalias = new HashMap<>();
+        mapaTiposDeAnomalias.put("", "NUEVO CONTADOR INSTALAR");
         mapaTiposDeAnomalias.put("NCI", "NUEVO CONTADOR INSTALAR");
         mapaTiposDeAnomalias.put("U", "USADO CONTADOR INSTALAR");
         mapaTiposDeAnomalias.put("T", "BAJA O CORTE DE SUMINISTRO");
@@ -214,9 +236,9 @@ public class Tabla_de_Codigos {
         mapaTiposDeAnomalias.put("SI", "SOLO INSTALAR");
     //mapaTiposDeAnomalias.put("R", "REFORMA MAS CONTADOR");
 
-    emptyMap = new HashMap<>();
+        emptyMap = new HashMap<>();
 
-    mapaAnomaliasNCI = new HashMap<>();
+        mapaAnomaliasNCI = new HashMap<>();
         mapaAnomaliasNCI.put("S01", "SUMINISTRO POR CAMBIO DE CALIBRE");
         mapaAnomaliasNCI.put("S02", "SUMINISTRO POR IMPAGO DE CONTADOR");
         mapaAnomaliasNCI.put("001", "CONTADOR DESTRUIDO");
@@ -239,45 +261,45 @@ public class Tabla_de_Codigos {
         mapaAnomaliasNCI.put("NZ2", "SUSTITUIR CONTADOR EMISOR");
         mapaAnomaliasNCI.put("Z21", "CAMBIOS MASIVOS");
 
-    mapaAnomaliasLFTD = new HashMap<>();
+        mapaAnomaliasLFTD = new HashMap<>();
         mapaAnomaliasLFTD.put("023", "REPARACION URGENTE");
         mapaAnomaliasLFTD.put("Z23", "REPARACION CTD Y EMISOR");
 
-    mapaAnomaliasTD= new HashMap<>();
+        mapaAnomaliasTD= new HashMap<>();
         mapaAnomaliasTD.put("027", "CORRECCION DE DATOS DE CONTADOR");
         mapaAnomaliasTD.put("A32", "ALTA CONTADOR INSTALADO");
         mapaAnomaliasTD.put("C32", "LEGALIZACION CONTADOR INSTALADO");
         mapaAnomaliasTD.put("Z21", "CAMBIOS MASIVOS");
         mapaAnomaliasTD.put("LHC", "LECTURA HISTORICA. WB-DB-RF");
 
-    mapaAnomaliasU = new HashMap<>();
+        mapaAnomaliasU = new HashMap<>();
         mapaAnomaliasU.put("A31", "ALTA CONTADOR DE BAJA");
 
-    mapaAnomaliasSI = new HashMap<>();
+        mapaAnomaliasSI = new HashMap<>();
         mapaAnomaliasSI.put("010", "SALIDERO EN LO RACORES");
         mapaAnomaliasSI.put("023", "REPARACION URGENTE");
         mapaAnomaliasSI.put("A30", "ALTA SOLO INSTALAR");
         mapaAnomaliasSI.put("003", "INSTALADO AL REVÉS");
         mapaAnomaliasSI.put("R30", "REINSTALAR UBICACIÓN CORRECTA");
 
-    mapaAnomaliasT = new HashMap<>();
+        mapaAnomaliasT = new HashMap<>();
         mapaAnomaliasT.put("035", "BAJA PROVISIONAL DE OFICIO");
         mapaAnomaliasT.put("036", "BAJA DEFINITIVA");
         mapaAnomaliasT.put("037", "BAJA ADMINISTRATIVA DE OFICIO");
         mapaAnomaliasT.put("038", "BAJA ADMINISTRATIVA DE CONTADOR DEL ABONADO");
         mapaAnomaliasT.put("039", "BAJA ADMINISTRATIVA DE CONTADOR DEL CONSORCIO");
 
-    mapaAnomaliasCF = new HashMap<>();
+        mapaAnomaliasCF = new HashMap<>();
         mapaAnomaliasCF.put("X12", "ALARMA DE LA RADIO");
         mapaAnomaliasCF.put("X15", "EMPAREJAR DATO RADIO Y MEC");
         mapaAnomaliasCF.put("NX2", "RENOVACIÓN DE EMISORA");
         mapaAnomaliasCF.put("NX0", "EMISORA RENOVADA. INFORMA CIA");
 
-    mapaAnomaliasEL = new HashMap<>();
+        mapaAnomaliasEL = new HashMap<>();
         mapaAnomaliasEL.put("X13", "RADIO NO RECIBIDA. VISITA P.");
         mapaAnomaliasEL.put("X14", "RADIO NO RECIBIDA. HAY LECT.");
 
-    mapaAnomaliasI = new HashMap<>();
+        mapaAnomaliasI = new HashMap<>();
         mapaAnomaliasI.put("M21", "PREPARACIÓN RENOVACIÓN PERIÓDICA");
         mapaAnomaliasI.put("III", "INFORME INSTALACIÓN INTERIOR");
 }

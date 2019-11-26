@@ -72,7 +72,7 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
     private TextView textView_screen_table_team;
     private Button button_filtro_citas;
     private boolean ver_citas = false;
-    private ArrayList<String> lista_desplegable;
+//    private ArrayList<String> lista_desplegable;
     private JSONObject jsonObjectSalvaLite = null;
     private static ProgressDialog progressDialog = null;
 
@@ -117,16 +117,16 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
         button_advance_filter_table_team  = (Button) findViewById(R.id.button_advance_filter_table_team);
         button_filtro_citas = (Button) findViewById(R.id.button_filtrar_citas_screen_table_team);
 
-        lista_desplegable = new ArrayList<String>();
-        lista_desplegable.add("NINGUNO");
-        lista_desplegable.add("DIRECCION");
-        lista_desplegable.add("DATOS PRIVADOS");
-        lista_desplegable.add("TIPO DE TAREA");
-        lista_desplegable.add("DATOS ÚNICOS");
-        lista_desplegable.add("CITAS");
-
+//        lista_desplegable = new ArrayList<String>();
+//        lista_desplegable.add("NINGUNO");
+//        lista_desplegable.add("DIRECCION");
+//        lista_desplegable.add("DATOS PRIVADOS");
+//        lista_desplegable.add("TIPO DE TAREA");
+//        lista_desplegable.add("DATOS ÚNICOS");
+//        lista_desplegable.add("CITAS");
 //        ArrayAdapter arrayAdapter_spinner = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista_desplegable);
 //        spinner_filtro_tareas.setAdapter(arrayAdapter_spinner);
+
         images_files_names = new ArrayList<String>();
         images_files = new ArrayList<String>();
         tareas_to_upload = new ArrayList<String>();
