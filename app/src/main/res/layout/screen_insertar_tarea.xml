@@ -37,36 +37,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:layout_marginTop="20dp"
-            >
-
-            <EditText
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/editText_numero_serie_screen_insertar_tarea"
-                android:hint="Número de Serie con Prefijo"
-                android:imeOptions="actionNext"
-                />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            >
-
-            <EditText
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/editText_anno_prefijo_screen_insertar_tarea"
-                android:hint="Año o Prefijo"
-                android:imeOptions="actionNext"
-                />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
             >
             <EditText
                 android:layout_width="300dp"
@@ -151,12 +121,100 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             >
+            <EditText
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/editText_anno_prefijo_screen_insertar_tarea"
+                android:hint="Año o Prefijo"
+                android:imeOptions="actionNext"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            >
+            <EditText
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/editText_numero_serie_screen_insertar_tarea"
+                android:hint="Número de Serie con Prefijo"
+                android:imeOptions="actionNext"
+                />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            >
 
             <EditText
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/editText_operario_screen_insertar_tarea"
-                android:hint="Operario"
+                android:id="@+id/editText_calibre_screen_insertar_tarea"
+                android:hint="Calibre"
+                android:inputType="number"
+                android:imeOptions="actionNext"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            >
+            <EditText
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/editText_anomalia_screen_insertar_tarea"
+                android:hint="Anomalia (Tarea a Realizar)"
+                android:imeOptions="actionNext"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            >
+            <EditText
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/editText_emplazamiento_screen_insertar_tarea"
+                android:hint="Emplazamiento"
+                android:imeOptions="actionNext"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            >
+
+            <EditText
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/editText_observaciones_screen_insertar_tarea"
+                android:hint="Observaciones"
+                android:imeOptions="actionNext"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            >
+
+            <EditText
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/editText_actividad_screen_insertar_tarea"
+                android:hint="Actividad"
                 android:imeOptions="actionNext"
                 />
         </LinearLayout>
@@ -170,7 +228,7 @@
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/editText_nombre_abonado_screen_insertar_tarea"
-                android:hint="Nombre de Abonado"
+                android:hint="Titular"
                 android:imeOptions="actionNext"
                 />
         </LinearLayout>
@@ -209,13 +267,54 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             >
+            <EditText
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/editText_acceso_screen_insertar_tarea"
+                android:hint="Acceso"
+                android:imeOptions="actionNext"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            >
+            <EditText
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/editText_codigo_geolocalizacion_screen_insertar_tarea"
+                android:hint="Codigo de geolocalizacion"
+                android:imeOptions="actionNext"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            >
+            <EditText
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/editText_ultima_lectura_screen_insertar_tarea"
+                android:hint="Ultima lectura"
+                android:imeOptions="actionNext"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            >
 
             <EditText
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/editText_calibre_screen_insertar_tarea"
-                android:hint="Calibre"
-                android:inputType="number"
+                android:id="@+id/editText_operario_screen_insertar_tarea"
+                android:hint="Operario"
                 android:imeOptions="actionNext"
                 />
         </LinearLayout>
