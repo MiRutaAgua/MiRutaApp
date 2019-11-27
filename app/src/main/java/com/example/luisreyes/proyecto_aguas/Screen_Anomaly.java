@@ -24,6 +24,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,6 +45,9 @@ import java.util.Map;
 public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogListener{
 
 
+    private LinearLayout linearlayout_resultado_screen_anomaly,
+            linearlayout_seleccion_resultado_screen_anomaly;
+
     private Spinner spinner_anomaly,
             spinner_tipo_anomalia_screen_anomaly,
             spinner_emplazamiento_screen_anomaly,
@@ -51,7 +55,8 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
     spinner_tipo_fluido_screen_anomaly,
     spinner_tipo_radio_screen_anomaly,
     spinner_marca_screen_anomaly;
-			
+    private Spinner spinner_resultado_screen_anomaly;
+
 	private TextView textView_lectura_nuevo_screen_exec_task,
 	textView_emplazamiento_screen_exec_task,
             textView_resultado_screen_exec_task,
@@ -90,6 +95,7 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
 
     private String current_tag;
 
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.screen_anomaly);
@@ -98,275 +104,31 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
         myToolbar.setBackgroundColor(Color.TRANSPARENT);
         setSupportActionBar(myToolbar);
 
-        mapaTiposDeEmplazamiento = new HashMap<>();
-        mapaTiposDeEmplazamiento.put("AC", "Acera");
-        mapaTiposDeEmplazamiento.put("AR", "Arqueta");
-        mapaTiposDeEmplazamiento.put("BA", "Batería Cuarto de Contadores");
-        mapaTiposDeEmplazamiento.put("BT", "Batería Escalera");
-        mapaTiposDeEmplazamiento.put("CA", "Caldera");
-        mapaTiposDeEmplazamiento.put("CB", "Combinado");
-        mapaTiposDeEmplazamiento.put("CO", "Cocina");
-        mapaTiposDeEmplazamiento.put("ES", "Escalera");
-        mapaTiposDeEmplazamiento.put("FA", "Fachada");
-        mapaTiposDeEmplazamiento.put("FR", "Fregadera");
-        mapaTiposDeEmplazamiento.put("GA", "Garaje");
-        mapaTiposDeEmplazamiento.put("KA", "Calle");
-        mapaTiposDeEmplazamiento.put("LO", "Local");
-        mapaTiposDeEmplazamiento.put("NI", "Nicho");
-        mapaTiposDeEmplazamiento.put("PA", "Patio");
-        mapaTiposDeEmplazamiento.put("SO", "Sotano");
-        mapaTiposDeEmplazamiento.put("TE", "Terraza");
-        mapaTiposDeEmplazamiento.put("TR", "Trastero");
-        mapaTiposDeEmplazamiento.put("VE", "Ventana");
-        mapaTiposDeEmplazamiento.put("WC", "W.C.");
-        mapaTiposDeEmplazamiento.put("CS", "Caseta");
-        mapaTiposDeEmplazamiento.put("CU", "Cuadra");
-        mapaTiposDeEmplazamiento.put("HA", "Hall");
-        mapaTiposDeEmplazamiento.put("TX", "Txoko");
-        mapaTiposDeEmplazamiento.put("PR", "Pared");
+        mapaTiposDeEmplazamiento = Tabla_de_Codigos.mapaTiposDeEmplazamiento;
+        mapaTiposDeRestoEmplazamiento = Tabla_de_Codigos.mapaTiposDeRestoEmplazamiento;
+        mapaTiposDeMarca = Tabla_de_Codigos.mapaTiposDeMarca;
+        mapaTiposDeClase= Tabla_de_Codigos.mapaTiposDeClase;
+        mapaTiposDeResultados = Tabla_de_Codigos.mapaTiposDeResultados;
+        mapaTiposDeAnomalias = Tabla_de_Codigos.mapaTiposDeAnomalias;
+        emptyMap = Tabla_de_Codigos.emptyMap;
+        mapaAnomaliasNCI = Tabla_de_Codigos.mapaAnomaliasNCI;
+        mapaAnomaliasLFTD = Tabla_de_Codigos.mapaAnomaliasLFTD;
+        mapaAnomaliasTD= Tabla_de_Codigos.mapaAnomaliasTD;
+        mapaAnomaliasU = Tabla_de_Codigos.mapaAnomaliasU;
+        mapaAnomaliasSI = Tabla_de_Codigos.mapaAnomaliasSI;
+        mapaAnomaliasT = Tabla_de_Codigos.mapaAnomaliasT;
+        mapaAnomaliasCF = Tabla_de_Codigos.mapaAnomaliasCF;
+        mapaAnomaliasEL = Tabla_de_Codigos.mapaAnomaliasEL;
+        mapaAnomaliasI = Tabla_de_Codigos.mapaAnomaliasI;
 
-        mapaTiposDeRestoEmplazamiento = new HashMap<>();
-        mapaTiposDeRestoEmplazamiento.put("AC", "ERA");
-        mapaTiposDeRestoEmplazamiento.put("AR", "QUETA");
-        mapaTiposDeRestoEmplazamiento.put("BA", "Batería Cuarto de Contadores");
-        mapaTiposDeRestoEmplazamiento.put("BT", "Batería Escalera"); //preguntar por este
-        mapaTiposDeRestoEmplazamiento.put("CA", "LDERA");
-        mapaTiposDeRestoEmplazamiento.put("CB", "INADO");
-        mapaTiposDeRestoEmplazamiento.put("CO", "CINA");
-        mapaTiposDeRestoEmplazamiento.put("ES", "CALERA");
-        mapaTiposDeRestoEmplazamiento.put("FA", "CHADA");
-        mapaTiposDeRestoEmplazamiento.put("FR", "EGADERA");
-        mapaTiposDeRestoEmplazamiento.put("GA", "RAJE");
-        mapaTiposDeRestoEmplazamiento.put("KA", "LLE");
-        mapaTiposDeRestoEmplazamiento.put("LO", "CAL");
-        mapaTiposDeRestoEmplazamiento.put("NI", "CHO");
-        mapaTiposDeRestoEmplazamiento.put("PA", "TIO");
-        mapaTiposDeRestoEmplazamiento.put("SO", "TANO");
-        mapaTiposDeRestoEmplazamiento.put("TE", "RRAZA");
-        mapaTiposDeRestoEmplazamiento.put("TR", "ASTERO");
-        mapaTiposDeRestoEmplazamiento.put("VE", "NTANA");
-        mapaTiposDeRestoEmplazamiento.put("WC", "W.C.");
-        mapaTiposDeRestoEmplazamiento.put("CS", "SETA");
-        mapaTiposDeRestoEmplazamiento.put("CU", "ADRA");
-        mapaTiposDeRestoEmplazamiento.put("HA", "LL");
-        mapaTiposDeRestoEmplazamiento.put("TX", "OKO");
-        mapaTiposDeRestoEmplazamiento.put("PR", "ED");
+        ArrayList<String> lista_tipo_radio= Tabla_de_Codigos.lista_tipo_radio;
 
-        mapaTiposDeMarca = new HashMap<>();
-        mapaTiposDeMarca.put("ELSTER-HELIX 4000", "001");
-        mapaTiposDeMarca.put("ELSTER - DELAUNET C", "002");
-        mapaTiposDeMarca.put("ELSTER - ZENIT S200", "003");
-        mapaTiposDeMarca.put("ITRON - FLOSTAR M", "004"); //preguntar por este
-        mapaTiposDeMarca.put("ITRON - MSD CYBLE", "005");
-        mapaTiposDeMarca.put("ELSTER - COSMOS WPW", "006");
-        mapaTiposDeMarca.put("SAPPEL -AQUILA V3 V4", "007");
-        mapaTiposDeMarca.put("SAPPEL - ALTAIR V3 V4", "008");
-        mapaTiposDeMarca.put("ITRON - MSD NO CYBLE", "009");
-        mapaTiposDeMarca.put("ELSTER - S130", "010"); //preguntar por este
-        mapaTiposDeMarca.put("ITRON - TR", "011");
-        mapaTiposDeMarca.put("ITRON - MEDIS CYBLE", "012");
-        mapaTiposDeMarca.put("ITRON - WOLTMANN", "013");
-        mapaTiposDeMarca.put("ITRON - WOLTEX", "014");
-        mapaTiposDeMarca.put("ITRON - CTWV", "015");
-        mapaTiposDeMarca.put("ITRON - COMBINADO", "016"); //preguntar por este
-        mapaTiposDeMarca.put("ELSTER - DELAUNET EXTRA", "017");
-        mapaTiposDeMarca.put("ELSTER - S200 NO REED", "018");
-        mapaTiposDeMarca.put("ELSTER - S100", "019");
-        mapaTiposDeMarca.put("ELSTER - S150", "020");
-        mapaTiposDeMarca.put("ELSTER - WOLTMANN NO REED", "021");
-        mapaTiposDeMarca.put("ITRON - MEDIS UNIMAG", "022");
-        mapaTiposDeMarca.put("ITRON -TA.3F", "023");
-        mapaTiposDeMarca.put("SENSUS - CONTAGUA-DN_13_1", "024"); //preguntar por este
-        mapaTiposDeMarca.put("ITRON - FLODIS", "025");
-        mapaTiposDeMarca.put("EBRO - EBRO", "026");
-        mapaTiposDeMarca.put("ITRON - NARVAL", "027");
-        mapaTiposDeMarca.put("BRUNATA - BRUNATA", "028");
-        mapaTiposDeMarca.put("WEHRLE - WEHRLE", "029");
-        mapaTiposDeMarca.put("JANZ - CONTHIDRA", "030"); //preguntar por este
-        mapaTiposDeMarca.put("SISMA - SISMA", "031");
-        mapaTiposDeMarca.put("LORENZ - LORENZ", "032");
-        mapaTiposDeMarca.put("?", "033");
-        mapaTiposDeMarca.put("SENSUS - MEISTREAM", "034");
-        mapaTiposDeMarca.put("SIEMENS - MAG 8000", "035");
-        mapaTiposDeMarca.put("SAPPEL - AQUARIUS", "036"); //preguntar por este
-        mapaTiposDeMarca.put("ITRON - IRRIMAG", "037");
-        mapaTiposDeMarca.put("ISTA - DOMAQUA", "038");
-        mapaTiposDeMarca.put("ELSTER - S220 STANDARD", "039");
-        mapaTiposDeMarca.put("ELSTER - Y250RI", "040");
-        mapaTiposDeMarca.put("ELSTER - S220_100", "041");
-        mapaTiposDeMarca.put("ITRON - AQUADIS PLUS", "042");
-        mapaTiposDeMarca.put("ELSTER -  WAI R1000 - R12", "043");
-        mapaTiposDeMarca.put("SENSUS - 620C", "044"); //preguntar por este
-        mapaTiposDeMarca.put("POWOGAZ - JS CLASE C", "045");
-        mapaTiposDeMarca.put("POWOGAZ - WI INCENDIOS", "046");
-        mapaTiposDeMarca.put("ARAD-OCTAVE", "047");
-        mapaTiposDeMarca.put("ELSTER - H5000", "048");
-        mapaTiposDeMarca.put("ELSTER - Y290", "049");
-        mapaTiposDeMarca.put("ELSTER - V200", "050"); //preguntar por este
-        mapaTiposDeMarca.put("ELSTER - Y250MRI", "051");
-        mapaTiposDeMarca.put("SAPPEL - WP-MFD", "052");
-        mapaTiposDeMarca.put("ITRON - INTELLIS", "053");
-        mapaTiposDeMarca.put("SAPPEL - HYDRUS", "054");
-        mapaTiposDeMarca.put("ELSTER - CSJ_S2000", "055");
-        mapaTiposDeMarca.put("ELSTER - R 1200", "056"); //preguntar por este
-        mapaTiposDeMarca.put("ELSTER-Y290M", "057");
-        mapaTiposDeMarca.put("ELSTER-M120", "058");
-        mapaTiposDeMarca.put("SAPPEL-WP G_ESFERA ESTANDAR", "059");
-        mapaTiposDeMarca.put("GENERICO-DN:13-15-20 MM", "060");
-        mapaTiposDeMarca.put("GENERICO-DN:25-30-40 MM", "061");
-        mapaTiposDeMarca.put("GENERICO-DN:50-65-80-100", "062");
-        mapaTiposDeMarca.put("GENERICO-DN:125-150-200 M", "063");
-        mapaTiposDeMarca.put("SV_RTK-CRONOS", "070"); //preguntar por este
+        ArrayList<String> lista_tipo_fluido= Tabla_de_Codigos.lista_tipo_fluido;
 
-        mapaTiposDeClase= new HashMap<>();
-        mapaTiposDeClase.put("B", "Fijo en Boca de Riego");
-        mapaTiposDeClase.put("C", "Combinado");
-        mapaTiposDeClase.put("M", "Chorro Múltiple");
-        mapaTiposDeClase.put("R", "Volumetrico con Radio Emisor");
-        mapaTiposDeClase.put("S", "Chorro Multiple con Radio Emisor");
-        mapaTiposDeClase.put("T", "Chorro Único con Radio Emisor");
-        mapaTiposDeClase.put("U", "Chorro Único");
-        mapaTiposDeClase.put("V", "Volumétrico sin Radio Emisor");
-        mapaTiposDeClase.put("W", "Woltman");
+        linearlayout_resultado_screen_anomaly = (LinearLayout) findViewById(R.id.linearlayout_resultado_screen_anomaly);
+        linearlayout_seleccion_resultado_screen_anomaly = (LinearLayout) findViewById(R.id.linearlayout_seleccion_resultado_screen_anomaly);
 
-//        mapaTiposDeTipoRadio= new HashMap<>();
-//        mapaTiposDeTipoRadio.put("027", "CORRECCION DE DATOS DE CONTADOR");
-//        mapaTiposDeTipoRadio.put("A32", "ALTA CONTADOR INSTALADO");
-//        mapaTiposDeTipoRadio.put("C32", "LEGALIZACION CONTADOR INSTALADO");
-//        mapaTiposDeTipoRadio.put("Z21", "CAMBIOS MASIVOS");
-//        mapaTiposDeTipoRadio.put("LHC", "LECTURA HISTORICA. WB-DB-RF");
-
-        mapaTiposDeResultados = new HashMap<>();
-        mapaTiposDeResultados.put("036", "012");
-        mapaTiposDeResultados.put("037", "012");
-        mapaTiposDeResultados.put("039", "012");
-//        mapaTiposDeAnomalias.put("036", "11"); //preguntar por este  //añadir opciones a escoger
-        mapaTiposDeResultados.put("A30", "002");
-        mapaTiposDeResultados.put("A31", "002");
-        mapaTiposDeResultados.put("A32", "002");
-        mapaTiposDeResultados.put("A33", "002");
-//        mapaTiposDeResultados.put("A32", "SR2"); //preguntar por este
-        mapaTiposDeResultados.put("C32", "002");
-        mapaTiposDeResultados.put("C33", "002");
-        mapaTiposDeResultados.put("S01", "002");
-        mapaTiposDeResultados.put("S02", "002");
-        mapaTiposDeResultados.put("CVF", "002");
-        mapaTiposDeResultados.put("021", "002");
-        mapaTiposDeResultados.put("Z21", "002");
-        mapaTiposDeResultados.put("NZ2", "002");
-        mapaTiposDeResultados.put("NZ0", "002");
-        mapaTiposDeResultados.put("023", "002");
-        mapaTiposDeResultados.put("Z23", "002");
-        mapaTiposDeResultados.put("APC", "002");
-        mapaTiposDeResultados.put("X12", "996");
-        mapaTiposDeResultados.put("X13", "990");
-        mapaTiposDeResultados.put("X14", "990");
-        mapaTiposDeResultados.put("X15", "996");
-        mapaTiposDeResultados.put("NX2", "994");
-        mapaTiposDeResultados.put("NX0", "994");
-        mapaTiposDeResultados.put("LHC", "991");
-        mapaTiposDeResultados.put("M21", "979-980-981-982");
-        mapaTiposDeResultados.put("III", "DII");
-        mapaTiposDeResultados.put("R30", "997");
-        mapaTiposDeResultados.put("003", "903");
-
-        mapaTiposDeAnomalias = new HashMap<>();
-        mapaTiposDeAnomalias.put("NCI", "NUEVO CONTADOR INSTALAR");
-        mapaTiposDeAnomalias.put("U", "USADO CONTADOR INSTALAR");
-        mapaTiposDeAnomalias.put("T", "BAJA O CORTE DE SUMINISTRO");
-        mapaTiposDeAnomalias.put("TBDN", "BAJA O CORTE DE SUMINISTRO");
-        mapaTiposDeAnomalias.put("LFTD", "LIMPIEZA DE FILTRO Y TOMA DE DATOS");
-        //mapaTiposDeAnomalias.put("D", "DATOS");
-        mapaTiposDeAnomalias.put("TD", "TOMA DE DATOS");
-        mapaTiposDeAnomalias.put("I", "INSPECCIÓN");
-        mapaTiposDeAnomalias.put("CF", "COMPROBAR EMISOR");
-        mapaTiposDeAnomalias.put("EL", "EMISOR LECTURA");
-        mapaTiposDeAnomalias.put("SI", "SOLO INSTALAR");
-        //mapaTiposDeAnomalias.put("R", "REFORMA MAS CONTADOR");
-
-        emptyMap = new HashMap<>();
-
-        mapaAnomaliasNCI = new HashMap<>();
-        mapaAnomaliasNCI.put("S01", "SUMINISTRO POR CAMBIO DE CALIBRE");
-        mapaAnomaliasNCI.put("S02", "SUMINISTRO POR IMPAGO DE CONTADOR");
-        mapaAnomaliasNCI.put("001", "CONTADOR DESTRUIDO");
-        mapaAnomaliasNCI.put("002", "CUENTA AL REVES");
-        mapaAnomaliasNCI.put("004", "AGUJAS SUELTAS O ROTAS");
-        mapaAnomaliasNCI.put("005", "CRISTAL ROTO");
-        mapaAnomaliasNCI.put("008", "NO FUNCIONA CORRECTAMENTE");
-        mapaAnomaliasNCI.put("009", "FUGA EN EL CONTADOR");
-        mapaAnomaliasNCI.put("021", "VERIFICACION CONTADOR CONSORCIO");
-        mapaAnomaliasNCI.put("024", "NO DISPONE DE CONTADOR");
-        mapaAnomaliasNCI.put("025", "MAS DE N AÑOS Y METROS 3 CONTADOS");
-        mapaAnomaliasNCI.put("026", "MAS DE N AÑOS");
-        mapaAnomaliasNCI.put("034", "CONTADOR PRECINTADO");
-        mapaAnomaliasNCI.put("A32", "TOMA DE DATOS");
-        mapaAnomaliasNCI.put("A33", "ALTA CONTADOR NUEVO");
-        mapaAnomaliasNCI.put("C33", "ALTA LEGALIZACION");
-        mapaAnomaliasNCI.put("CVF", "CONTADOR A VERIFICAR");
-        mapaAnomaliasNCI.put("APC", "ANALISIS DE PARQUE DE CONTADORES");
-        mapaAnomaliasNCI.put("NZ0", "CTD Y EMISORA RENOVADOS");
-        mapaAnomaliasNCI.put("NZ2", "SUSTITUIR CONTADOR EMISOR");
-        mapaAnomaliasNCI.put("Z21", "CAMBIOS MASIVOS");
-
-        mapaAnomaliasLFTD = new HashMap<>();
-        mapaAnomaliasLFTD.put("023", "REPARACION URGENTE");
-        mapaAnomaliasLFTD.put("Z23", "REPARACION CTD Y EMISOR");
-
-        mapaAnomaliasTD= new HashMap<>();
-        mapaAnomaliasTD.put("027", "CORRECCION DE DATOS DE CONTADOR");
-        mapaAnomaliasTD.put("A32", "ALTA CONTADOR INSTALADO");
-        mapaAnomaliasTD.put("C32", "LEGALIZACION CONTADOR INSTALADO");
-        mapaAnomaliasTD.put("Z21", "CAMBIOS MASIVOS");
-        mapaAnomaliasTD.put("LHC", "LECTURA HISTORICA. WB-DB-RF");
-
-        mapaAnomaliasU = new HashMap<>();
-        mapaAnomaliasU.put("A31", "ALTA CONTADOR DE BAJA");
-
-        mapaAnomaliasSI = new HashMap<>();
-        mapaAnomaliasSI.put("010", "SALIDERO EN LO RACORES");
-        mapaAnomaliasSI.put("023", "REPARACION URGENTE");
-        mapaAnomaliasSI.put("A30", "ALTA SOLO INSTALAR");
-        mapaAnomaliasSI.put("003", "INSTALADO AL REVÉS");
-        mapaAnomaliasSI.put("R30", "REINSTALAR UBICACIÓN CORRECTA");
-
-        mapaAnomaliasT = new HashMap<>();
-        mapaAnomaliasT.put("035", "BAJA PROVISIONAL DE OFICIO");
-        mapaAnomaliasT.put("036", "BAJA DEFINITIVA");
-        mapaAnomaliasT.put("037", "BAJA ADMINISTRATIVA DE OFICIO");
-        mapaAnomaliasT.put("038", "BAJA ADMINISTRATIVA DE CONTADOR DEL ABONADO");
-        mapaAnomaliasT.put("039", "BAJA ADMINISTRATIVA DE CONTADOR DEL CONSORCIO");
-
-        mapaAnomaliasCF = new HashMap<>();
-        mapaAnomaliasCF.put("X12", "ALARMA DE LA RADIO");
-        mapaAnomaliasCF.put("X15", "EMPAREJAR DATO RADIO Y MEC");
-        mapaAnomaliasCF.put("NX2", "RENOVACIÓN DE EMISORA");
-        mapaAnomaliasCF.put("NX0", "EMISORA RENOVADA. INFORMA CIA");
-
-        mapaAnomaliasEL = new HashMap<>();
-        mapaAnomaliasEL.put("X13", "RADIO NO RECIBIDA. VISITA P.");
-        mapaAnomaliasEL.put("X14", "RADIO NO RECIBIDA. HAY LECT.");
-
-        mapaAnomaliasI = new HashMap<>();
-        mapaAnomaliasI.put("M21", "PREPARACIÓN RENOVACIÓN PERIÓDICA");
-        mapaAnomaliasI.put("III", "INFORME INSTALACIÓN INTERIOR");
-
-        ArrayList<String> lista_tipo_radio= new ArrayList<>();
-        lista_tipo_radio.add("NINGUNO");
-        lista_tipo_radio.add("R3");
-        lista_tipo_radio.add("R4");
-        lista_tipo_radio.add("W4");
-
-        ArrayList<String> lista_tipo_fluido= new ArrayList<>();
-        lista_tipo_fluido.add("NINGUNO");
-        lista_tipo_fluido.add("FRIA");
-        lista_tipo_fluido.add("CALIENTE");
-        lista_tipo_fluido.add("ENERGIA");
-        lista_tipo_fluido.add("ELECTRONICO");
-        lista_tipo_fluido.add("MBUS");
-        lista_tipo_fluido.add("GAS");
-        lista_tipo_fluido.add("FRIGORIAS");
-        lista_tipo_fluido.add("GENERAL");
+        spinner_resultado_screen_anomaly = (Spinner) findViewById(R.id.spinner_resultado_screen_anomaly);
 
         button_guardar_datos_screen_anomaly = (Button)findViewById(R.id.button_guardar_datos_screen_anomaly);
 
@@ -629,6 +391,23 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
             public void onNothingSelected(AdapterView<?> adapterView) {
             }
         });
+
+        spinner_resultado_screen_anomaly.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String selected = spinner_resultado_screen_anomaly
+                        .getAdapter().getItem(i).toString();
+//                Toast.makeText(getApplicationContext(), "Selected: "+ selected, Toast.LENGTH_LONG).show();
+                if(selected.contains(" - ")) {
+                    String resultado = selected.split(" - ")[0];
+                    textView_resultado_screen_exec_task.setText(resultado);
+                    Log.e("Resultado: ", resultado);
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
         spinner_anomaly.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -636,8 +415,64 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
                         .getAdapter().getItem(i).toString();
                 if(!selected.isEmpty() && selected.contains(" - ")){
                     String anomaly = selected.split(" - ")[0].trim();
+
+                    Log.e("anomalia seleccionada", anomaly);
+
                     if(mapaTiposDeResultados.containsKey(anomaly)){
-                        textView_resultado_screen_exec_task.setText(mapaTiposDeResultados.get(anomaly));
+                        Log.e("anomalia seleccionada", "encontrada en mapa");
+                        ArrayList<String> lista_resultados = new ArrayList<>();
+                        ArrayAdapter resultados_adapter;
+
+                        linearlayout_resultado_screen_anomaly.setVisibility(View.GONE);
+                        linearlayout_seleccion_resultado_screen_anomaly.setVisibility(View.VISIBLE);
+
+                        if(anomaly.equals("036")){
+                            Log.e("anomalia_gestor 036", "012 011 017");
+                            lista_resultados.add("012 - BAJA EJECUTADA / Contador depositado en almacén");
+                            lista_resultados.add("011 - BAJA EJECUTADA / Contador entregado al abonado");
+                            lista_resultados.add("017 - Taponado con junta ciega y se mantiene contador");
+                            resultados_adapter = new ArrayAdapter(getApplicationContext(), R.layout.spinner_text_view, lista_resultados);
+                            spinner_resultado_screen_anomaly.setAdapter(resultados_adapter);
+                        }
+                        else if(anomaly.equals("A33")){
+                            linearlayout_resultado_screen_anomaly.setVisibility(View.VISIBLE);
+                            linearlayout_seleccion_resultado_screen_anomaly.setVisibility(View.GONE);
+                            try {
+                                Log.e("anomalia_gestor A33", "002");
+                                String anomalia_gestor = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.ANOMALIA).trim();
+                                if(anomalia_gestor.equals("A30")){
+                                    textView_resultado_screen_exec_task.setText("002");
+                                    Log.e("anomalia_gestor", "A30");
+                                }
+                                else if(anomalia_gestor.equals("A31")){
+                                    textView_resultado_screen_exec_task.setText("002");
+                                    Log.e("anomalia_gestor", "A31");
+                                }
+                                else if(anomalia_gestor.equals("A33")){
+                                    textView_resultado_screen_exec_task.setText("002");
+                                    Log.e("anomalia_gestor", "A33");
+                                }else {
+                                    textView_resultado_screen_exec_task.setText("002");
+                                    Log.e("anomalia_gestor", "else");
+                                }
+                            } catch (JSONException e) {
+                                Log.e("spinner_anomaly.setOnI", "No se pudo obtener anomalia del gestor");
+                                textView_resultado_screen_exec_task.setText("");
+                                e.printStackTrace();
+                            }
+                        }
+                        else if(anomaly.equals("A32")){
+                            Log.e("anomalia_gestor 032", "002 SR2");
+                            lista_resultados.add("002 - Toma datos");
+                            lista_resultados.add("SR2 - Toma datos RADIO");
+                            resultados_adapter = new ArrayAdapter(getApplicationContext(), R.layout.spinner_text_view, lista_resultados);
+                            spinner_resultado_screen_anomaly.setAdapter(resultados_adapter);
+                        }
+                        else{
+                            linearlayout_resultado_screen_anomaly.setVisibility(View.VISIBLE);
+                            linearlayout_seleccion_resultado_screen_anomaly.setVisibility(View.GONE);
+                            textView_resultado_screen_exec_task.setText(mapaTiposDeResultados.get(anomaly));
+                        }
                     }
                     else{
                         textView_resultado_screen_exec_task.setText("");
@@ -863,6 +698,9 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
                         Log.e("Excepcion", "no se pudo insertar resultado");
                         e.printStackTrace();
                     }
+                }
+                if(!team_or_personal_task_selection_screen_Activity.dBtareasController.saveChangesInTarea()){
+                    Toast.makeText(getApplicationContext(), "No se pudo guardar cambios", Toast.LENGTH_SHORT).show();
                 }
                 setResult(RESULT_OK, resultIntent);
                 finish();

@@ -705,6 +705,9 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
     }
     @Override
     public void onBackPressed() {
+        if(!team_or_personal_task_selection_screen_Activity.dBtareasController.saveChangesInTarea()){
+            Toast.makeText(getApplicationContext(), "No se pudo guardar cambios", Toast.LENGTH_SHORT).show();
+        }
         finishThisClass();
         super.onBackPressed();
     }

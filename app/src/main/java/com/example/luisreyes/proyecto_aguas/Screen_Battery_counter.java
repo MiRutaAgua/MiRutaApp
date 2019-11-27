@@ -83,20 +83,7 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
         myToolbar.setBackgroundColor(Color.TRANSPARENT);
         setSupportActionBar(myToolbar);
 
-        mapaTiposDeTarea = new HashMap<>();
-        mapaTiposDeTarea.put("", "NUEVO CONTADOR INSTALAR");
-        mapaTiposDeTarea.put("NCI", "NUEVO CONTADOR INSTALAR");
-        mapaTiposDeTarea.put("U", "USADO CONTADOR INSTALAR");
-        mapaTiposDeTarea.put("T", "BAJA O CORTE DE SUMINISTRO");
-        mapaTiposDeTarea.put("TBDN", "BAJA O CORTE DE SUMINISTRO");
-        mapaTiposDeTarea.put("LFTD", "LIMPIEZA DE FILTRO Y TOMA DE DATOS");
-        mapaTiposDeTarea.put("D", "DATOS");
-        mapaTiposDeTarea.put("TD", "TOMA DE DATOS");
-        mapaTiposDeTarea.put("I", "INSPECCIÓN");
-        mapaTiposDeTarea.put("CF", "COMPROBAR EMISOR");
-        mapaTiposDeTarea.put("EL", "EMISOR LECTURA");
-        mapaTiposDeTarea.put("SI", "SOLO INSTALAR");
-        mapaTiposDeTarea.put("R", "REFORMA MAS CONTADOR");
+        mapaTiposDeTarea = Tabla_de_Codigos.mapaTiposDeAnomalias;
 
         button_geolocalization =(Button) findViewById(R.id.button_geolocalization_screen_battery_counter);
         imagen_contador = (ImageView) findViewById(R.id.imageView_screen_battery_counter_imagen);
@@ -621,17 +608,20 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
     public void onBackPressed() {
         new AlertDialog.Builder(this)
                 .setTitle("Saliendo de tarea")
-                .setMessage("Los cambios en esta tarea se perderan\n¿Desea salir de esta tarea?")
+                .setMessage("¿Desea guardar cambios de esta tarea?")
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        if(!team_or_personal_task_selection_screen_Activity.dBtareasController.saveChangesInTarea()){
+                            Toast.makeText(getApplicationContext(), "No se pudo guardar cambios", Toast.LENGTH_SHORT).show();
+                        }
                         finish();
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-
+                        finish();
                     }
                 }).show();
     }

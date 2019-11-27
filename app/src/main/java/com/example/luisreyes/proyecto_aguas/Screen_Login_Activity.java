@@ -63,6 +63,8 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
     private EditText lineEdit_clave_de_acceso;
     private Button button_login, button_register;
 
+    public static Tabla_de_Codigos tabla_de_codigos;
+
     public static JSONObject tarea_JSON;
     public static JSONObject operario_JSON;
     public static ArrayList<String> lista_operarios = new ArrayList<>();
@@ -97,6 +99,8 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_NETWORK_STATE}, 1);
         }
+
+        tabla_de_codigos = new Tabla_de_Codigos();
 
         dBoperariosController = new DBoperariosController(this);
 

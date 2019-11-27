@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -911,6 +912,17 @@ public class DBtareasController extends SQLiteOpenHelper {
         } catch (ParseException ex) {
             Log.e("Excp getFecha...", "no se pudo parsear fecha: "+ ex.toString());
             return date_time;
+        }
+    }
+
+    public boolean saveChangesInTarea(){
+        try {
+            updateTarea(Screen_Login_Activity.tarea_JSON);
+            return true;
+        } catch (JSONException e) {
+            Log.e("saveChanges", "No se pudo salvar cambios");
+            e.printStackTrace();
+            return false;
         }
     }
 }

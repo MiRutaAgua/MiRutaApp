@@ -61,8 +61,17 @@ public class Screen_Insertar_Tarea extends AppCompatActivity implements TaskComp
             editText_piso_screen_insertar_tarea,
             editText_mano_screen_insertar_tarea,
             editText_BIS_screen_insertar_tarea,
-            editText_numero_portal_screen_insertar_tarea;
+            editText_numero_portal_screen_insertar_tarea,
+    editText_anomalia_screen_insertar_tarea,
+    editText_emplazamiento_screen_insertar_tarea,
+    editText_observaciones_screen_insertar_tarea,
+    editText_actividad_screen_insertar_tarea,
+            editText_acceso_screen_insertar_tarea ,
+    editText_codigo_geolocalizacion_screen_insertar_tarea,
+    editText_ultima_lectura_screen_insertar_tarea;
+
     private TextView textView_screen_insertar_tarea;
+
     private ProgressDialog progressDialog;
 
     private HashMap<String, String> mapaTiposDeAnomalias = new HashMap<>();
@@ -129,6 +138,14 @@ public class Screen_Insertar_Tarea extends AppCompatActivity implements TaskComp
         editText_nombre_abonado_screen_insertar_tarea = (EditText) findViewById(R.id.editText_nombre_abonado_screen_insertar_tarea);
         editText_numero_abonado_screen_insertar_tarea = (EditText) findViewById(R.id.editText_numero_abonado_screen_insertar_tarea);
         editText_telefono_screen_insertar_tarea = (EditText) findViewById(R.id.editText_telefono_screen_insertar_tarea);
+
+        editText_anomalia_screen_insertar_tarea = (EditText) findViewById(R.id.editText_anomalia_screen_insertar_tarea);
+        editText_emplazamiento_screen_insertar_tarea = (EditText) findViewById(R.id.editText_emplazamiento_screen_insertar_tarea);
+        editText_observaciones_screen_insertar_tarea = (EditText) findViewById(R.id.editText_observaciones_screen_insertar_tarea);
+        editText_actividad_screen_insertar_tarea = (EditText) findViewById(R.id.editText_actividad_screen_insertar_tarea);
+        editText_acceso_screen_insertar_tarea = (EditText) findViewById(R.id.editText_acceso_screen_insertar_tarea);
+        editText_codigo_geolocalizacion_screen_insertar_tarea = (EditText) findViewById(R.id.editText_codigo_geolocalizacion_screen_insertar_tarea);
+        editText_ultima_lectura_screen_insertar_tarea = (EditText) findViewById(R.id.editText_ultima_lectura_screen_insertar_tarea);
 
         screen_insertar_tarea_agregar = (Button)findViewById(R.id.imageView_agregar_tarea_screen_insertar_tarea);
         imageView_geolocalizar_screen_insertar_tarea = (Button)findViewById(R.id.imageView_geolocalizar_screen_insertar_tarea);
@@ -312,6 +329,21 @@ public class Screen_Insertar_Tarea extends AppCompatActivity implements TaskComp
             if(!(TextUtils.isEmpty(editText_calibre_screen_insertar_tarea.getText().toString())))
                 Screen_Login_Activity.tarea_JSON.put(DBtareasController.calibre_toma, editText_calibre_screen_insertar_tarea.getText().toString());
 
+
+            if(!(TextUtils.isEmpty(editText_nombre_abonado_screen_insertar_tarea.getText().toString())))
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.nombre_cliente, editText_nombre_abonado_screen_insertar_tarea.getText().toString());
+
+            if(!(TextUtils.isEmpty(editText_numero_abonado_screen_insertar_tarea.getText().toString())))
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.numero_abonado, editText_numero_abonado_screen_insertar_tarea.getText().toString());
+
+            if(!(TextUtils.isEmpty(editText_telefono_screen_insertar_tarea.getText().toString())))
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.telefono1, editText_telefono_screen_insertar_tarea.getText().toString());
+
+
+            if(!(TextUtils.isEmpty(editText_anomalia_screen_insertar_tarea.getText().toString())))
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.ANOMALIA, editText_anomalia_screen_insertar_tarea.getText().toString());
+
+
             if(!(TextUtils.isEmpty(spinner_tipo_screen_insertar_tarea.getSelectedItem().toString()))
                     && !spinner_tipo_screen_insertar_tarea.getSelectedItem().toString().equals("NINGUNO")) {
                 String tipo = spinner_tipo_screen_insertar_tarea.getSelectedItem().toString();
@@ -323,14 +355,23 @@ public class Screen_Insertar_Tarea extends AppCompatActivity implements TaskComp
                 Screen_Login_Activity.tarea_JSON.put(DBtareasController.tipo_tarea, "");
             }
 
-            if(!(TextUtils.isEmpty(editText_nombre_abonado_screen_insertar_tarea.getText().toString())))
-                Screen_Login_Activity.tarea_JSON.put(DBtareasController.nombre_cliente, editText_nombre_abonado_screen_insertar_tarea.getText().toString());
+            if(!(TextUtils.isEmpty(editText_emplazamiento_screen_insertar_tarea.getText().toString())))
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.emplazamiento, editText_emplazamiento_screen_insertar_tarea.getText().toString());
 
-            if(!(TextUtils.isEmpty(editText_numero_abonado_screen_insertar_tarea.getText().toString())))
-                Screen_Login_Activity.tarea_JSON.put(DBtareasController.numero_abonado, editText_numero_abonado_screen_insertar_tarea.getText().toString());
+            if(!(TextUtils.isEmpty(editText_observaciones_screen_insertar_tarea.getText().toString())))
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.observaciones, editText_observaciones_screen_insertar_tarea.getText().toString());
 
-            if(!(TextUtils.isEmpty(editText_telefono_screen_insertar_tarea.getText().toString())))
-                Screen_Login_Activity.tarea_JSON.put(DBtareasController.telefono1, editText_telefono_screen_insertar_tarea.getText().toString());
+            if(!(TextUtils.isEmpty(editText_actividad_screen_insertar_tarea.getText().toString())))
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.actividad, editText_actividad_screen_insertar_tarea.getText().toString());
+
+            if(!(TextUtils.isEmpty(editText_acceso_screen_insertar_tarea.getText().toString())))
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.acceso, editText_acceso_screen_insertar_tarea.getText().toString());
+
+            if(!(TextUtils.isEmpty(editText_codigo_geolocalizacion_screen_insertar_tarea.getText().toString())))
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.codigo_de_geolocalizacion, editText_codigo_geolocalizacion_screen_insertar_tarea.getText().toString());
+
+            if(!(TextUtils.isEmpty(editText_ultima_lectura_screen_insertar_tarea.getText().toString())))
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_actual, editText_ultima_lectura_screen_insertar_tarea.getText().toString());
 
             Screen_Login_Activity.tarea_JSON.put(DBtareasController.date_time_modified, DBtareasController.getStringFromFechaHora(new Date()));
             Screen_Login_Activity.tarea_JSON.put(DBtareasController.status_tarea, "IDLE");
