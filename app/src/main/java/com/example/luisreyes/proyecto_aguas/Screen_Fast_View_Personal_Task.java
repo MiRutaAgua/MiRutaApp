@@ -91,7 +91,7 @@ public class Screen_Fast_View_Personal_Task extends AppCompatActivity implements
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 String object_click = lista_de_contadores_screen_table_personal.getAdapter().getItem(i).toString();
-                if(!object_click.isEmpty()) {
+                if(!object_click.isEmpty()  && !object_click.contains("Resumen")) {
                     if (object_click.contains(" ")) {
                         String[] split_string = object_click.split(" ");
                         Log.e("Split", String.valueOf(split_string.length));

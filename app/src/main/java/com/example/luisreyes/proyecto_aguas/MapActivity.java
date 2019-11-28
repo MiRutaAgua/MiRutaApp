@@ -497,7 +497,7 @@ public class MapActivity extends AppCompatActivity implements TaskCompleted, OnM
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
         mMap.setMyLocationEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
         googleMap.setOnMapLongClickListener(this);
@@ -848,7 +848,7 @@ public class MapActivity extends AppCompatActivity implements TaskCompleted, OnM
             backgroundWorker.execute(type);
         } else{
             if(!error)
-                Toast.makeText(this, "No hay conexion se guardaron los datos en el telefono", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Se guardaron los datos en el telefono", Toast.LENGTH_SHORT).show();
             if (ventana == 2){
                 Intent intent = new Intent(MapActivity.this, Maps_Box.class);
                 startActivity(intent);

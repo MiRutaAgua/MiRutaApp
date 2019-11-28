@@ -903,6 +903,14 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
             return "";
         }
     }
+    public static String orderCounterForListView(MyCounter counter, boolean ver_cita){
+
+        String view= orderCounterForListView(counter);
+        if(ver_cita) {
+            view = counter.getCita()+"\n"+ view;
+        }
+        return view;
+    }
 
     private void onButtonFiltrar(){
         if(current_action_button_filter == SEARCH_DIRECTION){

@@ -26,7 +26,9 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -313,6 +315,38 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
             Toast.makeText(Screen_Incidence_Summary.this, "no se pudo obtener actual lectura de contador", Toast.LENGTH_LONG).show();
         }
 
+        lectura.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if(!charSequence.toString().isEmpty()) {
+                    String lectura_string = null;
+                    try {
+                        lectura_string = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.lectura_actual);
+                        Integer lect = Integer.parseInt(charSequence.toString());
+                        if (!lectura_string.isEmpty() && !lectura_string.contains("NULL") && !lectura_string.contains("null")) {
+                            Integer last = Integer.parseInt(lectura_string);
+                            if (last > 0) {
+                                if (lect - last >= 100) {
+                                    if (!MessageDialog.isShowing()) {
+                                        openMessage("Advertencia", "La diferencia de lectura es mayor que 100");
+                                    }
+                                }
+                            }
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
+
         imageView_edit_observaciones_screen_incidence_summary.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -585,10 +619,10 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
                 Integer lectura_insertada_int = Integer.parseInt(lectura_actual);
 
                 if (lectura_insertada_int >= lectura_ultima_registrada_int) {
-                    if(lectura_insertada_int > 100) {
+                    if(lectura_insertada_int - lectura_ultima_registrada_int >= 100) {
                         new AlertDialog.Builder(this)
                                 .setTitle("Lectura muy grande")
-                                .setMessage("La lectura es mayor que 100m3\n¿Desea guardar con esta lectura?")
+                                .setMessage("La diferencia de lecturas es mayor que 100m3\n¿Desea guardar con esta lectura?")
                                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -653,7 +687,7 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
 
     public void insertarLecturas(String lect_insertada, String ultima_lectura_registrada){
         try {
-            Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_ultima, ultima_lectura_registrada);
+//            Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_ultima, ultima_lectura_registrada);
             Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_actual, lect_insertada);
 
             saveData();

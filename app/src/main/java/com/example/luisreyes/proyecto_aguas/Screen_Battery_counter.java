@@ -342,47 +342,50 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
                 e.printStackTrace();
             }
         }else{
-            try {
-                //String foto_instalacion =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_antes_instalacion);
-                String image = null, numero_abonado = null;
-                numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
-                image =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_despues_instalacion);
-                //Toast.makeText(this, foto_instalacion, Toast.LENGTH_LONG).show();
-                if(image.isEmpty() || image.contains("null") || image.contains("NULL") || image == null){
-                    image =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_antes_instalacion);
-                    if(image.isEmpty() || image.contains("null") || image.contains("NULL") || image == null){
-                        image =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_lectura);
-                        if(image.isEmpty() || image.contains("null") || image.contains("NULL") || image == null){
-                            image =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_numero_serie);
-                        }
-                    }
-                }
-                if(numero_abonado!=null && !numero_abonado.equals("null")
-                        && !numero_abonado.equals("NULL") && !TextUtils.isEmpty(numero_abonado)) {
-                    if(image!=null && !image.equals("null")
-                            && !image.equals("NULL") && !TextUtils.isEmpty(image)) {
-                        File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/fotos_tareas/"+numero_abonado);
-                        if (!storageDir.exists()) {
-                            storageDir.mkdirs();
-                        }
-                        File[] files = storageDir.listFiles();
-                        for (int i = 0; i < files.length; i++) {
-                            if (files[i].getName().contains(image)) {
-                                //Toast.makeText(this, storageDir +"/" + files[i].getName(), Toast.LENGTH_LONG).show();
-                                imagen_contador.setVisibility(View.VISIBLE);
-                                imagen_contador.setImageBitmap(getPhotoUserLocal(storageDir + "/" + files[i].getName()));
-                            }
-                        }
-                    }
-                }
-//                Toast.makeText(this, image, Toast.LENGTH_LONG).show();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            buscarFotosOffline();
         }
 //            imagen_contador.setImageBitmap(Screen_Register_Operario.getImageFromString(Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_antes_instalacion)));
     }
 
+    public void buscarFotosOffline(){
+        try {
+            //String foto_instalacion =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_antes_instalacion);
+            String image = null, numero_abonado = null;
+            numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
+            image =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_despues_instalacion);
+            //Toast.makeText(this, foto_instalacion, Toast.LENGTH_LONG).show();
+            if(image.isEmpty() || image.contains("null") || image.contains("NULL") || image == null){
+                image =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_antes_instalacion);
+                if(image.isEmpty() || image.contains("null") || image.contains("NULL") || image == null){
+                    image =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_lectura);
+                    if(image.isEmpty() || image.contains("null") || image.contains("NULL") || image == null){
+                        image =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_numero_serie);
+                    }
+                }
+            }
+            if(numero_abonado!=null && !numero_abonado.equals("null")
+                    && !numero_abonado.equals("NULL") && !TextUtils.isEmpty(numero_abonado)) {
+                if(image!=null && !image.equals("null")
+                        && !image.equals("NULL") && !TextUtils.isEmpty(image)) {
+                    File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/fotos_tareas/"+numero_abonado);
+                    if (!storageDir.exists()) {
+                        storageDir.mkdirs();
+                    }
+                    File[] files = storageDir.listFiles();
+                    for (int i = 0; i < files.length; i++) {
+                        if (files[i].getName().contains(image)) {
+                            //Toast.makeText(this, storageDir +"/" + files[i].getName(), Toast.LENGTH_LONG).show();
+                            imagen_contador.setVisibility(View.VISIBLE);
+                            imagen_contador.setImageBitmap(getPhotoUserLocal(storageDir + "/" + files[i].getName()));
+                        }
+                    }
+                }
+            }
+//                Toast.makeText(this, image, Toast.LENGTH_LONG).show();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
     public boolean checkConection(){
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -402,15 +405,18 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
         if(type == "download_image") {
             hideRingDialog();
             if (result == null) {
-                Toast.makeText(this, "No se puede acceder al servidor, no se obtuvo foto instalacion", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "No se puede acceder al servidor, no se obtuvo foto instalacion"+ ", buscando fotos en el teléfono", Toast.LENGTH_LONG).show();
+                buscarFotosOffline();
             }
             else {
                 if(result.contains("not success")){
                     if(result.contains("no se pudo obtener imagen")){
-                        Toast.makeText(this, "Error obteniendo imagen", Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, "Error obteniendo imagen"+ ", buscando fotos en el teléfono", Toast.LENGTH_LONG).show();
+                        buscarFotosOffline();
                     }
                     else if(result.contains("no existe imagen")){
-                        Toast.makeText(this, "No hay foto de contador", Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, "No hay foto de contador"+ ", buscando fotos en el teléfono", Toast.LENGTH_LONG).show();
+                        buscarFotosOffline();
                     }
                 }else{
                     Bitmap bitmap = null;

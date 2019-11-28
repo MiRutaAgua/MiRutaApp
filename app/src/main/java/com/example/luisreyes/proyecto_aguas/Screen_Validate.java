@@ -28,7 +28,9 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -329,6 +331,37 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
 
         Screen_Execute_Task.hideRingDialog();
 
+        lectura_actual_et.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if(!charSequence.toString().isEmpty()) {
+                    String lectura_string = null;
+                    try {
+                        lectura_string = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.lectura_actual);
+                        Integer lect = Integer.parseInt(charSequence.toString());
+                        if (!lectura_string.isEmpty() && !lectura_string.contains("NULL") && !lectura_string.contains("null")) {
+                            Integer last = Integer.parseInt(lectura_string);
+                            if (last > 0) {
+                                if (lect - last >= 100) {
+                                    if (!MessageDialog.isShowing()) {
+                                        openMessage("Advertencia", "La diferencia de lectura es mayor que 100");
+                                    }
+                                }
+                            }
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
         button_compartir_screen_validate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -575,10 +608,10 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                 Integer lectura_last_int = Integer.parseInt(lect_last_string);
 
                 if(lectura_actual_int.compareTo(lectura_last_int)>=0){
-                    if(lectura_actual_int > 100) {
+                    if(lectura_actual_int - lectura_last_int >= 100) {
                         new AlertDialog.Builder(this)
                                 .setTitle("Lectura muy grande")
-                                .setMessage("La lectura es mayor que 100m3\n¿Desea guardar con esta lectura?")
+                                .setMessage("La diferencia de lecturas es mayor que 100m3\n¿Desea guardar con esta lectura?")
                                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -658,7 +691,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
     }
     public void saveDataLectura(String lectura_insertada, String lectura_ultima_registrada){
         try {
-            Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_ultima, lectura_ultima_registrada);
+//            Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_ultima, lectura_ultima_registrada);
             Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_actual, lectura_insertada);
         } catch (JSONException e) {
             Log.e("saveDataLectura", "JSONException "+e.toString());

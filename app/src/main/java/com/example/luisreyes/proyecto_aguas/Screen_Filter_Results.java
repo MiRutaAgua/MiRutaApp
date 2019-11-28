@@ -753,7 +753,7 @@ public class Screen_Filter_Results extends AppCompatActivity {
         ArrayList<String> lista_contadores = new ArrayList<String>();
         for(int i=0; i < lista_ordenada_de_tareas.size(); i++){
             lista_contadores.add(Screen_Filter_Tareas.
-                    orderCounterForListView(lista_ordenada_de_tareas.get(i)));
+                    orderCounterForListView(lista_ordenada_de_tareas.get(i), true));
         }
         ArrayAdapter arrayAdapter = new ArrayAdapter(this, R.layout.list_text_view, lista_contadores);
         arrayAdapter_all = arrayAdapter;

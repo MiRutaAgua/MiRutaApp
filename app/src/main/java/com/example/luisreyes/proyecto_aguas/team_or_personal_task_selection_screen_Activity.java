@@ -687,49 +687,64 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
 
     public void lookForGestors(){
         ArrayList<String> gestores = new ArrayList<>();
-        if(team_or_personal_task_selection_screen_Activity.dBtareasController!=null)
-        if(team_or_personal_task_selection_screen_Activity.dBtareasController.databasefileExists(this)){
-            if(team_or_personal_task_selection_screen_Activity.dBtareasController.checkForTableExists()){
-                if(team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas()>0) {
-                    ArrayList<String> tareas = new ArrayList<>();
-                    try {
-                        tareas = team_or_personal_task_selection_screen_Activity.
-                                dBtareasController.get_all_tareas_from_Database();
-                        for (int i = 0; i < tareas.size(); i++) {
-                            try {
-                                JSONObject jsonObject = new JSONObject(tareas.get(i));
-                                String gestor = "";
+        if(team_or_personal_task_selection_screen_Activity.dBtareasController!=null) {
+            if (team_or_personal_task_selection_screen_Activity.dBtareasController.databasefileExists(this)) {
+                if (team_or_personal_task_selection_screen_Activity.dBtareasController.checkForTableExists()) {
+                    if (team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas() > 0) {
+                        ArrayList<String> tareas = new ArrayList<>();
+                        try {
+                            tareas = team_or_personal_task_selection_screen_Activity.
+                                    dBtareasController.get_all_tareas_from_Database();
+                            for (int i = 0; i < tareas.size(); i++) {
                                 try {
-                                    gestor = jsonObject.getString(DBtareasController.GESTOR).trim();
-                                    if (!gestor.equals("NULL") && !gestor.equals("null") && !gestor.isEmpty()) {
-                                        if (!gestores.contains(gestor)) {
-                                            gestores.add(gestor);
+                                    JSONObject jsonObject = new JSONObject(tareas.get(i));
+                                    String gestor = "";
+                                    try {
+                                        gestor = jsonObject.getString(DBtareasController.GESTOR).trim();
+                                        if (!gestor.equals("NULL") && !gestor.equals("null") && !gestor.isEmpty()) {
+                                            if (!gestores.contains(gestor)) {
+                                                gestores.add(gestor);
+                                            }
+                                        } else {
+                                            if (!gestores.contains("SIN GESTOR")) {
+                                                gestores.add("SIN GESTOR");
+                                            }
                                         }
-                                    } else {
-                                        if (!gestores.contains("SIN GESTOR")) {
-                                            gestores.add("SIN GESTOR");
-                                        }
+                                    } catch (JSONException e) {
+                                        Log.e("Excepcion gestor", "No se pudo obtener gestor\n" + e.toString());
+                                        e.printStackTrace();
                                     }
                                 } catch (JSONException e) {
-                                    Log.e("Excepcion gestor", "No se pudo obtener gestor\n" + e.toString());
+                                    Log.e("Excp lookForGestors", "Elemento i = " + String.valueOf(i));
                                     e.printStackTrace();
                                 }
-                            } catch (JSONException e) {
-                                Log.e("Excp lookForGestors", "Elemento i = " + String.valueOf(i));
-                                e.printStackTrace();
                             }
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    } else {
+                        textView_sync_team_or_personal_task_screen.setText("NO HAY TAREAS");
+                        Log.e("lookForGestors", "NO HAY TAREAS tabla vacia");
+                        button_sync_team_or_personal_task_screen.setBackground(getResources().
+                                getDrawable(R.drawable.ic_sync_problem_blue_24dp));
                     }
-                }
-                else{
+                }else {
                     textView_sync_team_or_personal_task_screen.setText("NO HAY TAREAS");
-                    //textView_sync_team_or_personal_task_screen.setTextColor(getResources().getColor(R.color.colorBlueAppRuta));
+                    Log.e("lookForGestors", "NO HAY TAREAS no existe tabla");
                     button_sync_team_or_personal_task_screen.setBackground(getResources().
                             getDrawable(R.drawable.ic_sync_problem_blue_24dp));
                 }
+            }else {
+                textView_sync_team_or_personal_task_screen.setText("NO HAY TAREAS");
+                Log.e("lookForGestors", "NO HAY TAREAS no existe BD");
+                button_sync_team_or_personal_task_screen.setBackground(getResources().
+                        getDrawable(R.drawable.ic_sync_problem_blue_24dp));
             }
+        }else {
+            textView_sync_team_or_personal_task_screen.setText("NO HAY TAREAS");
+            Log.e("lookForGestors", "NO HAY TAREAS controlador de BD nulo");
+            button_sync_team_or_personal_task_screen.setBackground(getResources().
+                    getDrawable(R.drawable.ic_sync_problem_blue_24dp));
         }
         if(!gestores.isEmpty()){
             Collections.sort(gestores);

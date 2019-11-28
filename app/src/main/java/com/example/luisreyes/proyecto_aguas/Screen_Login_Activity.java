@@ -226,6 +226,7 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
     public static void playOnOffSound(Context context){
         if(MainActivity.sounds_on) {
             MediaPlayer mp = MediaPlayer.create(context, R.raw.sound_clicked);
+            mp.setVolume((float)0.07,(float)0.07);
             mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
 
                 @Override

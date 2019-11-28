@@ -304,4 +304,38 @@ public class Tabla_de_Codigos {
         mapaAnomaliasI.put("III", "INFORME INSTALACIÓN INTERIOR");
 }
 
+    public static String getTipoTareaByAnomaly(String anomaly){
+
+        if(mapaAnomaliasNCI.containsKey(anomaly)){
+            return mapaTiposDeAnomalias.get("NCI");
+        }
+        else if (mapaAnomaliasU.containsKey(anomaly)){
+            return mapaTiposDeAnomalias.get("U");
+        }
+        else if (mapaAnomaliasCF.containsKey(anomaly)){
+            return mapaTiposDeAnomalias.get("CF");
+        }
+        else if (mapaAnomaliasEL.containsKey(anomaly)){
+            return mapaTiposDeAnomalias.get("EL");
+        }
+        else if (mapaAnomaliasI.containsKey(anomaly)){
+            return mapaTiposDeAnomalias.get("I");
+        }
+        else if (mapaAnomaliasLFTD.containsKey(anomaly)){
+            return mapaTiposDeAnomalias.get("LFTD");
+        }
+        else if (mapaAnomaliasSI.containsKey(anomaly)){
+            return mapaTiposDeAnomalias.get("SI");
+        }
+        else if (mapaAnomaliasT.containsKey(anomaly)){
+            return mapaTiposDeAnomalias.get("T");
+        }
+        else if (mapaAnomaliasTD.containsKey(anomaly)){
+            return mapaTiposDeAnomalias.get("TD");
+        }
+        else {
+            return mapaTiposDeAnomalias.get("");
+        }
+    }
+
 }

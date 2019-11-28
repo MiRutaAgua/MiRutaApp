@@ -16,7 +16,9 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -167,6 +169,27 @@ public class Screen_Insertar_Tarea extends AppCompatActivity implements TaskComp
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        editText_anomalia_screen_insertar_tarea.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                String tipo_tarea = Tabla_de_Codigos.getTipoTareaByAnomaly(charSequence.toString());
+                if(!tipo_tarea.isEmpty()){
+                    ArrayAdapter adapter = (ArrayAdapter) spinner_tipo_screen_insertar_tarea.getAdapter();
+                    for(int n = 0; n < adapter.getCount(); n++){
+                        if(adapter.getItem(n).toString().equals(tipo_tarea)){
+                            spinner_tipo_screen_insertar_tarea.setSelection(n);
+                        }
+                    }
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
         imageView_geolocalizar_screen_insertar_tarea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -352,7 +375,7 @@ public class Screen_Insertar_Tarea extends AppCompatActivity implements TaskComp
                 }
             }
             else{
-                Screen_Login_Activity.tarea_JSON.put(DBtareasController.tipo_tarea, "");
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.tipo_tarea, "NCI");
             }
 
             if(!(TextUtils.isEmpty(editText_emplazamiento_screen_insertar_tarea.getText().toString())))

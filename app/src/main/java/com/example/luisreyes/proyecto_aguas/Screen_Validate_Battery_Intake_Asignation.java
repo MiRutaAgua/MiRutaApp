@@ -240,10 +240,10 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
                 Integer actualInt = Integer.parseInt(lectura_insertada);
 
                 if (actualInt >= ultimaInt) {
-                    if (actualInt > 100) {
+                    if (actualInt - ultimaInt >= 100) {
                         new AlertDialog.Builder(this)
                                 .setTitle("Lectura muy grande")
-                                .setMessage("La lectura es mayor que 100m3\n¿Desea guardar con esta lectura?")
+                                .setMessage("La diferencia de lecturas es mayor que 100m3\n¿Desea guardar con esta lectura?")
                                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -312,7 +312,7 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
 
     public void salvarLecturas(String lectura_insertada, String lectura_ultima_registrada){
         try {
-            Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_ultima, lectura_ultima_registrada);
+//            Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_ultima, lectura_ultima_registrada);
             Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_actual, lectura_insertada);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -417,12 +417,24 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
                 Integer lectura_actualInt = Integer.parseInt(wrote_string);
                 if(lectura_actualInt!=null && lectura_lastInt!=null) {
                     if (lectura_actualInt > lectura_lastInt) {
-                        Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_ultima, lectura_last);
+                        if(lectura_actualInt - lectura_lastInt >= 100){
+                            if(!MessageDialog.isShowing()){
+                                openMessage("Advertencia", "La diferencia de lectura es mayor que 100");
+                            }
+                        }
+//                        Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_ultima, lectura_last);
                         Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_actual, wrote_string);
                         lectura_anterior.setText(lectura_last);
                         lectura_ultima.setText(wrote_string);
                     } else {
-                        Toast.makeText(this, "La lectura del contador debe ser mayor que la ultima registrada", Toast.LENGTH_LONG).show();
+//                        Toast.makeText(this, "La lectura del contador debe ser mayor que la ultima registrada", Toast.LENGTH_LONG).show();
+                        if(!MessageDialog.isShowing()){
+                            openMessage("Advertencia", "La lectura del contador debe ser mayor que la última registrada");
+                        }
+//                        Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_ultima, lectura_last);
+                        Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_actual, wrote_string);
+                        lectura_anterior.setText(lectura_last);
+                        lectura_ultima.setText(wrote_string);
                     }
                 }
             }

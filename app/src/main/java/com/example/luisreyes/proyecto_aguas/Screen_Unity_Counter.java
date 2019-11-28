@@ -371,44 +371,48 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
                 e.printStackTrace();
             }
         }else{
-            try {
-                //String foto_instalacion =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_antes_instalacion);
-                String  numero_abonado = null;
-                numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
-                foto =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_despues_instalacion);
-                //Toast.makeText(this, foto_instalacion, Toast.LENGTH_LONG).show();
-                if(foto.isEmpty() || foto.contains("null") || foto.contains("NULL") || foto == null){
-                    foto =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_antes_instalacion);
-                    if(foto.isEmpty() || foto.contains("null") || foto.contains("NULL") || foto == null){
-                        foto =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_lectura);
-                        if(foto.isEmpty() || foto.contains("null") || foto.contains("NULL") || foto == null){
-                            foto =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_numero_serie);
-                        }
-                    }
-                }
+            buscarFotosOffline();
+        }
+    }
 
-                if(numero_abonado!=null && !numero_abonado.equals("null") && !TextUtils.isEmpty(numero_abonado)) {
-                    if (foto != null && !foto.equals("null") && !foto.equals("NULL") && !TextUtils.isEmpty(foto)) {
-                        File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/fotos_tareas/" + numero_abonado);
-                        if (!storageDir.exists()) {
-                            storageDir.mkdirs();
-                            Log.e("No existe directorio", storageDir.getAbsolutePath());
-                        }
-                        File[] files = storageDir.listFiles();
-                        for (int i = 0; i < files.length; i++) {
-                            if (files[i].getName().contains(foto)) {
-                                //Toast.makeText(this, storageDir +"/" + files[i].getName(), Toast.LENGTH_LONG).show();
-                                Log.e("Imagen encontrada", storageDir.getAbsolutePath());
-                                imagen_contador.setVisibility(View.VISIBLE);
-                                imagen_contador.setImageBitmap(getPhotoUserLocal(storageDir + "/" + files[i].getName()));
-                            }
+    public void buscarFotosOffline(){
+        try {
+            //String foto_instalacion =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_antes_instalacion);
+            String  numero_abonado = null;
+            numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
+            foto =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_despues_instalacion);
+            //Toast.makeText(this, foto_instalacion, Toast.LENGTH_LONG).show();
+            if(foto.isEmpty() || foto.contains("null") || foto.contains("NULL") || foto == null){
+                foto =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_antes_instalacion);
+                if(foto.isEmpty() || foto.contains("null") || foto.contains("NULL") || foto == null){
+                    foto =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_lectura);
+                    if(foto.isEmpty() || foto.contains("null") || foto.contains("NULL") || foto == null){
+                        foto =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_numero_serie);
+                    }
+                }
+            }
+
+            if(numero_abonado!=null && !numero_abonado.equals("null") && !TextUtils.isEmpty(numero_abonado)) {
+                if (foto != null && !foto.equals("null") && !foto.equals("NULL") && !TextUtils.isEmpty(foto)) {
+                    File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/fotos_tareas/" + numero_abonado);
+                    if (!storageDir.exists()) {
+                        storageDir.mkdirs();
+                        Log.e("No existe directorio", storageDir.getAbsolutePath());
+                    }
+                    File[] files = storageDir.listFiles();
+                    for (int i = 0; i < files.length; i++) {
+                        if (files[i].getName().contains(foto)) {
+                            //Toast.makeText(this, storageDir +"/" + files[i].getName(), Toast.LENGTH_LONG).show();
+                            Log.e("Imagen encontrada", storageDir.getAbsolutePath());
+                            imagen_contador.setVisibility(View.VISIBLE);
+                            imagen_contador.setImageBitmap(getPhotoUserLocal(storageDir + "/" + files[i].getName()));
                         }
                     }
                 }
-//                Toast.makeText(this, image, Toast.LENGTH_LONG).show();
-            } catch (JSONException e) {
-                e.printStackTrace();
             }
+//                Toast.makeText(this, image, Toast.LENGTH_LONG).show();
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 
@@ -487,11 +491,13 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
         if(type == "download_image") {
             hideRingDialog();
             if (result == null) {
-                Toast.makeText(this, "No se puede acceder al servidor, no se obtuvo foto instalacion", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "No se puede acceder al servidor, no se obtuvo foto instalacion, buscando fotos en el teléfono", Toast.LENGTH_LONG).show();
+                buscarFotosOffline();
             }
             else {
                 if(result.contains("not success")){
-                    Toast.makeText(this, "Error obteniendo datos, no se obtuvo foto instalacion\n"+ result, Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Error obteniendo datos, no se obtuvo foto instalacion\n"+ result+ " buscando fotos en el teléfono", Toast.LENGTH_LONG).show();
+                    buscarFotosOffline();
                 }else {
                     Log.e("Obtenida", "Foto instalación");
                     //Toast.makeText(Screen_Unity_Counter.this, "Foto de obtenida", Toast.LENGTH_SHORT).show();

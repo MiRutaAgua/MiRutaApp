@@ -28,7 +28,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -96,7 +98,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
     public static String numero_serie_viejo = "";
 
     private EditText lectura_editText;
-    private String lectura_string;
+    private String lectura_string = "";
 
     private static final int CAM_REQUEST_INST_PHOTO = 1313;
     private static final int CAM_REQUEST_READ_PHOTO = 1314;
@@ -115,6 +117,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
     public static String mCurrentPhotoPath_foto_serie = "";
     private ArrayList<String> images_files;
     private ArrayList<String> images_files_names;
+    private boolean showing;
 
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -239,6 +242,32 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
             e.printStackTrace();
             Toast.makeText(Screen_Execute_Task.this, "no se pudo obtener actual lectura de contador", Toast.LENGTH_LONG).show();
         }
+
+        lectura_editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if(!charSequence.toString().isEmpty()) {
+                    Integer lect = Integer.parseInt(charSequence.toString());
+                    if (!lectura_string.isEmpty()) {
+                        Integer last = Integer.parseInt(lectura_string);
+                        if (last > 0) {
+                            if (lect - last >= 100) {
+                                if (!MessageDialog.isShowing()) {
+                                    openMessage("Advertencia", "La diferencia de lectura es mayor que 100");
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
         button_geolocalization_screen_exec_task.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -701,18 +730,71 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         if(!(TextUtils.isEmpty(lectura_editText.getText()))) {
             if (!lectura_string.equals("null") && !lectura_string.equals("NULL") && !lectura_string.isEmpty()) {
                 String lectura_actual = lectura_editText.getText().toString();
-                if (Integer.parseInt(lectura_actual) >= Integer.parseInt(lectura_string)) {
-                    try {
-                        Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_ultima, lectura_string);
-                        Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_actual, lectura_actual);
-                        saveData();
+                Integer lectura_actual_int = Integer.parseInt(lectura_actual);
+                Integer lectura_last_int = Integer.parseInt(lectura_string);
 
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        Toast.makeText(Screen_Execute_Task.this, "no se pudo cambiar lectura de contador", Toast.LENGTH_LONG).show();
+                if (lectura_actual_int >= lectura_last_int) {
+                    if(lectura_actual_int - lectura_last_int >= 100){
+                        new AlertDialog.Builder(this)
+                                .setTitle("Lectura muy grande")
+                                .setMessage("La diferencia de lecturas es mayor que 100m3\n¿Desea guardar con esta lectura?")
+                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        try {
+//                                            Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_ultima, lectura_string);
+                                            Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_actual, lectura_actual);
+                                            saveData();
+
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                            Toast.makeText(Screen_Execute_Task.this, "no se pudo cambiar lectura de contador", Toast.LENGTH_LONG).show();
+                                        }
+                                    }
+                                })
+                                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                                    }
+                                }).show();
+                    }
+                    else {
+                        try {
+//                            Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_ultima, lectura_string);
+                            Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_actual, lectura_actual);
+                            saveData();
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(Screen_Execute_Task.this, "no se pudo cambiar lectura de contador", Toast.LENGTH_LONG).show();
+                        }
                     }
                 } else {
-                    Toast.makeText(Screen_Execute_Task.this, "La lectura del contador debe ser mayor que la ultima registrada", Toast.LENGTH_LONG).show();
+                    new AlertDialog.Builder(this)
+                            .setTitle("Lectura menor")
+                            .setMessage("La lectura insertada es menor a la última registrada\n¿Desea guardar con esta lectura menor?")
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    try {
+//                                        Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_ultima, lectura_string);
+                                        Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_actual, lectura_actual);
+                                        saveData();
+
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                        Toast.makeText(Screen_Execute_Task.this, "no se pudo cambiar lectura de contador", Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                            })
+                            .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                }
+                            }).show();
+//                    Toast.makeText(Screen_Execute_Task.this, "La lectura del contador debe ser mayor que la ultima registrada", Toast.LENGTH_LONG).show();
                 }
             } else {
                 try {

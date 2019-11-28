@@ -341,14 +341,7 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
         ArrayList<String> lista_filtro_Citas = new ArrayList<>();
         Collections.sort(lista_ordenada_de_contadores);
         for(int i=0; i < lista_ordenada_de_contadores.size(); i++){
-            String cita_hora = "", cita_fecha = lista_ordenada_de_contadores.get(i).getCita();
-            if(cita_fecha.contains("Entre")){
-                cita_hora = "Entre "+cita_fecha.split("Entre")[1].trim()+"\n";
-                cita_fecha = cita_fecha.split("Entre")[0].trim()+"\n";
-//                openMessage("Hora", cita_hora);
-            }
-            lista_filtro_Citas.add(cita_fecha + cita_hora
-                    +Screen_Filter_Tareas.orderCounterForListView(lista_ordenada_de_contadores.get(i)));
+            lista_filtro_Citas.add(Screen_Filter_Tareas.orderCounterForListView(lista_ordenada_de_contadores.get(i), true));
         }
         arrayAdapter = new ArrayAdapter(Screen_Table_Personal.this, R.layout.list_text_view, lista_filtro_Citas);
         lista_de_contadores_screen_table_personal.setAdapter(arrayAdapter);

@@ -358,7 +358,6 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
         Log.e("On Data set", String.valueOf(year));
         date_cita_selected = DateFormat.getDateInstance(DateFormat.FULL).format(c.getTime());//formato largo en string  Ej: Septiembre, 5 del 2019
         buscarTareasConCitaSeleccionada(date_cita_selected);
-
         ver_citas = true;
 //        selectDateTimeApointMent();
         button_filtro_citas.setTextColor(getResources().getColor(R.color.colorBlueAppRuta));
@@ -714,27 +713,15 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
                 Log.e("buscarCitasEn...", "Encontrado CITA A LAS");
                 String hora_string = observaciones_string.replace("CITA A LAS ","");
 //                Log.e("buscarCitasEn...", hora_string);
-//                if(!telefono1.isEmpty() && telefono1.matches("[0-9]+") && telefono1.length() > 2) {
-//                    jsonObject.put(DBtareasController.telefono1, telefono1);
-//                }
-                Date date = new Date();
-                Date date_temp;
-                try {
-                    date_temp = DBtareasController.getFechaHoraFromString(hora_string,
-                            "HH:mm");
-//                    Log.e("getFechaHoraFromString", date_temp.toString() );
-                    date.setHours(date_temp.getHours());
-                    date.setMinutes(date_temp.getMinutes());
-                    String currentDate = DateFormat.getDateInstance(DateFormat.FULL).format(date);
-                    jsonObject.put(DBtareasController.nuevo_citas, currentDate+"\n"+"A las "+hora_string);
-                    String date_formated_string = "";
-                    date_formated_string = DBtareasController.getStringFromFechaHora(date);
-                    jsonObject.put(DBtareasController.fecha_hora_cita, date_formated_string);
-                    Log.e("date_formated_string...", "CITA A lAS "+date_formated_string);
-                }catch (Exception e) {
-                    Log.e("JSONException...", "CITA A lAS "+e.toString());
-                    e.printStackTrace();
-                }
+
+                jsonObject = setHora(jsonObject, hora_string, "A las ", false, "");
+
+            }else if(!observaciones_string.isEmpty() && observaciones_string.contains("CITA ENTRE LAS ")){
+                Log.e("buscarCitasEn...", "Encontrado CITA ENTRE LAS ");
+                String horas_string = observaciones_string.replace("CITA ENTRE LAS ","");
+                String hora_string = horas_string.split(" Y LAS ")[0].trim();
+                String hora2_string = horas_string.split(" Y LAS ")[1].trim();
+                jsonObject = setHora(jsonObject, hora_string, "Entre las ", true, " y las "+hora2_string);
             }
             else{
                 if(!observaciones_string.isEmpty() && observaciones_string.contains("CITA")
@@ -743,23 +730,18 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
                     String fecha_string = observaciones_string.split(" A LAS ")[0].replace("CITA ","").trim();
                     String hora_string = observaciones_string.split(" A LAS ")[1].trim();
 //                    Log.e("observaciones_string...", observaciones_string.split(" A LAS ").toString());
-                    Date date = new Date();
-                    int year = date.getYear();
-                    try {
-                        date = DBtareasController.getFechaHoraFromString(fecha_string+" "+hora_string,
-                                "dd/MM HH:mm");
-                        date.setYear(year);
-                        String currentDate = DateFormat.getDateInstance(DateFormat.FULL).format(date);
-                        jsonObject.put(DBtareasController.nuevo_citas, currentDate+"\n"+"A las "+hora_string);
-                        String date_formated_string ="";
-                        date_formated_string = DBtareasController.getStringFromFechaHora(date);
-                        jsonObject.put(DBtareasController.fecha_hora_cita, date_formated_string);
-                        Log.e("date_formated_string...", "CITA "+date_formated_string);
-                    } catch (Exception e) {
-                        Log.e("JSONException...", "CITA "+e.toString());
-                        e.printStackTrace();
-                    }
 
+                    jsonObject = setFechaHora(jsonObject, fecha_string, hora_string, "A las ", false, "");
+
+                }
+                else if(!observaciones_string.isEmpty() && observaciones_string.contains("CITA")
+                        && observaciones_string.contains(" ENTRE LAS ") && observaciones_string.contains(" Y LAS ")){
+                    String fecha_string = observaciones_string.split(" ENTRE LAS ")[0].replace("CITA ","").trim();
+                    String horas_string = observaciones_string.split(" ENTRE LAS ")[1].trim();
+                    String hora_string = horas_string.split(" Y LAS ")[0].trim();
+                    String hora2_string = horas_string.split(" Y LAS ")[1].trim();
+
+                    jsonObject = setFechaHora(jsonObject, fecha_string, hora_string, "Entre las ", true, " y las "+hora2_string);
                 }
             }
         } catch (JSONException e) {
@@ -767,6 +749,47 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
             e.printStackTrace();
         }
         return jsonObject;
+    }
+
+    public static JSONObject setHora(JSONObject jsonObject , String hora_string, String string_before_time, boolean second_hour, String hora_second){
+        Date date = new Date();
+        Date date_temp;
+        try {
+            date_temp = DBtareasController.getFechaHoraFromString(hora_string,
+                    "HH:mm");
+//                    Log.e("getFechaHoraFromString", date_temp.toString() );
+            date.setHours(date_temp.getHours());
+            date.setMinutes(date_temp.getMinutes());
+            String currentDate = DateFormat.getDateInstance(DateFormat.FULL).format(date);
+            jsonObject.put(DBtareasController.nuevo_citas, currentDate+"\n"+string_before_time+hora_string+hora_second);
+            String date_formated_string = "";
+            date_formated_string = DBtareasController.getStringFromFechaHora(date);
+            jsonObject.put(DBtareasController.fecha_hora_cita, date_formated_string);
+            Log.e("date_formated_string...", "CITA A lAS "+date_formated_string);
+        }catch (Exception e) {
+            Log.e("JSONException...", "CITA A lAS "+e.toString());
+            e.printStackTrace();
+        }
+        return  jsonObject;
+    }
+    public static JSONObject setFechaHora(JSONObject jsonObject, String fecha_string, String hora_string, String string_before_time, boolean second_hour, String hora_second){
+        Date date = new Date();
+        int year = date.getYear();
+        try {
+            date = DBtareasController.getFechaHoraFromString(fecha_string+" "+hora_string,
+                    "dd/MM HH:mm");
+            date.setYear(year);
+            String currentDate = DateFormat.getDateInstance(DateFormat.FULL).format(date);
+            jsonObject.put(DBtareasController.nuevo_citas, currentDate+"\n"+ string_before_time + hora_string + hora_second);
+            String date_formated_string ="";
+            date_formated_string = DBtareasController.getStringFromFechaHora(date);
+            jsonObject.put(DBtareasController.fecha_hora_cita, date_formated_string);
+            Log.e("date_formated_string...", "CITA "+date_formated_string);
+        } catch (Exception e) {
+            Log.e("JSONException...", "CITA "+e.toString());
+            e.printStackTrace();
+        }
+        return  jsonObject;
     }
     public static JSONObject buscarTelefonosEnObservaciones(JSONObject jsonObject){
         String observaciones_string = null;
@@ -844,19 +867,7 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
         ArrayList<String> lista_filtro_Citas = new ArrayList<>();
         Collections.sort(lista_ordenada_de_contadores);
         for(int i=0; i < lista_ordenada_de_contadores.size(); i++){
-            String cita_hora = "", cita_fecha = lista_ordenada_de_contadores.get(i).getCita();
-            if(cita_fecha.contains("Entre")){
-                try {
-                    cita_hora = "Entre "+cita_fecha.split("Entre")[1].trim();
-                    cita_fecha = cita_fecha.split("Entre")[0].trim()+"\n";
-                } catch (Exception e) {
-                    Log.e("Excp", "buscarTareasConCitaSeleccionada: No se pudo hacer split en cita");
-                    e.printStackTrace();
-                }
-//                openMessage("Hora", cita_hora);
-            }
-            lista_filtro_Citas.add(cita_fecha + cita_hora + "\n"
-                    +Screen_Filter_Tareas.orderCounterForListView(lista_ordenada_de_contadores.get(i)));
+            lista_filtro_Citas.add(Screen_Filter_Tareas.orderCounterForListView(lista_ordenada_de_contadores.get(i), true));
         }
         arrayAdapter = new ArrayAdapter(Screen_Table_Team.this, R.layout.list_text_view, lista_filtro_Citas);
         lista_de_contadores_screen_table_team.setAdapter(arrayAdapter);
