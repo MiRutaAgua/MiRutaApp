@@ -15,9 +15,9 @@
         android:orientation="horizontal"
         android:gravity="center"
         >
-        <include layout = "@layout/toolbar"
-            android:id="@+id/my_toolbar"
-            />
+        <!--<include layout = "@layout/toolbar"-->
+            <!--android:id="@+id/my_toolbar"-->
+            <!--/>-->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -30,19 +30,30 @@
     </LinearLayout>
 
     <LinearLayout
+        android:gravity="center"
+        android:layout_gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="165dp"
         android:orientation="horizontal"
-        android:gravity="left"
-        android:layout_marginTop="10dp"
+        android:background="@drawable/fondo_layout_pant_vista_rapida"
         >
-
         <ImageView
-            android:layout_height="wrap_content"
-            android:id="@+id/imageView_logo_team"
-            android:layout_width="200dp"
-            android:layout_marginLeft="80dp"
-            android:src="@drawable/screen_fastview_table_team_icon" />
+            android:id="@+id/imageView_atras_screen_vista_rapida_equipo"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center"
+            android:src="@drawable/atras_icon"
+            android:layout_marginBottom="30dp"
+            />
+        <ImageView
+            android:layout_marginLeft="230dp"
+            android:id="@+id/imageView_menu_screen_vista_rapida_equipo"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center"
+            android:src="@drawable/menu_icon"
+            android:layout_marginBottom="30dp"
+            />
     </LinearLayout>
 
     <LinearLayout

@@ -26,6 +26,15 @@
                 android:layout_height="180dp"
                 android:layout_gravity="center"
                 android:src="@drawable/screen_login_bienvenido_icon" />
+
+            <Button
+                android:id="@+id/prueba_send"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Button"
+                android:visibility="gone"
+                />
         </LinearLayout>
 
         <LinearLayout
@@ -44,16 +53,18 @@
                 android:layout_height="48dp"
                 android:src="@drawable/screen_login_nombre_operario_icon"
                 android:text="Nombre de Operario" />
-            <EditText
-                android:hint="Usuario de Operario"
+
+            <AutoCompleteTextView
+                android:id="@+id/editText_Nombre_Operario_screen_login"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dip"
                 android:layout_weight="1"
-                android:text="Michel"
-                android:id="@+id/editText_Nombre_Operario_screen_login"
-                android:inputType="text"
+                android:hint="ID Fontanero"
                 android:imeOptions="actionNext"
+                android:inputType="text"
+
+
                 />
         </LinearLayout>
 
@@ -73,10 +84,9 @@
                 android:layout_height="46dp"
                 android:src="@drawable/screen_login_clave_acceso_icon"
                 android:text="Clave de Acceso"
-
                 />
 
-            <EditText
+            <AutoCompleteTextView
                 android:hint="Clave de Acceso"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -85,51 +95,38 @@
                 android:id="@+id/editText_Clave_Acceso_screen_login"
                 android:inputType="textPassword"
                 android:imeOptions="actionDone"
-                android:fontFamily="@font/segoeui"
-                android:text="123456"
+                android:textStyle="italic"
                 />
         </LinearLayout>
 
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="70dp"
             android:layout_marginTop="20dp"
             android:gravity="center"
             android:orientation="horizontal"
-            android:padding="5dp"
-            >
 
+            >
             <Button
                 android:id="@+id/button_login_screen_login"
-                android:layout_width="240dp"
-                android:layout_height="40dp"
-                android:fontFamily="@font/segoeui"
-                android:text="ENTRAR"
-                android:textSize="16dp"
-                android:textStyle="bold"
-                android:textColor="@android:color/white"
-                android:background="@drawable/fondo_boton_azul"
+                android:layout_width="280dp"
+                android:layout_height="70dp"
+                android:background="@drawable/entrar_screen_login"
                 />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="70dp"
             android:gravity="center"
             android:orientation="horizontal"
-            android:padding="5dp"
             >
             <Button
                 android:id="@+id/button_register_screen_login"
-                android:layout_width="240dp"
-                android:layout_height="40dp"
-                android:fontFamily="@font/segoeui"
-                android:text="REGISTRAR"
-                android:textSize="16dp"
-                android:textStyle="bold"
-                android:textColor="@color/colorBlueAppRuta"
-                android:background="@drawable/fondo_boton_blanco"
+                android:layout_width="280dp"
+                android:layout_height="70dp"
+                android:background="@drawable/registrar_screen_login"
                 />
         </LinearLayout>
 

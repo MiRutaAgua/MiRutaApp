@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -30,6 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.Bidi;
 import java.util.ArrayList;
@@ -46,7 +48,8 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
 
 
     private LinearLayout linearlayout_resultado_screen_anomaly,
-            linearlayout_seleccion_resultado_screen_anomaly;
+            linearlayout_seleccion_resultado_screen_anomaly,
+            layout_piezas_disponibles_screen_anomaly;
 
     private Spinner spinner_anomaly,
             spinner_tipo_anomalia_screen_anomaly,
@@ -55,14 +58,16 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
     spinner_tipo_fluido_screen_anomaly,
     spinner_tipo_radio_screen_anomaly,
     spinner_marca_screen_anomaly;
-    private Spinner spinner_resultado_screen_anomaly;
+    private Spinner spinner_resultado_screen_anomaly,
+            spinner_piezas_screen_anomaly;
 
 	private TextView textView_lectura_nuevo_screen_exec_task,
 	textView_emplazamiento_screen_exec_task,
             textView_resultado_screen_exec_task,
             textView_ruedas_screen_exec_task,
             textView_longitud_screen_exec_task,
-            textView_numero_serie_nuevo_screen_exec_task;
+            textView_numero_serie_nuevo_screen_exec_task,
+            textView_piezas_screen_exec_task;
 
 
 	private ImageView imageView_edit_lectura_nuevo_screen_exec_task,
@@ -72,25 +77,16 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
             imageView_edit_ruedas_screen_exec_task,
     imageView_edit_longitud_screen_exec_task;
 
-	Button button_guardar_datos_screen_anomaly;
+	Button button_guardar_datos_screen_anomaly,
+            button_add_pieza_screen_anomaly,
+            button_agregar_pieza_screen_anomaly;
 
-    private HashMap<String,String> mapaTiposDeResultados;
-    private HashMap<String,String> mapaTiposDeAnomalias;
     private HashMap<String,String> mapaTiposDeEmplazamiento;
     private HashMap<String,String> mapaTiposDeRestoEmplazamiento;
     private HashMap<String,String> mapaTiposDeMarca;
     private HashMap<String,String> mapaTiposDeClase;
     private HashMap<String,String> mapaTiposDeTipoRadio;
 
-    private HashMap<String,String> mapaAnomaliasNCI;
-    private HashMap<String,String> mapaAnomaliasLFTD;
-    private HashMap<String,String> mapaAnomaliasTD;
-    private HashMap<String,String> mapaAnomaliasU;
-    private HashMap<String,String> mapaAnomaliasSI;
-    private HashMap<String,String> mapaAnomaliasT;
-    private HashMap<String,String> mapaAnomaliasCF;
-    private HashMap<String,String> mapaAnomaliasEL;
-    private HashMap<String,String> mapaAnomaliasI;
     private HashMap<String,String> emptyMap;
 
     private String current_tag;
@@ -108,28 +104,23 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
         mapaTiposDeRestoEmplazamiento = Tabla_de_Codigos.mapaTiposDeRestoEmplazamiento;
         mapaTiposDeMarca = Tabla_de_Codigos.mapaTiposDeMarca;
         mapaTiposDeClase= Tabla_de_Codigos.mapaTiposDeClase;
-        mapaTiposDeResultados = Tabla_de_Codigos.mapaTiposDeResultados;
-        mapaTiposDeAnomalias = Tabla_de_Codigos.mapaTiposDeAnomalias;
+
         emptyMap = Tabla_de_Codigos.emptyMap;
-        mapaAnomaliasNCI = Tabla_de_Codigos.mapaAnomaliasNCI;
-        mapaAnomaliasLFTD = Tabla_de_Codigos.mapaAnomaliasLFTD;
-        mapaAnomaliasTD= Tabla_de_Codigos.mapaAnomaliasTD;
-        mapaAnomaliasU = Tabla_de_Codigos.mapaAnomaliasU;
-        mapaAnomaliasSI = Tabla_de_Codigos.mapaAnomaliasSI;
-        mapaAnomaliasT = Tabla_de_Codigos.mapaAnomaliasT;
-        mapaAnomaliasCF = Tabla_de_Codigos.mapaAnomaliasCF;
-        mapaAnomaliasEL = Tabla_de_Codigos.mapaAnomaliasEL;
-        mapaAnomaliasI = Tabla_de_Codigos.mapaAnomaliasI;
+
 
         ArrayList<String> lista_tipo_radio= Tabla_de_Codigos.lista_tipo_radio;
 
         ArrayList<String> lista_tipo_fluido= Tabla_de_Codigos.lista_tipo_fluido;
+
+        layout_piezas_disponibles_screen_anomaly = (LinearLayout) findViewById(R.id.layout_piezas_disponibles_screen_anomaly);
 
         linearlayout_resultado_screen_anomaly = (LinearLayout) findViewById(R.id.linearlayout_resultado_screen_anomaly);
         linearlayout_seleccion_resultado_screen_anomaly = (LinearLayout) findViewById(R.id.linearlayout_seleccion_resultado_screen_anomaly);
 
         spinner_resultado_screen_anomaly = (Spinner) findViewById(R.id.spinner_resultado_screen_anomaly);
 
+        button_add_pieza_screen_anomaly = (Button)findViewById(R.id.button_add_pieza_screen_anomaly);
+        button_agregar_pieza_screen_anomaly = (Button)findViewById(R.id.button_agregar_pieza_screen_anomaly);
         button_guardar_datos_screen_anomaly = (Button)findViewById(R.id.button_guardar_datos_screen_anomaly);
 
         imageView_edit_ruedas_screen_exec_task = (ImageView) findViewById(R.id.imageView_edit_ruedas_screen_exec_task);
@@ -140,6 +131,7 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
         imageView_edit_lectura_nuevo_screen_exec_task = (ImageView) findViewById(R.id.imageView_edit_lectura_nuevo_screen_exec_task);
         imageView_edit_emplazamiento_screen_exec_task = (ImageView)findViewById(R.id.imageView_edit_resto_emplazamiento_screen_exec_task);
 
+        textView_piezas_screen_exec_task = (TextView) findViewById(R.id.textView_piezas_screen_exec_task);
         textView_ruedas_screen_exec_task = (TextView) findViewById(R.id.textView_ruedas_screen_exec_task);
         textView_longitud_screen_exec_task = (TextView) findViewById(R.id.textView_longitud_screen_exec_task);
 
@@ -149,6 +141,7 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
         textView_lectura_nuevo_screen_exec_task = (TextView) findViewById(R.id.textView_lectura_nuevo_screen_exec_task);
         textView_emplazamiento_screen_exec_task = (TextView) findViewById(R.id.textView_resto_emplazamiento_screen_exec_task);
 
+        spinner_piezas_screen_anomaly = (Spinner)findViewById(R.id.spinner_piezas_screen_anomaly);
         spinner_anomaly = (Spinner)findViewById(R.id.spinner_anomalias_screen_anomaly);
         spinner_tipo_anomalia_screen_anomaly = (Spinner)findViewById(R.id.spinner_tipo_anomalia_screen_anomaly);
         spinner_emplazamiento_screen_anomaly = (Spinner)findViewById(R.id.spinner_emplazamiento_screen_anomaly);
@@ -157,8 +150,21 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
         spinner_tipo_radio_screen_anomaly = (Spinner)findViewById(R.id.spinner_tipo_radio_screen_anomaly);
         spinner_marca_screen_anomaly = (Spinner)findViewById(R.id.spinner_marca_screen_anomaly);
 
+        String piezas="";
         try {
-            String numero_serie_nuevo_string =Screen_Login_Activity.tarea_JSON.
+            piezas = Screen_Login_Activity.tarea_JSON.
+                    getString(DBtareasController.piezas).trim();
+            if(Screen_Login_Activity.checkStringVariable(piezas)) {
+                textView_piezas_screen_exec_task.setText(piezas);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        setPiezasInSpinner();
+
+        String numero_serie_nuevo_string="";
+        try {
+            numero_serie_nuevo_string = Screen_Login_Activity.tarea_JSON.
                     getString(DBtareasController.numero_serie_contador_devuelto).trim();
             if(!numero_serie_nuevo_string.isEmpty()&& !numero_serie_nuevo_string.equals("NULL")
                     && !numero_serie_nuevo_string.equals("null")) {
@@ -168,21 +174,13 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
             e.printStackTrace();
         }
 
-        ArrayList<String> lista_desplegable_tipos_anomalia = new ArrayList<>();
-        Iterator it = mapaTiposDeAnomalias.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry)it.next();
-            //System.out.println(pair.getKey() + " = " + pair.getValue());
-            if(!lista_desplegable_tipos_anomalia.contains(pair.getValue().toString())) {
-                lista_desplegable_tipos_anomalia.add(pair.getValue().toString());
-            }
-            //it.remove(); // avoids a ConcurrentModificationException
-        }
+        ArrayList<String> lista_desplegable_tipos_anomalia;
+        lista_desplegable_tipos_anomalia = Tabla_de_Codigos.getAccionsOrdenadas();
         Collections.sort(lista_desplegable_tipos_anomalia);
         lista_desplegable_tipos_anomalia.add(0,"NINGUNA");
 
         ArrayList<String> lista_desplegable_emplazamientos = new ArrayList<>();
-        it = mapaTiposDeEmplazamiento.entrySet().iterator();
+        Iterator it = mapaTiposDeEmplazamiento.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry)it.next();
             //System.out.println(pair.getKey() + " = " + pair.getValue());
@@ -212,8 +210,8 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry)it.next();
             //System.out.println(pair.getKey() + " = " + pair.getValue());
-            if(!lista_desplegable_marcas.contains(pair.getKey().toString() + " - " + pair.getValue().toString())) {
-                lista_desplegable_marcas.add(pair.getKey().toString() + " - " +pair.getValue().toString());
+            if(!lista_desplegable_marcas.contains(pair.getValue().toString() + " - " + pair.getKey().toString())) {
+                lista_desplegable_marcas.add(pair.getValue().toString() + " - " +pair.getKey().toString());
             }
             //it.remove(); // avoids a ConcurrentModificationException
         }
@@ -340,8 +338,8 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
                             textView_emplazamiento_screen_exec_task.setText("");
                             try {
                                 String resto_ubicacion = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.ubicacion_en_bateria);
-                                if(!resto_ubicacion.isEmpty() && !resto_ubicacion.equals("null") && !resto_ubicacion.equals("NULL") && resto_ubicacion!=null){
-                                    resto_ubicacion = resto_ubicacion.replace("BA", "");
+                                if(!Screen_Login_Activity.checkStringVariable(resto_ubicacion)){
+                                    resto_ubicacion = resto_ubicacion.replace("BA", "").replace("BT", "");
                                     textView_emplazamiento_screen_exec_task.setText(resto_ubicacion);
                                     Screen_Login_Activity.tarea_JSON.put(DBtareasController.RESTO_EM, resto_ubicacion);
                                 }
@@ -369,7 +367,6 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
                 }else{
                     if(selected.equals("NINGUNO")){
                         textView_emplazamiento_screen_exec_task.setText("");
-
                     }
                 }
             }
@@ -383,9 +380,19 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
                 String selected = spinner_tipo_anomalia_screen_anomaly
                         .getAdapter().getItem(i).toString();
 //                Toast.makeText(getApplicationContext(), "Selected: "+ selected, Toast.LENGTH_LONG).show();
-                if(!selected.isEmpty() && selected!=null && !selected.equals("NINGUNA")) {
+                if(Screen_Login_Activity.checkStringVariable(selected)) {
                     onTipoDeAnomalia(selected);
                 }
+                String anomaly_Order="";
+                try {
+                    anomaly_Order = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.AREALIZAR_devuelta);
+                    if(!Screen_Login_Activity.checkStringVariable(anomaly_Order)){
+                        anomaly_Order = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.ANOMALIA);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                setAnomalySpinner(anomaly_Order);
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -418,60 +425,31 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
 
                     Log.e("anomalia seleccionada", anomaly);
 
-                    if(mapaTiposDeResultados.containsKey(anomaly)){
-                        Log.e("anomalia seleccionada", "encontrada en mapa");
+                    String resultados = Tabla_de_Codigos.getResultadosPosiblesByAnomaly(anomaly).trim();
+
+                    if(Screen_Login_Activity.checkStringVariable(resultados)){
+                        Log.e("anomalia seleccionada", "encontrada en tabla");
                         ArrayList<String> lista_resultados = new ArrayList<>();
                         ArrayAdapter resultados_adapter;
 
-                        linearlayout_resultado_screen_anomaly.setVisibility(View.GONE);
-                        linearlayout_seleccion_resultado_screen_anomaly.setVisibility(View.VISIBLE);
-
-                        if(anomaly.equals("036")){
-                            Log.e("anomalia_gestor 036", "012 011 017");
-                            lista_resultados.add("012 - BAJA EJECUTADA / Contador depositado en almacén");
-                            lista_resultados.add("011 - BAJA EJECUTADA / Contador entregado al abonado");
-                            lista_resultados.add("017 - Taponado con junta ciega y se mantiene contador");
-                            resultados_adapter = new ArrayAdapter(getApplicationContext(), R.layout.spinner_text_view, lista_resultados);
-                            spinner_resultado_screen_anomaly.setAdapter(resultados_adapter);
-                        }
-                        else if(anomaly.equals("A33")){
-                            linearlayout_resultado_screen_anomaly.setVisibility(View.VISIBLE);
-                            linearlayout_seleccion_resultado_screen_anomaly.setVisibility(View.GONE);
-                            try {
-                                Log.e("anomalia_gestor A33", "002");
-                                String anomalia_gestor = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.ANOMALIA).trim();
-                                if(anomalia_gestor.equals("A30")){
-                                    textView_resultado_screen_exec_task.setText("002");
-                                    Log.e("anomalia_gestor", "A30");
-                                }
-                                else if(anomalia_gestor.equals("A31")){
-                                    textView_resultado_screen_exec_task.setText("002");
-                                    Log.e("anomalia_gestor", "A31");
-                                }
-                                else if(anomalia_gestor.equals("A33")){
-                                    textView_resultado_screen_exec_task.setText("002");
-                                    Log.e("anomalia_gestor", "A33");
-                                }else {
-                                    textView_resultado_screen_exec_task.setText("002");
-                                    Log.e("anomalia_gestor", "else");
-                                }
-                            } catch (JSONException e) {
-                                Log.e("spinner_anomaly.setOnI", "No se pudo obtener anomalia del gestor");
-                                textView_resultado_screen_exec_task.setText("");
-                                e.printStackTrace();
+                        if(resultados.contains("-")){
+                            Log.e("resultados posibles", resultados);
+                            String [] lista = resultados.split("-");
+                            for (int c=0 ; c < lista.length; c++){
+                                lista_resultados.add(lista[c].trim());
                             }
-                        }
-                        else if(anomaly.equals("A32")){
-                            Log.e("anomalia_gestor 032", "002 SR2");
-                            lista_resultados.add("002 - Toma datos");
-                            lista_resultados.add("SR2 - Toma datos RADIO");
+
+                            linearlayout_resultado_screen_anomaly.setVisibility(View.GONE);
+                            linearlayout_seleccion_resultado_screen_anomaly.setVisibility(View.VISIBLE);
+
                             resultados_adapter = new ArrayAdapter(getApplicationContext(), R.layout.spinner_text_view, lista_resultados);
                             spinner_resultado_screen_anomaly.setAdapter(resultados_adapter);
                         }
                         else{
+                            Log.e("resultado posible", resultados);
                             linearlayout_resultado_screen_anomaly.setVisibility(View.VISIBLE);
                             linearlayout_seleccion_resultado_screen_anomaly.setVisibility(View.GONE);
-                            textView_resultado_screen_exec_task.setText(mapaTiposDeResultados.get(anomaly));
+                            textView_resultado_screen_exec_task.setText(resultados);
                         }
                     }
                     else{
@@ -484,7 +462,59 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
             public void onNothingSelected(AdapterView<?> adapterView) {
             }
         });
+        button_add_pieza_screen_anomaly.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
+                final Animation myAnim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        layout_piezas_disponibles_screen_anomaly.setVisibility(View.VISIBLE);
+                    }
+                });
+                imageView_edit_ruedas_screen_exec_task.startAnimation(myAnim);
+            }
+        });
 
+        button_agregar_pieza_screen_anomaly.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
+                final Animation myAnim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        addPieza();
+                    }
+                });
+                imageView_edit_ruedas_screen_exec_task.startAnimation(myAnim);
+            }
+        });
         imageView_edit_ruedas_screen_exec_task.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -669,6 +699,230 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
             }
 
         });
+
+
+        String anomaly_Order="";
+        try {
+            anomaly_Order = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.AREALIZAR_devuelta);
+            if(!Screen_Login_Activity.checkStringVariable(anomaly_Order)){
+                anomaly_Order = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.ANOMALIA);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String emplazamiento="";
+        try {
+            emplazamiento = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.emplazamiento_devuelto).trim();
+            if(!Screen_Login_Activity.checkStringVariable(emplazamiento)){
+                emplazamiento = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.emplazamiento).trim();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        llenarInformacionDeAnomalia(anomaly_Order);
+        llenarInformacionDeContador(numero_serie_nuevo_string);
+        llenarInformacionDeEmplazamineto(emplazamiento);
+    }
+
+    private void addPieza() {
+        String selected = spinner_piezas_screen_anomaly
+                .getSelectedItem().toString();
+        if(selected.equals("NINGUNA")){
+            return;
+        }
+        String piezas = textView_piezas_screen_exec_task.getText().toString().trim();
+        if(!piezas.contains(selected)){
+            piezas += "\n1 - " + selected;
+        }else{
+            String [] piezas_split = piezas.split("\n");
+            int c = piezas_split.length;
+            for (int i=0; i < c; i++){
+                if(piezas_split[i].contains(selected)){
+                    int cant = 0;
+                    try {
+                        cant = Integer.parseInt(piezas_split[i].split(" - ")[0]);
+                        cant++;
+                        piezas_split[i] = String.valueOf(cant) + " - " + selected;
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            c = piezas_split.length;
+            piezas = "";
+            for (int i=0; i < c; i++){
+                piezas += piezas_split[i] + "\n";
+            }
+
+        }
+        textView_piezas_screen_exec_task.setText(piezas.trim());
+        layout_piezas_disponibles_screen_anomaly.setVisibility(View.GONE);
+        try {
+            Screen_Login_Activity.tarea_JSON.put(DBtareasController.piezas, piezas.trim());
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setPiezasInSpinner() {
+        ArrayList<String> lista_piezas = new ArrayList<>();
+        if(team_or_personal_task_selection_screen_Activity.dBpiezasController.databasefileExists(this)){
+            if(team_or_personal_task_selection_screen_Activity.dBpiezasController.checkForTableExists()){
+                lista_piezas.clear();
+                if (team_or_personal_task_selection_screen_Activity.dBpiezasController.countTablePiezas() > 0) {
+                    ArrayList<String> piezas = new ArrayList<>();
+                    try {
+                        piezas = team_or_personal_task_selection_screen_Activity.
+                                dBpiezasController.get_all_piezas_from_Database();
+                        for (int i = 0; i < piezas.size(); i++) {
+                            JSONObject jsonObject = null;
+                            try {
+                                jsonObject = new JSONObject(piezas.get(i));
+
+                                lista_piezas.add((jsonObject.getString(DBPiezasController.pieza)));
+
+                            } catch (JSONException e) {
+                                Log.e("JSONException", "Pieza Elemento i = " + String.valueOf(i));
+                                e.printStackTrace();
+                            }
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                lista_piezas.add(0,"NINGUNA");
+                ArrayAdapter arrayAdapter_spinner_piezas = new ArrayAdapter(this, R.layout.spinner_text_view, lista_piezas);
+                spinner_piezas_screen_anomaly.setAdapter(arrayAdapter_spinner_piezas);
+            }
+        }
+    }
+
+    private void llenarInformacionDeEmplazamineto(String emplazamiento) {
+        Log.e("emplaza------", emplazamiento);
+        if(!emplazamiento.isEmpty()){
+
+            ArrayAdapter adapter = (ArrayAdapter) spinner_emplazamiento_screen_anomaly.getAdapter();
+            for(int n = 0; n < adapter.getCount(); n++){
+                if(adapter.getItem(n).toString().split(" - ")[0].toLowerCase().equals(emplazamiento.toLowerCase())){
+                    spinner_emplazamiento_screen_anomaly.setSelection(n);
+                }
+            }
+        }
+    }
+    private void llenarInformacionDeAnomalia(String anomalia) {
+        String tipo_tarea = Tabla_de_Codigos.getAccionOrdenadaByAnomaly(anomalia);
+        if(!tipo_tarea.isEmpty()){
+            ArrayAdapter adapter = (ArrayAdapter) spinner_tipo_anomalia_screen_anomaly.getAdapter();
+            for(int n = 0; n < adapter.getCount(); n++){
+                if(adapter.getItem(n).toString().equals(tipo_tarea)){
+                    spinner_tipo_anomalia_screen_anomaly.setSelection(n);
+                }
+            }
+        }
+    }
+    private void setAnomalySpinner(String anomalia) {
+        if(!anomalia.isEmpty()){
+            ArrayAdapter adapter = (ArrayAdapter) spinner_anomaly.getAdapter();
+            try {
+                for(int n = 0; n < adapter.getCount(); n++){
+                    if(adapter.getItem(n).toString().contains(anomalia)){
+                        spinner_anomaly.setSelection(n);
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    private void llenarInformacionDeContador(String numero_serie_nuevo_string) {
+        for(int i = numero_serie_nuevo_string.length()-1; i >= 0; i--) {
+            if(Character.isLetter(numero_serie_nuevo_string.charAt(i))){
+                numero_serie_nuevo_string = numero_serie_nuevo_string.substring(0,
+                        numero_serie_nuevo_string.length()-1);
+            }else{
+                break;
+            }
+        }
+        try {
+            if(team_or_personal_task_selection_screen_Activity.
+                    dBcontadoresController.checkForTableExists()) {
+                if (team_or_personal_task_selection_screen_Activity.
+                        dBcontadoresController.checkIfContadorExists(numero_serie_nuevo_string)) {
+                    JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.
+                            dBcontadoresController.get_one_contador_from_Database(numero_serie_nuevo_string));
+
+                    Log.e("Contador", jsonObject.toString());
+
+                    textView_ruedas_screen_exec_task.setText(jsonObject.getString(DBcontadoresController.ruedas).trim());
+                    textView_longitud_screen_exec_task.setText(jsonObject.getString(DBcontadoresController.longitud).trim());
+
+                    String codigo_clase = jsonObject.getString(DBcontadoresController.codigo_clase).trim();
+                    String clase = jsonObject.getString(DBcontadoresController.clase).trim();
+                    String tipo_fluido = jsonObject.getString(DBcontadoresController.tipo_fluido).trim();
+                    String tipo_radio = jsonObject.getString(DBcontadoresController.tipo_radio).trim();
+
+                    String lectura_inicial = jsonObject.getString(DBcontadoresController.lectura_inicial).trim();
+                    if(Screen_Login_Activity.checkStringVariable(lectura_inicial)){
+                        Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_contador_nuevo, lectura_inicial);
+                    }
+
+                    String marca = "";
+                    marca = marca + jsonObject.getString(DBcontadoresController.codigo_marca).trim() +" - ";
+                    marca = marca + jsonObject.getString(DBcontadoresController.marca).trim() +" - ";
+                    marca = marca + jsonObject.getString(DBcontadoresController.modelo).trim();
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.marca_devuelta, marca);
+//                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.modelo_devuelto, jsonObject.getString(DBcontadoresController.marca || DBcontadoresController.modelo).trim());
+                    String clase_y_codigo_clase = "";
+                    clase_y_codigo_clase = clase_y_codigo_clase + codigo_clase +" - ";
+                    clase_y_codigo_clase = clase_y_codigo_clase + clase;
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.TIPO_devuelto, clase_y_codigo_clase);
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.calibre_real, jsonObject.getString(DBcontadoresController.calibre_contador).trim());
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.largo_devuelto, jsonObject.getString(DBcontadoresController.longitud).trim());
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.TIPOFLUIDO_devuelto, jsonObject.getString(DBcontadoresController.tipo_fluido).trim());
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.tipoRadio_devuelto, jsonObject.getString(DBcontadoresController.tipo_radio).trim());
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.RUEDASDV, jsonObject.getString(DBcontadoresController.ruedas).trim());
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.CONTADOR_Prefijo_anno_devuelto, jsonObject.getString(DBcontadoresController.anno_o_prefijo).trim());
+
+
+                    textView_lectura_nuevo_screen_exec_task.setText(
+                            Screen_Login_Activity.tarea_JSON.getString(
+                                    DBtareasController.lectura_contador_nuevo).trim());
+
+                    String codigo_marca = jsonObject.getString(DBcontadoresController.codigo_marca).trim();
+                    ArrayAdapter arrayAdapter = (ArrayAdapter) spinner_marca_screen_anomaly.getAdapter();
+                    for(int i=0; i<arrayAdapter.getCount(); i++){
+                        if(arrayAdapter.getItem(i).toString().contains(codigo_marca)){
+                            spinner_marca_screen_anomaly.setSelection(i);
+                            break;
+                        }
+                    }
+                    arrayAdapter = (ArrayAdapter) spinner_clase_contador_screen_anomaly.getAdapter();
+                    for(int i=0; i<arrayAdapter.getCount(); i++){
+                        if(arrayAdapter.getItem(i).toString().contains(codigo_clase + " - ")){
+                            spinner_clase_contador_screen_anomaly.setSelection(i);
+                            break;
+                        }
+                    }
+                    arrayAdapter = (ArrayAdapter) spinner_tipo_fluido_screen_anomaly.getAdapter();
+                    for(int i=0; i<arrayAdapter.getCount(); i++){
+                        if(arrayAdapter.getItem(i).toString().contains(tipo_fluido)){
+                            spinner_tipo_fluido_screen_anomaly.setSelection(i);
+                            break;
+                        }
+                    }
+                    arrayAdapter = (ArrayAdapter) spinner_tipo_radio_screen_anomaly.getAdapter();
+                    for(int i=0; i<arrayAdapter.getCount(); i++){
+                        if(arrayAdapter.getItem(i).toString().contains(tipo_radio)){
+                            spinner_tipo_radio_screen_anomaly.setSelection(i);
+                            break;
+                        }
+                    }
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -680,8 +934,6 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
         Intent resultIntent = new Intent(Screen_Anomaly.this, Screen_Execute_Task.class);
         if(spinner_anomaly.getSelectedItem()!=null) {
             String anomaly = spinner_anomaly.getSelectedItem().toString();
-
-
 
             if (!anomaly.isEmpty() && anomaly != null && !anomaly.equals("null") && !anomaly.equals("NULL") && anomaly.contains(" - ")) {
                 String anomaly_code = anomaly.split(" - ")[0];
@@ -746,6 +998,7 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
 
                 if(!DBtareasController.tabla_model) {
                     Screen_Login_Activity.tarea_JSON.put(DBtareasController.numero_serie_contador_devuelto, wrote_string);
+                    llenarInformacionDeContador(wrote_string);
                 }
                 textView_numero_serie_nuevo_screen_exec_task.setText(wrote_string);
             }
@@ -780,47 +1033,16 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
     }
 
     private void onTipoDeAnomalia(String selected) {
-        if(selected.equals("NUEVO CONTADOR INSTALAR")){
-            fillListaDesplegable(mapaAnomaliasNCI);
-        }
-        else if(selected.equals("USADO CONTADOR INSTALAR")){
-            fillListaDesplegable(mapaAnomaliasU);
-        }
-        else if(selected.equals("BAJA O CORTE DE SUMINISTRO")){
-            fillListaDesplegable(mapaAnomaliasT);
-        }
-        else if(selected.equals("LIMPIEZA DE FILTRO Y TOMA DE DATOS")){
-            fillListaDesplegable(mapaAnomaliasLFTD);
-        }
-        else if(selected.equals("DATOS")){
-            fillListaDesplegable(emptyMap);
-        }
-        else if(selected.equals("TOMA DE DATOS")){
-            fillListaDesplegable(mapaAnomaliasTD);
-        }
-        else if(selected.equals("INSPECCIÓN")){
-            fillListaDesplegable(mapaAnomaliasI);
-        }
-        else if(selected.equals("COMPROBAR EMISOR")){
-            fillListaDesplegable(mapaAnomaliasCF);
-        }
-        else if(selected.equals("EMISOR LECTURA")){
-            fillListaDesplegable(mapaAnomaliasEL);
-        }
-        else if(selected.equals("SOLO INSTALAR")){
-            fillListaDesplegable(mapaAnomaliasSI);
+        if(!selected.equals("NINGUNA")){
+            ArrayList<String> lista = Tabla_de_Codigos.getAnomaliaseIntervencionesByAccionOrdenada(selected);
+            fillListaDesplegableAnomaliasIntervenciones(lista);
+        }else{
+            fillListaDesplegableAnomaliasIntervenciones(new ArrayList<>());
         }
     }
 
-    public void fillListaDesplegable(HashMap<String, String> hashMap){
-        ArrayList<String> lista_desplegable_tipos_anomalia = new ArrayList<>();
-        Iterator it = hashMap.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry)it.next();
-            //System.out.println(pair.getKey() + " = " + pair.getValue());
-            lista_desplegable_tipos_anomalia.add(pair.getKey().toString() + " - " + pair.getValue().toString());
-//            it.remove(); // avoids a ConcurrentModificationException
-        }
+    public void fillListaDesplegableAnomaliasIntervenciones(ArrayList<String> lista){
+        ArrayList<String> lista_desplegable_tipos_anomalia = lista;
         ArrayAdapter arrayAdapter_spinner = new ArrayAdapter(this, R.layout.spinner_text_view, lista_desplegable_tipos_anomalia);
         spinner_anomaly.setAdapter(arrayAdapter_spinner);
     }
@@ -851,10 +1073,24 @@ public class Screen_Anomaly extends AppCompatActivity implements Dialog.DialogLi
                 // User chose the "Settings" item, show the app settings UI...
                 return true;
 
+            case R.id.Principal:
+//                Toast.makeText(Screen_User_Data.this, "Ayuda", Toast.LENGTH_SHORT).show();
+                // User chose the "Favorite" action, mark the current item
+                // as a favorite...
+                Intent open_screen= new Intent(this, team_or_personal_task_selection_screen_Activity.class);
+                startActivity(open_screen);
+                finish();
+                return true;
+
             case R.id.Tareas:
 //                Toast.makeText(Screen_User_Data.this, "Ayuda", Toast.LENGTH_SHORT).show();
                 // User chose the "Favorite" action, mark the current item
                 // as a favorite...
+                team_or_personal_task_selection_screen_Activity.from_team_or_personal =
+                        team_or_personal_task_selection_screen_Activity.FROM_TEAM;
+                Intent open_screen_ = new Intent(this, Screen_Table_Team.class);
+                startActivity(open_screen_);
+                finish();
                 return true;
 
             case R.id.Configuracion:

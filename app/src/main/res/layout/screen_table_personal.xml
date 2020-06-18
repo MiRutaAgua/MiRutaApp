@@ -40,7 +40,6 @@
                 android:text="TAREAS DE OPERARIO"
                 android:textColor="@color/colorGrayLetters"
                 android:textStyle="bold"
-                android:fontFamily="@font/segoeui"
                 android:textSize="18dp"
                 android:layout_marginTop="1dp"
                 android:gravity="center"
@@ -74,7 +73,6 @@
                 android:id="@+id/button_filtrar_citas_screen_table_personal"
                 android:layout_width="100dp"
                 android:layout_height="50dp"
-                android:fontFamily="@font/segoeui"
                 android:text="CITAS"
                 android:textSize="16dp"
                 android:textStyle="bold"
@@ -88,6 +86,8 @@
 
         <ListView
             android:id="@+id/listView_contadores_screen_table_personal"
+            android:choiceMode="singleChoice"
+            android:listSelector="@color/colorBlueAppRuta"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="20dp"
@@ -99,14 +99,14 @@
 
     <Button
         android:id="@+id/button_add_tarea_table_personal"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:layout_marginBottom="20dp"
         android:layout_marginRight="20dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:clickable="true"
-        android:background="@drawable/button_add_screen_table"
+        android:background="@drawable/ic_add_circle_blue_24dp"
         app:layout_anchor="@+id/linearLayout2"
         app:layout_anchorGravity="right|bottom"
         />

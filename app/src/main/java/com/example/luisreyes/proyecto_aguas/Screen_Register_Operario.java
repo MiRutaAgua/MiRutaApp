@@ -24,6 +24,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Base64;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -164,6 +165,7 @@ public class Screen_Register_Operario extends AppCompatActivity implements TaskC
                         String fecha_hora = DBoperariosController.getStringFromFechaHora(new Date());
                         //image = getStringImage(bitmap_foto);
                         capture_Photo.setImageDrawable(getDrawable(R.drawable.screen_exec_task_imagen));
+                        image = username_reg + "_operario.jpg";
                         //etname.setText(image);
 
                         showRingDialog("Registrando operario...");
@@ -379,10 +381,16 @@ public class Screen_Register_Operario extends AppCompatActivity implements TaskC
         progressDialog.setCancelable(true);
     }
     private void hideRingDialog(){
-        if(progressDialog!=null) {
-            if (progressDialog.isShowing()) {
-                progressDialog.dismiss();
+        try {
+            if(progressDialog!=null) {
+                if(progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                    progressDialog = null;
+                }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("hideRingDialog", e.toString());
         }
     }
 
@@ -434,7 +442,8 @@ public class Screen_Register_Operario extends AppCompatActivity implements TaskC
 
     @Override
     public void onBackPressed() {
+        Intent intent= new Intent(this, Screen_Login_Activity.class);
+        startActivity(intent);
         finish();
-        super.onBackPressed();
     }
 }

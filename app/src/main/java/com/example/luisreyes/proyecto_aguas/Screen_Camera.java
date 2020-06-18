@@ -193,14 +193,18 @@ public class Screen_Camera extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.screen_camera);
 
-        String numero_interno = "";
+        String numero_abonado = "", gestor = "";
         try {
-            numero_interno = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_interno).trim();
+            numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
+            gestor = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.GESTOR).trim();
+            if(!Screen_Login_Activity.checkStringVariable(gestor)){
+                gestor = "Sin_Gestor";
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
         photo_name = getIntent().getStringExtra("photo_name");
-        photo_folder = getIntent().getStringExtra("photo_folder")+"/"+numero_interno;
+        photo_folder = getIntent().getStringExtra("photo_folder")+"/" + gestor + "/" +numero_abonado;
         contador = getIntent().getStringExtra("contador").trim().replace(" ","");
 
 

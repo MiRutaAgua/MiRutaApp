@@ -12,7 +12,7 @@ public class MyCounter implements Comparable<MyCounter> {
     private String contador;
     private String direccion;
     private String tipo_tarea;
-    private String numero_interno = null;
+    private String principal_variable = null;
     private String cita;
     private String abonado;
     private String numero_serie_contador;
@@ -35,13 +35,13 @@ public class MyCounter implements Comparable<MyCounter> {
         }
     }
 
-    public String getNumero_interno() {
-        return numero_interno;
+    public String getPrincipal_variable() {
+        return principal_variable;
     }
 
-    public void setNumero_interno(String numero_interno) {
-        if(!numero_interno.isEmpty())
-            this.numero_interno = numero_interno;
+    public void setPrincipal_variable(String principal_variable) {
+        if(!principal_variable.isEmpty())
+            this.principal_variable = principal_variable;
     }
 
     public String getNumero_abonado() {
@@ -115,6 +115,7 @@ public class MyCounter implements Comparable<MyCounter> {
     public void setFecha_cita(String fecha_cita) {
         this.fecha_cita = fecha_cita;
     }
+
     public String getDireccion() {
         return direccion;
     }

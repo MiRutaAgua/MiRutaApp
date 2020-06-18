@@ -54,15 +54,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:gravity="center"
+            android:gravity="left"
             android:layout_gravity="center"
             >
 
             <TextView
                 android:id="@+id/textView_telefonos_screen_incidence"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:gravity="center"
                 android:text="Teléfonos:"
                 android:textSize="18dp"
                 android:textStyle="bold"
@@ -75,6 +76,14 @@
                 android:gravity="center"
                 android:layout_gravity="center"
                 >
+                <ImageView
+                    android:id="@+id/imageView_edit_phone1_incidence"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="4dp"
+                    android:src="@drawable/ic_phone_blue_24dp" />
+
                 <TextView
                     android:id="@+id/textView_telefono1_screen_incidence"
                     android:layout_width="wrap_content"
@@ -100,6 +109,14 @@
                 android:gravity="center"
                 android:layout_gravity="center"
                 >
+                <ImageView
+                    android:id="@+id/imageView_edit_phone2_incidence"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="4dp"
+                    android:src="@drawable/ic_phone_blue_24dp" />
+
                 <TextView
                     android:id="@+id/textView_telefono2_screen_incidence"
                     android:layout_width="wrap_content"
@@ -134,9 +151,7 @@
                 android:id="@+id/imageView_foto1_screen_incidence"
                 android:layout_width="130dp"
                 android:layout_height="40dp"
-                android:fontFamily="@font/segoeui"
                 android:text="FOTO 1"
-                android:textSize="16dp"
                 android:textStyle="bold"
                 android:textColor="@android:color/white"
                 android:background="@drawable/fondo_boton_azul"
@@ -154,9 +169,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_width="130dp"
                 android:layout_height="40dp"
-                android:fontFamily="@font/segoeui"
                 android:text="FOTO 2"
-                android:textSize="16dp"
                 android:textStyle="bold"
                 android:textColor="@android:color/white"
                 android:background="@drawable/fondo_boton_azul"
@@ -175,9 +188,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_width="130dp"
                 android:layout_height="40dp"
-                android:fontFamily="@font/segoeui"
                 android:text="FOTO 3"
-                android:textSize="16dp"
                 android:textStyle="bold"
                 android:textColor="@android:color/white"
                 android:background="@drawable/fondo_boton_azul"  />
@@ -221,9 +232,7 @@
                         android:id="@+id/button_geolocalizar_screen_incidence"
                         android:layout_width="266dp"
                         android:layout_height="40dp"
-                        android:fontFamily="@font/segoeui"
                         android:text="GEOLOCALIZAR"
-                        android:textSize="16dp"
                         android:textStyle="bold"
                         android:textColor="@android:color/white"
                         android:background="@drawable/fondo_boton_azul" />
@@ -240,9 +249,7 @@
                         android:id="@+id/button_firma_del_cliente_screen_incidence"
                         android:layout_width="266dp"
                         android:layout_height="40dp"
-                        android:fontFamily="@font/segoeui"
                         android:text="FIRMA DEL CLIENTE"
-                        android:textSize="16dp"
                         android:textStyle="bold"
                         android:textColor="@android:color/white"
                         android:background="@drawable/fondo_boton_azul"  />

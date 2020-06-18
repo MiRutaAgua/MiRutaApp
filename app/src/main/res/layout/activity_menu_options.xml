@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:padding="16dp"
+    android:orientation="vertical">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent" android:layout_height="80dp"
+        android:orientation="vertical"
+        android:layout_gravity="top">
+        <Button
+            android:id="@+id/button_pant_principal_layout_dialog"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:background="@drawable/pant_principal_button"
+            />
+    </LinearLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent" android:layout_height="80dp"
+        android:orientation="vertical"
+        android:layout_gravity="top">
+        <Button
+            android:id="@+id/button_tareas_layout_dialog"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:background="@drawable/tabla_tarea_button"
+            />
+    </LinearLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent" android:layout_height="80dp"
+        android:orientation="vertical"
+        android:layout_gravity="top">
+        <Button
+            android:id="@+id/button_savework_layout_dialog"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:background="@drawable/salvar_trabajo_button"
+            />
+    </LinearLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent" android:layout_height="80dp"
+        android:orientation="vertical"
+        android:layout_gravity="top">
+        <Button
+            android:id="@+id/button_loadwork_layout_dialog"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:background="@drawable/cargar_trabajo_button"
+            />
+    </LinearLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent" android:layout_height="80dp"
+        android:orientation="vertical"
+        android:layout_gravity="top">
+        <Button
+            android:id="@+id/button_ayuda_layout_dialog"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:background="@drawable/ayuda_button"
+            />
+    </LinearLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent" android:layout_height="80dp"
+        android:orientation="vertical"
+        android:layout_gravity="top">
+        <Button
+            android:id="@+id/button_tarea_info_layout_dialog"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:background="@drawable/informacion_tarea_button"
+            />
+    </LinearLayout>
+</LinearLayout>

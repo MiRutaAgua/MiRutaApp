@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:padding="16dp"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/edit_myemail_layout_dialog"
+        android:hint="De:"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="inglreyesm@gmail.com"
+        />
+    <EditText
+        android:id="@+id/edit_password_layout_dialog"
+        android:hint="Contraseña"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:text="26194larm"
+        />
+    <EditText
+        android:layout_marginTop="20dp"
+        android:id="@+id/edit_toemail_layout_dialog"
+        android:hint="Correo Destinatario"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="betty071194@gmail.com"
+        />
+    <EditText
+        android:id="@+id/edit_subject_layout_dialog"
+        android:hint="Asunto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="PDF de Trabajo"
+        />
+    <EditText
+        android:layout_marginTop="10dp"
+        android:id="@+id/edit_body_layout_dialog"
+        android:hint="Texto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        />
+
+</LinearLayout>

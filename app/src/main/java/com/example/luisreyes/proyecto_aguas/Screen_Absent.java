@@ -69,7 +69,9 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
 
     private ImageView imageView_edit_fecha_screen_absent,
             imageView_edit_hora_screen_absent,
-            imageView_edit_observaciones_screen_absent;
+            imageView_edit_observaciones_screen_absent,
+            imageView_edit_phone1_screen_absent,
+            imageView_edit_phone2_screen_absent;
     private String global_tag="";
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -87,6 +89,8 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
         myToolbar.setBackgroundColor(Color.TRANSPARENT);
         setSupportActionBar(myToolbar);
 
+        imageView_edit_phone2_screen_absent = (ImageView) findViewById(R.id.imageView_edit_phone2_screen_absent);
+        imageView_edit_phone1_screen_absent = (ImageView) findViewById(R.id.imageView_edit_phone1_screen_absent);
         imageView_edit_fecha_screen_absent = (ImageView) findViewById(R.id.imageView_edit_fecha_screen_absent);
         imageView_edit_hora_screen_absent = (ImageView) findViewById(R.id.imageView_edit_hora_screen_absent);
         imageView_edit_observaciones_screen_absent = (ImageView) findViewById(R.id.imageView_edit_observaciones_screen_absent);
@@ -139,8 +143,8 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
             Toast.makeText(Screen_Absent.this, "No se pudo obtener datos de telefonos", Toast.LENGTH_LONG).show();
         }
         try {
-            String telefono1_string = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.telefono1);
-            String telefono2_string = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.telefono2);
+            String telefono1_string = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.telefono1).trim();
+            String telefono2_string = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.telefono2).trim();
             if(!TextUtils.isEmpty(telefono1_string)&&  !telefono1_string.equals("null")) {
                 telefono1.setText(telefono1_string);
             }
@@ -152,10 +156,18 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
             Toast.makeText(Screen_Absent.this, "No se pudo obtener numeros telefono", Toast.LENGTH_LONG).show();
         }
         try {
-            String observaciones_string = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.observaciones);
-            if(!TextUtils.isEmpty(observaciones_string)&&  !observaciones_string.equals("null")) {
-                observaciones_text.setText(observaciones_string);
+            String obs = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.MENSAJE_LIBRE).trim();
+            if(!Screen_Login_Activity.checkStringVariable(obs)) {
+                obs = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.observaciones).trim();
+                if (!Screen_Login_Activity.checkStringVariable(obs)) {
+                    obs = (Screen_Login_Activity.tarea_JSON.getString(DBtareasController.OBSERVA).trim());
+                    if (!Screen_Login_Activity.checkStringVariable(obs)) {
+                        obs = "";
+                    }
+                }
             }
+            observaciones_text.setText(obs);
+
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(Screen_Absent.this, "No se pudo obtener observaciones", Toast.LENGTH_LONG).show();
@@ -180,7 +192,7 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
                     }
                     @Override
                     public void onAnimationEnd(Animation arg0) {
-                        openDialog("Observaciones", "...");
+                        openDialog("Mensaje libre", "...");
                     }
                 });
                 imageView_edit_observaciones_screen_absent.startAnimation(myAnim);
@@ -293,31 +305,36 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
             }
         });
 
+        imageView_edit_phone1_screen_absent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String tel = telefono1.getText().toString();
+                if(checkIfOnlyNumbers(tel)) {
+                    callNumber(Screen_Absent.this, tel);
+                }else{
+
+                    openDialog("Telefono 1", "...");
+                }
+            }
+        });
+        imageView_edit_phone2_screen_absent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String tel = telefono2.getText().toString();
+                if(checkIfOnlyNumbers(tel)) {
+                    callNumber(Screen_Absent.this,tel);
+                }else{
+
+                    openDialog("Telefono 2", "...");
+                }
+            }
+        });
         telefono1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String tel = telefono1.getText().toString();
-                if(!tel.isEmpty() && tel.matches("[0-9]+") && tel.length() > 2) {
-                    PhoneCallListener phoneListener = new PhoneCallListener();
-                    TelephonyManager telephonyManager = (TelephonyManager) Screen_Absent.this
-                            .getSystemService(Context.TELEPHONY_SERVICE);
-                    telephonyManager.listen(phoneListener,
-                            PhoneStateListener.LISTEN_CALL_STATE);
-
-                    Intent callIntent = new Intent(Intent.ACTION_CALL);
-                    callIntent.setData(Uri.parse("tel:" + telefono1.getText().toString()));
-
-                    if (ActivityCompat.checkSelfPermission(Screen_Absent.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                        // TODO: Consider calling
-                        //    ActivityCompat#requestPermissions
-                        // here to request the missing permissions, and then overriding
-                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                        //                                          int[] grantResults)
-                        // to handle the case where the user grants the permission. See the documentation
-                        // for ActivityCompat#requestPermissions for more details.
-                        return;
-                    }
-                    startActivity(callIntent);
+                if(checkIfOnlyNumbers(tel)) {
+                    callNumber(Screen_Absent.this, tel);
                 }else{
 
                     openDialog("Telefono 1", "...");
@@ -328,20 +345,8 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
             @Override
             public void onClick(View view) {
                 String tel = telefono2.getText().toString();
-                if(!tel.isEmpty() && tel.matches("[0-9]+") && tel.length() > 2) {
-                    PhoneCallListener phoneListener = new PhoneCallListener();
-                    TelephonyManager telephonyManager = (TelephonyManager) Screen_Absent.this
-                            .getSystemService(Context.TELEPHONY_SERVICE);
-                    telephonyManager.listen(phoneListener,
-                            PhoneStateListener.LISTEN_CALL_STATE);
-
-                    Intent callIntent = new Intent(Intent.ACTION_CALL);
-                    callIntent.setData(Uri.parse("tel:" + telefono2.getText().toString()));
-
-                    if (ActivityCompat.checkSelfPermission(Screen_Absent.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                        return;
-                    }
-                    startActivity(callIntent);
+                if(checkIfOnlyNumbers(tel)) {
+                    callNumber(Screen_Absent.this,tel);
                 }else{
 
                     openDialog("Telefono 2", "...");
@@ -371,7 +376,6 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
             }
         });
 
-
         fecha_cita.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -387,17 +391,55 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
         observaciones_text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openDialog("Observaciones", "...");
+                openDialog("Mensaje libre", "...");
             }
         });
     }
 
+    public static boolean checkIfOnlyNumbers(String tel)
+    {
+        if(!tel.isEmpty() && tel.matches("[0-9]+") && tel.length() > 2) {
+            return true;
+        }else{
+            return false;
+        }
+    }
+    public static boolean checkOnlyNumbers(String num)
+    {
+        if(!num.isEmpty() && num.matches("[0-9]+")) {
+            return true;
+        }else{
+            return false;
+        }
+    }
+    public static void callNumber(Context context, String phone){
+           PhoneCallListener phoneListener = new PhoneCallListener();
+            TelephonyManager telephonyManager = (TelephonyManager) context
+                    .getSystemService(Context.TELEPHONY_SERVICE);
+            telephonyManager.listen(phoneListener,
+                    PhoneStateListener.LISTEN_CALL_STATE);
+
+            Intent callIntent = new Intent(Intent.ACTION_CALL);
+            callIntent.setData(Uri.parse("tel:" + phone));
+
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
+        context.startActivity(callIntent);
+    }
     private void guardarCambiosDeCheckBoxes(){
         if(checkbox_tocado_en_puerta_screen_absent.isChecked()) {
             try {
                 Date date =  new Date();
                 date.setSeconds(0);
-                String fechaString = DBoperariosController.getStringFromFechaHora(date);
+                String fechaString = DBtareasController.getStringFromFechaHora(date).replace("null", "");
                 String fechas = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.fechas_tocado_puerta);
                 if(!fechas.contains(fechaString)){
                     Screen_Login_Activity.tarea_JSON.put(DBtareasController.fechas_tocado_puerta, fechaString
@@ -411,7 +453,7 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
             try {
                 Date date =  new Date();
                 date.setSeconds(0);
-                String fechaString = DBoperariosController.getStringFromFechaHora(date);
+                String fechaString = DBtareasController.getStringFromFechaHora(date).replace("null", "");
                 String fechas = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.fechas_nota_aviso);
                 if(!fechas.contains(fechaString)){
                     Screen_Login_Activity.tarea_JSON.put(DBtareasController.fechas_nota_aviso, fechaString
@@ -547,9 +589,7 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
             try {
                 team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea(Screen_Login_Activity.tarea_JSON);
                 Toast.makeText(Screen_Absent.this, "Datos guardados en el teléfono, el la próxima sincronización se actualizaran los datos", Toast.LENGTH_LONG).show();
-                Intent intent_open_battery_counter = new Intent(Screen_Absent.this, team_or_personal_task_selection_screen_Activity.class);
-                startActivity(intent_open_battery_counter);
-                Screen_Absent.this.finish();
+                finishThisClass();
             } catch (JSONException e) {
                 e.printStackTrace();
                 Toast.makeText(Screen_Absent.this, "No se pudo guardar datos offline", Toast.LENGTH_LONG).show();
@@ -669,18 +709,18 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
     @Override
     public void pasarTexto(String wrote_string) throws JSONException {
         if(!(TextUtils.isEmpty(wrote_string))){
-            if(global_tag.equals("Observaciones")) {
-                Screen_Login_Activity.tarea_JSON.put(DBtareasController.observaciones_devueltas, wrote_string);
+            if(global_tag.equals("Mensaje libre")) {
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.MENSAJE_LIBRE, wrote_string);
                 //Toast.makeText(Screen_Absent.this, Screen_Login_Activity.tarea_JSON.toString(), Toast.LENGTH_LONG).show();
                 observaciones_text.setText(wrote_string);
             }else if(global_tag.equals("Telefono 1")) {
                 Screen_Login_Activity.tarea_JSON.put(DBtareasController.telefono1, wrote_string);
-                Screen_Login_Activity.tarea_JSON.put(DBtareasController.MENSAJE_LIBRE, "#"+wrote_string+"#");
+//                Screen_Login_Activity.tarea_JSON.put(DBtareasController.MENSAJE_LIBRE, "#"+wrote_string+"#");
                 //Toast.makeText(Screen_Absent.this, Screen_Login_Activity.tarea_JSON.toString(), Toast.LENGTH_LONG).show();
                 telefono1.setText(wrote_string);
             }else if(global_tag.equals("Telefono 2")) {
                 Screen_Login_Activity.tarea_JSON.put(DBtareasController.telefono2, wrote_string);
-                Screen_Login_Activity.tarea_JSON.put(DBtareasController.MENSAJE_LIBRE, "#"+wrote_string+"#");
+//                Screen_Login_Activity.tarea_JSON.put(DBtareasController.MENSAJE_LIBRE, "#"+wrote_string+"#");
                 //Toast.makeText(Screen_Absent.this, Screen_Login_Activity.tarea_JSON.toString(), Toast.LENGTH_LONG).show();
                 telefono2.setText(wrote_string);
             }
@@ -701,9 +741,7 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
 
                 }else {
                     Toast.makeText(Screen_Absent.this, "Guardada tarea correctamente", Toast.LENGTH_SHORT).show();
-                    Intent intent_open_battery_counter = new Intent(Screen_Absent.this, team_or_personal_task_selection_screen_Activity.class);
-                    startActivity(intent_open_battery_counter);
-                    Screen_Absent.this.finish();
+                    finishThisClass();
                 }
             }
         }
@@ -714,8 +752,17 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
         progressDialog.setCancelable(true);
     }
     private void hideRingDialog(){
-        if(progressDialog!=null)
-        progressDialog.dismiss();
+        try {
+            if(progressDialog!=null) {
+                if(progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                    progressDialog = null;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("hideRingDialog", e.toString());
+        }
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -737,10 +784,25 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
                 // User chose the "Settings" item, show the app settings UI...
                 return true;
 
+            case R.id.Principal:
+//                Toast.makeText(Screen_User_Data.this, "Ayuda", Toast.LENGTH_SHORT).show();
+                // User chose the "Favorite" action, mark the current item
+                // as a favorite...
+                Intent open_screen= new Intent(this, team_or_personal_task_selection_screen_Activity.class);
+                startActivity(open_screen);
+
+                finish();
+                return true;
+
             case R.id.Tareas:
 //                Toast.makeText(Screen_User_Data.this, "Ayuda", Toast.LENGTH_SHORT).show();
                 // User chose the "Favorite" action, mark the current item
                 // as a favorite...
+                team_or_personal_task_selection_screen_Activity.from_team_or_personal =
+                        team_or_personal_task_selection_screen_Activity.FROM_TEAM;
+                Intent open_screen_ = new Intent(this, Screen_Table_Team.class);
+                startActivity(open_screen_);
+                finish();
                 return true;
 
             case R.id.Configuracion:
@@ -774,7 +836,35 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
         if(!team_or_personal_task_selection_screen_Activity.dBtareasController.saveChangesInTarea()){
             Toast.makeText(Screen_Absent.this, "No se pudo guardar cambios", Toast.LENGTH_SHORT).show();
         }
-        this.finish();
+        Intent intent_open_screen_info_counter=null;
+        if (team_or_personal_task_selection_screen_Activity.from_battery_or_unity == team_or_personal_task_selection_screen_Activity.FROM_BATTERY) {
+            intent_open_screen_info_counter= new Intent(this, Screen_Battery_counter.class);
+        } else if(team_or_personal_task_selection_screen_Activity.from_battery_or_unity == team_or_personal_task_selection_screen_Activity.FROM_UNITY){
+            intent_open_screen_info_counter= new Intent(this, Screen_Unity_Counter.class);
+        }
+        if(intent_open_screen_info_counter!=null) {
+            startActivity(intent_open_screen_info_counter);
+        }
+        Screen_Absent.this.finish();
         super.onBackPressed();
+    }
+
+    public void finishThisClass(){
+        Intent openTableActivity = null;
+        if(team_or_personal_task_selection_screen_Activity.from_team_or_personal == team_or_personal_task_selection_screen_Activity.FROM_TEAM) {
+            openTableActivity = new Intent(this, Screen_Table_Team.class);
+        }else if(team_or_personal_task_selection_screen_Activity.from_team_or_personal == team_or_personal_task_selection_screen_Activity.FROM_PERSONAL){
+            openTableActivity = new Intent(this, Screen_Table_Personal.class);
+        }else if(team_or_personal_task_selection_screen_Activity.from_team_or_personal == team_or_personal_task_selection_screen_Activity.FROM_FILTER_RESULT){
+            openTableActivity = new Intent(this, Screen_Filter_Results.class);
+        }else if(team_or_personal_task_selection_screen_Activity.from_team_or_personal == team_or_personal_task_selection_screen_Activity.FROM_FILTER_TAREAS){
+            openTableActivity = new Intent(this, Screen_Filter_Tareas.class);
+        }
+        if(openTableActivity!= null) {
+            openTableActivity.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+//        openTableActivity.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            startActivityIfNeeded(openTableActivity, 0);
+        }
+        finish();
     }
 }

@@ -8,7 +8,7 @@
         </compositeConfiguration>
         <option name="distributionType" value="LOCAL" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="gradleHome" value="$PROJECT_DIR$/../../Android 3.5.1/gradle-5.4.1" />
+        <option name="gradleHome" value="$PROJECT_DIR$/../../Actualizado/gradle-5.4.1" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />

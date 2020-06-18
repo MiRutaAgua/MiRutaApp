@@ -237,6 +237,7 @@
                             android:hint="Código"
                             android:textSize="15dp"
                             android:textAlignment="center"
+                            android:inputType="numberDecimal"
                             />
                     </LinearLayout>
                 </LinearLayout>
@@ -425,9 +426,7 @@
                     android:id="@+id/button_fitrar_screen_filter_tareas"
                     android:layout_width="273dp"
                     android:layout_height="40dp"
-                    android:fontFamily="@font/segoeui"
                     android:text="FILTRAR"
-                    android:textSize="16dp"
                     android:textStyle="bold"
                     android:textColor="@android:color/white"
                     android:background="@drawable/fondo_boton_azul" />
@@ -590,6 +589,8 @@
                 />
             <ListView
                 android:id="@+id/listView_contadores_screen_filter_tareas"
+                android:choiceMode="singleChoice"
+                android:listSelector="@color/colorBlueAppRuta"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 >

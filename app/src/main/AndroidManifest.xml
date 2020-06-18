@@ -22,6 +22,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_INTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -75,6 +76,7 @@
         <activity
             android:name=".team_or_personal_task_selection_screen_Activity"
             android:configChanges="orientation"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Screen_Table_Team"
@@ -83,18 +85,22 @@
         <activity
             android:name=".Screen_Unity_Counter"
             android:configChanges="orientation"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Screen_Battery_counter"
             android:configChanges="orientation"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name=".personal_task_screen_Activity"
             android:configChanges="orientation"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name=".team_task_screen_Activity"
             android:configChanges="orientation"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Screen_Table_Personal"
@@ -135,6 +141,7 @@
         <activity
             android:name=".lector"
             android:configChanges="orientation"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Screen_Draw_Canvas"
@@ -147,14 +154,17 @@
         <activity
             android:name=".Screen_Zoom_Photo"
             android:configChanges="orientation"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Screen_Register_Operario"
             android:configChanges="orientation"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Screen_User_Data"
             android:configChanges="orientation"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Screen_Camera"
@@ -163,14 +173,17 @@
         <activity
             android:name=".Screen_Insertar_Tarea"
             android:configChanges="orientation"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Screen_Zoom_Firma"
             android:configChanges="orientation"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Screen_Advance_Filter"
             android:configChanges="orientation"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Maps_Box"

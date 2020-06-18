@@ -40,6 +40,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
@@ -143,7 +144,9 @@ public class MapActivity extends AppCompatActivity implements TaskCompleted, OnM
         mapView = mapFragment.getView();
 
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(MapActivity.this);
+
         Places.initialize(MapActivity.this, getString(R.string.google_maps_api));
+
         placesClient = Places.createClient(this);
         final AutocompleteSessionToken token = AutocompleteSessionToken.newInstance();
 
@@ -318,15 +321,13 @@ public class MapActivity extends AppCompatActivity implements TaskCompleted, OnM
                                 Screen_Login_Activity.tarea_JSON.put(DBtareasController.codigo_de_localizacion, latLang_string_geolocalizacion_pump);
                                 Screen_Login_Activity.tarea_JSON.put(DBtareasController.url_geolocalizacion, latLang_string_geolocalizacion_QT_pump);
 
-                                //igual = true;
+
                             }
 
                             Intent ListSong = new Intent(getApplicationContext(), Maps_Box.class);
                             startActivity(ListSong);
                             finish();
-                            //ventana=1;
-                            //saveData();
-                            //Toast.makeText(MapsActivity.this, latLang_string_geolocalizacion, Toast.LENGTH_LONG).show();
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Toast.makeText(MapActivity.this, "No pudo guardar geolocalizacion", Toast.LENGTH_SHORT).show();
@@ -337,67 +338,67 @@ public class MapActivity extends AppCompatActivity implements TaskCompleted, OnM
 
                 }
 
-               else if (!insertando){
-                   if (markerHome.getPosition() != null ){
-                    try {
-                        //Screen_Login_Activity.tarea_JSON.put("geolocalizacion", latLng.toString());
-                        if ((latLngHome.latitude != 0.0 && latLngHome.longitude != 0.0 ) && !(coordHome.equals(latLngHome.toString()))){
+                else if (!insertando){
+                    if (markerHome.getPosition() != null ){
+                        try {
+                            //Screen_Login_Activity.tarea_JSON.put("geolocalizacion", latLng.toString());
+                            if ((latLngHome.latitude != 0.0 && latLngHome.longitude != 0.0 ) && !(coordHome.equals(latLngHome.toString()))){
 
-                            String latLang_string_geolocalizacion = latLngHome.toString();
-                            String latLang_string_geolocalizacion_QT = "https://maps.google.com/?q="+latLngHome.toString();
-                            Log.e(latLang_string_geolocalizacion, "guardando");
+                                String latLang_string_geolocalizacion = latLngHome.toString();
+                                String latLang_string_geolocalizacion_QT = "https://maps.google.com/?q="+latLngHome.toString();
+                                Log.e(latLang_string_geolocalizacion, "guardando");
 
-                            latLang_string_geolocalizacion = latLang_string_geolocalizacion.replace("lat/lng: (","").replace(")", "");
-                            latLang_string_geolocalizacion_QT = latLang_string_geolocalizacion_QT.replace("lat/lng: (","").replace(")", "");
+                                latLang_string_geolocalizacion = latLang_string_geolocalizacion.replace("lat/lng: (","").replace(")", "");
+                                latLang_string_geolocalizacion_QT = latLang_string_geolocalizacion_QT.replace("lat/lng: (","").replace(")", "");
 
 
-                            Screen_Login_Activity.tarea_JSON.put(DBtareasController.geolocalizacion, latLang_string_geolocalizacion);
-                            Screen_Login_Activity.tarea_JSON.put(DBtareasController.url_geolocalizacion, latLang_string_geolocalizacion_QT);
+                                Screen_Login_Activity.tarea_JSON.put(DBtareasController.geolocalizacion, latLang_string_geolocalizacion);
+                                Screen_Login_Activity.tarea_JSON.put(DBtareasController.url_geolocalizacion, latLang_string_geolocalizacion_QT);
 
-                            igual = true;
+                                igual = true;
+                            }
+
+                            if ((latLngPump.latitude != 0.0 && latLngPump.longitude != 0.0 ) && !(coordPump.equals(latLngPump.toString()))){
+
+                                Log.e("result",coordPump);
+                                Log.e("result",latLngPump.toString());
+
+                                String latLang_string_geolocalizacion_pump = latLngPump.toString();
+                                String latLang_string_geolocalizacion_QT_pump = "https://maps.google.com/?q="+latLngPump.toString();
+
+                                Log.e(latLang_string_geolocalizacion_pump, "guardando");
+
+                                latLang_string_geolocalizacion_pump = latLang_string_geolocalizacion_pump.replace("lat/lng: (","").replace(")", "");
+                                latLang_string_geolocalizacion_QT_pump = latLang_string_geolocalizacion_QT_pump.replace("lat/lng: (","").replace(")", "");
+
+
+                                Screen_Login_Activity.tarea_JSON.put(DBtareasController.codigo_de_localizacion, latLang_string_geolocalizacion_pump);
+                                Screen_Login_Activity.tarea_JSON.put(DBtareasController.url_geolocalizacion, latLang_string_geolocalizacion_QT_pump);
+
+                                igual = true;
+                            }
+                            if(igual){
+                                ventana=2;
+                                saveData();}else{
+                                Intent ListSong = new Intent(getApplicationContext(), Maps_Box.class);
+                                startActivity(ListSong);
+                                finish();
+                            }
+
+                            //Toast.makeText(MapsActivity.this, latLang_string_geolocalizacion, Toast.LENGTH_LONG).show();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(MapActivity.this, "No pudo guardar geolocalizacion", Toast.LENGTH_SHORT).show();
+
                         }
-
-                        if ((latLngPump.latitude != 0.0 && latLngPump.longitude != 0.0 ) && !(coordPump.equals(latLngPump.toString()))){
-
-                            Log.e("result",coordPump);
-                            Log.e("result",latLngPump.toString());
-
-                            String latLang_string_geolocalizacion_pump = latLngPump.toString();
-                            String latLang_string_geolocalizacion_QT_pump = "https://maps.google.com/?q="+latLngPump.toString();
-
-                            Log.e(latLang_string_geolocalizacion_pump, "guardando");
-
-                            latLang_string_geolocalizacion_pump = latLang_string_geolocalizacion_pump.replace("lat/lng: (","").replace(")", "");
-                            latLang_string_geolocalizacion_QT_pump = latLang_string_geolocalizacion_QT_pump.replace("lat/lng: (","").replace(")", "");
-
-
-                            Screen_Login_Activity.tarea_JSON.put(DBtareasController.codigo_de_localizacion, latLang_string_geolocalizacion_pump);
-                            Screen_Login_Activity.tarea_JSON.put(DBtareasController.url_geolocalizacion, latLang_string_geolocalizacion_QT_pump);
-
-                            igual = true;
-                        }
-                        if(igual){
-                        ventana=2;
-                        saveData();}else{
-                            Intent ListSong = new Intent(getApplicationContext(), Maps_Box.class);
-                            startActivity(ListSong);
-                            finish();
-                        }
-
-                        //Toast.makeText(MapsActivity.this, latLang_string_geolocalizacion, Toast.LENGTH_LONG).show();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        Toast.makeText(MapActivity.this, "No pudo guardar geolocalizacion", Toast.LENGTH_SHORT).show();
 
                     }
-
-                }
                 }
 
             }
 
 
-            });
+        });
 
         btnlocal = (Button) findViewById(R.id.btnlocal);
 
@@ -420,12 +421,12 @@ public class MapActivity extends AppCompatActivity implements TaskCompleted, OnM
         btnhome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                        btnhome.setBackgroundResource(R.drawable.ic_home_blue_24dp);
-                        btnhand.setBackgroundResource(R.drawable.ic_location_off_black_50dp);
-                        home = 1;
-                        pomp = 0;
-                        if(markerHome.getPosition() != null)
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(markerHome.getPosition().latitude,markerHome.getPosition().longitude), DEFAULT_ZOOM));
+                btnhome.setBackgroundResource(R.drawable.ic_home_blue_24dp);
+                btnhand.setBackgroundResource(R.drawable.ic_location_off_black_50dp);
+                home = 1;
+                pomp = 0;
+                if(markerHome.getPosition() != null)
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(markerHome.getPosition().latitude,markerHome.getPosition().longitude), DEFAULT_ZOOM));
 
 
             }});
@@ -589,7 +590,7 @@ public class MapActivity extends AppCompatActivity implements TaskCompleted, OnM
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(coordenates, DEFAULT_ZOOM));
                 marker =true;
                 //Toast.makeText(MapActivity.this, "Cargando Marcadores", Toast.LENGTH_SHORT).show();
-                }
+            }
 
 
             String coor1 = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.codigo_de_localizacion).trim();
@@ -620,10 +621,10 @@ public class MapActivity extends AppCompatActivity implements TaskCompleted, OnM
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(coordenates_pump, DEFAULT_ZOOM));
                 Toast.makeText(MapActivity.this, "Cargando Marcador", Toast.LENGTH_SHORT).show();}
 
-                else{
+            else{
 
-                    marker = false;
-                    getDeviceLocation();
+                marker = false;
+                getDeviceLocation();
 
             }
 
@@ -659,7 +660,7 @@ public class MapActivity extends AppCompatActivity implements TaskCompleted, OnM
                             mLastKnownLocation = task.getResult();
                             if (mLastKnownLocation != null) {
                                 if (!marker){
-                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude()), DEFAULT_ZOOM)); }
+                                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude()), DEFAULT_ZOOM)); }
                             } else {
                                 final LocationRequest locationRequest = LocationRequest.create();
                                 locationRequest.setInterval(10000);
@@ -703,7 +704,7 @@ public class MapActivity extends AppCompatActivity implements TaskCompleted, OnM
                 .setCancelable(false)
                 .setNegativeButton(" Salir", new DialogInterface.OnClickListener() {
                     @Override
-                   public void onClick(DialogInterface dialog, int which) {
+                    public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
                     }
                 });
@@ -735,7 +736,7 @@ public class MapActivity extends AppCompatActivity implements TaskCompleted, OnM
                         mMap.clear();
                         if(markerPump.getPosition() != null){
                             mMap.addMarker(markerPump);}
-                   }
+                    }
                     String icon = "casa";
                     //markerHome.position(latLng).draggable(true).title("Marcador de casa").snippet("Posicion de casa").icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons(icon, 100, 100)));
                     markerHome.position(latLng).draggable(true).title("Marcador de casa").snippet("Posicion de casa").icon(bitmapDescriptorFromVector(MapActivity.this, R.drawable.ic_home_black_24dp));
@@ -794,7 +795,7 @@ public class MapActivity extends AppCompatActivity implements TaskCompleted, OnM
                         mMap.clear();
 
                         if(markerHome.getPosition() != null){
-                           mMap.addMarker(markerHome);}
+                            mMap.addMarker(markerHome);}
 
                     }
 
@@ -804,13 +805,13 @@ public class MapActivity extends AppCompatActivity implements TaskCompleted, OnM
                     LatLng prueba = new LatLng(latitude,longitude);
                     latLngPump = prueba;
 
-                     String icon = "mano";
+                    String icon = "mano";
                     markerPump.position(prueba).draggable(true).title("Marcador de contador").snippet("Posicion de contador").icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons(icon, 100, 100)));
 //                    markerPump.position(prueba).draggable(true).title("Marcador de contador").snippet("Posicion de contador").icon(bitmapDescriptorFromVector(MapActivity.this, R.drawable.ic_location_on_blue_24dp));
 
                     mMap.addMarker(markerPump);}
                 customDialog.dismiss();
-           }
+            }
         });
 
         customDialog.show();
@@ -848,7 +849,7 @@ public class MapActivity extends AppCompatActivity implements TaskCompleted, OnM
             backgroundWorker.execute(type);
         } else{
             if(!error)
-                Toast.makeText(this, "Se guardaron los datos en el telefono", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "No hay conexion se guardaron los datos en el telefono", Toast.LENGTH_SHORT).show();
             if (ventana == 2){
                 Intent intent = new Intent(MapActivity.this, Maps_Box.class);
                 startActivity(intent);
@@ -1002,9 +1003,9 @@ public class MapActivity extends AppCompatActivity implements TaskCompleted, OnM
         {
 
 
-             LatLng latLng = new LatLng(marker.getPosition().latitude, marker.getPosition().longitude);
-                latLngPump = latLng;
-                Log.e("arrastrar",latLngPump.toString());
+            LatLng latLng = new LatLng(marker.getPosition().latitude, marker.getPosition().longitude);
+            latLngPump = latLng;
+            Log.e("arrastrar",latLngPump.toString());
             Log.e("arrastrar",coordPump);
 
 
@@ -1019,10 +1020,9 @@ public class MapActivity extends AppCompatActivity implements TaskCompleted, OnM
 
             if (markerHome.getPosition() != null || markerPump.getPosition() != null){
                 try {
-                    //Log.e("entre","try");
-                    //Screen_Login_Activity.tarea_JSON.put("geolocalizacion", latLng.toString());
+
                     if ((latLngHome.latitude != 0.0 && latLngHome.longitude != 0.0 ) && !(coordHome.equals(latLngHome.toString()))){
-                        //Log.e("entre","latitud");
+
                         String latLang_string_geolocalizacion = latLngHome.toString();
                         String latLang_string_geolocalizacion_QT = "https://maps.google.com/?q="+latLngHome.toString();
 
@@ -1034,8 +1034,7 @@ public class MapActivity extends AppCompatActivity implements TaskCompleted, OnM
                         Screen_Login_Activity.tarea_JSON.put(DBtareasController.geolocalizacion, latLang_string_geolocalizacion);
                         Screen_Login_Activity.tarea_JSON.put(DBtareasController.url_geolocalizacion, latLang_string_geolocalizacion_QT);
 
-                        //Log.e(latLang_string_geolocalizacion_QT,"vida");
-                        //igual = true;
+
                     }
 
                     if ((latLngPump.latitude != 0.0 && latLngPump.longitude != 0.0 ) && !(coordPump.equals(latLngPump.toString()))){
@@ -1055,86 +1054,83 @@ public class MapActivity extends AppCompatActivity implements TaskCompleted, OnM
                         Screen_Login_Activity.tarea_JSON.put(DBtareasController.codigo_de_localizacion, latLang_string_geolocalizacion_pump);
                         Screen_Login_Activity.tarea_JSON.put(DBtareasController.url_geolocalizacion, latLang_string_geolocalizacion_QT_pump);
 
-                       // Log.e(latLang_string_geolocalizacion_QT_pump,"vida1");
-                        //igual = true;
+
                     }
 
 
                     finish();
 
-                    //ventana=1;
-                    //saveData();
-                    //Toast.makeText(MapsActivity.this, latLang_string_geolocalizacion, Toast.LENGTH_LONG).show();
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Toast.makeText(MapActivity.this, "No pudo guardar geolocalizacion", Toast.LENGTH_SHORT).show();
                     finish();
                 }
 
-        }else finish();
+            }else finish();
 
 
         }
 
         else if (!insertando){
 
-                if(markerHome.getPosition() != null || markerPump.getPosition() != null){
-        try {
-            //Screen_Login_Activity.tarea_JSON.put("geolocalizacion", latLng.toString());
-            if ((latLngHome.latitude != 0.0 && latLngHome.longitude != 0.0 ) && !(coordHome.equals(latLngHome.toString()))){
+            if(markerHome.getPosition() != null || markerPump.getPosition() != null){
+                try {
 
-                Log.e("result",coordHome);
-                Log.e("result",latLngHome.toString());
+                    if ((latLngHome.latitude != 0.0 && latLngHome.longitude != 0.0 ) && !(coordHome.equals(latLngHome.toString()))){
 
-            String latLang_string_geolocalizacion = latLngHome.toString();
-            String latLang_string_geolocalizacion_QT = "https://maps.google.com/?q="+latLngHome.toString();
+                        Log.e("result",coordHome);
+                        Log.e("result",latLngHome.toString());
 
-            Log.e(latLang_string_geolocalizacion, "guardando");
+                        String latLang_string_geolocalizacion = latLngHome.toString();
+                        String latLang_string_geolocalizacion_QT = "https://maps.google.com/?q="+latLngHome.toString();
 
-            latLang_string_geolocalizacion = latLang_string_geolocalizacion.replace("lat/lng: (","").replace(")", "");
-            latLang_string_geolocalizacion_QT = latLang_string_geolocalizacion_QT.replace("lat/lng: (","").replace(")", "");
+                        Log.e(latLang_string_geolocalizacion, "guardando");
 
-
-                Screen_Login_Activity.tarea_JSON.put(DBtareasController.geolocalizacion, latLang_string_geolocalizacion);
-                Screen_Login_Activity.tarea_JSON.put(DBtareasController.url_geolocalizacion, latLang_string_geolocalizacion_QT);
-
-            igual = true;
-            }
-
-            //Screen_Login_Activity.tarea_JSON.put("geolocalizacion", latLng.toString());
-            if ((latLngPump.latitude != 0.0 && latLngPump.longitude != 0.0 ) && !(coordPump.equals(latLngPump.toString()))){
-
-                Log.e("result",coordPump);
-                Log.e("result",latLngPump.toString());
-
-                String latLang_string_geolocalizacion_pump = latLngPump.toString();
-                String latLang_string_geolocalizacion_QT_pump = "https://maps.google.com/?q="+latLngPump.toString();
+                        latLang_string_geolocalizacion = latLang_string_geolocalizacion.replace("lat/lng: (","").replace(")", "");
+                        latLang_string_geolocalizacion_QT = latLang_string_geolocalizacion_QT.replace("lat/lng: (","").replace(")", "");
 
 
-                Log.e(latLang_string_geolocalizacion_pump, "guardando");
+                        Screen_Login_Activity.tarea_JSON.put(DBtareasController.geolocalizacion, latLang_string_geolocalizacion);
+                        Screen_Login_Activity.tarea_JSON.put(DBtareasController.url_geolocalizacion, latLang_string_geolocalizacion_QT);
 
-                latLang_string_geolocalizacion_pump = latLang_string_geolocalizacion_pump.replace("lat/lng: (","").replace(")", "");
-                latLang_string_geolocalizacion_QT_pump = latLang_string_geolocalizacion_QT_pump.replace("lat/lng: (","").replace(")", "");
-
-
-                Screen_Login_Activity.tarea_JSON.put(DBtareasController.codigo_de_localizacion, latLang_string_geolocalizacion_pump);
-                Screen_Login_Activity.tarea_JSON.put(DBtareasController.url_geolocalizacion, latLang_string_geolocalizacion_QT_pump);
-                igual = true;
-            }
-
-            if(igual){
-            ventana=1;
-            saveData();}else finish();
-
-            //Toast.makeText(MapsActivity.this, latLang_string_geolocalizacion, Toast.LENGTH_LONG).show();
-        } catch (JSONException e) {
-            e.printStackTrace();
-            Toast.makeText(MapActivity.this, "No pudo guardar geolocalizacion", Toast.LENGTH_SHORT).show();
-            finish();
-        }
+                        igual = true;
+                    }
 
 
-        }else finish();
+                    if ((latLngPump.latitude != 0.0 && latLngPump.longitude != 0.0 ) && !(coordPump.equals(latLngPump.toString()))){
+
+                        Log.e("result",coordPump);
+                        Log.e("result",latLngPump.toString());
+
+                        String latLang_string_geolocalizacion_pump = latLngPump.toString();
+                        String latLang_string_geolocalizacion_QT_pump = "https://maps.google.com/?q="+latLngPump.toString();
+
+
+                        Log.e(latLang_string_geolocalizacion_pump, "guardando");
+
+                        latLang_string_geolocalizacion_pump = latLang_string_geolocalizacion_pump.replace("lat/lng: (","").replace(")", "");
+                        latLang_string_geolocalizacion_QT_pump = latLang_string_geolocalizacion_QT_pump.replace("lat/lng: (","").replace(")", "");
+
+
+                        Screen_Login_Activity.tarea_JSON.put(DBtareasController.codigo_de_localizacion, latLang_string_geolocalizacion_pump);
+                        Screen_Login_Activity.tarea_JSON.put(DBtareasController.url_geolocalizacion, latLang_string_geolocalizacion_QT_pump);
+                        igual = true;
+                    }
+
+                    if(igual){
+                        ventana=1;
+                        saveData();}else finish();
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(MapActivity.this, "No pudo guardar geolocalizacion", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+
+
+            }else finish();
 
         }
 
@@ -1145,4 +1141,58 @@ public class MapActivity extends AppCompatActivity implements TaskCompleted, OnM
 
 
     }
+
+
+
+
 }
+
+//changeSimilarsGeolocalization(latLang_string_geolocalizacion_pump, latLang_string_geolocalizacion_QT_pump, false);
+
+//    public static boolean changeSimilarsGeolocalization(String codigo_de_geolocalizacion, String latLang_string, boolean casa_mano) {
+//
+//        boolean  fin = false;
+//
+//        if (team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas() > 0) {
+//            ArrayList<String> tareas = new ArrayList<>();
+//            try {
+//                tareas = team_or_personal_task_selection_screen_Activity.
+//                        dBtareasController.get_all_tareas_from_Database();
+//                for (int i = 0; i < tareas.size(); i++) {
+//                    JSONObject jsonObject = null;
+//                    try {
+//                        jsonObject = new JSONObject(tareas.get(i));
+//                        String status = "";
+//                        try {
+//                            Date date = new Date();
+//                            status = jsonObject.getString(DBtareasController.status_tarea);
+//                            if (!status.contains("DONE") && !status.contains("done")) {
+//                                if (jsonObject.getString(DBtareasController.codigo_de_geolocalizacion).trim().equals(codigo_de_geolocalizacion)) {
+//                                    if(casa_mano){
+//                                        jsonObject.put(DBtareasController.geolocalizacion, latLang_string);
+//                                    }
+//                                    else {
+//                                        jsonObject.put(DBtareasController.codigo_de_localizacion, latLang_string);
+//                                    }
+//                                    jsonObject.put(DBtareasController.date_time_modified, DBtareasController.getStringFromFechaHora(date));
+//                                    team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea(jsonObject);
+//                                }
+//                            }
+//                        } catch (JSONException e) {
+//                            //Log.e("reyes_function", "No se pudo obtener estado se tarea\n" + e.toString());
+//                            e.printStackTrace();
+//                        }
+//
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//
+//                fin = true;
+//            }
+//            catch (JSONException e) {
+//                e.printStackTrace();
+//                fin = false;
+//            }
+//        }return fin;
+//    }

@@ -16,12 +16,10 @@ public class My_Fast_View_Task implements Comparable<My_Fast_View_Task> {
     }
 
     public void setCalibre(String calibre) {
-        this.calibre = calibre.replace("\n","").trim();
-        all_string += " "+ this.calibre + " mm";
+        this.calibre = calibre.trim();
     }
     public void setCalibreByInt(int calibre) {
         this.calibre = String.valueOf(calibre);
-        all_string += " "+ this.calibre + " mm";
     }
 
     public String getTipo_tarea() {
@@ -29,8 +27,8 @@ public class My_Fast_View_Task implements Comparable<My_Fast_View_Task> {
     }
 
     public void setTipo_tarea(String tipo_tarea) {
-        this.tipo_tarea = tipo_tarea.replace("\n","").trim();
-        all_string += tipo_tarea;
+        this.tipo_tarea = tipo_tarea.trim();
+        all_string = tipo_tarea;
     }
 
     private String calibre="";
@@ -46,7 +44,7 @@ public class My_Fast_View_Task implements Comparable<My_Fast_View_Task> {
     }
 
     public boolean compareToOther(My_Fast_View_Task other){
-        if(other.getCalibre().equals(calibre) && other.getTipo_tarea().equals(tipo_tarea)){
+        if(other.getTipo_tarea().equals(tipo_tarea)){
             return true;
         }
         else{

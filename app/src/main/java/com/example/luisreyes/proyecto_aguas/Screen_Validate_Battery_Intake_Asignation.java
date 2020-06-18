@@ -22,6 +22,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -104,16 +105,16 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
 
         String tipo, calibre, nombre;
         try {
-            nombre = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.nombre_cliente).trim().replace("\n", "");
-            tipo = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.tipo_tarea).trim().replace("\n", "");
-            calibre = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.calibre_toma).trim().replace("\n", "");
-            if(nombre.equals("null") || nombre.equals("NULL")){
+            nombre = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.nombre_cliente).trim();
+            tipo = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.tipo_tarea).trim();
+            calibre = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.calibre_toma).trim();
+            if(!Screen_Login_Activity.checkStringVariable(nombre)){
                 nombre = "";
             }
-            if(tipo.equals("null") || tipo.equals("NULL")){
+            if(!Screen_Login_Activity.checkStringVariable(tipo)){
                 tipo = "";
             }
-            if(calibre.equals("null") || calibre.equals("NULL")){
+            if(!Screen_Login_Activity.checkStringVariable(calibre)){
                 calibre = "";
             }
             nombre_y_tarea.setText(nombre+", "+tipo+ " "+calibre);
@@ -143,7 +144,14 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
             lectura_anterior.setText(Screen_Login_Activity.tarea_JSON.getString(DBtareasController.lectura_ultima).trim());
             lectura_ultima.setText(Screen_Login_Activity.tarea_JSON.getString(DBtareasController.lectura_actual).trim());
             numero_serie_nuevo.setText(Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador).trim());
-            observaciones.setText(Screen_Login_Activity.tarea_JSON.getString(DBtareasController.observaciones).trim());
+            String mensaje = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.MENSAJE_LIBRE).trim();
+            if(!Screen_Login_Activity.checkStringVariable(mensaje)){
+                mensaje = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.observaciones).trim();
+                if(!Screen_Login_Activity.checkStringVariable(mensaje)) {
+                    mensaje = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.OBSERVA).trim();
+                }
+            }
+            observaciones.setText(mensaje);
             ubicacion.setText(Screen_Login_Activity.tarea_JSON.getString(DBtareasController.ubicacion_en_bateria).trim());
         } catch (JSONException e) {
             e.printStackTrace();
@@ -171,13 +179,13 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
         imageView_edit_obsevations_screen_validate_battery_intake_asignation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openDialog("observaciones");
+                openDialog("Mensaje libre");
             }
         });
         observaciones.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openDialog("observaciones");
+                openDialog("Mensaje libre");
             }
         });
         imageView_edit_new_serial_number_screen_validate_battery_intake_asignation.setOnClickListener(new View.OnClickListener() {
@@ -226,6 +234,7 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
     private void onGuardar_Datos() {
         try {
             Screen_Login_Activity.tarea_JSON.put(DBtareasController.date_time_modified, DBtareasController.getStringFromFechaHora(new Date()));
+            Screen_Login_Activity.tarea_JSON.put(DBtareasController.Estado, "NORMAL");
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(Screen_Validate_Battery_Intake_Asignation.this, "Error date_time_modified "+e.toString(), Toast.LENGTH_LONG).show();
@@ -325,13 +334,13 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
                     DBtareasController.status_tarea);
             if(status_tarea.contains("TO_UPLOAD")) {
                 try {
-                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.status_tarea, "TO_BAT, TO_UPLOAD");
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.status_tarea, "IDLE TO_BAT, TO_UPLOAD");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }else{
                 try {
-                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.status_tarea, "TO_BAT, TO_UPDATE");
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.status_tarea, "IDLE TO_BAT, TO_UPDATE");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -359,10 +368,10 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
             backgroundWorker.execute(type);
         } else{
             if(!error) {
-                Toast.makeText(this, "No hay conexion se guardaron los datos en el telefono", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Se guardaron los datos en el telefono", Toast.LENGTH_LONG).show();
                 Intent intent_open_battery_counter = new Intent(this, Screen_Battery_counter.class);
                 startActivity(intent_open_battery_counter);
-                this.finish();
+                finishesThisClass();
             }
         }
     }
@@ -396,10 +405,10 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
     @Override
     public void pasarTexto(String wrote_string) throws JSONException {
 
-        if(current_tag.contains("observaciones")) {
+        if(current_tag.contains("Mensaje libre")) {
             if (!(TextUtils.isEmpty(wrote_string))) {
 
-                Screen_Login_Activity.tarea_JSON.put(DBtareasController.observaciones_devueltas, wrote_string);
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.MENSAJE_LIBRE, wrote_string);
                 observaciones.setText(wrote_string);
             }
         }else if(current_tag.contains("Número de Serie")){
@@ -496,7 +505,7 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
 
                         Intent intent_open_battery_counter = new Intent(this, Screen_Battery_counter.class);
                         startActivity(intent_open_battery_counter);
-                        this.finish();
+                        finishesThisClass();
                     }
                 }
             }
@@ -518,7 +527,7 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
             Toast.makeText(this, "Actualizada tarea correctamente", Toast.LENGTH_SHORT).show();
             Intent intent_open_battery_counter = new Intent(this, Screen_Battery_counter.class);
             startActivity(intent_open_battery_counter);
-            this.finish();
+            finishesThisClass();
             return;
         }
         else {
@@ -549,10 +558,16 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
         progressDialog.setCancelable(true);
     }
     private void hideRingDialog(){
-        if(progressDialog!=null) {
-            if (progressDialog.isShowing()) {
-                progressDialog.dismiss();
+        try {
+            if(progressDialog!=null) {
+                if(progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                    progressDialog = null;
+                }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("hideRingDialog", e.toString());
         }
     }
 
@@ -590,11 +605,23 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
                                 +"\n\n       Luis A. Reyes: inglreyesm@gmail.com");
                 // User chose the "Settings" item, show the app settings UI...
                 return true;
-
+            case R.id.Principal:
+//                Toast.makeText(Screen_User_Data.this, "Ayuda", Toast.LENGTH_SHORT).show();
+                // User chose the "Favorite" action, mark the current item
+                // as a favorite...
+                Intent open_screen= new Intent(this, team_or_personal_task_selection_screen_Activity.class);
+                startActivity(open_screen);
+                finish();
+                return true;
             case R.id.Tareas:
 //                Toast.makeText(Screen_User_Data.this, "Ayuda", Toast.LENGTH_SHORT).show();
                 // User chose the "Favorite" action, mark the current item
                 // as a favorite...
+                team_or_personal_task_selection_screen_Activity.from_team_or_personal =
+                        team_or_personal_task_selection_screen_Activity.FROM_TEAM;
+                Intent open_screen_ = new Intent(this, Screen_Table_Team.class);
+                startActivity(open_screen_);
+                finish();
                 return true;
 
             case R.id.Configuracion:
@@ -623,10 +650,17 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
     }
     @Override
     public void onBackPressed() {
+        finishesThisClass();
+        super.onBackPressed();
+    }
+
+    public void finishesThisClass(){
         if(!team_or_personal_task_selection_screen_Activity.dBtareasController.saveChangesInTarea()){
             Toast.makeText(getApplicationContext(), "No se pudo guardar cambios", Toast.LENGTH_SHORT).show();
         }
+        Screen_Battery_Intake_Asignation.mCurrentPhotoPath_foto_antes = "";
+        Screen_Battery_Intake_Asignation.mCurrentPhotoPath_foto_lectura= "";
+        Screen_Battery_Intake_Asignation.mCurrentPhotoPath_foto_serie = "";
         finish();
-        super.onBackPressed();
     }
 }

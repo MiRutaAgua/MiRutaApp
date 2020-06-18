@@ -23,7 +23,7 @@
             android:layout_height="68dp"
             android:layout_gravity="center"
             android:gravity="center"
-            android:src="@drawable/screen_register_operario_foto"
+            android:src="@drawable/camera_icon"
             android:visibility="gone"
             />
 
@@ -33,10 +33,9 @@
             android:layout_width="160dp"
             android:layout_height="160dp"
             android:layout_centerInParent="true"
-            android:src="@drawable/screen_user_data_photo"
+            android:src="@drawable/camera_icon"
             app:civ_border="true"
             app:civ_border_color="@color/colorBlueAppRuta"
-            app:civ_border_width="1dp"
             android:id="@+id/imageView_screen_register_operario_foto"
             />
     </LinearLayout>
@@ -102,10 +101,10 @@
         >
 
         <EditText
+            android:id="@+id/editText_screen_register_operario_etUsuario"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:id="@+id/editText_screen_register_operario_etUsuario"
-            android:hint="Nombre de Usuario"/>
+            android:hint="ID Fontanero" />
     </LinearLayout>
 
 
@@ -136,7 +135,6 @@
             android:layout_height="40dp"
             android:id="@+id/button_screen_register_operario_register"
             android:text="REGISTRAR"
-            android:textSize="16dp"
             android:textStyle="bold"
             android:textColor="@android:color/white"
             android:background="@drawable/fondo_boton_azul"

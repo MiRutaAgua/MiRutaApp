@@ -119,16 +119,23 @@ public class Screen_Draw_Canvas extends Activity {
         File myDir = null;
         try {
             numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado);
+            String gestor = null;
+            gestor = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.GESTOR).trim();
+            if(!Screen_Login_Activity.checkStringVariable(gestor)){
+                gestor = "Sin_Gestor";
+            }
+
             if(!numero_abonado.isEmpty() && numero_abonado!=null
                     && !numero_abonado.equals("NULL") && !numero_abonado.equals("null")){
 
                 myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"
-                        + numero_abonado);
+                        + gestor + "/" + numero_abonado);
+
 
                 if(myDir!=null) {
                     if (!myDir.exists()) {
                         myDir.mkdirs();
-                        File storageDir2 = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/fotos_tareas/"+ numero_abonado);
+                        File storageDir2 =  new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+ gestor + "/" +numero_abonado);
                         if (!storageDir2.exists()) {
                             storageDir2.mkdirs();
                         }

@@ -85,6 +85,9 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
 
     private boolean subiendo_fotos = false;
 
+    public static int selected_item = -1;
+    public static String from_close_task="";
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -170,21 +173,22 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Object object_click = lista_de_contadores_screen_table_personal.getAdapter().getItem(i);
+                selected_item= i;
                 if(object_click!=null) {
                     if (!arrayAdapter_all.isEmpty() && !lista_de_contadores_screen_table_personal.getAdapter().isEmpty()) {
-                        for (int n = 0; n < arrayAdapter_all.getCount(); n++) {
-                            Object object = arrayAdapter_all.getItem(n);
+                        for (int n = 0; n < lista_ordenada_de_tareas.size(); n++) {
+                            String object = Screen_Filter_Tareas.orderCounterForListView(lista_ordenada_de_tareas.get(n));
                             if (object != null) {
-                                if (object_click.toString().contains(object.toString())) {
+                                if (object_click.toString().contains(object)) {
                                     try {
                                         if(n < team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas()
                                                 && !lista_ordenada_de_tareas.isEmpty() && lista_ordenada_de_tareas.size()> n){
                                             JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.
-                                                    dBtareasController.get_one_tarea_from_Database(lista_ordenada_de_tareas.get(n).getNumero_interno()));
+                                                    dBtareasController.get_one_tarea_from_Database(lista_ordenada_de_tareas.get(n).getPrincipal_variable()));
                                             if (jsonObject != null) {
                                                 Screen_Login_Activity.tarea_JSON = jsonObject;
                                                 if(Screen_Login_Activity.tarea_JSON!=null) {
-                                                    acceder_a_Tarea();//revisar esto
+                                                    Screen_Table_Team.acceder_a_Tarea(Screen_Table_Personal.this,  team_or_personal_task_selection_screen_Activity.FROM_PERSONAL);///revisar esto
                                                 }else{
                                                     Toast.makeText(Screen_Table_Personal.this, "Tarea nula", Toast.LENGTH_SHORT).show();
                                                 }
@@ -294,6 +298,37 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
             e.printStackTrace();
             Toast.makeText(this, "Error al subir tareas -> \n"+e.toString(), Toast.LENGTH_LONG).show();
         }
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+//        from_close_task = getIntent().getStringExtra("from");
+        if (from_close_task != null) {
+            Log.e("onResume from", from_close_task);
+            if (from_close_task.equals("CLOSE_TASK")) {
+                ArrayList<String> lista_actual = new ArrayList<>();
+                for (int i = 0; i < lista_de_contadores_screen_table_personal.getAdapter().getCount(); i++) {
+//                    if (i != selected_item) {
+                        lista_actual.add(lista_de_contadores_screen_table_personal.getAdapter().getItem(i).toString());
+//                    }
+                }
+                lista_de_contadores_screen_table_personal.setAdapter(new ArrayAdapter<String>(this, R.layout.list_text_view, lista_actual));
+                if (lista_de_contadores_screen_table_personal != null && selected_item != -1 && lista_de_contadores_screen_table_personal.getAdapter().getCount() > selected_item) {
+                    lista_de_contadores_screen_table_personal.setSelection(selected_item);
+                    Log.e("onResume sel", String.valueOf(selected_item));
+                }
+                from_close_task = "";
+            }else{
+                if(lista_de_contadores_screen_table_personal != null && lista_de_contadores_screen_table_personal.getAdapter()!=null) {
+                    if (selected_item != -1 && lista_de_contadores_screen_table_personal.getAdapter().getCount() > selected_item) {
+                        lista_de_contadores_screen_table_personal.setSelection(selected_item);
+//            lista_de_contadores_screen_table_team.setItemChecked(selected_item, true);
+                    }
+                }
+            }
+        }
     }
 
     public void buscarTareasConCitaSeleccionada(String cita_seleccionada){
@@ -310,13 +345,12 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
                             JSONObject jsonObject = null;
                             try {
                                 jsonObject = new JSONObject(tareas.get(i));
-                                if (jsonObject.getString(DBtareasController.operario).trim().equals(Screen_Login_Activity.operario_JSON.getString(DBoperariosController.usuario))) {
-                                    String status = "";
+                                if (jsonObject.getString(DBtareasController.operario).trim().contains(
+                                        Screen_Login_Activity.operario_JSON.getString(DBoperariosController.usuario).trim())) {
                                     try {
-                                        status = jsonObject.getString(DBtareasController.status_tarea);
-                                        if (!status.contains("DONE") && !status.contains("done")) {
-                                            String cita = jsonObject.getString(DBtareasController.nuevo_citas).trim();
-                                            if (!cita.isEmpty() && !cita.equals("null") && !cita.equals("NULL") && !cita.contains("No hay cita")) {
+                                        if (!Screen_Filter_Tareas.checkIfIsDone(jsonObject)) {
+                                            String cita = jsonObject.getString(DBtareasController.fecha_hora_cita).trim();
+                                            if (Screen_Login_Activity.checkStringVariable(cita)) {
                                                 if (cita.contains(cita_seleccionada)) {
                                                     lista_ordenada_de_contadores.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
                                                 }
@@ -366,10 +400,9 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
         }
         mes += String.valueOf(month+1);
         dia += String.valueOf(day);
-//        date_cita_selected = String.valueOf(year)+"-"+mes+"-"+dia+" ";
-
-        Log.e("On Data set", String.valueOf(year));
-        date_cita_selected = DateFormat.getDateInstance(DateFormat.FULL).format(c.getTime());//formato largo en string  Ej: Septiembre, 5 del 2019
+        date_cita_selected = String.valueOf(year)+"-"+mes+"-"+dia; //"yyyy-MM-dd"
+        Log.e("On Data set", date_cita_selected);
+//        date_cita_selected = DateFormat.getDateInstance(DateFormat.FULL).format(c.getTime());//formato largo en string  Ej: Septiembre, 5 del 2019
         buscarTareasConCitaSeleccionada(date_cita_selected);
         ver_citas = true;
 //        selectDateTimeApointMent();
@@ -438,9 +471,9 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
                                     String status = "";
                                     try {
                                         status = jsonObject.getString(DBtareasController.status_tarea);
-                                        if (!status.contains("DONE") && !status.contains("done")) {
-                                            if (jsonObject.getString(DBtareasController.operario).equals(
-                                                    Screen_Login_Activity.operario_JSON.getString("usuario"))) {
+                                        if (!Screen_Filter_Tareas.checkIfIsDone(jsonObject)) {
+                                            if (jsonObject.getString(DBtareasController.operario).trim().contains(
+                                                    Screen_Login_Activity.operario_JSON.getString("usuario").trim())) {
 
                                                 lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
                                             }
@@ -462,11 +495,13 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
                 }
             }
             personal_task_screen_Activity.hideRingDialog();
-            if(lista_ordenada_de_tareas.isEmpty()){
-                openMessage("Información", "No hay tareas asignadas a este operario");
-            }else{
-                openMessage("Información", "Existen "+String.valueOf(lista_ordenada_de_tareas.size())
-                        +" tareas pendientes");
+            if(lista_de_contadores_screen_table_personal.getAdapter()!= null) {
+                if (lista_de_contadores_screen_table_personal.getAdapter().isEmpty()) {
+                    openMessage("Información", "No hay tareas asignadas a este operario");
+                } else {
+                    openMessage("Información", "Existen " + String.valueOf(lista_de_contadores_screen_table_personal.getAdapter().getCount())
+                            + " tareas pendientes");
+                }
             }
             if(alguna_cita_obsoleta){
                 Intent serviceIntent = new Intent(this, Notification_Service.class);
@@ -515,7 +550,7 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
 
-                            if(Screen_Filter_Tareas.checkIfTaskIsDone(jsonObject)){
+                            if(Screen_Filter_Tareas.checkIfIsDone(jsonObject)){
                                 continue;
                             }
                             if(Screen_Table_Team.checkIfDateisDeprecated(jsonObject)){
@@ -529,8 +564,8 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
                                 }
                                 else if(lite_count!=-10) {
                                     if (!team_or_personal_task_selection_screen_Activity.dBtareasController.
-                                            checkIfTareaExists(jsonObject.getString(DBtareasController.numero_interno))) {
-                                        Toast.makeText(this, "MySQL tarea: "+jsonObject.getString(DBtareasController.numero_interno)+" insertada", Toast.LENGTH_LONG).show();
+                                            checkIfTareaExists(jsonObject.getString(DBtareasController.principal_variable))) {
+                                        Toast.makeText(this, "MySQL tarea: "+jsonObject.getString(DBtareasController.principal_variable)+" insertada", Toast.LENGTH_LONG).show();
                                         team_or_personal_task_selection_screen_Activity.dBtareasController.insertTarea(jsonObject);
                                     }else {
                                         String date_MySQL_string = null;
@@ -541,7 +576,7 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
                                                 date_MySQL = team_or_personal_task_selection_screen_Activity.dBtareasController.getFechaHoraFromString(date_MySQL_string);
                                             }
                                             JSONObject jsonObject_Lite = new JSONObject(team_or_personal_task_selection_screen_Activity.dBtareasController.get_one_tarea_from_Database(
-                                                    jsonObject.getString(DBtareasController.numero_interno).replace("\n", "")));
+                                                    jsonObject.getString(DBtareasController.principal_variable).replace("\n", "")));
                                             String date_SQLite_string = jsonObject_Lite.getString("date_time_modified").replace("\n", "");
                                             Date date_SQLite = null;
 //                                    Toast.makeText(Screen_Table_Team.this, date_SQLite_string, Toast.LENGTH_LONG).show();
@@ -551,7 +586,7 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
                                             }
                                             if (date_SQLite == null) {
                                                 if (date_MySQL != null) {
-                                                    team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea(jsonObject, DBtareasController.numero_interno);
+                                                    team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea(jsonObject, DBtareasController.principal_variable);
                                                 } else {
                                                     Toast.makeText(this, "Fechas ambas nulas", Toast.LENGTH_LONG).show();
                                                 }
@@ -560,7 +595,7 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
                                                 if (date_SQLite != null) {
                                                     //aqui actualizar MySQL con la DB SQLite
                                                     try {
-                                                        tareas_to_update.add(jsonObject_Lite.getString(DBtareasController.numero_interno));
+                                                        tareas_to_update.add(jsonObject_Lite.getString(DBtareasController.principal_variable));
                                                         jsonObject = jsonObject_Lite;
 //                                                        openMessage("Actualizar", jsonObject_Lite.getString());
                                                     } catch (JSONException e) {
@@ -575,13 +610,13 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
                                             else { //si ninguna de la dos son nulas
 
                                                 if (date_MySQL.after(date_SQLite)) {//MySQL mas actualizada
-                                                    team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea(jsonObject, DBtareasController.numero_interno);
+                                                    team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea(jsonObject, DBtareasController.principal_variable);
                                                     //Toast.makeText(Screen_Table_Team.this, "tarea actualizadas: "+String.valueOf(tareas_actualizadas_count), Toast.LENGTH_LONG).show();
 
                                                 } else if (date_MySQL.before(date_SQLite)) {//SQLite mas actualizada
                                                     //aqui actualizar MySQL con la DB SQLite
                                                     try {
-                                                        tareas_to_update.add(jsonObject_Lite.getString(DBtareasController.numero_interno));
+                                                        tareas_to_update.add(jsonObject_Lite.getString(DBtareasController.principal_variable));
                                                         jsonObject = jsonObject_Lite;
 //                                                        openMessage("Actualizar 2", jsonObject_Lite.getString());
                                                     } catch (JSONException e) {
@@ -606,9 +641,10 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
                                     Toast.makeText(getApplicationContext(), "No se pudo obtener estado se tarea\n"+ e.toString(), Toast.LENGTH_LONG).show();
                                     e.printStackTrace();
                                 }
-                                if(!status.contains("DONE") && !status.contains("done")) {
-                                    if(jsonObject.getString(DBtareasController.operario).equals(
-                                            Screen_Login_Activity.operario_JSON.getString("usuario"))) {
+                                if(!Screen_Filter_Tareas.checkIfIsDone(jsonObject)) {
+                                    if(jsonObject.getString(DBtareasController.operario).trim().contains(
+                                            Screen_Login_Activity.operario_JSON.getString(
+                                                    DBoperariosController.usuario).trim())) {
                                         lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
                                     }
                                 }
@@ -651,10 +687,10 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
                     if (result.contains("not success")) {
                         Toast.makeText(this, "No se pudo insertar correctamente, problemas con el servidor de la base de datos", Toast.LENGTH_SHORT).show();
                     } else {
-                        String numero_interno = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_interno);
-                        if(!numero_interno.isEmpty() && numero_interno!=null && !numero_interno.equals("null")) {
+                        String principal_variable = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.principal_variable);
+                        if(!principal_variable.isEmpty() && principal_variable!=null && !principal_variable.equals("null")) {
                             showRingDialog("Actualizando fotos de Tarea "
-                                    + numero_interno);
+                                    + principal_variable);
                             updatePhotosInMySQL();
                         }
                         return;
@@ -684,10 +720,10 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
                             dBtareasController.updateTarea(jsonObjectSalvaLite);
                 }
 //                upLoadTareaInMySQL();
-                String numero_interno = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_interno);
-                if(!numero_interno.isEmpty() && numero_interno!=null && !numero_interno.equals("null")) {
+                String principal_variable = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.principal_variable);
+                if(!principal_variable.isEmpty() && principal_variable!=null && !principal_variable.equals("null")) {
                     showRingDialog("Subiendo fotos de tarea "
-                            + numero_interno);
+                            + principal_variable);
                     uploadPhotosInMySQL();
                 }
                 return;
@@ -697,8 +733,15 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
 
     public void orderTareastoArrayAdapter(){
         Collections.sort(lista_ordenada_de_tareas);
+        String string_view = "";
         for(int i=0; i < lista_ordenada_de_tareas.size(); i++){
-            lista_contadores.add(Screen_Filter_Tareas.orderCounterForListView(lista_ordenada_de_tareas.get(i)));
+            string_view = Screen_Filter_Tareas.orderCounterForListView(lista_ordenada_de_tareas.get(i));
+            if(!lista_contadores.contains(string_view)) {
+                lista_contadores.add(string_view);
+            }else{
+                //Borrar la tarera repetida si existe
+                Screen_Filter_Results.eraseTaskLocal(lista_ordenada_de_tareas.get(i).getPrincipal_variable());
+            }
         }
         arrayAdapter = new ArrayAdapter(Screen_Table_Personal.this, R.layout.list_text_view, lista_contadores);
         arrayAdapter_all = new ArrayAdapter(Screen_Table_Personal.this, R.layout.list_text_view, lista_contadores);
@@ -719,7 +762,7 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
                             jsonObject = new JSONObject(tareas.get(i));
                             String status_tarea = jsonObject.getString(DBtareasController.status_tarea);
                             if (status_tarea.contains("TO_UPLOAD")) {
-                                tareas_to_upload.add(jsonObject.getString(DBtareasController.numero_interno));
+                                tareas_to_upload.add(jsonObject.getString(DBtareasController.principal_variable));
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -857,7 +900,7 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
             JSONObject jsonObject_Lite = new JSONObject(team_or_personal_task_selection_screen_Activity.dBtareasController.get_one_tarea_from_Database(
                     tareas_to_update.get(tareas_to_update.size() - 1)));
             tareas_to_update.remove(tareas_to_update.size() - 1);
-            Toast.makeText(this, "Actualizando Tarea: "+ jsonObject_Lite.getString(DBtareasController.numero_interno), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Actualizando Tarea: "+ jsonObject_Lite.getString(DBtareasController.principal_variable), Toast.LENGTH_SHORT).show();
             String type_script = "update_tarea";
             BackgroundWorker backgroundWorker = new BackgroundWorker(this);
             Screen_Login_Activity.tarea_JSON = jsonObject_Lite;
@@ -881,12 +924,17 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
         String numero_abonado = null;
 
         Log.e("Entrando a funcion", "addPhotos_toUpload");
+        String gestor = null;
         try {
             numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado);
+            gestor = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.GESTOR).trim();
+            if(!Screen_Login_Activity.checkStringVariable(gestor)){
+                gestor = "Sin_Gestor";
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        String path = getExternalFilesDir(Environment.DIRECTORY_PICTURES)+"/fotos_tareas/"+ numero_abonado+"/";
+        String path = getExternalFilesDir(Environment.DIRECTORY_PICTURES)+"/fotos_tareas/" + gestor + "/"+ numero_abonado+"/";
 
         foto = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_antes_instalacion);
         addPhotos_names_and_files(path, foto);
@@ -955,10 +1003,16 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
         progressDialog.setCancelable(false);
     }
     public static void hideRingDialog(){
-        if(progressDialog!=null) {
-            if (progressDialog.isShowing()) {
-                progressDialog.dismiss();
+        try {
+            if(progressDialog!=null) {
+                if(progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                    progressDialog = null;
+                }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("hideRingDialog", e.toString());
         }
     }
 
@@ -980,6 +1034,14 @@ public class Screen_Table_Personal extends AppCompatActivity implements TaskComp
                         "\n   Michel Morales: mraguas@gmail.com"
                                 +"\n\n       Luis A. Reyes: inglreyesm@gmail.com");
                 // User chose the "Settings" item, show the app settings UI...
+                return true;
+            case R.id.Principal:
+//                Toast.makeText(Screen_User_Data.this, "Ayuda", Toast.LENGTH_SHORT).show();
+                // User chose the "Favorite" action, mark the current item
+                // as a favorite...
+                Intent open_screen= new Intent(this, team_or_personal_task_selection_screen_Activity.class);
+                startActivity(open_screen);
+                finish();
                 return true;
 
             case R.id.Tareas:

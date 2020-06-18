@@ -60,7 +60,9 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
             button_geolocalization;
 
     private String foto;
-    private ImageView imagen_contador;
+    private ImageView imagen_contador,
+            imageView_menu_screen_unity_counter,
+            imageView_atras_screen_unity_counter;
 
     private TextView tipo_tarea,
             direccion,
@@ -71,21 +73,31 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
             ubicacion,
             calibre,
             textView_numero_abonado_screen_unity_counter;
-    private HashMap<String, String> mapaTiposDeTarea;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.screen_unity_counter);
 
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        myToolbar.setBackgroundColor(Color.TRANSPARENT);
-        setSupportActionBar(myToolbar);
+//        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+//        myToolbar.setBackgroundColor(Color.TRANSPARENT);
+//        setSupportActionBar(myToolbar);
 
-        mapaTiposDeTarea = Tabla_de_Codigos.mapaTiposDeAnomalias;
+//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE)
+//                != PackageManager.PERMISSION_GRANTED) {
+//            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CALL_PHONE}, 1);
+//        }
+
+
+
+        team_or_personal_task_selection_screen_Activity.from_battery_or_unity = team_or_personal_task_selection_screen_Activity.FROM_UNITY;
 
         button_geolocalization=(Button) findViewById(R.id.button_geolocalization_screen_unity_counter);
+
+        imageView_menu_screen_unity_counter = (ImageView) findViewById(R.id.imageView_menu_screen_unity_counter);
+        imageView_atras_screen_unity_counter = (ImageView) findViewById(R.id.imageView_atras_screen_unity_counter);
         imagen_contador = (ImageView) findViewById(R.id.imageView_screen_unity_counter_imagen);
         serie = (TextView) findViewById(R.id.textView_screen_unity_counter_serie);
         textView_numero_abonado_screen_unity_counter= (TextView) findViewById(R.id.textView_numero_abonado_screen_unity_counter);
@@ -102,31 +114,43 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
         button_exec_task_screen_unity_counter = (Button)findViewById(R.id.button_ejecutar_tarea_screen_unity_counter);
         button_trazar_ruta_screen_unity_counter = (Button)findViewById(R.id.button_trazar_ruta_screen_unity_counter);
 
+        imageView_menu_screen_unity_counter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Unity_Counter.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        team_or_personal_task_selection_screen_Activity.openMenu("Menu", getApplicationContext(), getSupportFragmentManager());
+                    }
+                });
+                imageView_menu_screen_unity_counter.startAnimation(myAnim);
+            }
+        });
+
+        String obs;
         try {
-            String tipo = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.tipo_tarea).
-                    replace("\n", "").replace(" ", "").
-                    replace("null","").replace("NULL","");
-            for(int i = 0; i < 10; i++){
-                tipo = tipo.replace(String.valueOf(i), "");
-            }
-            String tipo_long="";
-            String calibre_local = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.calibre_toma);
-            if(mapaTiposDeTarea.containsKey(tipo)) {
-                tipo_long = mapaTiposDeTarea.get(tipo);
-            }else if (tipo.contains("T") && tipo.contains("\"")){
-                tipo_long = "BAJA O CORTE DE SUMINISTRO";
-            }
-            if((calibre_local.contains("null") && tipo_long.contains("null"))
-                    || (calibre_local.contains("NULL") && tipo_long.contains("NULL"))
-                    || (calibre_local.contains("NULL") && tipo_long.contains("null"))
-                    || (calibre_local.contains("null") && tipo_long.contains("NULL"))){
-                tipo_tarea.setText("Desconocido");
+            String tipo_long = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.accion_ordenada).trim();
+            String calibre_local = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.calibre_toma).trim();
+            if(Screen_Login_Activity.checkStringVariable(tipo_long)){
+                tipo_tarea.setText(tipo_long+"  "+calibre_local + "mm");
             }
             else {
-                tipo_tarea.setText(tipo_long+"  "
-                        +Screen_Login_Activity.tarea_JSON.getString(DBtareasController.calibre_toma).
-                        replace("\n", "").replace("null","").replace(" ","")
-                        +"mm");
+                tipo_tarea.setText(calibre_local + "mm");
             }
 
             //Toast.makeText(getApplicationContext(), "Tarea JSON ->"+Screen_Login_Activity.tarea_JSON .toString(), Toast.LENGTH_SHORT).show();
@@ -149,23 +173,87 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
                         + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.piso).trim().replace("\n", "").replace("NULL", "").replace("null", "") + "  "
                         + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.mano).trim().replace("\n", "")).replace("null", "").replace("NULL", ""));
             }
-            datosEspecificos.setText((Screen_Login_Activity.tarea_JSON.getString(DBtareasController.observaciones).replace("\n", "")).replace("null","").replace("NULL",""));
+            obs = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.MENSAJE_LIBRE).trim();
+            if(!Screen_Login_Activity.checkStringVariable(obs)) {
+                obs = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.observaciones).trim();
+                if (!Screen_Login_Activity.checkStringVariable(obs)) {
+                    obs = (Screen_Login_Activity.tarea_JSON.getString(DBtareasController.OBSERVA).trim());
+                    if (!Screen_Login_Activity.checkStringVariable(obs)) {
+                        obs = "";
+                    }
+                }
+            }
+            if(obs.isEmpty()) {
+                Log.e("observaciones", "Vacia");
+            }else{
+                Log.e("observaciones", obs);
+            }
+            String caliber = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.calibre_real).trim();
+            if(caliber.isEmpty() || caliber.equals("NULL") || caliber.equals("null")){
+                caliber = (Screen_Login_Activity.tarea_JSON.getString(DBtareasController.calibre_toma).trim());
+                if(caliber.isEmpty() || caliber.equals("NULL") || caliber.equals("null")){
+                    caliber = "";
+                }
+            }
+            datosEspecificos.setText(obs);
             serie.setText((Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador).replace("\n", "")).replace("null","").replace("NULL",""));
             lectura.setText((Screen_Login_Activity.tarea_JSON.getString(DBtareasController.lectura_actual).replace("\n", "")).replace("null","").replace("NULL",""));
             ubicacion.setText((Screen_Login_Activity.tarea_JSON.getString(DBtareasController.emplazamiento).replace("\n", "")).replace("null","").replace("NULL",""));
             acceso.setText((Screen_Login_Activity.tarea_JSON.getString(DBtareasController.acceso).replace("\n", "")).replace("null","").replace("NULL",""));
-            calibre.setText((Screen_Login_Activity.tarea_JSON.getString(DBtareasController.calibre_toma).replace("\n", "")).replace("null","").replace("NULL",""));
+            calibre.setText(caliber);
 
         } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(getApplicationContext(),"No se obtuvo informacion: "+e.toString(), Toast.LENGTH_LONG).show();
         }
         try {
-            textView_numero_abonado_screen_unity_counter.setText(Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado));
+            String numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
+            if(Screen_Login_Activity.checkStringVariable(numero_abonado)) {
+                textView_numero_abonado_screen_unity_counter.setText(numero_abonado);
+            }
         } catch (JSONException e) {
             Log.e("Excepcion", "Error al cargar numero de abonado");
             e.printStackTrace();
         }
+        tipo_tarea.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openMessage("Datos Especificos", tipo_tarea.getText().toString());
+            }
+        });
+        datosEspecificos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openMessage("Datos Especificos", datosEspecificos.getText().toString());
+            }
+        });
+        imageView_atras_screen_unity_counter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Unity_Counter.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(
+                        MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                Toast.makeText(context,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        onBackPressed();
+                    }
+                });
+                imageView_atras_screen_unity_counter.startAnimation(myAnim);
+            }
+        });
         button_geolocalization.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -274,6 +362,7 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
                     public void onAnimationEnd(Animation arg0) {
                         Intent intent_open_screen_incidence = new Intent(Screen_Unity_Counter.this, Screen_Incidence.class);
                         startActivity(intent_open_screen_incidence);
+                        Screen_Unity_Counter.this.finish();
                     }
                 });
                 button_incidence_screen_unity_counter.startAnimation(myAnim);
@@ -302,6 +391,7 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
                     public void onAnimationEnd(Animation arg0) {
                         Intent intent_open_screen_absent = new Intent(Screen_Unity_Counter.this, Screen_Absent.class);
                         startActivity(intent_open_screen_absent);
+                        Screen_Unity_Counter.this.finish();
                     }
                 });
                 button_absent_screen_unity_counter.startAnimation(myAnim);
@@ -331,6 +421,7 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
                     public void onAnimationEnd(Animation arg0) {
                         Intent intent_open_screen_exec_task = new Intent(Screen_Unity_Counter.this, Screen_Execute_Task.class);
                         startActivity(intent_open_screen_exec_task);
+                        Screen_Unity_Counter.this.finish();
                     }
                 });
                 button_exec_task_screen_unity_counter.startAnimation(myAnim);
@@ -352,8 +443,14 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
                 }
                 if(!foto.isEmpty() && foto!=null && !foto.equals("NULL")  && !foto.equals("null")) {
                     String numero_abonado="";
+                    String gestor = null;
+
                     try {
                         numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado);
+                        gestor = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.GESTOR).trim();
+                        if(!Screen_Login_Activity.checkStringVariable(gestor)){
+                            gestor = "Sin_Gestor";
+                        }
                         if(!numero_abonado.isEmpty() && numero_abonado!=null
                                 && !numero_abonado.equals("null") && !numero_abonado.equals("NULL")){
 
@@ -361,7 +458,8 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
                             showRingDialog("Obteniendo foto de instalación");
                             String type_script = "download_image";
                             BackgroundWorker backgroundWorker = new BackgroundWorker(this);
-                            backgroundWorker.execute(type_script, foto, numero_abonado);
+                            backgroundWorker.execute(type_script, foto, gestor, numero_abonado);
+                            Log.e("Buscando", gestor);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -394,10 +492,14 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
 
             if(numero_abonado!=null && !numero_abonado.equals("null") && !TextUtils.isEmpty(numero_abonado)) {
                 if (foto != null && !foto.equals("null") && !foto.equals("NULL") && !TextUtils.isEmpty(foto)) {
-                    File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/fotos_tareas/" + numero_abonado);
+                    String gestor = null;
+                    gestor = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.GESTOR).trim();
+                    if(!Screen_Login_Activity.checkStringVariable(gestor)){
+                        gestor = "Sin_Gestor";
+                    }
+                    File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+ gestor + "/" +numero_abonado);
                     if (!storageDir.exists()) {
                         storageDir.mkdirs();
-                        Log.e("No existe directorio", storageDir.getAbsolutePath());
                     }
                     File[] files = storageDir.listFiles();
                     for (int i = 0; i < files.length; i++) {
@@ -458,7 +560,12 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
         try {
             numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
 
-            File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+numero_abonado);
+            String gestor = null;
+            gestor = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.GESTOR).trim();
+            if(!Screen_Login_Activity.checkStringVariable(gestor)){
+                gestor = "Sin_Gestor";
+            }
+            File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+ gestor + "/" +numero_abonado);
             if (!myDir.exists()) {
                 myDir.mkdirs();
             }
@@ -490,13 +597,14 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
     public void onTaskComplete(String type, String result) throws JSONException {
         if(type == "download_image") {
             hideRingDialog();
+            Log.e("download_image", result);
             if (result == null) {
                 Toast.makeText(this, "No se puede acceder al servidor, no se obtuvo foto instalacion, buscando fotos en el teléfono", Toast.LENGTH_LONG).show();
                 buscarFotosOffline();
             }
             else {
                 if(result.contains("not success")){
-                    Toast.makeText(this, "Error obteniendo datos, no se obtuvo foto instalacion\n"+ result+ " buscando fotos en el teléfono", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "No hay foto de instalación en servidor\n"+ result+ " buscando fotos en el teléfono", Toast.LENGTH_LONG).show();
                     buscarFotosOffline();
                 }else {
                     Log.e("Obtenida", "Foto instalación");
@@ -507,6 +615,8 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
                         imagen_contador.setVisibility(View.VISIBLE);
                         imagen_contador.setImageBitmap(bitmap);
                         saveBitmapImage(bitmap, foto);
+                    }else{
+                        buscarFotosOffline();
                     }
                 }
             }
@@ -517,59 +627,65 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
         progressDialog.setCancelable(true);
     }
     private void hideRingDialog(){
-        if(progressDialog!=null) {
-            if (progressDialog.isShowing()) {
-                progressDialog.dismiss();
+        try {
+            if(progressDialog!=null) {
+                if(progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                    progressDialog = null;
+                }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("hideRingDialog", e.toString());
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.Contactar:
-//                Toast.makeText(Screen_User_Data.this, "Seleccionó la opción settings", Toast.LENGTH_SHORT).show();
-                openMessage("Contactar",
-                        /*+"\nAdrian Nieves: 1331995adrian@gmail.com"
-                        +"\nJorge G. Perez: yoyi1991@gmail.com"*/
-                        "\n   Michel Morales: mraguas@gmail.com"
-                                +"\n\n       Luis A. Reyes: inglreyesm@gmail.com");
-                // User chose the "Settings" item, show the app settings UI...
-                return true;
-
-            case R.id.Tareas:
-//                Toast.makeText(Screen_User_Data.this, "Ayuda", Toast.LENGTH_SHORT).show();
-                // User chose the "Favorite" action, mark the current item
-                // as a favorite...
-                return true;
-
-            case R.id.Configuracion:
-//                Toast.makeText(Screen_User_Data.this, "Configuracion", Toast.LENGTH_SHORT).show();
-                // User chose the "Favorite" action, mark the current item
-                // as a favorite...
-                openMessage("Tarea", Screen_Battery_counter.get_tarea_info());
-                return true;
-            case R.id.Info_Tarea:
-//                Toast.makeText(Screen_User_Data.this, "Configuracion", Toast.LENGTH_SHORT).show();
-                // User chose the "Favorite" action, mark the current item
-                // as a favorite...
-                openMessage("Tarea", Screen_Battery_counter.get_tarea_info());
-                return true;
-
-            default:
-                // If we got here, the user's action was not recognized.
-                // Invoke the superclass to handle it.
-                return super.onOptionsItemSelected(item);
-
-        }
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.menu, menu);
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+//            case R.id.Contactar:
+////                Toast.makeText(Screen_User_Data.this, "Seleccionó la opción settings", Toast.LENGTH_SHORT).show();
+//                openMessage("Contactar",
+//                        /*+"\nAdrian Nieves: 1331995adrian@gmail.com"
+//                        +"\nJorge G. Perez: yoyi1991@gmail.com"*/
+//                        "\n   Michel Morales: mraguas@gmail.com"
+//                                +"\n\n       Luis A. Reyes: inglreyesm@gmail.com");
+//                // User chose the "Settings" item, show the app settings UI...
+//                return true;
+//
+//            case R.id.Tareas:
+////                Toast.makeText(Screen_User_Data.this, "Ayuda", Toast.LENGTH_SHORT).show();
+//                // User chose the "Favorite" action, mark the current item
+//                // as a favorite...
+//                return true;
+//
+//            case R.id.Configuracion:
+////                Toast.makeText(Screen_User_Data.this, "Configuracion", Toast.LENGTH_SHORT).show();
+//                // User chose the "Favorite" action, mark the current item
+//                // as a favorite...
+//                openMessage("Tarea", Screen_Battery_counter.get_tarea_info());
+//                return true;
+//            case R.id.Info_Tarea:
+////                Toast.makeText(Screen_User_Data.this, "Configuracion", Toast.LENGTH_SHORT).show();
+//                // User chose the "Favorite" action, mark the current item
+//                // as a favorite...
+//                openMessage("Tarea", Screen_Battery_counter.get_tarea_info());
+//                return true;
+//
+//            default:
+//                // If we got here, the user's action was not recognized.
+//                // Invoke the superclass to handle it.
+//                return super.onOptionsItemSelected(item);
+//
+//        }
+//    }
 
     public void openMessage(String title, String hint){
         MessageDialog messageDialog = new MessageDialog();
@@ -588,13 +704,29 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
                         if(!team_or_personal_task_selection_screen_Activity.dBtareasController.saveChangesInTarea()){
                             Toast.makeText(getApplicationContext(), "No se pudo guardar cambios", Toast.LENGTH_SHORT).show();
                         }
-                        finish();
+                        Intent openTableActivity = null;
+                        if(team_or_personal_task_selection_screen_Activity.from_team_or_personal == team_or_personal_task_selection_screen_Activity.FROM_TEAM) {
+                            openTableActivity = new Intent(Screen_Unity_Counter.this, Screen_Table_Team.class);
+                        }else if(team_or_personal_task_selection_screen_Activity.from_team_or_personal == team_or_personal_task_selection_screen_Activity.FROM_PERSONAL){
+                            openTableActivity = new Intent(Screen_Unity_Counter.this, Screen_Table_Personal.class);
+                        }else
+                        if(team_or_personal_task_selection_screen_Activity.from_team_or_personal == team_or_personal_task_selection_screen_Activity.FROM_FILTER_RESULT){
+                            openTableActivity = new Intent(Screen_Unity_Counter.this, Screen_Filter_Results.class);
+                        }else if(team_or_personal_task_selection_screen_Activity.from_team_or_personal == team_or_personal_task_selection_screen_Activity.FROM_FILTER_TAREAS){
+                            openTableActivity = new Intent(Screen_Unity_Counter.this, Screen_Filter_Tareas.class);
+                        }
+                        if(openTableActivity!= null) {
+                            openTableActivity.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+//            openTableActivity.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                            startActivityIfNeeded(openTableActivity, 0);
+                        }
+                        Screen_Unity_Counter.this.finish();
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        finish();
+                        Screen_Unity_Counter.this.finish();
                     }
                 }).show();
     }

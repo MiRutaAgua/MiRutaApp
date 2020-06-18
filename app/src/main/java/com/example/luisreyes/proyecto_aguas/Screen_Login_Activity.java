@@ -18,8 +18,10 @@ import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -38,6 +40,8 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -49,6 +53,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
@@ -59,14 +65,16 @@ import java.util.Locale;
 
 public class Screen_Login_Activity extends AppCompatActivity implements TaskCompleted{
 
-    private EditText lineEdit_nombre_de_operario;
-    private EditText lineEdit_clave_de_acceso;
-    private Button button_login, button_register;
+    private AutoCompleteTextView lineEdit_nombre_de_operario;
+    private AutoCompleteTextView lineEdit_clave_de_acceso;
+    private Button button_login, button_register,button_send;
 
+    ImageView imageView_logo_screen_login;
     public static Tabla_de_Codigos tabla_de_codigos;
 
     public static JSONObject tarea_JSON;
     public static JSONObject operario_JSON;
+    public static JSONObject contador_JSON;
     public static ArrayList<String> lista_operarios = new ArrayList<>();
     public static ArrayList<String> lista_usuarios = new ArrayList<>();
     ArrayList<String> usuarios_to_update = new ArrayList<>();
@@ -86,13 +94,10 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
-
         getWindow().setSoftInputMode( //Para esconder el teclado
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
         );
-
         setContentView(R.layout.screen_login);
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE)
@@ -104,13 +109,19 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
 
         dBoperariosController = new DBoperariosController(this);
 
+
+
         tarea_JSON = new JSONObject();
         operario_JSON = new JSONObject();
 
-        lineEdit_nombre_de_operario = (EditText) findViewById(R.id.editText_Nombre_Operario_screen_login);
-        lineEdit_clave_de_acceso    = (EditText) findViewById(R.id.editText_Clave_Acceso_screen_login);
+        imageView_logo_screen_login = (ImageView) findViewById(R.id.imageView_logo_screen_login);
+        lineEdit_nombre_de_operario = (AutoCompleteTextView) findViewById(R.id.editText_Nombre_Operario_screen_login);
+        lineEdit_clave_de_acceso    = (AutoCompleteTextView) findViewById(R.id.editText_Clave_Acceso_screen_login);
         button_login                = (Button) findViewById(R.id.button_login_screen_login);
         button_register             = (Button) findViewById(R.id.button_register_screen_login);
+        button_send                 = (Button) findViewById(R.id.prueba_send);
+
+        rellenarAutoCompleteTexts();
 
         try {
             operario_JSON.put("id", 1);
@@ -138,6 +149,12 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
 
         descargarOperarios();
 
+
+        if(!BackgroundWorker.server_online_or_wamp){
+            lineEdit_nombre_de_operario.setText("Michel");
+            lineEdit_clave_de_acceso.setText("123456");
+        }
+
         lineEdit_nombre_de_operario.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -157,6 +174,15 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
 
             }
         });
+
+
+        button_send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                imageView_logo_screen_login.setImageBitmap(getPhotoUserLocal(dir));
+            }
+        });
+
         button_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -194,7 +220,6 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
                 button_register.startAnimation(myAnim);
             }
         });
-
         button_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -222,6 +247,66 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
                 button_login.startAnimation(myAnim);
             }
         });
+    }
+
+    public void rellenarAutoCompleteTexts(){
+        try {
+            ArrayList<String> lista_operarios = dBoperariosController.get_all_operarios_from_Database();
+            ArrayList<String> nombre_usuario = new ArrayList<>();
+            for(int i=0; i< lista_operarios.size(); i++){
+                try {
+                    JSONObject jsonObject = new JSONObject(lista_operarios.get(i));
+                    String usuario = null;
+                    try {
+                        usuario = jsonObject.getString(DBoperariosController.usuario);
+                        nombre_usuario.add(usuario);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            if(nombre_usuario!=null){
+                if(!nombre_usuario.isEmpty()){
+                    ArrayAdapter arrayAdapter = new ArrayAdapter(this, R.layout.list_text_view_short_info, nombre_usuario);
+                    lineEdit_nombre_de_operario.setAdapter(arrayAdapter);
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+    public Bitmap getPhotoUserLocal(String path){
+        File file = new File(path);
+        if(file.exists()) {
+            Bitmap bitmap = null;
+            try {
+//                bitmap =Bitmap.createScaledBitmap(MediaStore.Images.Media
+//                        .getBitmap(this.getContentResolver(), Uri.fromFile(file)), 512, 512, true);
+                bitmap = MediaStore.Images.Media
+                        .getBitmap(this.getContentResolver(), Uri.fromFile(file));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            if (bitmap != null) {
+                return bitmap;
+            } else {
+                return null;
+            }
+        }else{
+            return null;
+        }
+    }
+
+    public static boolean checkStringVariable(String var){ //true si es valida
+        if(var != null && !var.equals("null") && !var.equals("NULL") && !var.isEmpty()){
+            return true;
+        }else {
+            return false;
+        }
     }
     public static void playOnOffSound(Context context){
         if(MainActivity.sounds_on) {
@@ -345,6 +430,7 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
     public void onTaskComplete(String type, String result) throws JSONException {
 
         if(type == "login"){
+            login_press = false;
             hideRingDialog();
             if(result == null){
                 //Toast.makeText(this,"No hay conexion a Internet, se procedera con datos desactualizados", Toast.LENGTH_LONG).show();
@@ -364,7 +450,7 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
 
                             }
                         }).show();
-                login_press = false;
+
             }
             else {
                 if (result.contains("not success")) {
@@ -374,14 +460,13 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
                     Toast.makeText(Screen_Login_Activity.this, "Bienvenido", Toast.LENGTH_SHORT).show();
 
                     String username = lineEdit_nombre_de_operario.getText().toString();
-
                     String type_script = "get_user_data";
-
                     BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Login_Activity.this);
                     backgroundWorker.execute(type_script, username);
                 }
 
             }
+
 
         }else if(type == "get_user_data"){
             if(result == null){
@@ -396,66 +481,76 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
             }
         }else if(type == "get_operarios"){
 
+            login_press = false;
             if(result == null){
                 Toast.makeText(this,"No se pudo establecer conexión con el servidor", Toast.LENGTH_LONG).show();
                 hideRingDialog();
             }
             else {
-                Toast.makeText(this,"Información de Operarios actualizada correctamente", Toast.LENGTH_LONG).show();
-                int sqlite_database_count = dBoperariosController.countTableOperarios();
-                boolean insertar_todos = false;
-                if(sqlite_database_count < 1){
-                    insertar_todos = true;
+                Log.e("get_operarios", result);
+                if(result.isEmpty()) {
+                    Log.e("get_operarios", "Vacio");
+                    Toast.makeText(this, "Tabla de operarios en internet vacia", Toast.LENGTH_LONG).show();
                 }
-                for(int n =1 ; n < lista_operarios.size() ; n++) { //el elemento n 0 esta vacio
-                    try {
-                        JSONArray jsonArray = new JSONArray(lista_operarios.get(n));
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            JSONObject jsonObject = jsonArray.getJSONObject(i);
-                            lista_usuarios.add(jsonObject.getString("usuario"));
-                            if(insertar_todos) {
-                                dBoperariosController.insertOperario(jsonObject);
-                            }
-                            else{
-                                if(i + 1 > sqlite_database_count) {
+                else if(result.equals("Servidor caido, ahora no se puede sincronizar")){
+                    Toast.makeText(this, result, Toast.LENGTH_LONG).show();
+                }
+                else{
+                    Log.e("get_operarios", "con informacion");
+                    Toast.makeText(this,"Información de Operarios actualizada correctamente", Toast.LENGTH_LONG).show();
+                    int sqlite_database_count = dBoperariosController.countTableOperarios();
+                    boolean insertar_todos = false;
+                    if(sqlite_database_count < 1){
+                        insertar_todos = true;
+                    }
+                    for(int n =1 ; n < lista_operarios.size() ; n++) { //el elemento n 0 esta vacio
+                        try {
+                            JSONArray jsonArray = new JSONArray(lista_operarios.get(n));
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                lista_usuarios.add(jsonObject.getString("usuario"));
+                                if (insertar_todos) {
                                     dBoperariosController.insertOperario(jsonObject);
-                                }
-                                else {
-                                    Date date_MySQL = DBoperariosController.getFechaHoraFromString(jsonObject.getString("date_time_modified").replace("\n", ""));
-                                    JSONObject jsonObject_Lite = new JSONObject(dBoperariosController.get_one_operario_from_Database(jsonObject.getString("usuario")));
-                                    Date date_SQLite = DBoperariosController.getFechaHoraFromString((jsonObject_Lite.getString("date_time_modified").replace("\n", "")));
-                                    if (date_SQLite == null) {
-                                        if (date_MySQL != null) {
-                                            dBoperariosController.updateOperario(jsonObject, "usuario");
-                                        } else {
-                                            Toast.makeText(Screen_Login_Activity.this, "Fechas ambas nulas", Toast.LENGTH_SHORT).show();
-                                        }
+                                } else {
+                                    if (i + 1 > sqlite_database_count) {
+                                        dBoperariosController.insertOperario(jsonObject);
+                                    } else {
+                                        Date date_MySQL = DBoperariosController.getFechaHoraFromString(jsonObject.getString("date_time_modified").replace("\n", ""));
+                                        JSONObject jsonObject_Lite = new JSONObject(dBoperariosController.get_one_operario_from_Database(jsonObject.getString("usuario")));
+                                        Date date_SQLite = DBoperariosController.getFechaHoraFromString((jsonObject_Lite.getString("date_time_modified").replace("\n", "")));
+                                        if (date_SQLite == null) {
+                                            if (date_MySQL != null) {
+                                                dBoperariosController.updateOperario(jsonObject, "usuario");
+                                            } else {
+                                                Toast.makeText(Screen_Login_Activity.this, "Fechas ambas nulas", Toast.LENGTH_SHORT).show();
+                                            }
 
-                                    } else if (date_MySQL == null) {
-                                        if (date_SQLite != null) {
-                                            //aqui actualizar MySQL con la DB SQLite
-                                            usuarios_to_update.add(jsonObject_Lite.getString("usuario"));
-                                        } else {
-                                            Toast.makeText(Screen_Login_Activity.this, "Fechas ambas nulas", Toast.LENGTH_SHORT).show();
-                                        }
-                                    } else { //si ninguna de la dos son nulas
+                                        } else if (date_MySQL == null) {
+                                            if (date_SQLite != null) {
+                                                //aqui actualizar MySQL con la DB SQLite
+                                                usuarios_to_update.add(jsonObject_Lite.getString("usuario"));
+                                            } else {
+                                                Toast.makeText(Screen_Login_Activity.this, "Fechas ambas nulas", Toast.LENGTH_SHORT).show();
+                                            }
+                                        } else { //si ninguna de la dos son nulas
 
-                                        if (date_MySQL.after(date_SQLite)) {//MySQL mas actualizada
-                                            dBoperariosController.updateOperario(jsonObject, "usuario");
+                                            if (date_MySQL.after(date_SQLite)) {//MySQL mas actualizada
+                                                dBoperariosController.updateOperario(jsonObject, "usuario");
 
-                                        } else if (date_MySQL.before(date_SQLite)) {//SQLite mas actualizada
-                                            //aqui actualizar MySQL con la DB SQLite
-                                            usuarios_to_update.add(jsonObject_Lite.getString("usuario"));
+                                            } else if (date_MySQL.before(date_SQLite)) {//SQLite mas actualizada
+                                                //aqui actualizar MySQL con la DB SQLite
+                                                usuarios_to_update.add(jsonObject_Lite.getString("usuario"));
+                                            }
                                         }
                                     }
                                 }
                             }
-                        }
 
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        Toast.makeText(Screen_Login_Activity.this, "Excepción -> \n"+e.toString(), Toast.LENGTH_SHORT).show();
-                        Log.e("Excepción -> ", lista_operarios.toString());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(Screen_Login_Activity.this, "Excepción -> \n" + e.toString(), Toast.LENGTH_SHORT).show();
+                            Log.e("Excepción -> ", lista_operarios.toString());
+                        }
                     }
                 }
                 updateOperarioInMySQL();
@@ -476,9 +571,9 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
     public void updateOperarioInMySQL() throws JSONException {
         if(usuarios_to_update.isEmpty()){
             if(login_pendent){
-
                 loginOperario();
             }
+            rellenarAutoCompleteTexts();
             return;
         }
         else {
@@ -512,15 +607,24 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
         progressDialog.setCancelable(false);
     }
     private void hideRingDialog(){
-        if(progressDialog!=null) {
-            progressDialog.dismiss();
+        try {
+            if(progressDialog!=null) {
+                if(progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                    progressDialog = null;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("hideRingDialog", e.toString());
         }
     }
 
     @Override
     public void onBackPressed() {
+        Intent intent= new Intent(this, MainActivity.class);
+        startActivity(intent);
         finish();
-        super.onBackPressed();
     }
 
 }

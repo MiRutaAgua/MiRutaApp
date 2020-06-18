@@ -45,6 +45,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -83,6 +84,8 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
             imageView_edit_serial_number_screen_exec_task,
             imageView_edit_serial_number_module_screen_exec_task,
             button_codigo_geolocalization_screen_exec_task,
+            imageView_call_phone1_exec_task,
+    imageView_call_phone2_exec_task, imageview_edit_lectura_screen_exec_task,
             observaciones_button;
 
     private Button button_instalation_photo_screen_exec_task;
@@ -124,12 +127,10 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         getWindow().setSoftInputMode( //Para esconder el teclado
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
         );
         setContentView(R.layout.screen_execute_task);
-
 
         mCurrentPhotoPath_foto_antes = "";
         mCurrentPhotoPath_foto_lectura= "";
@@ -141,6 +142,11 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
         }
 
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CALL_PHONE}, 1);
+        }
+
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         myToolbar.setBackgroundColor(Color.TRANSPARENT);
         setSupportActionBar(myToolbar);
@@ -149,10 +155,13 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         images_files= new ArrayList<>();
         images_files_names =new ArrayList<>();
 
+        imageview_edit_lectura_screen_exec_task = (ImageView)findViewById(R.id.imageview_edit_lectura_screen_exec_task);
         imageView_edit_serial_number_screen_exec_task = (ImageView)findViewById(R.id.imageView_edit_serial_number_screen_exec_task);
         imageView_edit_serial_number_module_screen_exec_task = (ImageView)findViewById(R.id.imageView_edit_serial_number_module_screen_exec_task);
         imageView_edit_phone1_screen_exec_task = (ImageView)findViewById(R.id.imageView_edit_phone1_screen_exec_task);
         imageView_edit_phone2_screen_exec_task= (ImageView)findViewById(R.id.imageView_edit_phone2_screen_exec_task);
+        imageView_call_phone2_exec_task= (ImageView)findViewById(R.id.imageView_edit_phone2_exec_task);
+        imageView_call_phone1_exec_task= (ImageView)findViewById(R.id.imageView_edit_phone1_exec_task);
 
         lectura_editText = (EditText)findViewById(R.id.editText_lectura_screen_exec_task);
         textView_serial_number_result = (TextView)findViewById(R.id.textView_serial_number_screen_exec_task);
@@ -182,6 +191,92 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         textView_observaciones_screen_exec_task = (TextView)findViewById(R.id.textView_observaciones_screen_exec_task);
         button_geolocalization_screen_exec_task= (Button)findViewById(R.id.button_geolocalization_screen_exec_task);
 
+        String photo = "";
+        try {
+            photo = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_antes_instalacion).trim();
+            Log.e("photo: ", photo);
+            if(Screen_Login_Activity.checkStringVariable(photo)){
+                String bitmap_dir = lookForAllreadyTakenPhotos(photo);
+                Log.e("bitmap_dir: ", bitmap_dir);
+                if(!bitmap_dir.isEmpty()){
+                    Bitmap bitmap = getPhotoUserLocal(bitmap_dir);
+                    if(bitmap!=null) {
+                        Log.e("Bitmap ok: ", bitmap_dir);
+                        mCurrentPhotoPath_foto_antes = bitmap_dir;
+                        instalation_photo_screen_exec_task.setVisibility(View.VISIBLE);
+                        instalation_photo_screen_exec_task.setImageBitmap(bitmap);
+                        lectura_editText.setVisibility(View.VISIBLE);
+                    }else{
+                        Log.e("Bitmap nulo: ", "foto_antes_instalacion");
+                    }
+                }else{
+                    Log.e("no Existe: ", "foto_antes_instalacion");
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            photo = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_lectura).trim();
+            if(Screen_Login_Activity.checkStringVariable(photo)){
+                String bitmap_dir = lookForAllreadyTakenPhotos(photo);
+                if(!bitmap_dir.isEmpty()){
+                    Log.e("Existe: ", bitmap_dir);
+                    mCurrentPhotoPath_foto_lectura = bitmap_dir;
+                    read_photo_screen_exec_task.setVisibility(View.VISIBLE);
+                    read_photo_screen_exec_task.setImageBitmap(getPhotoUserLocal(bitmap_dir));
+                }
+                else{
+                    Log.e("no Existe: ", "foto_lectura");
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            photo = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_numero_serie).trim();
+            if(Screen_Login_Activity.checkStringVariable(photo)){
+                String bitmap_dir = lookForAllreadyTakenPhotos(photo);
+                if(!bitmap_dir.isEmpty()){
+                    Log.e("Existe: ", bitmap_dir);
+                    mCurrentPhotoPath_foto_serie = bitmap_dir;
+                    serial_number_photo_screen_exec_task.setVisibility(View.VISIBLE);
+                    serial_number_photo_screen_exec_task.setImageBitmap(getPhotoUserLocal(bitmap_dir));
+                }else{
+                    Log.e("no Existe: ", "foto_numero_serie");
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            photo = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_despues_instalacion).trim();
+            if(Screen_Login_Activity.checkStringVariable(photo)){
+                String bitmap_dir = lookForAllreadyTakenPhotos(photo);
+                if(!bitmap_dir.isEmpty()){
+                    Log.e("Existe: ", bitmap_dir);
+                    mCurrentPhotoPath_foto_despues = bitmap_dir;
+                    after_instalation_photo_screen_exec_task.setVisibility(View.VISIBLE);
+                    after_instalation_photo_screen_exec_task.setImageBitmap(getPhotoUserLocal(bitmap_dir));
+                }else{
+                    Log.e("no Existe: ", "foto_despues_instalacion");
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            String contadorDV = Screen_Login_Activity.tarea_JSON.
+                    getString(DBtareasController.numero_serie_contador_devuelto)
+                    .trim().replace(" ", "");
+            if(Screen_Login_Activity.checkStringVariable(contadorDV)) {
+                textView_serial_number_result.setText(contadorDV);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Toast.makeText(Screen_Execute_Task.this, "no se pudo obtener numero_serie_contador de tarea", Toast.LENGTH_LONG).show();
+        }
+
         try {
             contador = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador)
             .trim().replace(" ", "");
@@ -201,7 +296,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         }
         try {
             textView_observaciones_screen_exec_task.setText(Screen_Login_Activity.tarea_JSON.getString(
-                    DBtareasController.observaciones));
+                    DBtareasController.MENSAJE_LIBRE));
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(Screen_Execute_Task.this, "no se pudo obtener observaciones de tarea", Toast.LENGTH_LONG).show();
@@ -251,11 +346,18 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if(!charSequence.toString().isEmpty()) {
+                    Log.e("onTextChanged", charSequence.toString());
+                    Log.e("lectura_string", lectura_string);
+                    lectura_introducida = charSequence.toString();
+                    Log.e("lectura_introducida", lectura_introducida);
                     Integer lect = Integer.parseInt(charSequence.toString());
-                    if (!lectura_string.isEmpty()) {
-                        Integer last = Integer.parseInt(lectura_string);
+                    if (!lectura_string.isEmpty() ) {
+                        Integer last = Integer.parseInt(lectura_string.trim());
+                        Log.e("last", last.toString());
                         if (last > 0) {
+                            Log.e("last", "mayor 0");
                             if (lect - last >= 100) {
+                                Log.e("lect - last", "mayor");
                                 if (!MessageDialog.isShowing()) {
                                     openMessage("Advertencia", "La diferencia de lectura es mayor que 100");
                                 }
@@ -266,6 +368,62 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
             }
             @Override
             public void afterTextChanged(Editable editable) {
+            }
+        });
+        imageView_call_phone2_exec_task.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Execute_Task.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        if(Screen_Absent.checkIfOnlyNumbers(telefono2.getText().toString().trim())){
+                            Screen_Absent.callNumber(Screen_Execute_Task.this,telefono2.getText().toString().trim());
+                        }
+                    }
+                });
+                imageView_call_phone2_exec_task.startAnimation(myAnim);
+            }
+        });
+        imageView_call_phone1_exec_task.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Execute_Task.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        if(Screen_Absent.checkIfOnlyNumbers(telefono1.getText().toString().trim())){
+                            Screen_Absent.callNumber(Screen_Execute_Task.this,telefono1.getText().toString().trim());
+                        }
+                    }
+                });
+                imageView_call_phone1_exec_task.startAnimation(myAnim);
             }
         });
         button_geolocalization_screen_exec_task.setOnClickListener(new View.OnClickListener() {
@@ -297,6 +455,58 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
             }
         });
 
+//        lectura_editText.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Execute_Task.this, R.anim.bounce);
+//                // Use bounce interpolator with amplitude 0.2 and frequency 20
+//                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+//                myAnim.setInterpolator(interpolator);
+//                myAnim.setAnimationListener(new Animation.AnimationListener() {
+//                    @Override
+//                    public void onAnimationStart(Animation arg0) {
+//                        // TODO Auto-generated method stub
+////                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+//                    }
+//                    @Override
+//                    public void onAnimationRepeat(Animation arg0) {
+//                        // TODO Auto-generated method stub
+//                    }
+//                    @Override
+//                    public void onAnimationEnd(Animation arg0) {
+//                        openDialog("Lectura","...");
+//                    }
+//                });
+//                lectura_editText.startAnimation(myAnim);
+//            }
+//
+//        });
+        imageview_edit_lectura_screen_exec_task.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Execute_Task.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        openDialog("Lectura","...");
+                    }
+                });
+                imageview_edit_lectura_screen_exec_task.startAnimation(myAnim);
+            }
+
+        });
         textView_serial_number_result.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -473,7 +683,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                     }
                     @Override
                     public void onAnimationEnd(Animation arg0) {
-                        openDialog("Observaciones","Observación");
+                        openDialog("Mensaje libre","Mensaje");
                     }
                 });
                 observaciones_button.startAnimation(myAnim);
@@ -560,8 +770,14 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                     @Override
                     public void onAnimationEnd(Animation arg0) {
                         guardar_en_JSON_modificaciones();
-                        if(!TextUtils.isEmpty(lectura_editText.getText().toString())) {
-                            lectura_introducida = lectura_editText.getText().toString();
+                        String lect = lectura_editText.getText().toString();
+                        if(Screen_Absent.checkOnlyNumbers(lect)) {
+                            lectura_introducida = lect;
+                            Log.e("lectura_ ", "Llena");
+
+                        }else{
+                            lectura_introducida="";
+                            Log.e("lectura_ ", "Vacia");
                         }
                         if(!team_or_personal_task_selection_screen_Activity.dBtareasController.saveChangesInTarea()){
                             Toast.makeText(getApplicationContext(), "No se pudo guardar cambios", Toast.LENGTH_SHORT).show();
@@ -699,7 +915,8 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                 Screen_Login_Activity.playOnOffSound(getApplicationContext());
                 String numero_serie_devuelto = "";
                 try {
-                    numero_serie_devuelto = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador_devuelto).trim();
+                    numero_serie_devuelto = Screen_Login_Activity.tarea_JSON.
+                            getString(DBtareasController.numero_serie_contador_devuelto).trim();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -725,10 +942,38 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         });
     }
 
+    public String lookForAllreadyTakenPhotos(String photo_name) throws JSONException {
+        String numero_abonado = null;
+        String gestor = null;
+        try {
+            numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
+            gestor = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.GESTOR).trim();
+            if(!Screen_Login_Activity.checkStringVariable(gestor)){
+                gestor = "Sin_Gestor";
+            }
+            String dir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/" + gestor + "/" +numero_abonado;
+            File myDir = new File(dir);
+            if(myDir.exists()){
+                String file_full_name = dir+"/"+photo_name;
+                File photo = new File(file_full_name);
+                if(photo.exists()){
+                    return photo.getAbsolutePath();
+                }
+            }
+        } catch (JSONException e) {
+            Log.e("JSONException", "lookForAllreadyTakenPhotos "+e.toString());
+            e.printStackTrace();
+        }
+        return "";
+    }
+
     public void onGuardar_Datos(){
         guardar_en_JSON_modificaciones();
         if(!(TextUtils.isEmpty(lectura_editText.getText()))) {
+            Log.e("onGuardar_Datos", "Solo numeros");
+            Log.e("lectura_editText", lectura_editText.getText().toString());
             if (!lectura_string.equals("null") && !lectura_string.equals("NULL") && !lectura_string.isEmpty()) {
+                Log.e("lectura_string", lectura_string);
                 String lectura_actual = lectura_editText.getText().toString();
                 Integer lectura_actual_int = Integer.parseInt(lectura_actual);
                 Integer lectura_last_int = Integer.parseInt(lectura_string);
@@ -833,6 +1078,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                     status = status + ", TO_UPDATE";
                 }
                 Screen_Login_Activity.tarea_JSON.put(DBtareasController.status_tarea, status);
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.Estado, "NORMAL");
                 team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea(Screen_Login_Activity.tarea_JSON);
             } catch (JSONException e) {
                 Toast.makeText(this, "No se pudo guardar tarea local " + e.toString(), Toast.LENGTH_LONG).show();
@@ -851,8 +1097,6 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         } else{
             if(!error) {
                 Toast.makeText(this, "Se guardaron los datos en el teléfono", Toast.LENGTH_LONG).show();
-                Intent intent_open_task_or_personal_screen = new Intent(Screen_Execute_Task.this, team_or_personal_task_selection_screen_Activity.class);
-                startActivity(intent_open_task_or_personal_screen);
                 finishesThisClass();
             }
         }
@@ -873,7 +1117,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         if(!TextUtils.isEmpty(textView_observaciones_screen_exec_task.getText().toString())){
             String observaciones = textView_observaciones_screen_exec_task.getText().toString();
             try {
-                Screen_Login_Activity.tarea_JSON.put(DBtareasController.observaciones_devueltas,observaciones);
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.MENSAJE_LIBRE,observaciones);
             } catch (JSONException e) {
                 e.printStackTrace();
                 Toast.makeText(Screen_Execute_Task.this, "No pudo guardar observaciones", Toast.LENGTH_LONG).show();
@@ -954,20 +1198,109 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
 //        }
     }
 
-    @Override
+    public static String eliminarCaracteresAlFinal(String string){
+        for(int n = string.length()-1; n >= 0; n--) {
+            if(Character.isLetter(string.charAt(n))){
+                string = string.substring(0,
+                        string.length()-1);
+            }else{
+                break;
+            }
+        }
+        return string;
+    }
+    private void llenarInformacionDeContador(String numero_serie_nuevo_string) {
+        numero_serie_nuevo_string = eliminarCaracteresAlFinal(numero_serie_nuevo_string);
+        try {
+            if (team_or_personal_task_selection_screen_Activity.
+                    dBcontadoresController.checkForTableExists()) {
+                if (team_or_personal_task_selection_screen_Activity.
+                        dBcontadoresController.checkIfContadorExists(numero_serie_nuevo_string)) {
+                    JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.
+                            dBcontadoresController.get_one_contador_from_Database(numero_serie_nuevo_string));
+
+                    Log.e("Contador", jsonObject.toString());
+
+                    String codigo_clase = jsonObject.getString(DBcontadoresController.codigo_clase).trim();
+                    String clase = jsonObject.getString(DBcontadoresController.clase).trim();
+                    String tipo_fluido = jsonObject.getString(DBcontadoresController.tipo_fluido).trim();
+                    String tipo_radio = jsonObject.getString(DBcontadoresController.tipo_radio).trim();
+
+                    String marca = "";
+                    marca = marca + jsonObject.getString(DBcontadoresController.codigo_marca).trim() + " - ";
+                    marca = marca + jsonObject.getString(DBcontadoresController.marca).trim() + " - ";
+                    marca = marca + jsonObject.getString(DBcontadoresController.modelo).trim();
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.marca_devuelta, marca);
+//                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.modelo_devuelto, jsonObject.getString(DBcontadoresController.marca || DBcontadoresController.modelo).trim());
+                    String clase_y_codigo_clase = "";
+                    clase_y_codigo_clase = clase_y_codigo_clase + codigo_clase + " - ";
+                    clase_y_codigo_clase = clase_y_codigo_clase + clase;
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.TIPO_devuelto, clase_y_codigo_clase);
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.calibre_real, jsonObject.getString(DBcontadoresController.calibre_contador).trim());
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.largo_devuelto, jsonObject.getString(DBcontadoresController.longitud).trim());
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.TIPOFLUIDO_devuelto, jsonObject.getString(DBcontadoresController.tipo_fluido).trim());
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.tipoRadio_devuelto, jsonObject.getString(DBcontadoresController.tipo_radio).trim());
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.RUEDASDV, jsonObject.getString(DBcontadoresController.ruedas).trim());
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.CONTADOR_Prefijo_anno_devuelto, jsonObject.getString(DBcontadoresController.anno_o_prefijo).trim());
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+                    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if(resultCode == RESULT_OK) {
             if (requestCode == REQUEST_LECTOR_SNC) {//OJO preguntar sobre el numero de serie a cambiar
                 String data_result = "";
+                String contadorEscaneado ="";
                 data_result = data.getStringExtra("result");
                 if (!data_result.equals("null") && !data_result.isEmpty() && data_result!=null) {
+                    if (team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas() > 0) {
+                        ArrayList<String> tareas = new ArrayList<>();
+                        try {
+                            tareas = team_or_personal_task_selection_screen_Activity.
+                                    dBtareasController.get_all_tareas_from_Database();
+                            String numIn = Screen_Login_Activity.tarea_JSON.
+                                    getString(DBtareasController.numero_interno).trim();
+                            for (int i = 0; i < tareas.size(); i++) {
+                                JSONObject jsonObject = null;
+                                try {
+                                    jsonObject = new JSONObject(tareas.get(i));
+
+                                    String numSerieDevuelto = jsonObject.getString(DBtareasController.
+                                            numero_serie_contador_devuelto).trim();
+                                    numSerieDevuelto = eliminarCaracteresAlFinal(numSerieDevuelto);
+
+                                    contadorEscaneado = data_result;
+                                    contadorEscaneado = eliminarCaracteresAlFinal(contadorEscaneado);
+
+                                    String numInterno = jsonObject.
+                                            getString(DBtareasController.numero_interno).trim();
+                                    if (numSerieDevuelto.equals(contadorEscaneado) &&
+                                            !numIn.equals(numInterno)) {
+                                        openMessage("Advertencia", "Este contador " +
+                                                "ya esta asignado " +
+                                                "en otra instalacion realizada");
+                                        return;
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
                     textView_serial_number_result.setVisibility(View.VISIBLE);
-                    textView_serial_number_result.setText(data_result);
-                    contador = data_result;
+                    textView_serial_number_result.setText(contadorEscaneado);
+                    contador = contadorEscaneado;
                     try {
-                        Screen_Login_Activity.tarea_JSON.put(DBtareasController.numero_serie_contador_devuelto, data_result);
+                        Screen_Login_Activity.tarea_JSON.put(DBtareasController.
+                                numero_serie_contador_devuelto, contadorEscaneado);
+                        llenarInformacionDeContador(contadorEscaneado);
                     } catch (JSONException e) {
                         e.printStackTrace();
                         Toast.makeText(this, "No pudo insertarse numero serie: " + e.toString(), Toast.LENGTH_LONG).show();
@@ -1181,8 +1514,12 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
 
             numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
 
-            File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+numero_abonado);
-
+            String gestor = null;
+            gestor = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.GESTOR).trim();
+            if(!Screen_Login_Activity.checkStringVariable(gestor)){
+                gestor = "Sin_Gestor";
+            }
+            File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+ gestor + "/" +numero_abonado);
             if (!myDir.exists()) {
                 myDir.mkdirs();
             }
@@ -1276,29 +1613,67 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         if(tag.contains("Telefono 1")) {
             if (!(TextUtils.isEmpty(wrote_text))) {
                 Screen_Login_Activity.tarea_JSON.put(DBtareasController.telefono1, wrote_text);
-                Screen_Login_Activity.tarea_JSON.put(DBtareasController.MENSAJE_LIBRE, "#"+wrote_text+"#");
+//                Screen_Login_Activity.tarea_JSON.put(DBtareasController.MENSAJE_LIBRE, "#"+wrote_text+"#");
                 //Toast.makeText(Screen_Execute_Task.this, Screen_Login_Activity.tarea_JSON.toString(), Toast.LENGTH_LONG).show();
                 telefono1.setText(wrote_text);
             }
         }else if(tag.contains("Telefono 2")){
             if (!(TextUtils.isEmpty(wrote_text))) {
                 Screen_Login_Activity.tarea_JSON.put(DBtareasController.telefono2, wrote_text);
-                Screen_Login_Activity.tarea_JSON.put(DBtareasController.MENSAJE_LIBRE, "#"+wrote_text+"#");
+//                Screen_Login_Activity.tarea_JSON.put(DBtareasController.MENSAJE_LIBRE, "#"+wrote_text+"#");
                 //Toast.makeText(Screen_Execute_Task.this, Screen_Login_Activity.tarea_JSON.toString(), Toast.LENGTH_LONG).show();
                 telefono2.setText(wrote_text);
             }
-        }else if(tag.contains("Observaciones")){
+        }else if(tag.contains("Mensaje libre")){
             if (!(TextUtils.isEmpty(wrote_text))) {
-                Screen_Login_Activity.tarea_JSON.put(DBtareasController.observaciones_devueltas, wrote_text);
-                //Toast.makeText(Screen_Execute_Task.this, Screen_Login_Activity.tarea_JSON.toString(), Toast.LENGTH_LONG).show();
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.MENSAJE_LIBRE, wrote_text);
+//                Screen_Login_Activity.tarea_JSON.put(DBtareasController.observaciones_devueltas, wrote_text);
+//                Screen_Login_Activity.tarea_JSON.put(DBtareasController.observaciones, wrote_text);
                 textView_observaciones_screen_exec_task.setText(wrote_text);
             }
         }else if(tag.equals("Número Serie")){
             if (!(TextUtils.isEmpty(wrote_text))) {
                 if (!(TextUtils.isEmpty(wrote_text))) {
-                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.numero_serie_contador_devuelto, wrote_text);
-                    textView_serial_number_result.setVisibility(View.VISIBLE);
-                    textView_serial_number_result.setText(wrote_text);
+                    if (!wrote_text.equals("null") && !wrote_text.isEmpty() && wrote_text != null) {
+                        if (team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas() > 0) {
+                            ArrayList<String> tareas = new ArrayList<>();
+                            try {
+                                tareas = team_or_personal_task_selection_screen_Activity.
+                                        dBtareasController.get_all_tareas_from_Database();
+                                String numIn = Screen_Login_Activity.tarea_JSON.
+                                        getString(DBtareasController.numero_interno).trim();
+                                for (int i = 0; i < tareas.size(); i++) {
+                                    JSONObject jsonObject = null;
+                                    try {
+                                        jsonObject = new JSONObject(tareas.get(i));
+                                        String numSerieDevuelto = jsonObject.getString(DBtareasController.
+                                                numero_serie_contador_devuelto).trim();
+                                        numSerieDevuelto = eliminarCaracteresAlFinal(numSerieDevuelto);
+                                        wrote_text = eliminarCaracteresAlFinal(wrote_text);
+
+                                        String numInterno = jsonObject.getString
+                                                (DBtareasController.numero_interno).trim();
+                                        if (numSerieDevuelto.equals(wrote_text) &&
+                                                !numIn.equals(numInterno)) {
+                                            openMessage("Advertencia", "Este contador " +
+                                                    "ya esta asignado " +
+                                                    "en otra instalacion realizada");
+                                            return;
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        Screen_Login_Activity.tarea_JSON.put(DBtareasController.
+                                numero_serie_contador_devuelto, wrote_text);
+                        llenarInformacionDeContador(wrote_text);
+                        textView_serial_number_result.setVisibility(View.VISIBLE);
+                        textView_serial_number_result.setText(wrote_text);
+                    }
                 }
             }
         }else if(tag.equals("Número Serie de Modulo")){
@@ -1317,6 +1692,14 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                     textView_codigo_geolocalization_screen_exec_task.setText(wrote_text);
                 }
             }
+        }else if(tag.equals("Lectura")){
+            if (!(TextUtils.isEmpty(wrote_text))) {
+                if (!(TextUtils.isEmpty(wrote_text))) {
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_actual, wrote_text);
+                    lectura_editText.setVisibility(View.VISIBLE);
+                    lectura_editText.setText(wrote_text);
+                }
+            }
         }
     }
 
@@ -1324,8 +1707,6 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         if(images_files.isEmpty()){
             hideRingDialog();
             Toast.makeText(Screen_Execute_Task.this, "Actualizada tarea correctamente", Toast.LENGTH_SHORT).show();
-            Intent intent_open_task_or_personal_screen = new Intent(Screen_Execute_Task.this, team_or_personal_task_selection_screen_Activity.class);
-            startActivity(intent_open_task_or_personal_screen);
             finishesThisClass();
             return;
         }
@@ -1405,8 +1786,6 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                             showRingDialog("Subiedo fotos");
                             uploadPhotos();
                         }else{
-                            Intent intent_open_task_or_personal_screen = new Intent(Screen_Execute_Task.this, team_or_personal_task_selection_screen_Activity.class);
-                            startActivity(intent_open_task_or_personal_screen);
                             finishesThisClass();
                         }
                     }
@@ -1478,7 +1857,12 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
 
         File image_file=null;
-        File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+numero_abonado);
+        String gestor = null;
+        gestor = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.GESTOR).trim();
+        if(!Screen_Login_Activity.checkStringVariable(gestor)){
+            gestor = "Sin_Gestor";
+        }
+        File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+ gestor + "/" +numero_abonado);
         if (!storageDir.exists()) {
             storageDir.mkdirs();
         }
@@ -1553,8 +1937,17 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         progressDialog.setCancelable(true);
     }
     public static void hideRingDialog(){
-        if(progressDialog!=null)
-        progressDialog.dismiss();
+        try {
+            if(progressDialog!=null) {
+                if(progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                    progressDialog = null;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("hideRingDialog", e.toString());
+        }
     }
 
     @Override
@@ -1577,10 +1970,26 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                 // User chose the "Settings" item, show the app settings UI...
                 return true;
 
+            case R.id.Principal:
+//                Toast.makeText(Screen_User_Data.this, "Ayuda", Toast.LENGTH_SHORT).show();
+                // User chose the "Favorite" action, mark the current item
+                // as a favorite...
+                Intent open_screen= new Intent(Screen_Execute_Task.this,
+                        team_or_personal_task_selection_screen_Activity.class);
+                startActivity(open_screen);
+                clearvariables();
+                finish();
+                return true;
+
             case R.id.Tareas:
 //                Toast.makeText(Screen_User_Data.this, "Ayuda", Toast.LENGTH_SHORT).show();
                 // User chose the "Favorite" action, mark the current item
                 // as a favorite...
+                team_or_personal_task_selection_screen_Activity.from_team_or_personal =
+                        team_or_personal_task_selection_screen_Activity.FROM_TEAM;
+//                Intent open_screen= new Intent(Screen_Execute_Task.this, Screen_Table_Team.class);
+//                startActivity(open_screen);
+                finishesThisClass();
                 return true;
 
             case R.id.Configuracion:
@@ -1614,15 +2023,44 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         if(!team_or_personal_task_selection_screen_Activity.dBtareasController.saveChangesInTarea()){
             Toast.makeText(getApplicationContext(), "No se pudo guardar cambios", Toast.LENGTH_SHORT).show();
         }
-        finishesThisClass();
+        clearvariables();
+        Intent intent_open_screen_info_counter=null;
+        if (team_or_personal_task_selection_screen_Activity.from_battery_or_unity == team_or_personal_task_selection_screen_Activity.FROM_BATTERY) {
+            intent_open_screen_info_counter= new Intent(this, Screen_Battery_counter.class);
+        } else if(team_or_personal_task_selection_screen_Activity.from_battery_or_unity == team_or_personal_task_selection_screen_Activity.FROM_UNITY){
+            intent_open_screen_info_counter= new Intent(this, Screen_Unity_Counter.class);
+        }
+        if(intent_open_screen_info_counter!=null) {
+            startActivity(intent_open_screen_info_counter);
+        }
+        Screen_Execute_Task.this.finish();
         super.onBackPressed();
     }
 
     public void finishesThisClass(){
+
+        Intent openTableActivity = null;
+        if(team_or_personal_task_selection_screen_Activity.from_team_or_personal == team_or_personal_task_selection_screen_Activity.FROM_TEAM) {
+            openTableActivity = new Intent(this, Screen_Table_Team.class);
+        }else if(team_or_personal_task_selection_screen_Activity.from_team_or_personal == team_or_personal_task_selection_screen_Activity.FROM_PERSONAL){
+            openTableActivity = new Intent(this, Screen_Table_Personal.class);
+        }else if(team_or_personal_task_selection_screen_Activity.from_team_or_personal == team_or_personal_task_selection_screen_Activity.FROM_FILTER_RESULT){
+            openTableActivity = new Intent(this, Screen_Filter_Results.class);
+        }else if(team_or_personal_task_selection_screen_Activity.from_team_or_personal == team_or_personal_task_selection_screen_Activity.FROM_FILTER_TAREAS){
+            openTableActivity = new Intent(this, Screen_Filter_Tareas.class);
+        }
+        if(openTableActivity!= null) {
+            openTableActivity.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+//            openTableActivity.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            startActivityIfNeeded(openTableActivity, 0);
+        }
+        clearvariables();
+        finish();
+    }
+    public void clearvariables(){
         mCurrentPhotoPath_foto_antes = "";
         mCurrentPhotoPath_foto_lectura= "";
         mCurrentPhotoPath_foto_despues = "";
         mCurrentPhotoPath_foto_serie = "";
-        finish();
     }
 }

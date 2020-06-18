@@ -22,16 +22,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Created by Alejandro on 11/08/2019.
@@ -44,9 +48,8 @@ public class Screen_Battery_Intake_Asignation extends AppCompatActivity {
             button_read_photo_screen_exec_task,
             button_serial_number_photo_screen_exec_task;
 
-    private Intent intent_open_screen_validate_battery_intake_asignation;
-
-    EditText editText_bateria, editText_fila, editText_columna;
+    EditText editText_bateria, editText_fila, editText_columna, editText_contador;
+    private Spinner spinner_tipo_bateria, spinner_lado_bateria;
 
     private static final int CAM_REQUEST_INST_PHOTO = 1323;
     private static final int CAM_REQUEST_READ_PHOTO = 1324;
@@ -74,7 +77,9 @@ public class Screen_Battery_Intake_Asignation extends AppCompatActivity {
         setSupportActionBar(myToolbar);
 
 
-        intent_open_screen_validate_battery_intake_asignation = new Intent(Screen_Battery_Intake_Asignation.this, Screen_Validate_Battery_Intake_Asignation.class);
+        editText_contador= (EditText)findViewById(R.id.editText_contador_screen_battery_intake_asignation);
+        spinner_lado_bateria = (Spinner)findViewById(R.id.spinner_lado_bateria);
+        spinner_tipo_bateria = (Spinner)findViewById(R.id.spinner_tipo_bateria);
 
         imageView_foto_instalacion_screen_battery_intake_asignation = (ImageView)findViewById(R.id.imageView_foto_instalacion_screen_battery_intake_asignation);
         imageView_foto_lectura_screen_battery_intake_asignation = (ImageView)findViewById(R.id.imageView_foto_lectura_screen_battery_intake_asignation);
@@ -92,6 +97,27 @@ public class Screen_Battery_Intake_Asignation extends AppCompatActivity {
         foto_numero_de_serie = (ImageView)findViewById(R.id.imageView_foto_numero_serie_screen_battery_intake_asignation);
         foto_lectura = (ImageView)findViewById(R.id.imageView_foto_lectura_screen_battery_intake_asignation);
 
+        ArrayList<String> lista_desplegable_tipo_bateria = new ArrayList<String>();
+        ArrayList<String> lista_desplegable_lado_bateria = new ArrayList<String>();
+        lista_desplegable_tipo_bateria.add("CUARTO DE CONTADORES");
+        lista_desplegable_tipo_bateria.add("ESCALERA");
+        lista_desplegable_lado_bateria.add("NINGUNO");
+        lista_desplegable_lado_bateria.add("IZQUIERDA");
+        lista_desplegable_lado_bateria.add("CENTRO");
+        lista_desplegable_lado_bateria.add("DERECHA");
+        lista_desplegable_lado_bateria.add("1");
+        lista_desplegable_lado_bateria.add("2");
+        lista_desplegable_lado_bateria.add("3");
+        lista_desplegable_lado_bateria.add("4");
+        lista_desplegable_lado_bateria.add("5");
+
+        ArrayAdapter arrayAdapter_spinner_tipo_bateria = new ArrayAdapter(this, R.layout.spinner_text_view, lista_desplegable_tipo_bateria);
+        spinner_tipo_bateria.setAdapter(arrayAdapter_spinner_tipo_bateria);
+
+        ArrayAdapter arrayAdapter_spinner_lado_bateria = new ArrayAdapter(this, R.layout.spinner_text_view, lista_desplegable_lado_bateria);
+        spinner_lado_bateria.setAdapter(arrayAdapter_spinner_lado_bateria);
+
+
         try {
             contador = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador)
                     .trim().replace(" ", "");
@@ -100,6 +126,63 @@ public class Screen_Battery_Intake_Asignation extends AppCompatActivity {
             Toast.makeText(Screen_Battery_Intake_Asignation.this, "no se pudo obtener numero_serie_contador de tarea", Toast.LENGTH_LONG).show();
         }
 
+        String photo = "";
+        try {
+            photo = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_antes_instalacion).trim();
+            Log.e("photo: ", photo);
+            if(Screen_Login_Activity.checkStringVariable(photo)){
+                String bitmap_dir = lookForAllreadyTakenPhotos(photo);
+                Log.e("bitmap_dir: ", bitmap_dir);
+                if(!bitmap_dir.isEmpty()){
+                    Bitmap bitmap = getPhotoUserLocal(bitmap_dir);
+                    if(bitmap!=null) {
+                        Log.e("Bitmap ok: ", bitmap_dir);
+                        mCurrentPhotoPath_foto_antes = bitmap_dir;
+                        imageView_foto_instalacion_screen_battery_intake_asignation.setVisibility(View.VISIBLE);
+                        imageView_foto_instalacion_screen_battery_intake_asignation.setImageBitmap(bitmap);
+                    }else{
+                        Log.e("Bitmap nulo: ", "foto_antes_instalacion");
+                    }
+                }else{
+                    Log.e("no Existe: ", "foto_antes_instalacion");
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            photo = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_lectura).trim();
+            if(Screen_Login_Activity.checkStringVariable(photo)){
+                String bitmap_dir = lookForAllreadyTakenPhotos(photo);
+                if(!bitmap_dir.isEmpty()){
+                    Log.e("Existe: ", bitmap_dir);
+                    mCurrentPhotoPath_foto_lectura = bitmap_dir;
+                    imageView_foto_lectura_screen_battery_intake_asignation.setVisibility(View.VISIBLE);
+                    imageView_foto_lectura_screen_battery_intake_asignation.setImageBitmap(getPhotoUserLocal(bitmap_dir));
+                }
+                else{
+                    Log.e("no Existe: ", "foto_lectura");
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            photo = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_numero_serie).trim();
+            if(Screen_Login_Activity.checkStringVariable(photo)){
+                String bitmap_dir = lookForAllreadyTakenPhotos(photo);
+                if(!bitmap_dir.isEmpty()){
+                    Log.e("Existe: ", bitmap_dir);
+                    mCurrentPhotoPath_foto_serie = bitmap_dir;
+                    imageView_foto_numero_serie_screen_battery_intake_asignation.setVisibility(View.VISIBLE);
+                    imageView_foto_numero_serie_screen_battery_intake_asignation.setImageBitmap(getPhotoUserLocal(bitmap_dir));
+                }else{
+                    Log.e("no Existe: ", "foto_numero_serie");
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         button_instalation_photo_screen_exec_task.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -189,24 +272,56 @@ public class Screen_Battery_Intake_Asignation extends AppCompatActivity {
         });
     }
 
+    public String lookForAllreadyTakenPhotos(String photo_name) throws JSONException {
+        String numero_abonado = null;
+        String gestor = null;
+        try {
+            numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
+            gestor = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.GESTOR).trim();
+            if(!Screen_Login_Activity.checkStringVariable(gestor)){
+                gestor = "Sin_Gestor";
+            }
+            String dir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/" + gestor + "/" +numero_abonado;
+            File myDir = new File(dir);
+            if(myDir.exists()){
+                String file_full_name = dir+"/"+photo_name;
+                File photo = new File(file_full_name);
+                if(photo.exists()){
+                    return photo.getAbsolutePath();
+                }
+            }
+        } catch (JSONException e) {
+            Log.e("JSONException", "lookForAllreadyTakenPhotos "+e.toString());
+            e.printStackTrace();
+        }
+        return "";
+    }
+
     public void onValidar_Button(){
-        String bateria= "",fila = "",columna = "";
+        String tipo, lado = "", planta= "",fila = "",columna = "", cont = "";
+
+        if(spinner_tipo_bateria.getSelectedItem().toString().equals("ESCALERA")){
+            tipo = "BT";
+        }else{
+            tipo = "BA";
+        }
+
+        String lad = spinner_lado_bateria.getSelectedItem().toString();
+        if(!lad.equals("NINGUNO")){
+            lado = "-" + lad.substring(0,1);
+            Log.e("Lado ----- ", lado);
+        }else{
+            Log.e("Lado ----- ", "NINGUNO");
+        }
 
         if(!(TextUtils.isEmpty(editText_bateria.getText()))){
             Integer bat = Integer.parseInt(editText_bateria.getText().toString());
-            if(bat <10){
-                bateria = "-0" + editText_bateria.getText().toString();
-            }else {
-                bateria = "-" + editText_bateria.getText().toString();
-            }
+            planta = "-" + editText_bateria.getText().toString();
         }
         if(!(TextUtils.isEmpty(editText_fila.getText()))){
             Integer fil = Integer.parseInt(editText_fila.getText().toString());
-            if(fil <10){
-                fila = "-0" + editText_fila.getText().toString();
-            }else {
-                fila = "-" + editText_fila.getText().toString();
-            }
+            fila = "-" + editText_fila.getText().toString();
+
         }
         if(!(TextUtils.isEmpty(editText_columna.getText()))){
             Integer col = Integer.parseInt(editText_columna.getText().toString());
@@ -216,12 +331,60 @@ public class Screen_Battery_Intake_Asignation extends AppCompatActivity {
                 columna = "-" + editText_columna.getText().toString();
             }
         }
+        if(!(TextUtils.isEmpty(editText_contador.getText()))){
+            cont = "." + editText_contador.getText().toString();
+        }
+
+        String rest = planta + lado + fila + columna + cont;
+        String ubic = tipo + planta + lado + fila + columna + cont;
+        try {
+            String cod_geo = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.codigo_de_geolocalizacion);
+            String numIn = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_interno);
+
+            if (team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas() > 0) {
+                ArrayList<String> tareas = new ArrayList<>();
+                try {
+                    tareas = team_or_personal_task_selection_screen_Activity.
+                            dBtareasController.get_all_tareas_from_Database();
+                    for (int i = 0; i < tareas.size(); i++) {
+                        JSONObject jsonObject = null;
+                        try {
+                            jsonObject = new JSONObject(tareas.get(i));
+                            String codigo_geo = jsonObject.getString(DBtareasController.
+                                    codigo_de_geolocalizacion).trim();
+                            String numInterno = jsonObject.getString(DBtareasController.
+                                    numero_interno).trim();
+                            if(cod_geo.equals(codigo_geo) && !cod_geo.isEmpty() &&
+                                    !numIn.equals(numInterno)){
+                                String ubi = jsonObject.getString(DBtareasController.
+                                        ubicacion_en_bateria).trim();
+                                if(ubic.equals(ubi)) {
+                                    openMessage("Advertencia", "Esta ubicacion ya esta asignada " +
+                                            "a un contador en la misma bateria de contadores");
+                                    return;
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
 
         try {
             Screen_Login_Activity.tarea_JSON.put(DBtareasController.acceso,"BAT");
-            Screen_Login_Activity.tarea_JSON.put(DBtareasController.ubicacion_en_bateria, "BA"+bateria+fila+columna);
-
+            Screen_Login_Activity.tarea_JSON.put(DBtareasController.ubicacion_en_bateria, ubic);
+            String emplaza = tipo;
+            Screen_Login_Activity.tarea_JSON.put(DBtareasController.emplazamiento_devuelto, emplaza);
+            if(Tabla_de_Codigos.mapaTiposDeRestoEmplazamiento.containsKey(emplaza)) {
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.RESTO_EM, rest /* + "  " +Tabla_de_Codigos.mapaTiposDeRestoEmplazamiento.get(emplaza)*/);
+            }
             String contador=null;
             try {
                 contador = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador)
@@ -259,7 +422,9 @@ public class Screen_Battery_Intake_Asignation extends AppCompatActivity {
             }
 
             Toast.makeText(Screen_Battery_Intake_Asignation.this, "Asignada posicion en bateria", Toast.LENGTH_SHORT).show();
+            Intent intent_open_screen_validate_battery_intake_asignation = new Intent(Screen_Battery_Intake_Asignation.this, Screen_Validate_Battery_Intake_Asignation.class);
             startActivity(intent_open_screen_validate_battery_intake_asignation);
+            finish();
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -296,9 +461,13 @@ public class Screen_Battery_Intake_Asignation extends AppCompatActivity {
                 .trim().replace(" ", "")+"_"+foto_x;
         String numero_abonado = null;
         numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
-
+        String gestor = null;
+        gestor = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.GESTOR).trim();
+        if(!Screen_Login_Activity.checkStringVariable(gestor)){
+            gestor = "Sin_Gestor";
+        }
         File image_file=null;
-        File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+numero_abonado);
+        File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+ gestor + "/" +numero_abonado);
         if (!storageDir.exists()) {
             storageDir.mkdirs();
         }
@@ -474,10 +643,13 @@ public class Screen_Battery_Intake_Asignation extends AppCompatActivity {
             //Toast.makeText(Screen_Incidence.this,"archivo: "+file_full_name, Toast.LENGTH_LONG).show();
 
             String numero_abonado = null;
-
             numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
-
-            File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+numero_abonado);
+            String gestor = null;
+            gestor = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.GESTOR).trim();
+            if(!Screen_Login_Activity.checkStringVariable(gestor)){
+                gestor = "Sin_Gestor";
+            }
+            File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+ gestor + "/" +numero_abonado);
             if (!myDir.exists()) {
                 myDir.mkdirs();
             }
@@ -574,11 +746,23 @@ public class Screen_Battery_Intake_Asignation extends AppCompatActivity {
                                 +"\n\n       Luis A. Reyes: inglreyesm@gmail.com");
                 // User chose the "Settings" item, show the app settings UI...
                 return true;
-
+            case R.id.Principal:
+//                Toast.makeText(Screen_User_Data.this, "Ayuda", Toast.LENGTH_SHORT).show();
+                // User chose the "Favorite" action, mark the current item
+                // as a favorite...
+                Intent open_screen= new Intent(this, team_or_personal_task_selection_screen_Activity.class);
+                startActivity(open_screen);
+                finishesThisClass();
+                return true;
             case R.id.Tareas:
 //                Toast.makeText(Screen_User_Data.this, "Ayuda", Toast.LENGTH_SHORT).show();
                 // User chose the "Favorite" action, mark the current item
                 // as a favorite...
+                team_or_personal_task_selection_screen_Activity.from_team_or_personal =
+                        team_or_personal_task_selection_screen_Activity.FROM_TEAM;
+                Intent open_screen_ = new Intent(this, Screen_Table_Team.class);
+                startActivity(open_screen_);
+                finish();
                 return true;
 
             case R.id.Info_Tarea:
@@ -606,7 +790,23 @@ public class Screen_Battery_Intake_Asignation extends AppCompatActivity {
         if(!team_or_personal_task_selection_screen_Activity.dBtareasController.saveChangesInTarea()){
             Toast.makeText(getApplicationContext(), "No se pudo guardar cambios", Toast.LENGTH_SHORT).show();
         }
-        finish();
+        Intent intent_open_screen_info_counter=null;
+        if (team_or_personal_task_selection_screen_Activity.from_battery_or_unity == team_or_personal_task_selection_screen_Activity.FROM_BATTERY) {
+            intent_open_screen_info_counter= new Intent(this, Screen_Battery_counter.class);
+        } else if(team_or_personal_task_selection_screen_Activity.from_battery_or_unity == team_or_personal_task_selection_screen_Activity.FROM_UNITY){
+            intent_open_screen_info_counter= new Intent(this, Screen_Unity_Counter.class);
+        }
+        if(intent_open_screen_info_counter!=null) {
+            startActivity(intent_open_screen_info_counter);
+        }
+        finishesThisClass();
         super.onBackPressed();
+    }
+
+    public void finishesThisClass(){
+        mCurrentPhotoPath_foto_antes = "";
+        mCurrentPhotoPath_foto_lectura= "";
+        mCurrentPhotoPath_foto_serie = "";
+        finish();
     }
 }

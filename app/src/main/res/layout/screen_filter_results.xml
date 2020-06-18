@@ -145,8 +145,12 @@
             />
         <ListView
             android:id="@+id/listView_contadores_screen_filter_results"
+            android:layout_marginTop="5dp"
+            android:choiceMode="singleChoice"
+            android:listSelector="@color/colorBlueAppRuta"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:theme="@style/AppTheme"
             >
         </ListView>
     </LinearLayout>

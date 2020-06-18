@@ -3,39 +3,34 @@ package com.example.luisreyes.proyecto_aguas;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity /*implements LifecycleObserver*/{
 
     private TextView textView_pantalla_principal;
-    private static final long START_TIME_IN_MILLIS = 500;
+    private static final long START_TIME_IN_MILLIS = 2000;
     private CountDownTimer countDowntimer_delay_showing_logo;
 
     private long delay_in_Millis = START_TIME_IN_MILLIS;
 
-    private Intent intent_open_screen_login;
-
-    public static int DB_VERSION = 70;
+    public static int DB_VERSION = 115;
     public static int COMPRESS_QUALITY = 50;
 
-    public static double AMPLITUD_BOUNCE = 0.02;
-    public static int FRECUENCY_BOUNCE = 63;
+    public static double AMPLITUD_BOUNCE = 0.005;
+    public static int FRECUENCY_BOUNCE = 500;
 
     public static boolean sounds_on=true;
+
+    public static boolean minimize = false;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -43,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+//        ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
 //        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
 //        myToolbar.setBackgroundColor(Color.TRANSPARENT);
 //
@@ -54,11 +50,10 @@ public class MainActivity extends AppCompatActivity {
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.INTERNET}, 1);
         }
-
         textView_pantalla_principal = (TextView) findViewById(R.id.textView_screen_main);
         startTimer();
 
-        intent_open_screen_login = new Intent(this, Screen_Login_Activity.class);
+
     }
 
     private void startTimer() {
@@ -73,7 +68,10 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFinish() {
-
+                if(minimize){
+                    return;
+                }
+                Intent intent_open_screen_login = new Intent(MainActivity.this, Screen_Login_Activity.class);
                 textView_pantalla_principal.setText("Finished");
                 startActivity(intent_open_screen_login);
                 finish();
@@ -82,7 +80,40 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateCountDownText(){
-
         textView_pantalla_principal.setText(String.valueOf(delay_in_Millis));
+    }
+
+    @Override
+    public void onBackPressed() {
+        minimizeApp();
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        if(minimize) {
+            minimize = false;
+            startTimer();
+            Toast.makeText(this,"Presione atrás de nuevo para salir", Toast.LENGTH_LONG).show();
+        }
+    }
+//    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
+//    private void onAppBackgrounded() {
+//        Log.d("MyApp", "App in background");
+//    }
+//
+//    @OnLifecycleEvent(Lifecycle.Event.ON_START)
+//    private void onAppForegrounded() {
+//        Log.d("MyApp", "App in foreground");
+//    }
+
+
+
+    public void minimizeApp() {
+        minimize = true;
+        Intent startMain = new Intent(Intent.ACTION_MAIN);
+        startMain.addCategory(Intent.CATEGORY_HOME);
+        startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(startMain);
     }
 }

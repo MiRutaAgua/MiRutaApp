@@ -21,7 +21,6 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             >
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -29,9 +28,84 @@
                 android:text="DATOS DE NUEVA INSTALACIÓN"
                 android:textSize="20dp"
                 android:textStyle="bold"
-                android:fontFamily="@font/segoeui"
                 android:textColor="@color/colorGrayLetters"
                 />
+        </LinearLayout>
+
+
+        <TextView
+            android:layout_marginTop="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="PIEZAS"
+            android:textSize="16dp"
+            android:textStyle="bold"
+            android:textColor="@color/colorBlueAppRuta"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+           >
+            <TextView
+                android:id="@+id/textView_piezas_screen_exec_task"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="        "
+                android:textSize="15dp" />
+
+            <Button
+                android:layout_marginLeft="15dp"
+                android:id="@+id/button_add_pieza_screen_anomaly"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:textStyle="bold"
+                android:background="@drawable/ic_pieza_add_blue_24dp" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:id="@+id/layout_piezas_disponibles_screen_anomaly"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="PIEZAS DISPONIBLES"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:textColor="@color/colorBlueAppRuta"
+                />
+            <LinearLayout
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+                <Spinner
+                    android:id="@+id/spinner_piezas_screen_anomaly"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    >
+                </Spinner>
+
+                <Button
+                    android:id="@+id/button_agregar_pieza_screen_anomaly"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:textStyle="bold"
+                    android:background="@drawable/ic_pieza_add_check_black_24dp" />
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -42,16 +116,15 @@
             android:gravity="center"
             android:orientation="vertical"
             >
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="TIPO DE ANOMALÍA"
-                android:textSize="16dp"
-                android:textStyle="bold"
-                android:fontFamily="@font/segoeui"
+                android:text="ACCIÓN ORDENADA"
                 android:textColor="@color/colorBlueAppRuta"
-                />
+                android:textSize="16dp"
+                android:textStyle="bold" />
             <Spinner
                 android:id="@+id/spinner_tipo_anomalia_screen_anomaly"
                 android:layout_width="wrap_content"
@@ -70,16 +143,15 @@
             android:gravity="center"
             android:orientation="vertical"
             >
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="ANOMALÍA"
-                android:textSize="16dp"
-                android:textStyle="bold"
-                android:fontFamily="@font/segoeui"
+                android:text="CAUSA ORIGEN"
                 android:textColor="@color/colorBlueAppRuta"
-                />
+                android:textSize="16dp"
+                android:textStyle="bold" />
             <Spinner
                 android:id="@+id/spinner_anomalias_screen_anomaly"
                 android:layout_width="wrap_content"
@@ -105,7 +177,6 @@
                 android:text="RESULTADO"
                 android:textSize="16dp"
                 android:textStyle="bold"
-                android:fontFamily="@font/segoeui"
                 android:textColor="@color/colorBlueAppRuta"
                 />
             <LinearLayout
@@ -134,32 +205,84 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginTop="20dp"
+            android:id="@+id/linearlayout_seleccion_resultado_screen_anomaly"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginTop="20dp"
             android:gravity="center"
-            android:orientation="vertical"
-            android:id="@+id/linearlayout_seleccion_resultado_screen_anomaly"
-            >
+            android:orientation="vertical">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="SELECCIÓN DE RESULTADO"
+                android:textColor="@color/colorBlueAppRuta"
+                android:textSize="16dp"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/spinner_resultado_screen_anomaly"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"></Spinner>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_marginTop="30dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="EMPLAZAMIENTO"
                 android:textSize="16dp"
                 android:textStyle="bold"
-                android:fontFamily="@font/segoeui"
                 android:textColor="@color/colorBlueAppRuta"
                 />
             <Spinner
-                android:id="@+id/spinner_resultado_screen_anomaly"
+                android:id="@+id/spinner_emplazamiento_screen_anomaly"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
                 >
             </Spinner>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="RESTO:   "
+
+                    android:textColor="@color/colorBlueAppRuta"
+                    android:textSize="18dp" />
+                <TextView
+                    android:id="@+id/textView_resto_emplazamiento_screen_exec_task"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text=""
+                    android:textSize="15dp" />
+
+                <ImageView
+                    android:id="@+id/imageView_edit_resto_emplazamiento_screen_exec_task"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="10dp"
+                    android:paddingTop="1dp"
+                    android:src="@drawable/ic_edit_blue_24dp" />
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -175,7 +298,6 @@
                 android:text="NÚMERO DE SERIE NUEVO"
                 android:textSize="16dp"
                 android:textStyle="bold"
-                android:fontFamily="@font/segoeui"
                 android:textColor="@color/colorBlueAppRuta"
                 />
             <LinearLayout
@@ -213,36 +335,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="MARCA DE CONTADOR"
-                android:textSize="16dp"
-                android:textStyle="bold"
-                android:fontFamily="@font/segoeui"
-                android:textColor="@color/colorBlueAppRuta"
-                />
-            <Spinner
-                android:id="@+id/spinner_marca_screen_anomaly"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                >
-            </Spinner>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:layout_marginTop="30dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
                 android:text="LECTURA DE CONTADOR NUEVO"
                 android:textSize="16dp"
                 android:textStyle="bold"
-                android:fontFamily="@font/segoeui"
+
                 android:textColor="@color/colorBlueAppRuta"
                 />
             <LinearLayout
@@ -280,10 +376,36 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:text="MARCA DE CONTADOR"
+                android:textSize="16dp"
+                android:textStyle="bold"
+
+                android:textColor="@color/colorBlueAppRuta"
+                />
+            <Spinner
+                android:id="@+id/spinner_marca_screen_anomaly"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                >
+            </Spinner>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_marginTop="30dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:text="RUEDAS"
                 android:textSize="16dp"
                 android:textStyle="bold"
-                android:fontFamily="@font/segoeui"
+
                 android:textColor="@color/colorBlueAppRuta"
                 />
             <LinearLayout
@@ -324,7 +446,7 @@
                 android:text="LONGITUD"
                 android:textSize="16dp"
                 android:textStyle="bold"
-                android:fontFamily="@font/segoeui"
+
                 android:textColor="@color/colorBlueAppRuta"
                 />
             <LinearLayout
@@ -362,66 +484,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="EMPLAZAMIENTO"
-                android:textSize="16dp"
-                android:textStyle="bold"
-                android:fontFamily="@font/segoeui"
-                android:textColor="@color/colorBlueAppRuta"
-                />
-            <Spinner
-                android:id="@+id/spinner_emplazamiento_screen_anomaly"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                >
-            </Spinner>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="RESTO:   "
-                    android:textStyle="bold"
-                    android:textColor="@color/colorBlueAppRuta"
-                    android:textSize="18dp" />
-                <TextView
-                    android:id="@+id/textView_resto_emplazamiento_screen_exec_task"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text=""
-                    android:textSize="15dp" />
-
-                <ImageView
-                    android:id="@+id/imageView_edit_resto_emplazamiento_screen_exec_task"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:padding="10dp"
-                    android:paddingTop="1dp"
-                    android:src="@drawable/ic_edit_blue_24dp" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:layout_marginTop="30dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
                 android:text="TIPO O CLASE DE CONTADOR"
                 android:textSize="16dp"
                 android:textStyle="bold"
-                android:fontFamily="@font/segoeui"
+
                 android:textColor="@color/colorBlueAppRuta"
                 />
             <LinearLayout
@@ -453,7 +519,7 @@
                 android:text="TIPO DE FLUIDO"
                 android:textSize="16dp"
                 android:textStyle="bold"
-                android:fontFamily="@font/segoeui"
+
                 android:textColor="@color/colorBlueAppRuta"
                 />
             <LinearLayout
@@ -484,7 +550,7 @@
                 android:text="TIPO DE RADIO"
                 android:textSize="16dp"
                 android:textStyle="bold"
-                android:fontFamily="@font/segoeui"
+
                 android:textColor="@color/colorBlueAppRuta"
                 />
             <LinearLayout
@@ -516,9 +582,7 @@
                 android:id="@+id/button_guardar_datos_screen_anomaly"
                 android:layout_width="273dp"
                 android:layout_height="40dp"
-                android:fontFamily="@font/segoeui"
                 android:text="GUARDAR DATOS"
-                android:textSize="16dp"
                 android:textStyle="bold"
                 android:textColor="@android:color/white"
                 android:background="@drawable/fondo_boton_azul" />

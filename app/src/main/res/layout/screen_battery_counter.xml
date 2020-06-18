@@ -13,22 +13,34 @@
         android:gravity="top"
         android:paddingBottom="40dp"
         >
-        <include layout = "@layout/toolbar"
-            android:id="@+id/my_toolbar"
-            />
+        <!--<include layout = "@layout/toolbar"-->
+            <!--android:id="@+id/my_toolbar"-->
+            <!--/>-->
         <LinearLayout
-            android:layout_marginTop="20dp"
             android:gravity="center"
             android:layout_gravity="center"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="165dp"
             android:orientation="horizontal"
+            android:background="@drawable/fondo_layout_pant_modo_bateria"
             >
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="181dp"
+                android:id="@+id/imageView_atras_screen_battery_counter"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_gravity="center"
-                android:src="@drawable/screen_battery_counter_icon" />
+                android:src="@drawable/atras_icon"
+                android:layout_marginBottom="30dp"
+                />
+            <ImageView
+                android:layout_marginLeft="230dp"
+                android:id="@+id/imageView_menu_screen_battery_counter"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:src="@drawable/menu_icon"
+                android:layout_marginBottom="30dp"
+                />
         </LinearLayout>
 
 
@@ -45,9 +57,7 @@
                 android:id="@+id/button_ejecutar_tarea_screen_battery_counter"
                 android:layout_width="266dp"
                 android:layout_height="40dp"
-                android:fontFamily="@font/segoeui"
                 android:text="EJECUTAR TAREA"
-                android:textSize="16dp"
                 android:textStyle="bold"
                 android:textColor="@android:color/white"
                 android:background="@drawable/fondo_boton_azul"
@@ -65,9 +75,7 @@
             <Button
                 android:layout_width="266dp"
                 android:layout_height="40dp"
-                android:fontFamily="@font/segoeui"
                 android:text="INCIDENCIA"
-                android:textSize="16dp"
                 android:textStyle="bold"
                 android:textColor="@android:color/white"
                 android:background="@drawable/fondo_boton_azul"
@@ -86,9 +94,7 @@
                 android:id="@+id/button_geolocalization_screen_battery_counter"
                 android:layout_width="266dp"
                 android:layout_height="40dp"
-                android:fontFamily="@font/segoeui"
                 android:text="GEOLOCALIZACIÓN"
-                android:textSize="16dp"
                 android:textStyle="bold"
                 android:textColor="@android:color/white"
                 android:background="@drawable/fondo_boton_azul"
@@ -105,9 +111,7 @@
             <Button
                 android:layout_width="266dp"
                 android:layout_height="40dp"
-                android:fontFamily="@font/segoeui"
                 android:text="TRAZAR RUTA"
-                android:textSize="16dp"
                 android:textStyle="bold"
                 android:textColor="@android:color/white"
                 android:background="@drawable/fondo_boton_azul"
@@ -123,14 +127,14 @@
             android:background="@drawable/fondo_dir"
             android:layout_gravity="center"
             >
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
-                android:layout_marginTop="10dp"
+                 android:layout_marginTop="10dp"
                 android:layout_marginLeft="20dp"
-                android:text="DIRECCIÓN:"
-                android:textSize="14sp"
+                android:text="DIRECCIÓN"
                 android:textStyle="bold"
                 android:textColor="@color/colorBlueAppRuta"
                 />
@@ -141,7 +145,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
-                android:text="Calle 136 #4903 /Ave 49 y Ave 51" />
+                android:text="..." />
         </LinearLayout>
 
         <LinearLayout
@@ -152,57 +156,58 @@
             android:layout_gravity="center"
             >
             <LinearLayout
-                android:layout_width="132dp"
+                android:layout_width="163dp"
                 android:layout_height="130dp"
                 android:orientation="vertical"
                 android:background="@drawable/fondo_datos_contador"
                 >
                 <TextView
-                    android:layout_marginTop="15dp"
-                    android:layout_marginLeft="20dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left"
-                    android:text="TAREA:"
+                    android:layout_marginLeft="13dp"
+                    android:layout_marginTop="15dp"
+                    android:text="ACCIÓN ORDENADA"
+                    android:textColor="@color/colorBlueAppRuta"
                     android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/colorBlueAppRuta"/>
+                    android:textStyle="bold" />
                 <TextView
 
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
+                    android:layout_marginLeft="13dp"
+                    android:layout_marginRight="13dp"
                     android:id="@+id/textView_tipo_tarea_screen_battery_counter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
-                    android:text="Nuevo Contador Instalar 15mm"
+                    android:maxHeight="80dp"
+                    android:text="..."
                     android:textSize="13sp" />
             </LinearLayout>
             <LinearLayout
                 android:layout_marginLeft="6dp"
-                android:layout_width="132dp"
+                android:layout_width="100dp"
                 android:layout_height="130dp"
                 android:orientation="vertical"
                 android:gravity="left"
                 android:background="@drawable/fondo_datos_contador"
                 >
+
                 <TextView
-                    android:layout_marginTop="15dp"
-                    android:layout_marginLeft="20dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left"
-                    android:text="Nº ABONADO:"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="15dp"
+                    android:text="ABONADO"
+                    android:textColor="@color/colorBlueAppRuta"
                     android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/colorBlueAppRuta"/>
+                    android:textStyle="bold" />
                 <TextView
                     android:layout_marginLeft="20dp"
                     android:id="@+id/textView_numero_abonado_screen_battery_counter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
 
-                    android:text="023 456"
+                    android:text="..."
                     android:textSize="15sp" />
             </LinearLayout>
         </LinearLayout>
@@ -226,7 +231,6 @@
                 android:textStyle="bold"
                 android:textColor="@color/colorBlueAppRuta"
                 />
-
             <TextView
                 android:id="@+id/textView_datos_especificos_screen_battery_counter"
                 android:layout_width="wrap_content"
@@ -234,7 +238,8 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:textSize="15sp"
-                android:text="El garaje tiene una puerta verde y suelen salir a las 8:00" />
+                android:maxHeight="66dp"
+                android:text="..." />
         </LinearLayout>
 
         <LinearLayout
@@ -257,7 +262,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="left"
                     android:layout_marginLeft="20dp"
-                    android:text="DATOS DE CONTADOR:"
+                    android:text="DATOS DE CONTADOR"
                     android:textSize="14sp"
                     android:textStyle="bold"
                     android:textColor="@color/colorBlueAppRuta"/>
@@ -286,7 +291,7 @@
                         android:id="@+id/textView_screen_battery_counter_serie"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text=" C11FA 666666"
+                        android:text="..."
                         android:textSize="14sp" />
                 </LinearLayout>
 
@@ -306,7 +311,7 @@
                         android:id="@+id/textView_screen_battery_counter_lectura"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text=" 1347 m3"
+                        android:text="..."
                         android:textSize="14sp" />
                 </LinearLayout>
 
@@ -326,7 +331,7 @@
                         android:id="@+id/textView_screen_battery_counter_calibre"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text=" Calibre 20-190"
+                        android:text="..."
                         android:textSize="14sp"
 
                         />
@@ -348,7 +353,7 @@
                         android:id="@+id/textView_screen_battery_counter_ubicacion"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text=" Fregadera"
+                        android:text="..."
                         android:textSize="14sp" />
                 </LinearLayout>
 
@@ -368,7 +373,7 @@
                         android:id="@+id/textView_screen_battery_counter_acceso"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text=" Garaje"
+                        android:text="..."
                         android:textSize="14sp" />
                 </LinearLayout>
 
@@ -428,14 +433,9 @@
             android:padding="5dp"
             >
             <Button
-                android:layout_width="300dp"
-                android:layout_height="40dp"
-                android:fontFamily="@font/segoeui"
-                android:text="REAJUSTAR DATOS DE UBICACIÓN"
-                android:textSize="16dp"
-                android:textStyle="bold"
-                android:textColor="@android:color/white"
-                android:background="@drawable/fondo_boton_azul"
+                android:layout_width="320dp"
+                android:layout_height="75dp"
+                android:background="@drawable/screen_battery_counter_reajustar_datos"
                 android:id="@+id/button_reajustar_ubicacion_screen_battery_counter"
                 />
         </LinearLayout>

@@ -176,11 +176,8 @@
     <orderEntry type="library" name="Gradle: com.github.iammert:ReadableBottomBar:0.2@aar" level="project" />
     <orderEntry type="module" module-name="core" />
     <orderEntry type="module" module-name="core-3.3.3" />
-    <orderEntry type="module" module-name="core" />
-    <orderEntry type="module" module-name="core-3.3.3" />
-    <orderEntry type="module" module-name="core" />
-    <orderEntry type="module" module-name="core-3.3.3" />
-    <orderEntry type="module" module-name="core" />
-    <orderEntry type="module" module-name="core-3.3.3" />
+    <orderEntry type="module" module-name="activation" />
+    <orderEntry type="module" module-name="additionnal" />
+    <orderEntry type="module" module-name="mail" />
   </component>
 </module>

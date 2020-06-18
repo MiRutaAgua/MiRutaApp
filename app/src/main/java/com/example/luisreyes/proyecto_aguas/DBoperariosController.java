@@ -365,13 +365,13 @@ public class DBoperariosController extends SQLiteOpenHelper {
 
     public static String getStringFromFechaHora(Date date){
         //date = Calendar.getInstance().getTime();
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String strDate = dateFormat.format(date);
         return strDate;
     }
 
     public static Date getFechaHoraFromString(String fechaHora_String){
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date_time = null;
         try {
             date_time = sdf.parse(fechaHora_String);

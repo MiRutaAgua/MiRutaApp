@@ -5,19 +5,19 @@
         <!-- Customize your theme here. -->
 
         <item name="android:actionOverflowButtonStyle"> @style/MyActionButtonOverflow </item>
-        <item name="colorPrimary">#0086FF</item>
-        <item name="colorPrimaryDark">#0086FF</item>
-        <item name="colorAccent">#0086FF</item>
+        <item name="colorPrimary">#368DCE</item>
+        <item name="colorPrimaryDark">#368DCE</item>
+        <item name="colorAccent">#368DCE</item>
         <item name="android:fontFamily" tools:targetApi="jelly_bean">@font/segoeui</item>
     </style>
 
     <!-- Style to replace actionbar overflow icon. set item 'android:actionOverflowButtonStyle' in AppTheme -->
     <style name="MyActionButtonOverflow" parent="android:style/Widget.Holo.Light.ActionButton.Overflow">
-        <item name="android:src">@drawable/menu_icon</item>
-        <item name="android:background">?android:attr/actionBarItemBackground</item>
-        <item name="colorPrimary">#0086FF</item>
-        <item name="colorPrimaryDark">#0086FF</item>
-        <item name="colorAccent">#0086FF</item>
+        <item name="android:src">@drawable/menu_icon_blue</item>
+        <!--<item name="android:background">?android:attr/actionBarItemBackground</item>-->
+        <item name="colorPrimary">#368DCE</item>
+        <item name="colorPrimaryDark">#368DCE</item>
+        <item name="colorAccent">#368DCE</item>
         <item name="android:fontFamily" tools:targetApi="jelly_bean">@font/segoeui</item>
     </style>
 

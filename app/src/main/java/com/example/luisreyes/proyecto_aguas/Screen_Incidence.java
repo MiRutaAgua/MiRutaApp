@@ -58,6 +58,8 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
     private Button button_photo1,button_photo2, button_photo3;
 
     private ImageView imageView_edit_phone1_screen_incidence,
+            imageView_call_phone1_incidence,
+            imageView_call_phone2_incidence,
             imageView_edit_phone2_screen_incidence;
     private ImageView photo1;
     private ImageView photo2;
@@ -98,6 +100,8 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
         button_photo2 = (Button) findViewById(R.id.imageView_foto2_screen_incidence);
         button_photo3 = (Button) findViewById(R.id.imageView_foto3_screen_incidence);
 
+        imageView_call_phone2_incidence= (ImageView) findViewById(R.id.imageView_edit_phone2_incidence);
+        imageView_call_phone1_incidence= (ImageView) findViewById(R.id.imageView_edit_phone1_incidence);
         imageView_edit_phone1_screen_incidence = (ImageView) findViewById(R.id.imageView_edit_phone1_screen_incidence);
         imageView_edit_phone2_screen_incidence = (ImageView) findViewById(R.id.imageView_edit_phone2_screen_incidence);
 
@@ -143,6 +147,110 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
             Toast.makeText(Screen_Incidence.this, "No se pudo obtener numeros de telefono", Toast.LENGTH_LONG).show();
         }
 
+        String photo="";
+        try {
+            photo = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_incidencia_1).trim();
+            if(Screen_Login_Activity.checkStringVariable(photo)){
+                String bitmap_dir = lookForAllreadyTakenPhotos(photo);
+                if(!bitmap_dir.isEmpty()){
+                    Log.e("Existe: ", bitmap_dir);
+                    mCurrentPhotoPath_incidencia_1 = bitmap_dir;
+                    photo1.setVisibility(View.VISIBLE);
+                    photo1.setImageBitmap(getPhotoUserLocal(bitmap_dir));
+                }else{
+                    Log.e("no Existe: ", "foto_numero_serie");
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            photo = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_incidencia_2).trim();
+            if(Screen_Login_Activity.checkStringVariable(photo)){
+                String bitmap_dir = lookForAllreadyTakenPhotos(photo);
+                if(!bitmap_dir.isEmpty()){
+                    Log.e("Existe: ", bitmap_dir);
+                    mCurrentPhotoPath_incidencia_2 = bitmap_dir;
+                    photo2.setVisibility(View.VISIBLE);
+                    photo2.setImageBitmap(getPhotoUserLocal(bitmap_dir));
+                }else{
+                    Log.e("no Existe: ", "foto_numero_serie");
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            photo = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_incidencia_3).trim();
+            if(Screen_Login_Activity.checkStringVariable(photo)){
+                String bitmap_dir = lookForAllreadyTakenPhotos(photo);
+                if(!bitmap_dir.isEmpty()){
+                    Log.e("Existe: ", bitmap_dir);
+                    mCurrentPhotoPath_incidencia_3 = bitmap_dir;
+                    photo3.setVisibility(View.VISIBLE);
+                    photo3.setImageBitmap(getPhotoUserLocal(bitmap_dir));
+                }else{
+                    Log.e("no Existe: ", "foto_numero_serie");
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        imageView_call_phone1_incidence.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Incidence.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                Toast.makeText(context,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        if(Screen_Absent.checkIfOnlyNumbers(telefono1.getText().toString())){
+                            Screen_Absent.callNumber(Screen_Incidence.this,telefono1.getText().toString());
+                        }
+                    }
+                });
+                imageView_call_phone1_incidence.startAnimation(myAnim);
+            }
+        });
+        imageView_call_phone2_incidence.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Incidence.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                Toast.makeText(context,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        if(Screen_Absent.checkIfOnlyNumbers(telefono2.getText().toString())){
+                            Screen_Absent.callNumber(Screen_Incidence.this,telefono2.getText().toString());
+                        }
+                    }
+                });
+                imageView_call_phone2_incidence.startAnimation(myAnim);
+            }
+        });
         imageView_edit_phone1_screen_incidence.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -332,6 +440,7 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
                         try {
                             Screen_Login_Activity.tarea_JSON.put(DBtareasController.incidencia,
                                     spinner_lista_de_mal_ubicacion.getSelectedItem().toString());
+                            Screen_Login_Activity.tarea_JSON.put(DBtareasController.Estado, "INCIDENCIA");
                         }catch (JSONException e) {
                             e.printStackTrace();
                             Toast.makeText(Screen_Incidence.this, "No se pudo insetar texto incidencia en JSON tarea", Toast.LENGTH_LONG).show();
@@ -343,6 +452,31 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
                 button_firma_del_cliente_screen_incidence.startAnimation(myAnim);
             }
         });
+    }
+
+    public String lookForAllreadyTakenPhotos(String photo_name) throws JSONException {
+        String numero_abonado = null;
+        String gestor = null;
+        try {
+            numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
+            gestor = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.GESTOR).trim();
+            if(!Screen_Login_Activity.checkStringVariable(gestor)){
+                gestor = "Sin_Gestor";
+            }
+            String dir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/" + gestor + "/" +numero_abonado;
+            File myDir = new File(dir);
+            if(myDir.exists()){
+                String file_full_name = dir+"/"+photo_name;
+                File photo = new File(file_full_name);
+                if(photo.exists()){
+                    return photo.getAbsolutePath();
+                }
+            }
+        } catch (JSONException e) {
+            Log.e("JSONException", "lookForAllreadyTakenPhotos "+e.toString());
+            e.printStackTrace();
+        }
+        return "";
     }
 
     public void openDialog(String tel){
@@ -358,11 +492,11 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
             if(Dialog.getTitle() == "telefono1"){
                 telefono1.setText((CharSequence) telefono);
                 Screen_Login_Activity.tarea_JSON.put(DBtareasController.telefono1, telefono1.getText().toString());
-                Screen_Login_Activity.tarea_JSON.put(DBtareasController.MENSAJE_LIBRE, "#"+telefono+"#");
+//                Screen_Login_Activity.tarea_JSON.put(DBtareasController.MENSAJE_LIBRE, "#"+telefono+"#");
             }else if(Dialog.getTitle() == "telefono2"){
                 telefono2.setText((CharSequence) telefono);
                 Screen_Login_Activity.tarea_JSON.put(DBtareasController.telefono2, telefono2.getText().toString());
-                Screen_Login_Activity.tarea_JSON.put(DBtareasController.MENSAJE_LIBRE, "#"+telefono+"#");
+//                Screen_Login_Activity.tarea_JSON.put(DBtareasController.MENSAJE_LIBRE, "#"+telefono+"#");
             }
         }
     }
@@ -515,7 +649,12 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
         numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
 
         File image_file=null;
-        File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+numero_abonado);
+        String gestor = null;
+        gestor = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.GESTOR).trim();
+        if(!Screen_Login_Activity.checkStringVariable(gestor)){
+            gestor = "Sin_Gestor";
+        }
+        File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+ gestor + "/" +numero_abonado);
         if (!storageDir.exists()) {
             storageDir.mkdirs();
         }
@@ -580,7 +719,12 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
 
             numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
 
-            File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+numero_abonado);
+            String gestor = null;
+            gestor = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.GESTOR).trim();
+            if(!Screen_Login_Activity.checkStringVariable(gestor)){
+                gestor = "Sin_Gestor";
+            }
+            File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+ gestor + "/" +numero_abonado);
             if (!myDir.exists()) {
                 myDir.mkdirs();
             }
@@ -672,7 +816,14 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
                                 +"\n\n       Luis A. Reyes: inglreyesm@gmail.com");
                 // User chose the "Settings" item, show the app settings UI...
                 return true;
-
+            case R.id.Principal:
+//                Toast.makeText(Screen_User_Data.this, "Ayuda", Toast.LENGTH_SHORT).show();
+                // User chose the "Favorite" action, mark the current item
+                // as a favorite...
+                Intent open_screen= new Intent(this, team_or_personal_task_selection_screen_Activity.class);
+                startActivity(open_screen);
+                finishThisClass();
+                return true;
             case R.id.Tareas:
 //                Toast.makeText(Screen_User_Data.this, "Ayuda", Toast.LENGTH_SHORT).show();
                 // User chose the "Favorite" action, mark the current item
@@ -707,6 +858,15 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
     public void onBackPressed() {
         if(!team_or_personal_task_selection_screen_Activity.dBtareasController.saveChangesInTarea()){
             Toast.makeText(getApplicationContext(), "No se pudo guardar cambios", Toast.LENGTH_SHORT).show();
+        }
+        Intent intent_open_screen_info_counter=null;
+        if (team_or_personal_task_selection_screen_Activity.from_battery_or_unity == team_or_personal_task_selection_screen_Activity.FROM_BATTERY) {
+            intent_open_screen_info_counter= new Intent(this, Screen_Battery_counter.class);
+        } else if(team_or_personal_task_selection_screen_Activity.from_battery_or_unity == team_or_personal_task_selection_screen_Activity.FROM_UNITY){
+            intent_open_screen_info_counter= new Intent(this, Screen_Unity_Counter.class);
+        }
+        if(intent_open_screen_info_counter!=null) {
+            startActivity(intent_open_screen_info_counter);
         }
         finishThisClass();
         super.onBackPressed();

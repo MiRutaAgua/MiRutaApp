@@ -2,7 +2,8 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -26,13 +27,31 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="1dp"
             android:gravity="center"
+            android:layout_marginTop="10dp"
             >
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinner_tipoOrden_screen_insertar_tarea"
+                android:hint="Tipo de Tarea"
 
+                />
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            >
+            <AutoCompleteTextView
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/editText_gestor_screen_insertar_tarea"
+                android:hint="Gestor"
+                android:imeOptions="actionNext"
+                />
+        </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -287,6 +306,7 @@
                 android:id="@+id/editText_codigo_geolocalizacion_screen_insertar_tarea"
                 android:hint="Codigo de geolocalizacion"
                 android:imeOptions="actionNext"
+                android:inputType="text"
                 />
         </LinearLayout>
 
@@ -301,6 +321,7 @@
                 android:id="@+id/editText_ultima_lectura_screen_insertar_tarea"
                 android:hint="Ultima lectura"
                 android:imeOptions="actionNext"
+                android:inputType="numberDecimal"
                 />
         </LinearLayout>
 
@@ -332,7 +353,6 @@
                 android:text="TIPO DE TAREA"
                 android:textColor="@color/colorBlueAppRuta"
                 android:textStyle="bold"
-                android:fontFamily="@font/segoeui"
                 android:textSize="15dp"
                 android:gravity="center"
                 android:layout_gravity="center"
@@ -356,9 +376,7 @@
                 android:id="@+id/imageView_geolocalizar_screen_insertar_tarea"
                 android:layout_width="300dp"
                 android:layout_height="40dp"
-                android:fontFamily="@font/segoeui"
                 android:text="GEOLOCALIZAR"
-                android:textSize="16dp"
                 android:textStyle="bold"
                 android:textColor="@android:color/white"
                 android:background="@drawable/fondo_boton_azul"/>
@@ -377,9 +395,7 @@
                 android:id="@+id/imageView_agregar_tarea_screen_insertar_tarea"
                 android:layout_width="300dp"
                 android:layout_height="40dp"
-                android:fontFamily="@font/segoeui"
                 android:text="AGREGAR"
-                android:textSize="16dp"
                 android:textStyle="bold"
                 android:textColor="@android:color/white"
                 android:background="@drawable/fondo_boton_azul"/>

@@ -33,6 +33,7 @@ public class DBtareasController extends SQLiteOpenHelper {
     //OJO al cambiar el modelo subir la DB_VERSION en MainWindow
     public static boolean tabla_model = false;//true-> tabla vieja  //false->estructura de tabla nueva
 
+
     //  table_model = false;
     public static String id = "id";
     public static String idOrdenCABB = "idOrdenCABB";//siempre es 3 para su empresa
@@ -67,7 +68,7 @@ public class DBtareasController extends SQLiteOpenHelper {
     public static String FECULTREP = "FECULTREP";
     public static String OBSERVA = "OBSERVA";//----------------------------------------------------------
     public static String RS = "RS";
-    public static String F_INST = "F_INST"; //fecha de instalacionde contador nuevo
+    public static String F_INST = "F_INST"; //fecha de instalacion de contador nuevo
     public static String INDICE = "INDICE";
     public static String emplazamiento_devuelto = "EMPLAZADV";
     public static String RESTO_EM = "RESTO_EM";
@@ -140,10 +141,30 @@ public class DBtareasController extends SQLiteOpenHelper {
     public static String DNI_CIF_ABONADO = "DNI_CIF_ABONADO";
     public static String C_COMUNERO = "C_COMUNERO";
     public static String MENSAJE_LIBRE = "MENSAJE_LIBRE";
+
+    public static String ID_SAT = "ID_SAT";                 //checked   //new//-----------//campos nuevos
+    public static String fecha_realizacion = "fecha_realizacion";                           //checked   //new//-----------//campos nuevos
+    public static String suministros = "suministros";                     //checked   //new//-----------//campos nuevos
+    public static String servicios = "servicios";
+    public static String equipo = "equipo";
+    public static String fecha_informe_servicios = "fecha_informe_servicios";
+
+    public static String piezas = "piezas";
+
+    public static String proximidad = "proximidad";
+
+    public static String causa_origen = "causa_origen";
+    public static String accion_ordenada = "accion_ordenada";
+
     public static String date_time_modified = "date_time_modified";
     public static String status_tarea = "status_tarea";
+
+
     public static String numero_edificio = "numero_edificio";
     public static String letra_edificio = "letra_edificio";
+
+
+    public static String principal_variable = numero_interno;
 
     public DBtareasController(Context applicationContext){
         super(applicationContext, database_name, null,  MainActivity.DB_VERSION);
@@ -154,7 +175,7 @@ public class DBtareasController extends SQLiteOpenHelper {
                 jsonTareaType.put(idOrdenCABB, "null");
                 jsonTareaType.put(FechImportacion, "null");
                 jsonTareaType.put(numero_interno, "null");
-            jsonTareaType.put(GESTOR, "null");
+                jsonTareaType.put(GESTOR, "null");
                 jsonTareaType.put(ANOMALIA, "null");
                 jsonTareaType.put(AREALIZAR, "null");//numero de portal
                 jsonTareaType.put(INTERVENCION, "null");
@@ -221,7 +242,7 @@ public class DBtareasController extends SQLiteOpenHelper {
                 jsonTareaType.put(codigo_de_localizacion, "null");
                 jsonTareaType.put(codigo_de_geolocalizacion, "null");
                 jsonTareaType.put(geolocalizacion, "null");
-            jsonTareaType.put(url_geolocalizacion, "null");
+                jsonTareaType.put(url_geolocalizacion, "null");
                 jsonTareaType.put(foto_antes_instalacion, "null");
                 jsonTareaType.put(foto_numero_serie, "null");
                 jsonTareaType.put(foto_lectura, "null");
@@ -256,6 +277,19 @@ public class DBtareasController extends SQLiteOpenHelper {
                 jsonTareaType.put(DNI_CIF_ABONADO, "null");
                 jsonTareaType.put(C_COMUNERO, "null");
                 jsonTareaType.put(MENSAJE_LIBRE, "null");
+
+            jsonTareaType.put(ID_SAT, "null");
+            jsonTareaType.put(fecha_realizacion, "null");
+            jsonTareaType.put(suministros, "null");
+            jsonTareaType.put(servicios, "null");
+            jsonTareaType.put(equipo, "null");
+            jsonTareaType.put(fecha_informe_servicios, "null");
+            jsonTareaType.put(piezas, "null");
+            jsonTareaType.put(proximidad, "null");
+
+            jsonTareaType.put(causa_origen, "null");
+            jsonTareaType.put(accion_ordenada, "null");
+
                 jsonTareaType.put(date_time_modified, "null");
                 jsonTareaType.put(status_tarea, "null");
 
@@ -375,6 +409,19 @@ public class DBtareasController extends SQLiteOpenHelper {
                         DNI_CIF_ABONADO + " TEXT, " +
                         C_COMUNERO + " TEXT, " +
                         MENSAJE_LIBRE + " TEXT, " +
+
+                        ID_SAT + " TEXT, " +
+                        fecha_realizacion + " TEXT, " +
+                        suministros + " TEXT, " +
+                        servicios + " TEXT, " +
+                        equipo + " TEXT, " +
+                        fecha_informe_servicios + " TEXT, " +
+                        piezas + " TEXT, " +
+                        proximidad + " TEXT, " +
+
+                        causa_origen + " TEXT, " +
+                        accion_ordenada + " TEXT, " +
+
                         date_time_modified + " TEXT, " +
                         status_tarea + " TEXT" +
                         ")");
@@ -395,6 +442,7 @@ public class DBtareasController extends SQLiteOpenHelper {
             jsonTareaType.put(idOrdenCABB, "");
             jsonTareaType.put(FechImportacion, "");
             jsonTareaType.put(numero_interno, "");
+            jsonTareaType.put(GESTOR, "");
             jsonTareaType.put(ANOMALIA, "");
             jsonTareaType.put(AREALIZAR, "");//numero de portal
             jsonTareaType.put(INTERVENCION, "");
@@ -496,6 +544,19 @@ public class DBtareasController extends SQLiteOpenHelper {
             jsonTareaType.put(DNI_CIF_ABONADO, "");
             jsonTareaType.put(C_COMUNERO, "");
             jsonTareaType.put(MENSAJE_LIBRE, "");
+
+            jsonTareaType.put(ID_SAT, "");
+            jsonTareaType.put(fecha_realizacion, "");
+            jsonTareaType.put(suministros, "");
+            jsonTareaType.put(servicios, "");
+            jsonTareaType.put(equipo, "");
+            jsonTareaType.put(fecha_informe_servicios, "");
+            jsonTareaType.put(piezas, "");
+            jsonTareaType.put(proximidad, "");
+
+            jsonTareaType.put(causa_origen, "");
+            jsonTareaType.put(accion_ordenada, "");
+
             jsonTareaType.put(date_time_modified, "");
             jsonTareaType.put(status_tarea, "");
 
@@ -708,7 +769,7 @@ public class DBtareasController extends SQLiteOpenHelper {
         }
     }
 
-    public String get_one_tarea_from_Database(String numero_interno_var) throws JSONException {
+    public String get_one_tarea_from_Database(String principal_variable_var) throws JSONException {
 
         ArrayList<String> keys = new ArrayList<String>();
 
@@ -716,7 +777,7 @@ public class DBtareasController extends SQLiteOpenHelper {
         if(database == null){
             return "null";
         }
-        Cursor c = database.rawQuery("SELECT * FROM "+table_name+" WHERE "+numero_interno+" LIKE \""+ numero_interno_var +"\";", null);
+        Cursor c = database.rawQuery("SELECT * FROM "+table_name+" WHERE "+principal_variable+" LIKE \""+ principal_variable_var +"\";", null);
 
         try {
             if(c.moveToFirst()) {
@@ -836,12 +897,12 @@ public class DBtareasController extends SQLiteOpenHelper {
         return rows;
     }
 
-    public boolean checkIfTareaExists(String numero_interno_var){
+    public boolean checkIfTareaExists(String principal_variable_var){ //true si existe tarea
         SQLiteDatabase database = this.getReadableDatabase();
         if(database == null){
             return false;
         }
-        Cursor c = database.rawQuery("SELECT * FROM "+table_name+" WHERE "+numero_interno+"=\""+numero_interno_var+"\";", null);
+        Cursor c = database.rawQuery("SELECT * FROM "+table_name+" WHERE "+principal_variable+"=\""+principal_variable_var+"\";", null);
         if (c.getCount() > 0) {
             return true;
         }else{

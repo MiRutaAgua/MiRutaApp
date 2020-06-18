@@ -48,8 +48,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONException;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -58,6 +61,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Properties;
+
+
 
 /**
  * Created by Alejandro on 11/08/2019.
@@ -79,6 +85,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
             imageView_edit_numero_carnet_firmante_screen_validate,
             imageView_edit_lectura_contador_nuevo_screen_validate;
 
+    String targetPdf = "";
     private LinearLayout llScroll_final,
     llScroll_antes,
     llScroll_firma ,
@@ -106,7 +113,8 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
 
     private String current_tag;
     private ProgressDialog progressDialog;
-    private TextView nombre_y_tarea;
+    private TextView nombre_y_tarea, textView_antes_cambio,
+            textView_despues_cambio,textView_Lectura;
     private ArrayList<String> images_files;
     private ArrayList<String> images_files_names;
 
@@ -120,6 +128,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
         );
 
         setContentView(R.layout.screen_validate);
+
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         myToolbar.setBackgroundColor(Color.TRANSPARENT);
@@ -162,6 +171,9 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
         imageView_edit_serial_number_screen_validate   = (ImageView)findViewById(R.id.imageView_edit_serial_number_screen_validate);
         imageView_edit_calibre_screen_validate     = (ImageView)findViewById(R.id.imageView_edit_calibre_screen_validate);
 
+        textView_Lectura = (TextView) findViewById(R.id.textView_Lectura);
+        textView_antes_cambio = (TextView) findViewById(R.id.textView_antes_cambio);
+        textView_despues_cambio = (TextView) findViewById(R.id.textView_despues_cambio);
         nombre_y_tarea = (TextView) findViewById(R.id.textView_nombre_cliente_y_tarea_screen_validate);
         textView_info = (TextView) findViewById(R.id.textView_info_screen_validate);
         textView_info_observaciones_screen_validate = (TextView) findViewById(R.id.textView_info_observaciones_screen_validate);
@@ -170,42 +182,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
 
         llScroll_info.setVisibility(View.INVISIBLE);
 
-        if(DBtareasController.tabla_model) {
-            try {
-                textView_info.setText((Screen_Login_Activity.tarea_JSON.getString(DBtareasController.poblacion).trim()+ ", "
-                        + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.calle).trim().replace("\n", "") + ",  "
-                        + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero).trim().replace("\n", "") + ",  "
-                        + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_edificio).trim().replace("\n", "")
-                        + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.letra_edificio).trim().replace("\n", "") + ",  "
-                        + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.nombre_cliente).trim().replace("\n", "") + "\nNÚMERO DE ABONADO: "
-                        + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim().replace("\n", "")
-                ).replace("null", "").replace("NULL", "").replace(" , ", ""));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        else{
-            try {
-                textView_info.setText((Screen_Login_Activity.tarea_JSON.getString(DBtareasController.poblacion).trim()+ ", "
-                        + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.calle).trim().replace("\n", "") + ",  "
-                        + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero).trim().replace("\n", "") + ",  "
-                        + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.BIS).trim().replace("\n", "") + ",  "
-                        + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.nombre_cliente).trim().replace("\n", "") + "\nNÚMERO DE ABONADO: "
-                        + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim().replace("\n", "")
-                ).replace("null", "").replace("NULL", "").replace(" , ", ""));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        try {
-
-            textView_info_operario_screen_validate.setText("CAMBIADO POR: "
-                    + Screen_Login_Activity.operario_JSON.getString(DBoperariosController.nombre).trim().replace("\n", "")
-                    + "  " + Screen_Login_Activity.operario_JSON.getString(DBoperariosController.apellidos).trim().replace("\n", "")
-                    + "  " + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.date_time_modified).trim().replace("\n", ""));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        setPDFinfo();
         try {
             String lectura_string = Screen_Login_Activity.tarea_JSON.
                     getString(DBtareasController.lectura_contador_nuevo).trim();
@@ -217,24 +194,33 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
             e.printStackTrace();
         }
         try {
-            textView_info_observaciones_screen_validate.setText("OBSERVACIONES: "+Screen_Login_Activity.tarea_JSON.
-                    getString(DBtareasController.observaciones).trim().replace("\n", ""));
+            String obs = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.MENSAJE_LIBRE).trim();
+            if(!Screen_Login_Activity.checkStringVariable(obs)) {
+                obs = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.observaciones).trim();
+                if (!Screen_Login_Activity.checkStringVariable(obs)) {
+                    obs = (Screen_Login_Activity.tarea_JSON.getString(DBtareasController.OBSERVA).trim());
+                    if (!Screen_Login_Activity.checkStringVariable(obs)) {
+                        obs = "";
+                    }
+                }
+            }
+            textView_info_observaciones_screen_validate.setText("OBSERVACIONES: "+obs);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         String tipo, calibre, nombre;
         try {
-            nombre = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.nombre_cliente).trim().replace("\n", "");
-            tipo = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.tipo_tarea).trim().replace("\n", "");
-            calibre = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.calibre_toma).trim().replace("\n", "");
-            if(nombre.equals("null") || nombre.equals("NULL")){
+            nombre = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.nombre_cliente).trim();
+            tipo = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.tipo_tarea).trim();
+            calibre = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.calibre_toma).trim();
+            if(!Screen_Login_Activity.checkStringVariable(nombre)){
                 nombre = "";
             }
-            if(tipo.equals("null") || tipo.equals("NULL")){
+            if(!Screen_Login_Activity.checkStringVariable(tipo)){
                 tipo = "";
             }
-            if(calibre.equals("null") || calibre.equals("NULL")){
+            if(!Screen_Login_Activity.checkStringVariable(calibre)){
                 calibre = "";
             }
             nombre_y_tarea.setText(nombre+", "+tipo+ " "+calibre);
@@ -257,7 +243,8 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
         String n = null;
         lectura_actual_et.setText("");
         n = Screen_Execute_Task.lectura_introducida;
-        if(!n.equals("null") && !TextUtils.isEmpty(n) && n != null) {
+        Log.e("lectura_Exec", Screen_Execute_Task.lectura_introducida);
+        if(Screen_Absent.checkOnlyNumbers(n)) {
             lectura_actual_et.setText(n);
         }
 
@@ -317,9 +304,14 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
         }
         try {
             String firma = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.firma_cliente).trim();
+            String gestor = null;
+            gestor = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.GESTOR).trim();
+            if(!Screen_Login_Activity.checkStringVariable(gestor)){
+                gestor = "Sin_Gestor";
+            }
             if(!firma.isEmpty() && !firma.equals("null")&&  !firma.equals("NULL"))  {
-                Bitmap firma_bitmap = getPhotoUserLocal(  getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+
-                        Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim() + "/" + firma);
+                Bitmap firma_bitmap = getPhotoUserLocal(  getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"
+                        + gestor +"/" + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim() + "/" + firma);
                 if (firma_bitmap != null) {
                     bitmap_firma_no_nulo = true;
                     imageButton_firma_cliente_screen_validate.setImageBitmap(firma_bitmap);
@@ -566,10 +558,128 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
 
     }
 
+    private void setPDFinfo() {
+        if(DBtareasController.tabla_model) {
+            try {
+                textView_info.setText((Screen_Login_Activity.tarea_JSON.getString(DBtareasController.poblacion).trim()+ ", "
+                        + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.calle).trim().replace("\n", "") + ",  "
+                        + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero).trim().replace("\n", "") + ",  "
+                        + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_edificio).trim().replace("\n", "")
+                        + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.letra_edificio).trim().replace("\n", "") + ",  "
+                        + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.nombre_cliente).trim().replace("\n", "") + "\nNÚMERO DE ABONADO: "
+                        + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim().replace("\n", "")
+                ).replace("null", "").replace("NULL", "").replace(" , ", ""));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        else{
+            try {
+                String infoTel = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.telefonos_cliente).trim();
+                String tels = "  Tel:";
+                if(!infoTel.contains("TEL1_INCORRECTO")) {
+                    String telefono = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.telefono1).trim();
+                    tels+= " "+telefono;
+                }if(!infoTel.contains("TEL2_INCORRECTO")) {
+                    String telefono = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.telefono2).trim();
+                    tels+= " "+telefono;
+                }
+                textView_info.setText((Screen_Login_Activity.tarea_JSON.getString(DBtareasController.poblacion).trim()+ ", "
+                        + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.calle).trim().replace("\n", "") + ",  "
+                        + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero).trim().replace("\n", "") + ",  "
+                        + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.BIS).trim().replace("\n", "") + ",  "
+                        + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.piso).trim().replace("\n", "")
+                        + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.mano).trim().replace("\n", "") + ",  "
+                        + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.nombre_cliente).trim().replace("\n", "") + "\nNÚMERO DE ABONADO: "
+                        + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim().replace("\n", "")
+                        + tels
+                ).replace("null", "").replace("NULL", "").replace(" , ", ""));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        try {
+            String pdf_info = "CAMBIADO POR: "
+                    + Screen_Login_Activity.operario_JSON.getString(DBoperariosController.nombre).trim()
+                    + "  " + Screen_Login_Activity.operario_JSON.getString(DBoperariosController.apellidos).trim()
+                    + "  " + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.date_time_modified).trim();
+            String serial_number = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador_devuelto).trim();
+            String serial_number_ANTES = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador).trim();
+            String lectura_inicial = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.lectura_contador_nuevo).trim();
+            String lectura_ULT = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.lectura_actual).trim();
+            if(!Screen_Login_Activity.checkStringVariable(lectura_ULT)){
+                lectura_ULT= Screen_Login_Activity.tarea_JSON.getString(DBtareasController.lectura_ultima).trim();
+                if(!Screen_Login_Activity.checkStringVariable(lectura_ULT)){
+                    lectura_ULT="0";
+                }
+            }
+            if(!Screen_Login_Activity.checkStringVariable(lectura_inicial)){
+                lectura_inicial="0";
+            }
+            String caliber = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.calibre_real).trim();
+            if (!serial_number.isEmpty() && !serial_number.equals("null") && !serial_number.equals("NULL")) {
+                serial_number = "\nN.SERIE: " + serial_number;
+            } else {
+                serial_number = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador).trim();
+                if (!serial_number.isEmpty() && !serial_number.equals("null") && !serial_number.equals("NULL")) {
+                    serial_number = "\nN.SERIE: " + serial_number;
+                } else {
+                    serial_number = "";
+                }
+            }
+            if (!caliber.isEmpty() && !caliber.equals("null") && !caliber.equals("NULL")) {
+                caliber = "     CALIBRE: " + caliber;
+            } else {
+                caliber = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.calibre_toma).trim();
+                if (!caliber.isEmpty() && !caliber.equals("null") && !caliber.equals("NULL")) {
+                    caliber = "     CALIBRE: " + caliber;
+                } else {
+                    caliber = "";
+                }
+            }
+            pdf_info = pdf_info + serial_number + caliber;
+            textView_info_operario_screen_validate.setText(pdf_info);
+            textView_antes_cambio.setText("ANTES DEL CAMBIO. N.SERIE, "+ serial_number_ANTES);
+            textView_despues_cambio.setText("DESPUÉS DEL CAMBIO. "+ serial_number.trim()
+                    +", LECTURA INICIAL "+  lectura_inicial + "m3");
+            textView_Lectura.setText("FOTO ÚLTIMA LECTURA, "+ lectura_ULT + "m3");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+    public static void setContadorComoInstalado(String numero_serie_Contador){
+        if(team_or_personal_task_selection_screen_Activity.dBcontadoresController != null) {
+            if(team_or_personal_task_selection_screen_Activity.dBcontadoresController.checkIfContadorExists(numero_serie_Contador)) {
+                try {
+                    String contador = team_or_personal_task_selection_screen_Activity
+                            .dBcontadoresController.get_one_contador_from_Database(numero_serie_Contador);
+                    JSONObject contador_jsonObject = new JSONObject(contador);
+                    contador_jsonObject.put(DBcontadoresController.status_contador, "INSTALLED");
+                    contador_jsonObject.put(DBcontadoresController.date_time_modified_contador,
+                            DBtareasController.getStringFromFechaHora(new Date()));
+                    team_or_personal_task_selection_screen_Activity.dBcontadoresController.updateContador(contador_jsonObject);
+                    Log.e("actualizado contador",numero_serie_Contador);
+                } catch (JSONException e) {
+                    Log.e("Error","No actualizar");
+                    e.printStackTrace();
+                }
+            }
+        }else{
+            Log.e("Error","No hay tabla donde actualizar");
+        }
+    }
     private void onCerrar_tarea() {
         try {
             Screen_Login_Activity.tarea_JSON.put(DBtareasController.date_time_modified,
                     DBtareasController.getStringFromFechaHora(new Date()));
+            Screen_Login_Activity.tarea_JSON.put(DBtareasController.Estado, "NORMAL");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            String num_serie_devuelto = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador_devuelto).trim();
+            setContadorComoInstalado(num_serie_devuelto);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -683,9 +793,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
             boolean error = saveTaskLocal();
             if(!error) {
                 Toast.makeText(Screen_Validate.this, "Se guardaron los datos en el telefono", Toast.LENGTH_LONG).show();
-                Intent intent_open_battery_counter = new Intent(this, team_or_personal_task_selection_screen_Activity.class);
-                startActivity(intent_open_battery_counter);
-                this.finish();
+                finishThisClass();
             }
         }
     }
@@ -779,7 +887,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
         if (!myDir.exists()) {
             myDir.mkdirs();
         }
-        String targetPdf = getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)+"/"+pdfName+".pdf";
+        targetPdf = getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)+"/"+pdfName+".pdf";
         File filePath;
         filePath = new File(targetPdf);
         try {
@@ -798,12 +906,17 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
         llScroll_info.setVisibility(View.INVISIBLE);
 
         if(filePath.exists()) {
-            try{
+             try{
                 try {
                     String numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado);
+                    String gestor = null;
+                    gestor = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.GESTOR).trim();
+                    if(!Screen_Login_Activity.checkStringVariable(gestor)){
+                        gestor = "Sin_Gestor";
+                    }
                     InputStream in = new FileInputStream(filePath);
                     OutputStream out = new FileOutputStream(getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-                            + "/fotos_tareas/"+ numero_abonado+"/"+pdfName+".pdf");
+                            + "/fotos_tareas/"+ gestor + "/" + numero_abonado+"/"+pdfName+".pdf");
                     // Copy the bits from instream to outstream
                     byte[] buf = new byte[1024];
                     int len;
@@ -821,28 +934,38 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
+            String numero_abonado = null;
             try {
-//                textView_info.setVisibility(View.GONE);
+                numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado);
+                String gestor = null;
+                gestor = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.GESTOR).trim();
+                if(!Screen_Login_Activity.checkStringVariable(gestor)){
+                    gestor = "Sin_Gestor";
+                }
+                Intent i = new Intent(Intent.ACTION_SEND);
+                i.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
-                Toast.makeText(this, "PDF creado correctamente ", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(Intent.ACTION_SEND ,Uri.parse("mailto: mraguascontadores@gmail.com")); // it's not ACTION_SEND
-                intent.setType("text/plain");
-                intent.putExtra(Intent.EXTRA_SUBJECT, "PDF validar");
-                intent.putExtra(Intent.EXTRA_TEXT, "Validación de Instalación");
-                intent.putExtra(Intent.EXTRA_STREAM, filePath.getAbsolutePath());
-                startActivity(intent);
-            }
-            catch(Exception e) {
+                i.putExtra(Intent.EXTRA_EMAIL, new String[] { "" });
+                i.putExtra(Intent.EXTRA_SUBJECT, "PDF de Trabajo");
+                i.putExtra(Intent.EXTRA_TEXT, "Instalación realizada");
+                Uri uri = FileProvider.getUriForFile(this, "com.example.luisreyes.proyecto_aguas.fileprovider",
+                        new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+                                + "/fotos_tareas/" + gestor + "/" + numero_abonado+"/"+pdfName+".pdf"));
+                i.putExtra(Intent.EXTRA_STREAM, uri);
+                i.setType("application/pdf");
+                startActivity(i);
+
+            } catch (JSONException e) {
                 e.printStackTrace();
-                openMessage("Exception",  e.toString());
-//                Toast.makeText(this, "Exception->\n"+ e.toString(), Toast.LENGTH_SHORT).show();
             }
         }
         else{
             Toast.makeText(this, "PDF no creado", Toast.LENGTH_SHORT).show();
         }
+
     }
+
+
     private void openGeneratedPDF(){
         File file = new File(getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)+"/"+pdfName+".pdf");
         if (file.exists())
@@ -875,9 +998,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                 Toast.makeText(this, "No hay tabla donde borrar", Toast.LENGTH_LONG).show();
             }
             Toast.makeText(Screen_Validate.this, "Actualizada tarea correctamente", Toast.LENGTH_LONG).show();
-            Intent intent_open_battery_counter = new Intent(Screen_Validate.this, team_or_personal_task_selection_screen_Activity.class);
-            startActivity(intent_open_battery_counter);
-            Screen_Validate.this.finish();
+            finishThisClass();
             return;
         }
         else {
@@ -1030,9 +1151,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                         }else{
                             Toast.makeText(this, "No hay tabla donde borrar", Toast.LENGTH_LONG).show();
                         }
-                        Intent intent_open_battery_counter = new Intent(this, team_or_personal_task_selection_screen_Activity.class);
-                        startActivity(intent_open_battery_counter);
-                        this.finish();
+                        finishThisClass();
                     }
                 }
             }
@@ -1055,8 +1174,13 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
         String numero_abonado = null;
         try {
             numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado);
+            String gestor = null;
+            gestor = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.GESTOR).trim();
+            if(!Screen_Login_Activity.checkStringVariable(gestor)){
+                gestor = "Sin_Gestor";
+            }
             String fullDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"
-                    + numero_abonado+"/"+filename;
+                    + gestor + "/" + numero_abonado+"/"+filename;
             return fullDir;
         } catch (JSONException e) {
             e.printStackTrace();
@@ -1068,16 +1192,21 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
         File myDir = null;
         try {
             numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado);
+            String gestor = null;
+            gestor = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.GESTOR).trim();
+            if(!Screen_Login_Activity.checkStringVariable(gestor)){
+                gestor = "Sin_Gestor";
+            }
             if(!numero_abonado.isEmpty() && numero_abonado!=null
                     && !numero_abonado.equals("NULL") && !numero_abonado.equals("null")){
 
                 myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"
-                        + numero_abonado);
+                        + gestor + "/" + numero_abonado);
 
                 if(myDir!=null) {
                     if (!myDir.exists()) {
                         myDir.mkdirs();
-                        File storageDir2 = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/fotos_tareas/"+ numero_abonado);
+                        File storageDir2 = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/fotos_tareas/" + gestor + "/" + numero_abonado);
                         if (!storageDir2.exists()) {
                             storageDir2.mkdirs();
                         }
@@ -1127,15 +1256,17 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
             if (!(TextUtils.isEmpty(wrote_string))) {
                 Screen_Login_Activity.tarea_JSON.put(DBtareasController.numero_serie_contador_devuelto, wrote_string);
                 numero_serie_nuevo.setText(wrote_string);
+                setPDFinfo();
             }
         }else if(current_tag.contains("Calibre Real")){
             if (!(TextUtils.isEmpty(wrote_string))) {
                 Screen_Login_Activity.tarea_JSON.put(DBtareasController.calibre_real, wrote_string);
                 textView_calibre_screen_validate.setText(wrote_string);
+                setPDFinfo();
             }
-        }else if(current_tag.contains("Observaciones")){
+        }else if(current_tag.contains("Mensaje Libre")){
             if (!(TextUtils.isEmpty(wrote_string))) {
-                Screen_Login_Activity.tarea_JSON.put(DBtareasController.observaciones_devueltas, wrote_string);
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.MENSAJE_LIBRE, wrote_string);
                 textView_info_observaciones_screen_validate.setText("OBSERVACIONES: "+wrote_string);
             }
         }else if(current_tag.equals("Nombre del firmante")){
@@ -1164,10 +1295,16 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
         progressDialog.setCancelable(true);
     }
     private void hideRingDialog(){
-        if(progressDialog!=null) {
-            if (progressDialog.isShowing()) {
-                progressDialog.dismiss();
+        try {
+            if(progressDialog!=null) {
+                if(progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                    progressDialog = null;
+                }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("hideRingDialog", e.toString());
         }
     }
 
@@ -1224,11 +1361,25 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                                 +"\n\n       Luis A. Reyes: inglreyesm@gmail.com");
                 // User chose the "Settings" item, show the app settings UI...
                 return true;
-
+            case R.id.Principal:
+//                Toast.makeText(Screen_User_Data.this, "Ayuda", Toast.LENGTH_SHORT).show();
+                // User chose the "Favorite" action, mark the current item
+                // as a favorite...
+                Intent open_screen= new Intent(Screen_Validate.this, team_or_personal_task_selection_screen_Activity.class);
+                startActivity(open_screen);
+                Screen_Execute_Task.lectura_introducida = "";
+                finish();
+                return true;
             case R.id.Tareas:
 //                Toast.makeText(Screen_User_Data.this, "Ayuda", Toast.LENGTH_SHORT).show();
                 // User chose the "Favorite" action, mark the current item
                 // as a favorite...
+                team_or_personal_task_selection_screen_Activity.from_team_or_personal =
+                        team_or_personal_task_selection_screen_Activity.FROM_TEAM;
+//                Intent open_screen= new Intent(Screen_Execute_Task.this, Screen_Table_Team.class);
+//                startActivity(open_screen);
+                Screen_Execute_Task.lectura_introducida = "";
+                finish();
                 return true;
 
             case R.id.Configuracion:
@@ -1265,4 +1416,34 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
         finish();
         super.onBackPressed();
     }
+    private void finishThisClass(){
+        Screen_Execute_Task.lectura_introducida = "";
+
+        Intent openTableActivity = null;
+        if(team_or_personal_task_selection_screen_Activity.from_team_or_personal == team_or_personal_task_selection_screen_Activity.FROM_TEAM) {
+            openTableActivity = new Intent(this, Screen_Table_Team.class);
+            openTableActivity.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            Screen_Table_Team.from_close_task = "CLOSE_TASK";
+        }else if(team_or_personal_task_selection_screen_Activity.from_team_or_personal == team_or_personal_task_selection_screen_Activity.FROM_PERSONAL){
+            openTableActivity = new Intent(this, Screen_Table_Personal.class);
+            openTableActivity.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            Screen_Table_Personal.from_close_task = "CLOSE_TASK";
+        }else if(team_or_personal_task_selection_screen_Activity.from_team_or_personal == team_or_personal_task_selection_screen_Activity.FROM_FILTER_RESULT){
+            openTableActivity = new Intent(this, Screen_Filter_Results.class);
+            Screen_Filter_Results.from_close_task = "CLOSE_TASK";
+            openTableActivity.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        }else if(team_or_personal_task_selection_screen_Activity.from_team_or_personal == team_or_personal_task_selection_screen_Activity.FROM_FILTER_TAREAS){
+            openTableActivity = new Intent(this, Screen_Filter_Tareas.class);
+            Screen_Filter_Tareas.from_close_task = "CLOSE_TASK";
+            openTableActivity.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        }
+        if(openTableActivity!= null) {
+//            openTableActivity.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+//            openTableActivity.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            startActivityIfNeeded(openTableActivity, 0);
+        }
+        finish();
+    }
+
+
 }

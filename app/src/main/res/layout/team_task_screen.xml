@@ -5,65 +5,82 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="top">
+    android:gravity="top"
+    android:background="@android:color/white"
+    >
+    <!--<include layout = "@layout/toolbar"-->
+        <!--android:id="@+id/my_toolbar"-->
+        <!--/>-->
 
-
-    <include layout = "@layout/toolbar"
-        android:id="@+id/my_toolbar"
-        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="165dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:background="@drawable/fondo_layout_pant_tareas_equipo"
+        >
+        <ImageView
+            android:id="@+id/imageView_atras_screen_team_task"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center"
+            android:src="@drawable/atras_icon"
+            android:layout_marginBottom="30dp"
+            android:foregroundGravity="center"
+            />
+        <ImageView
+            android:layout_marginLeft="230dp"
+            android:id="@+id/imageView_menu_screen_team_task"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center"
+            android:src="@drawable/menu_icon"
+            android:layout_marginBottom="30dp"
+            />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="50dp"
         android:gravity="center"
-        android:padding="1dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="60dip"
         >
-
-        <ImageView
-            android:id="@+id/imageView_logo_team"
-            android:layout_width="wrap_content"
-            android:layout_height="188dp"
-            android:layout_gravity="center"
-            android:src="@drawable/screen_tareas_equipo_icon" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:layout_marginTop="20dip"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="40dp"
-        android:padding="10dp"
-        >
-
-
         <Button
             android:id="@+id/button_tabla_tareas_equipo_screen_team_task"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_width="300dp"
+            android:layout_height="75dp"
             android:background="@drawable/screen_tareas_equipo_tabla_equipo" />
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="40dp"
-        android:padding="10dp"
-        android:layout_marginTop="5dp"
+        android:layout_gravity="center"
         >
-
         <Button
             android:id="@+id/button_vista_tareas_equipo_screen_team_task"
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
+            android:layout_width="300dp"
+            android:layout_height="75dp"
             android:background="@drawable/screen_tareas_equipo_vista_rapida" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_gravity="center"
+        >
+        <Button
+            android:layout_marginLeft="5dp"
+            android:id="@+id/button_filtro_tareas_equipo_screen_team_task"
+            android:layout_width="305dp"
+            android:layout_height="85dp"
+            android:background="@drawable/screen_tareas_equipo_filtro_tareas" />
     </LinearLayout>
 
 </LinearLayout>

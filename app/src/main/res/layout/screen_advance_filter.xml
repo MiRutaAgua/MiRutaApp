@@ -396,7 +396,6 @@
                 android:id="@+id/button_fitrar_screen_filter_tareas"
                 android:layout_width="273dp"
                 android:layout_height="40dp"
-                android:fontFamily="@font/segoeui"
                 android:text="FILTRAR"
                 android:textSize="16dp"
                 android:textStyle="bold"

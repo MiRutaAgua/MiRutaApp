@@ -23,6 +23,7 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -60,6 +61,7 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
     String image;
     Bitmap bitmap_user_photo=null;
 
+    ImageView imageView_atras_screen_user_data;
     private static final int CAM_REQUEST_USER_PHOTO = 1219;
     private static final int REQUEST_TAKE_PHOTO_FULL_SIZE = 1220;
     private ProgressDialog progressDialog;
@@ -76,10 +78,11 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 1);
         }
 
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        myToolbar.setBackgroundColor(Color.TRANSPARENT);
-        setSupportActionBar(myToolbar);
+//        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+//        myToolbar.setBackgroundColor(Color.TRANSPARENT);
+//        setSupportActionBar(myToolbar);
 
+        imageView_atras_screen_user_data= (ImageView) findViewById(R.id.imageView_atras_screen_user_data);
         button_continuar = (Button)findViewById(R.id.button_screen_user_data_continuar);
         circlImageView_photo = (CircleImageView)findViewById(R.id.circleImageView_screen_user_data_photo);
         nombre = (TextView)findViewById(R.id.textView_screen_user_data_nombre);
@@ -146,6 +149,32 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
             }
         });
 
+        imageView_atras_screen_user_data.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_User_Data.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        onBackPressed();
+                    }
+                });
+                imageView_atras_screen_user_data.startAnimation(myAnim);
+            }
+        });
         button_continuar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -418,54 +447,60 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
         progressDialog.setCancelable(true);
     }
     private void hideRingDialog(){
-        if(progressDialog!=null) {
-            if (progressDialog.isShowing()) {
-                progressDialog.dismiss();
+        try {
+            if(progressDialog!=null) {
+                if(progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                    progressDialog = null;
+                }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("hideRingDialog", e.toString());
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.Contactar:
-//                Toast.makeText(Screen_User_Data.this, "Seleccionó la opción settings", Toast.LENGTH_SHORT).show();
-                openMessage("Contactar",
-                        /*+"\nAdrian Nieves: 1331995adrian@gmail.com"
-                        +"\nJorge G. Perez: yoyi1991@gmail.com"*/
-                        "\n   Michel Morales: mraguas@gmail.com"
-                                +"\n\n       Luis A. Reyes: inglreyesm@gmail.com");
-                // User chose the "Settings" item, show the app settings UI...
-                return true;
-
-            case R.id.Tareas:
-                Toast.makeText(Screen_User_Data.this, "Ayuda", Toast.LENGTH_SHORT).show();
-                // User chose the "Favorite" action, mark the current item
-                // as a favorite...
-                Intent intent= new Intent(this, Screen_Table_Team.class);
-                startActivity(intent);
-                return true;
-
-            case R.id.Configuracion:
-                Toast.makeText(Screen_User_Data.this, "Configuracion", Toast.LENGTH_SHORT).show();
-                // User chose the "Favorite" action, mark the current item
-                // as a favorite...
-                return true;
-
-            default:
-                // If we got here, the user's action was not recognized.
-                // Invoke the superclass to handle it.
-                return super.onOptionsItemSelected(item);
-
-        }
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.menu, menu);
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+//            case R.id.Contactar:
+////                Toast.makeText(Screen_User_Data.this, "Seleccionó la opción settings", Toast.LENGTH_SHORT).show();
+//                openMessage("Contactar",
+//                        /*+"\nAdrian Nieves: 1331995adrian@gmail.com"
+//                        +"\nJorge G. Perez: yoyi1991@gmail.com"*/
+//                        "\n   Michel Morales: mraguas@gmail.com"
+//                                +"\n\n       Luis A. Reyes: inglreyesm@gmail.com");
+//                // User chose the "Settings" item, show the app settings UI...
+//                return true;
+//
+//            case R.id.Tareas:
+//                Toast.makeText(Screen_User_Data.this, "Ayuda", Toast.LENGTH_SHORT).show();
+//                // User chose the "Favorite" action, mark the current item
+//                // as a favorite...
+//                Intent intent= new Intent(this, Screen_Table_Team.class);
+//                startActivity(intent);
+//                return true;
+//
+//            case R.id.Configuracion:
+//                Toast.makeText(Screen_User_Data.this, "Configuracion", Toast.LENGTH_SHORT).show();
+//                // User chose the "Favorite" action, mark the current item
+//                // as a favorite...
+//                return true;
+//
+//            default:
+//                // If we got here, the user's action was not recognized.
+//                // Invoke the superclass to handle it.
+//                return super.onOptionsItemSelected(item);
+//
+//        }
+//    }
 
     public void openMessage(String title, String hint){
         MessageDialog messageDialog = new MessageDialog();
@@ -475,7 +510,8 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
 
     @Override
     public void onBackPressed() {
+        Intent intent= new Intent(this, Screen_Login_Activity.class);
+        startActivity(intent);
         finish();
-        super.onBackPressed();
     }
 }

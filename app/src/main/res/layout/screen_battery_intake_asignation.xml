@@ -44,9 +44,7 @@
                 android:id="@+id/button_foto_instalacion_screen_battery_intake_asignation"
                 android:layout_width="266dp"
                 android:layout_height="40dp"
-                android:fontFamily="@font/segoeui"
                 android:text="FOTO DE INSTALACIÓN"
-                android:textSize="16dp"
                 android:textStyle="bold"
                 android:textColor="@android:color/white"
                 android:background="@drawable/fondo_boton_azul"
@@ -71,9 +69,7 @@
                 android:id="@+id/button_foto_lectura_screen_battery_intake_asignation"
                 android:layout_width="266dp"
                 android:layout_height="40dp"
-                android:fontFamily="@font/segoeui"
                 android:text="FOTO DE LECTURA"
-                android:textSize="16dp"
                 android:textStyle="bold"
                 android:textColor="@android:color/white"
                 android:background="@drawable/fondo_boton_azul"
@@ -100,9 +96,7 @@
                 android:id="@+id/button_foto_numero_serie_screen_battery_intake_asignation"
                 android:layout_width="266dp"
                 android:layout_height="40dp"
-                android:fontFamily="@font/segoeui"
                 android:text="FOTO DE NÚMERO SERIE"
-                android:textSize="16dp"
                 android:textStyle="bold"
                 android:textColor="@android:color/white"
                 android:background="@drawable/fondo_boton_azul"
@@ -134,7 +128,22 @@
                 android:layout_marginLeft="45dp"
                 android:layout_marginRight="50dp"
                 >
-
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:layout_marginBottom="10dp"
+                    >
+                    <Spinner
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:id="@+id/spinner_tipo_bateria"
+                        android:layout_marginLeft="40dp"
+                        android:layout_marginRight="40dp"
+                        >
+                    </Spinner>
+                </LinearLayout>
                 <LinearLayout
                     android:gravity="left"
                     android:padding="1dp"
@@ -146,7 +155,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="BATERÍA"
+                        android:text="PLANTA"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:paddingTop="20dp"
@@ -159,6 +168,24 @@
                         android:id="@+id/editText_bateria_screen_battery_intake_asignation"
                         android:inputType="number"
                         />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    >
+                    <Spinner
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:id="@+id/spinner_lado_bateria"
+                        android:layout_marginLeft="40dp"
+                        android:layout_marginRight="40dp"
+                        >
+                    </Spinner>
                 </LinearLayout>
 
                 <LinearLayout
@@ -217,6 +244,33 @@
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:orientation="horizontal"
+                    android:padding="1dp"
+                    android:layout_marginLeft="50dp"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="CONTADOR"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:paddingTop="20dp"
+                        />
+                    <EditText
+                        android:inputType="number"
+                        android:layout_width="40dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="2dp"
+                        android:id="@+id/editText_contador_screen_battery_intake_asignation"
+                        />
+
+                </LinearLayout>
+
 
             </LinearLayout>
 
@@ -236,9 +290,7 @@
                 android:id="@+id/button_validar_screen_battery_intake_asignation"
                 android:layout_width="266dp"
                 android:layout_height="40dp"
-                android:fontFamily="@font/segoeui"
                 android:text="VALIDAR"
-                android:textSize="16dp"
                 android:textStyle="bold"
                 android:textColor="@android:color/white"
                 android:background="@drawable/fondo_boton_azul"/>

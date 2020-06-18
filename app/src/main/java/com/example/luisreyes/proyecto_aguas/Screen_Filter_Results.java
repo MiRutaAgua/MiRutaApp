@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -37,6 +38,8 @@ public class Screen_Filter_Results extends AppCompatActivity {
 
     private ProgressDialog progressDialog;
     private ArrayList<MyCounter> lista_ordenada_de_tareas;
+    private ArrayList<MyCounterPortal> lista_ordenada_de_tareas_portales;
+    private ArrayList<MyBatteryCounter> lista_ordenada_de_tareas_en_bateria;
     private boolean limitar_a_operario = false;
 
     private ArrayAdapter arrayAdapter_all;
@@ -56,11 +59,15 @@ public class Screen_Filter_Results extends AppCompatActivity {
 
     private ArrayList<String> calles_filtradas_en_tipo_tarea;
 
-    private String tipo_filtro, tipo_tarea, calibre, poblacion, calle, geolocalizacion;
+    private static String tipo_filtro ="", tipo_tarea="", calibre="", poblacion="", calle="", geolocalizacion="", portales_string="";
     private ArrayList<String> portales, calibres_list;
 
     private TextView textView_listView_type_screen_filter_results;
-    private HashMap<String, String> mapaTiposDeTarea;
+
+    public static int selected_item = -1;
+
+    public static String from_close_task= "";
+    public static String from_team_or_personal = "FAST_VIEW_PERSONAL";
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,40 +77,39 @@ public class Screen_Filter_Results extends AppCompatActivity {
             team_or_personal_task_selection_screen_Activity.dBtareasController = new DBtareasController(this);
         }
 
-        mapaTiposDeTarea = new HashMap<>();
-        mapaTiposDeTarea.put("", "NUEVO CONTADOR INSTALAR");
-        mapaTiposDeTarea.put("NCI", "NUEVO CONTADOR INSTALAR");
-        mapaTiposDeTarea.put("U", "USADO CONTADOR INSTALAR");
-        mapaTiposDeTarea.put("T", "BAJA O CORTE DE SUMINISTRO");
-        mapaTiposDeTarea.put("TBDN", "BAJA O CORTE DE SUMINISTRO");
-        mapaTiposDeTarea.put("LFTD", "LIMPIEZA DE FILTRO Y TOMA DE DATOS");
-        //mapaTiposDeTarea.put("D", "DATOS");
-        mapaTiposDeTarea.put("TD", "TOMA DE DATOS");
-        mapaTiposDeTarea.put("I", "INSPECCIÓN");
-        mapaTiposDeTarea.put("CF", "COMPROBAR EMISOR");
-        mapaTiposDeTarea.put("EL", "EMISOR LECTURA");
-        mapaTiposDeTarea.put("SI", "SOLO INSTALAR");
-        //mapaTiposDeTarea.put("R", "REFORMA MAS CONTADOR");
-
         lista_ordenada_de_tareas = new ArrayList<>();
+        lista_ordenada_de_tareas_portales = new ArrayList<>();
+        lista_ordenada_de_tareas_en_bateria = new ArrayList<>();
         calles_filtradas_en_tipo_tarea = new ArrayList<>();
-        String portales_string="";
-        Log.e("Obteniendo parametros", "filter_type");
         try {
-            tipo_filtro = getIntent().getStringExtra("filter_type");
-            tipo_tarea = getIntent().getStringExtra("tipo_tarea");
-            Log.e("tipo_tarea enviado", tipo_tarea);
-            calibre = getIntent().getStringExtra("calibre");
-            Log.e("calibre enviado", calibre);
-            poblacion = getIntent().getStringExtra("poblacion");
-            calle = getIntent().getStringExtra("calle");
-            portales_string = getIntent().getStringExtra("portales");
-            geolocalizacion = getIntent().getStringExtra("geolocalizacion");
-            limitar_a_operario = getIntent().getBooleanExtra("limitar_a_operario", false);
+            from_close_task = getIntent().getStringExtra("from");
+            if(from_close_task!=null && !from_close_task.equals("CLOSE_TASK")) {
+
+                if(from_close_task.equals("FAST_VIEW_PERSONAL")){
+                    from_team_or_personal = "FAST_VIEW_PERSONAL";
+                }
+                else if(from_close_task.equals("FAST_VIEW_TEAM")){
+                    from_team_or_personal = "FAST_VIEW_TEAM";
+                }
+
+                tipo_filtro = getIntent().getStringExtra("filter_type");
+                tipo_tarea = getIntent().getStringExtra("tipo_tarea");
+                Log.e("tipo_tarea recibido", tipo_tarea);
+                calibre = getIntent().getStringExtra("calibre");
+                Log.e("calibre recibido", calibre);
+                poblacion = getIntent().getStringExtra("poblacion");
+                calle = getIntent().getStringExtra("calle");
+                portales_string = getIntent().getStringExtra("portales");
+                geolocalizacion = getIntent().getStringExtra("geolocalizacion");
+                limitar_a_operario = getIntent().getBooleanExtra("limitar_a_operario", false);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+        if(Screen_Login_Activity.checkStringVariable(tipo_filtro)) {
+            Log.e("parametros guardados", tipo_filtro);
+        }
 
         textView_listView_type_screen_filter_results=  (TextView) findViewById(R.id.textView_listView_type_screen_filter_results);
 
@@ -187,6 +193,7 @@ public class Screen_Filter_Results extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 ArrayAdapter arrayAdapter = (ArrayAdapter) listView_contadores_screen_advance_results.getAdapter();
                 Object object_click = listView_contadores_screen_advance_results.getAdapter().getItem(i);
+                selected_item=i;
                 if(object_click!=null) {
                     if (!arrayAdapter_all.isEmpty() && !arrayAdapter.isEmpty()) {
                         for (int n = 0; n < arrayAdapter_all.getCount(); n++) {
@@ -194,20 +201,35 @@ public class Screen_Filter_Results extends AppCompatActivity {
                             if (object != null) {
                                 if (object.toString().contains(object_click.toString())) {
                                     try {
+                                        int size =0;
+                                        String principal_variable_local="";
+                                        if(tipo_filtro.equals("GEOLOCALIZACION")){
+                                            size = lista_ordenada_de_tareas_en_bateria.size();
+                                            Log.e("Cantidad de tareas", String.valueOf(size));
+                                            principal_variable_local = lista_ordenada_de_tareas_en_bateria.get(n).getPrincipal_variable();
+                                            Log.e("principal_variable_l", principal_variable_local);
+
+                                        }else if (tipo_filtro.equals("DIRECCION")){
+                                            size = lista_ordenada_de_tareas_portales.size();
+                                            principal_variable_local = lista_ordenada_de_tareas_portales.get(n).getPrincipal_variable();
+                                        }else{
+                                            size = lista_ordenada_de_tareas.size();
+                                            principal_variable_local = lista_ordenada_de_tareas.get(n).getPrincipal_variable();
+                                        }
                                         if(n < team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas()
-                                                && !lista_ordenada_de_tareas.isEmpty() && lista_ordenada_de_tareas.size()> n){
+                                                && size > 0 && size > n){
                                             JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.
-                                                    dBtareasController.get_one_tarea_from_Database(lista_ordenada_de_tareas.get(n).getNumero_interno()));
+                                                    dBtareasController.get_one_tarea_from_Database(principal_variable_local));
                                             if (jsonObject != null) {
                                                 Screen_Login_Activity.tarea_JSON = jsonObject;
 
                                                 try {
                                                     if(Screen_Login_Activity.tarea_JSON!=null) {
-                                                        if (Screen_Login_Activity.tarea_JSON.getString(DBtareasController.operario).equals(
-                                                                Screen_Login_Activity.operario_JSON.getString("usuario"))) {
-                                                            acceder_a_Tarea();//revisar esto
+                                                        if (Screen_Login_Activity.tarea_JSON.getString(DBtareasController.operario).trim().contains(
+                                                                Screen_Login_Activity.operario_JSON.getString("usuario").trim())) {
+                                                            Screen_Table_Team.acceder_a_Tarea(Screen_Filter_Results.this, team_or_personal_task_selection_screen_Activity.FROM_FILTER_RESULT);//revisar esto
                                                         } else {
-//                                                                acceder_a_Tarea();
+//                                                               Screen_Table_Team.acceder_a_Tarea(Screen_Filter_Results.this);
                                                             try {
                                                                 new AlertDialog.Builder(Screen_Filter_Results.this)
                                                                         .setTitle("Cambiar Operario")
@@ -223,7 +245,7 @@ public class Screen_Filter_Results extends AppCompatActivity {
                                                                                     e.printStackTrace();
                                                                                     return;
                                                                                 }
-                                                                                acceder_a_Tarea();
+                                                                                Screen_Table_Team.acceder_a_Tarea(Screen_Filter_Results.this, team_or_personal_task_selection_screen_Activity.FROM_FILTER_RESULT);
                                                                             }
                                                                         })
                                                                         .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -268,6 +290,21 @@ public class Screen_Filter_Results extends AppCompatActivity {
             }
         });
 
+        applyFilter();
+//        if(listView_contadores_screen_advance_results != null && selected_item != -1 && listView_contadores_screen_advance_results.getAdapter().getCount()> selected_item){
+//            listView_contadores_screen_advance_results.setSelection(selected_item);
+//            Log.e("Seleccionado", String.valueOf(selected_item));
+//            listView_contadores_screen_advance_results.clearFocus();
+//            listView_contadores_screen_advance_results.post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    listView_contadores_screen_advance_results.setSelection(selected_item);
+//                }
+//            });
+//        }
+    }
+
+    void applyFilter(){
         if(tipo_filtro.equals("TIPO_TAREA")){
             Log.e("Llenando Resultados", "TIPO_TAREA");
             layout_filtro_direccion_screen_filter_tareas.setVisibility(View.VISIBLE);
@@ -287,7 +324,7 @@ public class Screen_Filter_Results extends AppCompatActivity {
                             portales.add(splitted_portales[i].trim());
                         }
                     }
-                    Log.e("portales", portales.toString());
+                    Log.e("Lista portales", portales.toString());
                     layout_filtro_direccion_screen_filter_tareas.setVisibility(View.GONE);
                     layout_filtro_tipo_tareas_screen_filter_results.setVisibility(View.VISIBLE);
                     fillListViewWithDirectionsResults();
@@ -297,6 +334,7 @@ public class Screen_Filter_Results extends AppCompatActivity {
         else if(tipo_filtro.equals("GEOLOCALIZACION")) {
             layout_filtro_direccion_screen_filter_tareas.setVisibility(View.GONE);
             layout_filtro_tipo_tareas_screen_filter_results.setVisibility(View.VISIBLE);
+            Log.e("ejecutando", "filtro GEOLOCALIZACION");
             fillListViewWithGeolocalizacionResults();
         }
         else if(tipo_filtro.equals("CITAS_VENCIDAS")) {
@@ -304,15 +342,50 @@ public class Screen_Filter_Results extends AppCompatActivity {
             layout_filtro_tipo_tareas_screen_filter_results.setVisibility(View.GONE);
             fillListViewWithCitasVencidasResults();
         }
-
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+//        from_close_task = getIntent().getStringExtra("from");
+        if (from_close_task != null) {
+            Log.e("onResume from", from_close_task);
+            if (from_close_task.equals("CLOSE_TASK")) {
+                ArrayList<String> lista_actual = new ArrayList<>();
+                for (int i = 0; i < listView_contadores_screen_advance_results.getAdapter().getCount(); i++) {
+                    if (i != selected_item) {
+                        lista_actual.add(listView_contadores_screen_advance_results.getAdapter().getItem(i).toString());
+                    }
+                }
+                listView_contadores_screen_advance_results.setAdapter(new ArrayAdapter<String>(this, R.layout.list_text_view, lista_actual));
+                if (listView_contadores_screen_advance_results != null && selected_item != -1 && listView_contadores_screen_advance_results.getAdapter().getCount() > selected_item) {
+                    listView_contadores_screen_advance_results.setSelection(selected_item);
+                    Log.e("onResume sel", String.valueOf(selected_item));
+                }
+                from_close_task = "";
+                textView_listView_type_screen_filter_results.setText("RESULTADOS: "
+                        + String.valueOf(listView_contadores_screen_advance_results.getAdapter().getCount()));
+            }else {
+                applyFilter();
+                if (listView_contadores_screen_advance_results != null && listView_contadores_screen_advance_results.getAdapter()!=null) {
+                    Log.e("Selected Item", String.valueOf(selected_item));
+                    if (selected_item != -1 && listView_contadores_screen_advance_results.getAdapter().getCount() > selected_item) {
+                        listView_contadores_screen_advance_results.setSelection(selected_item);
+//            lista_de_contadores_screen_table_team.setItemChecked(selected_item, true);
+                    }
+                }
+                textView_listView_type_screen_filter_results.setText("RESULTADOS: "
+                        + String.valueOf(listView_contadores_screen_advance_results.getAdapter().getCount()));
+            }
+        }
     }
 
     private void fillListViewWithGeolocalizacionResults() {
+        Log.e("ejecutando", "fillListViewWithGeolocalizacionResults");
         ArrayList<String> tipos_tareas_selected = new ArrayList<String>();
         tipos_tareas_selected.add("TODAS");
         ArrayList<String> calibres_selected = new ArrayList<String>();
         calibres_selected.add("TODOS");
-        lista_ordenada_de_tareas.clear();
+        lista_ordenada_de_tareas_en_bateria.clear();
         if (team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas() > 0) {
             ArrayList<String> tareas = new ArrayList<>();
             try {
@@ -332,31 +405,20 @@ public class Screen_Filter_Results extends AppCompatActivity {
                                     continue;
                                 }
                             }
-                            status = jsonObject.getString(DBtareasController.status_tarea);
-                            if (!status.contains("DONE") && !status.contains("done")) {
-                                if (jsonObject.getString(DBtareasController.codigo_de_geolocalizacion).trim().contains(geolocalizacion)) {
-                                    lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
+                            if (!Screen_Filter_Tareas.checkIfIsDone(jsonObject)) {
+                                if (jsonObject.getString(DBtareasController.codigo_de_geolocalizacion).trim().equals(geolocalizacion)) {
+                                    lista_ordenada_de_tareas_en_bateria.add(Screen_Table_Team.orderTareaInBatteryFromJSON(jsonObject));
                                     String cal =jsonObject.getString(DBtareasController.calibre_toma).trim();
-                                    if(cal.isEmpty()){
+                                    if(!Screen_Login_Activity.checkStringVariable(cal)){
                                         cal = "?";
                                     }
                                     if (!calibres_selected.contains(cal)) {
                                         calibres_selected.add(cal);
                                     }
-                                    String tipo = jsonObject.getString(DBtareasController.tipo_tarea);
-                                    if (mapaTiposDeTarea.containsKey(tipo)) {
-                                        if (!tipos_tareas_selected.contains(mapaTiposDeTarea.get(tipo))) {
-                                            tipos_tareas_selected.add(mapaTiposDeTarea.get(tipo));
-                                        }
-                                    } else if (tipo.contains("T") && tipo.contains("\"")) {
-                                        tipo = "BAJA O CORTE DE SUMINISTRO";
-                                        if (!tipos_tareas_selected.contains(tipo)) {
-                                            tipos_tareas_selected.add(tipo);
-                                        }
-                                    } else if (tipo.contains("LFTD")) {
-                                        tipo = "LIMPIEZA DE FILTRO Y TOMA DE DATOS";
-                                        if (!tipos_tareas_selected.contains(tipo)) {
-                                            tipos_tareas_selected.add(tipo);
+                                    String accion_ordenada = jsonObject.getString(DBtareasController.accion_ordenada);
+                                    if(Screen_Login_Activity.checkStringVariable(accion_ordenada)) {
+                                        if (!tipos_tareas_selected.contains(accion_ordenada)) {
+                                            tipos_tareas_selected.add(accion_ordenada);
                                         }
                                     }
                                 }
@@ -378,7 +440,7 @@ public class Screen_Filter_Results extends AppCompatActivity {
         ArrayAdapter arrayAdapter2 = new ArrayAdapter(this, R.layout.spinner_text_view,calibres_selected);
         spinner_filtro_tipo_tarea_screen_filter_results.setAdapter(arrayAdapter);
         spinner_filtro_calibre_screen_filter_results.setAdapter(arrayAdapter2);
-        orderTareastoArrayAdapter();
+        orderTareasInBatteryToArrayAdapter();
         arrayAdapter_salva_calibreAndTareas = (ArrayAdapter) listView_contadores_screen_advance_results.getAdapter();
     }
 
@@ -431,11 +493,11 @@ public class Screen_Filter_Results extends AppCompatActivity {
                                     continue;
                                 }
                             }
-                            if (Screen_Filter_Tareas.checkIfTaskIsDone(jsonObject)) {
+                            if (Screen_Filter_Tareas.checkIfIsDone(jsonObject)) {
                                 continue;
                             }
-                            String calle = jsonObject.getString(DBtareasController.calle);
-                            if (selected_poblacion.equals(jsonObject.getString(DBtareasController.poblacion))) {
+                            String calle = jsonObject.getString(DBtareasController.calle).trim();
+                            if (selected_poblacion.equals(jsonObject.getString(DBtareasController.poblacion).trim())) {
                                 if (calles_filtradas_en_tipo_tarea.contains(calle)) {
                                     if (!calles.contains(calle)) {
                                         calles.add(calle); ///Añadir calles de tareas filtrdas por tipo de tarea
@@ -485,11 +547,16 @@ public class Screen_Filter_Results extends AppCompatActivity {
             }
         }
         else if(!tarea_selected.equals("TODAS") && calibre_selected.equals("TODOS")){
-            tarea_selected = getTipoTareaFromValue(tarea_selected);
+            ArrayList<String> tipos_tareas = getTiposTareasFromValue(tarea_selected);
+            Log.e("tipos_tareas", tipos_tareas.toString());
             Log.e("Tarea Selected", tarea_selected);
+            Log.e("calibre Selected", calibre_selected+ "mm");
+
             for(int i=0; i < arrayAdapter_salva_calibreAndTareas.getCount(); i++) {
                 Log.e("Tipo Simplificado", tarea_selected);
-                if (arrayAdapter_salva_calibreAndTareas.getItem(i).toString().contains("TAREA " + tarea_selected)) {
+                String [] tarea_split = arrayAdapter_salva_calibreAndTareas.getItem(i).toString().split("TAREA");
+                boolean match = getMatch(tipos_tareas, tarea_split);
+                if (match) {
                     list_adapter_filtrado.add(arrayAdapter_salva_calibreAndTareas.getItem(i).toString());
                 }
             }
@@ -511,14 +578,16 @@ public class Screen_Filter_Results extends AppCompatActivity {
             textView_listView_type_screen_filter_results.setText("RESULTADOS: " + String.valueOf(
                     listView_contadores_screen_advance_results.getAdapter().getCount()));
         }else if(!tarea_selected.equals("TODAS") && !calibre_selected.equals("TODOS") ){
-            tarea_selected = getTipoTareaFromValue(tarea_selected);
+            ArrayList<String> tipos_tareas = getTiposTareasFromValue(tarea_selected);
+            Log.e("tipos_tareas", tipos_tareas.toString());
             Log.e("Tarea Selected", tarea_selected);
             Log.e("calibre Selected", calibre_selected+ "mm");
+
             for(int i=0; i < arrayAdapter_salva_calibreAndTareas.getCount(); i++) {
                 Log.e("Tipo Simplificado", tarea_selected);
-                if (arrayAdapter_salva_calibreAndTareas.getItem(i).toString().
-                        contains("TAREA " + tarea_selected)
-                        && arrayAdapter_salva_calibreAndTareas.getItem(i).toString().
+                String [] tarea_split = arrayAdapter_salva_calibreAndTareas.getItem(i).toString().split("TAREA");
+                boolean match = getMatch(tipos_tareas, tarea_split);
+                if (match && arrayAdapter_salva_calibreAndTareas.getItem(i).toString().
                         contains(calibre_selected + "mm")) {
                     list_adapter_filtrado.add(arrayAdapter_salva_calibreAndTareas.getItem(i).toString());
                 }
@@ -530,26 +599,30 @@ public class Screen_Filter_Results extends AppCompatActivity {
         }
     }
 
-    public String getTipoTareaFromValue(String tarea_selected){
-        Iterator it = mapaTiposDeTarea.entrySet().iterator();
-        String tipotarea = "";
-        while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry) it.next();
-            //System.out.println(pair.getKey() + " = " + pair.getValue());
-            if (pair.getValue().toString().equals(tarea_selected)) {
-                tipotarea = pair.getKey().toString();
+    public boolean getMatch(ArrayList<String> tipos_tareas, String [] tarea_split){
+        String string = tarea_split[tarea_split.length-1].trim();
+        String tipo_tarea = string.split(",")[0];
+        boolean match = false;
+        for(int n=0; n< tipos_tareas.size(); n++){
+            String tipo = "";
+            if(tipos_tareas.get(n).contains(" + ")){
+                tipo = tipos_tareas.get(n).split(" + ")[0].trim();
+            }else{
+                tipo = tipos_tareas.get(n);
             }
-            //it.remove(); // avoids a ConcurrentModificationException
+            if(tipo_tarea.contains(tipo)){
+                match = true;
+            }
         }
-        Log.e("Tarea Converted", tarea_selected);
-        if(tipotarea.isEmpty()){
-            return "NCI";
-        }
-        else {
-            return tipotarea;
-        }
+        return match;
+    }
+    public ArrayList<String>  getTiposTareasFromValue(String tarea_selected){
+        ArrayList<String>  tipos_tareas = Tabla_de_Codigos.getTipoByAccionOrdenada(tarea_selected);
+        Log.e("Tarea tarea_selected", tarea_selected);
+        return tipos_tareas;
     }
     private void acceder_a_Tarea(){
+        team_or_personal_task_selection_screen_Activity.from_team_or_personal = team_or_personal_task_selection_screen_Activity.FROM_FILTER_RESULT;
         try {
             String acceso = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.acceso);
             acceso = acceso.replace("\n", "");
@@ -588,17 +661,22 @@ public class Screen_Filter_Results extends AppCompatActivity {
                                 continue;
                             }
                         }
-                        if (!Screen_Filter_Tareas.checkIfTaskIsDone(jsonObject)) {
-                            String numero_interno = jsonObject.getString(DBtareasController.numero_interno).trim();
-                            if (!numero_interno.equals("null") && !numero_interno.equals("NULL") && !numero_interno.isEmpty()) {
+                        if (!Screen_Filter_Tareas.checkIfIsDone(jsonObject)) {
+                            String principal_variable = jsonObject.getString(DBtareasController.principal_variable).trim();
+                            if (!principal_variable.equals("null") && !principal_variable.equals("NULL") && !principal_variable.isEmpty()) {
                                 if (team_or_personal_task_selection_screen_Activity.
-                                        tareas_con_citas_obsoletas.contains(numero_interno)) {
-                                    lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
-                                    if (!poblaciones_selected.contains(jsonObject.getString(DBtareasController.poblacion))) {
-                                        poblaciones_selected.add(jsonObject.getString(DBtareasController.poblacion));
-                                    }
-                                    if (!calles_filtradas_en_tipo_tarea.contains(jsonObject.getString(DBtareasController.calle))) {
-                                        calles_filtradas_en_tipo_tarea.add(jsonObject.getString(DBtareasController.calle));
+                                        tareas_con_citas_obsoletas.contains(principal_variable)) {
+                                    if (Screen_Table_Team.checkIfDateisDeprecated(jsonObject)) {
+                                        lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
+                                        if (!poblaciones_selected.contains(jsonObject.getString(DBtareasController.poblacion).trim())) {
+                                            poblaciones_selected.add(jsonObject.getString(DBtareasController.poblacion).trim());
+                                        }
+                                        if (!calles_filtradas_en_tipo_tarea.contains(jsonObject.getString(DBtareasController.calle).trim())) {
+                                            calles_filtradas_en_tipo_tarea.add(jsonObject.getString(DBtareasController.calle).trim());
+                                        }
+                                    }else{
+                                        team_or_personal_task_selection_screen_Activity.
+                                                tareas_con_citas_obsoletas.remove(principal_variable);
                                     }
                                 }
                             }
@@ -622,7 +700,7 @@ public class Screen_Filter_Results extends AppCompatActivity {
         tipos_tareas_selected.add("TODAS");
         ArrayList<String> calibres_selected = new ArrayList<String>();
         calibres_selected.add("TODOS");
-        lista_ordenada_de_tareas.clear();
+        lista_ordenada_de_tareas_portales.clear();
         if (team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas() > 0) {
             ArrayList<String> tareas = new ArrayList<>();
             try {
@@ -633,21 +711,26 @@ public class Screen_Filter_Results extends AppCompatActivity {
                     try {
                         jsonObject = new JSONObject(tareas.get(i));
                         if (!team_or_personal_task_selection_screen_Activity.checkGestor(jsonObject)) {
+                            Log.d("Ignorando", "Seleccionado GESTOR");
                             continue;
                         }
-                        String status = "";
                         try {
                             if (limitar_a_operario) {
                                 if (!Screen_Filter_Tareas.checkIfOperarioTask(jsonObject)) {
+                                    Log.d("Ignorando", "Seleccionado operario");
                                     continue;
                                 }
                             }
-                            status = jsonObject.getString(DBtareasController.status_tarea);
-                            if (!status.contains("DONE") && !status.contains("done")) {
-                                if (jsonObject.getString(DBtareasController.poblacion).trim().equals(poblacion)
-                                        && jsonObject.getString(DBtareasController.calle).trim().equals(calle)
-                                        && portales.contains(jsonObject.getString(DBtareasController.numero).trim())) {
-                                    lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
+                            if (!Screen_Filter_Tareas.checkIfIsDone(jsonObject)) {
+                                String pob = jsonObject.getString(DBtareasController.poblacion).trim();
+                                String call = jsonObject.getString(DBtareasController.calle).trim();
+                                String por = jsonObject.getString(DBtareasController.numero).trim();
+                                por = por.replaceFirst("^0+(?!$)", "");
+
+                                if (pob.equals(poblacion.trim())
+                                        && call.equals(calle.trim())
+                                        && portales.contains(por)) {
+                                    lista_ordenada_de_tareas_portales.add(Screen_Table_Team.orderTareaFromJSONPortales(jsonObject));
                                     String cal =jsonObject.getString(DBtareasController.calibre_toma).trim();
                                     if(cal.isEmpty()){
                                         cal = "?";
@@ -655,23 +738,13 @@ public class Screen_Filter_Results extends AppCompatActivity {
                                     if (!calibres_selected.contains(cal)) {
                                         calibres_selected.add(cal);
                                     }
-                                    String tipo = jsonObject.getString(DBtareasController.tipo_tarea);
-                                    if (mapaTiposDeTarea.containsKey(tipo)) {
-                                        if (!tipos_tareas_selected.contains(mapaTiposDeTarea.get(tipo))) {
-                                            tipos_tareas_selected.add(mapaTiposDeTarea.get(tipo));
-                                        }
-                                    } else if (tipo.contains("T") && tipo.contains("\"")) {
-                                        tipo = "BAJA O CORTE DE SUMINISTRO";
-                                        if (!tipos_tareas_selected.contains(tipo)) {
-                                            tipos_tareas_selected.add(tipo);
-                                        }
-                                    } else if (tipo.contains("LFTD")) {
-                                        tipo = "LIMPIEZA DE FILTRO Y TOMA DE DATOS";
-                                        if (!tipos_tareas_selected.contains(tipo)) {
-                                            tipos_tareas_selected.add(tipo);
-                                        }
+                                    String accion_ordenada = jsonObject.getString(DBtareasController.accion_ordenada);
+                                    if (!tipos_tareas_selected.contains(accion_ordenada)) {
+                                        tipos_tareas_selected.add(accion_ordenada);
                                     }
                                 }
+                            }else{
+                                Log.d("Ignorando", "Por Status Tarea");
                             }
                         } catch (JSONException e) {
                             Toast.makeText(getApplicationContext(), "No se pudo obtener estado se tarea\n" + e.toString(), Toast.LENGTH_LONG).show();
@@ -690,7 +763,7 @@ public class Screen_Filter_Results extends AppCompatActivity {
         ArrayAdapter arrayAdapter2 = new ArrayAdapter(this, R.layout.spinner_text_view,calibres_selected);
         spinner_filtro_tipo_tarea_screen_filter_results.setAdapter(arrayAdapter);
         spinner_filtro_calibre_screen_filter_results.setAdapter(arrayAdapter2);
-        orderTareastoArrayAdapter();
+        orderTareasInPortalestoArrayAdapter();
         arrayAdapter_salva_calibreAndTareas = (ArrayAdapter) listView_contadores_screen_advance_results.getAdapter();
     }
     public void fillListViewWithTipoTareaResults(){
@@ -714,22 +787,23 @@ public class Screen_Filter_Results extends AppCompatActivity {
                                 continue;
                             }
                         }
-                        if (!Screen_Filter_Tareas.checkIfTaskIsDone(jsonObject)) {
+                        if (!Screen_Filter_Tareas.checkIfIsDone(jsonObject)) {
                             String tipo = jsonObject.getString(DBtareasController.tipo_tarea).trim();
                             String cal = jsonObject.getString(DBtareasController.calibre_toma).trim();
-                            if (tipo.equals("null") ||  tipo.equals("NULL") ||  tipo.isEmpty()) {
-                                tipo = "NCI";
-                            }
-                            if (cal.equals("null") ||  cal.equals("NULL") ||  cal.isEmpty()) {
-                                cal ="?";
-                            }
-                            if (calibre.equals(cal) && tipo_tarea.equals(tipo)) {
-                                lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
-                                if (!poblaciones_selected.contains(jsonObject.getString(DBtareasController.poblacion))) {
-                                    poblaciones_selected.add(jsonObject.getString(DBtareasController.poblacion));
+                            if (!Screen_Login_Activity.checkStringVariable(tipo)) {
+                                tipo = "NCI ";
+                                if (!Screen_Login_Activity.checkStringVariable(cal)) {
+                                    cal ="?";
                                 }
-                                if (!calles_filtradas_en_tipo_tarea.contains(jsonObject.getString(DBtareasController.calle))) {
-                                    calles_filtradas_en_tipo_tarea.add(jsonObject.getString(DBtareasController.calle));
+                                tipo += cal + "mm";
+                            }
+                            if (tipo_tarea.equals(tipo)) {
+                                lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
+                                if (!poblaciones_selected.contains(jsonObject.getString(DBtareasController.poblacion).trim())) {
+                                    poblaciones_selected.add(jsonObject.getString(DBtareasController.poblacion).trim());
+                                }
+                                if (!calles_filtradas_en_tipo_tarea.contains(jsonObject.getString(DBtareasController.calle).trim())) {
+                                    calles_filtradas_en_tipo_tarea.add(jsonObject.getString(DBtareasController.calle).trim());
                                 }
                             }
                         }
@@ -748,12 +822,20 @@ public class Screen_Filter_Results extends AppCompatActivity {
         arrayAdapter_salva_poblacion = (ArrayAdapter) listView_contadores_screen_advance_results.getAdapter();
     }
 
-    public void orderTareastoArrayAdapter(){
-        Collections.sort(lista_ordenada_de_tareas);
+    public void orderTareasInPortalestoArrayAdapter(){
+        Collections.sort(lista_ordenada_de_tareas_portales);
         ArrayList<String> lista_contadores = new ArrayList<String>();
-        for(int i=0; i < lista_ordenada_de_tareas.size(); i++){
-            lista_contadores.add(Screen_Filter_Tareas.
-                    orderCounterForListView(lista_ordenada_de_tareas.get(i), true));
+        String string_view = "";
+        for(int i=0; i < lista_ordenada_de_tareas_portales.size(); i++){
+            string_view = Screen_Filter_Tareas.
+                    orderCounterForListView(lista_ordenada_de_tareas_portales.get(i));
+            if(!lista_contadores.contains(string_view)) {
+                lista_contadores.add(string_view);
+            }
+            else{
+                //Borrar la tarera repetida si existe
+                eraseTaskLocal(lista_ordenada_de_tareas_portales.get(i).getPrincipal_variable());
+            }
         }
         ArrayAdapter arrayAdapter = new ArrayAdapter(this, R.layout.list_text_view, lista_contadores);
         arrayAdapter_all = arrayAdapter;
@@ -762,10 +844,97 @@ public class Screen_Filter_Results extends AppCompatActivity {
                 String.valueOf(listView_contadores_screen_advance_results.getCount()));
     }
 
+    public void orderTareastoArrayAdapter(){
+        Collections.sort(lista_ordenada_de_tareas);
+        ArrayList<String> lista_contadores = new ArrayList<String>();
+
+        String string_view = "";
+        for(int i=0; i < lista_ordenada_de_tareas.size(); i++){
+            string_view = Screen_Filter_Tareas.
+                    orderCounterForListView(lista_ordenada_de_tareas.get(i), true);
+            if(!lista_contadores.contains(string_view)) {
+                lista_contadores.add(string_view);
+            }
+            else{
+                //Borrar la tarera repetida si existe
+                eraseTaskLocal(lista_ordenada_de_tareas.get(i).getPrincipal_variable());
+            }
+        }
+        ArrayAdapter arrayAdapter = new ArrayAdapter(this, R.layout.list_text_view, lista_contadores);
+        arrayAdapter_all = arrayAdapter;
+        listView_contadores_screen_advance_results.setAdapter(arrayAdapter);
+        textView_listView_type_screen_filter_results.setText("RESULTADOS: "+
+                String.valueOf(listView_contadores_screen_advance_results.getCount()));
+    }
+    public void orderTareasInBatteryToArrayAdapter(){
+        Collections.sort(lista_ordenada_de_tareas_en_bateria);
+        Log.e("ejecutando", "orderTareasInBatteryToArrayAdapter");
+        Log.e("tamaño", String.valueOf(lista_ordenada_de_tareas_en_bateria));
+        ArrayList<String> lista_contadores = new ArrayList<String>();
+        String string_view = "";
+        for(int i=0; i < lista_ordenada_de_tareas_en_bateria.size(); i++){
+            string_view = Screen_Filter_Tareas.
+                    orderCounterForListView(lista_ordenada_de_tareas_en_bateria.get(i), true);
+            if(!lista_contadores.contains(string_view)) {
+                lista_contadores.add(string_view);
+            }
+            else{
+                //Borrar la tarera repetida si existe
+                eraseTaskLocal(lista_ordenada_de_tareas_en_bateria.get(i).getPrincipal_variable());
+            }
+        }
+        ArrayAdapter arrayAdapter = new ArrayAdapter(this, R.layout.list_text_view, lista_contadores);
+        arrayAdapter_all = arrayAdapter;
+        listView_contadores_screen_advance_results.setAdapter(arrayAdapter);
+        textView_listView_type_screen_filter_results.setText("RESULTADOS: "+
+                String.valueOf(listView_contadores_screen_advance_results.getCount()));
+    }
+
+    public static boolean eraseTaskLocal(String principal_variable){
+        if(team_or_personal_task_selection_screen_Activity.dBtareasController.checkIfTareaExists(principal_variable)) {
+            try {
+                String tarea = team_or_personal_task_selection_screen_Activity.dBtareasController.get_one_tarea_from_Database(principal_variable);
+                JSONObject tarea_jsonObject = new JSONObject(tarea);
+                if(Screen_Filter_Tareas.checkIfIsDone(tarea_jsonObject)){
+                    return false;
+                }
+                team_or_personal_task_selection_screen_Activity.dBtareasController.deleteTarea(tarea_jsonObject);
+                Log.e("borrada tarea",principal_variable);
+                return true;
+            } catch (JSONException e) {
+                Log.e("Error","No hay tabla donde borrar");
+                e.printStackTrace();
+                return false;
+            }
+        }else{
+            Log.e("No encontrada","No se ah enontrado tarea para borrar");
+            return false;
+        }
+    }
     @Override
     public void onBackPressed() {
+        if(tipo_filtro.equals("CITAS_VENCIDAS")) {
+            Intent open_screen_team_or_task= new Intent(this, team_or_personal_task_selection_screen_Activity.class);
+            startActivity(open_screen_team_or_task);
+        }
+        else if(tipo_filtro.equals("DIRECCION") || tipo_filtro.equals("GEOLOCALIZACION")) {
+            Intent open_screen= new Intent(this, Screen_Filter_Tareas.class);
+            open_screen.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+            open_screen.putExtra("desde", Screen_Filter_Tareas.desde);
+//            openTableActivity.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            startActivityIfNeeded(open_screen, 0);
+        }
+        else if (tipo_filtro.equals("TIPO_TAREA")) {
+            if(from_team_or_personal.equals("FAST_VIEW_PERSONAL")){
+                Intent open_screen_team_or_task= new Intent(this, Screen_Fast_View_Personal_Task.class);
+                startActivity(open_screen_team_or_task);
+            }
+            else if(from_team_or_personal.equals("FAST_VIEW_TEAM")){
+                Intent open_screen_team_or_task= new Intent(this, Screen_Fast_View_Team_Task.class);
+                startActivity(open_screen_team_or_task);
+            }
+        }
         finish();
-        super.onBackPressed();
     }
 }
 

@@ -1,5 +1,8 @@
 package com.example.luisreyes.proyecto_aguas;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -9,23 +12,12 @@ import java.util.HashMap;
 
 public class Tabla_de_Codigos {
 
-    public static HashMap<String,String> mapaTiposDeResultados;
-    public static HashMap<String,String> mapaTiposDeAnomalias;
     public static HashMap<String,String> mapaTiposDeEmplazamiento;
     public static HashMap<String,String> mapaTiposDeRestoEmplazamiento;
     public static HashMap<String,String> mapaTiposDeMarca;
     public static HashMap<String,String> mapaTiposDeClase;
     public static HashMap<String,String> mapaTiposDeTipoRadio;
 
-    public static HashMap<String,String> mapaAnomaliasNCI;
-    public static HashMap<String,String> mapaAnomaliasLFTD;
-    public static HashMap<String,String> mapaAnomaliasTD;
-    public static HashMap<String,String> mapaAnomaliasU;
-    public static HashMap<String,String> mapaAnomaliasSI;
-    public static HashMap<String,String> mapaAnomaliasT;
-    public static HashMap<String,String> mapaAnomaliasCF;
-    public static HashMap<String,String> mapaAnomaliasEL;
-    public static HashMap<String,String> mapaAnomaliasI;
     public static HashMap<String,String> emptyMap;
 
     public static ArrayList<String> lista_tipo_radio;
@@ -105,13 +97,13 @@ public class Tabla_de_Codigos {
         mapaTiposDeRestoEmplazamiento.put("PR", "ED");
 
         mapaTiposDeMarca = new HashMap<>();
-        mapaTiposDeMarca.put("ELSTER-HELIX 4000", "001");
+        mapaTiposDeMarca.put("ELSTER - HELIX 4000", "001");
         mapaTiposDeMarca.put("ELSTER - DELAUNET C", "002");
         mapaTiposDeMarca.put("ELSTER - ZENIT S200", "003");
         mapaTiposDeMarca.put("ITRON - FLOSTAR M", "004"); //preguntar por este
         mapaTiposDeMarca.put("ITRON - MSD CYBLE", "005");
         mapaTiposDeMarca.put("ELSTER - COSMOS WPW", "006");
-        mapaTiposDeMarca.put("SAPPEL -AQUILA V3 V4", "007");
+        mapaTiposDeMarca.put("SAPPEL - AQUILA V3 V4", "007");
         mapaTiposDeMarca.put("SAPPEL - ALTAIR V3 V4", "008");
         mapaTiposDeMarca.put("ITRON - MSD NO CYBLE", "009");
         mapaTiposDeMarca.put("ELSTER - S130", "010"); //preguntar por este
@@ -127,7 +119,7 @@ public class Tabla_de_Codigos {
         mapaTiposDeMarca.put("ELSTER - S150", "020");
         mapaTiposDeMarca.put("ELSTER - WOLTMANN NO REED", "021");
         mapaTiposDeMarca.put("ITRON - MEDIS UNIMAG", "022");
-        mapaTiposDeMarca.put("ITRON -TA.3F", "023");
+        mapaTiposDeMarca.put("ITRON - TA.3F", "023");
         mapaTiposDeMarca.put("SENSUS - CONTAGUA-DN_13_1", "024"); //preguntar por este
         mapaTiposDeMarca.put("ITRON - FLODIS", "025");
         mapaTiposDeMarca.put("EBRO - EBRO", "026");
@@ -151,7 +143,7 @@ public class Tabla_de_Codigos {
         mapaTiposDeMarca.put("SENSUS - 620C", "044"); //preguntar por este
         mapaTiposDeMarca.put("POWOGAZ - JS CLASE C", "045");
         mapaTiposDeMarca.put("POWOGAZ - WI INCENDIOS", "046");
-        mapaTiposDeMarca.put("ARAD-OCTAVE", "047");
+        mapaTiposDeMarca.put("ARAD - OCTAVE", "047");
         mapaTiposDeMarca.put("ELSTER - H5000", "048");
         mapaTiposDeMarca.put("ELSTER - Y290", "049");
         mapaTiposDeMarca.put("ELSTER - V200", "050"); //preguntar por este
@@ -161,16 +153,17 @@ public class Tabla_de_Codigos {
         mapaTiposDeMarca.put("SAPPEL - HYDRUS", "054");
         mapaTiposDeMarca.put("ELSTER - CSJ_S2000", "055");
         mapaTiposDeMarca.put("ELSTER - R 1200", "056"); //preguntar por este
-        mapaTiposDeMarca.put("ELSTER-Y290M", "057");
-        mapaTiposDeMarca.put("ELSTER-M120", "058");
-        mapaTiposDeMarca.put("SAPPEL-WP G_ESFERA ESTANDAR", "059");
-        mapaTiposDeMarca.put("GENERICO-DN:13-15-20 MM", "060");
-        mapaTiposDeMarca.put("GENERICO-DN:25-30-40 MM", "061");
-        mapaTiposDeMarca.put("GENERICO-DN:50-65-80-100", "062");
-        mapaTiposDeMarca.put("GENERICO-DN:125-150-200 M", "063");
-        mapaTiposDeMarca.put("SV_RTK-CRONOS", "070"); //preguntar por este
+        mapaTiposDeMarca.put("ELSTER - Y290M", "057");
+        mapaTiposDeMarca.put("ELSTER - M120", "058");
+        mapaTiposDeMarca.put("SAPPEL - WP G_ESFERA ESTANDAR", "059");
+        mapaTiposDeMarca.put("GENERICO - DN:13-15-20 MM", "060");
+        mapaTiposDeMarca.put("GENERICO - DN:25-30-40 MM", "061");
+        mapaTiposDeMarca.put("GENERICO - DN:50-65-80-100", "062");
+        mapaTiposDeMarca.put("GENERICO - DN:125-150-200 M", "063");
+        mapaTiposDeMarca.put("SV_RTK - CRONOS", "070"); //preguntar por este
+        mapaTiposDeMarca.put("DIEHL - ALTAIR V3 V4", "071");
 
-    mapaTiposDeClase= new HashMap<>();
+        mapaTiposDeClase= new HashMap<>();
         mapaTiposDeClase.put("B", "Fijo en Boca de Riego");
         mapaTiposDeClase.put("C", "Combinado");
         mapaTiposDeClase.put("M", "Chorro Múltiple");
@@ -181,161 +174,294 @@ public class Tabla_de_Codigos {
         mapaTiposDeClase.put("V", "Volumétrico sin Radio Emisor");
         mapaTiposDeClase.put("W", "Woltman");
 
-//        mapaTiposDeTipoRadio= new HashMap<>();
-//        mapaTiposDeTipoRadio.put("027", "CORRECCION DE DATOS DE CONTADOR");
-//        mapaTiposDeTipoRadio.put("A32", "ALTA CONTADOR INSTALADO");
-//        mapaTiposDeTipoRadio.put("C32", "LEGALIZACION CONTADOR INSTALADO");
-//        mapaTiposDeTipoRadio.put("Z21", "CAMBIOS MASIVOS");
-//        mapaTiposDeTipoRadio.put("LHC", "LECTURA HISTORICA. WB-DB-RF");
-
-        mapaTiposDeResultados = new HashMap<>();
-        mapaTiposDeResultados.put("036", "012");
-        mapaTiposDeResultados.put("037", "012");
-        mapaTiposDeResultados.put("039", "012");
-        mapaTiposDeResultados.put("A30", "002");
-        mapaTiposDeResultados.put("A31", "002");
-        mapaTiposDeResultados.put("A32", "002");
-        mapaTiposDeResultados.put("A33", "002");
-//        mapaTiposDeResultados.put("A32", "SR2"); //preguntar por este
-        mapaTiposDeResultados.put("C32", "002");
-        mapaTiposDeResultados.put("C33", "002");
-        mapaTiposDeResultados.put("S01", "002");
-        mapaTiposDeResultados.put("S02", "002");
-        mapaTiposDeResultados.put("CVF", "002");
-        mapaTiposDeResultados.put("021", "002");
-        mapaTiposDeResultados.put("Z21", "002");
-        mapaTiposDeResultados.put("NZ2", "002");
-        mapaTiposDeResultados.put("NZ0", "002");
-        mapaTiposDeResultados.put("023", "002");
-        mapaTiposDeResultados.put("Z23", "002");
-        mapaTiposDeResultados.put("APC", "002");
-        mapaTiposDeResultados.put("X12", "996");
-        mapaTiposDeResultados.put("X13", "990");
-        mapaTiposDeResultados.put("X14", "990");
-        mapaTiposDeResultados.put("X15", "996");
-        mapaTiposDeResultados.put("NX2", "994");
-        mapaTiposDeResultados.put("NX0", "994");
-        mapaTiposDeResultados.put("LHC", "991");
-        mapaTiposDeResultados.put("M21", "979-980-981-982");
-        mapaTiposDeResultados.put("III", "DII");
-        mapaTiposDeResultados.put("R30", "997");
-        mapaTiposDeResultados.put("003", "903");
-
-        mapaTiposDeAnomalias = new HashMap<>();
-        mapaTiposDeAnomalias.put("", "NUEVO CONTADOR INSTALAR");
-        mapaTiposDeAnomalias.put("NCI", "NUEVO CONTADOR INSTALAR");
-        mapaTiposDeAnomalias.put("U", "USADO CONTADOR INSTALAR");
-        mapaTiposDeAnomalias.put("T", "BAJA O CORTE DE SUMINISTRO");
-        mapaTiposDeAnomalias.put("TBDN", "BAJA O CORTE DE SUMINISTRO");
-        mapaTiposDeAnomalias.put("LFTD", "LIMPIEZA DE FILTRO Y TOMA DE DATOS");
-    //mapaTiposDeAnomalias.put("D", "DATOS");
-        mapaTiposDeAnomalias.put("TD", "TOMA DE DATOS");
-        mapaTiposDeAnomalias.put("I", "INSPECCIÓN");
-        mapaTiposDeAnomalias.put("CF", "COMPROBAR EMISOR");
-        mapaTiposDeAnomalias.put("EL", "EMISOR LECTURA");
-        mapaTiposDeAnomalias.put("SI", "SOLO INSTALAR");
-    //mapaTiposDeAnomalias.put("R", "REFORMA MAS CONTADOR");
-
         emptyMap = new HashMap<>();
 
-        mapaAnomaliasNCI = new HashMap<>();
-        mapaAnomaliasNCI.put("S01", "SUMINISTRO POR CAMBIO DE CALIBRE");
-        mapaAnomaliasNCI.put("S02", "SUMINISTRO POR IMPAGO DE CONTADOR");
-        mapaAnomaliasNCI.put("001", "CONTADOR DESTRUIDO");
-        mapaAnomaliasNCI.put("002", "CUENTA AL REVES");
-        mapaAnomaliasNCI.put("004", "AGUJAS SUELTAS O ROTAS");
-        mapaAnomaliasNCI.put("005", "CRISTAL ROTO");
-        mapaAnomaliasNCI.put("008", "NO FUNCIONA CORRECTAMENTE");
-        mapaAnomaliasNCI.put("009", "FUGA EN EL CONTADOR");
-        mapaAnomaliasNCI.put("021", "VERIFICACION CONTADOR CONSORCIO");
-        mapaAnomaliasNCI.put("024", "NO DISPONE DE CONTADOR");
-        mapaAnomaliasNCI.put("025", "MAS DE N AÑOS Y METROS 3 CONTADOS");
-        mapaAnomaliasNCI.put("026", "MAS DE N AÑOS");
-        mapaAnomaliasNCI.put("034", "CONTADOR PRECINTADO");
-        mapaAnomaliasNCI.put("A32", "TOMA DE DATOS");
-        mapaAnomaliasNCI.put("A33", "ALTA CONTADOR NUEVO");
-        mapaAnomaliasNCI.put("C33", "ALTA LEGALIZACION");
-        mapaAnomaliasNCI.put("CVF", "CONTADOR A VERIFICAR");
-        mapaAnomaliasNCI.put("APC", "ANALISIS DE PARQUE DE CONTADORES");
-        mapaAnomaliasNCI.put("NZ0", "CTD Y EMISORA RENOVADOS");
-        mapaAnomaliasNCI.put("NZ2", "SUSTITUIR CONTADOR EMISOR");
-        mapaAnomaliasNCI.put("Z21", "CAMBIOS MASIVOS");
-
-        mapaAnomaliasLFTD = new HashMap<>();
-        mapaAnomaliasLFTD.put("023", "REPARACION URGENTE");
-        mapaAnomaliasLFTD.put("Z23", "REPARACION CTD Y EMISOR");
-
-        mapaAnomaliasTD= new HashMap<>();
-        mapaAnomaliasTD.put("027", "CORRECCION DE DATOS DE CONTADOR");
-        mapaAnomaliasTD.put("A32", "ALTA CONTADOR INSTALADO");
-        mapaAnomaliasTD.put("C32", "LEGALIZACION CONTADOR INSTALADO");
-        mapaAnomaliasTD.put("Z21", "CAMBIOS MASIVOS");
-        mapaAnomaliasTD.put("LHC", "LECTURA HISTORICA. WB-DB-RF");
-
-        mapaAnomaliasU = new HashMap<>();
-        mapaAnomaliasU.put("A31", "ALTA CONTADOR DE BAJA");
-
-        mapaAnomaliasSI = new HashMap<>();
-        mapaAnomaliasSI.put("010", "SALIDERO EN LO RACORES");
-        mapaAnomaliasSI.put("023", "REPARACION URGENTE");
-        mapaAnomaliasSI.put("A30", "ALTA SOLO INSTALAR");
-        mapaAnomaliasSI.put("003", "INSTALADO AL REVÉS");
-        mapaAnomaliasSI.put("R30", "REINSTALAR UBICACIÓN CORRECTA");
-
-        mapaAnomaliasT = new HashMap<>();
-        mapaAnomaliasT.put("035", "BAJA PROVISIONAL DE OFICIO");
-        mapaAnomaliasT.put("036", "BAJA DEFINITIVA");
-        mapaAnomaliasT.put("037", "BAJA ADMINISTRATIVA DE OFICIO");
-        mapaAnomaliasT.put("038", "BAJA ADMINISTRATIVA DE CONTADOR DEL ABONADO");
-        mapaAnomaliasT.put("039", "BAJA ADMINISTRATIVA DE CONTADOR DEL CONSORCIO");
-
-        mapaAnomaliasCF = new HashMap<>();
-        mapaAnomaliasCF.put("X12", "ALARMA DE LA RADIO");
-        mapaAnomaliasCF.put("X15", "EMPAREJAR DATO RADIO Y MEC");
-        mapaAnomaliasCF.put("NX2", "RENOVACIÓN DE EMISORA");
-        mapaAnomaliasCF.put("NX0", "EMISORA RENOVADA. INFORMA CIA");
-
-        mapaAnomaliasEL = new HashMap<>();
-        mapaAnomaliasEL.put("X13", "RADIO NO RECIBIDA. VISITA P.");
-        mapaAnomaliasEL.put("X14", "RADIO NO RECIBIDA. HAY LECT.");
-
-        mapaAnomaliasI = new HashMap<>();
-        mapaAnomaliasI.put("M21", "PREPARACIÓN RENOVACIÓN PERIÓDICA");
-        mapaAnomaliasI.put("III", "INFORME INSTALACIÓN INTERIOR");
 }
 
-    public static String getTipoTareaByAnomaly(String anomaly){
-
-        if(mapaAnomaliasNCI.containsKey(anomaly)){
-            return mapaTiposDeAnomalias.get("NCI");
+    public static String getResultadosPosiblesByAnomaly(String anomaly){
+        if (team_or_personal_task_selection_screen_Activity.dBcausasController.countTableCausas() > 0) {
+            ArrayList<String> causas = new ArrayList<>();
+            try {
+                causas = team_or_personal_task_selection_screen_Activity.
+                        dBcausasController.get_all_causas_from_Database();
+                for (int i = 0; i < causas.size(); i++) {
+                    JSONObject jsonObject = null;
+                    try {
+                        jsonObject = new JSONObject(causas.get(i));
+                        String anomalia_en_json = jsonObject.getString(DBCausasController.codigo_causa_causas).trim();
+                        if (anomalia_en_json.equals(anomaly)) {
+                            String resultados = jsonObject.getString(DBCausasController.resultados_posibles_causas).trim();
+                            return resultados;
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
-        else if (mapaAnomaliasU.containsKey(anomaly)){
-            return mapaTiposDeAnomalias.get("U");
-        }
-        else if (mapaAnomaliasCF.containsKey(anomaly)){
-            return mapaTiposDeAnomalias.get("CF");
-        }
-        else if (mapaAnomaliasEL.containsKey(anomaly)){
-            return mapaTiposDeAnomalias.get("EL");
-        }
-        else if (mapaAnomaliasI.containsKey(anomaly)){
-            return mapaTiposDeAnomalias.get("I");
-        }
-        else if (mapaAnomaliasLFTD.containsKey(anomaly)){
-            return mapaTiposDeAnomalias.get("LFTD");
-        }
-        else if (mapaAnomaliasSI.containsKey(anomaly)){
-            return mapaTiposDeAnomalias.get("SI");
-        }
-        else if (mapaAnomaliasT.containsKey(anomaly)){
-            return mapaTiposDeAnomalias.get("T");
-        }
-        else if (mapaAnomaliasTD.containsKey(anomaly)){
-            return mapaTiposDeAnomalias.get("TD");
-        }
-        else {
-            return mapaTiposDeAnomalias.get("");
-        }
+        return "";
     }
 
+    public static ArrayList<String> getTipoByAccionOrdenada(String accion_ordenada){
+        ArrayList<String> tipos_tareas = new ArrayList<>();
+        if (team_or_personal_task_selection_screen_Activity.dBcausasController.countTableCausas() > 0) {
+            ArrayList<String> causas = new ArrayList<>();
+            try {
+                causas = team_or_personal_task_selection_screen_Activity.
+                        dBcausasController.get_all_causas_from_Database();
+                for (int i = 0; i < causas.size(); i++) {
+                    JSONObject jsonObject = null;
+                    try {
+                        jsonObject = new JSONObject(causas.get(i));
+                        String accion = jsonObject.getString(DBCausasController.accion_ordenada_causas).trim();
+                        if (accion.equals(accion_ordenada)) {
+                            String tipo_tarea = jsonObject.getString(DBCausasController.tipo_tarea_causas).trim();
+                            if(!tipos_tareas.contains(tipo_tarea)){
+                                tipos_tareas.add(tipo_tarea);
+                            }
+
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return tipos_tareas;
+    }
+    public static String getTipoTareaByAnomaly(String anomaly){
+        if (team_or_personal_task_selection_screen_Activity.dBcausasController.countTableCausas() > 0) {
+            ArrayList<String> causas = new ArrayList<>();
+            try {
+                causas = team_or_personal_task_selection_screen_Activity.
+                        dBcausasController.get_all_causas_from_Database();
+                for (int i = 0; i < causas.size(); i++) {
+                    JSONObject jsonObject = null;
+                    try {
+                        jsonObject = new JSONObject(causas.get(i));
+                        String anomalia_en_json = jsonObject.getString(DBCausasController.codigo_causa_causas).trim();
+                        if (anomalia_en_json.equals(anomaly)) {
+                            String tipo_tarea = jsonObject.getString(DBCausasController.tipo_tarea_causas).trim();
+                            return tipo_tarea;
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return "";
+    }
+    public static String getAccionOrdenadaByAnomaly(String anomaly){
+        if (team_or_personal_task_selection_screen_Activity.dBcausasController.countTableCausas() > 0) {
+            ArrayList<String> causas = new ArrayList<>();
+            try {
+                causas = team_or_personal_task_selection_screen_Activity.
+                        dBcausasController.get_all_causas_from_Database();
+                for (int i = 0; i < causas.size(); i++) {
+                    JSONObject jsonObject = null;
+                    try {
+                        jsonObject = new JSONObject(causas.get(i));
+                        String anomalia_en_json = jsonObject.getString(DBCausasController.codigo_causa_causas).trim();
+                        if (anomalia_en_json.equals(anomaly)) {
+                            String accion_ordenada = jsonObject.getString(DBCausasController.accion_ordenada_causas).trim();
+                            return accion_ordenada;
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return "";
+    }
+    public static ArrayList<String> getAccionsOrdenadas(){
+        ArrayList<String> acciones_odenadas = new ArrayList<>();
+        if (team_or_personal_task_selection_screen_Activity.dBcausasController.countTableCausas() > 0) {
+            ArrayList<String> causas = new ArrayList<>();
+            try {
+                causas = team_or_personal_task_selection_screen_Activity.
+                        dBcausasController.get_all_causas_from_Database();
+                for (int i = 0; i < causas.size(); i++) {
+                    JSONObject jsonObject = null;
+                    try {
+                        jsonObject = new JSONObject(causas.get(i));
+                        String accion_ordenada = jsonObject.getString(DBCausasController.accion_ordenada_causas).trim();
+                        if (Screen_Login_Activity.checkStringVariable(accion_ordenada) && !acciones_odenadas.contains(accion_ordenada)) {
+                            acciones_odenadas.add(accion_ordenada);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return acciones_odenadas;
+    }
+    public static ArrayList<String> getAnomaliaseIntervencionesByAccionOrdenada(String accion_ordenada){
+        ArrayList<String> anomalias_intervenciones = new ArrayList<>();
+        if (team_or_personal_task_selection_screen_Activity.dBcausasController.countTableCausas() > 0) {
+            ArrayList<String> causas = new ArrayList<>();
+            try {
+                causas = team_or_personal_task_selection_screen_Activity.
+                        dBcausasController.get_all_causas_from_Database();
+                for (int i = 0; i < causas.size(); i++) {
+                    JSONObject jsonObject = null;
+                    try {
+                        jsonObject = new JSONObject(causas.get(i));
+                        String accion = jsonObject.getString(DBCausasController.accion_ordenada_causas).trim();
+                        if(accion.equals(accion_ordenada)) {
+                            String anomalia = jsonObject.getString(DBCausasController.codigo_causa_causas).trim();
+                            String intervencion = jsonObject.getString(DBCausasController.causa_causas).trim();
+                            String anomalia_intervencion = anomalia + " - " + intervencion;
+                            if (!anomalias_intervenciones.contains(anomalia_intervencion)) {
+                                anomalias_intervenciones.add(anomalia_intervencion);
+                            }
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return anomalias_intervenciones;
+    }
+
+    public static String parse_tipo_tarea(String anomalia, String calibre, String marca)
+    {
+        if(!Screen_Login_Activity.checkStringVariable(calibre)){
+            calibre = "?";
+        }
+        if(!Screen_Login_Activity.checkStringVariable(anomalia)){
+            return "NCI " + calibre + "mm";
+        }
+        String tipo_t = getTipoTareaByAnomaly(anomalia).trim();
+        calibre = calibre.trim();
+
+        if(tipo_t == "NCI")
+        {
+            return "NCI " + calibre + "mm";
+        }
+        else if(tipo_t == "NCI + RC")
+        {
+            return "NCI " + calibre + "mm " + "+ RC";
+        }
+        else if(tipo_t == "LFTD")
+        {
+            return "LFTD " + calibre + "mm";
+        }
+        else if(tipo_t == "S.I.")
+        {
+            return "S.I. " + calibre + "mm";
+        }
+        else if(tipo_t == "U")
+        {
+            return "U " + calibre + "mm";
+        }
+        else if(tipo_t == "TD")
+        {
+            return "TD";
+        }
+        else if(tipo_t == "TD")
+        {
+            if(marca.toLowerCase().contains("Sappel")){
+                return "TD";
+            }
+            return "TD/NCI " + calibre + "mm";
+        }
+        else if(tipo_t == "I+")
+        {
+            return "I+";
+        }
+        else if(tipo_t == "I+/NCI")
+        {
+            if(marca.toLowerCase().contains("sappel")){
+                return "I+";
+            }
+            return "I+/NCI " + calibre + "mm";
+        }
+        else if(tipo_t == "LECT.R o RC")
+        {
+            return "LECT.R o RC";
+        }
+        else if(tipo_t == "RC")
+        {
+            return "RC";
+        }
+        else if(tipo_t == "RC NCI")
+        {
+            return "RC NCI " + calibre + "mm";
+        }
+        else if(tipo_t == "RCN")
+        {
+            return "RCN";
+        }
+        else if(tipo_t == "C. H. W4")
+        {
+            return "C. H. W4";
+        }
+        else if(tipo_t == "T"){
+            String pre;
+            if(calibre == "15")
+                pre = "T3/4\" ";
+
+            else if(calibre == "13")
+                pre =  "T7/8\" ";
+
+            else if(calibre == "20")
+                pre =  "T1\" ";
+
+            else if(calibre == "25")
+                pre =  "T11/4\" ";
+
+            else if(calibre == "30")
+                pre =  "T11/2\" ";
+
+            else if(calibre == "40")
+                pre =  "T2\" ";
+
+            else{
+                pre =  "TBDN ";
+            }
+            return pre + calibre + "mm";
+        }
+        else if(tipo_t == "T + NCI"){
+            String pre;
+            if(calibre == "15")
+                pre = "T3/4\" ";
+
+            else if(calibre == "13")
+                pre =  "T7/8\" ";
+
+            else if(calibre == "20")
+                pre =  "T1\" ";
+
+            else if(calibre == "25")
+                pre =  "T11/4\" ";
+
+            else if(calibre == "30")
+                pre =  "T11/2\" ";
+
+            else if(calibre == "40")
+                pre =  "T2\" ";
+
+            else{
+                pre =  "TBDN ";
+            }
+            return pre + "+ NCI " + calibre + "mm";
+        }
+        return tipo_t + " " + calibre + "mm";
+    }
 }

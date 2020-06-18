@@ -55,7 +55,9 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
             button_reajustar_ubicacion,
             button_trazar_ruta_screen_battery_counter;
 
-    private ImageView imagen_contador;
+    private ImageView imagen_contador,
+            imageView_menu_screen_battery_counter,
+            imageView_atras_screen_battery_counter;
 
     private TextView tipo_tarea,
             direccion,
@@ -71,7 +73,6 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
     private String foto;
 
     private ProgressDialog progressDialog;
-    private HashMap<String, String> mapaTiposDeTarea;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -79,15 +80,24 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
         super.onCreate(savedInstanceState);
         setContentView(R.layout.screen_battery_counter);
 
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        myToolbar.setBackgroundColor(Color.TRANSPARENT);
-        setSupportActionBar(myToolbar);
+//        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+//        myToolbar.setBackgroundColor(Color.TRANSPARENT);
+//        setSupportActionBar(myToolbar);
 
-        mapaTiposDeTarea = Tabla_de_Codigos.mapaTiposDeAnomalias;
 
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CALL_PHONE}, 1);
+        }
+
+        team_or_personal_task_selection_screen_Activity.from_battery_or_unity = team_or_personal_task_selection_screen_Activity.FROM_BATTERY;
+
+        imageView_menu_screen_battery_counter = (ImageView) findViewById(R.id.imageView_menu_screen_battery_counter);
         button_geolocalization =(Button) findViewById(R.id.button_geolocalization_screen_battery_counter);
+        imageView_atras_screen_battery_counter = (ImageView) findViewById(R.id.imageView_atras_screen_battery_counter);
         imagen_contador = (ImageView) findViewById(R.id.imageView_screen_battery_counter_imagen);
-        textView_numero_abonado_screen_battery_counter = (TextView) findViewById(R.id.textView_screen_battery_counter_serie);
+        textView_numero_abonado_screen_battery_counter = (TextView) findViewById(R.id.textView_numero_abonado_screen_battery_counter);
         serie = (TextView) findViewById(R.id.textView_screen_battery_counter_serie);
         lectura = (TextView) findViewById(R.id.textView_screen_battery_counter_lectura);
         acceso = (TextView) findViewById(R.id.textView_screen_battery_counter_acceso);
@@ -102,31 +112,41 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
         button_incidence_screen_battery_counter = (Button)findViewById(R.id.button_incidencia_screen_battery_counter);
         button_trazar_ruta_screen_battery_counter= (Button)findViewById(R.id.button_trazar_ruta_screen_battery_counter);
 
+        imageView_menu_screen_battery_counter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Battery_counter.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        team_or_personal_task_selection_screen_Activity.openMenu("Menu", getApplicationContext(), getSupportFragmentManager());
+                    }
+                });
+                imageView_menu_screen_battery_counter.startAnimation(myAnim);
+            }
+        });
         try {
-            String tipo = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.tipo_tarea).
-                    replace("\n", "").replace(" ", "").
-                    replace("null","").replace("NULL","");
-            for(int i = 0; i < 10; i++){
-                tipo = tipo.replace(String.valueOf(i), "");
-            }
-            String tipo_long="";
-            String calibre_local = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.calibre_toma);
-            if(mapaTiposDeTarea.containsKey(tipo)) {
-                tipo_long = mapaTiposDeTarea.get(tipo);
-            }else if (tipo.contains("T") && tipo.contains("\"")){
-                tipo_long = "BAJA O CORTE DE SUMINISTRO";
-            }
-            if((calibre_local.contains("null") && tipo_long.contains("null"))
-                    || (calibre_local.contains("NULL") && tipo_long.contains("NULL"))
-                    || (calibre_local.contains("NULL") && tipo_long.contains("null"))
-                    || (calibre_local.contains("null") && tipo_long.contains("NULL"))){
-                tipo_tarea.setText("Desconocido");
+            String tipo_long = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.accion_ordenada).trim();
+            String calibre_local = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.calibre_toma).trim();
+            if(Screen_Login_Activity.checkStringVariable(tipo_long)){
+                tipo_tarea.setText(tipo_long+"  "+calibre_local + "mm");
             }
             else {
-                tipo_tarea.setText(tipo_long+"  "
-                        +Screen_Login_Activity.tarea_JSON.getString(DBtareasController.calibre_toma).
-                        replace("\n", "").replace("null","").replace(" ","")
-                        +"mm");
+                tipo_tarea.setText(calibre_local + "mm");
             }
 
             if(DBtareasController.tabla_model) {
@@ -147,25 +167,104 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
                         + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.piso).trim().replace("\n", "").replace("NULL", "").replace("null", "") + "  "
                         + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.mano).trim().replace("\n", "")).replace("null", "").replace("NULL", ""));
             }
-            datosEspecificos.setText((Screen_Login_Activity.tarea_JSON.getString(DBtareasController.observaciones).trim().replace("\n", "")).replace("null","").replace("NULL",""));
-            serie.setText((Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador).trim().replace("\n", "")).replace("null","").replace("NULL",""));
+
+            String serie_number = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador).trim().replace("null", "").replace("NULL", "");
+            String obs = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.MENSAJE_LIBRE).trim();
+            if(!Screen_Login_Activity.checkStringVariable(obs)) {
+                obs = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.observaciones).trim();
+                if (!Screen_Login_Activity.checkStringVariable(obs)) {
+                    obs = (Screen_Login_Activity.tarea_JSON.getString(DBtareasController.OBSERVA).trim());
+                    if (!Screen_Login_Activity.checkStringVariable(obs)) {
+                        obs = "";
+                    }
+                }
+            }
+            if(obs.isEmpty()) {
+                Log.e("observaciones", "Vacia");
+            }else{
+                Log.e("observaciones", obs);
+            }
+
+            String caliber = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.calibre_real).trim();
+            if(caliber.isEmpty() || caliber.equals("NULL") || caliber.equals("null")){
+                caliber = (Screen_Login_Activity.tarea_JSON.getString(DBtareasController.calibre_toma).trim());
+                if(caliber.isEmpty() || caliber.equals("NULL") || caliber.equals("null")){
+                    caliber = "";
+                }
+            }
+            datosEspecificos.setText(obs);
+            serie.setText(serie_number);
             lectura.setText((Screen_Login_Activity.tarea_JSON.getString(DBtareasController.lectura_actual).trim().replace("\n", "")).replace("null","").replace("NULL",""));
-            ubicacion.setText((Screen_Login_Activity.tarea_JSON.getString(DBtareasController.emplazamiento).trim().replace("\n", "")).replace("null","").replace("NULL",""));
+            String ubicacion_en_bat = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.emplazamiento).trim();
+            if(!Screen_Login_Activity.checkStringVariable(ubicacion_en_bat)){
+                ubicacion_en_bat = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.ubicacion_en_bateria).trim();
+            }
+            ubicacion.setText(ubicacion_en_bat);
             acceso.setText((Screen_Login_Activity.tarea_JSON.getString(DBtareasController.acceso).trim().replace("\n", "")).replace("null","").replace("NULL",""));
-            calibre.setText((Screen_Login_Activity.tarea_JSON.getString(DBtareasController.calibre_toma).trim().replace("\n", "")).replace("null","").replace("NULL",""));
-            ubicacion_bateria.setText((Screen_Login_Activity.tarea_JSON.getString(DBtareasController.ubicacion_en_bateria).trim().replace("\n", "")).replace("null","").replace("NULL",""));
+            calibre.setText(caliber);
+            if(!ubicacion_en_bat.contains("-")){
+                ubicacion_en_bat = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.ubicacion_en_bateria).trim();
+            }
+            ubicacion_bateria.setText(ubicacion_en_bat);
+
 
         } catch (Exception e) {
             e.printStackTrace();
+            Log.v("Exception", "No se obtuvo informacion: "+e.toString());
             Toast.makeText(getApplicationContext(),"No se obtuvo informacion: "+e.toString(), Toast.LENGTH_LONG).show();
         }
+        tipo_tarea.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openMessage("Datos Especificos", tipo_tarea.getText().toString());
+            }
+        });
+        datosEspecificos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openMessage("Datos Especificos", datosEspecificos.getText().toString());
+            }
+        });
 
         try {
-            textView_numero_abonado_screen_battery_counter.setText(Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado));
+            String numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado);
+            textView_numero_abonado_screen_battery_counter.setText(numero_abonado);
+
+            Log.e("numero_abonado", numero_abonado);
+            Log.e("numero_interno", Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_interno));
+            Log.e("numero_serie_contador", Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador));
+//            Toast.makeText(getApplicationContext(),"numero_abonado: "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado), Toast.LENGTH_LONG).show();
         } catch (JSONException e) {
             Log.e("Excepcion", "Error al cargar numero de abonado");
             e.printStackTrace();
         }
+        imageView_atras_screen_battery_counter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Battery_counter.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        onBackPressed();
+                    }
+                });
+                imageView_atras_screen_battery_counter.startAnimation(myAnim);
+            }
+
+        });
         button_geolocalization.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -245,6 +344,7 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
                     public void onAnimationEnd(Animation arg0) {
                         Intent intent_open_screen_exec_task = new Intent(Screen_Battery_counter.this, Screen_Execute_Task.class);
                         startActivity(intent_open_screen_exec_task);
+                        Screen_Battery_counter.this.finish();
                     }
                 });
                 button_ejecutar_tarea_screen_battery_counter.startAnimation(myAnim);
@@ -274,6 +374,7 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
                     public void onAnimationEnd(Animation arg0) {
                         Intent intent_open_screen_battery_intake_asignation = new Intent(Screen_Battery_counter.this, Screen_Battery_Intake_Asignation.class);
                         startActivity(intent_open_screen_battery_intake_asignation);
+                        finish();
                     }
                 });
                 button_reajustar_ubicacion.startAnimation(myAnim);
@@ -303,6 +404,7 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
                     public void onAnimationEnd(Animation arg0) {
                         Intent intent_open_screen_incidence = new Intent(Screen_Battery_counter.this, Screen_Incidence.class);
                         startActivity(intent_open_screen_incidence);
+                        Screen_Battery_counter.this.finish();
                     }
                 });
                 button_incidence_screen_battery_counter.startAnimation(myAnim);
@@ -325,14 +427,20 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
                 if(!foto.isEmpty() && !foto.equals("null") && !foto.equals("NULL") && foto != null){
 
                     String numero_abonado="";
+                    String gestor = null;
                     try {
+                        gestor = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.GESTOR).trim();
+                        if(!Screen_Login_Activity.checkStringVariable(gestor)){
+                            gestor = "Sin_Gestor";
+                        }
                         numero_abonado=Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado);
                         if(!numero_abonado.isEmpty() && numero_abonado!=null
                                 && !numero_abonado.equals("null") && !numero_abonado.equals("NULL")){
                             showRingDialog("Obteniendo foto de instalación");
                             String type_script = "download_image";
                             BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Battery_counter.this);
-                            backgroundWorker.execute(type_script, foto, numero_abonado);
+                            backgroundWorker.execute(type_script, foto, gestor, numero_abonado);
+                            Log.e("Buscando", gestor);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -367,7 +475,12 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
                     && !numero_abonado.equals("NULL") && !TextUtils.isEmpty(numero_abonado)) {
                 if(image!=null && !image.equals("null")
                         && !image.equals("NULL") && !TextUtils.isEmpty(image)) {
-                    File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/fotos_tareas/"+numero_abonado);
+                    String gestor = null;
+                    gestor = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.GESTOR).trim();
+                    if(!Screen_Login_Activity.checkStringVariable(gestor)){
+                        gestor = "Sin_Gestor";
+                    }
+                    File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+ gestor + "/" +numero_abonado);
                     if (!storageDir.exists()) {
                         storageDir.mkdirs();
                     }
@@ -403,29 +516,36 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
     @Override
     public void onTaskComplete(String type, String result) throws JSONException {
         if(type == "download_image") {
+            Log.e("hideRingDialog", "fffffffffff");
             hideRingDialog();
             if (result == null) {
-                Toast.makeText(this, "No se puede acceder al servidor, no se obtuvo foto instalacion"+ ", buscando fotos en el teléfono", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "No se puede acceder al servidor, "+ ", buscando fotos en el teléfono", Toast.LENGTH_SHORT).show();
                 buscarFotosOffline();
+                Log.e("result", "null");
             }
             else {
                 if(result.contains("not success")){
                     if(result.contains("no se pudo obtener imagen")){
-                        Toast.makeText(this, "Error obteniendo imagen"+ ", buscando fotos en el teléfono", Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, "No se encontro imagen en servidor"+ ", buscando fotos en el teléfono", Toast.LENGTH_SHORT).show();
                         buscarFotosOffline();
+                        Log.e("result", "no se pudo obtener imagen");
                     }
                     else if(result.contains("no existe imagen")){
-                        Toast.makeText(this, "No hay foto de contador"+ ", buscando fotos en el teléfono", Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, "No hay foto de contador en servidor"+ ", buscando fotos en el teléfono", Toast.LENGTH_SHORT).show();
                         buscarFotosOffline();
+                        Log.e("result", "no existe imagen");
                     }
                 }else{
                     Bitmap bitmap = null;
                     bitmap = Screen_Register_Operario.getImageFromString(result);
+                    Log.e("foto", "ffffffffffffffffffff");
                     if(bitmap!= null) {
                         imagen_contador.setVisibility(View.VISIBLE);
                         imagen_contador.setImageBitmap(bitmap);
                         saveBitmapImage(bitmap, foto);
                         Toast.makeText(Screen_Battery_counter.this, "Imagen descargada", Toast.LENGTH_SHORT).show();
+                    }else{
+                        buscarFotosOffline();
                     }
                 }
             }
@@ -439,7 +559,12 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
         String numero_abonado = null;
         try {
             numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
-            File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+numero_abonado);
+            String gestor = null;
+            gestor = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.GESTOR).trim();
+            if(!Screen_Login_Activity.checkStringVariable(gestor)){
+                gestor = "Sin_Gestor";
+            }
+            File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+ gestor + "/" +numero_abonado);
             if (!myDir.exists()) {
                 myDir.mkdirs();
             }
@@ -451,7 +576,6 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
                     }
                 }
             }
-            file_name+=".jpg";
             File file = new File(myDir, file_name);
             if (file.exists())
                 file.delete();
@@ -472,13 +596,13 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
         File file = new File(path);
         if(file.exists()) {
             Bitmap bitmap = null;
-            try {
-                bitmap = MediaStore.Images.Media
-                        .getBitmap(this.getContentResolver(), Uri.fromFile(file));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
+                try {
+                    bitmap = MediaStore.Images.Media
+                            .getBitmap(this.getContentResolver(), Uri.fromFile(file));
+                } catch (IOException e) {
+                    Log.e("getPhotoUserLocal", e.toString());
+                    e.printStackTrace();
+                }
             if (bitmap != null) {
                 return bitmap;
             } else {
@@ -493,49 +617,58 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
         progressDialog.setCancelable(true);
     }
     private void hideRingDialog(){
-        if(progressDialog!=null)
-        progressDialog.dismiss();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.Contactar:
-//                Toast.makeText(Screen_User_Data.this, "Seleccionó la opción settings", Toast.LENGTH_SHORT).show();
-                openMessage("Contactar",
-                        /*+"\nAdrian Nieves: 1331995adrian@gmail.com"
-                        +"\nJorge G. Perez: yoyi1991@gmail.com"*/
-                        "\n   Michel Morales: mraguas@gmail.com"
-                                +"\n\n       Luis A. Reyes: inglreyesm@gmail.com");
-                // User chose the "Settings" item, show the app settings UI...
-                return true;
-
-            case R.id.Tareas:
-//                Toast.makeText(Screen_User_Data.this, "Ayuda", Toast.LENGTH_SHORT).show();
-                // User chose the "Favorite" action, mark the current item
-                // as a favorite...
-                return true;
-
-            case R.id.Info_Tarea:
-//                Toast.makeText(Screen_User_Data.this, "Configuracion", Toast.LENGTH_SHORT).show();
-                // User chose the "Favorite" action, mark the current item
-                // as a favorite...
-                openMessage("Tarea", Screen_Battery_counter.get_tarea_info());
-                return true;
-            default:
-                // If we got here, the user's action was not recognized.
-                // Invoke the superclass to handle it.
-                return super.onOptionsItemSelected(item);
-
+        try {
+            if(progressDialog!=null) {
+                if(progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                    progressDialog = null;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("hideRingDialog", e.toString());
         }
     }
+
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.menu, menu);
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+//            case R.id.Contactar:
+////                Toast.makeText(Screen_User_Data.this, "Seleccionó la opción settings", Toast.LENGTH_SHORT).show();
+//                openMessage("Contactar",
+//                        /*+"\nAdrian Nieves: 1331995adrian@gmail.com"
+//                        +"\nJorge G. Perez: yoyi1991@gmail.com"*/
+//                        "\n   Michel Morales: mraguas@gmail.com"
+//                                +"\n\n       Luis A. Reyes: inglreyesm@gmail.com");
+//                // User chose the "Settings" item, show the app settings UI...
+//                return true;
+//
+//            case R.id.Tareas:
+////                Toast.makeText(Screen_User_Data.this, "Ayuda", Toast.LENGTH_SHORT).show();
+//                // User chose the "Favorite" action, mark the current item
+//                // as a favorite...
+//                return true;
+//
+//            case R.id.Info_Tarea:
+////                Toast.makeText(Screen_User_Data.this, "Configuracion", Toast.LENGTH_SHORT).show();
+//                // User chose the "Favorite" action, mark the current item
+//                // as a favorite...
+//                openMessage("Tarea", Screen_Battery_counter.get_tarea_info());
+//                return true;
+//            default:
+//                // If we got here, the user's action was not recognized.
+//                // Invoke the superclass to handle it.
+//                return super.onOptionsItemSelected(item);
+//
+//        }
+//    }
 
     public void openMessage(String title, String hint){
         MessageDialog messageDialog = new MessageDialog();
@@ -544,44 +677,33 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
     }
 
     public static String get_tarea_info(){
-        HashMap<String, String> mapaTiposDeTarea = new HashMap<>();
-        mapaTiposDeTarea.put("", "NUEVO CONTADOR INSTALAR");
-        mapaTiposDeTarea.put("NCI", "NUEVO CONTADOR INSTALAR");
-        mapaTiposDeTarea.put("U", "USADO CONTADOR INSTALAR");
-        mapaTiposDeTarea.put("T", "BAJA O CORTE DE SUMINISTRO");
-        mapaTiposDeTarea.put("TBDN", "BAJA O CORTE DE SUMINISTRO");
-        mapaTiposDeTarea.put("LFTD", "LIMPIEZA DE FILTRO Y TOMA DE DATOS");
-        mapaTiposDeTarea.put("D", "DATOS");
-        mapaTiposDeTarea.put("TD", "TOMA DE DATOS");
-        mapaTiposDeTarea.put("I", "INSPECCIÓN");
-        mapaTiposDeTarea.put("CF", "COMPROBAR EMISOR");
-        mapaTiposDeTarea.put("EL", "EMISOR LECTURA");
-        mapaTiposDeTarea.put("SI", "SOLO INSTALAR");
-        mapaTiposDeTarea.put("R", "REFORMA MAS CONTADOR");
         String tipo_tarea = "";
         String calibre = "";
         try {
-            tipo_tarea = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.tipo_tarea).
-                    trim().replace("\n","");
-            calibre = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.calibre_toma).
-                    trim().replace("\n","");
+            tipo_tarea = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.accion_ordenada). trim();
+            calibre = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.calibre_toma).trim();
             if(calibre.contains("null")){
                 calibre = "";
             }
-            if(tipo_tarea.contains("null")){
+            if(!Screen_Login_Activity.checkStringVariable(tipo_tarea)){
                 tipo_tarea = "";
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        if(mapaTiposDeTarea.containsKey(tipo_tarea)) {
-            tipo_tarea = mapaTiposDeTarea.get(tipo_tarea);
-        }else if (tipo_tarea.contains("T") && tipo_tarea.contains("\"")){
-            tipo_tarea = "BAJA O CORTE DE SUMINISTRO";
-        }
         String n = "";
         try{
+            String obs = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.MENSAJE_LIBRE).trim();
+            if(!Screen_Login_Activity.checkStringVariable(obs)) {
+                obs = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.observaciones).trim();
+                if (!Screen_Login_Activity.checkStringVariable(obs)) {
+                    obs = (Screen_Login_Activity.tarea_JSON.getString(DBtareasController.OBSERVA).trim());
+                    if (!Screen_Login_Activity.checkStringVariable(obs)) {
+                        obs = "";
+                    }
+                }
+            }
             n = "Tipo:\n  "+tipo_tarea + " "+calibre
                     +"\n\nGestor: "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.GESTOR).trim()
                     +"\n\nDirección:\n  "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.poblacion).trim()
@@ -590,6 +712,7 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
                     +"\n\nAbonado:\n  "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.nombre_cliente)
                     +"\n\nNúmero de abonado:  "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado)
                     +"\n\nContador:\n  "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador)
+                    +"\n\nObservaciones:\n  " + obs
                     +"\n\nCita:  "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.nuevo_citas)
                     +"\n\nLectura última: "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.lectura_ultima)
                     +"\nLectura actual: "+Screen_Login_Activity.tarea_JSON.getString(DBtareasController.lectura_actual)
@@ -621,7 +744,22 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
                         if(!team_or_personal_task_selection_screen_Activity.dBtareasController.saveChangesInTarea()){
                             Toast.makeText(getApplicationContext(), "No se pudo guardar cambios", Toast.LENGTH_SHORT).show();
                         }
-                        finish();
+                        Intent openTableActivity = null;
+                        if(team_or_personal_task_selection_screen_Activity.from_team_or_personal == team_or_personal_task_selection_screen_Activity.FROM_TEAM) {
+                            openTableActivity = new Intent(Screen_Battery_counter.this, Screen_Table_Team.class);
+                        }else if(team_or_personal_task_selection_screen_Activity.from_team_or_personal == team_or_personal_task_selection_screen_Activity.FROM_PERSONAL){
+                            openTableActivity = new Intent(Screen_Battery_counter.this, Screen_Table_Personal.class);
+                        }else if(team_or_personal_task_selection_screen_Activity.from_team_or_personal == team_or_personal_task_selection_screen_Activity.FROM_FILTER_RESULT){
+                            openTableActivity = new Intent(Screen_Battery_counter.this, Screen_Filter_Results.class);
+                        }else if(team_or_personal_task_selection_screen_Activity.from_team_or_personal == team_or_personal_task_selection_screen_Activity.FROM_FILTER_TAREAS){
+                            openTableActivity = new Intent(Screen_Battery_counter.this, Screen_Filter_Tareas.class);
+                        }
+                        if(openTableActivity!= null) {
+                            openTableActivity.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+//            openTableActivity.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                            startActivityIfNeeded(openTableActivity, 0);
+                        }
+                        Screen_Battery_counter.this.finish();
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
