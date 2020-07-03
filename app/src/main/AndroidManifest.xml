@@ -45,8 +45,11 @@
             android:value="@string/google_maps_key" />
 
         <activity
+            android:name=".MapsActivityTareas"
+            android:label="@string/title_activity_maps_tareas"></activity>
+        <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps"></activity>
+            android:label="@string/title_activity_maps" />
 
         <uses-library
             android:name="org.apache.http.legacy"
@@ -173,7 +176,6 @@
         <activity
             android:name=".Screen_Insertar_Tarea"
             android:configChanges="orientation"
-            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Screen_Zoom_Firma"
@@ -207,6 +209,11 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".Screen_Filter_Results"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".permission_cercania"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
 

@@ -1,6 +1,7 @@
 package com.example.luisreyes.proyecto_aguas;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -94,7 +95,10 @@ public class Maps_Box extends AppCompatActivity implements OnMapReadyCallback, M
                     longitud_h = Double.parseDouble(part2);
                     coordenates = new LatLng(latitud_h,longitud_h);
                     Toast.makeText(Maps_Box.this, "Cargando Ruta", Toast.LENGTH_LONG).show();
-                    getcoor();}else {
+                    getcoor();
+                }
+
+                else {
                     if (coor1.contains(",") && (!coor1.contains("null")) && (!coor1.contains("NULL"))    && (locationComponent.getLastKnownLocation() != null) ){
                         String[] parts1 = coor1.split(",");
                         String part11 = parts1[0]; //obtiene: latitud
@@ -330,6 +334,20 @@ public class Maps_Box extends AppCompatActivity implements OnMapReadyCallback, M
     }
 
     @Override
+    public void onBackPressed() {
+        Intent openTareaActivity = null;
+        if(team_or_personal_task_selection_screen_Activity.from_battery_or_unity == team_or_personal_task_selection_screen_Activity.FROM_UNITY) {
+            openTareaActivity = new Intent(this, Screen_Unity_Counter.class);
+        }else if(team_or_personal_task_selection_screen_Activity.from_battery_or_unity == team_or_personal_task_selection_screen_Activity.FROM_BATTERY) {
+            openTareaActivity = new Intent(this, Screen_Battery_counter.class);
+        }
+        if(openTareaActivity!=null) {
+            startActivity(openTareaActivity);
+        }
+        super.onBackPressed();
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
 //        if(locationEngine != null){
@@ -337,6 +355,7 @@ public class Maps_Box extends AppCompatActivity implements OnMapReadyCallback, M
 //        }
 //        if (locationLayerPlugin != null)
 //        { locationLayerPlugin.onStop();}
+
         mapView.onStop();
     }
 

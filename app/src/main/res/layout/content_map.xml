@@ -18,13 +18,13 @@
 
     <Button android:id="@+id/btnOpciones"
         android:layout_width="51dp"
-        android:layout_height="54dp"
+        android:layout_height="51dp"
         android:layout_alignParentRight="true"
         android:layout_above="@+id/btnhome"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="16dp"
-        android:background="@drawable/ic_directions_car_black_24dp"
+        android:background="@drawable/car_on"
 
         />
 
@@ -35,7 +35,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="16dp"
-        android:background="@drawable/ic_my_location_blue_50dp"
+        android:background="@drawable/ubicacion_tarea"
         android:layout_below="@+id/btnhand"
         android:layout_marginTop="40dp"
 
@@ -47,7 +47,7 @@
         android:layout_alignParentRight="true"
         android:layout_centerInParent="true"
         android:layout_marginRight="16dp"
-        android:background="@drawable/ic_home_blue_24dp"
+        android:background="@drawable/casa_on"
 
         />
 
@@ -58,7 +58,7 @@
         android:layout_below="@+id/btnhome"
         android:layout_marginRight="16dp"
         android:layout_marginTop="16dp"
-        android:background="@drawable/ic_location_off_black_50dp"
+        android:background="@drawable/hand_off"
 
         />
 

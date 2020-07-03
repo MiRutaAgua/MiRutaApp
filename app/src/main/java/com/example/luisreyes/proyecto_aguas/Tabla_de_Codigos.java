@@ -204,6 +204,58 @@ public class Tabla_de_Codigos {
         return "";
     }
 
+    public static String getArealizarByAnomaly(String anomaly){
+        if (team_or_personal_task_selection_screen_Activity.dBcausasController.countTableCausas() > 0) {
+            ArrayList<String> causas = new ArrayList<>();
+            try {
+                causas = team_or_personal_task_selection_screen_Activity.
+                        dBcausasController.get_all_causas_from_Database();
+                for (int i = 0; i < causas.size(); i++) {
+                    JSONObject jsonObject = null;
+                    try {
+                        jsonObject = new JSONObject(causas.get(i));
+                        String anomalia_en_json = jsonObject.getString(DBCausasController.codigo_causa_causas).trim();
+                        if (anomalia_en_json.equals(anomaly)) {
+                            String arealizar = jsonObject.getString(DBCausasController.arealizar_causas).trim();
+                            return arealizar;
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return "";
+    }
+
+    public static String getIntervencionByAnomaly(String anomaly){
+        if (team_or_personal_task_selection_screen_Activity.dBcausasController.countTableCausas() > 0) {
+            ArrayList<String> causas = new ArrayList<>();
+            try {
+                causas = team_or_personal_task_selection_screen_Activity.
+                        dBcausasController.get_all_causas_from_Database();
+                for (int i = 0; i < causas.size(); i++) {
+                    JSONObject jsonObject = null;
+                    try {
+                        jsonObject = new JSONObject(causas.get(i));
+                        String anomalia_en_json = jsonObject.getString(DBCausasController.codigo_causa_causas).trim();
+                        if (anomalia_en_json.equals(anomaly)) {
+                            String intervencion = jsonObject.getString(DBCausasController.causa_causas).trim();
+                            return intervencion;
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return "";
+    }
+
     public static ArrayList<String> getTipoByAccionOrdenada(String accion_ordenada){
         ArrayList<String> tipos_tareas = new ArrayList<>();
         if (team_or_personal_task_selection_screen_Activity.dBcausasController.countTableCausas() > 0) {

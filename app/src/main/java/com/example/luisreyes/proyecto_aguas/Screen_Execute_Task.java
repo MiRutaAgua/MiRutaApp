@@ -38,6 +38,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -54,7 +55,9 @@ import java.security.Policy;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Alejandro on 11/08/2019.
@@ -455,32 +458,6 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
             }
         });
 
-//        lectura_editText.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Execute_Task.this, R.anim.bounce);
-//                // Use bounce interpolator with amplitude 0.2 and frequency 20
-//                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
-//                myAnim.setInterpolator(interpolator);
-//                myAnim.setAnimationListener(new Animation.AnimationListener() {
-//                    @Override
-//                    public void onAnimationStart(Animation arg0) {
-//                        // TODO Auto-generated method stub
-////                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
-//                    }
-//                    @Override
-//                    public void onAnimationRepeat(Animation arg0) {
-//                        // TODO Auto-generated method stub
-//                    }
-//                    @Override
-//                    public void onAnimationEnd(Animation arg0) {
-//                        openDialog("Lectura","...");
-//                    }
-//                });
-//                lectura_editText.startAnimation(myAnim);
-//            }
-//
-//        });
         imageview_edit_lectura_screen_exec_task.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -940,6 +917,67 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                 }
             }
         });
+
+
+        String anomaly_Order="";
+        try {
+            anomaly_Order = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.AREALIZAR_devuelta);
+            if(!Screen_Login_Activity.checkStringVariable(anomaly_Order)){
+                anomaly_Order = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.ANOMALIA);
+                llenarInformacionDeAnomalia(anomaly_Order);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        llenarInformacionDeEmplazamiento();
+
+    }
+
+    private void llenarInformacionDeEmplazamiento() {
+        String emplazamiento="";
+        try {
+            emplazamiento = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.emplazamiento_devuelto).trim();
+            if(!Screen_Login_Activity.checkStringVariable(emplazamiento)){
+                emplazamiento = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.emplazamiento).trim();
+                if(emplazamiento.contains("BA-") || emplazamiento.contains("BT-")){
+                    String resto= "";
+                    if(emplazamiento.contains("BA")){
+                        resto = emplazamiento.replace("BA", "");
+                        Screen_Login_Activity.tarea_JSON.put(DBtareasController.emplazamiento_devuelto, "BA");
+                    }
+                    if(emplazamiento.contains("BT")){
+                        resto = emplazamiento.replace("BT", "");
+                        Screen_Login_Activity.tarea_JSON.put(DBtareasController.emplazamiento_devuelto, "BT");
+                    }
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.RESTO_EM, resto);
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.ubicacion_en_bateria, resto);
+                }else {
+                    Iterator it = Tabla_de_Codigos.mapaTiposDeEmplazamiento.entrySet().iterator();
+                    while (it.hasNext()) {
+                        Map.Entry pair = (Map.Entry) it.next();
+                        //System.out.println(pair.getKey() + " = " + pair.getValue());
+                        if (pair.getValue().toString().toLowerCase().equals(emplazamiento.toLowerCase())) {
+                            Screen_Login_Activity.tarea_JSON.put(DBtareasController.emplazamiento_devuelto, pair.getKey().toString());
+                            Screen_Login_Activity.tarea_JSON.put(DBtareasController.RESTO_EM, Tabla_de_Codigos.mapaTiposDeRestoEmplazamiento.get(pair.getKey().toString()));
+                            break;
+                        }
+                    }
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+    private void llenarInformacionDeAnomalia(String anomalia) {
+        String resultados = Tabla_de_Codigos.getResultadosPosiblesByAnomaly(anomalia);
+        String intervencion = Tabla_de_Codigos.getIntervencionByAnomaly(anomalia);
+        try {
+            Screen_Login_Activity.tarea_JSON.put(DBtareasController.resultado, resultados);
+            Screen_Login_Activity.tarea_JSON.put(DBtareasController.AREALIZAR_devuelta, //causa destino
+                    anomalia + " - " + intervencion);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public String lookForAllreadyTakenPhotos(String photo_name) throws JSONException {

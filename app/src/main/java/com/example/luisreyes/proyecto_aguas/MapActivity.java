@@ -165,6 +165,10 @@ public class MapActivity extends AppCompatActivity implements TaskCompleted, OnM
             public void onButtonClicked(int buttonCode) {
                 if (buttonCode == MaterialSearchBar.BUTTON_NAVIGATION) {
                     //opening or closing a navigation drawer
+//                    if (materialSearchBar.isSuggestionsVisible())
+//                        materialSearchBar.clearSuggestions();
+//                    if (materialSearchBar.isSearchEnabled())
+//                        materialSearchBar.disableSearch();
                 } else if (buttonCode == MaterialSearchBar.BUTTON_BACK) {
                     materialSearchBar.disableSearch();
                 }
@@ -283,6 +287,7 @@ public class MapActivity extends AppCompatActivity implements TaskCompleted, OnM
                 if (insertando)
                 {
 
+
                     if ((markerHome.getPosition() != null) || (markerPump.getPosition() != null)){
                         try {
                             //Screen_Login_Activity.tarea_JSON.put("geolocalizacion", latLng.toString());
@@ -339,7 +344,10 @@ public class MapActivity extends AppCompatActivity implements TaskCompleted, OnM
                 }
 
                 else if (!insertando){
-                    if (markerHome.getPosition() != null ){
+
+                    Log.e("no_insertando", "no_insertando");
+
+                    if ((markerHome.getPosition() != null) || (markerPump.getPosition() != null) ){
                         try {
                             //Screen_Login_Activity.tarea_JSON.put("geolocalizacion", latLng.toString());
                             if ((latLngHome.latitude != 0.0 && latLngHome.longitude != 0.0 ) && !(coordHome.equals(latLngHome.toString()))){
@@ -379,7 +387,10 @@ public class MapActivity extends AppCompatActivity implements TaskCompleted, OnM
                             }
                             if(igual){
                                 ventana=2;
-                                saveData();}else{
+                                saveData();
+                            }
+
+                            else{
                                 Intent ListSong = new Intent(getApplicationContext(), Maps_Box.class);
                                 startActivity(ListSong);
                                 finish();
@@ -421,8 +432,8 @@ public class MapActivity extends AppCompatActivity implements TaskCompleted, OnM
         btnhome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                btnhome.setBackgroundResource(R.drawable.ic_home_blue_24dp);
-                btnhand.setBackgroundResource(R.drawable.ic_location_off_black_50dp);
+                btnhome.setBackgroundResource(R.drawable.casa_on);
+                btnhand.setBackgroundResource(R.drawable.hand_off);
                 home = 1;
                 pomp = 0;
                 if(markerHome.getPosition() != null)
@@ -436,8 +447,8 @@ public class MapActivity extends AppCompatActivity implements TaskCompleted, OnM
         btnhand.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                btnhome.setBackgroundResource(R.drawable.ic_home_white_24dp);
-                btnhand.setBackgroundResource(R.drawable.ic_location_on_blue_24dp);
+                btnhome.setBackgroundResource(R.drawable.casa_off);
+                btnhand.setBackgroundResource(R.drawable.hand_on);
                 home = 0;
                 pomp = 1;
                 if(markerPump.getPosition() != null)
@@ -584,8 +595,8 @@ public class MapActivity extends AppCompatActivity implements TaskCompleted, OnM
                 }
 
                 String icon = "casa";
-                //markerHome.position(coordenates).draggable(true).title("Marcador de casa").snippet("Posicion de casa").icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons(icon, 100, 100)));
-                markerHome.position(coordenates).draggable(true).title("Marcador de casa").snippet("Posicion de casa").icon(bitmapDescriptorFromVector(this, R.drawable.ic_home_black_24dp));
+                markerHome.position(coordenates).draggable(true).title("Marcador de casa").snippet("Posicion de casa").icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons(icon, 100, 100)));
+//                markerHome.position(coordenates).draggable(true).title("Marcador de casa").snippet("Posicion de casa").icon(bitmapDescriptorFromVector(this, R.drawable.ic_home_black_24dp));
                 mMap.addMarker(markerHome);
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(coordenates, DEFAULT_ZOOM));
                 marker =true;
@@ -738,8 +749,8 @@ public class MapActivity extends AppCompatActivity implements TaskCompleted, OnM
                             mMap.addMarker(markerPump);}
                     }
                     String icon = "casa";
-                    //markerHome.position(latLng).draggable(true).title("Marcador de casa").snippet("Posicion de casa").icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons(icon, 100, 100)));
-                    markerHome.position(latLng).draggable(true).title("Marcador de casa").snippet("Posicion de casa").icon(bitmapDescriptorFromVector(MapActivity.this, R.drawable.ic_home_black_24dp));
+                    markerHome.position(latLng).draggable(true).title("Marcador de casa").snippet("Posicion de casa").icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons(icon, 100, 100)));
+//                    markerHome.position(latLng).draggable(true).title("Marcador de casa").snippet("Posicion de casa").icon(bitmapDescriptorFromVector(MapActivity.this, R.drawable.ic_home_black_24dp));
                     latLngHome = latLng;
                     mMap.addMarker(markerHome);}
 
@@ -785,8 +796,8 @@ public class MapActivity extends AppCompatActivity implements TaskCompleted, OnM
                     latLngHome = prueba;
 
                     String icon = "casa";
-                    //markerHome.position(prueba).draggable(true).title("Marcador de casa").snippet("Posicion de casa").icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons(icon, 100, 100)));
-                    markerHome.position(prueba).draggable(true).title("Marcador de casa").snippet("Posicion de casa").icon(bitmapDescriptorFromVector(MapActivity.this, R.drawable.ic_home_black_24dp));
+                    markerHome.position(prueba).draggable(true).title("Marcador de casa").snippet("Posicion de casa").icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons(icon, 100, 100)));
+//                    markerHome.position(prueba).draggable(true).title("Marcador de casa").snippet("Posicion de casa").icon(bitmapDescriptorFromVector(MapActivity.this, R.drawable.ic_home_black_24dp));
                     mMap.addMarker(markerHome);
                 }
                 else if(pomp == 1){
@@ -849,7 +860,7 @@ public class MapActivity extends AppCompatActivity implements TaskCompleted, OnM
             backgroundWorker.execute(type);
         } else{
             if(!error)
-                Toast.makeText(this, "No hay conexion se guardaron los datos en el telefono", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Se han guardado los datos", Toast.LENGTH_SHORT).show();
             if (ventana == 2){
                 Intent intent = new Intent(MapActivity.this, Maps_Box.class);
                 startActivity(intent);
@@ -1017,7 +1028,6 @@ public class MapActivity extends AppCompatActivity implements TaskCompleted, OnM
     public void onBackPressed() {
         if (insertando)
         {
-
             if (markerHome.getPosition() != null || markerPump.getPosition() != null){
                 try {
 
@@ -1054,20 +1064,17 @@ public class MapActivity extends AppCompatActivity implements TaskCompleted, OnM
                         Screen_Login_Activity.tarea_JSON.put(DBtareasController.codigo_de_localizacion, latLang_string_geolocalizacion_pump);
                         Screen_Login_Activity.tarea_JSON.put(DBtareasController.url_geolocalizacion, latLang_string_geolocalizacion_QT_pump);
 
-
                     }
-
-
-                    finish();
+                    finishThisClass();
 
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Toast.makeText(MapActivity.this, "No pudo guardar geolocalizacion", Toast.LENGTH_SHORT).show();
-                    finish();
+                    finishThisClass();
                 }
 
-            }else finish();
+            }else finishThisClass();
 
 
         }
@@ -1120,17 +1127,18 @@ public class MapActivity extends AppCompatActivity implements TaskCompleted, OnM
 
                     if(igual){
                         ventana=1;
-                        saveData();}else finish();
+                        saveData();
+                    }else finishThisClass();
 
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Toast.makeText(MapActivity.this, "No pudo guardar geolocalizacion", Toast.LENGTH_SHORT).show();
-                    finish();
+                    finishThisClass();
                 }
 
 
-            }else finish();
+            }else finishThisClass();
 
         }
 
@@ -1142,6 +1150,18 @@ public class MapActivity extends AppCompatActivity implements TaskCompleted, OnM
 
     }
 
+    private void finishThisClass() {
+        Intent openTareaActivity = null;
+        if(team_or_personal_task_selection_screen_Activity.from_battery_or_unity == team_or_personal_task_selection_screen_Activity.FROM_UNITY) {
+            openTareaActivity = new Intent(this, Screen_Unity_Counter.class);
+        }else if(team_or_personal_task_selection_screen_Activity.from_battery_or_unity == team_or_personal_task_selection_screen_Activity.FROM_BATTERY) {
+            openTareaActivity = new Intent(this, Screen_Battery_counter.class);
+        }
+        if(openTareaActivity!=null) {
+            startActivity(openTareaActivity);
+        }
+        finish();
+    }
 
 
 

@@ -75,10 +75,9 @@
         android:layout_gravity="center"
         >
         <Button
-            android:layout_marginLeft="5dp"
             android:id="@+id/button_filtro_tareas_personal_screen_team_task"
-            android:layout_width="305dp"
-            android:layout_height="85dp"
+            android:layout_width="300dp"
+            android:layout_height="75dp"
             android:background="@drawable/screen_tareas_equipo_filtro_tareas" />
     </LinearLayout>
 

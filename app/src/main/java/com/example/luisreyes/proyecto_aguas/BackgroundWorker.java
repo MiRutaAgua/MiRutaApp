@@ -123,7 +123,7 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
         }
         else {
             //Para PC de Trabjo ojo cambiar esto entre
-            String prestring = "http://192.168.21.250";
+            String prestring = "http://192.168.20.82";
             //Mi PC en casa
 //            String prestring = "http://192.168.56.1";
 

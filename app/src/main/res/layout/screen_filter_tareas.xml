@@ -222,14 +222,14 @@
                         android:gravity="center"
                         android:orientation="vertical"
                         >
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="CÓDIGO DE GEOLOCALIZACIÓN"
-                            android:textStyle="bold"
-                            android:textSize="17dp"
+                            android:text="CÓDIGO DE EMPLAZAMIENTO"
                             android:textColor="@color/colorBlueAppRuta"
-                            />
+                            android:textSize="17dp"
+                            android:textStyle="bold" />
                         <AutoCompleteTextView
                             android:id="@+id/editText_geolocalizacion_screen_filter_tareas"
                             android:layout_width="match_parent"

@@ -104,6 +104,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
     public static final int FROM_PERSONAL = 1;
     public static final int FROM_FILTER_RESULT= 2;
     public static final int FROM_FILTER_TAREAS = 3;
+    public static final int FROM_MAP = 4;
     public static int from_team_or_personal=-1;
 
     public static final int FROM_BATTERY = 0;
