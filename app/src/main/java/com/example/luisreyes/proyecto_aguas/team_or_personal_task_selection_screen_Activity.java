@@ -62,12 +62,15 @@ import java.util.Map;
 
 public class team_or_personal_task_selection_screen_Activity extends AppCompatActivity implements TaskCompleted{
 
+
     NotificationCompat.Builder mBuilder;
 
     public static DBtareasController dBtareasController = null;
     public static DBcontadoresController dBcontadoresController = null;
     public static DBPiezasController dBpiezasController = null;
     public static DBCausasController dBcausasController = null;
+
+    ArrayList<String> tareas_en_servidor = new ArrayList<>();
 
     public static String gestor_seleccionado = "TODOS";
 
@@ -104,12 +107,17 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
     public static final int FROM_PERSONAL = 1;
     public static final int FROM_FILTER_RESULT= 2;
     public static final int FROM_FILTER_TAREAS = 3;
-    public static final int FROM_MAP = 4;
+    public static final int FROM_MAP_CERCANIA = 4;
     public static int from_team_or_personal=-1;
+    public static int from_screen =-1;
 
     public static final int FROM_BATTERY = 0;
     public static final int FROM_UNITY = 1;
     public static int from_battery_or_unity=-1;
+
+    private static final int PEDAZOS_A_DESCARGAR = 500;
+    private int count_tareas_descargadas = 0;
+    private int cantidad_total_de_tareas_en_servidor = 0;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -236,6 +244,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
             @Override
             public void onClick(View view) {
                 from_team_or_personal = FROM_TEAM;
+                from_screen = FROM_TEAM;
                 Screen_Login_Activity.playOnOffSound(getApplicationContext());
                 final Animation myAnim = AnimationUtils.loadAnimation(team_or_personal_task_selection_screen_Activity.this, R.anim.bounce);
                 // Use bounce interpolator with amplitude 0.2 and frequency 20
@@ -266,6 +275,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
             @Override
             public void onClick(View view) {
                 from_team_or_personal = FROM_PERSONAL;
+                from_screen = FROM_PERSONAL;
                 Screen_Login_Activity.playOnOffSound(getApplicationContext());
                 final Animation myAnim = AnimationUtils.loadAnimation(team_or_personal_task_selection_screen_Activity.this, R.anim.bounce);
                 // Use bounce interpolator with amplitude 0.2 and frequency 20
@@ -468,10 +478,11 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
             }
         });
 
+        showRingDialog("Cargando información");
         setNotificationCitasObsoletas();
         lookForGestors();
         Log.e("Cant_tareas_oofline", String.valueOf(cantidad_tareas_offline));
-
+        hideRingDialog();
     }
 
     @Override
@@ -861,14 +872,31 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
         }
     }
 
-    private void descargarTareas() {
+    private void descargarCantidadTareas() {
         if(checkConection()){
-            Log.e("descargarTareas", "Hay conexion");
+            Log.e("descargarCantidadTareas", "Hay conexion");
             Screen_Login_Activity.isOnline = true;
             showRingDialog("Actualizando información de tareas");
-            String type_script = "get_tareas";
+            String type_script = "get_tareas_amount";
             BackgroundWorker backgroundWorker = new BackgroundWorker(this);
             backgroundWorker.execute(type_script);
+        }
+    }
+
+    private void descargarTareas() {
+        count_tareas_descargadas = 0;
+        descargarCantidadTareas();
+    }
+
+    private void descargarXTareas(int cantidad, int count_tareas_descargadas){
+        if(checkConection()){
+            Log.e("descargarXTareas", "Hay conexion");
+            Screen_Login_Activity.isOnline = true;
+            String type_script = "get_tareas_with_limit";
+            String amount = String.valueOf(cantidad);
+            String offset = String.valueOf(count_tareas_descargadas);
+            BackgroundWorker backgroundWorker = new BackgroundWorker(this);
+            backgroundWorker.execute(type_script, amount, offset);
         }
     }
 
@@ -1402,6 +1430,178 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                 }
 
                 actualizarContadoresEnInternet();
+            }
+        }
+        else if(type == "get_tareas_amount"){
+            if(result == null){
+                hideRingDialog();
+                Toast.makeText(this, "No se pudo establecer conexión con el servidor", Toast.LENGTH_LONG).show();
+            }
+            else {
+                Log.e("get_tareas_amount", result + "-----------------------------------------");
+                if(result.contains("not success get_tareas_amount")){
+                    Toast.makeText(this,"Error al obtener la cantidad de tareas", Toast.LENGTH_LONG).show();
+                }else{
+                    if(result.contains("Cantidad de tareas:")){
+                        try {
+                            String [] split = result.split("Cantidad de tareas:");
+                            if(split.length >= 2){
+                                result = split[1].replace("]", "").trim();
+                                Integer integer = Integer.parseInt(result);
+                                if(integer!= null){
+                                    cantidad_total_de_tareas_en_servidor = integer;
+                                    descargarXTareas(PEDAZOS_A_DESCARGAR, count_tareas_descargadas);
+                                }
+                            }
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        }
+        else if(type == "get_tareas_with_limit"){
+            if(result == null){
+                hideRingDialog();
+                Toast.makeText(this, "No se pudo establecer conexión con el servidor", Toast.LENGTH_LONG).show();
+            }
+            else {
+                Log.e("get_tareas", "-----------------------------------------");
+
+                if(result.isEmpty()) {
+                    Log.e("get_tareas", "Vacio");
+                    Toast.makeText(this,"Tabla de tareas en internet vacia", Toast.LENGTH_LONG).show();
+                    hideRingDialog();
+
+                    checkTareasMissinInServer(tareas_en_servidor);
+                    if (!tareas_to_update.isEmpty()) {
+                        showRingDialog("Actualizando tareas en Internet...");
+                        updateTareaInMySQL();
+                        return;
+                    }
+                }
+                else if(result.equals("Servidor caido, ahora no se puede sincronizar")){
+                    Toast.makeText(this, result, Toast.LENGTH_LONG).show();
+                    hideRingDialog();
+                }
+                else {
+                    boolean insertar_todas = false;
+                    if (team_or_personal_task_selection_screen_Activity.dBtareasController.checkForTableExists()) {
+                        lite_count = team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas();
+//                    Toast.makeText(Screen_Table_Team.this, "Existe", Toast.LENGTH_LONG).show();
+
+                        if (lite_count < 1) {
+                            insertar_todas = true;
+                            Toast.makeText(this, "Insertando todas las tareas", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                    for (int n = 1; n < Screen_Table_Team.lista_tareas.size(); n++) { //el elemento n 0 esta vacio
+                        try {
+                            JSONArray jsonArray = new JSONArray(Screen_Table_Team.lista_tareas.get(n));
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                                tareas_en_servidor.add(jsonObject.getString(DBtareasController.principal_variable));
+
+                                if (Screen_Filter_Tareas.checkIfTaskIsDoneAndEraseLocal(jsonObject)) {
+                                    continue; //si ya esta hecha en servidor paso y borro la local si existe
+                                }
+                                jsonObject = Screen_Table_Team.buscarTelefonosEnObservaciones(jsonObject);
+                                if (insertar_todas) {
+                                    team_or_personal_task_selection_screen_Activity.dBtareasController.insertTarea(jsonObject);
+                                } else if (lite_count != -10) {
+                                    if (!team_or_personal_task_selection_screen_Activity.dBtareasController.
+                                            checkIfTareaExists(jsonObject.getString(DBtareasController.principal_variable))) {
+                                        Toast.makeText(this, "MySQL tarea: " + jsonObject.getString(DBtareasController.principal_variable) + " insertada", Toast.LENGTH_LONG).show();
+                                        team_or_personal_task_selection_screen_Activity.dBtareasController.insertTarea(jsonObject);
+                                    } else {
+                                        String date_MySQL_string = null;
+//                                    Log.e("Tareas existe: ", jsonObject.getString(DBtareasController.principal_variable));
+                                        try {
+                                            date_MySQL_string = jsonObject.getString(DBtareasController.date_time_modified).trim();
+                                            Date date_MySQL = null;
+                                            if (!TextUtils.isEmpty(date_MySQL_string)) {
+                                                date_MySQL = team_or_personal_task_selection_screen_Activity.dBtareasController.getFechaHoraFromString(date_MySQL_string);
+                                            }
+                                            JSONObject jsonObject_Lite = new JSONObject(team_or_personal_task_selection_screen_Activity.dBtareasController.get_one_tarea_from_Database(
+                                                    jsonObject.getString(DBtareasController.principal_variable).trim()));
+                                            String date_SQLite_string = jsonObject_Lite.getString(DBtareasController.date_time_modified).trim();
+                                            Date date_SQLite = null;
+//                                    Toast.makeText(Screen_Table_Team.this, date_SQLite_string, Toast.LENGTH_LONG).show();
+
+                                            if (!TextUtils.isEmpty(date_SQLite_string)) {
+                                                date_SQLite = team_or_personal_task_selection_screen_Activity.dBtareasController.getFechaHoraFromString(date_SQLite_string);
+                                            }
+                                            if (date_SQLite == null) {
+                                                if (date_MySQL != null) {
+                                                    team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea(jsonObject, DBtareasController.principal_variable);
+                                                    Log.e("Updating", jsonObject.getString(DBtareasController.principal_variable));
+                                                } else {
+                                                    Toast.makeText(this, "Fechas ambas nulas", Toast.LENGTH_LONG).show();
+                                                }
+                                            } else if (date_MySQL == null) {
+                                                if (date_SQLite != null) {
+                                                    //aqui actualizar MySQL con la DB SQLite
+                                                    try {
+                                                        tareas_to_update.add(jsonObject_Lite.getString(DBtareasController.principal_variable));
+                                                    } catch (JSONException e) {
+                                                        e.printStackTrace();
+                                                        Toast.makeText(this, "No se pudo actualizar tarea\n" + e.toString(), Toast.LENGTH_LONG).show();
+                                                    }
+
+                                                } else {
+                                                    Toast.makeText(this, "Fechas ambas nulas", Toast.LENGTH_LONG).show();
+                                                }
+                                            } else { //si ninguna de la dos son nulas
+
+                                                if (date_MySQL.after(date_SQLite)) {//MySQL mas actualizada
+                                                    team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea(jsonObject, DBtareasController.principal_variable);
+                                                    Log.e("Updating", jsonObject.getString(DBtareasController.principal_variable));
+                                                } else if (date_MySQL.before(date_SQLite)) {//SQLite mas actualizada
+                                                    //aqui actualizar MySQL con la DB SQLite
+                                                    try {
+                                                        tareas_to_update.add(jsonObject_Lite.getString(DBtareasController.principal_variable));
+                                                    } catch (JSONException e) {
+                                                        e.printStackTrace();
+                                                        Toast.makeText(this, "No se pudo actualizar tarea\n" + e.toString(), Toast.LENGTH_LONG).show();
+                                                    }
+
+                                                }
+                                            }
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            //Toast.makeText(Screen_Table_Team.this,e.toString(), Toast.LENGTH_LONG).show();
+                        }
+                    }
+
+                    count_tareas_descargadas += PEDAZOS_A_DESCARGAR;
+                    if(count_tareas_descargadas >= cantidad_total_de_tareas_en_servidor) {
+                        hideRingDialog();
+                        Toast.makeText(this, "Tareas descargadas correctamente", Toast.LENGTH_LONG).show();
+                        checkTareasMissinInServer(tareas_en_servidor);
+                        if (!tareas_to_update.isEmpty()) {
+                            showRingDialog("Actualizando tareas en Internet...");
+                            updateTareaInMySQL();
+                            return;
+                        } else {
+                            setNotificationCitasObsoletas();
+                            lookForGestors();
+                            textView_sync_team_or_personal_task_screen.setText("SINCRONIZAR");
+                            button_sync_team_or_personal_task_screen.setBackground(getResources().
+                                    getDrawable(R.drawable.sync_button));
+                        }
+                        tareas_en_servidor.clear();
+                    }else{
+                        descargarXTareas(PEDAZOS_A_DESCARGAR, count_tareas_descargadas);
+                    }
+                }
             }
         }
         else if(type == "get_tareas"){

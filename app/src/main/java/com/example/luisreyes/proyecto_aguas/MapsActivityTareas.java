@@ -62,6 +62,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.VisibleRegion;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -87,7 +88,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-public class MapsActivityTareas extends AppCompatActivity implements TaskCompleted, OnMapReadyCallback, GoogleMap.OnMapLongClickListener, GoogleMap.OnMarkerDragListener, GoogleMap.OnMarkerClickListener {
+public class MapsActivityTareas extends AppCompatActivity implements TaskCompleted, OnMapReadyCallback, GoogleMap.OnMapLongClickListener,
+        GoogleMap.OnMarkerDragListener, GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener {
 
     private GoogleMap mMap;
     private FusedLocationProviderClient mFusedLocationProviderClient;
@@ -96,10 +98,12 @@ public class MapsActivityTareas extends AppCompatActivity implements TaskComplet
     private LocationCallback locationCallback;
     private final float DEFAULT_ZOOM = 18;
     private View mapView;
-    private HashMap<String, String> tabla_marcadores = new HashMap<>();
+    private HashMap<String, Marker> tabla_marcadores = new HashMap<>();
+    private HashMap<String, String> tabla_principal_variable = new HashMap<>();
     LatLng lastClickedMarker =null;
 
-    Button btnlocalizacion;
+
+    Button btnlocalizacion, btn_abrir_tarea;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,6 +119,7 @@ public class MapsActivityTareas extends AppCompatActivity implements TaskComplet
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(MapsActivityTareas.this);
 
         btnlocalizacion = (Button) findViewById(R.id.btnlocalizacion);
+        btn_abrir_tarea = (Button) findViewById(R.id.btn_abrir_tarea);
 
         btnlocalizacion.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,10 +130,85 @@ public class MapsActivityTareas extends AppCompatActivity implements TaskComplet
 
             }});
 
+        btn_abrir_tarea.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String coords = lastClickedMarker.toString().replace("lat/lng: (","").replace(")", "");
+                String latLang = lastClickedMarker.toString();
+
+                Log.e("Marker", coords);
+                if(tabla_principal_variable.containsKey(coords)) {
+                    try {
+                        String princ_var = tabla_principal_variable.get(coords);
+                        if (team_or_personal_task_selection_screen_Activity.dBtareasController.checkForTableExists() && coords != null) {
+                            if (team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas() > 0) {
+                                String tarea = team_or_personal_task_selection_screen_Activity.
+                                        dBtareasController.get_one_tarea_from_Database(princ_var);
+                                if (Screen_Login_Activity.checkStringVariable(tarea)) {
+                                    JSONObject jsonObject = new JSONObject(tarea);
+                                    if (jsonObject != null) {
+                                        openTarea(jsonObject);
+                                    }
+                                }
+                            }
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+        });
+
+        team_or_personal_task_selection_screen_Activity.from_team_or_personal = team_or_personal_task_selection_screen_Activity.FROM_MAP_CERCANIA;
+
+        btn_abrir_tarea.setVisibility(View.INVISIBLE);
     }
 
 
 
+    public void openTarea(JSONObject jsonObject){
+        Screen_Login_Activity.tarea_JSON = jsonObject;
+        try {
+            if (Screen_Login_Activity.tarea_JSON != null) {
+                if (Screen_Login_Activity.tarea_JSON.getString(DBtareasController.operario).trim().contains(
+                        Screen_Login_Activity.operario_JSON.getString(DBoperariosController.usuario).trim())) {
+                    Screen_Table_Team.acceder_a_Tarea(MapsActivityTareas.this, team_or_personal_task_selection_screen_Activity.FROM_MAP_CERCANIA);//revisar esto
+                    MapsActivityTareas.this.finish();
+                } else {
+                    new AlertDialog.Builder(MapsActivityTareas.this)
+                            .setTitle("Cambiar Operario")
+                            .setMessage("Esta tarea corresponde a otro operario\n¿Desea asignarse esta tarea?")
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    try {
+                                        Screen_Login_Activity.tarea_JSON.put(DBtareasController.operario,
+                                                Screen_Login_Activity.operario_JSON.getString(DBoperariosController.usuario).trim());
+                                    } catch (JSONException e) {
+                                        Toast.makeText(MapsActivityTareas.this, "Error -> No pudo asignarse tarea a este operario", Toast.LENGTH_SHORT).show();
+                                        e.printStackTrace();
+                                        return;
+                                    }
+                                    Screen_Table_Team.acceder_a_Tarea(MapsActivityTareas.this, team_or_personal_task_selection_screen_Activity.FROM_MAP_CERCANIA);
+                                    MapsActivityTareas.this.finish();
+                                }
+                            })
+                            .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                }
+                            }).show();
+                }
+            } else {
+                Toast.makeText(MapsActivityTareas.this, "Tarea nula", Toast.LENGTH_SHORT).show();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Toast.makeText(MapsActivityTareas.this, "No pudo acceder a tarea Error -> " + e.toString(), Toast.LENGTH_SHORT).show();
+        }
+    }
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -171,6 +251,7 @@ public class MapsActivityTareas extends AppCompatActivity implements TaskComplet
         });
 
         googleMap.setOnMarkerClickListener(this);
+        googleMap.setOnMapClickListener(this);
         mMap.getUiSettings().setZoomControlsEnabled(true);
 //        insertarMarcador("viva",43.2708400000000,-2.9437300000000);
      }
@@ -182,68 +263,6 @@ public class MapsActivityTareas extends AppCompatActivity implements TaskComplet
 
     @Override
     public void onMapLongClick(LatLng latLng) {
-        String coords = lastClickedMarker.toString().replace("lat/lng: (","").replace(")", "");
-//        Log.e("LastMarkerClicked", lastClickedMarker.toString());
-        Log.e("Marker", coords);
-        Log.e("Markers", tabla_marcadores.toString());
-        if(tabla_marcadores.containsKey(coords)) {
-            String princ_var = tabla_marcadores.get(coords);
-            princ_var = princ_var.replace("++", "");
-            try {
-                if (team_or_personal_task_selection_screen_Activity.dBtareasController.checkForTableExists() && princ_var != null) {
-                    if (team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas() > 0) {
-                        JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.
-                                dBtareasController.get_one_tarea_from_Database(princ_var));
-                        if (jsonObject != null) {
-                            Screen_Login_Activity.tarea_JSON = jsonObject;
-                            //Toast.makeText(Screen_Table_Team.this, "Tarea JSON ->"+Screen_Login_Activity.tarea_JSON .toString(), Toast.LENGTH_LONG).show();
-                            //openMessage("JSON", Screen_Login_Activity.tarea_JSON .toString());
-                            try {
-                                if (Screen_Login_Activity.tarea_JSON != null) {
-                                    if (Screen_Login_Activity.tarea_JSON.getString(DBtareasController.operario).trim().contains(
-                                            Screen_Login_Activity.operario_JSON.getString(DBoperariosController.usuario).trim())) {
-                                        Screen_Table_Team.acceder_a_Tarea(MapsActivityTareas.this, team_or_personal_task_selection_screen_Activity.FROM_MAP);//revisar esto
-                                    } else {
-                                        new AlertDialog.Builder(MapsActivityTareas.this)
-                                                .setTitle("Cambiar Operario")
-                                                .setMessage("Esta tarea corresponde a otro operario\n¿Desea asignarse esta tarea?")
-                                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                                        try {
-                                                            Screen_Login_Activity.tarea_JSON.put(DBtareasController.operario,
-                                                                    Screen_Login_Activity.operario_JSON.getString(DBoperariosController.usuario).trim());
-                                                        } catch (JSONException e) {
-                                                            Toast.makeText(MapsActivityTareas.this, "Error -> No pudo asignarse tarea a este operario", Toast.LENGTH_SHORT).show();
-                                                            e.printStackTrace();
-                                                            return;
-                                                        }
-                                                        Screen_Table_Team.acceder_a_Tarea(MapsActivityTareas.this, team_or_personal_task_selection_screen_Activity.FROM_MAP);
-                                                    }
-                                                })
-                                                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(DialogInterface dialogInterface, int i) {
-
-                                                    }
-                                                }).show();
-                                    }
-                                } else {
-                                    Toast.makeText(MapsActivityTareas.this, "Tarea nula", Toast.LENGTH_SHORT).show();
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                                Toast.makeText(MapsActivityTareas.this, "No pudo acceder a tarea Error -> " + e.toString(), Toast.LENGTH_SHORT).show();
-                            }
-                        } else {
-                            Toast.makeText(MapsActivityTareas.this, "JSON nulo, se delvio de la tabla elemento nulo", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     @Override
@@ -294,9 +313,10 @@ public class MapsActivityTareas extends AppCompatActivity implements TaskComplet
                                             return;
                                         }
                                         mLastKnownLocation = locationResult.getLastLocation();
-                                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+//                                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
                                         mFusedLocationProviderClient.removeLocationUpdates(locationCallback);//
                                         fillFilterGeolocalizacion();
+//                                        Log.e("entre","entre");
                                     }
                                 };
                                 mFusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, null);
@@ -310,9 +330,11 @@ public class MapsActivityTareas extends AppCompatActivity implements TaskComplet
     }
 
     private void fillFilterGeolocalizacion() {
-
+       ArrayList<String> tareas;
+        double minimun_distance = 999999;
+        String minimun_coords = "";
         if (team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas() > 0) {
-            ArrayList<String> tareas ;
+
             try {
                 tareas = team_or_personal_task_selection_screen_Activity.
                         dBtareasController.get_all_tareas_from_Database();
@@ -323,11 +345,12 @@ public class MapsActivityTareas extends AppCompatActivity implements TaskComplet
                         if (!team_or_personal_task_selection_screen_Activity.checkGestor(jsonObject)) {
                             continue;
                         }
-//                        if (!desde_equipo) {
-//                            if (!checkIfOperarioTask(jsonObject)) {
-//                                continue;
-//                            }
-//                        }
+                        if (team_or_personal_task_selection_screen_Activity.from_team_or_personal
+                                ==team_or_personal_task_selection_screen_Activity.FROM_PERSONAL) {
+                            if (!Screen_Filter_Tareas.checkIfOperarioTask(jsonObject)) {
+                                continue;
+                            }
+                        }
 
                         if (!Screen_Filter_Tareas.checkIfIsDone(jsonObject)) {
                             String geolocalizacion = jsonObject.getString(DBtareasController.geolocalizacion).trim();
@@ -344,7 +367,7 @@ public class MapsActivityTareas extends AppCompatActivity implements TaskComplet
                                 String[] parts = geolocalizacion.split(",");
                                 String part1 = parts[0].trim(); //obtiene: latitud
                                 String part2 = parts[1].trim(); //obtiene: longitud
-                                double latitud_h, longitud_h, distance;
+                                double latitud_h, longitud_h;
                                 latitud_h = Double.parseDouble(part1);
                                 longitud_h = Double.parseDouble(part2);
 
@@ -352,33 +375,37 @@ public class MapsActivityTareas extends AppCompatActivity implements TaskComplet
 
                                 if(!tabla_marcadores.containsKey(geolocalizacion)) {
 
-                                    tabla_marcadores.put(geolocalizacion, principal_var);
-
-
-
-                                    distance = distanceInKmBetweenEarthCoordinates(latitud_h, longitud_h, currentLatitud, currentLongitud);
-
-                                    String dist;
-                                    if(distance >= 1){
-                                        dist = String.format("%.2f", distance ) + " Km";
-                                    }else{
-                                        dist = String.format("%.2f", distance * 1000) + " m";
+                                    double current_distance = distanceInKmBetweenEarthCoordinates(latitud_h, longitud_h, currentLatitud, currentLongitud);
+                                    if(current_distance < minimun_distance) {
+                                        minimun_distance = current_distance;
+                                        minimun_coords = geolocalizacion;
                                     }
+                                    String dist = getDistanceString(latitud_h, longitud_h, currentLatitud, currentLongitud);
 
-//                                    Log.e("lugar", part1+part2);
+                                    Marker marker =  insertarMarcador(tipo_tarea, dist,latitud_h,longitud_h);
+                                    tabla_marcadores.put(geolocalizacion, marker);
+                                    tabla_principal_variable.put(geolocalizacion, principal_var);
 
-                                    insertarMarcador(tipo_tarea, dist,latitud_h,longitud_h);
                                 }else{
-                                    tabla_marcadores.put(geolocalizacion, tabla_marcadores.get(geolocalizacion) + "++");
+                                    Marker marker = tabla_marcadores.get(geolocalizacion);
+                                    String title_split = marker.getTitle().substring(0,1);
+
+                                    if(Screen_Absent.checkOnlyNumbers(title_split)){
+                                        Integer integer = Integer.parseInt(title_split);
+                                        if(integer != null){
+                                            integer++;
+                                            String cant = integer.toString();
+                                            String tittle =  cant + marker.getTitle().substring(1, marker.getTitle().length());
+                                            marker.setTitle(tittle);
+                                            tabla_marcadores.put(geolocalizacion, marker);
+                                        }
+                                    }else{
+                                        String tittle =  "2 " + marker.getTitle();
+                                        marker.setTitle(tittle);
+                                        tabla_marcadores.put(geolocalizacion, marker);
+                                    }
                                 }
 
-//                                Handler handler = new Handler();
-//                                handler.postDelayed(new Runnable() {
-//                                    @Override
-//                                    public void run() {
-//                                        insertarMarcador(part1+part2,latitud_h,-longitud_h);
-//                                    }
-//                                }, 500);
                             }
                         }
                     } catch (JSONException e) {
@@ -388,8 +415,20 @@ public class MapsActivityTareas extends AppCompatActivity implements TaskComplet
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        }}
+        }
+        Log.e("Minimun dist", String.valueOf(minimun_distance));
+        Log.e("Minimun coords", minimun_coords);
 
+        double zoom_d = log2((int)(40000 / (minimun_distance / 2)));
+        int zoom_l = (int)(Math.floor(zoom_d));
+        Log.e("zoom_d", String.valueOf(zoom_l));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude()), zoom_l-1));
+    }
+
+    public static int log2(int n){
+        if(n <= 0) throw new IllegalArgumentException();
+        return 31 - Integer.numberOfLeadingZeros(n);
+    }
     private double degreesToRadians(double degrees) {
         return degrees * Math.PI / 180;
     }
@@ -408,14 +447,23 @@ public class MapsActivityTareas extends AppCompatActivity implements TaskComplet
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
         return earthRadiusKm * c;
     }
-    private void insertarMarcador(String titulo, String snippet_parameter, double latitud, double longitud) {
-        mMap.addMarker(new MarkerOptions()
+    private String getDistanceString(double lat1, double lon1, double lat2, double lon2){
+        double distance = distanceInKmBetweenEarthCoordinates( lat1,  lon1,  lat2,  lon2);
+        String dist;
+        if(distance >= 1){
+            dist = String.format("%.2f", distance ) + " Km";
+        }else{
+            dist = String.format("%.2f", distance * 1000) + " m";
+        }
+        return dist;
+    }
+    private Marker insertarMarcador(String titulo, String snippet_parameter, double latitud, double longitud) {
+        Marker marker = mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(latitud, longitud))
                 .title(titulo)
-                .icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("mano", 100, 100)))
-                .snippet(snippet_parameter)
-
-        );
+                .icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("mano", 80, 100)))
+                .snippet(snippet_parameter));
+        return marker;
     }
 
 
@@ -428,15 +476,28 @@ public class MapsActivityTareas extends AppCompatActivity implements TaskComplet
     public boolean onMarkerClick(Marker marker) {
         lastClickedMarker = marker.getPosition();
         Log.e("LastMarkerClicked", lastClickedMarker.toString());
+        btn_abrir_tarea.setVisibility(View.VISIBLE);
         return false;
     }
 
     @Override
     public void onBackPressed() {
-        Intent intent =new Intent(this,team_task_screen_Activity.class);
-        startActivity(intent);
+        Intent intent = null;
+        if(team_or_personal_task_selection_screen_Activity.from_screen == team_or_personal_task_selection_screen_Activity.FROM_TEAM) {
+            intent = new Intent(this,team_task_screen_Activity.class);
+        }else if(team_or_personal_task_selection_screen_Activity.from_screen == team_or_personal_task_selection_screen_Activity.FROM_PERSONAL){
+            intent = new Intent(this,personal_task_screen_Activity.class);
+        }
+        if(intent != null) {
+            startActivity(intent);
+        }
         finish();
-            }
+    }
+
+    @Override
+    public void onMapClick(LatLng latLng) {
+        btn_abrir_tarea.setVisibility(View.INVISIBLE);
+    }
 }
 
 

@@ -717,7 +717,8 @@ public class DBtareasController extends SQLiteOpenHelper {
         if(database == null){
             return "null";
         }
-        Cursor c = database.rawQuery("SELECT * FROM "+table_name+" WHERE "+key+" LIKE \""+value+"\";", null);
+        String query = "SELECT * FROM "+table_name+" WHERE "+key+" LIKE "+value+";";
+        Cursor c = database.rawQuery(query, null);
 
         try {
             if(c.moveToFirst()) {

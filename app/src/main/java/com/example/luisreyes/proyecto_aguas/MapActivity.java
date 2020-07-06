@@ -128,11 +128,18 @@ public class MapActivity extends AppCompatActivity implements TaskCompleted, OnM
 
     private final float DEFAULT_ZOOM = 15;
     private ProgressDialog progressDialog;
+    private String from = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_map);
+
+        try {
+            from = getIntent().getStringExtra("FROM");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         insertando = getIntent().getBooleanExtra("INSERTANDO",false);
 
@@ -304,9 +311,6 @@ public class MapActivity extends AppCompatActivity implements TaskCompleted, OnM
 
                                 Screen_Login_Activity.tarea_JSON.put(DBtareasController.geolocalizacion, latLang_string_geolocalizacion);
                                 Screen_Login_Activity.tarea_JSON.put(DBtareasController.url_geolocalizacion, latLang_string_geolocalizacion_QT);
-
-
-
                             }
 
                             if ((latLngPump.latitude != 0.0 && latLngPump.longitude != 0.0 ) && !(coordPump.equals(latLngPump.toString()))){
@@ -595,7 +599,7 @@ public class MapActivity extends AppCompatActivity implements TaskCompleted, OnM
                 }
 
                 String icon = "casa";
-                markerHome.position(coordenates).draggable(true).title("Marcador de casa").snippet("Posicion de casa").icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons(icon, 100, 100)));
+                markerHome.position(coordenates).draggable(true).title("Marcador de casa").snippet("Posicion de casa").icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons(icon, 84, 100)));
 //                markerHome.position(coordenates).draggable(true).title("Marcador de casa").snippet("Posicion de casa").icon(bitmapDescriptorFromVector(this, R.drawable.ic_home_black_24dp));
                 mMap.addMarker(markerHome);
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(coordenates, DEFAULT_ZOOM));
@@ -625,7 +629,7 @@ public class MapActivity extends AppCompatActivity implements TaskCompleted, OnM
                         mMap.addMarker(markerHome);}
                 }
                 String icon = "mano";
-                markerPump.position(coordenates_pump).draggable(true).title("Marcador de bateria").snippet("Posicion de bateria").icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons(icon, 100, 100)));
+                markerPump.position(coordenates_pump).draggable(true).title("Marcador de bateria").snippet("Posicion de bateria").icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons(icon, 80, 100)));
 //                markerPump.position(coordenates_pump).draggable(true).title("Marcador de bateria").snippet("Posicion de bateria").icon(bitmapDescriptorFromVector(this, R.drawable.ic_location_on_blue_24dp));
                 mMap.addMarker(markerPump);
                 marker =true;
@@ -749,7 +753,7 @@ public class MapActivity extends AppCompatActivity implements TaskCompleted, OnM
                             mMap.addMarker(markerPump);}
                     }
                     String icon = "casa";
-                    markerHome.position(latLng).draggable(true).title("Marcador de casa").snippet("Posicion de casa").icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons(icon, 100, 100)));
+                    markerHome.position(latLng).draggable(true).title("Marcador de casa").snippet("Posicion de casa").icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons(icon, 84, 100)));
 //                    markerHome.position(latLng).draggable(true).title("Marcador de casa").snippet("Posicion de casa").icon(bitmapDescriptorFromVector(MapActivity.this, R.drawable.ic_home_black_24dp));
                     latLngHome = latLng;
                     mMap.addMarker(markerHome);}
@@ -764,7 +768,7 @@ public class MapActivity extends AppCompatActivity implements TaskCompleted, OnM
 
                     }
                     String icon = "mano";
-                    markerPump.position(latLng).draggable(true).title("Marcador de contador").snippet("Posicion de contador").icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons(icon, 100, 100)));
+                    markerPump.position(latLng).draggable(true).title("Marcador de contador").snippet("Posicion de contador").icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons(icon, 80, 100)));
 //                    markerPump.position(latLng).draggable(true).title("Marcador de bateria").snippet("Posicion de bateria").icon(bitmapDescriptorFromVector(MapActivity.this, R.drawable.ic_location_on_blue_24dp));
                     latLngPump = latLng;
                     mMap.addMarker(markerPump);
@@ -796,7 +800,7 @@ public class MapActivity extends AppCompatActivity implements TaskCompleted, OnM
                     latLngHome = prueba;
 
                     String icon = "casa";
-                    markerHome.position(prueba).draggable(true).title("Marcador de casa").snippet("Posicion de casa").icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons(icon, 100, 100)));
+                    markerHome.position(prueba).draggable(true).title("Marcador de casa").snippet("Posicion de casa").icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons(icon, 84, 100)));
 //                    markerHome.position(prueba).draggable(true).title("Marcador de casa").snippet("Posicion de casa").icon(bitmapDescriptorFromVector(MapActivity.this, R.drawable.ic_home_black_24dp));
                     mMap.addMarker(markerHome);
                 }
@@ -817,7 +821,7 @@ public class MapActivity extends AppCompatActivity implements TaskCompleted, OnM
                     latLngPump = prueba;
 
                     String icon = "mano";
-                    markerPump.position(prueba).draggable(true).title("Marcador de contador").snippet("Posicion de contador").icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons(icon, 100, 100)));
+                    markerPump.position(prueba).draggable(true).title("Marcador de contador").snippet("Posicion de contador").icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons(icon, 80, 100)));
 //                    markerPump.position(prueba).draggable(true).title("Marcador de contador").snippet("Posicion de contador").icon(bitmapDescriptorFromVector(MapActivity.this, R.drawable.ic_location_on_blue_24dp));
 
                     mMap.addMarker(markerPump);}
@@ -1151,14 +1155,16 @@ public class MapActivity extends AppCompatActivity implements TaskCompleted, OnM
     }
 
     private void finishThisClass() {
-        Intent openTareaActivity = null;
-        if(team_or_personal_task_selection_screen_Activity.from_battery_or_unity == team_or_personal_task_selection_screen_Activity.FROM_UNITY) {
-            openTareaActivity = new Intent(this, Screen_Unity_Counter.class);
-        }else if(team_or_personal_task_selection_screen_Activity.from_battery_or_unity == team_or_personal_task_selection_screen_Activity.FROM_BATTERY) {
-            openTareaActivity = new Intent(this, Screen_Battery_counter.class);
-        }
-        if(openTareaActivity!=null) {
-            startActivity(openTareaActivity);
+        if(Screen_Login_Activity.checkStringVariable(from)) {
+            Intent openTareaActivity = null;
+            if (team_or_personal_task_selection_screen_Activity.from_battery_or_unity == team_or_personal_task_selection_screen_Activity.FROM_UNITY) {
+                openTareaActivity = new Intent(this, Screen_Unity_Counter.class);
+            } else if (team_or_personal_task_selection_screen_Activity.from_battery_or_unity == team_or_personal_task_selection_screen_Activity.FROM_BATTERY) {
+                openTareaActivity = new Intent(this, Screen_Battery_counter.class);
+            }
+            if (openTareaActivity != null) {
+                startActivity(openTareaActivity);
+            }
         }
         finish();
     }

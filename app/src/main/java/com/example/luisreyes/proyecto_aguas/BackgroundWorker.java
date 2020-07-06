@@ -86,6 +86,8 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
         String load_work_url;
         String get_piezas_url;
         String get_causas_url;
+        String get_tareas_amout_url;
+        String get_tareas_with_limit_url;
 
 //        String server =  "https://server26194.000webhostapp.com/php/";
 //        String server =  "https://server26194.000webhostapp.com/php/yoyi/";
@@ -120,6 +122,8 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
             load_work_url = server+"load_work.php";
             get_piezas_url = server+"get_piezas.php";
             get_causas_url = server+"get_causas.php";
+            get_tareas_amout_url = server+"get_tareas_amount.php";
+            get_tareas_with_limit_url = server+"get_tareas_with_limit.php";
         }
         else {
             //Para PC de Trabjo ojo cambiar esto entre
@@ -147,6 +151,8 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
             load_work_url = prestring+"/load_work.php";
             get_piezas_url = prestring+"/get_piezas.php";
             get_causas_url = prestring+"/get_causas.php";
+            get_tareas_amout_url = prestring+"/get_tareas_amount.php";
+            get_tareas_with_limit_url = prestring+"/get_tareas_with_limit.php";
         }
 
 
@@ -568,7 +574,71 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
                 e.printStackTrace();
             }
 
-        }else if (type.equals("get_tareas")){
+        }
+        else if (type.equals("get_tareas_amount")){
+            try{
+                return_image = false;
+                ArrayList<String> keys = new ArrayList<String>();
+                ArrayList<String> values = new ArrayList<String>();
+
+                ArrayList<String> answer = post_Output_Info(keys, values, get_tareas_amout_url, false, true);
+
+                String return_string = answer.toString();
+
+                return return_string;
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (ProtocolException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        else if (type.equals("get_tareas_with_limit")){
+            try{
+                return_image = false;
+                ArrayList<String> keys = new ArrayList<String>();
+                ArrayList<String> values = new ArrayList<String>();
+                keys.add("LIMIT");
+                keys.add("OFFSET");
+                for (int i = 0; i < keys.size(); i++) {
+                    values.add(params[i+1]);
+                }
+                Screen_Table_Team.lista_tareas = post_Output_Info(keys, values, get_tareas_with_limit_url, true, true);
+
+                String return_string = "";
+                for(int n =1 ; n < Screen_Table_Team.lista_tareas.size() ; n++) { //el elemento n 0 esta vacio
+                    try {
+                        JSONArray jsonArray = new JSONArray(Screen_Table_Team.lista_tareas.get(n));
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                            return_string += jsonObject.toString();
+                            //return_string += jsonObject.getString("poblacion")+" "+jsonObject.getString("calle");
+                            return_string += "\n";
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if(Screen_Table_Team.lista_tareas.size() > 1){
+                    String retorno = Screen_Table_Team.lista_tareas.get(1);
+                    if(retorno.contains("<b>Warning</b>:  mysqli_connect():")
+                            && retorno.contains("Too many connections")){
+                        return "Servidor caido, ahora no se puede sincronizar";
+                    }
+                }
+                return return_string;
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (ProtocolException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        else if (type.equals("get_tareas")){
             try{
                 return_image = false;
                 ArrayList<String> keys = new ArrayList<String>();
