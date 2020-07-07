@@ -46,7 +46,7 @@ public class permission_cercania extends AppCompatActivity {
                         .withListener(new PermissionListener() {
                             @Override
                             public void onPermissionGranted(PermissionGrantedResponse response) {
-                                startActivity(new Intent(permission_cercania.this, MapActivity.class));
+                                startActivity(new Intent(permission_cercania.this, MapsActivityTareas.class));
                                 finish();
                             }
 
