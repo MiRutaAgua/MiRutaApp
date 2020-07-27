@@ -1419,6 +1419,8 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                             if (bitmap != null) {
                                 read_photo_screen_exec_task.setVisibility(View.VISIBLE);
                                 read_photo_screen_exec_task.setImageBitmap(bitmap);
+                                lectura_editText.setVisibility(View.VISIBLE);
+                                Log.e("Foto", "Lectura----************-------");
                             }else{
                                 Toast.makeText(this,"No se encuentra foto luego de cambiar nombre: " +mCurrentPhotoPath_foto_lectura, Toast.LENGTH_LONG).show();
                             }
@@ -1490,13 +1492,17 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                     }
                 }
                 if (requestCode == CAM_REQUEST_READ_PHOTO) {
+                    Log.e("Foto", "Lectura-----------------------");
                     if (!TextUtils.isEmpty(data.getStringExtra("photo_path")) && data.getStringExtra("photo_path") != null) {
                         mCurrentPhotoPath_foto_lectura = data.getStringExtra("photo_path");
+                        Log.e("Foto", "Lectura-----------------------");
                         Bitmap bitmap_foto_lectura = getPhotoUserLocal(mCurrentPhotoPath_foto_lectura);
                         if (bitmap_foto_lectura != null) {
                             bitmap_foto_lectura = Bitmap.createScaledBitmap(bitmap_foto_lectura, 960, 1280, true);
                             read_photo_screen_exec_task.setVisibility(View.VISIBLE);
                             read_photo_screen_exec_task.setImageBitmap(bitmap_foto_lectura);
+                            lectura_editText.setVisibility(View.VISIBLE);
+                            Log.e("Foto", "Lectura-----------------------");
                         }else{
                             Toast.makeText(this,"No se encuentra foto: " +mCurrentPhotoPath_foto_lectura, Toast.LENGTH_LONG).show();
                         }

@@ -116,15 +116,15 @@ public class MyBatteryCounter implements Comparable<MyBatteryCounter>  {
     }
 
     public String getUbicacion_bateria() {
-        String previo="BA-";
+        String previo;
         if(!Screen_Login_Activity.checkStringVariable(ubicacion_bateria) || !ubicacion_bateria.contains("-")){
             previo="BA-?";
             return previo;
         }
-        return previo+ubicacion_bateria;
+        return ubicacion_bateria;
     }
     public void setUbicacion_bateria(String ubicacion) {
-        this.ubicacion_bateria = ubicacion.trim().replace("BA-","");
+        this.ubicacion_bateria = ubicacion.trim();
     }
 
     @Override

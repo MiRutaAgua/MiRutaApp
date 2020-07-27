@@ -315,11 +315,11 @@ public class Screen_Battery_Intake_Asignation extends AppCompatActivity {
         }
 
         if(!(TextUtils.isEmpty(editText_bateria.getText()))){
-            Integer bat = Integer.parseInt(editText_bateria.getText().toString());
+
             planta = "-" + editText_bateria.getText().toString();
         }
         if(!(TextUtils.isEmpty(editText_fila.getText()))){
-            Integer fil = Integer.parseInt(editText_fila.getText().toString());
+
             fila = "-" + editText_fila.getText().toString();
 
         }

@@ -1036,7 +1036,7 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
                     + jsonObject.getString(DBtareasController.mano).trim().replace("\n", "");
         }
         else{
-            Log.e("poblacion", jsonObject.getString(DBtareasController.poblacion).trim() );
+//            Log.e("poblacion", jsonObject.getString(DBtareasController.poblacion).trim() );
             dir = jsonObject.getString(DBtareasController.poblacion).trim() + ", "
                     + jsonObject.getString(DBtareasController.calle).trim().replace("\n", "") + ", "
                     + jsonObject.getString(DBtareasController.numero).trim().replace("\n", "") + " " //numero de portal

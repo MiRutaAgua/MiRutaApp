@@ -195,16 +195,14 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
             datosEspecificos.setText(obs);
             serie.setText(serie_number);
             lectura.setText((Screen_Login_Activity.tarea_JSON.getString(DBtareasController.lectura_actual).trim().replace("\n", "")).replace("null","").replace("NULL",""));
-            String ubicacion_en_bat = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.emplazamiento).trim();
+            String ubicacion_en_bat = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.ubicacion_en_bateria).trim();
             if(!Screen_Login_Activity.checkStringVariable(ubicacion_en_bat)){
-                ubicacion_en_bat = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.ubicacion_en_bateria).trim();
+                ubicacion_en_bat = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.emplazamiento).trim();
             }
             ubicacion.setText(ubicacion_en_bat);
             acceso.setText((Screen_Login_Activity.tarea_JSON.getString(DBtareasController.acceso).trim().replace("\n", "")).replace("null","").replace("NULL",""));
             calibre.setText(caliber);
-            if(!ubicacion_en_bat.contains("-")){
-                ubicacion_en_bat = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.ubicacion_en_bateria).trim();
-            }
+
             ubicacion_bateria.setText(ubicacion_en_bat);
 
 
@@ -286,7 +284,6 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
                     @Override
                     public void onAnimationEnd(Animation arg0) {
                         Intent intent = new Intent(getApplicationContext(), PermissionsActivity.class);
-                        intent.putExtra("FROM", "battery");
                         intent.putExtra("INSERTANDO", false);
                         startActivity(intent);
                     }
@@ -754,10 +751,6 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
                             openTableActivity = new Intent(Screen_Battery_counter.this, Screen_Filter_Results.class);
                         }else if(team_or_personal_task_selection_screen_Activity.from_team_or_personal == team_or_personal_task_selection_screen_Activity.FROM_FILTER_TAREAS){
                             openTableActivity = new Intent(Screen_Battery_counter.this, Screen_Filter_Tareas.class);
-
-                        }
-                        else if(team_or_personal_task_selection_screen_Activity.from_team_or_personal == team_or_personal_task_selection_screen_Activity.FROM_MAP_CERCANIA){
-                            openTableActivity = new Intent(Screen_Battery_counter.this, MapsActivityTareas.class);
                         }
                         if(openTableActivity!= null) {
                             openTableActivity.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
@@ -770,26 +763,7 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Intent openTableActivity = null;
-                        if(team_or_personal_task_selection_screen_Activity.from_team_or_personal == team_or_personal_task_selection_screen_Activity.FROM_TEAM) {
-                            openTableActivity = new Intent(Screen_Battery_counter.this, Screen_Table_Team.class);
-                        }else if(team_or_personal_task_selection_screen_Activity.from_team_or_personal == team_or_personal_task_selection_screen_Activity.FROM_PERSONAL){
-                            openTableActivity = new Intent(Screen_Battery_counter.this, Screen_Table_Personal.class);
-                        }else if(team_or_personal_task_selection_screen_Activity.from_team_or_personal == team_or_personal_task_selection_screen_Activity.FROM_FILTER_RESULT){
-                            openTableActivity = new Intent(Screen_Battery_counter.this, Screen_Filter_Results.class);
-                        }else if(team_or_personal_task_selection_screen_Activity.from_team_or_personal == team_or_personal_task_selection_screen_Activity.FROM_FILTER_TAREAS){
-                            openTableActivity = new Intent(Screen_Battery_counter.this, Screen_Filter_Tareas.class);
-
-                        }
-                        else if(team_or_personal_task_selection_screen_Activity.from_team_or_personal == team_or_personal_task_selection_screen_Activity.FROM_MAP_CERCANIA){
-                            openTableActivity = new Intent(Screen_Battery_counter.this, MapsActivityTareas.class);
-                        }
-                        if(openTableActivity!= null) {
-                            openTableActivity.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-//            openTableActivity.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                            startActivityIfNeeded(openTableActivity, 0);
-                        }
-                        Screen_Battery_counter.this.finish();
+                        finish();
                     }
                 }).show();
     }

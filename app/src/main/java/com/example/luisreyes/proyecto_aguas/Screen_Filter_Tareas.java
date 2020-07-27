@@ -144,7 +144,7 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
         lista_desplegable.add("DIRECCIÓN");
         //lista_desplegable.add("DATOS PRIVADOS");
         lista_desplegable.add("TIPO DE TAREA");
-        lista_desplegable.add("GEOLOCALIZACIÓN");
+        lista_desplegable.add("C.EMPLAZAMIENTO");
         //lista_desplegable.add("DATOS ÚNICOS");
 
 
@@ -536,7 +536,7 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
                     layout_filtro_tipo_tarea_screen_advance_filter.setVisibility(View.VISIBLE);
                     fillFilterTiposTareas();
                 }
-                else if(lista_desplegable.get(i).contains("GEOLOCALIZACIÓN")){
+                else if(lista_desplegable.get(i).contains("C.EMPLAZAMIENTO")){
                     hideAllFilters();
                     layout_filtro_geolocalizacion_screen_advance_filter.setVisibility(View.VISIBLE);
                     fillFilterGeolocalizacion();

@@ -109,7 +109,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
     public static final int FROM_FILTER_TAREAS = 3;
     public static final int FROM_MAP_CERCANIA = 4;
     public static int from_team_or_personal=-1;
-    public static int from_screen =-1;
+    public static int from_screen=-1;
 
     public static final int FROM_BATTERY = 0;
     public static final int FROM_UNITY = 1;
@@ -244,7 +244,6 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
             @Override
             public void onClick(View view) {
                 from_team_or_personal = FROM_TEAM;
-                from_screen = FROM_TEAM;
                 Screen_Login_Activity.playOnOffSound(getApplicationContext());
                 final Animation myAnim = AnimationUtils.loadAnimation(team_or_personal_task_selection_screen_Activity.this, R.anim.bounce);
                 // Use bounce interpolator with amplitude 0.2 and frequency 20
@@ -275,7 +274,6 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
             @Override
             public void onClick(View view) {
                 from_team_or_personal = FROM_PERSONAL;
-                from_screen = FROM_PERSONAL;
                 Screen_Login_Activity.playOnOffSound(getApplicationContext());
                 final Animation myAnim = AnimationUtils.loadAnimation(team_or_personal_task_selection_screen_Activity.this, R.anim.bounce);
                 // Use bounce interpolator with amplitude 0.2 and frequency 20
@@ -1513,7 +1511,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                                 } else if (lite_count != -10) {
                                     if (!team_or_personal_task_selection_screen_Activity.dBtareasController.
                                             checkIfTareaExists(jsonObject.getString(DBtareasController.principal_variable))) {
-                                        Toast.makeText(this, "MySQL tarea: " + jsonObject.getString(DBtareasController.principal_variable) + " insertada", Toast.LENGTH_LONG).show();
+//                                        Toast.makeText(this, "MySQL tarea: " + jsonObject.getString(DBtareasController.principal_variable) + " insertada", Toast.LENGTH_LONG).show();
                                         team_or_personal_task_selection_screen_Activity.dBtareasController.insertTarea(jsonObject);
                                     } else {
                                         String date_MySQL_string = null;
@@ -1657,7 +1655,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                                 } else if (lite_count != -10) {
                                     if (!team_or_personal_task_selection_screen_Activity.dBtareasController.
                                             checkIfTareaExists(jsonObject.getString(DBtareasController.principal_variable))) {
-                                        Toast.makeText(this, "MySQL tarea: " + jsonObject.getString(DBtareasController.principal_variable) + " insertada", Toast.LENGTH_LONG).show();
+//                                        Toast.makeText(this, "MySQL tarea: " + jsonObject.getString(DBtareasController.principal_variable) + " insertada", Toast.LENGTH_LONG).show();
                                         team_or_personal_task_selection_screen_Activity.dBtareasController.insertTarea(jsonObject);
                                     } else {
                                         String date_MySQL_string = null;
