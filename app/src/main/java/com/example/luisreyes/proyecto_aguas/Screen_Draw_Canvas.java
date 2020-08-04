@@ -128,14 +128,14 @@ public class Screen_Draw_Canvas extends Activity {
             if(!numero_abonado.isEmpty() && numero_abonado!=null
                     && !numero_abonado.equals("NULL") && !numero_abonado.equals("null")){
 
-                myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"
+                myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" + Screen_Login_Activity.current_empresa + "/fotos_tareas/"
                         + gestor + "/" + numero_abonado);
 
 
                 if(myDir!=null) {
                     if (!myDir.exists()) {
                         myDir.mkdirs();
-                        File storageDir2 =  new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+ gestor + "/" +numero_abonado);
+                        File storageDir2 =  new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" + Screen_Login_Activity.current_empresa + "/fotos_tareas/"+ gestor + "/" +numero_abonado);
                         if (!storageDir2.exists()) {
                             storageDir2.mkdirs();
                         }

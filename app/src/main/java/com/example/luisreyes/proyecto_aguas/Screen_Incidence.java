@@ -317,7 +317,7 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
                 else {
                     Intent intent_camera = new Intent(Screen_Incidence.this, Screen_Camera.class);
                     intent_camera.putExtra("photo_name", contador + "_foto_incidencia_1");
-                    intent_camera.putExtra("photo_folder", "fotos_tareas");
+                    intent_camera.putExtra("photo_folder", Screen_Login_Activity.current_empresa + "/fotos_tareas");
                     intent_camera.putExtra("contador", contador);
                     startActivityForResult(intent_camera, CAM_REQUEST_1_PHOTO_FULL_SIZE);
                 }
@@ -337,7 +337,7 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
                 else {
                     Intent intent_camera = new Intent(Screen_Incidence.this, Screen_Camera.class);
                     intent_camera.putExtra("photo_name", contador + "_foto_incidencia_2");
-                    intent_camera.putExtra("photo_folder", "fotos_tareas");
+                    intent_camera.putExtra("photo_folder", Screen_Login_Activity.current_empresa + "/fotos_tareas");
                     intent_camera.putExtra("contador", contador);
                     startActivityForResult(intent_camera, CAM_REQUEST_2_PHOTO_FULL_SIZE);
                 }
@@ -357,7 +357,7 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
                 else {
                     Intent intent_camera = new Intent(Screen_Incidence.this, Screen_Camera.class);
                     intent_camera.putExtra("photo_name", contador + "_foto_incidencia_3");
-                    intent_camera.putExtra("photo_folder", "fotos_tareas");
+                    intent_camera.putExtra("photo_folder", Screen_Login_Activity.current_empresa + "/fotos_tareas");
                     intent_camera.putExtra("contador", contador);
                     startActivityForResult(intent_camera, CAM_REQUEST_3_PHOTO_FULL_SIZE);
                 }
@@ -463,7 +463,7 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
             if(!Screen_Login_Activity.checkStringVariable(gestor)){
                 gestor = "Sin_Gestor";
             }
-            String dir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/" + gestor + "/" +numero_abonado;
+            String dir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" + Screen_Login_Activity.current_empresa + "/fotos_tareas/" + gestor + "/" +numero_abonado;
             File myDir = new File(dir);
             if(myDir.exists()){
                 String file_full_name = dir+"/"+photo_name;
@@ -654,7 +654,7 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
         if(!Screen_Login_Activity.checkStringVariable(gestor)){
             gestor = "Sin_Gestor";
         }
-        File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+ gestor + "/" +numero_abonado);
+        File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" + Screen_Login_Activity.current_empresa + "/fotos_tareas/"+ gestor + "/" +numero_abonado);
         if (!storageDir.exists()) {
             storageDir.mkdirs();
         }
@@ -724,7 +724,7 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
             if(!Screen_Login_Activity.checkStringVariable(gestor)){
                 gestor = "Sin_Gestor";
             }
-            File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+ gestor + "/" +numero_abonado);
+            File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" + Screen_Login_Activity.current_empresa + "/fotos_tareas/"+ gestor + "/" +numero_abonado);
             if (!myDir.exists()) {
                 myDir.mkdirs();
             }

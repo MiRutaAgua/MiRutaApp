@@ -70,6 +70,7 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
     private EditText editText_filter;
     public static ArrayList<String> lista_tareas;
     public static ArrayList<String> lista_contadores_servidor;
+    public static ArrayList<String> lista_gestores_servidor;
     public static ArrayList<String> lista_piezas_servidor;
     public static ArrayList<String> lista_causas_servidor;
 
@@ -104,8 +105,9 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        String empresa = Screen_Login_Activity.current_empresa;
         if(team_or_personal_task_selection_screen_Activity.dBtareasController == null) {
-            team_or_personal_task_selection_screen_Activity.dBtareasController = new DBtareasController(this);
+            team_or_personal_task_selection_screen_Activity.dBtareasController = new DBtareasController(this, empresa.toLowerCase());
         }
 
         getWindow().setSoftInputMode( //Para esconder el teclado
@@ -1276,12 +1278,12 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
             jsonObject_Lite.put(DBtareasController.status_tarea, "IDLE");
             jsonObject_Lite.put(DBtareasController.date_time_modified, DBtareasController.getStringFromFechaHora(new Date()));
             jsonObjectSalvaLite = jsonObject_Lite;
-
+            String empresa = Screen_Login_Activity.current_empresa;
             String type_script = "create_tarea";
             BackgroundWorker backgroundWorker = new BackgroundWorker(this);
             Screen_Login_Activity.tarea_JSON = jsonObject_Lite;
             addPhotos_toUpload();
-            backgroundWorker.execute(type_script);
+            backgroundWorker.execute(type_script, Screen_Login_Activity.tarea_JSON.toString(), empresa.toLowerCase());
         }
     }
 
@@ -1412,7 +1414,7 @@ public class Screen_Table_Team extends AppCompatActivity implements TaskComplete
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        String path = getExternalFilesDir(Environment.DIRECTORY_PICTURES)+"/fotos_tareas/" + gestor + "/"+ numero_abonado+"/";
+        String path = getExternalFilesDir(Environment.DIRECTORY_PICTURES)+"/" + Screen_Login_Activity.current_empresa + "/fotos_tareas/" + gestor + "/"+ numero_abonado+"/";
 
         foto = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_antes_instalacion);
         addPhotos_names_and_files(path, foto);

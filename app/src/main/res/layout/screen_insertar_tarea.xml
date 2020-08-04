@@ -43,12 +43,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:orientation="vertical"
             >
-            <AutoCompleteTextView
-                android:layout_width="300dp"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="GESTOR"
+                android:textColor="@color/colorBlueAppRuta"
+                android:textStyle="bold"
+                android:textSize="15dp"
+                android:gravity="center"
+                android:layout_gravity="center"
+                />
+            <Spinner
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/editText_gestor_screen_insertar_tarea"
-                android:hint="Gestor"
                 android:imeOptions="actionNext"
                 />
         </LinearLayout>

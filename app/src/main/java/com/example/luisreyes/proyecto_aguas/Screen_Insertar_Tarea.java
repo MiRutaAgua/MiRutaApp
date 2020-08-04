@@ -74,7 +74,7 @@ public class Screen_Insertar_Tarea extends AppCompatActivity implements TaskComp
             editText_acceso_screen_insertar_tarea ,
     editText_codigo_geolocalizacion_screen_insertar_tarea,
     editText_ultima_lectura_screen_insertar_tarea;
-    AutoCompleteTextView editText_gestor_screen_insertar_tarea;
+    Spinner editText_gestor_screen_insertar_tarea;
 
     private TextView textView_screen_insertar_tarea;
 
@@ -108,7 +108,7 @@ public class Screen_Insertar_Tarea extends AppCompatActivity implements TaskComp
         Collections.sort(lista_desplegable);
         lista_desplegable.add(0,"NINGUNO");
 
-        editText_gestor_screen_insertar_tarea = (AutoCompleteTextView) findViewById(R.id.editText_gestor_screen_insertar_tarea);
+        editText_gestor_screen_insertar_tarea = (Spinner) findViewById(R.id.editText_gestor_screen_insertar_tarea);
         spinner_tipoOrden_screen_insertar_tarea = (Spinner) findViewById(R.id.spinner_tipoOrden_screen_insertar_tarea);
 
         editText_anno_prefijo_screen_insertar_tarea = (EditText) findViewById(R.id.editText_anno_prefijo_screen_insertar_tarea);
@@ -139,9 +139,44 @@ public class Screen_Insertar_Tarea extends AppCompatActivity implements TaskComp
         screen_insertar_tarea_agregar = (Button)findViewById(R.id.imageView_agregar_tarea_screen_insertar_tarea);
         imageView_geolocalizar_screen_insertar_tarea = (Button)findViewById(R.id.imageView_geolocalizar_screen_insertar_tarea);
 
-        ArrayAdapter arrayAdapter_gestores = new ArrayAdapter(this,
-                R.layout.spinner_text_view, team_or_personal_task_selection_screen_Activity.gestores);
-        editText_gestor_screen_insertar_tarea.setAdapter(arrayAdapter_gestores);
+        if(team_or_personal_task_selection_screen_Activity.dBgestoresController!=null) {
+            if (team_or_personal_task_selection_screen_Activity.dBgestoresController.databasefileExists(this)) {
+                if (team_or_personal_task_selection_screen_Activity.dBgestoresController.checkForTableExists()) {
+                    if (team_or_personal_task_selection_screen_Activity.dBgestoresController.countTableGestores() > 0) {
+                        ArrayList<String> gestores = new ArrayList<>();
+                        try {
+                            ArrayList<String> json_gestores = team_or_personal_task_selection_screen_Activity.
+                                    dBgestoresController.get_all_gestores_from_Database();
+                            for (int i = 0; i < json_gestores.size(); i++) {
+                                try {
+                                    JSONObject jsonObject = new JSONObject(json_gestores.get(i));
+                                    String gestor = "";
+                                    try {
+                                        gestor = jsonObject.getString(DBgestoresController.gestor).trim();
+                                        if (Screen_Login_Activity.checkStringVariable(gestor)) {
+                                            if (!gestores.contains(gestor)) {
+                                                gestores.add(gestor);
+                                            }
+                                        }
+                                    }catch (JSONException e) {
+                                        Log.e("Excepcion gestor", "No se pudo obtener gestor\n" + e.toString());
+                                        e.printStackTrace();
+                                    }
+                                }catch (JSONException e) {
+                                    Log.e("Excepcion gestor", "No se pudo obtener gestor\n" + e.toString());
+                                    e.printStackTrace();
+                                }
+                            }
+                            ArrayAdapter arrayAdapter_gestores = new ArrayAdapter(this,
+                                    R.layout.spinner_text_view, gestores);
+                            editText_gestor_screen_insertar_tarea.setAdapter(arrayAdapter_gestores);
+                        }catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        }
 
         ArrayAdapter arrayAdapter_spinner_ORDENES = new ArrayAdapter(this,
                 R.layout.spinner_text_view, lista_desplegable_ordenes);
@@ -254,7 +289,7 @@ public class Screen_Insertar_Tarea extends AppCompatActivity implements TaskComp
         if(!insertando_tarea) {
             insertando_tarea = true;
             if (!(TextUtils.isEmpty(editText_numero_serie_screen_insertar_tarea.getText().toString()))) {
-                if(!(TextUtils.isEmpty(editText_gestor_screen_insertar_tarea.getText().toString()))) {
+                if(!(TextUtils.isEmpty(editText_gestor_screen_insertar_tarea.getSelectedItem().toString()))) {
                     if (!(TextUtils.isEmpty(editText_numero_abonado_screen_insertar_tarea.getText().toString()))) {
                         if (!team_or_personal_task_selection_screen_Activity.dBtareasController.checkIfTareaExists(
                                 editText_numero_serie_screen_insertar_tarea.getText().toString())) {
@@ -268,9 +303,10 @@ public class Screen_Insertar_Tarea extends AppCompatActivity implements TaskComp
                                     Log.e("Error", "insertTarea online");
                                     e.printStackTrace();
                                 }
+                                String empresa = Screen_Login_Activity.current_empresa;
                                 String type_script = "create_tarea";
                                 BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Insertar_Tarea.this);
-                                backgroundWorker.execute(type_script);
+                                backgroundWorker.execute(type_script, Screen_Login_Activity.tarea_JSON.toString(), empresa.toLowerCase());
                             } else {
                                 guardar_modificaciones();
                                 try {
@@ -321,8 +357,8 @@ public class Screen_Insertar_Tarea extends AppCompatActivity implements TaskComp
         try {
             Screen_Login_Activity.tarea_JSON.put(DBtareasController.TIPORDEN, spinner_tipoOrden_screen_insertar_tarea.getSelectedItem().toString());
 
-            if(!(TextUtils.isEmpty(editText_gestor_screen_insertar_tarea.getText().toString())))
-                Screen_Login_Activity.tarea_JSON.put(DBtareasController.GESTOR, editText_gestor_screen_insertar_tarea.getText().toString().toUpperCase());
+            if(!(TextUtils.isEmpty(editText_gestor_screen_insertar_tarea.getSelectedItem().toString())))
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.GESTOR, editText_gestor_screen_insertar_tarea.getSelectedItem().toString());
 
             Screen_Login_Activity.tarea_JSON.put(DBtareasController.CONTADOR_Prefijo_anno, editText_anno_prefijo_screen_insertar_tarea.getText().toString());
             Screen_Login_Activity.tarea_JSON.put(DBtareasController.numero_serie_contador, editText_numero_serie_screen_insertar_tarea.getText().toString());

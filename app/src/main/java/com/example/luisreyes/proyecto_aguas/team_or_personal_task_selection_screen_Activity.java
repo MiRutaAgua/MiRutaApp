@@ -69,6 +69,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
     public static DBcontadoresController dBcontadoresController = null;
     public static DBPiezasController dBpiezasController = null;
     public static DBCausasController dBcausasController = null;
+    public static DBgestoresController dBgestoresController = null;
 
     ArrayList<String> tareas_en_servidor = new ArrayList<>();
 
@@ -108,16 +109,19 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
     public static final int FROM_FILTER_RESULT= 2;
     public static final int FROM_FILTER_TAREAS = 3;
     public static final int FROM_MAP_CERCANIA = 4;
+
     public static int from_team_or_personal=-1;
-    public static int from_screen=-1;
+    public static final int from_screen = -1;
 
     public static final int FROM_BATTERY = 0;
     public static final int FROM_UNITY = 1;
     public static int from_battery_or_unity=-1;
 
-    private static final int PEDAZOS_A_DESCARGAR = 500;
+    private static final int PEDAZOS_A_DESCARGAR = 1000;
     private int count_tareas_descargadas = 0;
     private int cantidad_total_de_tareas_en_servidor = 0;
+    private int count_contadores_descargadas = 0;
+    private int cantidad_total_de_contadores_en_servidor = 0;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -129,6 +133,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
         }
+
         File myDir = new File(String.valueOf(getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)+"/Trabajo Salvado/"));
         if (!myDir.exists()) {
             myDir.mkdirs();
@@ -145,11 +150,12 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
 //        myToolbar.setBackgroundColor(Color.TRANSPARENT);
 //        setSupportActionBar(myToolbar);
 
+        String empresa = Screen_Login_Activity.current_empresa;
         if(dBtareasController == null) {
-            dBtareasController = new DBtareasController(this);
+            dBtareasController = new DBtareasController(this, empresa.toLowerCase());
         }
         if(dBcontadoresController == null) {
-            dBcontadoresController = new DBcontadoresController(this);
+            dBcontadoresController = new DBcontadoresController(this, empresa.toLowerCase());
             Log.e("Creando tabla cont", "----------------------------------------------------------");
         }
         if(dBpiezasController == null) {
@@ -160,9 +166,16 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
             dBcausasController = new DBCausasController(this);
             Log.e("Creando tabla causas", "----------------------------------------------------------");
         }
-        int lite_count_counters = team_or_personal_task_selection_screen_Activity.dBcontadoresController.countTableContadores();
-        Log.e("Aqui", "----------------------------------------------------------");
-        Log.e("Contadores", String.valueOf(lite_count_counters));
+        if(dBgestoresController == null) {
+            dBgestoresController = new DBgestoresController(this, empresa.toLowerCase());
+            Log.e("Creando tabla gestores", "----------------------------------------------------------");
+        }
+        if(dBcontadoresController.checkForTableExists()){
+            int lite_count_counters = team_or_personal_task_selection_screen_Activity.dBcontadoresController.countTableContadores();
+            Log.e("Aqui", "----------------------------------------------------------");
+            Log.e("Contadores", String.valueOf(lite_count_counters));
+        }
+
 
         images_files_names = new ArrayList<String>();
         images_files = new ArrayList<String>();
@@ -414,7 +427,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                         if(checkConection()){
                             try {
                                 Log.e("checkConection", "Subiendo");
-                                getPiezasDeServidor();
+                                getGestoresDeServidor();
                             } catch (JSONException e) {
                                 sync_pressed = false;
                                 Log.e("Error subiendo", e.toString());
@@ -458,7 +471,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                         if(checkConection()){
                             try {
                                 Log.e("checkConection", "Subiendo");
-                                getPiezasDeServidor();
+                                getGestoresDeServidor();
                             } catch (JSONException e) {
                                 sync_pressed = false;
                                 Log.e("Error subiendo", e.toString());
@@ -478,8 +491,8 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
 
         showRingDialog("Cargando información");
         setNotificationCitasObsoletas();
-        lookForGestors();
-        Log.e("Cant_tareas_oofline", String.valueOf(cantidad_tareas_offline));
+//        lookForGestors();
+        Log.e("Cant_tareas_offline", String.valueOf(cantidad_tareas_offline));
         hideRingDialog();
     }
 
@@ -515,15 +528,29 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
         }
     }
 
-    public void getContadoresDeServidor() throws JSONException {
+    public void getGestoresDeServidor() throws JSONException {
+        String empresa = Screen_Login_Activity.current_empresa;
         if(checkConection()){
-            Log.e("getContadoresDeServidor", "Hay conexion");
+            Log.e("getGestoresDeServidor", "Hay conexion");
             Screen_Login_Activity.isOnline = true;
-            showRingDialog("Actualizando información de contadores");
-            String type_script = "get_contadores";
+            showRingDialog("Actualizando información de gestores");
+            String type_script = "get_gestores";
             BackgroundWorker backgroundWorker = new BackgroundWorker(this);
-            backgroundWorker.execute(type_script);
+            backgroundWorker.execute(type_script, empresa.toLowerCase());
         }
+    }
+
+    public void getContadoresDeServidor() throws JSONException {
+        descargarContadores();
+//        String empresa = Screen_Login_Activity.current_empresa;
+//        if(checkConection()){
+//            Log.e("getContadoresDeServidor", "Hay conexion");
+//            Screen_Login_Activity.isOnline = true;
+//            showRingDialog("Actualizando información de contadores");
+//            String type_script = "get_contadores";
+//            BackgroundWorker backgroundWorker = new BackgroundWorker(this);
+//            backgroundWorker.execute(type_script, empresa.toLowerCase());
+//        }
     }
 
     public void getCausasDeServidor() throws JSONException {
@@ -579,11 +606,12 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
 //                jsonObject_Lite.put(DBtareasController.status_tarea, status);
 //                jsonObjectSalvaLite = jsonObject_Lite;
 //            }
+            String empresa = Screen_Login_Activity.current_empresa;
             showRingDialog("Actualizando contador");
             String type_script = "update_contador";
             BackgroundWorker backgroundWorker = new BackgroundWorker(this);
             Screen_Login_Activity.contador_JSON = jsonObject_Lite_counter;
-            backgroundWorker.execute(type_script);
+            backgroundWorker.execute(type_script, Screen_Login_Activity.contador_JSON.toString(), empresa.toLowerCase());
         }
     }
     public void subirTareasSiExisten() throws JSONException {
@@ -648,12 +676,12 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
             jsonObject_Lite.put(DBtareasController.date_time_modified, DBtareasController.getStringFromFechaHora(new Date()));
 
             jsonObjectSalvaLite = jsonObject_Lite;
-
+            String empresa = Screen_Login_Activity.current_empresa;
             String type_script = "create_tarea";
             BackgroundWorker backgroundWorker = new BackgroundWorker(this);
             Screen_Login_Activity.tarea_JSON = jsonObject_Lite;
             addPhotos_toUpload();
-            backgroundWorker.execute(type_script);
+            backgroundWorker.execute(type_script, Screen_Login_Activity.tarea_JSON.toString(), empresa.toLowerCase());
         }
     }
     public void uploadPhotosInMySQL() throws JSONException {
@@ -678,6 +706,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
             Log.e("uploadPhotosInMySQL", "subiendo Fotos");
             String numero_abonado = "", gestor = "";
             try {
+                String empresa = Screen_Login_Activity.current_empresa;
                 numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
                 gestor = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.GESTOR).trim();
                 if(!Screen_Login_Activity.checkStringVariable(gestor)){
@@ -693,7 +722,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                 if(bitmap!=null) {
                     String type = "upload_image";
                     BackgroundWorker backgroundWorker = new BackgroundWorker(this);
-                    backgroundWorker.execute(type, Screen_Register_Operario.getStringImage(bitmap), file_name, gestor, numero_abonado);
+                    backgroundWorker.execute(type, Screen_Register_Operario.getStringImage(bitmap), file_name, gestor, numero_abonado, empresa.toLowerCase());
                 }else{
                     uploadPhotosInMySQL();
                 }
@@ -721,7 +750,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        String path = getExternalFilesDir(Environment.DIRECTORY_PICTURES)+"/fotos_tareas/" + gestor + "/"+ numero_abonado+"/";
+        String path = getExternalFilesDir(Environment.DIRECTORY_PICTURES)+"/" + Screen_Login_Activity.current_empresa + "/fotos_tareas/" + gestor + "/"+ numero_abonado+"/";
 
         foto = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_antes_instalacion);
         addPhotos_names_and_files(path, foto);
@@ -793,7 +822,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
 //            }
 //            Toast.makeText(this, "Tareas actualizadas en internet", Toast.LENGTH_SHORT).show();
             setNotificationCitasObsoletas();
-            lookForGestors();
+//            lookForGestors();
             textView_sync_team_or_personal_task_screen.setText("SINCRONIZAR");
             button_sync_team_or_personal_task_screen.setBackground(getResources().
                     getDrawable(R.drawable.sync_button));
@@ -813,12 +842,13 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                 jsonObject_Lite.put(DBtareasController.status_tarea, status);
                 jsonObjectSalvaLite = jsonObject_Lite;
             }
+            String empresa = Screen_Login_Activity.current_empresa;
             showRingDialog("Actualizando tarea");
             String type_script = "update_tarea";
             BackgroundWorker backgroundWorker = new BackgroundWorker(this);
             Screen_Login_Activity.tarea_JSON = jsonObject_Lite;
             addPhotos_toUpload();
-            backgroundWorker.execute(type_script);
+            backgroundWorker.execute(type_script, Screen_Login_Activity.tarea_JSON.toString(), empresa.toLowerCase());
         }
     }
     public void updatePhotosInMySQL() throws JSONException {
@@ -842,6 +872,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
             Log.e("updatePhotosInMySQL", "actualizando fotos en internet");
             String numero_abonado = "", gestor = "";
             try {
+                String empresa = Screen_Login_Activity.current_empresa;
                 numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
                 gestor = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.GESTOR).trim();
                 if(!Screen_Login_Activity.checkStringVariable(gestor)){
@@ -857,7 +888,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                 if(bitmap!=null) {
                     String type = "upload_image";
                     BackgroundWorker backgroundWorker = new BackgroundWorker(this);
-                    backgroundWorker.execute(type, Screen_Register_Operario.getStringImage(bitmap), file_name, gestor, numero_abonado);
+                    backgroundWorker.execute(type, Screen_Register_Operario.getStringImage(bitmap), file_name, gestor, numero_abonado, empresa.toLowerCase());
                 }else{
                     updatePhotosInMySQL();
                 }
@@ -869,15 +900,26 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
             }
         }
     }
-
+    private void descargarCantidadContadores() {
+        String empresa = Screen_Login_Activity.current_empresa;
+        if(checkConection()){
+            Log.e("descargarCantContadores", "Hay conexion");
+            Screen_Login_Activity.isOnline = true;
+            showRingDialog("Actualizando información de Contadores");
+            String type_script = "get_contadores_amount";
+            BackgroundWorker backgroundWorker = new BackgroundWorker(this);
+            backgroundWorker.execute(type_script, empresa.toLowerCase());
+        }
+    }
     private void descargarCantidadTareas() {
+        String empresa = Screen_Login_Activity.current_empresa;
         if(checkConection()){
             Log.e("descargarCantidadTareas", "Hay conexion");
             Screen_Login_Activity.isOnline = true;
             showRingDialog("Actualizando información de tareas");
             String type_script = "get_tareas_amount";
             BackgroundWorker backgroundWorker = new BackgroundWorker(this);
-            backgroundWorker.execute(type_script);
+            backgroundWorker.execute(type_script, empresa.toLowerCase());
         }
     }
 
@@ -885,8 +927,26 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
         count_tareas_descargadas = 0;
         descargarCantidadTareas();
     }
+    private void descargarContadores() {
+        count_contadores_descargadas = 0;
+        descargarCantidadContadores();
+    }
+
+    private void descargarXContadores(int cantidad, int count_contadores_descargadas){
+        String empresa = Screen_Login_Activity.current_empresa;
+        if(checkConection()){
+            Log.e("descargarXContadores", "Hay conexion");
+            Screen_Login_Activity.isOnline = true;
+            String type_script = "get_contadores_with_limit";
+            String amount = String.valueOf(cantidad);
+            String offset = String.valueOf(count_contadores_descargadas);
+            BackgroundWorker backgroundWorker = new BackgroundWorker(this);
+            backgroundWorker.execute(type_script, amount, offset, empresa.toLowerCase());
+        }
+    }
 
     private void descargarXTareas(int cantidad, int count_tareas_descargadas){
+        String empresa = Screen_Login_Activity.current_empresa;
         if(checkConection()){
             Log.e("descargarXTareas", "Hay conexion");
             Screen_Login_Activity.isOnline = true;
@@ -894,7 +954,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
             String amount = String.valueOf(cantidad);
             String offset = String.valueOf(count_tareas_descargadas);
             BackgroundWorker backgroundWorker = new BackgroundWorker(this);
-            backgroundWorker.execute(type_script, amount, offset);
+            backgroundWorker.execute(type_script, amount, offset, empresa.toLowerCase());
         }
     }
 
@@ -1029,8 +1089,10 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
         }
     }
 
-    public void setNotificationCitasObsoletas(){
+    public void setNotificationCitasObsoletas(){ //Incluye la busqueda de gestores
         int count_sync=0;
+        gestores.clear();
+        boolean sin_tareas = false;
         tareas_con_citas_obsoletas.clear();
         if (team_or_personal_task_selection_screen_Activity.dBtareasController != null) {
             if (team_or_personal_task_selection_screen_Activity.dBtareasController.databasefileExists(this)) {
@@ -1044,6 +1106,24 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                                 JSONObject jsonObject = null;
                                 try {
                                     jsonObject = new JSONObject(tareas.get(i));
+                                    //lookForGestors-----------------------------------------------------------------------------------------
+                                    String gestor = "";
+                                    try {
+                                        gestor = jsonObject.getString(DBtareasController.GESTOR).trim();
+                                        if (!gestor.equals("NULL") && !gestor.equals("null") && !gestor.isEmpty()) {
+                                            if (!gestores.contains(gestor)) {
+                                                gestores.add(gestor);
+                                            }
+                                        } else {
+                                            if (!gestores.contains("SIN GESTOR")) {
+                                                gestores.add("SIN GESTOR");
+                                            }
+                                        }
+                                    } catch (JSONException e) {
+                                        Log.e("Excepcion gestor", "No se pudo obtener gestor\n" + e.toString());
+                                        e.printStackTrace();
+                                    }
+                                    //end lookForGestors-----------------------------------------------------------------------------------------
                                     if(checkIfIsToUpdateOrUpLoad(jsonObject)){
                                         count_sync++;
                                     }
@@ -1064,23 +1144,59 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                             Log.e("Excp setNotificati...", "No se pudo obtener tareas ");
                             e.printStackTrace();
                         }
+                    }else {
+                        textView_sync_team_or_personal_task_screen.setText("NO HAY TAREAS");
+                        Log.e("lookForGestors", "NO HAY TAREAS no existe BD");
+                        button_sync_team_or_personal_task_screen.setBackground(getResources().
+                                getDrawable(R.drawable.sync_button_warning));
+                        sin_tareas = true;
                     }
+                }else {
+                    textView_sync_team_or_personal_task_screen.setText("NO HAY TAREAS");
+                    Log.e("lookForGestors", "NO HAY TAREAS no existe BD");
+                    button_sync_team_or_personal_task_screen.setBackground(getResources().
+                            getDrawable(R.drawable.sync_button_warning));
+                    sin_tareas = true;
                 }
+            }else {
+                textView_sync_team_or_personal_task_screen.setText("NO HAY TAREAS");
+                Log.e("lookForGestors", "NO HAY TAREAS no existe BD");
+                button_sync_team_or_personal_task_screen.setBackground(getResources().
+                        getDrawable(R.drawable.sync_button_warning));
+                sin_tareas = true;
             }
-        }
-        if(count_sync > 0){
-            textView_sync_team_or_personal_task_screen.setText("SINCRONIZAR ("+String.valueOf(count_sync)+")");
-            //textView_sync_team_or_personal_task_screen.setTextColor(getResources().getColor(R.color.colorBlueAppRuta));
+        }else {
+            textView_sync_team_or_personal_task_screen.setText("NO HAY TAREAS");
+            Log.e("lookForGestors", "NO HAY TAREAS no existe BD");
             button_sync_team_or_personal_task_screen.setBackground(getResources().
                     getDrawable(R.drawable.sync_button_warning));
+            sin_tareas = true;
+        }
+        if(!sin_tareas) {
+            if (count_sync > 0) {
+                textView_sync_team_or_personal_task_screen.setText("SINCRONIZAR (" + String.valueOf(count_sync) + ")");
+                //textView_sync_team_or_personal_task_screen.setTextColor(getResources().getColor(R.color.colorBlueAppRuta));
+                button_sync_team_or_personal_task_screen.setBackground(getResources().
+                        getDrawable(R.drawable.sync_button_warning));
 
+            } else {
+                textView_sync_team_or_personal_task_screen.setText("SINCRONIZAR");
+                //textView_sync_team_or_personal_task_screen.setTextColor(getResources().getColor(R.color.colorGrayLetters));
+                button_sync_team_or_personal_task_screen.setBackground(getResources().
+                        getDrawable(R.drawable.sync_button));
+            }
         }
-        else{
-            textView_sync_team_or_personal_task_screen.setText("SINCRONIZAR");
-            //textView_sync_team_or_personal_task_screen.setTextColor(getResources().getColor(R.color.colorGrayLetters));
-            button_sync_team_or_personal_task_screen.setBackground(getResources().
-                    getDrawable(R.drawable.sync_button));
+        //lookForGestors-----------------------------------------------------------------------------------------
+        if(!gestores.isEmpty()){
+            Collections.sort(gestores);
+            gestores.add(0, "TODOS");
+
+        }else{
+            gestores.add(0, "TODOS");
         }
+        ArrayAdapter gestores_adapter = new ArrayAdapter(this, R.layout.spinner_text_view, gestores);
+        spinner_filtro_gestor_screen_team_or_personal.setAdapter(gestores_adapter);
+        //end lookForGestors-----------------------------------------------------------------------------------------
         setNotificationOfCitas();
     }
 
@@ -1137,7 +1253,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
     @Override
     public void onTaskComplete(String type, String result) throws JSONException {
         int lite_count = -10;
-        int lite_count_counters = -10, lite_count_piezas=-10, lite_count_causas=-10;
+        int lite_count_counters = -10, lite_count_piezas=-10, lite_count_causas=-10, lite_count_gestores=-10;
         sync_pressed = false;
         if(type == "save_work") {
             if (result == null) {
@@ -1184,7 +1300,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                     if(Menu_Options.loadWorkinFile(dir)) {
                         openMessage("Cargado", "Trabajo cargado correctamente");
                         setNotificationCitasObsoletas();
-                        lookForGestors();
+//                        lookForGestors();
                     }else{
                         openMessage("Error", "El trabajo no ha sido cargado");
                     }
@@ -1212,7 +1328,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                     hideRingDialog();
                 } else {
                     boolean insertar_todos = false;
-//                    Log.e("get_contadores res", result);
+//                    Log.e("get_piezas res", result);
                     if (team_or_personal_task_selection_screen_Activity.dBpiezasController.checkForTableExists()) {
                         lite_count_piezas = team_or_personal_task_selection_screen_Activity.dBpiezasController.countTablePiezas();
                         Log.e("get_piezas", "Existe");
@@ -1252,6 +1368,64 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                 getCausasDeServidor();
             }
         }
+        else if(type == "get_gestores") {
+            if (result == null) {
+                hideRingDialog();
+                Toast.makeText(this, "No se pudo establecer conexión con el servidor", Toast.LENGTH_LONG).show();
+            } else if (result.equals("Servidor caido, ahora no se puede sincronizar")) {
+                Toast.makeText(this, result, Toast.LENGTH_LONG).show();
+                hideRingDialog();
+            } else {
+                Log.e("get_gestores", "-----------------------------------------");
+                if (result.isEmpty()) {
+                    Log.e("get_gestores", "Vacio");
+                    Toast.makeText(this, "Tabla de gestores en internet vacia", Toast.LENGTH_LONG).show();
+                    hideRingDialog();
+                } else {
+                    boolean insertar_todos = false;
+//                    Log.e("get_gestores res", result);
+                    if (team_or_personal_task_selection_screen_Activity.dBgestoresController.checkForTableExists()) {
+                        lite_count_gestores = team_or_personal_task_selection_screen_Activity.
+                                dBgestoresController.countTableGestores();
+                        Log.e("get_gestores", "Existe");
+                        Log.e("Aqui", "----------------------------------------------------------");
+                        Log.e("Gestores", String.valueOf(lite_count_gestores));
+
+                        if (lite_count_gestores < 1) {
+                            insertar_todos = true;
+                            Toast.makeText(this, "Insertando todas las gestores", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    for (int n = 1; n < Screen_Table_Team.lista_gestores_servidor.size(); n++) { //el elemento n 0 esta vacio
+                        try {
+                            JSONArray jsonArray = new JSONArray(Screen_Table_Team.lista_gestores_servidor.get(n));
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+//                                if (Screen_Filter_Tareas.checkIfCounterIsUsedAndEraseLocal(jsonObject)) {
+//                                    continue; //si ya esta instalado en servidor paso y borro el local si existe
+//                                }
+                                if (insertar_todos) {
+                                    team_or_personal_task_selection_screen_Activity.dBgestoresController.insertGestor(jsonObject);
+                                } else if (lite_count_gestores != -10) {
+                                    if (!team_or_personal_task_selection_screen_Activity.dBgestoresController.
+                                            checkIfGestorExists(jsonObject.getString(DBgestoresController.principal_variable))) {
+                                        Toast.makeText(this, "MySQL gestor: " +
+                                                jsonObject.getString(DBgestoresController.principal_variable) +
+                                                " insertado", Toast.LENGTH_LONG).show();
+                                        team_or_personal_task_selection_screen_Activity.dBgestoresController.insertGestor(jsonObject);
+                                    }
+                                }
+                            }
+                        }catch (JSONException e){
+                            Log.e("JSONException", e.toString());
+                        }
+                    }
+                    hideRingDialog();
+                }
+                getPiezasDeServidor();
+            }
+        }
         else if(type == "get_causas") {
             if (result == null) {
                 hideRingDialog();
@@ -1267,7 +1441,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                     hideRingDialog();
                 } else {
                     boolean insertar_todos = false;
-//                    Log.e("get_contadores res", result);
+//                    Log.e("get_causas res", result);
                     if (team_or_personal_task_selection_screen_Activity.dBcausasController.checkForTableExists()) {
                         lite_count_causas = team_or_personal_task_selection_screen_Activity.dBcausasController.countTableCausas();
                         Log.e("get_causas", "Existe");
@@ -1307,7 +1481,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                 getContadoresDeServidor();
             }
         }
-        else if(type == "get_contadores") {
+        else if(type == "get_contadores_with_limit") {
             if (result == null) {
                 hideRingDialog();
                 Toast.makeText(this, "No se pudo establecer conexión con el servidor", Toast.LENGTH_LONG).show();
@@ -1373,8 +1547,8 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                                                 date_SQLite = team_or_personal_task_selection_screen_Activity.dBtareasController.getFechaHoraFromString(date_SQLite_string);
                                             }
 
-                                            Log.e("date_MySQL", date_MySQL_string);
-                                            Log.e("date_SQLite", date_SQLite_string);
+//                                            Log.e("date_MySQL", date_MySQL_string);
+//                                            Log.e("date_SQLite", date_SQLite_string);
 
                                             if (date_SQLite == null) {
                                                 if (date_MySQL != null) {
@@ -1426,8 +1600,43 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                     hideRingDialog();
                     Toast.makeText(this, "Contadores descargadas correctamente", Toast.LENGTH_LONG).show();
                 }
+                count_contadores_descargadas += PEDAZOS_A_DESCARGAR;
+                if(count_contadores_descargadas >= cantidad_total_de_contadores_en_servidor) {
+                    hideRingDialog();
+                    actualizarContadoresEnInternet();
+                }else{
+                    descargarXContadores(PEDAZOS_A_DESCARGAR, count_contadores_descargadas);
+                }
+            }
+        }
+        else if(type == "get_contadores_amount"){
+            if(result == null){
+                hideRingDialog();
+                Toast.makeText(this, "No se pudo establecer conexión con el servidor", Toast.LENGTH_LONG).show();
+            }
+            else {
+                hideRingDialog();
+                Log.e("get_contadores_amount", result + "-----------------------------------------");
+                if(result.contains("not success get_contadores_amount")){
+                    Toast.makeText(this,"Error al obtener la cantidad de contadores", Toast.LENGTH_LONG).show();
+                }else{
+                    if(result.contains("Cantidad de contadores:")){
+                        try {
+                            String [] split = result.split("Cantidad de contadores:");
+                            if(split.length >= 2){
+                                result = split[1].replace("]", "").trim();
+                                Integer integer = Integer.parseInt(result);
+                                if(integer!= null){
+                                    cantidad_total_de_contadores_en_servidor = integer;
+                                    descargarXContadores(PEDAZOS_A_DESCARGAR, count_contadores_descargadas);
+                                }
+                            }
 
-                actualizarContadoresEnInternet();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
             }
         }
         else if(type == "get_tareas_amount"){
@@ -1436,6 +1645,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                 Toast.makeText(this, "No se pudo establecer conexión con el servidor", Toast.LENGTH_LONG).show();
             }
             else {
+                hideRingDialog();
                 Log.e("get_tareas_amount", result + "-----------------------------------------");
                 if(result.contains("not success get_tareas_amount")){
                     Toast.makeText(this,"Error al obtener la cantidad de tareas", Toast.LENGTH_LONG).show();
@@ -1590,7 +1800,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                             return;
                         } else {
                             setNotificationCitasObsoletas();
-                            lookForGestors();
+//                            lookForGestors();
                             textView_sync_team_or_personal_task_screen.setText("SINCRONIZAR");
                             button_sync_team_or_personal_task_screen.setBackground(getResources().
                                     getDrawable(R.drawable.sync_button));
@@ -1732,7 +1942,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                         return;
                     } else {
                         setNotificationCitasObsoletas();
-                        lookForGestors();
+//                        lookForGestors();
                         textView_sync_team_or_personal_task_screen.setText("SINCRONIZAR");
                         button_sync_team_or_personal_task_screen.setBackground(getResources().
                                 getDrawable(R.drawable.sync_button));

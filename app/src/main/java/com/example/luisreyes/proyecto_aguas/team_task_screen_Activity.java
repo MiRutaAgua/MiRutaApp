@@ -53,44 +53,20 @@ public class team_task_screen_Activity extends AppCompatActivity {
 
 //        openMessage("info", String.valueOf(team_or_personal_task_selection_screen_Activity.dBtareasController
 //        .countTableTareas()));
-        Log.e("Tareas en offline", String.valueOf(team_or_personal_task_selection_screen_Activity.dBtareasController
-        .countTableTareas()));
+        if(team_or_personal_task_selection_screen_Activity.dBtareasController != null){
+            if(team_or_personal_task_selection_screen_Activity.dBtareasController.checkForTableExists()){
+                Log.e("Tareas en offline", String.valueOf(team_or_personal_task_selection_screen_Activity.dBtareasController
+                        .countTableTareas()));
+            }
+        }
+
 
         imageView_atras_screen_team_task       = (ImageView) findViewById(R.id.imageView_atras_screen_team_task);
         imageView_menu_screen_team_task        = (ImageView) findViewById(R.id.imageView_menu_screen_team_task);
         button_tabla_tareas_equipo   = (Button) findViewById(R.id.button_tabla_tareas_equipo_screen_team_task);
         button_vista_rapida_tareas_equipo = (Button) findViewById(R.id.button_vista_tareas_equipo_screen_team_task);
         button_filtro_tareas_equipo_screen_team_task = (Button) findViewById(R.id.button_filtro_tareas_equipo_screen_team_task);
-
         button_tareas_cercanas = (Button) findViewById(R.id.button_tareas_cercanas);
-
-        button_tareas_cercanas.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Screen_Login_Activity.playOnOffSound(getApplicationContext());
-                final Animation myAnim = AnimationUtils.loadAnimation(team_task_screen_Activity.this, R.anim.bounce);
-                // Use bounce interpolator with amplitude 0.2 and frequency 20
-                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
-                myAnim.setInterpolator(interpolator);
-                myAnim.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation arg0) {
-                        // TODO Auto-generated method stub
-//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
-                    }
-                    @Override
-                    public void onAnimationRepeat(Animation arg0) {
-                        // TODO Auto-generated method stub
-                    }
-                    @Override
-                    public void onAnimationEnd(Animation arg0) {
-                        Intent intent_map_tareas = new Intent(team_task_screen_Activity.this, permission_cercania.class);
-                        startActivity(intent_map_tareas);
-                    }
-                });
-                button_tareas_cercanas.startAnimation(myAnim);
-            }
-        });
 
         imageView_menu_screen_team_task.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,6 +92,36 @@ public class team_task_screen_Activity extends AppCompatActivity {
                     }
                 });
                 imageView_menu_screen_team_task.startAnimation(myAnim);
+            }
+        });
+
+        button_tareas_cercanas.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
+                final Animation myAnim = AnimationUtils.loadAnimation(team_task_screen_Activity.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        showRingDialog("Buscando Tareas");
+                        Intent intent_open_table_team = new Intent(getApplicationContext(), permission_cercania.class);
+                        startActivity(intent_open_table_team);
+                        team_task_screen_Activity.this.finish();
+                    }
+                });
+                button_tabla_tareas_equipo.startAnimation(myAnim);
             }
         });
 

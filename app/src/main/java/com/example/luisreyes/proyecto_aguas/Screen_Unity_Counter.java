@@ -453,12 +453,12 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
                         }
                         if(!numero_abonado.isEmpty() && numero_abonado!=null
                                 && !numero_abonado.equals("null") && !numero_abonado.equals("NULL")){
-
+                            String empresa = Screen_Login_Activity.current_empresa;
                             Log.e("Buscando", foto);
                             showRingDialog("Obteniendo foto de instalación");
                             String type_script = "download_image";
                             BackgroundWorker backgroundWorker = new BackgroundWorker(this);
-                            backgroundWorker.execute(type_script, foto, gestor, numero_abonado);
+                            backgroundWorker.execute(type_script, foto, gestor, numero_abonado, empresa);
                             Log.e("Buscando", gestor);
                         }
                     } catch (JSONException e) {
@@ -497,7 +497,7 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
                     if(!Screen_Login_Activity.checkStringVariable(gestor)){
                         gestor = "Sin_Gestor";
                     }
-                    File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+ gestor + "/" +numero_abonado);
+                    File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" + Screen_Login_Activity.current_empresa + "/fotos_tareas/"+ gestor + "/" +numero_abonado);
                     if (!storageDir.exists()) {
                         storageDir.mkdirs();
                     }
@@ -565,7 +565,7 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
             if(!Screen_Login_Activity.checkStringVariable(gestor)){
                 gestor = "Sin_Gestor";
             }
-            File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+ gestor + "/" +numero_abonado);
+            File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" + Screen_Login_Activity.current_empresa + "/fotos_tareas/"+ gestor + "/" +numero_abonado);
             if (!myDir.exists()) {
                 myDir.mkdirs();
             }

@@ -74,8 +74,9 @@ public class Screen_Fast_View_Personal_Task extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.screen_fast_view_personal_task);
 
+        String empresa = Screen_Login_Activity.current_empresa;
         if(team_or_personal_task_selection_screen_Activity.dBtareasController == null) {
-            team_or_personal_task_selection_screen_Activity.dBtareasController = new DBtareasController(this);
+            team_or_personal_task_selection_screen_Activity.dBtareasController = new DBtareasController(this, empresa.toLowerCase());
         }
 
 //        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
@@ -102,21 +103,24 @@ public class Screen_Fast_View_Personal_Task extends AppCompatActivity implements
                 String object_click = lista_de_contadores_screen_table_personal.getAdapter().getItem(i).toString();
                 if(!object_click.isEmpty()  && !object_click.contains("Resumen")) {
                     if (object_click.contains(" ")) {
-                        String tipo_tarea = object_click.substring(2).trim();
-                        String calibre = "";
-                        Log.e("tipo_tarea", tipo_tarea);
+                        if(object_click.split("->").length >= 2) {
+                            String tipo_tarea = object_click.split("->")[1].trim();
 
-                        Intent open_Filter_Results = new Intent(Screen_Fast_View_Personal_Task.this, Screen_Filter_Results.class);
-                        open_Filter_Results.putExtra("from", "FAST_VIEW_PERSONAL");
-                        open_Filter_Results.putExtra("filter_type", "TIPO_TAREA");
-                        open_Filter_Results.putExtra("tipo_tarea", tipo_tarea);
-                        open_Filter_Results.putExtra("calibre", calibre);
-                        open_Filter_Results.putExtra("poblacion", "");
-                        open_Filter_Results.putExtra("calle", "");
-                        open_Filter_Results.putExtra("portales", "");
-                        open_Filter_Results.putExtra("limitar_a_operario", true);
-                        startActivity(open_Filter_Results);
-                        finish();
+                            String calibre = "";
+                            Log.e("tipo_tarea", tipo_tarea);
+
+                            Intent open_Filter_Results = new Intent(Screen_Fast_View_Personal_Task.this, Screen_Filter_Results.class);
+                            open_Filter_Results.putExtra("from", "FAST_VIEW_PERSONAL");
+                            open_Filter_Results.putExtra("filter_type", "TIPO_TAREA");
+                            open_Filter_Results.putExtra("tipo_tarea", tipo_tarea);
+                            open_Filter_Results.putExtra("calibre", calibre);
+                            open_Filter_Results.putExtra("poblacion", "");
+                            open_Filter_Results.putExtra("calle", "");
+                            open_Filter_Results.putExtra("portales", "");
+                            open_Filter_Results.putExtra("limitar_a_operario", true);
+                            startActivity(open_Filter_Results);
+                            finish();
+                        }
                     }
                 }
             }
@@ -241,17 +245,17 @@ public class Screen_Fast_View_Personal_Task extends AppCompatActivity implements
                     Collections.sort(lista_tareas_fast);
                     if(!lista_tareas_fast.isEmpty()) {
                         lista_cantidades.add(1);
-                        lista_to_display.add(lista_cantidades.get(0).toString()+" "+lista_tareas_fast.get(0).getAll_string());
+                        lista_to_display.add(lista_cantidades.get(0).toString()+" -> "+lista_tareas_fast.get(0).getAll_string());
                         String reference = lista_tareas_fast.get(0).getAll_string();
                         int c=0;
                         for (int i = 1; i < lista_tareas_fast.size(); i++) {
                             if(lista_tareas_fast.get(i).compareToOther(lista_tareas_fast.get(i-1))){
                                 lista_cantidades.set(c, lista_cantidades.get(c)+1);
-                                lista_to_display.set(c, lista_cantidades.get(c).toString()+"  "+lista_tareas_fast.get(i).getAll_string());
+                                lista_to_display.set(c, lista_cantidades.get(c).toString()+" -> "+lista_tareas_fast.get(i).getAll_string());
                             }else{
                                 c++;
                                 lista_cantidades.add(1);
-                                lista_to_display.add(lista_cantidades.get(c).toString()+"  "+lista_tareas_fast.get(i).getAll_string());
+                                lista_to_display.add(lista_cantidades.get(c).toString()+" -> "+lista_tareas_fast.get(i).getAll_string());
                             }
                         }
                     }
@@ -415,17 +419,17 @@ public class Screen_Fast_View_Personal_Task extends AppCompatActivity implements
                 Collections.sort(lista_tareas_fast);
                 if(!lista_tareas_fast.isEmpty()) {
                     lista_cantidades.add(1);
-                    lista_to_display.add(lista_cantidades.get(0).toString()+" "+lista_tareas_fast.get(0).getAll_string());
+                    lista_to_display.add(lista_cantidades.get(0).toString()+" -> "+lista_tareas_fast.get(0).getAll_string());
                     String reference = lista_tareas_fast.get(0).getAll_string();
                     int c=0;
                     for (int i = 1; i < lista_tareas_fast.size(); i++) {
                         if(lista_tareas_fast.get(i).compareToOther(lista_tareas_fast.get(i-1))){
                             lista_cantidades.set(c, lista_cantidades.get(c)+1);
-                            lista_to_display.set(c, lista_cantidades.get(c).toString()+"  "+lista_tareas_fast.get(i).getAll_string());
+                            lista_to_display.set(c, lista_cantidades.get(c).toString()+" -> "+lista_tareas_fast.get(i).getAll_string());
                         }else{
                             c++;
                             lista_cantidades.add(1);
-                            lista_to_display.add(lista_cantidades.get(c).toString()+"  "+lista_tareas_fast.get(i).getAll_string());
+                            lista_to_display.add(lista_cantidades.get(c).toString()+" -> "+lista_tareas_fast.get(i).getAll_string());
                         }
                     }
                 }
@@ -558,12 +562,12 @@ public class Screen_Fast_View_Personal_Task extends AppCompatActivity implements
             jsonObject_Lite.put(DBtareasController.status_tarea, "IDLE");
             jsonObject_Lite.put(DBtareasController.date_time_modified, DBtareasController.getStringFromFechaHora(new Date()));
             jsonObjectSalvaLite = jsonObject_Lite;
-
+            String empresa = Screen_Login_Activity.current_empresa;
             String type_script = "create_tarea";
             BackgroundWorker backgroundWorker = new BackgroundWorker(this);
             Screen_Login_Activity.tarea_JSON = jsonObject_Lite;
             addPhotos_toUpload();
-            backgroundWorker.execute(type_script);
+            backgroundWorker.execute(type_script, Screen_Login_Activity.tarea_JSON.toString(), empresa.toLowerCase());
         }
     }
     public void uploadPhotosInMySQL() throws JSONException {
@@ -684,7 +688,7 @@ public class Screen_Fast_View_Personal_Task extends AppCompatActivity implements
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        String path = getExternalFilesDir(Environment.DIRECTORY_PICTURES)+"/fotos_tareas/" + gestor + "/"+ numero_abonado+"/";
+        String path = getExternalFilesDir(Environment.DIRECTORY_PICTURES)+"/" + Screen_Login_Activity.current_empresa + "/fotos_tareas/" + gestor + "/"+ numero_abonado+"/";
 
         foto = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_antes_instalacion);
         addPhotos_names_and_files(path, foto);

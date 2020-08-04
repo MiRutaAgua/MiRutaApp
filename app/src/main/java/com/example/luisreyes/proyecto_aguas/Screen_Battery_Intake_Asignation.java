@@ -197,7 +197,7 @@ public class Screen_Battery_Intake_Asignation extends AppCompatActivity {
                 else {
                     Intent intent_camera = new Intent(Screen_Battery_Intake_Asignation.this, Screen_Camera.class);
                     intent_camera.putExtra("photo_name", contador+"_foto_antes_instalacion");
-                    intent_camera.putExtra("photo_folder", "fotos_tareas");
+                    intent_camera.putExtra("photo_folder", Screen_Login_Activity.current_empresa + "/fotos_tareas");
                     intent_camera.putExtra("contador", contador);
                     startActivityForResult(intent_camera, CAM_REQUEST_INST_PHOTO);
 
@@ -218,7 +218,7 @@ public class Screen_Battery_Intake_Asignation extends AppCompatActivity {
                 else {
                     Intent intent_camera = new Intent(Screen_Battery_Intake_Asignation.this, Screen_Camera.class);
                     intent_camera.putExtra("photo_name", contador+"_foto_lectura");
-                    intent_camera.putExtra("photo_folder", "fotos_tareas");
+                    intent_camera.putExtra("photo_folder", Screen_Login_Activity.current_empresa + "/fotos_tareas");
                     intent_camera.putExtra("contador", contador);
                     startActivityForResult(intent_camera, CAM_REQUEST_READ_PHOTO);
                 }
@@ -238,7 +238,7 @@ public class Screen_Battery_Intake_Asignation extends AppCompatActivity {
                 else {
                     Intent intent_camera = new Intent(Screen_Battery_Intake_Asignation.this, Screen_Camera.class);
                     intent_camera.putExtra("photo_name", contador+"_foto_numero_serie");
-                    intent_camera.putExtra("photo_folder", "fotos_tareas");
+                    intent_camera.putExtra("photo_folder", Screen_Login_Activity.current_empresa + "/fotos_tareas");
                     intent_camera.putExtra("contador", contador);
                     startActivityForResult(intent_camera, CAM_REQUEST_SN_PHOTO);
                 }
@@ -281,7 +281,7 @@ public class Screen_Battery_Intake_Asignation extends AppCompatActivity {
             if(!Screen_Login_Activity.checkStringVariable(gestor)){
                 gestor = "Sin_Gestor";
             }
-            String dir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/" + gestor + "/" +numero_abonado;
+            String dir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" + Screen_Login_Activity.current_empresa + "/fotos_tareas/" + gestor + "/" +numero_abonado;
             File myDir = new File(dir);
             if(myDir.exists()){
                 String file_full_name = dir+"/"+photo_name;
@@ -315,11 +315,9 @@ public class Screen_Battery_Intake_Asignation extends AppCompatActivity {
         }
 
         if(!(TextUtils.isEmpty(editText_bateria.getText()))){
-
             planta = "-" + editText_bateria.getText().toString();
         }
         if(!(TextUtils.isEmpty(editText_fila.getText()))){
-
             fila = "-" + editText_fila.getText().toString();
 
         }
@@ -467,7 +465,7 @@ public class Screen_Battery_Intake_Asignation extends AppCompatActivity {
             gestor = "Sin_Gestor";
         }
         File image_file=null;
-        File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+ gestor + "/" +numero_abonado);
+        File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" + Screen_Login_Activity.current_empresa + "/fotos_tareas/"+ gestor + "/" +numero_abonado);
         if (!storageDir.exists()) {
             storageDir.mkdirs();
         }
@@ -649,7 +647,7 @@ public class Screen_Battery_Intake_Asignation extends AppCompatActivity {
             if(!Screen_Login_Activity.checkStringVariable(gestor)){
                 gestor = "Sin_Gestor";
             }
-            File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+ gestor + "/" +numero_abonado);
+            File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" + Screen_Login_Activity.current_empresa + "/fotos_tareas/"+ gestor + "/" +numero_abonado);
             if (!myDir.exists()) {
                 myDir.mkdirs();
             }

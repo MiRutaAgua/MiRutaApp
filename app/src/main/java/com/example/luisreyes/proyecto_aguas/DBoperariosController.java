@@ -27,9 +27,11 @@ public class DBoperariosController extends SQLiteOpenHelper {
     public static final String database_name = "Database.db";
     public static String database_path;
     JSONObject jsonOperarioType = new JSONObject();
-    public static final String table_name = "operarios";
+    public static final String table = "operarios";
+    public static String table_name = "operarios";
 
     public static final String id = "id";
+    public static final String codigo_operario = "codigo_operario";
     public static final String nombre = "nombre";
     public static final String apellidos = "apellidos";
     public static final String edad = "edad";
@@ -40,10 +42,14 @@ public class DBoperariosController extends SQLiteOpenHelper {
     public static final String date_time_modified = "date_time_modified";
     public static final String foto = "foto";
 
-    public DBoperariosController(Context applicationContext){
+    public static final String principal_variable = usuario;
+
+    public DBoperariosController(Context applicationContext, String empresa){
         super(applicationContext, database_name, null, MainActivity.DB_VERSION);
+        table_name = table + "_" + empresa.toLowerCase();
         try {
             jsonOperarioType.put(id, 1);
+            jsonOperarioType.put(codigo_operario, "unknow");
             jsonOperarioType.put(nombre, "unknow");
             jsonOperarioType.put(apellidos, "unknow");
             jsonOperarioType.put(edad, 0);
@@ -64,6 +70,7 @@ public class DBoperariosController extends SQLiteOpenHelper {
         //sqLiteDatabase = SQLiteDatabase.openOrCreateDatabase("database_name", null);
         if(sqLiteDatabase != null) {
             sqLiteDatabase.execSQL("Create table if not exists " + table_name + " (id integer primary key autoincrement, " +
+                    codigo_operario+"  TEXT, " +
                     nombre+"  TEXT, " +
                     apellidos+"  TEXT, " +
                     edad+"  INTEGER, " +
@@ -326,6 +333,19 @@ public class DBoperariosController extends SQLiteOpenHelper {
         }
         c.close();
         return rows;
+    }
+
+    public boolean checkIfOperarioExists(String principal_variable_var){ //true si existe tarea
+        SQLiteDatabase database = this.getReadableDatabase();
+        if(database == null){
+            return false;
+        }
+        Cursor c = database.rawQuery("SELECT * FROM "+table_name+" WHERE "+principal_variable+"=\""+principal_variable_var+"\";", null);
+        if (c.getCount() > 0) {
+            return true;
+        }else{
+            return false;
+        }
     }
 
     public boolean checkForTableExists(){

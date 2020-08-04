@@ -310,7 +310,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                 gestor = "Sin_Gestor";
             }
             if(!firma.isEmpty() && !firma.equals("null")&&  !firma.equals("NULL"))  {
-                Bitmap firma_bitmap = getPhotoUserLocal(  getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"
+                Bitmap firma_bitmap = getPhotoUserLocal(  getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" + Screen_Login_Activity.current_empresa + "/fotos_tareas/"
                         + gestor +"/" + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim() + "/" + firma);
                 if (firma_bitmap != null) {
                     bitmap_firma_no_nulo = true;
@@ -916,7 +916,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                     }
                     InputStream in = new FileInputStream(filePath);
                     OutputStream out = new FileOutputStream(getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-                            + "/fotos_tareas/"+ gestor + "/" + numero_abonado+"/"+pdfName+".pdf");
+                            + "/" + Screen_Login_Activity.current_empresa + "/fotos_tareas/"+ gestor + "/" + numero_abonado+"/"+pdfName+".pdf");
                     // Copy the bits from instream to outstream
                     byte[] buf = new byte[1024];
                     int len;
@@ -950,7 +950,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                 i.putExtra(Intent.EXTRA_TEXT, "Instalación realizada");
                 Uri uri = FileProvider.getUriForFile(this, "com.example.luisreyes.proyecto_aguas.fileprovider",
                         new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-                                + "/fotos_tareas/" + gestor + "/" + numero_abonado+"/"+pdfName+".pdf"));
+                                + "/" + Screen_Login_Activity.current_empresa + "/fotos_tareas/" + gestor + "/" + numero_abonado+"/"+pdfName+".pdf"));
                 i.putExtra(Intent.EXTRA_STREAM, uri);
                 i.setType("application/pdf");
                 startActivity(i);
@@ -1179,7 +1179,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
             if(!Screen_Login_Activity.checkStringVariable(gestor)){
                 gestor = "Sin_Gestor";
             }
-            String fullDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"
+            String fullDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" + Screen_Login_Activity.current_empresa + "/fotos_tareas/"
                     + gestor + "/" + numero_abonado+"/"+filename;
             return fullDir;
         } catch (JSONException e) {
@@ -1200,13 +1200,13 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
             if(!numero_abonado.isEmpty() && numero_abonado!=null
                     && !numero_abonado.equals("NULL") && !numero_abonado.equals("null")){
 
-                myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"
+                myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" + Screen_Login_Activity.current_empresa + "/fotos_tareas/"
                         + gestor + "/" + numero_abonado);
 
                 if(myDir!=null) {
                     if (!myDir.exists()) {
                         myDir.mkdirs();
-                        File storageDir2 = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/fotos_tareas/" + gestor + "/" + numero_abonado);
+                        File storageDir2 = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/" + Screen_Login_Activity.current_empresa + "/fotos_tareas/" + gestor + "/" + numero_abonado);
                         if (!storageDir2.exists()) {
                             storageDir2.mkdirs();
                         }

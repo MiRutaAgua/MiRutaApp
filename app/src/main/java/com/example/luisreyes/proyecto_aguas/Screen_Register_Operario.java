@@ -255,11 +255,11 @@ public class Screen_Register_Operario extends AppCompatActivity implements TaskC
                     //Toast.makeText(Screen_Register_Operario.this, "Validando registro...", Toast.LENGTH_SHORT).show();
                     if (bitmap_foto != null) {
                         showRingDialog("Subiendo foto de operario");
-
+                        String empresa = Screen_Login_Activity.current_empresa;
                         String foto_string = getStringImage(bitmap_foto);
                         String type_script = "upload_user_image";
                         BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Register_Operario.this);
-                        backgroundWorker.execute(type_script, foto_string, image);
+                        backgroundWorker.execute(type_script, foto_string, image, empresa);
                     } else {
                         Toast.makeText(this, "Error subiendo foto, imagen nula", Toast.LENGTH_LONG).show();
                     }
@@ -279,10 +279,10 @@ public class Screen_Register_Operario extends AppCompatActivity implements TaskC
             else {
                 Toast.makeText(Screen_Register_Operario.this, "Imagen "+ image+" subida", Toast.LENGTH_SHORT).show();
                 showRingDialog("Validando registro...");
-
+                String empresa = Screen_Login_Activity.current_empresa;
                 String type_script = "download_user_image";
                 BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Register_Operario.this);
-                backgroundWorker.execute(type_script, username_reg);
+                backgroundWorker.execute(type_script, username_reg, empresa);
             }
         }
         else if(type == "download_user_image"){
@@ -327,7 +327,7 @@ public class Screen_Register_Operario extends AppCompatActivity implements TaskC
         String imageFileName = null;
         image = etuser_name.getText().toString();
         File image_file=null;
-        File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_operarios");
+        File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" + Screen_Login_Activity.current_empresa + "/fotos_operarios");
         if (!storageDir.exists()) {
             storageDir.mkdirs();
         }

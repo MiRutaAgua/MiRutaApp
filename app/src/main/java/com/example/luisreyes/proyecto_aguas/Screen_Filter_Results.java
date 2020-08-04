@@ -73,8 +73,9 @@ public class Screen_Filter_Results extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.screen_filter_results);
 
+        String empresa = Screen_Login_Activity.current_empresa;
         if(team_or_personal_task_selection_screen_Activity.dBtareasController == null) {
-            team_or_personal_task_selection_screen_Activity.dBtareasController = new DBtareasController(this);
+            team_or_personal_task_selection_screen_Activity.dBtareasController = new DBtareasController(this, empresa.toLowerCase());
         }
 
         lista_ordenada_de_tareas = new ArrayList<>();

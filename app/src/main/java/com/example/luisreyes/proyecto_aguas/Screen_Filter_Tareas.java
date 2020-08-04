@@ -120,8 +120,9 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.screen_filter_tareas);
 
+        String empresa = Screen_Login_Activity.current_empresa;
         if(team_or_personal_task_selection_screen_Activity.dBtareasController == null) {
-            team_or_personal_task_selection_screen_Activity.dBtareasController = new DBtareasController(this);
+            team_or_personal_task_selection_screen_Activity.dBtareasController = new DBtareasController(this, empresa.toLowerCase());
         }
 
 

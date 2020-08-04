@@ -29,7 +29,8 @@ public class DBtareasController extends SQLiteOpenHelper {
     public static String database_path;
     JSONObject jsonTareaType = new JSONObject();
     JSONObject jsonTareaType_empty = new JSONObject();
-    public static final String table_name = "tareas";
+    public static final String table = "tareas";
+    public static String table_name = "tareas";
     //OJO al cambiar el modelo subir la DB_VERSION en MainWindow
     public static boolean tabla_model = false;//true-> tabla vieja  //false->estructura de tabla nueva
 
@@ -166,8 +167,10 @@ public class DBtareasController extends SQLiteOpenHelper {
 
     public static String principal_variable = numero_interno;
 
-    public DBtareasController(Context applicationContext){
+    public DBtareasController(Context applicationContext, String empresa){
         super(applicationContext, database_name, null,  MainActivity.DB_VERSION);
+        table_name = table + "_" + empresa.toLowerCase();
+
 //        Log.e("Ejecutando: ", "Constructor");
         setTable_model();
         try {
@@ -908,12 +911,12 @@ public class DBtareasController extends SQLiteOpenHelper {
         }else{
             return false;
         }
-
     }
 
     public boolean checkForTableExists(){
         SQLiteDatabase db = this.getReadableDatabase();
         String sql = "SELECT name FROM sqlite_master WHERE type='table' AND name='" + table_name + "'";
+        Log.e("checkForTableExists",sql);
         Cursor mCursor = db.rawQuery(sql, null);
         if (mCursor.getCount() > 0) {
             return true;

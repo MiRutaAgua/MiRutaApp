@@ -840,7 +840,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                 else {
                     Intent intent_camera = new Intent(Screen_Execute_Task.this, Screen_Camera.class);
                     intent_camera.putExtra("photo_name", numero_serie_viejo + "_foto_antes_instalacion");
-                    intent_camera.putExtra("photo_folder", "fotos_tareas");
+                    intent_camera.putExtra("photo_folder", Screen_Login_Activity.current_empresa + "/fotos_tareas");
                     intent_camera.putExtra("contador", numero_serie_viejo);
                     startActivityForResult(intent_camera, CAM_REQUEST_INST_PHOTO);
                 }
@@ -860,7 +860,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                 else {
                     Intent intent_camera = new Intent(Screen_Execute_Task.this, Screen_Camera.class);
                     intent_camera.putExtra("photo_name", numero_serie_viejo + "_foto_lectura");
-                    intent_camera.putExtra("photo_folder", "fotos_tareas");
+                    intent_camera.putExtra("photo_folder", Screen_Login_Activity.current_empresa + "/fotos_tareas");
                     intent_camera.putExtra("contador", numero_serie_viejo);
                     startActivityForResult(intent_camera, CAM_REQUEST_READ_PHOTO);
                 }
@@ -880,7 +880,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                 else {
                     Intent intent_camera = new Intent(Screen_Execute_Task.this, Screen_Camera.class);
                     intent_camera.putExtra("photo_name", numero_serie_viejo + "_foto_numero_serie");
-                    intent_camera.putExtra("photo_folder", "fotos_tareas");
+                    intent_camera.putExtra("photo_folder", Screen_Login_Activity.current_empresa + "/fotos_tareas");
                     intent_camera.putExtra("contador", numero_serie_viejo);
                     startActivityForResult(intent_camera, CAM_REQUEST_SN_PHOTO);
                 }
@@ -911,7 +911,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                 else {
                     Intent intent_camera = new Intent(Screen_Execute_Task.this, Screen_Camera.class);
                     intent_camera.putExtra("photo_name", contador + "_foto_despues_instalacion");
-                    intent_camera.putExtra("photo_folder", "fotos_tareas");
+                    intent_camera.putExtra("photo_folder", Screen_Login_Activity.current_empresa + "/fotos_tareas");
                     intent_camera.putExtra("contador", contador);
                     startActivityForResult(intent_camera, CAM_REQUEST_AFT_INT_PHOTO);
                 }
@@ -989,7 +989,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
             if(!Screen_Login_Activity.checkStringVariable(gestor)){
                 gestor = "Sin_Gestor";
             }
-            String dir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/" + gestor + "/" +numero_abonado;
+            String dir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" + Screen_Login_Activity.current_empresa + "/fotos_tareas/" + gestor + "/" +numero_abonado;
             File myDir = new File(dir);
             if(myDir.exists()){
                 String file_full_name = dir+"/"+photo_name;
@@ -1492,10 +1492,8 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                     }
                 }
                 if (requestCode == CAM_REQUEST_READ_PHOTO) {
-                    Log.e("Foto", "Lectura-----------------------");
                     if (!TextUtils.isEmpty(data.getStringExtra("photo_path")) && data.getStringExtra("photo_path") != null) {
                         mCurrentPhotoPath_foto_lectura = data.getStringExtra("photo_path");
-                        Log.e("Foto", "Lectura-----------------------");
                         Bitmap bitmap_foto_lectura = getPhotoUserLocal(mCurrentPhotoPath_foto_lectura);
                         if (bitmap_foto_lectura != null) {
                             bitmap_foto_lectura = Bitmap.createScaledBitmap(bitmap_foto_lectura, 960, 1280, true);
@@ -1563,7 +1561,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
             if(!Screen_Login_Activity.checkStringVariable(gestor)){
                 gestor = "Sin_Gestor";
             }
-            File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+ gestor + "/" +numero_abonado);
+            File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" + Screen_Login_Activity.current_empresa + "/fotos_tareas/"+ gestor + "/" +numero_abonado);
             if (!myDir.exists()) {
                 myDir.mkdirs();
             }
@@ -1906,7 +1904,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         if(!Screen_Login_Activity.checkStringVariable(gestor)){
             gestor = "Sin_Gestor";
         }
-        File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/fotos_tareas/"+ gestor + "/" +numero_abonado);
+        File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" + Screen_Login_Activity.current_empresa + "/fotos_tareas/"+ gestor + "/" +numero_abonado);
         if (!storageDir.exists()) {
             storageDir.mkdirs();
         }

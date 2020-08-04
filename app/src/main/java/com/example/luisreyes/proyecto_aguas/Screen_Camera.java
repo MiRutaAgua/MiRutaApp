@@ -139,7 +139,7 @@ public class Screen_Camera extends Activity {
     private HandlerThread mBackgroundThread;
     private String photo_name = "";
     private String photo_path = "";
-    private String photo_folder = "fotos_tareas";
+    private String photo_folder = Screen_Login_Activity.current_empresa + "/fotos_tareas";
     private String contador = "";
 
     public static int sensorOrientation;

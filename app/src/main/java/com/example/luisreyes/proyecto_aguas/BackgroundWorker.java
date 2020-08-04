@@ -68,6 +68,7 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
         String login_url;
         String register_url;
         String change_foto_url;
+        String get_empresas_url;
         String get_operarios_url;
         String get_user_data_url;
         String get_one_tarea_url;
@@ -85,9 +86,12 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
         String save_work_url;
         String load_work_url;
         String get_piezas_url;
+        String get_gestores_url;
         String get_causas_url;
         String get_tareas_amout_url;
         String get_tareas_with_limit_url;
+        String get_contadores_amout_url;
+        String get_contadores_with_limit_url;
 
 //        String server =  "https://server26194.000webhostapp.com/php/";
 //        String server =  "https://server26194.000webhostapp.com/php/yoyi/";
@@ -104,6 +108,7 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
             login_url = server+"login_operarios.php";  //https://files.000webhost.com/
             register_url = server+"register_operario.php";
             change_foto_url = server+"change_foto.php";
+            get_empresas_url = server+"get_empresas.php";
             get_operarios_url = server+"get_operarios.php";
             get_user_data_url = server+"get_one_operario.php";
             get_one_tarea_url = server+"get_one_tarea.php";
@@ -121,19 +126,23 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
             save_work_url = server+"save_work.php";
             load_work_url = server+"load_work.php";
             get_piezas_url = server+"get_piezas.php";
+            get_gestores_url= server+"get_gestores.php";
             get_causas_url = server+"get_causas.php";
             get_tareas_amout_url = server+"get_tareas_amount.php";
             get_tareas_with_limit_url = server+"get_tareas_with_limit.php";
+            get_contadores_amout_url = server+"get_contadores_amount.php";
+            get_contadores_with_limit_url = server+"get_contadores_with_limit.php";
         }
         else {
             //Para PC de Trabjo ojo cambiar esto entre
-            String prestring = "http://192.168.20.82";
+//            String prestring = "http://192.168.20.93";
             //Mi PC en casa
-//            String prestring = "http://192.168.56.1";
+            String prestring = "http://192.168.56.1";
 
             login_url = prestring + "/login_operarios.php";
             register_url = prestring + "/register_operario.php";
             change_foto_url = prestring + "/change_foto.php";
+            get_empresas_url = prestring + "/get_empresas.php";
             get_operarios_url = prestring + "/get_operarios.php";
             get_user_data_url = prestring + "/get_one_operario.php";
             get_one_tarea_url = prestring + "/get_one_tarea.php";
@@ -150,9 +159,12 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
             save_work_url = prestring+"/save_work.php";
             load_work_url = prestring+"/load_work.php";
             get_piezas_url = prestring+"/get_piezas.php";
+            get_gestores_url = prestring+"/get_gestores.php";
             get_causas_url = prestring+"/get_causas.php";
             get_tareas_amout_url = prestring+"/get_tareas_amount.php";
             get_tareas_with_limit_url = prestring+"/get_tareas_with_limit.php";
+            get_contadores_amout_url = prestring+"/get_contadores_amount.php";
+            get_contadores_with_limit_url = prestring+"/get_contadores_with_limit.php";
         }
 
 
@@ -161,6 +173,7 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
             ArrayList<String> keys = new ArrayList<String>();
             keys.add("user_name");
             keys.add("password");
+            keys.add("empresa");
             ArrayList<String> values = new ArrayList<String>();
             for (int i = 0; i < keys.size(); i++) {
                 values.add(params[i+1]);
@@ -188,6 +201,7 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
                 keys.add("nombre");
                 keys.add("gestor");
                 keys.add("numero_abonado");
+                keys.add("empresa");
                 ArrayList<String> values = new ArrayList<String>();
                 for (int i = 0; i < keys.size(); i++) {
                     values.add(params[i+1]);
@@ -215,6 +229,7 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
                 ArrayList<String> keys = new ArrayList<String>();
                 keys.add("foto");
                 keys.add("user_name");
+                keys.add("empresa");
                 ArrayList<String> values = new ArrayList<String>();
                 for (int i = 0; i < keys.size(); i++) {
                     values.add(params[i+1]);
@@ -243,6 +258,7 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
                 keys.add("nombre");
                 keys.add("gestor");
                 keys.add("numero_abonado");
+                keys.add("empresa");
                 ArrayList<String> values = new ArrayList<String>();
                 for (int i = 0; i < keys.size(); i++) {
                     values.add(params[i+1]);
@@ -271,6 +287,7 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
                 return_image = false;
                 ArrayList<String> keys = new ArrayList<String>();
                 keys.add("user_name");
+                keys.add("empresa");
                 ArrayList<String> values = new ArrayList<String>();
                 for (int i = 0; i < keys.size(); i++) {
                     values.add(params[i+1]);
@@ -293,36 +310,23 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
             }
         }
         else if(type.equals("update_operario")){
-
             //////Pasarle los valores de los keys a esta operario (se hace en la clase que llama a esta)-----------------------------------------------------------------------------------------------------
-            String operario_post = String.valueOf(Screen_Login_Activity.operario_JSON);
+//            String operario_post = String.valueOf(Screen_Login_Activity.operario_JSON);
             try {
-
-                URL url = new URL(update_operario_url);
-                HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
-                httpURLConnection.setRequestMethod("POST");
-                httpURLConnection.setDoOutput(true);
-                httpURLConnection.setDoInput(true);
-                httpURLConnection.setRequestProperty("Content-Type", "application/json");
-                httpURLConnection.setRequestProperty("Accept", "application/json");
-
-                Writer bufferedWriter = new BufferedWriter(new OutputStreamWriter(httpURLConnection.getOutputStream(), "UTF-8"));
-                bufferedWriter.write(operario_post);
-                // bufferedWriter.flush();
-                bufferedWriter.close();
-
-                InputStream inputStream = httpURLConnection.getInputStream();
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
-                String line;
-                String result="";
-                while ((line = bufferedReader.readLine()) != null) {
-                    result+=(line);
+                ArrayList<String> keys = new ArrayList<String>();
+                keys.add("json");
+                keys.add("empresa");
+                ArrayList<String> values = new ArrayList<String>();
+                for (int i = 0; i < keys.size(); i++) {
+                    values.add(params[i+1]);
                 }
-                bufferedReader.close();
-                inputStream.close();
-                httpURLConnection.disconnect();
-
-                return result;
+                ArrayList<String> result = post_Output_Info(keys, values, update_operario_url,true, true);
+                if(result.size() >1){
+                    return result.get(1);
+                }
+                else{
+                    return "";
+                }
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
@@ -332,35 +336,22 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
                 e.printStackTrace();
             }
         }else if(type.equals("create_tarea")){
-
-            String tarea_post = String.valueOf(Screen_Login_Activity.tarea_JSON);
+//            String tarea_post = String.valueOf(Screen_Login_Activity.tarea_JSON);
             try {
-
-                URL url = new URL(create_tarea_url);
-                HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
-                httpURLConnection.setRequestMethod("POST");
-                httpURLConnection.setDoOutput(true);
-                httpURLConnection.setDoInput(true);
-                httpURLConnection.setRequestProperty("Content-Type", "application/json");
-                httpURLConnection.setRequestProperty("Accept", "application/json");
-
-                Writer bufferedWriter = new BufferedWriter(new OutputStreamWriter(httpURLConnection.getOutputStream(), "UTF-8"));
-                bufferedWriter.write(tarea_post);
-                bufferedWriter.flush();
-                bufferedWriter.close();
-
-                InputStream inputStream = httpURLConnection.getInputStream();
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
-                String line;
-                String result="";
-                while ((line = bufferedReader.readLine()) != null) {
-                    result+=(line);
+                ArrayList<String> keys = new ArrayList<String>();
+                keys.add("json");
+                keys.add("empresa");
+                ArrayList<String> values = new ArrayList<String>();
+                for (int i = 0; i < keys.size(); i++) {
+                    values.add(params[i+1]);
                 }
-                bufferedReader.close();
-                inputStream.close();
-                httpURLConnection.disconnect();
-
-                return result;
+                ArrayList<String> result = post_Output_Info(keys, values, create_tarea_url,true, true);
+                if(result.size() >1){
+                    return result.get(1);
+                }
+                else{
+                    return "";
+                }
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
@@ -464,35 +455,23 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
             }
         }
         else if(type.equals("update_contador")){
-
-            String contador_post = String.valueOf(Screen_Login_Activity.contador_JSON);
+//            String contador_post = String.valueOf(Screen_Login_Activity.contador_JSON);
             try {
-
-                URL url = new URL(update_contador_url);
-                HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
-                httpURLConnection.setRequestMethod("POST");
-                httpURLConnection.setDoOutput(true);
-                httpURLConnection.setDoInput(true);
-                httpURLConnection.setRequestProperty("Content-Type", "application/json");
-                httpURLConnection.setRequestProperty("Accept", "application/json");
-
-                Writer bufferedWriter = new BufferedWriter(new OutputStreamWriter(httpURLConnection.getOutputStream(), "UTF-8"));
-                bufferedWriter.write(contador_post);
-                // bufferedWriter.flush();
-                bufferedWriter.close();
-
-                InputStream inputStream = httpURLConnection.getInputStream();
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
-                String line;
-                String result="";
-                while ((line = bufferedReader.readLine()) != null) {
-                    result+=(line);
+                ArrayList<String> keys = new ArrayList<String>();
+                keys.add("json");
+                keys.add("empresa");
+                ArrayList<String> values = new ArrayList<String>();
+                for (int i = 0; i < keys.size(); i++) {
+                    values.add(params[i+1]);
                 }
-                bufferedReader.close();
-                inputStream.close();
-                httpURLConnection.disconnect();
+                ArrayList<String> result = post_Output_Info(keys, values, update_contador_url,true, true);
+                if(result.size() >1){
+                    return result.get(1);
+                }
+                else{
+                    return "";
+                }
 
-                return result;
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
@@ -501,37 +480,26 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
             }catch (IOException e) {
                 e.printStackTrace();
             }
+            return null;
         }
         else if(type.equals("update_tarea")){
-
-            String tarea_post = String.valueOf(Screen_Login_Activity.tarea_JSON);
+//            String tarea_post = String.valueOf(Screen_Login_Activity.tarea_JSON);
             try {
-
-                URL url = new URL(update_tarea_url);
-                HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
-                httpURLConnection.setRequestMethod("POST");
-                httpURLConnection.setDoOutput(true);
-                httpURLConnection.setDoInput(true);
-                httpURLConnection.setRequestProperty("Content-Type", "application/json");
-                httpURLConnection.setRequestProperty("Accept", "application/json");
-
-                Writer bufferedWriter = new BufferedWriter(new OutputStreamWriter(httpURLConnection.getOutputStream(), "UTF-8"));
-                bufferedWriter.write(tarea_post);
-                // bufferedWriter.flush();
-                bufferedWriter.close();
-
-                InputStream inputStream = httpURLConnection.getInputStream();
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
-                String line;
-                String result="";
-                while ((line = bufferedReader.readLine()) != null) {
-                    result+=(line);
+                ArrayList<String> keys = new ArrayList<String>();
+                keys.add("json");
+                keys.add("empresa");
+                ArrayList<String> values = new ArrayList<String>();
+                for (int i = 0; i < keys.size(); i++) {
+                    values.add(params[i+1]);
                 }
-                bufferedReader.close();
-                inputStream.close();
-                httpURLConnection.disconnect();
+                ArrayList<String> result = post_Output_Info(keys, values, update_tarea_url,true, true);
+                if(result.size() >1){
+                    return result.get(1);
+                }
+                else{
+                    return "";
+                }
 
-                return result;
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
@@ -540,6 +508,7 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
             }catch (IOException e) {
                 e.printStackTrace();
             }
+            return null;
         }
         else if (type.equals("get_one_tarea")){
 
@@ -575,13 +544,82 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
             }
 
         }
-        else if (type.equals("get_tareas_amount")){
+        else if (type.equals("get_contadores_amount")){
+            try{
+                return_image = false;
+                ArrayList<String> keys = new ArrayList<String>();
+                keys.add("empresa");
+                ArrayList<String> values = new ArrayList<String>();
+                for (int i = 0; i < keys.size(); i++) {
+                    values.add(params[i+1]);
+                }
+
+                ArrayList<String> answer = post_Output_Info(keys, values, get_contadores_amout_url, true, true);
+
+                String return_string = answer.toString();
+
+                return return_string;
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (ProtocolException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        else if (type.equals("get_contadores_with_limit")){
             try{
                 return_image = false;
                 ArrayList<String> keys = new ArrayList<String>();
                 ArrayList<String> values = new ArrayList<String>();
+                keys.add("LIMIT");
+                keys.add("OFFSET");
+                keys.add("empresa");
+                for (int i = 0; i < keys.size(); i++) {
+                    values.add(params[i+1]);
+                }
+                Screen_Table_Team.lista_contadores_servidor = post_Output_Info(keys, values, get_contadores_with_limit_url, true, true);
 
-                ArrayList<String> answer = post_Output_Info(keys, values, get_tareas_amout_url, false, true);
+                String return_string = "";
+                for(int n =1 ; n < Screen_Table_Team.lista_contadores_servidor.size() ; n++) { //el elemento n 0 esta vacio
+                    try {
+                        JSONArray jsonArray = new JSONArray(Screen_Table_Team.lista_contadores_servidor.get(n));
+                        if(jsonArray != null){
+                            return_string = "download success";
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if(Screen_Table_Team.lista_contadores_servidor.size() > 1){
+                    String retorno = Screen_Table_Team.lista_contadores_servidor.get(1);
+                    if(retorno.contains("<b>Warning</b>:  mysqli_connect():")
+                            && retorno.contains("Too many connections")){
+                        return "Servidor caido, ahora no se puede sincronizar";
+                    }
+                }
+                return return_string;
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (ProtocolException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        else if (type.equals("get_tareas_amount")){
+            try{
+                return_image = false;
+                ArrayList<String> keys = new ArrayList<String>();
+                keys.add("empresa");
+                ArrayList<String> values = new ArrayList<String>();
+                for (int i = 0; i < keys.size(); i++) {
+                    values.add(params[i+1]);
+                }
+
+                ArrayList<String> answer = post_Output_Info(keys, values, get_tareas_amout_url, true, true);
 
                 String return_string = answer.toString();
 
@@ -602,6 +640,7 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
                 ArrayList<String> values = new ArrayList<String>();
                 keys.add("LIMIT");
                 keys.add("OFFSET");
+                keys.add("empresa");
                 for (int i = 0; i < keys.size(); i++) {
                     values.add(params[i+1]);
                 }
@@ -611,11 +650,8 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
                 for(int n =1 ; n < Screen_Table_Team.lista_tareas.size() ; n++) { //el elemento n 0 esta vacio
                     try {
                         JSONArray jsonArray = new JSONArray(Screen_Table_Team.lista_tareas.get(n));
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            JSONObject jsonObject = jsonArray.getJSONObject(i);
-                            return_string += jsonObject.toString();
-                            //return_string += jsonObject.getString("poblacion")+" "+jsonObject.getString("calle");
-                            return_string += "\n";
+                        if(jsonArray != null){
+                            return_string = "download success";
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -644,17 +680,14 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
                 ArrayList<String> keys = new ArrayList<String>();
                 ArrayList<String> values = new ArrayList<String>();
 
-                Screen_Table_Team.lista_tareas = post_Output_Info(keys, values, get_tareas_url, false, true);
+                Screen_Table_Team.lista_tareas = post_Output_Info(keys, values, get_tareas_url, true, true);
 
                 String return_string = "";
                 for(int n =1 ; n < Screen_Table_Team.lista_tareas.size() ; n++) { //el elemento n 0 esta vacio
                     try {
                         JSONArray jsonArray = new JSONArray(Screen_Table_Team.lista_tareas.get(n));
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            JSONObject jsonObject = jsonArray.getJSONObject(i);
-                            return_string += jsonObject.toString();
-                            //return_string += jsonObject.getString("poblacion")+" "+jsonObject.getString("calle");
-                            return_string += "\n";
+                        if(jsonArray != null){
+                            return_string = "download success";
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -680,9 +713,12 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
             try{
                 return_image = false;
                 ArrayList<String> keys = new ArrayList<String>();
+                keys.add("empresa");
                 ArrayList<String> values = new ArrayList<String>();
-
-                Screen_Table_Team.lista_contadores_servidor = post_Output_Info(keys, values, get_contadores_url, false, true);
+                for (int i = 0; i < keys.size(); i++) {
+                    values.add(params[i+1]);
+                }
+                Screen_Table_Team.lista_contadores_servidor = post_Output_Info(keys, values, get_contadores_url, true, true);
 
                 String return_string = "";
                 for(int n =1 ; n < Screen_Table_Team.lista_contadores_servidor.size() ; n++) { //el elemento n 0 esta vacio
@@ -714,7 +750,48 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }else if (type.equals("get_piezas")){
+        }
+        else if (type.equals("get_gestores")){
+            try{
+                return_image = false;
+                ArrayList<String> keys = new ArrayList<String>();
+                keys.add("empresa");
+                ArrayList<String> values = new ArrayList<String>();
+                for (int i = 0; i < keys.size(); i++) {
+                    values.add(params[i+1]);
+                }
+
+                Screen_Table_Team.lista_gestores_servidor = post_Output_Info(keys, values, get_gestores_url, true, true);
+
+                String return_string = "";
+                for(int n =1 ; n < Screen_Table_Team.lista_gestores_servidor.size() ; n++) { //el elemento n 0 esta vacio
+                    try {
+                        JSONArray jsonArray = new JSONArray(Screen_Table_Team.lista_gestores_servidor.get(n));
+                        if(jsonArray!=null){
+                            return_string = "download success";
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if(Screen_Table_Team.lista_gestores_servidor.size() > 1){
+                    String retorno = Screen_Table_Team.lista_gestores_servidor.get(1);
+                    if(retorno.contains("<b>Warning</b>:  mysqli_connect():")
+                            && retorno.contains("Too many connections")){
+                        return "Servidor caido, ahora no se puede sincronizar";
+                    }
+                }
+                return return_string;
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (ProtocolException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        else if (type.equals("get_piezas")){
             try{
                 return_image = false;
                 ArrayList<String> keys = new ArrayList<String>();
@@ -795,6 +872,7 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
                 return_image = false;
                 ArrayList<String> keys = new ArrayList<String>();
                 keys.add("user_name");
+                keys.add("empresa");
                 ArrayList<String> values = new ArrayList<String>();
                 for (int i = 0; i < keys.size(); i++) {
                     values.add(params[i+1]);
@@ -811,6 +889,7 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
                             return_string = operario.toString();
                         }
                     } catch (JSONException e) {
+                        Log.e("JSONException","get_user_data -> "+e.toString());
                         e.printStackTrace();
                     }
                 }
@@ -825,14 +904,56 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
                 e.printStackTrace();
             }
 
-        }else if (type.equals("get_operarios")){
+        }else if (type.equals("get_empresas")){
 
             try{
                 return_image = false;
                 ArrayList<String> keys = new ArrayList<String>();
                 ArrayList<String> values = new ArrayList<String>();
 
-                Screen_Login_Activity.lista_operarios = post_Output_Info(keys, values, get_operarios_url, false, true);
+                Screen_Login_Activity.lista_empresas = post_Output_Info(keys, values, get_empresas_url, false, true);
+
+                String return_string = "";
+                for(int n =1 ; n < Screen_Login_Activity.lista_empresas.size() ; n++) {
+                    try {
+                        JSONArray jsonArray = new JSONArray(Screen_Login_Activity.lista_empresas.get(n).trim());
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                            return_string += jsonObject.getString(DBEmpresasController.empresa);
+                            return_string += "\n";
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if(Screen_Login_Activity.lista_empresas.size() > 1){
+                    String retorno = Screen_Login_Activity.lista_empresas.get(1);
+                    if(retorno.contains("<b>Warning</b>:  mysqli_connect():")
+                            && retorno.contains("Too many connections")){
+                        return "Servidor caido, ahora no se puede sincronizar";
+                    }
+                }
+                return return_string.trim();
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (ProtocolException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }else if (type.equals("get_operarios")){
+
+            try{
+                return_image = false;
+                ArrayList<String> keys = new ArrayList<String>();
+                keys.add("empresa");
+                ArrayList<String> values = new ArrayList<String>();
+                for (int i = 0; i < keys.size(); i++) {
+                    values.add(params[i+1]);
+                }
+                Screen_Login_Activity.lista_operarios = post_Output_Info(keys, values, get_operarios_url, true, true);
 
                 String return_string = "";
                 for(int n =1 ; n < Screen_Login_Activity.lista_operarios.size() ; n++) {
@@ -840,7 +961,7 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
                         JSONArray jsonArray = new JSONArray(Screen_Login_Activity.lista_operarios.get(n));
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
-                            return_string += jsonObject.getString("nombre")+" "+jsonObject.getString("apellidos");
+                            return_string += jsonObject.getString(DBoperariosController.nombre)+" "+jsonObject.getString(DBoperariosController.apellidos);
                             return_string += "\n";
                         }
                     } catch (JSONException e) {
@@ -873,6 +994,7 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
                 keys.add("password");
                 keys.add("image");
                 keys.add("date_time_modified");
+                keys.add("empresa");
                 ArrayList<String> values = new ArrayList<String>();
                 for (int i = 0; i < keys.size(); i++) {
                     values.add(params[i+1]);
@@ -901,6 +1023,7 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
                 keys.add("password");
                 keys.add("image");
                 keys.add("date_time_modified");
+                keys.add("empresa");
 
                 ArrayList<String> values = new ArrayList<String>();
                 for (int i = 0; i < keys.size(); i++) {
