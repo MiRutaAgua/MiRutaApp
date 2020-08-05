@@ -108,10 +108,9 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
     public static final int FROM_PERSONAL = 1;
     public static final int FROM_FILTER_RESULT= 2;
     public static final int FROM_FILTER_TAREAS = 3;
-    public static final int FROM_MAP_CERCANIA = 4;
-
+	    public static final int FROM_MAP_CERCANIA = 4;
     public static int from_team_or_personal=-1;
-    public static final int from_screen = -1;
+	public static final int from_screen = -1;
 
     public static final int FROM_BATTERY = 0;
     public static final int FROM_UNITY = 1;
@@ -722,7 +721,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                 if(bitmap!=null) {
                     String type = "upload_image";
                     BackgroundWorker backgroundWorker = new BackgroundWorker(this);
-                    backgroundWorker.execute(type, Screen_Register_Operario.getStringImage(bitmap), file_name, gestor, numero_abonado, empresa.toLowerCase());
+                    backgroundWorker.execute(type, Screen_Register_Operario.getStringImage(bitmap), file_name, gestor, numero_abonado, empresa);
                 }else{
                     uploadPhotosInMySQL();
                 }
@@ -888,7 +887,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                 if(bitmap!=null) {
                     String type = "upload_image";
                     BackgroundWorker backgroundWorker = new BackgroundWorker(this);
-                    backgroundWorker.execute(type, Screen_Register_Operario.getStringImage(bitmap), file_name, gestor, numero_abonado, empresa.toLowerCase());
+                    backgroundWorker.execute(type, Screen_Register_Operario.getStringImage(bitmap), file_name, gestor, numero_abonado, empresa);
                 }else{
                     updatePhotosInMySQL();
                 }
