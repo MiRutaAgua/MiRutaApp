@@ -426,7 +426,7 @@ public class MapsActivityTareas extends AppCompatActivity implements TaskComplet
     }
 
     public static int log2(int n){
-        if(n <= 0) throw new IllegalArgumentException();
+        if(n <= 0) throw new IllegalArgumentException("TAREAS NO CARGADAS!");
         return 31 - Integer.numberOfLeadingZeros(n);
     }
     private double degreesToRadians(double degrees) {

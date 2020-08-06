@@ -32,7 +32,7 @@ public class personal_task_screen_Activity extends AppCompatActivity {
             imageView_atras_screen_personal_task;
 
     private Button button_tabla_tareas_operario;
-    private Button button_vista_rapida_tareas_operario, button_filtro_tareas_personal_screen_team_task;
+    private Button button_vista_rapida_tareas_operario, button_filtro_tareas_personal_screen_team_task,button_tareas_cercanas_operario;
 
     private static ProgressDialog progressDialog;
 
@@ -56,6 +56,7 @@ public class personal_task_screen_Activity extends AppCompatActivity {
         button_tabla_tareas_operario   = (Button) findViewById(R.id.button_tabla_tareas_operarios_screen_personal_task);
         button_vista_rapida_tareas_operario = (Button) findViewById(R.id.button_vista_rapida_tareas_operario_screen_personal_task);
         button_filtro_tareas_personal_screen_team_task = (Button) findViewById(R.id.button_filtro_tareas_personal_screen_team_task);
+        button_tareas_cercanas_operario = (Button) findViewById(R.id.button_tareas_cercanas_operario);
 
         imageView_menu_screen_personal_task.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,6 +111,41 @@ public class personal_task_screen_Activity extends AppCompatActivity {
                 imageView_atras_screen_personal_task.startAnimation(myAnim);
             }
         });
+
+        button_tareas_cercanas_operario.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                team_or_personal_task_selection_screen_Activity.from_screen = team_or_personal_task_selection_screen_Activity.FROM_PERSONAL;
+
+
+                Screen_Login_Activity.playOnOffSound(personal_task_screen_Activity.this);
+                final Animation myAnim = AnimationUtils.loadAnimation(personal_task_screen_Activity.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        showRingDialog("Buscando Tareas");
+                        Intent intent_open_table_personal = new Intent(getApplicationContext(), permission_cercania.class);
+                        startActivity(intent_open_table_personal);
+                        finish();
+                    }
+                });
+                button_tareas_cercanas_operario.startAnimation(myAnim);
+            }
+        });
+
         button_tabla_tareas_operario.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

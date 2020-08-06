@@ -1030,6 +1030,7 @@ public class MapActivity extends AppCompatActivity implements TaskCompleted, OnM
 
     @Override
     public void onBackPressed() {
+
         if (insertando)
         {
             if (markerHome.getPosition() != null || markerPump.getPosition() != null){
@@ -1145,10 +1146,6 @@ public class MapActivity extends AppCompatActivity implements TaskCompleted, OnM
             }else finishThisClass();
 
         }
-
-
-
-
 
 
 

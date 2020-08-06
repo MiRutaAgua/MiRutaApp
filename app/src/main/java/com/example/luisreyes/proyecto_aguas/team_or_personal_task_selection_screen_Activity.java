@@ -108,9 +108,10 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
     public static final int FROM_PERSONAL = 1;
     public static final int FROM_FILTER_RESULT= 2;
     public static final int FROM_FILTER_TAREAS = 3;
-	    public static final int FROM_MAP_CERCANIA = 4;
-    public static int from_team_or_personal=-1;
-	public static final int from_screen = -1;
+	public static final int FROM_MAP_CERCANIA = 4;
+
+	public static int from_team_or_personal=-1;
+	public static int from_screen = -1;
 
     public static final int FROM_BATTERY = 0;
     public static final int FROM_UNITY = 1;
@@ -197,6 +198,8 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
 //        imageView_logo = (ImageView) findViewById(R.id.imageView_logo);
         button_tarea_equipo = (Button) findViewById(R.id.button_tarea_equipo);
         button_tarea_personal = (Button) findViewById(R.id.button_tarea_personal);
+
+
 
         imageView_atras_screen_team_or_personal.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -285,30 +288,41 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
         button_tarea_personal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                from_team_or_personal = FROM_PERSONAL;
-                Screen_Login_Activity.playOnOffSound(getApplicationContext());
-                final Animation myAnim = AnimationUtils.loadAnimation(team_or_personal_task_selection_screen_Activity.this, R.anim.bounce);
-                // Use bounce interpolator with amplitude 0.2 and frequency 20
-                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
-                myAnim.setInterpolator(interpolator);
-                myAnim.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation arg0) {
-                        // TODO Auto-generated method stub
+
+                if (team_or_personal_task_selection_screen_Activity.dBtareasController != null) {
+                    if (team_or_personal_task_selection_screen_Activity.dBtareasController.databasefileExists(team_or_personal_task_selection_screen_Activity.this)) {
+                        if (team_or_personal_task_selection_screen_Activity.dBtareasController.checkForTableExists()) {
+                            if(team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas()>0) {
+
+                                from_team_or_personal = FROM_PERSONAL;
+                                Screen_Login_Activity.playOnOffSound(getApplicationContext());
+                                final Animation myAnim = AnimationUtils.loadAnimation(team_or_personal_task_selection_screen_Activity.this, R.anim.bounce);
+                                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                                myAnim.setInterpolator(interpolator);
+                                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                                    @Override
+                                    public void onAnimationStart(Animation arg0) {
+                                        // TODO Auto-generated method stub
 //                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
-                    }
-                    @Override
-                    public void onAnimationRepeat(Animation arg0) {
-                        // TODO Auto-generated method stub
-                    }
-                    @Override
-                    public void onAnimationEnd(Animation arg0) {
-                        Intent personal_task_screen = new Intent(team_or_personal_task_selection_screen_Activity.this, personal_task_screen_Activity.class);
-                        startActivity(personal_task_screen);
-                        finish();
-                    }
-                });
-                button_tarea_personal.startAnimation(myAnim);
+                                    }
+                                    @Override
+                                    public void onAnimationRepeat(Animation arg0) {
+                                        // TODO Auto-generated method stub
+                                    }
+                                    @Override
+                                    public void onAnimationEnd(Animation arg0) {
+                                        Intent personal_task_screen = new Intent(team_or_personal_task_selection_screen_Activity.this, personal_task_screen_Activity.class);
+                                        startActivity(personal_task_screen);
+                                        finish();
+                                    }
+                                });
+                                button_tarea_personal.startAnimation(myAnim);
+
+                            }}}}
+
+                    Toast.makeText(team_or_personal_task_selection_screen_Activity.this,"Cargue Tareas", Toast.LENGTH_LONG).show();
+
             }
         });
 
