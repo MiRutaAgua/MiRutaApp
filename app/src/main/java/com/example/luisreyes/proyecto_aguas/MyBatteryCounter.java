@@ -121,6 +121,9 @@ public class MyBatteryCounter implements Comparable<MyBatteryCounter>  {
             previo="BA-?";
             return previo;
         }
+        if(!ubicacion_bateria.contains("BA") && !ubicacion_bateria.contains("BT")){
+            return "BA"+ubicacion_bateria;
+        }
         return ubicacion_bateria;
     }
     public void setUbicacion_bateria(String ubicacion) {

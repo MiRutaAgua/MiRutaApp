@@ -335,12 +335,16 @@ public class Screen_Validate_Battery_Intake_Asignation extends AppCompatActivity
             if(status_tarea.contains("TO_UPLOAD")) {
                 try {
                     Screen_Login_Activity.tarea_JSON.put(DBtareasController.status_tarea, "IDLE TO_BAT, TO_UPLOAD");
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.f_instnew, "ANDROID "
+                            + Screen_Login_Activity.operario_JSON.getString(DBoperariosController.usuario));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }else{
                 try {
                     Screen_Login_Activity.tarea_JSON.put(DBtareasController.status_tarea, "IDLE TO_BAT, TO_UPDATE");
+                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.f_instnew, "ANDROID "
+                            + Screen_Login_Activity.operario_JSON.getString(DBoperariosController.usuario));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

@@ -549,6 +549,8 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
     private void onCerrar_tarea() {
         try {
             Screen_Login_Activity.tarea_JSON.put(DBtareasController.date_time_modified, DBtareasController.getStringFromFechaHora(new Date()));
+            Screen_Login_Activity.tarea_JSON.put(DBtareasController.f_instnew, "ANDROID "
+                    + Screen_Login_Activity.operario_JSON.getString(DBoperariosController.usuario));
         } catch (JSONException e) {
             e.printStackTrace();
         }

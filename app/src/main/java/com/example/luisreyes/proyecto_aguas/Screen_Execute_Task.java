@@ -1115,6 +1115,8 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                 if(!status.contains("TO_UPDATE")){
                     status = status + ", TO_UPDATE";
                 }
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.f_instnew, "ANDROID "
+                        + Screen_Login_Activity.operario_JSON.getString(DBoperariosController.usuario));
                 Screen_Login_Activity.tarea_JSON.put(DBtareasController.status_tarea, status);
                 Screen_Login_Activity.tarea_JSON.put(DBtareasController.Estado, "NORMAL");
                 team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea(Screen_Login_Activity.tarea_JSON);

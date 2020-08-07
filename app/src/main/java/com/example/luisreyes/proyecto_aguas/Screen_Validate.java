@@ -812,6 +812,8 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
         boolean error = false;
         if(team_or_personal_task_selection_screen_Activity.dBtareasController != null) {
             try {
+                Screen_Login_Activity.tarea_JSON.put(DBtareasController.f_instnew, "ANDROID "
+                        + Screen_Login_Activity.operario_JSON.getString(DBoperariosController.usuario));
                 team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea(Screen_Login_Activity.tarea_JSON);
             } catch (JSONException e) {
                 Toast.makeText(Screen_Validate.this, "No se pudo guardar tarea local " + e.toString(), Toast.LENGTH_LONG).show();

@@ -135,9 +135,9 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
         }
         else {
             //Para PC de Trabjo ojo cambiar esto entre
-//            String prestring = "http://192.168.20.93";
+            String prestring = "http://192.168.20.93";
             //Mi PC en casa
-            String prestring = "http://192.168.56.1";
+//            String prestring = "http://192.168.56.1";
 
             login_url = prestring + "/login_operarios.php";
             register_url = prestring + "/register_operario.php";
