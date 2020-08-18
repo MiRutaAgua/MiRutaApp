@@ -70,8 +70,11 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
     public static DBPiezasController dBpiezasController = null;
     public static DBCausasController dBcausasController = null;
     public static DBgestoresController dBgestoresController = null;
+    public static DBitacsController dBitacsController = null;
+    public static DBequipo_operariosController dBequipo_operariosController = null;
 
     ArrayList<String> tareas_en_servidor = new ArrayList<>();
+    ArrayList<String> itacs_en_servidor = new ArrayList<>();
 
     public static String gestor_seleccionado = "TODOS";
 
@@ -90,7 +93,9 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
     public static ArrayList<String> tareas_con_citas_obsoletas;
     private Spinner spinner_filtro_gestor_screen_team_or_personal;
 
-    private ArrayList<String> tareas_to_update, contadores_to_update;
+    private ArrayList<String> tareas_to_update, contadores_to_update, itacs_to_update;
+    private ArrayList<String> images_files_names_itacs;
+    private ArrayList<String> images_files_itacs;
     private ArrayList<String> images_files_names;
     private ArrayList<String> images_files;
     private ArrayList<String> tareas_to_upload;
@@ -117,7 +122,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
     public static final int FROM_UNITY = 1;
     public static int from_battery_or_unity=-1;
 
-    private static final int PEDAZOS_A_DESCARGAR = 1000;
+    private static final int PEDAZOS_A_DESCARGAR = 500;
     private int count_tareas_descargadas = 0;
     private int cantidad_total_de_tareas_en_servidor = 0;
     private int count_contadores_descargadas = 0;
@@ -170,21 +175,27 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
             dBgestoresController = new DBgestoresController(this, empresa.toLowerCase());
             Log.e("Creando tabla gestores", "----------------------------------------------------------");
         }
+        if(dBitacsController == null) {
+            dBitacsController = new DBitacsController(this, empresa.toLowerCase());
+            Log.e("Creando tabla itacs", "----------------------------------------------------------");
+        }
         if(dBcontadoresController.checkForTableExists()){
             int lite_count_counters = team_or_personal_task_selection_screen_Activity.dBcontadoresController.countTableContadores();
             Log.e("Aqui", "----------------------------------------------------------");
             Log.e("Contadores", String.valueOf(lite_count_counters));
         }
 
-
+        images_files_names_itacs = new ArrayList<String>();
+        images_files_itacs = new ArrayList<String>();
         images_files_names = new ArrayList<String>();
         images_files = new ArrayList<String>();
         tareas_to_upload = new ArrayList<String>();
         tareas_to_update = new ArrayList<String>();
+        itacs_to_update = new ArrayList<String>();
         contadores_to_update = new ArrayList<String>();
         tareas_con_citas_obsoletas = new ArrayList<>();
 
-        spinner_filtro_gestor_screen_team_or_personal= (Spinner) findViewById(R.id.spinner_filtro_gestor_screen_team_or_personal);
+        spinner_filtro_gestor_screen_team_or_personal = (Spinner) findViewById(R.id.spinner_filtro_gestor_screen_team_or_personal);
 
         textView_sync_team_or_personal_task_screen = (TextView) findViewById(R.id.textView_sync_team_or_personal_task_screen);
         textView_citas__team_or_personal_task_screen= (TextView) findViewById(R.id.textView_citas__team_or_personal_task_screen);
@@ -440,6 +451,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                         if(checkConection()){
                             try {
                                 Log.e("checkConection", "Subiendo");
+                                showRingDialog("Sincronizando");
                                 getGestoresDeServidor();
                             } catch (JSONException e) {
                                 sync_pressed = false;
@@ -484,6 +496,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                         if(checkConection()){
                             try {
                                 Log.e("checkConection", "Subiendo");
+                                showRingDialog("Sincronizando");
                                 getGestoresDeServidor();
                             } catch (JSONException e) {
                                 sync_pressed = false;
@@ -541,57 +554,64 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
         }
     }
 
+    public void getItacsDeServidor() throws JSONException {
+        String empresa = Screen_Login_Activity.current_empresa;
+        if(checkConection()){
+            Log.e("getItacsDeServidor", "Hay conexion");
+            Screen_Login_Activity.isOnline = true;
+            String type_script = "get_itacs";
+            BackgroundWorker backgroundWorker = new BackgroundWorker(this);
+            backgroundWorker.execute(type_script, empresa.toLowerCase());
+        }
+        else{
+            Toast.makeText(this, "No hay conexion a Internet," +
+                    "Intente sincronizar con conexión", Toast.LENGTH_LONG).show();
+        }
+    }
     public void getGestoresDeServidor() throws JSONException {
         String empresa = Screen_Login_Activity.current_empresa;
         if(checkConection()){
             Log.e("getGestoresDeServidor", "Hay conexion");
             Screen_Login_Activity.isOnline = true;
-            showRingDialog("Actualizando información de gestores");
             String type_script = "get_gestores";
             BackgroundWorker backgroundWorker = new BackgroundWorker(this);
             backgroundWorker.execute(type_script, empresa.toLowerCase());
+        }else{
+            Toast.makeText(this, "No hay conexion a Internet," +
+                    "Intente sincronizar con conexión", Toast.LENGTH_LONG).show();
         }
     }
-
     public void getContadoresDeServidor() throws JSONException {
         descargarContadores();
-//        String empresa = Screen_Login_Activity.current_empresa;
-//        if(checkConection()){
-//            Log.e("getContadoresDeServidor", "Hay conexion");
-//            Screen_Login_Activity.isOnline = true;
-//            showRingDialog("Actualizando información de contadores");
-//            String type_script = "get_contadores";
-//            BackgroundWorker backgroundWorker = new BackgroundWorker(this);
-//            backgroundWorker.execute(type_script, empresa.toLowerCase());
-//        }
     }
-
     public void getCausasDeServidor() throws JSONException {
         if(checkConection()){
             Log.e("getCausasDeServidor", "Hay conexion");
             Screen_Login_Activity.isOnline = true;
-            showRingDialog("Actualizando información de causas");
             String type_script = "get_causas";
             BackgroundWorker backgroundWorker = new BackgroundWorker(this);
             backgroundWorker.execute(type_script);
+        }else{
+            Toast.makeText(this, "No hay conexion a Internet," +
+                    "Intente sincronizar con conexión", Toast.LENGTH_LONG).show();
         }
     }
-
     public void getPiezasDeServidor() throws JSONException {
         if(checkConection()){
             Log.e("getPiezasDeServidor", "Hay conexion");
             Screen_Login_Activity.isOnline = true;
-            showRingDialog("Actualizando información de piezas");
             String type_script = "get_piezas";
             BackgroundWorker backgroundWorker = new BackgroundWorker(this);
             backgroundWorker.execute(type_script);
+        }else{
+            Toast.makeText(this, "No hay conexion a Internet," +
+                    "Intente sincronizar con conexión", Toast.LENGTH_LONG).show();
         }
     }
 
     public void actualizarContadoresEnInternet() throws JSONException {
         if(!contadores_to_update.isEmpty() && checkConection()) {
             Log.e("actualizContEnInternet", "is NOt Empty() contadores");
-            showRingDialog("Actualizando Contadores en Servidor...");
             updateContadorInMySQL();
             return;
         }else{
@@ -601,7 +621,6 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
     }
     public void updateContadorInMySQL() throws JSONException {
         if(contadores_to_update.isEmpty()){
-            hideRingDialog();
             Log.e("updateContadorInMySQL", "Contadores actualizados en internet");
             subirTareasSiExisten();
             return;
@@ -620,7 +639,6 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
 //                jsonObjectSalvaLite = jsonObject_Lite;
 //            }
             String empresa = Screen_Login_Activity.current_empresa;
-            showRingDialog("Actualizando contador");
             String type_script = "update_contador";
             BackgroundWorker backgroundWorker = new BackgroundWorker(this);
             Screen_Login_Activity.contador_JSON = jsonObject_Lite_counter;
@@ -658,7 +676,6 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
         if(!tareas_to_upload.isEmpty() && checkConection()) {
             Log.e("subirTareasSiExisten", "is NOt Empty()");
             subiendo_fotos = true;
-            showRingDialog("Insertando Tareas creadas offline en Servidor...");
             upLoadTareaInMySQL();
             return;
         }else{
@@ -670,7 +687,6 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
 
     public void upLoadTareaInMySQL() throws JSONException {
         if(tareas_to_upload.isEmpty()){
-            hideRingDialog();
             Log.e("upLoadTareaInMySQL", "Tareas subidas en internet");
             Toast.makeText(this, "Tareas subidas en internet", Toast.LENGTH_SHORT).show();
             subiendo_fotos=false;
@@ -699,7 +715,6 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
     }
     public void uploadPhotosInMySQL() throws JSONException {
         if(images_files.isEmpty()){
-            hideRingDialog();
             Log.e("uploadPhotosInMySQL", "Fotos subidas en internet");
             if(Screen_Filter_Tareas.checkIfTaskIsDoneAndEraseLocal(jsonObjectSalvaLite)){
                 if (jsonObjectSalvaLite != null) {
@@ -748,6 +763,48 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
         }
     }
 
+    public void addPhotosItac_toUpload() throws JSONException { //luego rellenar en campo de incidencia algo para saber que tiene incidencias
+        String foto = "";
+        String cod_emplazamiento = null;
+
+        Log.e("Entrando a funcion", "addPhotosItac_toUpload");
+        String gestor = null;
+        try {
+            cod_emplazamiento = Screen_Login_Activity.itac_JSON.getString(DBitacsController.codigo_itac).trim();
+            gestor = Screen_Login_Activity.itac_JSON.getString(DBitacsController.gestor_itac).trim();
+            if(!Screen_Login_Activity.checkStringVariable(gestor)){
+                gestor = "Sin_Gestor";
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String path = getExternalFilesDir(Environment.DIRECTORY_PICTURES)+"/" + Screen_Login_Activity.current_empresa + "/fotos_ITACs/" + gestor + "/"+ cod_emplazamiento+"/";
+
+        foto = Screen_Login_Activity.itac_JSON.getString(DBitacsController.foto_1);
+        addPhotosItac_names_and_files(path, foto);
+
+        foto = Screen_Login_Activity.itac_JSON.getString(DBitacsController.foto_2);
+        addPhotosItac_names_and_files(path, foto);
+
+        foto = Screen_Login_Activity.itac_JSON.getString(DBitacsController.foto_3);
+        addPhotosItac_names_and_files(path, foto);
+
+        foto = Screen_Login_Activity.itac_JSON.getString(DBitacsController.foto_4);
+        addPhotosItac_names_and_files(path, foto);
+
+        foto = Screen_Login_Activity.itac_JSON.getString(DBitacsController.foto_5);
+        addPhotosItac_names_and_files(path, foto);
+
+        foto = Screen_Login_Activity.itac_JSON.getString(DBitacsController.foto_6);
+        addPhotosItac_names_and_files(path, foto);
+
+        foto = Screen_Login_Activity.itac_JSON.getString(DBitacsController.foto_7);
+        addPhotosItac_names_and_files(path, foto);
+
+        foto = Screen_Login_Activity.itac_JSON.getString(DBitacsController.foto_8);
+        addPhotosItac_names_and_files(path, foto);
+    }
+
     public void addPhotos_toUpload() throws JSONException { //luego rellenar en campo de incidencia algo para saber que tiene incidencias
         String foto = "";
         String numero_abonado = null;
@@ -789,6 +846,17 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
         foto = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.firma_cliente);
         addPhotos_names_and_files(path, foto);
     }
+    public void addPhotosItac_names_and_files(String path, String foto){
+        if(new File(path+foto).exists()) {
+            if (foto != null && !foto.isEmpty() && !foto.equals("null") && !foto.equals("NULL")) {
+                images_files_itacs.add(path + foto);
+                images_files_names_itacs.add(foto);
+                Log.e("Añadiendo Itac foto", path+ foto);
+            }
+        }else{
+            Log.e("No encontrada Itac foto", path+ foto);
+        }
+    }
     public void addPhotos_names_and_files(String path, String foto){
         if(new File(path+foto).exists()) {
             if (foto != null && !foto.isEmpty() && !foto.equals("null") && !foto.equals("NULL")) {
@@ -822,26 +890,92 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
             return null;
         }
     }
-
-    public void updateTareaInMySQL() throws JSONException {
-        if(tareas_to_update.isEmpty()){
-            hideRingDialog();
-            Log.e("updateTareaInMySQL", "Tareas actualizadas en internet");
-//            if(lista_ordenada_de_tareas.isEmpty()){
-//                openMessage("Información", "No hay tareas asignadas a este operario");
-//            }else{
-//                openMessage("Información", "Existen "+String.valueOf(lista_ordenada_de_tareas.size())
-//                        +" tareas pendientes");
-//            }
-//            Toast.makeText(this, "Tareas actualizadas en internet", Toast.LENGTH_SHORT).show();
+    public void updateItacsInMySQL() throws JSONException {
+        if(itacs_to_update.isEmpty()){
+            Log.e("updateItacsInMySQL", "Itacs actualizados en internet");
             setNotificationCitasObsoletas();
 //            lookForGestors();
             textView_sync_team_or_personal_task_screen.setText("SINCRONIZAR");
             button_sync_team_or_personal_task_screen.setBackground(getResources().
                     getDrawable(R.drawable.sync_button));
+            button_tarea_equipo.setEnabled(true);
+            button_tarea_personal.setEnabled(true);
+            button_sync_team_or_personal_task_screen.setEnabled(true);
+            button_notification_team_or_personal_task_screen.setEnabled(true);
+            textView_sync_team_or_personal_task_screen.setEnabled(true);
+            hideRingDialog();
             return;
         }
         else {
+            Log.e("updateItacsInMySQL", "actualizando itac");
+            images_files_itacs.clear();
+            images_files_names_itacs.clear();
+            JSONObject jsonObject_Lite = new JSONObject(dBitacsController.get_one_itac_from_Database(
+                    itacs_to_update.get(itacs_to_update.size() - 1)));
+            itacs_to_update.remove(itacs_to_update.size() - 1);
+            Log.e("Actualizando Itac: ", jsonObject_Lite.getString(DBitacsController.principal_variable));
+
+            String empresa = Screen_Login_Activity.current_empresa;
+            String type_script = "update_itac";
+            BackgroundWorker backgroundWorker = new BackgroundWorker(this);
+            Screen_Login_Activity.itac_JSON = jsonObject_Lite;
+            addPhotosItac_toUpload();
+            backgroundWorker.execute(type_script, Screen_Login_Activity.itac_JSON.toString(), empresa.toLowerCase());
+        }
+    }
+    public void updatePhotosItacInMySQL() throws JSONException {
+        if(images_files_itacs.isEmpty()){
+            Log.e("updatePhotosItacInMySQL", "Fotos itac actualizadas en internet");
+            updateItacsInMySQL();
+            return;
+        }
+        else {
+            Log.e("updatePhotosItacInMySQL", "actualizando fotos itac en internet");
+            String codigo_emplazamiento = "", gestor = "";
+            try {
+                String empresa = Screen_Login_Activity.current_empresa;
+                codigo_emplazamiento = Screen_Login_Activity.itac_JSON.getString(DBitacsController.codigo_itac).trim();
+                gestor = Screen_Login_Activity.itac_JSON.getString(DBitacsController.gestor_itac).trim();
+                if(!Screen_Login_Activity.checkStringVariable(gestor)){
+                    gestor = "Sin_Gestor";
+                }
+                String file_name = null, image_file;
+                file_name = images_files_names_itacs.get(images_files_itacs.size() - 1);
+                images_files_names_itacs.remove(images_files_itacs.size() - 1);
+                image_file = images_files_itacs.get(images_files_itacs.size() - 1);
+                images_files_itacs.remove(images_files_itacs.size() - 1);
+                Bitmap bitmap = null;
+                bitmap = getPhotoUserLocal(image_file);
+                if(bitmap!=null) {
+                    String type = "upload_itac_image";
+                    BackgroundWorker backgroundWorker = new BackgroundWorker(this);
+                    backgroundWorker.execute(type, Screen_Register_Operario.getStringImage(bitmap), gestor,
+                            file_name.replace(".jpg", "").replace(codigo_emplazamiento+"_",""),//campo de foto "foto_x"
+                            codigo_emplazamiento, file_name, empresa);
+                }else{
+                    updatePhotosItacInMySQL();
+                }
+            } catch (JSONException e) {
+                images_files_itacs.clear();
+                e.printStackTrace();
+                Toast.makeText(this, "Error obteniendo codigo_emplazamiento\n"+ e.toString(), Toast.LENGTH_LONG).show();
+                return;
+            }
+        }
+    }
+
+    public void updateTareaInMySQL() throws JSONException {
+        if(tareas_to_update.isEmpty()){
+            getItacsDeServidor();
+            Log.e("updateTareaInMySQL", "Tareas actualizadas en internet");
+            return;
+        }
+        else {
+            button_tarea_equipo.setEnabled(false);
+            button_tarea_personal.setEnabled(false);
+            button_sync_team_or_personal_task_screen.setEnabled(false);
+            button_notification_team_or_personal_task_screen.setEnabled(false);
+            textView_sync_team_or_personal_task_screen.setEnabled(false);
             Log.e("updateTareaInMySQL", "actualizando tarea");
             images_files.clear();
             images_files_names.clear();
@@ -856,7 +990,6 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                 jsonObjectSalvaLite = jsonObject_Lite;
             }
             String empresa = Screen_Login_Activity.current_empresa;
-            showRingDialog("Actualizando tarea");
             String type_script = "update_tarea";
             BackgroundWorker backgroundWorker = new BackgroundWorker(this);
             Screen_Login_Activity.tarea_JSON = jsonObject_Lite;
@@ -866,7 +999,6 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
     }
     public void updatePhotosInMySQL() throws JSONException {
         if(images_files.isEmpty()){
-            hideRingDialog();
             Log.e("updatePhotosInMySQL", "Fotos actualizadas en internet");
             if(Screen_Filter_Tareas.checkIfTaskIsDoneAndEraseLocal(jsonObjectSalvaLite)) {
                 if (jsonObjectSalvaLite != null) {
@@ -918,7 +1050,6 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
         if(checkConection()){
             Log.e("descargarCantContadores", "Hay conexion");
             Screen_Login_Activity.isOnline = true;
-            showRingDialog("Actualizando información de Contadores");
             String type_script = "get_contadores_amount";
             BackgroundWorker backgroundWorker = new BackgroundWorker(this);
             backgroundWorker.execute(type_script, empresa.toLowerCase());
@@ -1338,7 +1469,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                 if (result.isEmpty()) {
                     Log.e("get_piezas", "Vacio");
                     Toast.makeText(this, "Tabla de piezas en internet vacia", Toast.LENGTH_LONG).show();
-                    hideRingDialog();
+
                 } else {
                     boolean insertar_todos = false;
 //                    Log.e("get_piezas res", result);
@@ -1376,7 +1507,6 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                             Log.e("JSONException", e.toString());
                         }
                     }
-                    hideRingDialog();
                 }
                 getCausasDeServidor();
             }
@@ -1393,7 +1523,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                 if (result.isEmpty()) {
                     Log.e("get_gestores", "Vacio");
                     Toast.makeText(this, "Tabla de gestores en internet vacia", Toast.LENGTH_LONG).show();
-                    hideRingDialog();
+
                 } else {
                     boolean insertar_todos = false;
 //                    Log.e("get_gestores res", result);
@@ -1434,7 +1564,6 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                             Log.e("JSONException", e.toString());
                         }
                     }
-                    hideRingDialog();
                 }
                 getPiezasDeServidor();
             }
@@ -1451,7 +1580,6 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                 if (result.isEmpty()) {
                     Log.e("get_causas", "Vacio");
                     Toast.makeText(this, "Tabla de causas en internet vacia", Toast.LENGTH_LONG).show();
-                    hideRingDialog();
                 } else {
                     boolean insertar_todos = false;
 //                    Log.e("get_causas res", result);
@@ -1489,7 +1617,6 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                             Log.e("JSONException", e.toString());
                         }
                     }
-                    hideRingDialog();
                 }
                 getContadoresDeServidor();
             }
@@ -1568,7 +1695,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                                                     team_or_personal_task_selection_screen_Activity.dBcontadoresController.updateContador(jsonObject, DBcontadoresController.serie_contador);
                                                     Log.e("Updating", jsonObject.getString(DBcontadoresController.serie_contador));
                                                 } else {
-                                                    Toast.makeText(this, "Fechas ambas nulas", Toast.LENGTH_LONG).show();
+//                                                    Toast.makeText(this, "Fechas ambas nulas", Toast.LENGTH_LONG).show();
                                                 }
                                             } else if (date_MySQL == null) {
                                                 if (date_SQLite != null) {
@@ -1581,7 +1708,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                                                     }
 
                                                 } else {
-                                                    Toast.makeText(this, "Fechas ambas nulas", Toast.LENGTH_LONG).show();
+//                                                    Toast.makeText(this, "Fechas ambas nulas", Toast.LENGTH_LONG).show();
                                                 }
                                             } else { //si ninguna de la dos son nulas
 
@@ -1610,13 +1737,11 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                         }
                     }
                     Log.e("contadores_to_update", contadores_to_update.toString());
-                    hideRingDialog();
-                    Toast.makeText(this, "Contadores descargadas correctamente", Toast.LENGTH_LONG).show();
                 }
                 count_contadores_descargadas += PEDAZOS_A_DESCARGAR;
                 if(count_contadores_descargadas >= cantidad_total_de_contadores_en_servidor) {
-                    hideRingDialog();
                     actualizarContadoresEnInternet();
+                    Toast.makeText(this, "Contadores descargadas correctamente", Toast.LENGTH_LONG).show();
                 }else{
                     descargarXContadores(PEDAZOS_A_DESCARGAR, count_contadores_descargadas);
                 }
@@ -1628,7 +1753,6 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                 Toast.makeText(this, "No se pudo establecer conexión con el servidor", Toast.LENGTH_LONG).show();
             }
             else {
-                hideRingDialog();
                 Log.e("get_contadores_amount", result + "-----------------------------------------");
                 if(result.contains("not success get_contadores_amount")){
                     Toast.makeText(this,"Error al obtener la cantidad de contadores", Toast.LENGTH_LONG).show();
@@ -1652,13 +1776,159 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                 }
             }
         }
+        else if(type == "get_itacs"){
+            if(result == null){
+                hideRingDialog();
+                Toast.makeText(this, "No se pudo establecer conexión con el servidor", Toast.LENGTH_LONG).show();
+            }
+            else {
+                Log.e("get_itacs", "-----------------------------------------");
+                if(result.isEmpty()) {
+                    Log.e("get_itacs", "Vacio");
+                    Toast.makeText(this,"Tabla de itacs en internet vacia", Toast.LENGTH_LONG).show();
+                    hideRingDialog();
+                    checkItacsMissinInServer(itacs_en_servidor);
+                    updateItacsInMySQL(); //updateTareaInMySQL
+                }
+                else if(result.equals("Servidor caido, ahora no se puede sincronizar")){
+                    Toast.makeText(this, result, Toast.LENGTH_LONG).show();
+                    hideRingDialog();
+                }
+                else {
+                    boolean insertar_todas = false;
+                    if (dBitacsController.checkForTableExists()) {
+                        lite_count = dBitacsController.countTableItacs();
+
+                        if (lite_count < 1) {
+                            insertar_todas = true;
+                            Toast.makeText(this, "Insertando todas las Itacs", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                    for (int n = 1; n < Screen_Table_Team.lista_itacs_servidor.size(); n++) { //el elemento n 0 esta vacio
+                        try {
+                            JSONArray jsonArray = new JSONArray(Screen_Table_Team.lista_itacs_servidor.get(n));
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                                itacs_en_servidor.add(jsonObject.getString(DBitacsController.principal_variable));
+
+                                if (Screen_Filter_Tareas.checkIfItacIsDoneAndEraseLocal(jsonObject)) {
+                                    continue; //si ya esta hecha en servidor paso y borro la local si existe
+                                }
+                                if (insertar_todas) {
+                                    dBitacsController.insertItac(jsonObject);
+                                } else if (lite_count != -10) {
+                                    if (!dBitacsController.checkIfItacExists(jsonObject.getString(DBitacsController.principal_variable))) {
+                                        dBitacsController.insertItac(jsonObject);
+                                    } else {
+                                        String date_MySQL_string = null;
+                                        try {
+                                            date_MySQL_string = jsonObject.getString(DBitacsController.date_time_modified).trim();
+                                            Date date_MySQL = null;
+                                            if (!TextUtils.isEmpty(date_MySQL_string)) {
+                                                date_MySQL = DBtareasController.getFechaHoraFromString(date_MySQL_string);
+                                            }
+                                            JSONObject jsonObject_Lite = new JSONObject(dBitacsController.get_one_itac_from_Database(
+                                                    jsonObject.getString(DBitacsController.principal_variable)));
+                                            String date_SQLite_string = jsonObject_Lite.getString(DBitacsController.date_time_modified).trim();
+                                            Date date_SQLite = null;
+//                                    Toast.makeText(Screen_Table_Team.this, date_SQLite_string, Toast.LENGTH_LONG).show();
+
+                                            if (!TextUtils.isEmpty(date_SQLite_string)) {
+                                                date_SQLite = DBtareasController.getFechaHoraFromString(date_SQLite_string);
+                                            }
+                                            if (date_SQLite == null) {
+                                                if (date_MySQL != null) {
+                                                    dBitacsController.updateItac(jsonObject, DBitacsController.principal_variable);
+                                                    Log.e("Updating", jsonObject.getString(DBitacsController.principal_variable));
+                                                } else {
+//                                                    Toast.makeText(this, "Fechas ambas nulas", Toast.LENGTH_LONG).show();
+                                                    Log.e("Fechas nulas", jsonObject.getString(DBitacsController.principal_variable));
+                                                }
+                                            } else if (date_MySQL == null) {
+                                                if (date_SQLite != null) {
+                                                    //aqui actualizar MySQL con la DB SQLite
+                                                    try {
+                                                        itacs_to_update.add(jsonObject_Lite.getString(DBitacsController.principal_variable));
+                                                    } catch (JSONException e) {
+                                                        e.printStackTrace();
+                                                        Toast.makeText(this, "No se pudo actualizar itac\n" + e.toString(), Toast.LENGTH_LONG).show();
+                                                    }
+
+                                                } else {
+                                                    Log.e("Fechas nulas", jsonObject.getString(DBitacsController.principal_variable));
+                                                }
+                                            } else { //si ninguna de la dos son nulas
+
+                                                if (date_MySQL.after(date_SQLite)) {//MySQL mas actualizada
+                                                    dBitacsController.updateItac(jsonObject, DBitacsController.principal_variable);
+                                                    Log.e("Updating", jsonObject.getString(DBitacsController.principal_variable));
+                                                } else if (date_MySQL.before(date_SQLite)) {//SQLite mas actualizada
+                                                    //aqui actualizar MySQL con la DB SQLite
+                                                    try {
+                                                        itacs_to_update.add(jsonObject_Lite.getString(DBitacsController.principal_variable));
+                                                    } catch (JSONException e) {
+                                                        e.printStackTrace();
+                                                        Toast.makeText(this, "No se pudo actualizar itac\n" + e.toString(), Toast.LENGTH_LONG).show();
+                                                    }
+                                                }
+                                            }
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            //Toast.makeText(Screen_Table_Team.this,e.toString(), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                    Toast.makeText(this, "Itacs descargadas correctamente", Toast.LENGTH_LONG).show();
+                    checkItacsMissinInServer(itacs_en_servidor);
+                    updateItacsInMySQL();
+                    itacs_en_servidor.clear();
+                }
+            }
+        }
+        else if(type == "update_itac"){
+            if (!checkConection()) {
+                Toast.makeText(this, "No hay conexion a Internet, no se pudo guardar itac. Intente de nuevo con conexion", Toast.LENGTH_LONG).show();
+            }else {
+                if (result == null) {
+                    Toast.makeText(this, "No se puede acceder al hosting", Toast.LENGTH_LONG).show();
+                }else{
+                    if (result.contains("not success")) {
+                        Toast.makeText(this, "No se pudo insertar correctamente, problemas con el servidor de la base de datos", Toast.LENGTH_SHORT).show();
+                    } else {
+                        String principal_variable = Screen_Login_Activity.itac_JSON.getString(DBitacsController.principal_variable);
+                        if(Screen_Login_Activity.checkStringVariable(principal_variable)) {
+                            updatePhotosItacInMySQL(); //updatePhotosInMySQL
+                        }
+                        return;
+                    }
+                }
+            }
+        }
+        else if(type == "upload_itac_image"){
+            if(result == null){
+                Toast.makeText(this,"No se puede acceder al servidor, no se subio imagen," +
+                        "Intente luego la sincronización", Toast.LENGTH_LONG).show();
+                updateItacsInMySQL();
+            }
+            else {
+                Toast.makeText(this, "Imagen subida", Toast.LENGTH_SHORT).show();
+                updatePhotosItacInMySQL();//---------------------------------------------------------------------------------------
+
+                //showRingDialog("Validando registro...");
+            }
+        }
         else if(type == "get_tareas_amount"){
             if(result == null){
                 hideRingDialog();
                 Toast.makeText(this, "No se pudo establecer conexión con el servidor", Toast.LENGTH_LONG).show();
             }
             else {
-                hideRingDialog();
                 Log.e("get_tareas_amount", result + "-----------------------------------------");
                 if(result.contains("not success get_tareas_amount")){
                     Toast.makeText(this,"Error al obtener la cantidad de tareas", Toast.LENGTH_LONG).show();
@@ -1697,7 +1967,6 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
 
                     checkTareasMissinInServer(tareas_en_servidor);
                     if (!tareas_to_update.isEmpty()) {
-                        showRingDialog("Actualizando tareas en Internet...");
                         updateTareaInMySQL();
                         return;
                     }
@@ -1708,9 +1977,10 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                 }
                 else {
                     boolean insertar_todas = false;
-                    if (team_or_personal_task_selection_screen_Activity.dBtareasController.checkForTableExists()) {
-                        lite_count = team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas();
-//                    Toast.makeText(Screen_Table_Team.this, "Existe", Toast.LENGTH_LONG).show();
+                    if (team_or_personal_task_selection_screen_Activity.
+                            dBtareasController.checkForTableExists()) {
+                        lite_count = team_or_personal_task_selection_screen_Activity.
+                                dBtareasController.countTableTareas();
 
                         if (lite_count < 1) {
                             insertar_todas = true;
@@ -1727,6 +1997,9 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
 
                                 if (Screen_Filter_Tareas.checkIfTaskIsDoneAndEraseLocal(jsonObject)) {
                                     continue; //si ya esta hecha en servidor paso y borro la local si existe
+                                }
+                                if (!Screen_Filter_Tareas.checkTeam(jsonObject)) {
+                                    continue; //si no es del equipo ignoro la tarea
                                 }
                                 jsonObject = Screen_Table_Team.buscarTelefonosEnObservaciones(jsonObject);
                                 if (insertar_todas) {
@@ -1746,7 +2019,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                                                 date_MySQL = team_or_personal_task_selection_screen_Activity.dBtareasController.getFechaHoraFromString(date_MySQL_string);
                                             }
                                             JSONObject jsonObject_Lite = new JSONObject(team_or_personal_task_selection_screen_Activity.dBtareasController.get_one_tarea_from_Database(
-                                                    jsonObject.getString(DBtareasController.principal_variable).trim()));
+                                                    jsonObject.getString(DBtareasController.principal_variable)));
                                             String date_SQLite_string = jsonObject_Lite.getString(DBtareasController.date_time_modified).trim();
                                             Date date_SQLite = null;
 //                                    Toast.makeText(Screen_Table_Team.this, date_SQLite_string, Toast.LENGTH_LONG).show();
@@ -1759,7 +2032,8 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                                                     team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea(jsonObject, DBtareasController.principal_variable);
                                                     Log.e("Updating", jsonObject.getString(DBtareasController.principal_variable));
                                                 } else {
-                                                    Toast.makeText(this, "Fechas ambas nulas", Toast.LENGTH_LONG).show();
+//                                                    Toast.makeText(this, "Fechas ambas nulas", Toast.LENGTH_LONG).show();
+                                                    Log.e("Fechas nulas", jsonObject.getString(DBtareasController.principal_variable));
                                                 }
                                             } else if (date_MySQL == null) {
                                                 if (date_SQLite != null) {
@@ -1772,7 +2046,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                                                     }
 
                                                 } else {
-                                                    Toast.makeText(this, "Fechas ambas nulas", Toast.LENGTH_LONG).show();
+                                                    Log.e("Fechas nulas", jsonObject.getString(DBtareasController.principal_variable));
                                                 }
                                             } else { //si ninguna de la dos son nulas
 
@@ -1805,19 +2079,10 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                     count_tareas_descargadas += PEDAZOS_A_DESCARGAR;
                     if(count_tareas_descargadas >= cantidad_total_de_tareas_en_servidor) {
                         hideRingDialog();
+                        showRingDialog("Actualizando en internet");
                         Toast.makeText(this, "Tareas descargadas correctamente", Toast.LENGTH_LONG).show();
                         checkTareasMissinInServer(tareas_en_servidor);
-                        if (!tareas_to_update.isEmpty()) {
-                            showRingDialog("Actualizando tareas en Internet...");
-                            updateTareaInMySQL();
-                            return;
-                        } else {
-                            setNotificationCitasObsoletas();
-//                            lookForGestors();
-                            textView_sync_team_or_personal_task_screen.setText("SINCRONIZAR");
-                            button_sync_team_or_personal_task_screen.setBackground(getResources().
-                                    getDrawable(R.drawable.sync_button));
-                        }
+                        updateTareaInMySQL();
                         tareas_en_servidor.clear();
                     }else{
                         descargarXTareas(PEDAZOS_A_DESCARGAR, count_tareas_descargadas);
@@ -1825,145 +2090,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                 }
             }
         }
-        else if(type == "get_tareas"){
-            if(result == null){
-                hideRingDialog();
-                Toast.makeText(this, "No se pudo establecer conexión con el servidor", Toast.LENGTH_LONG).show();
-            }
-            else {
-                Log.e("get_tareas", "-----------------------------------------");
-                ArrayList<String> tareas_en_servidor = new ArrayList<>();
-
-                if(result.isEmpty()) {
-                    Log.e("get_tareas", "Vacio");
-                    Toast.makeText(this,"Tabla de tareas en internet vacia", Toast.LENGTH_LONG).show();
-                    hideRingDialog();
-
-                    checkTareasMissinInServer(tareas_en_servidor);
-                    if (!tareas_to_update.isEmpty()) {
-                        showRingDialog("Actualizando tareas en Internet...");
-                        updateTareaInMySQL();
-                        return;
-                    }
-                }
-                else if(result.equals("Servidor caido, ahora no se puede sincronizar")){
-                    Toast.makeText(this, result, Toast.LENGTH_LONG).show();
-                    hideRingDialog();
-                }
-                else {
-                    boolean insertar_todas = false;
-                    if (team_or_personal_task_selection_screen_Activity.dBtareasController.checkForTableExists()) {
-                        lite_count = team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas();
-//                    Toast.makeText(Screen_Table_Team.this, "Existe", Toast.LENGTH_LONG).show();
-
-                        if (lite_count < 1) {
-                            insertar_todas = true;
-                            Toast.makeText(this, "Insertando todas las tareas", Toast.LENGTH_LONG).show();
-                        }
-                    }
-                    for (int n = 1; n < Screen_Table_Team.lista_tareas.size(); n++) { //el elemento n 0 esta vacio
-                        try {
-                            JSONArray jsonArray = new JSONArray(Screen_Table_Team.lista_tareas.get(n));
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                JSONObject jsonObject = jsonArray.getJSONObject(i);
-
-                                tareas_en_servidor.add(jsonObject.getString(DBtareasController.principal_variable));
-
-                                if (Screen_Filter_Tareas.checkIfTaskIsDoneAndEraseLocal(jsonObject)) {
-                                    continue; //si ya esta hecha en servidor paso y borro la local si existe
-                                }
-                                jsonObject = Screen_Table_Team.buscarTelefonosEnObservaciones(jsonObject);
-                                if (insertar_todas) {
-                                    team_or_personal_task_selection_screen_Activity.dBtareasController.insertTarea(jsonObject);
-                                } else if (lite_count != -10) {
-                                    if (!team_or_personal_task_selection_screen_Activity.dBtareasController.
-                                            checkIfTareaExists(jsonObject.getString(DBtareasController.principal_variable))) {
-//                                        Toast.makeText(this, "MySQL tarea: " + jsonObject.getString(DBtareasController.principal_variable) + " insertada", Toast.LENGTH_LONG).show();
-                                        team_or_personal_task_selection_screen_Activity.dBtareasController.insertTarea(jsonObject);
-                                    } else {
-                                        String date_MySQL_string = null;
-//                                    Log.e("Tareas existe: ", jsonObject.getString(DBtareasController.principal_variable));
-                                        try {
-                                            date_MySQL_string = jsonObject.getString(DBtareasController.date_time_modified).trim();
-                                            Date date_MySQL = null;
-                                            if (!TextUtils.isEmpty(date_MySQL_string)) {
-                                                date_MySQL = team_or_personal_task_selection_screen_Activity.dBtareasController.getFechaHoraFromString(date_MySQL_string);
-                                            }
-                                            JSONObject jsonObject_Lite = new JSONObject(team_or_personal_task_selection_screen_Activity.dBtareasController.get_one_tarea_from_Database(
-                                                    jsonObject.getString(DBtareasController.principal_variable).trim()));
-                                            String date_SQLite_string = jsonObject_Lite.getString(DBtareasController.date_time_modified).trim();
-                                            Date date_SQLite = null;
-//                                    Toast.makeText(Screen_Table_Team.this, date_SQLite_string, Toast.LENGTH_LONG).show();
-
-                                            if (!TextUtils.isEmpty(date_SQLite_string)) {
-                                                date_SQLite = team_or_personal_task_selection_screen_Activity.dBtareasController.getFechaHoraFromString(date_SQLite_string);
-                                            }
-                                            if (date_SQLite == null) {
-                                                if (date_MySQL != null) {
-                                                    team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea(jsonObject, DBtareasController.principal_variable);
-                                                    Log.e("Updating", jsonObject.getString(DBtareasController.principal_variable));
-                                                } else {
-                                                    Toast.makeText(this, "Fechas ambas nulas", Toast.LENGTH_LONG).show();
-                                                }
-                                            } else if (date_MySQL == null) {
-                                                if (date_SQLite != null) {
-                                                    //aqui actualizar MySQL con la DB SQLite
-                                                    try {
-                                                        tareas_to_update.add(jsonObject_Lite.getString(DBtareasController.principal_variable));
-                                                    } catch (JSONException e) {
-                                                        e.printStackTrace();
-                                                        Toast.makeText(this, "No se pudo actualizar tarea\n" + e.toString(), Toast.LENGTH_LONG).show();
-                                                    }
-
-                                                } else {
-                                                    Toast.makeText(this, "Fechas ambas nulas", Toast.LENGTH_LONG).show();
-                                                }
-                                            } else { //si ninguna de la dos son nulas
-
-                                                if (date_MySQL.after(date_SQLite)) {//MySQL mas actualizada
-                                                    team_or_personal_task_selection_screen_Activity.dBtareasController.updateTarea(jsonObject, DBtareasController.principal_variable);
-                                                    Log.e("Updating", jsonObject.getString(DBtareasController.principal_variable));
-                                                } else if (date_MySQL.before(date_SQLite)) {//SQLite mas actualizada
-                                                    //aqui actualizar MySQL con la DB SQLite
-                                                    try {
-                                                        tareas_to_update.add(jsonObject_Lite.getString(DBtareasController.principal_variable));
-                                                    } catch (JSONException e) {
-                                                        e.printStackTrace();
-                                                        Toast.makeText(this, "No se pudo actualizar tarea\n" + e.toString(), Toast.LENGTH_LONG).show();
-                                                    }
-
-                                                }
-                                            }
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-                                }
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            //Toast.makeText(Screen_Table_Team.this,e.toString(), Toast.LENGTH_LONG).show();
-                        }
-                    }
-
-                    hideRingDialog();
-                    Toast.makeText(this, "Tareas descargadas correctamente", Toast.LENGTH_LONG).show();
-                    checkTareasMissinInServer(tareas_en_servidor);
-                    if (!tareas_to_update.isEmpty()) {
-                        showRingDialog("Actualizando tareas en Internet...");
-                        updateTareaInMySQL();
-                        return;
-                    } else {
-                        setNotificationCitasObsoletas();
-//                        lookForGestors();
-                        textView_sync_team_or_personal_task_screen.setText("SINCRONIZAR");
-                        button_sync_team_or_personal_task_screen.setBackground(getResources().
-                                getDrawable(R.drawable.sync_button));
-                    }
-                }
-            }
-        }else if(type == "update_tarea"){
-            hideRingDialog();
+        else if(type == "update_tarea"){
             if (!checkConection()) {
                 Toast.makeText(this, "No hay conexion a Internet, no se pudo guardar tarea. Intente de nuevo con conexion", Toast.LENGTH_LONG).show();
             }else {
@@ -1978,8 +2105,6 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                         }
                         String principal_variable = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.principal_variable);
                         if(!principal_variable.isEmpty() && principal_variable!=null && !principal_variable.equals("null")) {
-                            showRingDialog("Actualizando fotos de tarea "
-                                    + principal_variable);
                             updatePhotosInMySQL();
                         }
                         return;
@@ -1987,7 +2112,6 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                 }
             }
         }else if(type == "update_contador"){
-            hideRingDialog();
             if (!checkConection()) {
                 Toast.makeText(this, "No hay conexion a Internet, no se pudo guardar contador. Intente de nuevo con conexion", Toast.LENGTH_LONG).show();
             }else {
@@ -2027,14 +2151,43 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                 }
                 String principal_variable = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.principal_variable);
                 if(!principal_variable.isEmpty() && principal_variable!=null && !principal_variable.equals("null")) {
-                    showRingDialog("Subiendo fotos de tarea "
-                            + principal_variable);
                     uploadPhotosInMySQL();
                 }
                 return;
             }
         }
     }
+
+    public void checkItacsMissinInServer(ArrayList<String> itacs_en_servidor){
+        if (dBitacsController != null) {
+            if (dBitacsController.databasefileExists(this)) {
+                if (dBitacsController.checkForTableExists()) {
+                    if (dBitacsController.countTableItacs() > 0) {
+                        ArrayList<String> itacs = new ArrayList<>();
+                        try {
+                            itacs = dBitacsController.get_all_itacs_from_Database();
+                            for (int i = 0; i < itacs.size(); i++) {
+                                JSONObject jsonObject = null;
+                                try {
+                                    jsonObject = new JSONObject(itacs.get(i));
+                                    if(!itacs_en_servidor.contains(jsonObject.getString(
+                                            DBitacsController.principal_variable))){//////OJO añadir status_itac.contains("TO_UPLOAD")) a la condicion para que no se suban si eliminados en servidor
+                                        itacs_to_update.add(jsonObject.getString(
+                                                DBitacsController.principal_variable));
+                                    }
+                                }catch (JSONException e){
+                                    Log.e("Excepcion", e.toString());
+                                }
+                            }
+                        }catch (JSONException e){
+                            Log.e("Excepcion", e.toString());
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     public void checkTareasMissinInServer(ArrayList<String> tareas_en_servidor){
         if (team_or_personal_task_selection_screen_Activity.dBtareasController != null) {
             if (team_or_personal_task_selection_screen_Activity.dBtareasController.databasefileExists(this)) {
@@ -2048,8 +2201,9 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                                 JSONObject jsonObject = null;
                                 try {
                                     jsonObject = new JSONObject(tareas.get(i));
+                                    String status = jsonObject.getString(DBtareasController.status_tarea).trim();
                                     if(!tareas_en_servidor.contains(jsonObject.getString(
-                                            DBtareasController.principal_variable))){
+                                            DBtareasController.principal_variable)) && status.contains("TO_UPLOAD")){///////OJO nueva sin probar revisar esto
                                         tareas_to_update.add(jsonObject.getString(
                                                 DBtareasController.principal_variable));
                                     }

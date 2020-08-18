@@ -345,12 +345,22 @@ public class MapsActivityTareas extends AppCompatActivity implements TaskComplet
                         if (!team_or_personal_task_selection_screen_Activity.checkGestor(jsonObject)) {
                             continue;
                         }
+
                         if (team_or_personal_task_selection_screen_Activity.from_team_or_personal
                                 ==team_or_personal_task_selection_screen_Activity.FROM_PERSONAL) {
                             if (!Screen_Filter_Tareas.checkIfOperarioTask(jsonObject)) {
                                 continue;
                             }
                         }
+
+                        else if (team_or_personal_task_selection_screen_Activity.from_team_or_personal
+                                ==team_or_personal_task_selection_screen_Activity.FROM_TEAM) {
+                            if (!Screen_Filter_Tareas.checkTeam(jsonObject)) {
+                                continue;
+                            }
+                        }
+//
+
 
                         if (!Screen_Filter_Tareas.checkIfIsDone(jsonObject)) {
                             String geolocalizacion = jsonObject.getString(DBtareasController.geolocalizacion).trim();

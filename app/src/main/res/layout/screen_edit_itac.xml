@@ -1,0 +1,864 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="40dp">
+
+        <include
+            android:id="@+id/my_toolbar"
+            layout="@layout/toolbar" />
+
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="1dp">
+
+        <TextView
+            android:id="@+id/textView_screen_exec_task"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Pantalla Editar Itac"
+            android:visibility="invisible" />
+    </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            >
+            <TextView
+                android:id="@+id/imageView_logo_screen_login"
+                android:layout_width="155dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_span="2"
+                android:text="EDITAR ITAC"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/linearLayout_gestor_screen_edit_itac"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_marginTop="20dp"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="GESTOR"
+                android:textColor="@color/colorBlueAppRuta"
+                android:textStyle="bold"
+                android:textSize="15dp"
+                android:gravity="center"
+                android:layout_gravity="center"
+                />
+
+            <Spinner
+                android:id="@+id/spinner_gestor_screen_edit_itac"
+                android:layout_width="280dp"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionNext"
+                android:layout_gravity="center"
+                android:gravity="center"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="C.EMPLAZAMIENTO"
+                android:textSize="15dp"
+                android:textColor="@color/colorBlueAppRuta"
+                android:textStyle="bold"
+                />
+            <ImageView
+                android:id="@+id/button_cod_emplazamiento_screen_edit_itac"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_edit_blue_24dp"
+                android:padding="10dp"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/textView_cod_emplazamiento_screen_edit_itac"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:text="..."
+                android:textSize="18dp"
+                android:padding="5dp"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dip"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="5dp">
+            <Button
+                android:id="@+id/button_geolocalization_screen_edit_itac"
+                android:layout_width="266dp"
+                android:layout_height="40dp"
+                android:text="GEOLOCALIZACIÓN"
+
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:background="@drawable/fondo_boton_azul"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dip"
+            android:gravity="center"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="DIRECCIÓN"
+                    android:textSize="15dp"
+                    android:textColor="@color/colorBlueAppRuta"
+                    android:textStyle="bold"
+                    />
+                <ImageView
+                    android:id="@+id/button_direccion_screen_edit_itac"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_edit_blue_24dp"
+                    android:padding="10dp"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/textView_direccion_screen_edit_itac"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:text="..."
+                    android:textSize="18dp"
+                    android:padding="5dp"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dip"
+            android:gravity="center"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="ACCESO"
+                    android:textSize="15dp"
+                    android:textColor="@color/colorBlueAppRuta"
+                    android:textStyle="bold"
+                    />
+                <ImageView
+                    android:id="@+id/button_acceso_screen_edit_itac"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_edit_blue_24dp"
+                    android:padding="10dp"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/textView_acceso_screen_edit_itac"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:text="..."
+                    android:textSize="18dp"
+                    android:padding="5dp"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dip"
+            android:gravity="center"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="DESCRIPCIÓN DENERAL "
+                    android:textSize="15dp"
+                    android:textColor="@color/colorBlueAppRuta"
+                    android:textStyle="bold"
+                    />
+                <ImageView
+                    android:id="@+id/button_descripcion_screen_edit_itac"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_edit_blue_24dp"
+                    android:padding="10dp"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/textView_descripcion_screen_edit_itac"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:text="..."
+                    android:textSize="18dp"
+                    android:padding="5dp"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp"
+            >
+            <TextView
+                android:layout_width="155dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_span="2"
+                android:text="CONTACTOS"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:padding="15dp"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TIPO DE CONTACTO"
+                android:textStyle="bold"
+                android:textSize="14dp"
+                android:textColor="@color/colorBlueAppRuta"
+                />
+            <Spinner
+                android:id="@+id/spinner_tipo_contacto_screen_edit_itac"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                >
+            </Spinner>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:id="@+id/layout_empresa_screen_edit_itac"
+            >
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                >
+                <AutoCompleteTextView
+                    android:id="@+id/editText_nombre_empresa_screen_edit_itac"
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Empresa"
+                    android:textSize="15dp"
+                    android:textAlignment="center"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                >
+                <AutoCompleteTextView
+                    android:id="@+id/editText_direccion_oficina_screen_edit_itac"
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Dirección de Oficina"
+                    android:textSize="15dp"
+                    android:textAlignment="center"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp"
+                >
+                <AutoCompleteTextView
+                    android:id="@+id/editText_nombre_responsable_screen_edit_itac"
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Responsable"
+                    android:textSize="15dp"
+                    android:textAlignment="center"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                >
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    >
+                    <AutoCompleteTextView
+                        android:id="@+id/editText_telefono_fijo_screen_edit_itac"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Teléfono Fijo"
+                        android:textSize="15dp"
+                        android:textAlignment="center"
+                        android:inputType="numberDecimal"
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="50dp"
+                    >
+                    <AutoCompleteTextView
+                        android:id="@+id/editText_telefono_movil_screen_edit_itac"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Teléfono Móvil"
+                        android:textSize="15dp"
+                        android:textAlignment="center"
+                        android:inputType="numberDecimal"
+                        />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp"
+                >
+
+                <AutoCompleteTextView
+                    android:id="@+id/editText_correo_screen_edit_itac"
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Correo"
+                    android:inputType="textEmailAddress"
+                    android:textAlignment="center"
+                    android:textSize="15dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:id="@+id/layout_presidente_screen_edit_itac"
+            >
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                >
+                <AutoCompleteTextView
+                    android:id="@+id/editText_nombre_presidente_screen_edit_itac"
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Presidente o Vecino Colaborador"
+                    android:textSize="15dp"
+                    android:textAlignment="center"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                >
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    >
+                    <AutoCompleteTextView
+                        android:id="@+id/editText_telefono_fijo_presidente_screen_edit_itac"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Teléfono Fijo"
+                        android:textSize="15dp"
+                        android:textAlignment="center"
+                        android:inputType="numberDecimal"
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="50dp"
+                    >
+                    <AutoCompleteTextView
+                        android:id="@+id/editText_telefono_movil_presidente_screen_edit_itac"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Teléfono Móvil"
+                        android:textSize="15dp"
+                        android:textAlignment="center"
+                        android:inputType="numberDecimal"
+                        />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp"
+                >
+
+                <AutoCompleteTextView
+                    android:id="@+id/editText_correo_presidente_screen_edit_itac"
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Correo"
+                    android:inputType="textEmailAddress"
+                    android:textAlignment="center"
+                    android:textSize="15dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:id="@+id/layout_encargado_screen_edit_itac"
+            >
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                >
+                <AutoCompleteTextView
+                    android:id="@+id/editText_nombre_encargado_screen_edit_itac"
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Encargado o Conserje"
+                    android:textSize="15dp"
+                    android:textAlignment="center"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                >
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    >
+                    <AutoCompleteTextView
+                        android:id="@+id/editText_telefono_fijo_encargado_screen_edit_itac"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Teléfono Fijo"
+                        android:textSize="15dp"
+                        android:textAlignment="center"
+                        android:inputType="numberDecimal"
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="50dp"
+                    >
+                    <AutoCompleteTextView
+                        android:id="@+id/editText_telefono_movil_encargado_screen_edit_itac"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Teléfono Móvil"
+                        android:textSize="15dp"
+                        android:textAlignment="center"
+                        android:inputType="numberDecimal"
+                        />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp"
+                >
+
+                <AutoCompleteTextView
+                    android:id="@+id/editText_correo_encargado_screen_edit_itac"
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Correo"
+                    android:inputType="textEmailAddress"
+                    android:textAlignment="center"
+                    android:textSize="15dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/button_photo_1_screen_edit_itac"
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:text="FOTO 1"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:background="@drawable/fondo_boton_azul"
+                />
+            <ImageView
+                android:id="@+id/imageView_photo_1_screen_edit_itac"
+                android:layout_width="match_parent"
+                android:layout_height="500dp"
+                android:src="@drawable/screen_unity_counter_imagen"
+                android:visibility="gone" />
+            <EditText
+                android:id="@+id/editText_descripcion_photo_1_screen_edit_itac"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Descripción Foto 1"
+                android:visibility="gone"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/button_photo_2_screen_edit_itac"
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:text="FOTO 2"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:background="@drawable/fondo_boton_azul"
+                />
+            <ImageView
+                android:id="@+id/imageView_photo_2_screen_edit_itac"
+                android:layout_width="match_parent"
+                android:layout_height="500dp"
+                android:src="@drawable/screen_unity_counter_imagen"
+                android:visibility="gone" />
+            <EditText
+                android:id="@+id/editText_descripcion_photo_2_screen_edit_itac"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Descripción Foto 2"
+                android:visibility="gone"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/button_photo_3_screen_edit_itac"
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:text="FOTO 3"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:background="@drawable/fondo_boton_azul"
+                />
+            <ImageView
+                android:id="@+id/imageView_photo_3_screen_edit_itac"
+                android:layout_width="match_parent"
+                android:layout_height="500dp"
+                android:src="@drawable/screen_unity_counter_imagen"
+                android:visibility="gone" />
+            <EditText
+                android:id="@+id/editText_descripcion_photo_3_screen_edit_itac"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Descripción Foto 3"
+                android:visibility="gone"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/button_photo_4_screen_edit_itac"
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:text="FOTO 4"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:background="@drawable/fondo_boton_azul"
+                />
+            <ImageView
+                android:id="@+id/imageView_photo_4_screen_edit_itac"
+                android:layout_width="match_parent"
+                android:layout_height="500dp"
+                android:src="@drawable/screen_unity_counter_imagen"
+                android:visibility="gone" />
+            <EditText
+                android:id="@+id/editText_descripcion_photo_4_screen_edit_itac"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Descripción Foto 4"
+                android:visibility="gone"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/button_photo_5_screen_edit_itac"
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:text="FOTO 5"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:background="@drawable/fondo_boton_azul"
+                />
+            <ImageView
+                android:id="@+id/imageView_photo_5_screen_edit_itac"
+                android:layout_width="match_parent"
+                android:layout_height="500dp"
+                android:src="@drawable/screen_unity_counter_imagen"
+                android:visibility="gone" />
+            <EditText
+                android:id="@+id/editText_descripcion_photo_5_screen_edit_itac"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Descripción Foto 5"
+                android:visibility="gone"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/button_photo_6_screen_edit_itac"
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:text="FOTO 6"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:background="@drawable/fondo_boton_azul"
+                />
+            <ImageView
+                android:id="@+id/imageView_photo_6_screen_edit_itac"
+                android:layout_width="match_parent"
+                android:layout_height="500dp"
+                android:src="@drawable/screen_unity_counter_imagen"
+                android:visibility="gone" />
+            <EditText
+                android:id="@+id/editText_descripcion_photo_6_screen_edit_itac"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Descripción Foto 6"
+                android:visibility="gone"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/button_photo_7_screen_edit_itac"
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:text="FOTO 7"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:background="@drawable/fondo_boton_azul"
+                />
+            <ImageView
+                android:id="@+id/imageView_photo_7_screen_edit_itac"
+                android:layout_width="match_parent"
+                android:layout_height="500dp"
+                android:src="@drawable/screen_unity_counter_imagen"
+                android:visibility="gone" />
+            <EditText
+                android:id="@+id/editText_descripcion_photo_7_screen_edit_itac"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Descripción Foto 7"
+                android:visibility="gone"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/button_photo_8_screen_edit_itac"
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:text="FOTO 8"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:background="@drawable/fondo_boton_azul"
+                />
+            <ImageView
+                android:id="@+id/imageView_photo_8_screen_edit_itac"
+                android:layout_width="match_parent"
+                android:layout_height="500dp"
+                android:src="@drawable/screen_unity_counter_imagen"
+                android:visibility="gone" />
+            <EditText
+                android:id="@+id/editText_descripcion_photo_8_screen_edit_itac"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Descripción Foto 8"
+                android:visibility="gone"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dip"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="5dp">
+            <Button
+                android:id="@+id/button_guardar_datos_screen_edit_itac"
+                android:layout_width="266dp"
+                android:layout_height="40dp"
+                android:text="GUARDAR DATOS"
+
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:background="@drawable/fondo_boton_azul"
+                />
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

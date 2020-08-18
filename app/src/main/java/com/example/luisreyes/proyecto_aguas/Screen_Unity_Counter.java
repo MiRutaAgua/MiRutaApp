@@ -31,6 +31,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -73,6 +74,7 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
             ubicacion,
             calibre,
             textView_numero_abonado_screen_unity_counter;
+    private LinearLayout linearLayout_unity_counter;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -96,6 +98,7 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
 
         button_geolocalization=(Button) findViewById(R.id.button_geolocalization_screen_unity_counter);
 
+        linearLayout_unity_counter= (LinearLayout) findViewById(R.id.linearLayout_unity_counter);
         imageView_menu_screen_unity_counter = (ImageView) findViewById(R.id.imageView_menu_screen_unity_counter);
         imageView_atras_screen_unity_counter = (ImageView) findViewById(R.id.imageView_atras_screen_unity_counter);
         imagen_contador = (ImageView) findViewById(R.id.imageView_screen_unity_counter_imagen);
@@ -428,7 +431,9 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
             }
         });
 
-        if (checkConection()){
+        buscarFotosOffline();
+
+        if (checkConection()){ //buscar fotos online
             try {
                 foto =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_despues_instalacion);
                 //Toast.makeText(this, foto_instalacion, Toast.LENGTH_LONG).show();
@@ -468,8 +473,6 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        }else{
-            buscarFotosOffline();
         }
     }
 
@@ -497,7 +500,8 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
                     if(!Screen_Login_Activity.checkStringVariable(gestor)){
                         gestor = "Sin_Gestor";
                     }
-                    File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" + Screen_Login_Activity.current_empresa + "/fotos_tareas/"+ gestor + "/" +numero_abonado);
+                    File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" +
+                            Screen_Login_Activity.current_empresa + "/fotos_tareas/"+ gestor + "/" +numero_abonado);
                     if (!storageDir.exists()) {
                         storageDir.mkdirs();
                     }
@@ -505,9 +509,12 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
                     for (int i = 0; i < files.length; i++) {
                         if (files[i].getName().contains(foto)) {
                             //Toast.makeText(this, storageDir +"/" + files[i].getName(), Toast.LENGTH_LONG).show();
+                            Bitmap bitmap = getPhotoUserLocal(storageDir + "/" + files[i].getName());
                             Log.e("Imagen encontrada", storageDir.getAbsolutePath());
                             imagen_contador.setVisibility(View.VISIBLE);
-                            imagen_contador.setImageBitmap(getPhotoUserLocal(storageDir + "/" + files[i].getName()));
+                            imagen_contador.setImageBitmap(bitmap);
+                            imagen_contador.getLayoutParams().height = bitmap.getHeight() + 300;
+                            imagen_contador.requestLayout();
                         }
                     }
                 }
@@ -600,12 +607,10 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
             Log.e("download_image", result);
             if (result == null) {
                 Toast.makeText(this, "No se puede acceder al servidor, no se obtuvo foto instalacion, buscando fotos en el teléfono", Toast.LENGTH_LONG).show();
-                buscarFotosOffline();
             }
             else {
                 if(result.contains("not success")){
                     Toast.makeText(this, "No hay foto de instalación en servidor\n"+ result+ " buscando fotos en el teléfono", Toast.LENGTH_LONG).show();
-                    buscarFotosOffline();
                 }else {
                     Log.e("Obtenida", "Foto instalación");
                     //Toast.makeText(Screen_Unity_Counter.this, "Foto de obtenida", Toast.LENGTH_SHORT).show();
@@ -614,9 +619,8 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
                     if (bitmap != null) {
                         imagen_contador.setVisibility(View.VISIBLE);
                         imagen_contador.setImageBitmap(bitmap);
+                        imagen_contador.getLayoutParams().height = bitmap.getHeight() + 300;
                         saveBitmapImage(bitmap, foto);
-                    }else{
-                        buscarFotosOffline();
                     }
                 }
             }

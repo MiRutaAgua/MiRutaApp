@@ -275,6 +275,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                 bitmap_antes_no_nulo = true;
                 foto_instalacion_screen_exec_task.setVisibility(View.VISIBLE);
                 foto_instalacion_screen_exec_task.setImageBitmap(foto_antes_intalacion_bitmap);
+                foto_instalacion_screen_exec_task.getLayoutParams().height = foto_antes_intalacion_bitmap.getHeight() + 300;
             }
         }
         if(!Screen_Execute_Task.mCurrentPhotoPath_foto_serie.isEmpty()) {
@@ -282,6 +283,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
             if (foto_numero_serie_bitmap != null) {
                 foto_numero_de_serie_screen_exec_task.setVisibility(View.VISIBLE);
                 foto_numero_de_serie_screen_exec_task.setImageBitmap(foto_numero_serie_bitmap);
+                foto_numero_de_serie_screen_exec_task.getLayoutParams().height = foto_numero_serie_bitmap.getHeight() + 300;
             }
         }
 
@@ -291,6 +293,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                 bitmap_lectura_no_nulo = true;
                 imageView_foto_lectura_screen_validate.setVisibility(View.VISIBLE);
                 imageView_foto_lectura_screen_validate.setImageBitmap(foto_lectura_bitmap);
+                imageView_foto_lectura_screen_validate.getLayoutParams().height = foto_lectura_bitmap.getHeight() + 300;
             }
         }
 
@@ -300,6 +303,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                 bitmap_despues_no_nulo = true;
                 foto_final_instalacion_screen_exec_task.setVisibility(View.VISIBLE);
                 foto_final_instalacion_screen_exec_task.setImageBitmap(foto_despues_intalacion_bitmap);
+                foto_final_instalacion_screen_exec_task.getLayoutParams().height = foto_despues_intalacion_bitmap.getHeight() + 300;
             }
         }
         try {
@@ -315,6 +319,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                 if (firma_bitmap != null) {
                     bitmap_firma_no_nulo = true;
                     imageButton_firma_cliente_screen_validate.setImageBitmap(firma_bitmap);
+                    imageButton_firma_cliente_screen_validate.getLayoutParams().height = firma_bitmap.getHeight() + 300;
                 }
             }
         } catch (JSONException e) {
@@ -1040,6 +1045,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                     bitmap_firma_cliente = getPhotoUserLocal(firma);
                     if(bitmap_firma_cliente!=null) {
                         imageButton_firma_cliente_screen_validate.setImageBitmap(bitmap_firma_cliente);
+                        imageButton_firma_cliente_screen_validate.getLayoutParams().height = bitmap_firma_cliente.getHeight() + 300;
 //                        try {
 //                            String nombre_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.nombre_cliente).trim().replace(" ", "_");
 //                            Screen_Login_Activity.tarea_JSON.put(DBtareasController.firma_cliente, nombre_abonado + "_firma.jpg");

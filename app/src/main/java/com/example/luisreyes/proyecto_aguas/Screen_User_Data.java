@@ -34,6 +34,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
@@ -81,6 +82,12 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
 //        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
 //        myToolbar.setBackgroundColor(Color.TRANSPARENT);
 //        setSupportActionBar(myToolbar);
+        String empresa = Screen_Login_Activity.current_empresa;
+        if(team_or_personal_task_selection_screen_Activity.dBequipo_operariosController == null) {
+            team_or_personal_task_selection_screen_Activity.dBequipo_operariosController =
+                    new DBequipo_operariosController(this, empresa.toLowerCase());
+            Log.e("Creando tabla itacs", "----------------------------------------------------------");
+        }
 
         textView_empresa_screen_user_data= (TextView) findViewById(R.id.textView_empresa_screen_user_data);
         imageView_atras_screen_user_data= (ImageView) findViewById(R.id.imageView_atras_screen_user_data);
@@ -96,31 +103,8 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
             try {
                 JSONObject json_usuario = new JSONObject(json_usuario_string);
                 Screen_Login_Activity.operario_JSON = json_usuario;
-                //Bitmap bitmap = Screen_Validate.getImageFromString(foto_usuario);
-                //circlImageView_photo.setImageBitmap(bitmap);/////////////////////**************************************************************************************
                 fillJsonUsuario(json_usuario);
-
-                if (checkConection()) {
-                    showRingDialog("Cargando información de operario...");
-                    String empresa = Screen_Login_Activity.current_empresa;
-                    String type_script = "download_user_image";
-                    BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_User_Data.this);
-                    backgroundWorker.execute(type_script, usuario, empresa);
-                } else {
-                    if (Screen_Login_Activity.dBoperariosController.databasefileExists(this) && Screen_Login_Activity.dBoperariosController.checkForTableExists()) {
-                        //Toast.makeText(Screen_User_Data.this,"Existe y no esta vacia", Toast.LENGTH_LONG).show();
-                        String user = null;
-                        try {
-                            user = Screen_Login_Activity.dBoperariosController.get_one_operario_from_Database(usuario);
-                            if(user!=null && !TextUtils.isEmpty(user)){
-                                JSONObject jsonObject = new JSONObject(user);
-                                loadLocalFoto(jsonObject);
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
+                getEquiposDeServidor();
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -195,6 +179,91 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
             }
         });
     }
+
+    public void lookCurrentTeam(){
+        if (team_or_personal_task_selection_screen_Activity.dBequipo_operariosController != null) {
+            if (team_or_personal_task_selection_screen_Activity.dBequipo_operariosController.
+                    databasefileExists(this)) {
+                if (team_or_personal_task_selection_screen_Activity.dBequipo_operariosController.
+                        checkForTableExists()) {
+                    if (team_or_personal_task_selection_screen_Activity.dBequipo_operariosController.
+                            countTableEquipo_operarios() > 0) {
+                        ArrayList<String> equipo = new ArrayList<>();
+                        try {
+                            equipo = team_or_personal_task_selection_screen_Activity.
+                                    dBequipo_operariosController.
+                                    get_all_equipo_operarios_from_Database();
+                            for (int i = 0; i < equipo.size(); i++) {
+                                JSONObject jsonObject = null;
+                                try {
+                                    jsonObject = new JSONObject(equipo.get(i));
+                                    String operarios_integrantes = "";
+                                    try {
+                                        operarios_integrantes = jsonObject.getString(
+                                                DBequipo_operariosController.operarios).trim();
+                                        if (Screen_Login_Activity.checkStringVariable(operarios_integrantes)) {
+                                            if (operarios_integrantes.contains(
+                                                    Screen_Login_Activity.operario_JSON.getString(
+                                                            DBoperariosController.usuario))) {
+                                                Screen_Login_Activity.equipo_JSON = jsonObject;
+                                                break;
+                                            }
+                                        }
+                                    } catch (JSONException e) {
+                                        Log.e("Excepcion gestor", "No se pudo obtener gestor\n" + e.toString());
+                                        e.printStackTrace();
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        }
+    }
+    public void lookPhotoInServer(){
+        if (checkConection()) {
+            showRingDialog("Cargando información de operario...");
+            String empresa = Screen_Login_Activity.current_empresa;
+            String type_script = "download_user_image";
+            BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_User_Data.this);
+            backgroundWorker.execute(type_script, usuario, empresa);
+        } else {
+            if (Screen_Login_Activity.dBoperariosController.databasefileExists(this)
+                    && Screen_Login_Activity.dBoperariosController.checkForTableExists()) {
+                //Toast.makeText(Screen_User_Data.this,"Existe y no esta vacia", Toast.LENGTH_LONG).show();
+                String user = null;
+                try {
+                    user = Screen_Login_Activity.dBoperariosController.get_one_operario_from_Database(usuario);
+                    if(user!=null && !TextUtils.isEmpty(user)){
+                        JSONObject jsonObject = new JSONObject(user);
+                        loadLocalFoto(jsonObject);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+    public void getEquiposDeServidor() throws JSONException {
+        String empresa = Screen_Login_Activity.current_empresa;
+        if(checkConection()){
+            Log.e("getEquiposDeServidor", "Hay conexion");
+            showRingDialog("Descargando equipos...");
+            Screen_Login_Activity.isOnline = true;
+            String type_script = "get_equipo_operarios";
+            BackgroundWorker backgroundWorker = new BackgroundWorker(this);
+            backgroundWorker.execute(type_script, empresa.toLowerCase());
+        }else{
+            Toast.makeText(this, "No hay conexion a Internet", Toast.LENGTH_LONG).show();
+            lookCurrentTeam();
+            lookPhotoInServer();
+        }
+    }
     public void loadLocalFoto(JSONObject jsonObject){
         String user_foto = null;
         try {
@@ -251,6 +320,7 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
         }
         return null;
     }
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -279,16 +349,73 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onTaskComplete(String type, String result) throws JSONException {
+        int lite_count_equipo_operarios = -1;
+        if(type == "get_equipo_operarios"){
+            if (result == null) {
+                Toast.makeText(this, "No se pudo establecer conexión con el servidor", Toast.LENGTH_LONG).show();
+            } else if (result.equals("Servidor caido, ahora no se puede sincronizar")) {
+                Toast.makeText(this, result, Toast.LENGTH_LONG).show();
+            } else {
+                Log.e("get_equipo_operarios", "-----------------------------------------");
+                if (result.isEmpty()) {
+                    Log.e("get_equipo_operarios", "Vacio");
+                    Toast.makeText(this, "Tabla de equipo_operarios en internet vacia", Toast.LENGTH_LONG).show();
 
-        if(type == "login"){
-            if(result == null){
-                Toast.makeText(Screen_User_Data.this,"No hay conexion a Internet, no se pudo loguear", Toast.LENGTH_LONG).show();
+                } else {
+                    boolean insertar_todos = false;
+//                    Log.e("get_equipo_operarios res", result);
+                    if (team_or_personal_task_selection_screen_Activity.dBequipo_operariosController.checkForTableExists()) {
+                        lite_count_equipo_operarios = team_or_personal_task_selection_screen_Activity.
+                                dBequipo_operariosController.countTableEquipo_operarios();
+                        Log.e("get_equipo_operarios", "Existe");
+                        Log.e("Aqui", "----------------------------------------------------------");
+                        Log.e("Gestores", String.valueOf(lite_count_equipo_operarios));
+
+                        if (lite_count_equipo_operarios < 1) {
+                            insertar_todos = true;
+                            Toast.makeText(this, "Insertando todas las equipo_operarios", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    for (int n = 1; n < Screen_Table_Team.lista_equipo_operarios_servidor.size(); n++) { //el elemento n 0 esta vacio
+                        try {
+                            JSONArray jsonArray = new JSONArray(Screen_Table_Team.lista_equipo_operarios_servidor.get(n));
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+//                                if (Screen_Filter_Tareas.checkIfCounterIsUsedAndEraseLocal(jsonObject)) {
+//                                    continue; //si ya esta instalado en servidor paso y borro el local si existe
+//                                }
+                                if (insertar_todos) {
+                                    team_or_personal_task_selection_screen_Activity.dBequipo_operariosController
+                                            .insertEquipo_operario(jsonObject);
+                                } else if (lite_count_equipo_operarios != -10) {
+                                    if (!team_or_personal_task_selection_screen_Activity.dBequipo_operariosController.
+                                            checkIfEquipo_operarioExists(jsonObject.getString(DBequipo_operariosController.principal_variable))) {
+                                        Toast.makeText(this, "MySQL equipo_operario: " +
+                                                jsonObject.getString(DBequipo_operariosController.principal_variable) +
+                                                " insertado", Toast.LENGTH_LONG).show();
+                                        team_or_personal_task_selection_screen_Activity.
+                                                dBequipo_operariosController.insertEquipo_operario(jsonObject);
+                                    }
+                                    else{
+                                        team_or_personal_task_selection_screen_Activity.
+                                                dBequipo_operariosController.updateEquipo_operario(jsonObject);
+                                    }
+                                }
+                            }
+                        }catch (JSONException e){
+                            Log.e("JSONException", e.toString());
+                        }
+                    }
+                }
             }
-            else {
-                Toast.makeText(Screen_User_Data.this, "Login Success ", Toast.LENGTH_SHORT).show();
-            }
+            hideRingDialog();
+            lookCurrentTeam();
+            lookPhotoInServer();
+
         }else if(type == "change_foto"){
             if(result == null){
                 Toast.makeText(Screen_User_Data.this,"No se pudo acceder al servidor, no se pudo cambiar foto", Toast.LENGTH_LONG).show();
@@ -369,8 +496,9 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private String saveBitmapImage(Bitmap bitmap, String file_name){
-        bitmap = Bitmap.createScaledBitmap(bitmap, 960, 1280, true);
+        bitmap = Screen_Login_Activity.scaleBitmap(bitmap);
         File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" + Screen_Login_Activity.current_empresa + "/fotos_operarios");
         if (!myDir.exists()) {
             myDir.mkdirs();

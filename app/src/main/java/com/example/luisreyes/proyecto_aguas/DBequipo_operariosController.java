@@ -16,57 +16,44 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
- * Created by luis.reyes on 06/12/2019.
+ * Created by luis.reyes on 7/31/2020.
  */
 
-public class DBcontadoresController extends SQLiteOpenHelper {
-    public static String database_name = "Database_Contadores"; ///OJO cuando se cree una Tabla nueva hay que ponerla en una DB diferente
+public class DBequipo_operariosController extends SQLiteOpenHelper {
+
+    public static String database_name = "Database_Equipo_operarios"; ///OJO cuando se cree una Tabla nueva hay que ponerla en una DB diferente
     public static String database_path;
-    JSONObject jsonContadorType = new JSONObject();
-    public static final String table = "contadores";
-    public static String table_name = "contadores";
+    JSONObject jsonEquipo_operarioType = new JSONObject();
+    public static final String table = "equipo_operarios";
+    public static String table_name = "equipo_operarios";
 
     public static final String id = "id";
-    public static final String serie_contador = "numero_serie_contador";
-    public static final String anno_o_prefijo = "anno_o_prefijo";
-    public static final String calibre_contador = "calibre";
-    public static final String longitud  = "longitud";
-    public static final String marca = "marca";
-    public static final String codigo_marca = "codigo_marca";
-    public static final String modelo = "modelo";
-    public static final String clase = "clase";
-    public static final String codigo_clase  = "codigo_clase";
-    public static final String tipo_fluido = "tipo_fluido";
-    public static final String tipo_radio = "tipo_radio";
-    public static final String ruedas = "ruedas";
-    public static final String lectura_inicial = "lectura_inicial";
-    public static final String status_contador = "status_contador";
-    public static final String encargado_contador = "encargado";
-    public static final String date_time_modified_contador = "date_time_modified";
+    public static final String codigo_equipo_operario = "codigo_equipo_operario";
+    public static final String equipo_operario = "equipo_operario";
+    public static final String telefono = "telefono";
+    public static final String nombre_encargado = "nombre_encargado";
+    public static final String cantidad_tareas = "cantidad_tareas";
+    public static final String operarios = "operarios";
+    public static final String descripcion = "descripcion";
+    public static final String date_time_modified_equipo_operario  = "date_time_modified";
+
+    public static final String principal_variable  = codigo_equipo_operario;
     private String empresa = "";
 
-    public DBcontadoresController(Context applicationContext, String empresa){
+    public DBequipo_operariosController(Context applicationContext, String empresa){
         super(applicationContext, database_name + empresa + ".db", null, MainActivity.DB_VERSION);
         this.empresa = empresa;
         table_name = table + "_" + empresa.toLowerCase();
         try {
-            jsonContadorType.put(id, 1);
-            jsonContadorType.put(serie_contador, "");
-            jsonContadorType.put(anno_o_prefijo, "");
-            jsonContadorType.put(calibre_contador, "");
-            jsonContadorType.put(longitud, "");
-            jsonContadorType.put(marca, "");
-            jsonContadorType.put(codigo_marca, "");
-            jsonContadorType.put(modelo, "");
-            jsonContadorType.put(clase, "");
-            jsonContadorType.put(codigo_clase, "");
-            jsonContadorType.put(tipo_fluido, "");
-            jsonContadorType.put(tipo_radio, "");
-            jsonContadorType.put(ruedas, "");
-            jsonContadorType.put(lectura_inicial, "");
-            jsonContadorType.put(status_contador, "");
-            jsonContadorType.put(encargado_contador, "");
-            jsonContadorType.put(date_time_modified_contador, "");
+            jsonEquipo_operarioType.put(id, 1);
+            jsonEquipo_operarioType.put(codigo_equipo_operario, "");
+            jsonEquipo_operarioType.put(equipo_operario, "");
+            jsonEquipo_operarioType.put(telefono, "");
+            jsonEquipo_operarioType.put(nombre_encargado, "");
+            jsonEquipo_operarioType.put(cantidad_tareas, "");
+            jsonEquipo_operarioType.put(operarios, "");
+            jsonEquipo_operarioType.put(descripcion, "");
+            jsonEquipo_operarioType.put(date_time_modified_equipo_operario, "");
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -78,26 +65,18 @@ public class DBcontadoresController extends SQLiteOpenHelper {
         if(sqLiteDatabase != null) {
             try {
                 sqLiteDatabase.execSQL("Create table if not exists " + table_name + " (id integer primary key autoincrement, " +
-                        serie_contador+"  TEXT, " +
-                        anno_o_prefijo+"  TEXT, " +
-                        calibre_contador+"  TEXT, " +
-                        longitud+"  INTEGER, " +
-                        marca+"  TEXT, " +
-                        codigo_marca+"  TEXT, " +
-                        modelo+"  TEXT, " +
-                        clase+"  TEXT, " +
-                        codigo_clase+"  TEXT, " +
-                        tipo_fluido+"  TEXT, " +
-                        tipo_radio+"  TEXT, " +
-                        ruedas+"  TEXT, " +
-                        lectura_inicial+"  TEXT, " +
-                        status_contador+"  TEXT, " +
-                        encargado_contador+"  TEXT, " +
-                        date_time_modified_contador+"  TEXT" +
+                        codigo_equipo_operario+"  TEXT, " +
+                        equipo_operario+"  TEXT, " +
+                        telefono+"  TEXT, " +
+                        nombre_encargado+"  TEXT, " +
+                        cantidad_tareas+"  TEXT, " +
+                        operarios+"  TEXT, " +
+                        descripcion+"  TEXT, " +
+                        date_time_modified_equipo_operario+"  TEXT" +
                         ")");
             } catch (SQLException e) {
                 e.printStackTrace();
-                Log.e("onCreate contadores", "Error"+e.toString());
+                Log.e("onCreate equipo", "Error"+e.toString());
             }
         }
     }
@@ -109,7 +88,7 @@ public class DBcontadoresController extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
-    public void insertContador(JSONObject json) throws JSONException {
+    public void insertEquipo_operario(JSONObject json) throws JSONException {
         SQLiteDatabase database = this.getWritableDatabase();
 
         if(database == null){
@@ -128,7 +107,7 @@ public class DBcontadoresController extends SQLiteOpenHelper {
         database.insert(table_name, null, contentValues);
     }
 
-    public String deleteContador(JSONObject json, String key) throws JSONException {
+    public String deleteEquipo_operario(JSONObject json, String key) throws JSONException {
         String key_value = json.getString(key);
         SQLiteDatabase database = this.getWritableDatabase();
         if(database == null){
@@ -138,7 +117,7 @@ public class DBcontadoresController extends SQLiteOpenHelper {
         return key_value;
     }
 
-    public String deleteContador(JSONObject json) throws JSONException {
+    public String deleteEquipo_operario(JSONObject json) throws JSONException {
         String id = json.getString(this.id);
         SQLiteDatabase database = this.getWritableDatabase();
         if(database == null){
@@ -148,7 +127,7 @@ public class DBcontadoresController extends SQLiteOpenHelper {
         return id;
     }
 
-    public String get_one_contador_from_Database(String key, String value) throws JSONException {
+    public String get_one_equipo_operario_from_Database(String key, String value) throws JSONException {
         ArrayList<String> keys = new ArrayList<String>();
         SQLiteDatabase database = this.getReadableDatabase();
         if(database == null){
@@ -158,15 +137,15 @@ public class DBcontadoresController extends SQLiteOpenHelper {
 
         try {
             if(c.moveToFirst()) {
-                Iterator<String> keys_it = jsonContadorType.keys();
+                Iterator<String> keys_it = jsonEquipo_operarioType.keys();
                 while (keys_it.hasNext()) {
                     keys.add(keys_it.next());
                 }
 
                 for (int n = 0; n < keys.size(); n++) {
-                    jsonContadorType.put(keys.get(n), c.getString(n));
+                    jsonEquipo_operarioType.put(keys.get(n), c.getString(n));
                 }
-                return jsonContadorType.toString();
+                return jsonEquipo_operarioType.toString();
             }else{
                 return "null";
             }
@@ -176,7 +155,7 @@ public class DBcontadoresController extends SQLiteOpenHelper {
         }
     }
 
-    public String get_one_contador_from_Database(String key, int value) throws JSONException {
+    public String get_one_equipo_operario_from_Database(String key, int value) throws JSONException {
 
         ArrayList<String> keys = new ArrayList<String>();
 
@@ -188,15 +167,15 @@ public class DBcontadoresController extends SQLiteOpenHelper {
 
         try {
             if(c.moveToFirst()) {
-                Iterator<String> keys_it = jsonContadorType.keys();
+                Iterator<String> keys_it = jsonEquipo_operarioType.keys();
                 while (keys_it.hasNext()) {
                     keys.add(keys_it.next());
                 }
 
                 for (int n = 0; n < keys.size(); n++) {
-                    jsonContadorType.put(keys.get(n), c.getString(n));
+                    jsonEquipo_operarioType.put(keys.get(n), c.getString(n));
                 }
-                return jsonContadorType.toString();
+                return jsonEquipo_operarioType.toString();
             }else{
                 return "null";
             }
@@ -206,7 +185,7 @@ public class DBcontadoresController extends SQLiteOpenHelper {
         }
     }
 
-    public String get_one_contador_from_Database(String serie) throws JSONException {
+    public String get_one_equipo_operario_from_Database(String principal_var) throws JSONException {
 
         ArrayList<String> keys = new ArrayList<String>();
 
@@ -214,21 +193,21 @@ public class DBcontadoresController extends SQLiteOpenHelper {
         if(database == null){
             return "null";
         }
-        Cursor c = database.rawQuery("SELECT * FROM "+table_name+" WHERE "+serie_contador+" LIKE \""+ serie +"\";", null);
+        Cursor c = database.rawQuery("SELECT * FROM "+table_name+" WHERE "+principal_variable+" LIKE \""+ principal_var +"\";", null);
 
         try {
             if(c.moveToFirst()) {
-                Iterator<String> keys_it = jsonContadorType.keys();
+                Iterator<String> keys_it = jsonEquipo_operarioType.keys();
                 while (keys_it.hasNext()) {
                     keys.add(keys_it.next());
                 }
 
                 for (int n = 0; n < keys.size(); n++) {
-                    jsonContadorType.put(keys.get(n), c.getString(n));
+                    jsonEquipo_operarioType.put(keys.get(n), c.getString(n));
                 }
                 c.close();
 //                Log.e("Obteniendo JSON by NI:",jsonTareaType.toString());
-                return jsonContadorType.toString();
+                return jsonEquipo_operarioType.toString();
             }else{
                 c.close();
                 return "null";
@@ -240,7 +219,7 @@ public class DBcontadoresController extends SQLiteOpenHelper {
         }
     }
 
-    public String get_one_contador_from_Database(int id) throws JSONException {
+    public String get_one_equipo_operario_from_Database(int id) throws JSONException {
 
         ArrayList<String> keys = new ArrayList<String>();
 
@@ -252,17 +231,17 @@ public class DBcontadoresController extends SQLiteOpenHelper {
 
         try {
             if(c.moveToFirst()) {
-                Iterator<String> keys_it = jsonContadorType.keys();
+                Iterator<String> keys_it = jsonEquipo_operarioType.keys();
                 while (keys_it.hasNext()) {
                     keys.add(keys_it.next());
                 }
 
                 for (int n = 0; n < keys.size(); n++) {
-                    jsonContadorType.put(keys.get(n), c.getString(n));
+                    jsonEquipo_operarioType.put(keys.get(n), c.getString(n));
                 }
                 c.close();
 //                Log.e("Obteniendo JSON by id:",jsonTareaType.toString());
-                return jsonContadorType.toString();
+                return jsonEquipo_operarioType.toString();
             }else{
                 c.close();
                 return "null";
@@ -274,7 +253,7 @@ public class DBcontadoresController extends SQLiteOpenHelper {
         }
     }
 
-    public ArrayList<String> get_all_contadores_from_Database() throws JSONException {
+    public ArrayList<String> get_all_equipo_operarios_from_Database() throws JSONException {
 
         ArrayList<String> rows = new ArrayList<String>();
         ArrayList<String> keys = new ArrayList<String>();
@@ -288,23 +267,23 @@ public class DBcontadoresController extends SQLiteOpenHelper {
         }
         Cursor c = database.rawQuery("SELECT * FROM "+table_name+";", null);
 
-        Iterator<String> keys_it = jsonContadorType.keys();
+        Iterator<String> keys_it = jsonEquipo_operarioType.keys();
         while (keys_it.hasNext()) {
             keys.add(keys_it.next());
         }
         for(int i=0; c.moveToPosition(i); i++){
 
             for (int n=0; n < keys.size(); n++){
-                jsonContadorType.put(keys.get(n),  c.getString(n));
+                jsonEquipo_operarioType.put(keys.get(n),  c.getString(n));
             }
 
-            rows.add(jsonContadorType.toString());
+            rows.add(jsonEquipo_operarioType.toString());
         }
         c.close();
         return rows;
     }
 
-    public String updateContador(JSONObject json, String key) throws JSONException {
+    public String updateEquipo_operario(JSONObject json, String key) throws JSONException {
 
         String key_value = json.getString(key);
 
@@ -329,7 +308,7 @@ public class DBcontadoresController extends SQLiteOpenHelper {
         return contentValues.toString();
     }
 
-    public String updateContador(JSONObject json) throws JSONException {
+    public String updateEquipo_operario(JSONObject json) throws JSONException {
 
         String id = json.getString(this.id);
         SQLiteDatabase database = this.getWritableDatabase();
@@ -349,12 +328,12 @@ public class DBcontadoresController extends SQLiteOpenHelper {
         return contentValues.toString();
     }
 
-    public boolean checkIfContadorExists(String serie){
+    public boolean checkIfEquipo_operarioExists(String principal_var){
         SQLiteDatabase database = this.getReadableDatabase();
         if(database == null){
             return false;
         }
-        Cursor c = database.rawQuery("SELECT * FROM "+table_name+" WHERE "+serie_contador+"=\""+serie+"\";", null);
+        Cursor c = database.rawQuery("SELECT * FROM "+table_name+" WHERE "+principal_variable+"=\""+principal_var+"\";", null);
         if (c.getCount() > 0) {
             return true;
         }else{
@@ -374,19 +353,19 @@ public class DBcontadoresController extends SQLiteOpenHelper {
         return false;
     }
 
-    public int countTableContadores(){
+    public int countTableEquipo_operarios(){
 
-        int contador_count = 0;
+        int equipo_operario_count = 0;
         SQLiteDatabase database = this.getReadableDatabase();
         String sql = "SELECT COUNT(*) FROM "+table_name;
         Cursor cursor = database.rawQuery(sql, null);
 
         if(cursor.getCount() > 0){
             cursor.moveToFirst();
-            contador_count = cursor.getInt(0);
+            equipo_operario_count = cursor.getInt(0);
         }
         cursor.close();
-        return contador_count;
+        return equipo_operario_count;
     }
 
     public boolean databasefileExists(Context context) {

@@ -23,7 +23,7 @@ public class Dialog extends AppCompatDialogFragment {
     private DialogListener listener;
     AlertDialog.Builder builder;
 
-    private static String hint="";
+    private static String hint="", text = "";
     private static String title="";
     private static int inputType;
 
@@ -65,7 +65,12 @@ public class Dialog extends AppCompatDialogFragment {
                 });
 
         editText_observaciones = view.findViewById(R.id.edit_usename_layout_dialog);
-        editText_observaciones.setHint(hint);
+        if(Screen_Login_Activity.checkStringVariable(text)){
+            editText_observaciones.setText(text);
+            text = "";
+        }else {
+            editText_observaciones.setHint(hint);
+        }
         editText_observaciones.setInputType(inputType);
         return  builder.create();
     }
@@ -84,6 +89,11 @@ public class Dialog extends AppCompatDialogFragment {
                 || title_tag.contains("calibre") || title_tag.contains("Calibre")
                 || title_tag.contains("Longitud") || title_tag.contains("Ruedas")){
             inputType = InputType.TYPE_CLASS_NUMBER;
+        }else if(title_tag.toLowerCase().contains("observa") ||
+                title_tag.toLowerCase().contains("mensaje") ||
+                title_tag.toLowerCase().contains("descripci") ){
+            text = hint;
+            inputType = InputType.TYPE_CLASS_TEXT;
         }
         else{
             inputType = InputType.TYPE_CLASS_TEXT;

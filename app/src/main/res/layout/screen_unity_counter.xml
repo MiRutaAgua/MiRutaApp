@@ -285,7 +285,8 @@
                 android:layout_marginRight="20dp"
                 android:textSize="15sp"
                 android:maxHeight="66dp"
-                android:text="..." />
+                android:text="..."
+                />
         </LinearLayout>
 
         <LinearLayout
@@ -430,15 +431,15 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linearLayout_unity_counter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp">
             <ImageView
                 android:id="@+id/imageView_screen_unity_counter_imagen"
                 android:layout_width="match_parent"
-                android:layout_height="500dp"
-                android:src="@drawable/screen_unity_counter_imagen"
-                android:visibility="gone"/>
+                android:layout_height="wrap_content"
+                />
         </LinearLayout>
 
     </LinearLayout>

@@ -192,7 +192,7 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
                     }
                     @Override
                     public void onAnimationEnd(Animation arg0) {
-                        openDialog("Mensaje libre", "...");
+                        openDialog("Mensaje libre", observaciones_text.getText().toString());
                     }
                 });
                 imageView_edit_observaciones_screen_absent.startAnimation(myAnim);
@@ -305,6 +305,7 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
             }
         });
 
+
         imageView_edit_phone1_screen_absent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -313,7 +314,7 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
                     callNumber(Screen_Absent.this, tel);
                 }else{
 
-                    openDialog("Telefono 1", "...");
+                    openDialog("Telefono 1", checkIfAgregar(telefono1.getText().toString()));
                 }
             }
         });
@@ -325,7 +326,7 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
                     callNumber(Screen_Absent.this,tel);
                 }else{
 
-                    openDialog("Telefono 2", "...");
+                    openDialog("Telefono 2", checkIfAgregar(telefono2.getText().toString()));
                 }
             }
         });
@@ -337,7 +338,7 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
                     callNumber(Screen_Absent.this, tel);
                 }else{
 
-                    openDialog("Telefono 1", "...");
+                    openDialog("Telefono 1", checkIfAgregar(telefono1.getText().toString()));
                 }
             }
         });
@@ -348,8 +349,7 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
                 if(checkIfOnlyNumbers(tel)) {
                     callNumber(Screen_Absent.this,tel);
                 }else{
-
-                    openDialog("Telefono 2", "...");
+                    openDialog("Telefono 2", checkIfAgregar(telefono2.getText().toString()));
                 }
             }
         });
@@ -391,11 +391,17 @@ public class Screen_Absent extends AppCompatActivity implements DatePickerDialog
         observaciones_text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openDialog("Mensaje libre", "...");
+                openDialog("Mensaje libre", observaciones_text.getText().toString());
             }
         });
     }
 
+    public static String checkIfAgregar(String s){
+        if(s.toLowerCase().contains("añadir")){
+            return "";
+        }
+        return s;
+    }
     public static boolean checkIfOnlyNumbers(String tel)
     {
         if(!tel.isEmpty() && tel.matches("[0-9]+") && tel.length() > 2) {

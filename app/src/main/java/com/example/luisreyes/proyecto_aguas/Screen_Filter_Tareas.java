@@ -91,7 +91,8 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
     private ArrayAdapter arrayAdapter_salva_calles;
     private ArrayAdapter arrayAdapter_salva_calibreAndTareas;
 
-    private Button button_filtrar;
+    private Button button_filtrar, imageView_itac_screen_filter_tareas;
+
     private HashMap<String, String> mapaTiposDeTarea;
 
     private TextView textView_checkboxes_type,
@@ -182,10 +183,42 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
         textView_calle_screen_filter_tareas = (TextView) findViewById(R.id.textView_calle_screen_filter_tareas);
         textView_checkboxes_type = (TextView) findViewById(R.id.textView_checkboxes_type);
         button_filtrar = (Button) findViewById(R.id.button_fitrar_screen_filter_tareas);
+        imageView_itac_screen_filter_tareas = (Button) findViewById(R.id.imageView_itac_screen_filter_tareas);
 
         ArrayAdapter arrayAdapter_spinner = new ArrayAdapter(this, R.layout.spinner_text_view, lista_desplegable);
         spinner_filtro_tareas.setAdapter(arrayAdapter_spinner);
 
+        imageView_itac_screen_filter_tareas.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
+                final Animation myAnim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(
+                        MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                Toast.makeText(context,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        String cod_emplazamiento = editText_geolocalizacion_screen_filter_tareas.
+                                getText().toString();
+                        if(!cod_emplazamiento.isEmpty()) {
+                            onButtonITAC(cod_emplazamiento);
+                        }
+                    }
+                });
+                imageView_itac_screen_filter_tareas.startAnimation(myAnim);
+            }
+        });
         button_filtrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -573,6 +606,83 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
         }else {
             Screen_Table_Personal.hideRingDialog();
             Log.e("Desde", "Personal");
+        }
+    }
+
+    private void onButtonITAC(String cod_emplazamiento) {
+        if (team_or_personal_task_selection_screen_Activity.dBitacsController != null) {
+            if (team_or_personal_task_selection_screen_Activity.dBitacsController.databasefileExists(this)) {
+                if (team_or_personal_task_selection_screen_Activity.dBitacsController.checkForTableExists()) {
+                    if (team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas() > 0) {
+                        ArrayList<String> itacs = new ArrayList<>();
+                        try {
+                            itacs = team_or_personal_task_selection_screen_Activity.
+                                    dBitacsController.get_all_itacs_from_Database();
+                            for (int i = 0; i < itacs.size(); i++) {
+                                JSONObject jsonObject = null;
+                                try {
+                                    jsonObject = new JSONObject(itacs.get(i));
+                                    if (!team_or_personal_task_selection_screen_Activity.checkGestor(jsonObject)) {
+                                        continue;
+                                    }
+                                    String c_emplazamiento = jsonObject.getString(
+                                            DBitacsController.codigo_itac).trim();
+
+                                    if(c_emplazamiento.equals(cod_emplazamiento)){
+                                        if (jsonObject != null) {
+                                            Screen_Login_Activity.itac_JSON = jsonObject;
+                                            try {
+                                                if(Screen_Login_Activity.itac_JSON!=null) {
+                                                    Intent intent = new Intent(this, Screen_Itac.class);
+                                                    startActivity(intent);
+                                                    return;
+                                                }else{
+                                                    Toast.makeText(this, "Itac nula", Toast.LENGTH_SHORT).show();
+                                                }
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                                Toast.makeText(this, "No pudo acceder a itac Error -> "+e.toString(), Toast.LENGTH_SHORT).show();
+                                            }
+                                        }else{
+                                            Toast.makeText(this, "JSON nulo, se delvio de la tabla elemento nulo", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        } catch(JSONException e){
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                new AlertDialog.Builder(this)
+                        .setTitle("No exite ITAC")
+                        .setMessage("¿Desea crear un nuevo itac?")
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                JSONObject jsonObject = new JSONObject();
+                                Screen_Login_Activity.itac_JSON = DBitacsController.setEmptyJSON(jsonObject);
+                                try {
+                                    Screen_Login_Activity.itac_JSON.put(
+                                            DBitacsController.codigo_itac, cod_emplazamiento);
+                                    Intent intent_open_screen_edit_itac = new Intent(
+                                            Screen_Filter_Tareas.this, Screen_Edit_ITAC.class);
+                                    startActivity(intent_open_screen_edit_itac);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                            }
+                        }).show();
+
+            }
         }
     }
 
@@ -1386,7 +1496,69 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
             return  true;
         }
     }
-
+    //esta fucion borra la tarea cuidado al llamarla
+    public static boolean checkIfItacIsDoneAndEraseLocal(JSONObject jsonObject){//devuelve true si la tarea ya esta hecha
+        return false;
+//        String status="";
+//        String principal_variable;
+//        if(jsonObject!=null) {
+//            try {
+//                status = jsonObject.getString(DBitacsController.status_itac);
+//                if (!status.contains("DONE") && !status.contains("done")
+//                        && !status.contains("CLOSED") && !status.contains("closed")
+//                        && !status.contains("INFORMADA") && !status.contains("informada")) {
+//                    return false;
+//                } else {
+//                    if (team_or_personal_task_selection_screen_Activity.dBitacsController != null) {
+//                        principal_variable = jsonObject.getString(DBtareasController.principal_variable);
+//                        if (team_or_personal_task_selection_screen_Activity.dBitacsController.checkIfItacExists(principal_variable)) {
+//                            try {
+//                                String itac = team_or_personal_task_selection_screen_Activity.dBitacsController.get_one_itac_from_Database(principal_variable);
+//                                JSONObject itac_jsonObject = new JSONObject(itac);
+//                                team_or_personal_task_selection_screen_Activity.dBitacsController.deleteItac(itac_jsonObject);
+//                                Log.e("borrada itac", principal_variable);
+//                            } catch (JSONException e) {
+//                                Log.e("Error", "No hay tabla donde borrar");
+//                                e.printStackTrace();
+//                            }
+//                        }
+//                    } else {
+//                        Log.e("Error", "No hay tabla donde borrar");
+//                    }
+//                    return true;
+//                }
+//            } catch (JSONException e) {
+////            Toast.makeText(getApplicationContext(), "No se pudo obtener estado se tarea\n"+ e.toString(), Toast.LENGTH_LONG).show();
+//                Log.e("Excepcion", "No se pudo obtener estado de tarea\n" + e.toString());
+//                e.printStackTrace();
+//                return true;
+//            }
+//        }else{
+//            return true;
+//        }
+    }
+    //TODO
+    public static boolean checkTeam(JSONObject jsonObject){ ///Terminar esta funcion con las dudas de michel
+        String equipo_tarea="";
+        String equipo_del_operario="";
+        if(jsonObject!=null) {
+            try {
+                equipo_tarea = jsonObject.getString(DBtareasController.equipo).trim();
+                if (Screen_Login_Activity.equipo_JSON != null) {
+                    equipo_del_operario = Screen_Login_Activity.equipo_JSON
+                            .getString(DBequipo_operariosController.equipo_operario).trim();
+                    if (equipo_tarea.equals(equipo_del_operario)) {
+                        return true;
+                    }
+                }
+            } catch (JSONException e) {
+                Log.e("Excepcion", "No se pudo obtener equipo de tarea\n" + e.toString());
+                e.printStackTrace();
+                return false;
+            }
+        }
+        return false;
+    }
     //esta fucion borra la tarea cuidado al llamarla
     public static boolean checkIfTaskIsDoneAndEraseLocal(JSONObject jsonObject){//devuelve true si la tarea ya esta hecha
         String status="";

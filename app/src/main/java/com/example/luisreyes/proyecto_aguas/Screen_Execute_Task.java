@@ -208,6 +208,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                         mCurrentPhotoPath_foto_antes = bitmap_dir;
                         instalation_photo_screen_exec_task.setVisibility(View.VISIBLE);
                         instalation_photo_screen_exec_task.setImageBitmap(bitmap);
+                        instalation_photo_screen_exec_task.getLayoutParams().height = bitmap.getHeight() + 300;
                         lectura_editText.setVisibility(View.VISIBLE);
                     }else{
                         Log.e("Bitmap nulo: ", "foto_antes_instalacion");
@@ -225,9 +226,11 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                 String bitmap_dir = lookForAllreadyTakenPhotos(photo);
                 if(!bitmap_dir.isEmpty()){
                     Log.e("Existe: ", bitmap_dir);
+                    Bitmap bitmap =getPhotoUserLocal(bitmap_dir);
                     mCurrentPhotoPath_foto_lectura = bitmap_dir;
                     read_photo_screen_exec_task.setVisibility(View.VISIBLE);
-                    read_photo_screen_exec_task.setImageBitmap(getPhotoUserLocal(bitmap_dir));
+                    read_photo_screen_exec_task.setImageBitmap(bitmap);
+                    read_photo_screen_exec_task.getLayoutParams().height = bitmap.getHeight() + 300;
                 }
                 else{
                     Log.e("no Existe: ", "foto_lectura");
@@ -242,9 +245,11 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                 String bitmap_dir = lookForAllreadyTakenPhotos(photo);
                 if(!bitmap_dir.isEmpty()){
                     Log.e("Existe: ", bitmap_dir);
+                    Bitmap bitmap =getPhotoUserLocal(bitmap_dir);
                     mCurrentPhotoPath_foto_serie = bitmap_dir;
                     serial_number_photo_screen_exec_task.setVisibility(View.VISIBLE);
-                    serial_number_photo_screen_exec_task.setImageBitmap(getPhotoUserLocal(bitmap_dir));
+                    serial_number_photo_screen_exec_task.setImageBitmap(bitmap);
+                    serial_number_photo_screen_exec_task.getLayoutParams().height = bitmap.getHeight() + 300;
                 }else{
                     Log.e("no Existe: ", "foto_numero_serie");
                 }
@@ -258,9 +263,11 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                 String bitmap_dir = lookForAllreadyTakenPhotos(photo);
                 if(!bitmap_dir.isEmpty()){
                     Log.e("Existe: ", bitmap_dir);
+                    Bitmap bitmap =getPhotoUserLocal(bitmap_dir);
                     mCurrentPhotoPath_foto_despues = bitmap_dir;
                     after_instalation_photo_screen_exec_task.setVisibility(View.VISIBLE);
-                    after_instalation_photo_screen_exec_task.setImageBitmap(getPhotoUserLocal(bitmap_dir));
+                    after_instalation_photo_screen_exec_task.setImageBitmap(bitmap);
+                    after_instalation_photo_screen_exec_task.getLayoutParams().height = bitmap.getHeight() + 300;
                 }else{
                     Log.e("no Existe: ", "foto_despues_instalacion");
                 }
@@ -477,7 +484,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                     }
                     @Override
                     public void onAnimationEnd(Animation arg0) {
-                        openDialog("Lectura","...");
+                        openDialog("Lectura",lectura_editText.getText().toString());
                     }
                 });
                 imageview_edit_lectura_screen_exec_task.startAnimation(myAnim);
@@ -503,7 +510,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                     }
                     @Override
                     public void onAnimationEnd(Animation arg0) {
-                        openDialog("Numero Serie","Escriba aqui número serie");
+                        openDialog("Numero Serie",textView_serial_number_result.getText().toString());
                     }
                 });
                 textView_serial_number_result.startAnimation(myAnim);
@@ -529,7 +536,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                     }
                     @Override
                     public void onAnimationEnd(Animation arg0) {
-                        openDialog("Número Serie","Escriba aqui número serie");
+                        openDialog("Número Serie",textView_serial_number_result.getText().toString());
                     }
                 });
                 imageView_edit_serial_number_screen_exec_task.startAnimation(myAnim);
@@ -555,7 +562,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                     }
                     @Override
                     public void onAnimationEnd(Animation arg0) {
-                        openDialog("Número Serie de Modulo","Escriba número serie de modulo");
+                        openDialog("Número Serie de Modulo",textView_serial_number_module_result.getText().toString());
                     }
                 });
                 imageView_edit_serial_number_module_screen_exec_task.startAnimation(myAnim);
@@ -581,7 +588,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                     }
                     @Override
                     public void onAnimationEnd(Animation arg0) {
-                        openDialog("Código de geolocalización","...");
+                        openDialog("Código de geolocalización",textView_codigo_geolocalization_screen_exec_task.getText().toString());
                     }
                 });
                 button_codigo_geolocalization_screen_exec_task.startAnimation(myAnim);
@@ -606,7 +613,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                     }
                     @Override
                     public void onAnimationEnd(Animation arg0) {
-                        openDialog("Numero Serie de Modulo","Escriba número serie de modulo");
+                        openDialog("Numero Serie de Modulo",textView_serial_number_module_result.getText().toString());
                     }
                 });
                 textView_serial_number_module_result.startAnimation(myAnim);
@@ -660,7 +667,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                     }
                     @Override
                     public void onAnimationEnd(Animation arg0) {
-                        openDialog("Mensaje libre","Mensaje");
+                        openDialog("Mensaje libre",textView_observaciones_screen_exec_task.getText().toString());
                     }
                 });
                 observaciones_button.startAnimation(myAnim);
@@ -698,31 +705,31 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         telefonos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openDialog("Telefono 1","547076...");
+                openDialog("Telefono 1",Screen_Absent.checkIfAgregar(telefono1.getText().toString()));
             }
         });
         imageView_edit_phone1_screen_exec_task.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openDialog("Telefono 1","547076...");
+                openDialog("Telefono 1",Screen_Absent.checkIfAgregar(telefono1.getText().toString()));
             }
         });
         imageView_edit_phone2_screen_exec_task.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openDialog("Telefono 2","547076...");
+                openDialog("Telefono 2",Screen_Absent.checkIfAgregar(telefono2.getText().toString()));
             }
         });
         telefono1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openDialog("Telefono 1","547076...");
+                openDialog("Telefono 1",Screen_Absent.checkIfAgregar(telefono1.getText().toString()));
             }
         });
         telefono2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openDialog("Telefono 2","547076...");
+                openDialog("Telefono 2",Screen_Absent.checkIfAgregar(telefono2.getText().toString()));
             }
         });
 
@@ -1288,7 +1295,8 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
             e.printStackTrace();
         }
     }
-                    @Override
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -1398,6 +1406,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                             if (bitmap != null) {
                                 instalation_photo_screen_exec_task.setVisibility(View.VISIBLE);
                                 instalation_photo_screen_exec_task.setImageBitmap(bitmap);
+                                instalation_photo_screen_exec_task.getLayoutParams().height = bitmap.getHeight() + 300;
                                 lectura_editText.setVisibility(View.VISIBLE);
                             }else{
                                 Toast.makeText(this,"No se encuentra foto luego de cambiar nombre: " +mCurrentPhotoPath_foto_antes, Toast.LENGTH_LONG).show();
@@ -1421,6 +1430,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                             if (bitmap != null) {
                                 read_photo_screen_exec_task.setVisibility(View.VISIBLE);
                                 read_photo_screen_exec_task.setImageBitmap(bitmap);
+                                read_photo_screen_exec_task.getLayoutParams().height = bitmap.getHeight() + 300;
                                 lectura_editText.setVisibility(View.VISIBLE);
                                 Log.e("Foto", "Lectura----************-------");
                             }else{
@@ -1445,6 +1455,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                             if (bitmap != null) {
                                 serial_number_photo_screen_exec_task.setVisibility(View.VISIBLE);
                                 serial_number_photo_screen_exec_task.setImageBitmap(bitmap);
+                                serial_number_photo_screen_exec_task.getLayoutParams().height = bitmap.getHeight() + 300;
                             }else{
                                 Toast.makeText(this,"No se encuentra foto luego de cambiar nombre: " +mCurrentPhotoPath_foto_serie, Toast.LENGTH_LONG).show();
                             }
@@ -1467,6 +1478,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                             if (bitmap != null) {
                                 after_instalation_photo_screen_exec_task.setVisibility(View.VISIBLE);
                                 after_instalation_photo_screen_exec_task.setImageBitmap(bitmap);
+                                after_instalation_photo_screen_exec_task.getLayoutParams().height = bitmap.getHeight() + 300;
                             }else{
                                 Toast.makeText(this,"No se encuentra foto luego de cambiar nombre: " +mCurrentPhotoPath_foto_despues, Toast.LENGTH_LONG).show();
                             }
@@ -1478,70 +1490,15 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                     }
                 }
             }
-            else {
-                if (requestCode == CAM_REQUEST_INST_PHOTO) {
-                    if (!TextUtils.isEmpty(data.getStringExtra("photo_path")) && data.getStringExtra("photo_path") != null) {
-                        mCurrentPhotoPath_foto_antes = data.getStringExtra("photo_path");
-                        Bitmap bitmap_foto_antes_instalacion = getPhotoUserLocal(mCurrentPhotoPath_foto_antes);
-                        if (bitmap_foto_antes_instalacion != null) {
-                            bitmap_foto_antes_instalacion = Bitmap.createScaledBitmap(bitmap_foto_antes_instalacion, 960, 1280, true);
-                            instalation_photo_screen_exec_task.setVisibility(View.VISIBLE);
-                            instalation_photo_screen_exec_task.setImageBitmap(bitmap_foto_antes_instalacion);
-                            lectura_editText.setVisibility(View.VISIBLE);
-                        }else{
-                            Toast.makeText(this,"No se encuentra foto: " +mCurrentPhotoPath_foto_antes, Toast.LENGTH_LONG).show();
-                        }
-                    }
-                }
-                if (requestCode == CAM_REQUEST_READ_PHOTO) {
-                    if (!TextUtils.isEmpty(data.getStringExtra("photo_path")) && data.getStringExtra("photo_path") != null) {
-                        mCurrentPhotoPath_foto_lectura = data.getStringExtra("photo_path");
-                        Bitmap bitmap_foto_lectura = getPhotoUserLocal(mCurrentPhotoPath_foto_lectura);
-                        if (bitmap_foto_lectura != null) {
-                            bitmap_foto_lectura = Bitmap.createScaledBitmap(bitmap_foto_lectura, 960, 1280, true);
-                            read_photo_screen_exec_task.setVisibility(View.VISIBLE);
-                            read_photo_screen_exec_task.setImageBitmap(bitmap_foto_lectura);
-                            lectura_editText.setVisibility(View.VISIBLE);
-                            Log.e("Foto", "Lectura-----------------------");
-                        }else{
-                            Toast.makeText(this,"No se encuentra foto: " +mCurrentPhotoPath_foto_lectura, Toast.LENGTH_LONG).show();
-                        }
-                    }
-                }
-                if (requestCode == CAM_REQUEST_SN_PHOTO) {
-                    if (!TextUtils.isEmpty(data.getStringExtra("photo_path")) && data.getStringExtra("photo_path") != null) {
-                        mCurrentPhotoPath_foto_serie = data.getStringExtra("photo_path");
-                        Bitmap bitmap_foto_numero_serie = getPhotoUserLocal(mCurrentPhotoPath_foto_serie);
-                        if (bitmap_foto_numero_serie != null) {
-                            bitmap_foto_numero_serie = Bitmap.createScaledBitmap(bitmap_foto_numero_serie, 960, 1280, true);
-                            serial_number_photo_screen_exec_task.setVisibility(View.VISIBLE);
-                            serial_number_photo_screen_exec_task.setImageBitmap(bitmap_foto_numero_serie);
-                        }else{
-                            Toast.makeText(this,"No se encuentra foto: " +mCurrentPhotoPath_foto_serie, Toast.LENGTH_LONG).show();
-                        }
-                    }
-                }
-                if (requestCode == CAM_REQUEST_AFT_INT_PHOTO) {
-                    if (!TextUtils.isEmpty(data.getStringExtra("photo_path")) && data.getStringExtra("photo_path") != null) {
-                        mCurrentPhotoPath_foto_despues = data.getStringExtra("photo_path");
-                        Bitmap bitmap_foto_despues_instalacion = getPhotoUserLocal(mCurrentPhotoPath_foto_despues);
-                        if (bitmap_foto_despues_instalacion != null) {
-                            bitmap_foto_despues_instalacion = Bitmap.createScaledBitmap(bitmap_foto_despues_instalacion, 960, 1280, true);
-                            after_instalation_photo_screen_exec_task.setVisibility(View.VISIBLE);
-                            after_instalation_photo_screen_exec_task.setImageBitmap(bitmap_foto_despues_instalacion);
-                        }else{
-                            Toast.makeText(this,"No se encuentra foto: " +mCurrentPhotoPath_foto_despues, Toast.LENGTH_LONG).show();
-                        }
-                    }
-                }
-            }
+
         }
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private String saveBitmapImage(Bitmap bitmap, String key){
         try {
-            bitmap = Bitmap.createScaledBitmap(bitmap, 960, 1280, true);
+            bitmap = Screen_Login_Activity.scaleBitmap(bitmap);
             String numero_serie="";
             if(key.contains("despues")){
                  numero_serie = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador_devuelto)
@@ -1883,6 +1840,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
             }
         }
     }
+
     private File createImageFile(String foto_x) throws IOException, JSONException {
         // Create an image file name
 

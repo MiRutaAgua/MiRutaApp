@@ -26,6 +26,7 @@ public class DBoperariosController extends SQLiteOpenHelper {
 
     public static final String database_name = "Database.db";
     public static String database_path;
+    private String empresa;
     JSONObject jsonOperarioType = new JSONObject();
     public static final String table = "operarios";
     public static String table_name = "operarios";
@@ -45,7 +46,8 @@ public class DBoperariosController extends SQLiteOpenHelper {
     public static final String principal_variable = usuario;
 
     public DBoperariosController(Context applicationContext, String empresa){
-        super(applicationContext, database_name, null, MainActivity.DB_VERSION);
+        super(applicationContext, database_name + empresa + ".db", null, MainActivity.DB_VERSION);
+        this.empresa = empresa;
         table_name = table + "_" + empresa.toLowerCase();
         try {
             jsonOperarioType.put(id, 1);
@@ -66,8 +68,6 @@ public class DBoperariosController extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        //database_path = sqLiteDatabase.getPath();
-        //sqLiteDatabase = SQLiteDatabase.openOrCreateDatabase("database_name", null);
         if(sqLiteDatabase != null) {
             sqLiteDatabase.execSQL("Create table if not exists " + table_name + " (id integer primary key autoincrement, " +
                     codigo_operario+"  TEXT, " +
@@ -361,7 +361,7 @@ public class DBoperariosController extends SQLiteOpenHelper {
 
 
     public boolean databasefileExists(Context context) {
-        File file = context.getDatabasePath(database_name);
+        File file = context.getDatabasePath(database_name + empresa + ".db");
         if(file == null || !file.exists()) {
             return false;
         }

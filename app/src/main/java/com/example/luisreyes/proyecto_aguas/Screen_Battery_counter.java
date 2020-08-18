@@ -50,6 +50,7 @@ import java.util.HashMap;
 public class Screen_Battery_counter extends AppCompatActivity implements TaskCompleted{
 
     private Button button_incidence_screen_battery_counter,
+            button_abandonado_ausente_screen_battery_counter,
             button_ejecutar_tarea_screen_battery_counter,
             button_geolocalization,
             button_reajustar_ubicacion,
@@ -111,6 +112,37 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
         button_ejecutar_tarea_screen_battery_counter = (Button)findViewById(R.id.button_ejecutar_tarea_screen_battery_counter);
         button_incidence_screen_battery_counter = (Button)findViewById(R.id.button_incidencia_screen_battery_counter);
         button_trazar_ruta_screen_battery_counter= (Button)findViewById(R.id.button_trazar_ruta_screen_battery_counter);
+        button_abandonado_ausente_screen_battery_counter= (Button)findViewById(R.id.button_abandonado_ausente_screen_battery_counter);
+
+        button_abandonado_ausente_screen_battery_counter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Battery_counter.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        Intent intent_open_screen_absent = new Intent(Screen_Battery_counter.this, Screen_Absent.class);
+                        startActivity(intent_open_screen_absent);
+                        Screen_Battery_counter.this.finish();
+                    }
+                });
+                button_abandonado_ausente_screen_battery_counter.startAnimation(myAnim);
+            }
+        });
 
         imageView_menu_screen_battery_counter.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -409,7 +441,9 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
             }
         });
 
-        if (checkConection()){
+        buscarFotosOffline();
+
+        if (checkConection()){ //buscar fotos online
             try {
                 foto =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_despues_instalacion);
                 //Toast.makeText(this, foto_instalacion, Toast.LENGTH_LONG).show();
@@ -448,8 +482,6 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        }else{
-            buscarFotosOffline();
         }
 //            imagen_contador.setImageBitmap(Screen_Register_Operario.getImageFromString(Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_antes_instalacion)));
     }
@@ -479,7 +511,8 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
                     if(!Screen_Login_Activity.checkStringVariable(gestor)){
                         gestor = "Sin_Gestor";
                     }
-                    File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" + Screen_Login_Activity.current_empresa + "/fotos_tareas/"+ gestor + "/" +numero_abonado);
+                    File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" +
+                            Screen_Login_Activity.current_empresa + "/fotos_tareas/"+ gestor + "/" +numero_abonado);
                     if (!storageDir.exists()) {
                         storageDir.mkdirs();
                     }
@@ -487,8 +520,10 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
                     for (int i = 0; i < files.length; i++) {
                         if (files[i].getName().contains(image)) {
                             //Toast.makeText(this, storageDir +"/" + files[i].getName(), Toast.LENGTH_LONG).show();
+                            Bitmap bitmap = getPhotoUserLocal(storageDir + "/" + files[i].getName());
                             imagen_contador.setVisibility(View.VISIBLE);
-                            imagen_contador.setImageBitmap(getPhotoUserLocal(storageDir + "/" + files[i].getName()));
+                            imagen_contador.setImageBitmap(bitmap);
+                            imagen_contador.getLayoutParams().height = bitmap.getHeight() + 300;
                         }
                     }
                 }
@@ -519,19 +554,16 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
             hideRingDialog();
             if (result == null) {
                 Toast.makeText(this, "No se puede acceder al servidor, "+ ", buscando fotos en el teléfono", Toast.LENGTH_SHORT).show();
-                buscarFotosOffline();
                 Log.e("result", "null");
             }
             else {
                 if(result.contains("not success")){
                     if(result.contains("no se pudo obtener imagen")){
                         Toast.makeText(this, "No se encontro imagen en servidor"+ ", buscando fotos en el teléfono", Toast.LENGTH_SHORT).show();
-                        buscarFotosOffline();
                         Log.e("result", "no se pudo obtener imagen");
                     }
                     else if(result.contains("no existe imagen")){
                         Toast.makeText(this, "No hay foto de contador en servidor"+ ", buscando fotos en el teléfono", Toast.LENGTH_SHORT).show();
-                        buscarFotosOffline();
                         Log.e("result", "no existe imagen");
                     }
                 }else{
@@ -543,8 +575,6 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
                         imagen_contador.setImageBitmap(bitmap);
                         saveBitmapImage(bitmap, foto);
                         Toast.makeText(Screen_Battery_counter.this, "Imagen descargada", Toast.LENGTH_SHORT).show();
-                    }else{
-                        buscarFotosOffline();
                     }
                 }
             }

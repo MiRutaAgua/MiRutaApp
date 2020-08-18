@@ -523,6 +523,7 @@ public class Screen_Battery_Intake_Asignation extends AppCompatActivity {
             }
         }
     }
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -632,9 +633,10 @@ public class Screen_Battery_Intake_Asignation extends AppCompatActivity {
             }
         }
     }
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private String saveBitmapImage(Bitmap bitmap, String key){
         try {
-            bitmap = Bitmap.createScaledBitmap(bitmap, 960, 1280, true);
+            bitmap = Screen_Login_Activity.scaleBitmap(bitmap);
             String numero_serie = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador)
                     .trim().replace(" ","")    ;
             String file_full_name = numero_serie+"_"+key;

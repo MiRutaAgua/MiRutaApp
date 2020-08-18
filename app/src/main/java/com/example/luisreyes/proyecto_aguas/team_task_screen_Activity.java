@@ -33,7 +33,9 @@ public class team_task_screen_Activity extends AppCompatActivity {
     private ImageView imageView_atras_screen_team_task,imageView_menu_screen_team_task;
     private Button button_tabla_tareas_equipo;
     private Button button_vista_rapida_tareas_equipo;
-    private Button button_filtro_tareas_equipo_screen_team_task,button_tareas_cercanas;
+    private Button button_filtro_tareas_equipo_screen_team_task,
+            button_tareas_cercanas,
+            button_table_itacs;
 
     private static ProgressDialog progressDialog = null;
 
@@ -68,8 +70,36 @@ public class team_task_screen_Activity extends AppCompatActivity {
         button_vista_rapida_tareas_equipo = (Button) findViewById(R.id.button_vista_tareas_equipo_screen_team_task);
         button_filtro_tareas_equipo_screen_team_task = (Button) findViewById(R.id.button_filtro_tareas_equipo_screen_team_task);
         button_tareas_cercanas = (Button) findViewById(R.id.button_tareas_cercanas);
+        button_table_itacs = (Button) findViewById(R.id.button_table_itacs);
 
-
+        button_table_itacs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
+                final Animation myAnim = AnimationUtils.loadAnimation(team_task_screen_Activity.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        Intent intent_open_table_itacs = new Intent(getApplicationContext(), Screen_Tabla_Itacs.class);
+                        startActivity(intent_open_table_itacs);
+                        team_task_screen_Activity.this.finish();
+                    }
+                });
+                button_table_itacs.startAnimation(myAnim);
+            }
+        });
         imageView_menu_screen_team_task.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -19,10 +19,12 @@ import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -32,6 +34,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
+import android.util.Size;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -40,6 +43,7 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -77,8 +81,11 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
 
     public static String current_empresa = "";
     public static JSONObject tarea_JSON;
+    public static JSONObject itac_JSON;
     public static JSONObject operario_JSON;
     public static JSONObject contador_JSON;
+    public static JSONObject equipo_JSON = null;
+
     public static ArrayList<String> lista_operarios = new ArrayList<>();
     public static ArrayList<String> lista_empresas = new ArrayList<>();
     public static ArrayList<String> lista_empresas_for_spinner = new ArrayList<>();
@@ -127,11 +134,19 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
             team_or_personal_task_selection_screen_Activity.dBcontadoresController = null;
             Log.e("Creando tabla cont", "----------------------------------------------------------");
         }
+        if(team_or_personal_task_selection_screen_Activity.dBitacsController != null) {
+            team_or_personal_task_selection_screen_Activity.dBitacsController.close();
+            team_or_personal_task_selection_screen_Activity.dBitacsController = null;
+            Log.e("Creando tabla cont", "----------------------------------------------------------");
+        }
+        if(team_or_personal_task_selection_screen_Activity.dBequipo_operariosController != null) {
+            team_or_personal_task_selection_screen_Activity.dBequipo_operariosController.close();
+            team_or_personal_task_selection_screen_Activity.dBequipo_operariosController = null;
+            Log.e("Creando tabla cont", "----------------------------------------------------------");
+        }
 
 
         tabla_de_codigos = new Tabla_de_Codigos();
-
-//        dBoperariosController = new DBoperariosController(this);
 
         if(dBempresasController == null) {
             dBempresasController = new DBEmpresasController(this);
@@ -178,10 +193,21 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
 //        descargarOperarios();
         descargarEmpresas();
 
-        if(!BackgroundWorker.server_online_or_wamp){
-            lineEdit_nombre_de_operario.setText("Michel");
+        if(BackgroundWorker.server_online_or_wamp){
+            lineEdit_nombre_de_operario.setText("MICHEL MORALES");
             lineEdit_clave_de_acceso.setText("123456");
         }
+
+        spinner_filtro_empresa_screen_login.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                current_empresa = spinner_filtro_empresa_screen_login
+                        .getSelectedItem().toString();
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
 
         lineEdit_nombre_de_operario.addTextChangedListener(new TextWatcher() {
             @Override
@@ -334,7 +360,22 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
             return null;
         }
     }
-
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public static Bitmap scaleBitmap(Bitmap bitmap){
+        Size size = new Size(bitmap.getWidth(), bitmap.getHeight());
+        double max_height = 1280;
+        double max_width = 1280;
+        double ratio;
+        if(size.getWidth() > size.getHeight()){
+            ratio = (double)(size.getHeight())/ (double)(size.getWidth());
+            max_height = max_width * ratio;
+        }else{
+            ratio = (double)(size.getWidth())/ (double)(size.getHeight());
+            max_width = max_height * ratio;
+        }
+        bitmap = Bitmap.createScaledBitmap(bitmap, (int)max_width, (int)max_height, true);
+        return bitmap;
+    }
     public static boolean checkStringVariable(String var){ //true si es valida
         if(var != null && !var.equals("null") && !var.equals("NULL") && !var.isEmpty()){
             return true;
@@ -396,6 +437,7 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
                                             Intent intent_open_next_screen = new Intent(Screen_Login_Activity.this, Screen_User_Data.class);
                                             intent_open_next_screen.putExtra("usuario", json_user);
                                             startActivity(intent_open_next_screen);
+                                            finish();
                                             Toast.makeText(Screen_Login_Activity.this, "Bienvenido", Toast.LENGTH_SHORT).show();
 
                                         } else {
@@ -550,6 +592,7 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 Intent intent_open_next_screen = new Intent(Screen_Login_Activity.this, team_or_personal_task_selection_screen_Activity.class);
                                 startActivity(intent_open_next_screen);
+                                finish();
                             }
                         })
                         .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -587,6 +630,7 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
                 intent_open_next_screen.putExtra("usuario", result);
                 startActivity(intent_open_next_screen);
                 login_press = false;
+                finish();
             }
         }else if(type == "get_empresas"){
             if(result == null){

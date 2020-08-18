@@ -21,7 +21,7 @@ import java.util.Iterator;
 
 public class DBgestoresController extends SQLiteOpenHelper {
 
-    public static final String database_name = "Database_Gestores.db"; ///OJO cuando se cree una Tabla nueva hay que ponerla en una DB diferente
+    public static String database_name = "Database_Gestores"; ///OJO cuando se cree una Tabla nueva hay que ponerla en una DB diferente
     public static String database_path;
     JSONObject jsonGestorType = new JSONObject();
     public static final String table = "gestores";
@@ -35,9 +35,11 @@ public class DBgestoresController extends SQLiteOpenHelper {
     public static final String date_time_modified_gestor  = "date_time_modified";
 
     public static final String principal_variable  = codigo_gestor;
+    private String empresa = "";
 
     public DBgestoresController(Context applicationContext, String empresa){
-        super(applicationContext, database_name, null, MainActivity.DB_VERSION);
+        super(applicationContext, database_name + empresa + ".db", null, MainActivity.DB_VERSION);
+        this.empresa = empresa;
         table_name = table + "_" + empresa.toLowerCase();
         try {
             jsonGestorType.put(id, 1);
@@ -54,8 +56,6 @@ public class DBgestoresController extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        //database_path = sqLiteDatabase.getPath();
-        //sqLiteDatabase = SQLiteDatabase.openOrCreateDatabase("database_name", null);
         if(sqLiteDatabase != null) {
             try {
                 sqLiteDatabase.execSQL("Create table if not exists " + table_name + " (id integer primary key autoincrement, " +
@@ -360,7 +360,7 @@ public class DBgestoresController extends SQLiteOpenHelper {
     }
 
     public boolean databasefileExists(Context context) {
-        File file = context.getDatabasePath(database_name);
+        File file = context.getDatabasePath(database_name + empresa + ".db");
         if(file == null || !file.exists()) {
             return false;
         }

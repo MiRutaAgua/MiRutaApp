@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@android:color/white"
+    >
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@android:color/white">
+
+        <include
+            android:id="@+id/my_toolbar"
+            layout="@layout/toolbar" />
+
+        <TextView
+            android:id="@+id/textView_screen_table_itacs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:gravity="center"
+            android:text="Pantalla Lista de Contadores de Equipo"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:text="ITACs"
+                android:textColor="@color/colorGrayLetters"
+                android:textStyle="bold"
+                android:textSize="18dp"
+                android:layout_marginTop="1dp"
+                android:gravity="center"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left">
+
+            <EditText
+                android:layout_marginLeft="20dp"
+                android:id="@+id/editText_screen_table_itacs_filter"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:hint="filtrar"
+                android:padding="10dp"
+                />
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/listView_itacs_screen_table_itacs"
+            android:choiceMode="singleChoice"
+            android:listSelector="@color/colorBlueAppRuta"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="20dp"
+            android:theme="@style/AppTheme"
+            >
+        </ListView>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/button_add_itac_screen_table_itacs"
+        android:gravity="center"
+        android:foregroundGravity="center"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:clickable="true"
+        android:background="@drawable/ic_add_circle_blue_24dp"
+        app:layout_anchor="@+id/linearLayout"
+        app:layout_anchorGravity="right|bottom" />
+
+</RelativeLayout>

@@ -74,6 +74,12 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
         String get_one_tarea_url;
         String get_tareas_url;
         String get_contadores_url;
+        String get_itacs_url;
+        String get_equipo_operarios_url;
+        String create_itac_url;
+        String update_itac_url;
+        String upload_itac_image_url;
+        String download_itac_image_url;
         String create_tarea_url;
         String update_tarea_url;
         String update_contador_url;
@@ -132,39 +138,51 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
             get_tareas_with_limit_url = server+"get_tareas_with_limit.php";
             get_contadores_amout_url = server+"get_contadores_amount.php";
             get_contadores_with_limit_url = server+"get_contadores_with_limit.php";
+            get_itacs_url = server+"get_itacs.php";
+            create_itac_url = server+"create_itac.php";
+            update_itac_url = server+"update_itac.php";
+            upload_itac_image_url = server+"upload_itac_image_android.php";
+            download_itac_image_url = server+"download_itac_image.php";
+            get_equipo_operarios_url= server+"get_equipo_operarios.php";
         }
         else {
             //Para PC de Trabjo ojo cambiar esto entre
-            String prestring = "http://192.168.20.93";
+            // String prestring = "http://192.168.20.93/";
             //Mi PC en casa
-//            String prestring = "http://192.168.56.1";
+            String prestring = "http://192.168.56.1/";
 
-            login_url = prestring + "/login_operarios.php";
-            register_url = prestring + "/register_operario.php";
-            change_foto_url = prestring + "/change_foto.php";
-            get_empresas_url = prestring + "/get_empresas.php";
-            get_operarios_url = prestring + "/get_operarios.php";
-            get_user_data_url = prestring + "/get_one_operario.php";
-            get_one_tarea_url = prestring + "/get_one_tarea.php";
-            get_tareas_url = prestring + "/get_tareas.php";
-            get_contadores_url = prestring + "/get_contadores.php";
-            create_tarea_url = prestring + "/create_task.php";
-            update_tarea_url = prestring + "/update_tarea.php";
-            update_contador_url = prestring+"/update_contador.php";
-            update_operario_url = prestring + "/update_operario.php";
-            upload_image_url = prestring + "/upload_image.php";
-            download_image_url = prestring + "/download_image.php";
-            download_user_image_url = prestring + "/download_user_image.php";
-            upload_user_image_url = prestring + "/upload_user_image.php";
-            save_work_url = prestring+"/save_work.php";
-            load_work_url = prestring+"/load_work.php";
-            get_piezas_url = prestring+"/get_piezas.php";
-            get_gestores_url = prestring+"/get_gestores.php";
-            get_causas_url = prestring+"/get_causas.php";
-            get_tareas_amout_url = prestring+"/get_tareas_amount.php";
-            get_tareas_with_limit_url = prestring+"/get_tareas_with_limit.php";
-            get_contadores_amout_url = prestring+"/get_contadores_amount.php";
-            get_contadores_with_limit_url = prestring+"/get_contadores_with_limit.php";
+            login_url = prestring + "login_operarios.php";
+            register_url = prestring + "register_operario.php";
+            change_foto_url = prestring + "change_foto.php";
+            get_empresas_url = prestring + "get_empresas.php";
+            get_operarios_url = prestring + "get_operarios.php";
+            get_user_data_url = prestring + "get_one_operario.php";
+            get_one_tarea_url = prestring + "get_one_tarea.php";
+            get_tareas_url = prestring + "get_tareas.php";
+            get_contadores_url = prestring + "get_contadores.php";
+            create_tarea_url = prestring + "create_task.php";
+            update_tarea_url = prestring + "update_tarea.php";
+            update_contador_url = prestring + "update_contador.php";
+            update_operario_url = prestring + "update_operario.php";
+            upload_image_url = prestring + "upload_image.php";
+            download_image_url = prestring + "download_image.php";
+            download_user_image_url = prestring + "download_user_image.php";
+            upload_user_image_url = prestring + "upload_user_image.php";
+            save_work_url = prestring + "save_work.php";
+            load_work_url = prestring + "load_work.php";
+            get_piezas_url = prestring + "get_piezas.php";
+            get_gestores_url = prestring + "get_gestores.php";
+            get_causas_url = prestring + "get_causas.php";
+            get_tareas_amout_url = prestring + "get_tareas_amount.php";
+            get_tareas_with_limit_url = prestring + "get_tareas_with_limit.php";
+            get_contadores_amout_url = prestring + "get_contadores_amount.php";
+            get_contadores_with_limit_url = prestring + "get_contadores_with_limit.php";
+            get_itacs_url = prestring + "get_itacs.php";
+            create_itac_url = prestring + "create_itac.php";
+            update_itac_url = prestring + "update_itac.php";
+            upload_itac_image_url = prestring + "upload_itac_image_android.php";
+            download_itac_image_url = prestring + "download_itac_image.php";
+            get_equipo_operarios_url= prestring+"get_equipo_operarios.php";
         }
 
 
@@ -750,9 +768,202 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }else if (type.equals("get_itacs")){
+            try{
+                return_image = false;
+                ArrayList<String> keys = new ArrayList<String>();
+                keys.add("empresa");
+                ArrayList<String> values = new ArrayList<String>();
+                for (int i = 0; i < keys.size(); i++) {
+                    values.add(params[i+1]);
+                }
+
+                Screen_Table_Team.lista_itacs_servidor = post_Output_Info(keys, values, get_itacs_url, true, true);
+
+                String return_string = "";
+                for(int n =1 ; n < Screen_Table_Team.lista_itacs_servidor.size() ; n++) { //el elemento n 0 esta vacio
+                    try {
+                        JSONArray jsonArray = new JSONArray(Screen_Table_Team.lista_itacs_servidor.get(n));
+                        if(jsonArray!=null){
+                            return_string = "download success";
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if(Screen_Table_Team.lista_itacs_servidor.size() > 1){
+                    String retorno = Screen_Table_Team.lista_itacs_servidor.get(1);
+                    if(retorno.contains("<b>Warning</b>:  mysqli_connect():")
+                            && retorno.contains("Too many connections")){
+                        return "Servidor caido, ahora no se puede sincronizar";
+                    }
+                }
+                return return_string;
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (ProtocolException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        else if(type.equals("create_itac")){
+            try {
+                ArrayList<String> keys = new ArrayList<String>();
+                keys.add("json");
+                keys.add("empresa");
+                ArrayList<String> values = new ArrayList<String>();
+                for (int i = 0; i < keys.size(); i++) {
+                    values.add(params[i+1]);
+                }
+                ArrayList<String> result = post_Output_Info(keys, values, create_itac_url,true, true);
+                if(result.size() >1){
+                    return result.get(1);
+                }
+                else{
+                    return "";
+                }
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            catch (ProtocolException e) {
+                e.printStackTrace();
+            }catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        else if(type.equals("update_itac")){
+            try {
+                ArrayList<String> keys = new ArrayList<String>();
+                keys.add("json");
+                keys.add("empresa");
+                ArrayList<String> values = new ArrayList<String>();
+                for (int i = 0; i < keys.size(); i++) {
+                    values.add(params[i+1]);
+                }
+                ArrayList<String> result = post_Output_Info(keys, values, update_itac_url,true, true);
+                if(result.size() >1){
+                    return result.get(1);
+                }
+                else{
+                    return "";
+                }
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            catch (ProtocolException e) {
+                e.printStackTrace();
+            }catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+        else if(type.equals("download_itac_image")){
+            try {
+                return_image = false;
+                ArrayList<String> keys = new ArrayList<String>();
+                keys.add("GESTOR");
+                keys.add("codigo_emplazamiento");
+                keys.add("nombre_foto");
+                keys.add("empresa");
+                ArrayList<String> values = new ArrayList<String>();
+                for (int i = 0; i < keys.size(); i++) {
+                    values.add(params[i+1]);
+                    Log.e("parametro", params[i+1]);
+                }
+
+                ArrayList<String> result = post_Output_Info(keys, values, download_itac_image_url,true, true);
+                if(result.size() >1){
+                    return result.get(1);
+                }
+                else{
+                    return result.get(0);
+                }
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            catch (ProtocolException e) {
+                e.printStackTrace();
+            }catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        else if(type.equals("upload_itac_image")){
+            try {
+                return_image = false;
+                ArrayList<String> keys = new ArrayList<String>();
+                keys.add("foto");
+                keys.add("GESTOR");
+                keys.add("campo_foto");
+                keys.add("codigo_emplazamiento");
+                keys.add("nombre_foto");
+                keys.add("empresa");
+                ArrayList<String> values = new ArrayList<String>();
+                for (int i = 0; i < keys.size(); i++) {
+                    values.add(params[i+1]);
+                }
+                ArrayList<String> result = post_Output_Info(keys, values, upload_itac_image_url, true, true);
+                if(result.size() >1){
+                    return result.get(1);
+                }
+                else{
+                    return result.get(0);
+                }
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            catch (ProtocolException e) {
+                e.printStackTrace();
+            }catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        else if (type.equals("get_equipo_operarios")){
+            try{
+                return_image = false;
+                ArrayList<String> keys = new ArrayList<String>();
+                keys.add("empresa");
+                ArrayList<String> values = new ArrayList<String>();
+                for (int i = 0; i < keys.size(); i++) {
+                    values.add(params[i+1]);
+                }
+
+                Screen_Table_Team.lista_equipo_operarios_servidor = post_Output_Info(keys, values, get_equipo_operarios_url, true, true);
+
+                String return_string = "";
+                for(int n =1 ; n < Screen_Table_Team.lista_equipo_operarios_servidor.size() ; n++) { //el elemento n 0 esta vacio
+                    try {
+                        JSONArray jsonArray = new JSONArray(Screen_Table_Team.lista_equipo_operarios_servidor.get(n));
+                        if(jsonArray!=null){
+                            return_string = "download success";
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if(Screen_Table_Team.lista_equipo_operarios_servidor.size() > 1){
+                    String retorno = Screen_Table_Team.lista_equipo_operarios_servidor.get(1);
+                    if(retorno.contains("<b>Warning</b>:  mysqli_connect():")
+                            && retorno.contains("Too many connections")){
+                        return "Servidor caido, ahora no se puede sincronizar";
+                    }
+                }
+                return return_string;
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (ProtocolException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         else if (type.equals("get_gestores")){
-            try{
+             try{
                 return_image = false;
                 ArrayList<String> keys = new ArrayList<String>();
                 keys.add("empresa");
