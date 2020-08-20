@@ -244,5 +244,15 @@
     <orderEntry type="module" module-name="activation" />
     <orderEntry type="module" module-name="additionnal" />
     <orderEntry type="module" module-name="mail" />
+    <orderEntry type="module" module-name="core" />
+    <orderEntry type="module" module-name="core-3.3.3" />
+    <orderEntry type="module" module-name="activation" />
+    <orderEntry type="module" module-name="additionnal" />
+    <orderEntry type="module" module-name="mail" />
+    <orderEntry type="module" module-name="core" />
+    <orderEntry type="module" module-name="core-3.3.3" />
+    <orderEntry type="module" module-name="activation" />
+    <orderEntry type="module" module-name="additionnal" />
+    <orderEntry type="module" module-name="mail" />
   </component>
 </module>

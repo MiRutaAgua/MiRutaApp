@@ -218,6 +218,20 @@
             android:screenOrientation="portrait" />
 
         <service android:name=".Notification_Service" />
+		
+		<activity
+            android:name=".Screen_Tabla_Itacs"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Screen_Itac"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".Screen_Edit_ITAC"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" ></activity>
     </application>
 
 </manifest>

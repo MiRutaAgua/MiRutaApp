@@ -153,10 +153,11 @@ public class DBtareasController extends SQLiteOpenHelper {
 
     public static String piezas = "piezas";
 
-    public static String proximidad = "proximidad";
+    public static String prioridad = "prioridad";
 
     public static String causa_origen = "causa_origen";
     public static String accion_ordenada = "accion_ordenada";
+    public static String hibernacion = "hibernacion";
 
     public static String date_time_modified = "date_time_modified";
     public static String status_tarea = "status_tarea";
@@ -290,10 +291,11 @@ public class DBtareasController extends SQLiteOpenHelper {
             jsonTareaType.put(equipo, "");
             jsonTareaType.put(fecha_informe_servicios, "");
             jsonTareaType.put(piezas, "");
-            jsonTareaType.put(proximidad, "");
+            jsonTareaType.put(prioridad, "");
 
             jsonTareaType.put(causa_origen, "");
             jsonTareaType.put(accion_ordenada, "");
+            jsonTareaType.put(hibernacion, "");
 
                 jsonTareaType.put(date_time_modified, "");
                 jsonTareaType.put(status_tarea, "");
@@ -422,10 +424,11 @@ public class DBtareasController extends SQLiteOpenHelper {
                         equipo + " TEXT, " +
                         fecha_informe_servicios + " TEXT, " +
                         piezas + " TEXT, " +
-                        proximidad + " TEXT, " +
+                        prioridad + " TEXT, " +
 
                         causa_origen + " TEXT, " +
                         accion_ordenada + " TEXT, " +
+                        hibernacion + " TEXT, " +
 
                         date_time_modified + " TEXT, " +
                         status_tarea + " TEXT" +
@@ -557,10 +560,11 @@ public class DBtareasController extends SQLiteOpenHelper {
             jsonTareaType.put(equipo, "");
             jsonTareaType.put(fecha_informe_servicios, "");
             jsonTareaType.put(piezas, "");
-            jsonTareaType.put(proximidad, "");
+            jsonTareaType.put(prioridad, "");
 
             jsonTareaType.put(causa_origen, "");
             jsonTareaType.put(accion_ordenada, "");
+            jsonTareaType.put(hibernacion, "");
 
             jsonTareaType.put(date_time_modified, "");
             jsonTareaType.put(status_tarea, "");
