@@ -232,6 +232,27 @@
             android:name=".Screen_Edit_ITAC"
             android:configChanges="orientation"
             android:screenOrientation="portrait" ></activity>
+
+            <activity android:name=".Screen_Itac_Seccion_1"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".Screen_Itac_Seccion_2"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".Screen_Itac_Seccion_3"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".Screen_Itac_Seccion_4"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".Screen_Itac_Seccion_5"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            />
     </application>
 
 </manifest>

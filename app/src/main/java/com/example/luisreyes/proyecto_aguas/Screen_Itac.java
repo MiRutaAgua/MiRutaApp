@@ -42,7 +42,12 @@ public class Screen_Itac extends AppCompatActivity implements TaskCompleted{
 
     private ProgressDialog progressDialog = null;
 
-    private Button button_edit_itac_screen_itac;
+    private Button button_seccion1,
+            button_seccion2,
+            button_seccion3,
+            button_seccion4,
+            button_seccion5,
+            button_edit_itac_screen_itac;
     private ImageView imageView_atras_screen_itac,
             imageView_menu_screen_itac;
 
@@ -68,6 +73,12 @@ public class Screen_Itac extends AppCompatActivity implements TaskCompleted{
         imageView_menu_screen_itac=(ImageView) findViewById(R.id.imageView_menu_screen_itac);
         imageView_atras_screen_itac=(ImageView) findViewById(R.id.imageView_atras_screen_itac);
         button_edit_itac_screen_itac=(Button) findViewById(R.id.button_editar_itac_tarea_screen_itac);
+
+        button_seccion1=(Button) findViewById(R.id.button_seccion1);
+        button_seccion2=(Button) findViewById(R.id.button_seccion2);
+        button_seccion3=(Button) findViewById(R.id.button_seccion3);
+        button_seccion4=(Button) findViewById(R.id.button_seccion4);
+        button_seccion5=(Button) findViewById(R.id.button_seccion5);
 
         acceso = (TextView) findViewById(R.id.textView_acceso_screen_itac);
         direccion = (TextView) findViewById(R.id.textView_direccion_screen_itac);
@@ -160,7 +171,146 @@ public class Screen_Itac extends AppCompatActivity implements TaskCompleted{
                 button_edit_itac_screen_itac.startAnimation(myAnim);
             }
         });
-
+        button_seccion1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Itac.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                Toast.makeText(context,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        Intent intent_open_screen_seccion1 = new Intent(Screen_Itac.this,
+                                Screen_Itac_Seccion_1.class);
+                        startActivity(intent_open_screen_seccion1);
+                    }
+                });
+                button_seccion1.startAnimation(myAnim);
+            }
+        });
+        button_seccion2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Itac.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                Toast.makeText(context,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        Intent intent_open_screen_seccion2 = new Intent(Screen_Itac.this,
+                                Screen_Itac_Seccion_2.class);
+                        startActivity(intent_open_screen_seccion2);
+                    }
+                });
+                button_seccion2.startAnimation(myAnim);
+            }
+        });
+        button_seccion3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Itac.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                Toast.makeText(context,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        Intent intent_open_screen_seccion3 = new Intent(Screen_Itac.this,
+                                Screen_Itac_Seccion_3.class);
+                        startActivity(intent_open_screen_seccion3);
+                    }
+                });
+                button_seccion3.startAnimation(myAnim);
+            }
+        });
+        button_seccion4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Itac.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                Toast.makeText(context,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        Intent intent_open_screen_seccion4 = new Intent(Screen_Itac.this,
+                                Screen_Itac_Seccion_4.class);
+                        startActivity(intent_open_screen_seccion4);
+                    }
+                });
+                button_seccion4.startAnimation(myAnim);
+            }
+        });
+        button_seccion5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Itac.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                Toast.makeText(context,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        Intent intent_open_screen_seccion5 = new Intent(Screen_Itac.this,
+                                Screen_Itac_Seccion_5.class);
+                        startActivity(intent_open_screen_seccion5);
+                    }
+                });
+                button_seccion5.startAnimation(myAnim);
+            }
+        });
         buscarFotosOffline();
 
         if (checkConection()){
@@ -273,7 +423,7 @@ public class Screen_Itac extends AppCompatActivity implements TaskCompleted{
     }
     @Override
     public void onTaskComplete(String type, String result) throws JSONException {
-        if(type == "download_itac_image") {
+        if(type.equals("download_itac_image")) {
             hideRingDialog();
             Log.e("download_itac_image", result);
             if (result == null) {

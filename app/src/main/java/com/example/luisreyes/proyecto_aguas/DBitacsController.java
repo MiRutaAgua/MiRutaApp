@@ -35,6 +35,7 @@ public class DBitacsController extends SQLiteOpenHelper {
     public static final String geolocalizacion = "geolocalizacion";
     public static final String acceso = "acceso";
     public static final String descripcion  = "descripcion";
+
     public static final String nombre_empresa_administracion = "nombre_empresa_administracion";
     public static final String nombre_responsable_administracion = "nombre_responsable_administracion";
     public static final String telefono_fijo_administracion = "telefono_fijo_administracion";
@@ -43,15 +44,49 @@ public class DBitacsController extends SQLiteOpenHelper {
     public static final String correo_administracion = "correo_administracion";
 
     public static final String nombre_presidente = "nombre_presidente";
+    public static final String vivienda_presidente = "vivienda_presidente";
     public static final String telefono_fijo_presidente = "telefono_fijo_presidente";
     public static final String telefono_movil_presidente = "telefono_movil_presidente";
     public static final String correo_presidente = "correo_presidente";
 
     public static final String nombre_encargado = "nombre_encargado";
+    public static final String vivienda_encargado = "vivienda_encargado";
     public static final String telefono_fijo_encargado = "telefono_fijo_encargado";
     public static final String telefono_movil_encargado = "telefono_movil_encargado";
     public static final String correo_encargado = "correo_encargado";
 
+    public static final String acceso_ubicacion_ubicacion = "acceso_ubicacion_ubicacion";
+    public static final String acceso_ubicacion_acceso = "acceso_ubicacion_acceso";
+    public static final String extra_acceso_ubicacion = "extra_acceso_ubicacion";
+    public static final String acceso_ubicacion_nota = "acceso_ubicacion_nota";
+
+    public static final String siempre_abierto = "siempre_abierto";
+    public static final String tipo_llave = "tipo_llave";
+    public static final String extras_llaves = "extras_llaves";
+    public static final String llaves_nota = "llaves_nota";
+
+    public static final String espacio_para_trabajar = "espacio_para_trabajar";
+    public static final String desague = "desague";
+    public static final String extras_desague = "extras_desague";
+    public static final String iluminacion = "iluminacion";
+    public static final String extras_iluminacion = "extras_iluminacion";
+    public static final String estado_de_conservacion_nota = "estado_de_conservacion_nota";
+
+    public static final String tubo_de_alimentacion = "tubo_de_alimentacion";
+    public static final String colector = "colector";
+    public static final String tuberias_de_salida_contador = "tuberias_de_salida_contador";
+    public static final String estado_de_tuberias_nota = "estado_de_tuberias_nota";
+
+    public static final String valvula_general = "valvula_general";
+    public static final String extras_valvula_general = "extras_valvula_general";
+    public static final String valvula_entrada = "valvula_entrada";
+    public static final String extras_valvula_entrada = "extras_valvula_entrada";
+    public static final String valvula_salida = "valvula_salida";
+    public static final String extras_valvula_salida = "extras_valvula_salida";
+    public static final String valvula_antiretorno = "valvula_antiretorno";
+    public static final String extras_valvula_antiretorno = "extras_valvula_antiretorno";
+    public static final String estado_de_valvulas_nota = "estado_de_valvulas_nota";
+    
     public static final String descripcion_foto_1 = "descripcion_foto_1";
     public static final String descripcion_foto_2 = "descripcion_foto_2";
     public static final String descripcion_foto_3 = "descripcion_foto_3";
@@ -68,6 +103,9 @@ public class DBitacsController extends SQLiteOpenHelper {
     public static final String foto_6 = "foto_6";
     public static final String foto_7 = "foto_7";
     public static final String foto_8 = "foto_8";
+
+    public static final String equipo = "equipo";
+    public static final String operario = "operario";
 
     public static final String gestor_itac = "gestor";
     public static final String status_itac = "status_itac";
@@ -96,13 +134,48 @@ public class DBitacsController extends SQLiteOpenHelper {
             jsonItacType.put(direccion_oficina_administracion, "");
             jsonItacType.put(correo_administracion, "");
             jsonItacType.put(nombre_presidente, "");
+            jsonItacType.put(vivienda_presidente, "");
             jsonItacType.put(telefono_fijo_presidente, "");
             jsonItacType.put(telefono_movil_presidente, "");
             jsonItacType.put(correo_presidente, "");
             jsonItacType.put(nombre_encargado, "");
+            jsonItacType.put(vivienda_encargado, "");
             jsonItacType.put(telefono_fijo_encargado, "");
             jsonItacType.put(telefono_movil_encargado, "");
             jsonItacType.put(correo_encargado, "");
+
+            jsonItacType.put(acceso_ubicacion_ubicacion, "");
+            jsonItacType.put(acceso_ubicacion_acceso, "");
+            jsonItacType.put(extra_acceso_ubicacion, "");
+            jsonItacType.put(acceso_ubicacion_nota, "");
+
+            jsonItacType.put(siempre_abierto, "");
+            jsonItacType.put(tipo_llave, "");
+            jsonItacType.put(extras_llaves, "");
+            jsonItacType.put(llaves_nota, "");
+
+            jsonItacType.put(espacio_para_trabajar, "");
+            jsonItacType.put(desague, "");
+            jsonItacType.put(extras_desague, "");
+            jsonItacType.put(iluminacion, "");
+            jsonItacType.put(extras_iluminacion, "");
+            jsonItacType.put(estado_de_conservacion_nota, "");
+
+            jsonItacType.put(tubo_de_alimentacion, "");
+            jsonItacType.put(colector, "");
+            jsonItacType.put(tuberias_de_salida_contador, "");
+            jsonItacType.put(estado_de_tuberias_nota, "");
+
+            jsonItacType.put(valvula_general, "");
+            jsonItacType.put(extras_valvula_general, "");
+            jsonItacType.put(valvula_entrada, "");
+            jsonItacType.put(extras_valvula_entrada, "");
+            jsonItacType.put(valvula_salida, "");
+            jsonItacType.put(extras_valvula_salida, "");
+            jsonItacType.put(valvula_antiretorno, "");
+            jsonItacType.put(extras_valvula_antiretorno, "");
+            jsonItacType.put(estado_de_valvulas_nota, "");
+
             jsonItacType.put(descripcion_foto_1, "");
             jsonItacType.put(descripcion_foto_2, "");
             jsonItacType.put(descripcion_foto_3, "");
@@ -119,6 +192,8 @@ public class DBitacsController extends SQLiteOpenHelper {
             jsonItacType.put(foto_6, "");
             jsonItacType.put(foto_7, "");
             jsonItacType.put(foto_8, "");
+            jsonItacType.put(equipo, "");
+            jsonItacType.put(operario, "");
             jsonItacType.put(gestor_itac, "");
             jsonItacType.put(status_itac, "");
             jsonItacType.put(date_time_modified, "");
@@ -145,13 +220,48 @@ public class DBitacsController extends SQLiteOpenHelper {
                         direccion_oficina_administracion+"  TEXT, " +
                         correo_administracion+"  TEXT, " +
                         nombre_presidente+"  TEXT, " +
+                        vivienda_presidente+"  TEXT, " +
                         telefono_fijo_presidente+"  TEXT, " +
                         telefono_movil_presidente+"  TEXT, " +
                         correo_presidente+"  TEXT, " +
                         nombre_encargado+"  TEXT, " +
+                        vivienda_encargado+"  TEXT, " +
                         telefono_fijo_encargado+"  TEXT, " +
                         telefono_movil_encargado+"  TEXT, " +
                         correo_encargado+"  TEXT, " +
+
+                        acceso_ubicacion_ubicacion+"  TEXT, " +
+                        acceso_ubicacion_acceso+"  TEXT, " +
+                        extra_acceso_ubicacion+"  TEXT, " +
+                        acceso_ubicacion_nota+"  TEXT, " +
+
+                        siempre_abierto+"  TEXT, " +
+                        tipo_llave+"  TEXT, " +
+                        extras_llaves+"  TEXT, " +
+                        llaves_nota+"  TEXT, " +
+
+                        espacio_para_trabajar+"  TEXT, " +
+                        desague+"  TEXT, " +
+                        extras_desague+"  TEXT, " +
+                        iluminacion+"  TEXT, " +
+                        extras_iluminacion+"  TEXT, " +
+                        estado_de_conservacion_nota+"  TEXT, " +
+
+                        tubo_de_alimentacion+"  TEXT, " +
+                        colector+"  TEXT, " +
+                        tuberias_de_salida_contador+"  TEXT, " +
+                        estado_de_tuberias_nota+"  TEXT, " +
+
+                        valvula_general+"  TEXT, " +
+                        extras_valvula_general+"  TEXT, " +
+                        valvula_entrada+"  TEXT, " +
+                        extras_valvula_entrada+"  TEXT, " +
+                        valvula_salida+"  TEXT, " +
+                        extras_valvula_salida+"  TEXT, " +
+                        valvula_antiretorno+"  TEXT, " +
+                        extras_valvula_antiretorno+"  TEXT, " +
+                        estado_de_valvulas_nota+"  TEXT, " +
+
                         descripcion_foto_1+"  TEXT, " +
                         descripcion_foto_2+"  TEXT, " +
                         descripcion_foto_3+"  TEXT, " +
@@ -168,6 +278,8 @@ public class DBitacsController extends SQLiteOpenHelper {
                         foto_6+"  TEXT, " +
                         foto_7+"  TEXT, " +
                         foto_8+"  TEXT, " +
+                        equipo+"  TEXT, " +
+                        operario+"  TEXT, " +
                         gestor_itac+"  TEXT, " +
                         status_itac+"  TEXT, " +
                         date_time_modified+"  TEXT" +
@@ -193,13 +305,48 @@ public class DBitacsController extends SQLiteOpenHelper {
             jsonItacType.put(direccion_oficina_administracion, "");
             jsonItacType.put(correo_administracion, "");
             jsonItacType.put(nombre_presidente, "");
+            jsonItacType.put(vivienda_presidente, "");
             jsonItacType.put(telefono_fijo_presidente, "");
             jsonItacType.put(telefono_movil_presidente, "");
             jsonItacType.put(correo_presidente, "");
             jsonItacType.put(nombre_encargado, "");
+            jsonItacType.put(vivienda_encargado, "");
             jsonItacType.put(telefono_fijo_encargado, "");
             jsonItacType.put(telefono_movil_encargado, "");
             jsonItacType.put(correo_encargado, "");
+
+            jsonItacType.put(acceso_ubicacion_ubicacion, "");
+            jsonItacType.put(acceso_ubicacion_acceso, "");
+            jsonItacType.put(extra_acceso_ubicacion, "");
+            jsonItacType.put(acceso_ubicacion_nota, "");
+
+            jsonItacType.put(siempre_abierto, "");
+            jsonItacType.put(tipo_llave, "");
+            jsonItacType.put(extras_llaves, "");
+            jsonItacType.put(llaves_nota, "");
+
+            jsonItacType.put(espacio_para_trabajar, "");
+            jsonItacType.put(desague, "");
+            jsonItacType.put(extras_desague, "");
+            jsonItacType.put(iluminacion, "");
+            jsonItacType.put(extras_iluminacion, "");
+            jsonItacType.put(estado_de_conservacion_nota, "");
+
+            jsonItacType.put(tubo_de_alimentacion, "");
+            jsonItacType.put(colector, "");
+            jsonItacType.put(tuberias_de_salida_contador, "");
+            jsonItacType.put(estado_de_tuberias_nota, "");
+
+            jsonItacType.put(valvula_general, "");
+            jsonItacType.put(extras_valvula_general, "");
+            jsonItacType.put(valvula_entrada, "");
+            jsonItacType.put(extras_valvula_entrada, "");
+            jsonItacType.put(valvula_salida, "");
+            jsonItacType.put(extras_valvula_salida, "");
+            jsonItacType.put(valvula_antiretorno, "");
+            jsonItacType.put(extras_valvula_antiretorno, "");
+            jsonItacType.put(estado_de_valvulas_nota, "");
+
             jsonItacType.put(descripcion_foto_1, "");
             jsonItacType.put(descripcion_foto_2, "");
             jsonItacType.put(descripcion_foto_3, "");
@@ -216,6 +363,8 @@ public class DBitacsController extends SQLiteOpenHelper {
             jsonItacType.put(foto_6, "");
             jsonItacType.put(foto_7, "");
             jsonItacType.put(foto_8, "");
+            jsonItacType.put(equipo, "");
+            jsonItacType.put(operario, "");
             jsonItacType.put(gestor_itac, "");
             jsonItacType.put(status_itac, "");
             jsonItacType.put(date_time_modified, "");

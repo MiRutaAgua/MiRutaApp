@@ -64,15 +64,103 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:gravity="center"
             android:padding="5dp"
             >
             <Button
                 android:id="@+id/button_editar_itac_tarea_screen_itac"
-                android:layout_width="266dp"
+                android:layout_width="280dp"
                 android:layout_height="40dp"
                 android:text="EDITAR ITAC"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:background="@drawable/fondo_boton_azul"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="5dp"
+            >
+            <Button
+                android:id="@+id/button_seccion1"
+                android:layout_width="280dp"
+                android:layout_height="40dp"
+                android:text="ACCESO Y UBICACIÓN"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:background="@drawable/fondo_boton_azul"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="5dp"
+            >
+            <Button
+                android:id="@+id/button_seccion2"
+                android:layout_width="280dp"
+                android:layout_height="40dp"
+                android:text="LLAVES DE PUERTAS"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:background="@drawable/fondo_boton_azul"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="5dp"
+            >
+            <Button
+                android:id="@+id/button_seccion3"
+                android:layout_width="280dp"
+                android:layout_height="40dp"
+                android:text="CONSERVACIÓN Y ZONA DE TRABAJO"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:background="@drawable/fondo_boton_azul"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="5dp"
+            >
+            <Button
+                android:id="@+id/button_seccion4"
+                android:layout_width="280dp"
+                android:layout_height="40dp"
+                android:text="ESTADO DE TUBERÍAS"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:background="@drawable/fondo_boton_azul"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="5dp"
+            >
+            <Button
+                android:id="@+id/button_seccion5"
+                android:layout_width="280dp"
+                android:layout_height="40dp"
+                android:text="ESTADO DE VÁLVULAS"
                 android:textStyle="bold"
                 android:textColor="@android:color/white"
                 android:background="@drawable/fondo_boton_azul"

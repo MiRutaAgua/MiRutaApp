@@ -96,7 +96,16 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
         nombre = (TextView)findViewById(R.id.textView_screen_user_data_nombre);
         telefono = (TextView)findViewById(R.id.textView_screen_user_data_telefono);
 
-        textView_empresa_screen_user_data.setText(Screen_Login_Activity.current_empresa);
+        String nombre_empresa = "";
+        try {
+            String empresa_json = Screen_Login_Activity.dBempresasController.get_one_empresa_from_Database(
+                    DBEmpresasController.empresa, empresa);
+            JSONObject jsonObject = new JSONObject(empresa_json);
+            nombre_empresa = jsonObject.getString(DBEmpresasController.nombre_empresa);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        textView_empresa_screen_user_data.setText(nombre_empresa);
 
         String json_usuario_string = getIntent().getStringExtra("usuario");
         if(json_usuario_string != null && !TextUtils.isEmpty(json_usuario_string)){
@@ -353,7 +362,7 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
     @Override
     public void onTaskComplete(String type, String result) throws JSONException {
         int lite_count_equipo_operarios = -1;
-        if(type == "get_equipo_operarios"){
+        if(type.equals("get_equipo_operarios")){
             if (result == null) {
                 Toast.makeText(this, "No se pudo establecer conexión con el servidor", Toast.LENGTH_LONG).show();
             } else if (result.equals("Servidor caido, ahora no se puede sincronizar")) {
@@ -416,7 +425,7 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
             lookCurrentTeam();
             lookPhotoInServer();
 
-        }else if(type == "change_foto"){
+        }else if(type.equals("change_foto")){
             if(result == null){
                 Toast.makeText(Screen_User_Data.this,"No se pudo acceder al servidor, no se pudo cambiar foto", Toast.LENGTH_LONG).show();
             }
@@ -432,7 +441,7 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
                 backgroundWorker.execute(type_script, username, empresa);
             }
         }
-        else if(type == "upload_user_image"){
+        else if(type.equals("upload_user_image")){
             hideRingDialog();
             if(result == null){
                 Toast.makeText(this,"No se puede acceder al servidor, no se subio imagen", Toast.LENGTH_LONG).show();
@@ -442,7 +451,7 @@ public class Screen_User_Data extends AppCompatActivity implements TaskCompleted
                 //showRingDialog("Validando registro...");
             }
         }
-        else if(type == "download_user_image") {
+        else if(type.equals("download_user_image")) {
             if (result == null) {
                 hideRingDialog();
                 Toast.makeText(this, "No se puede acceder al servidor, no se obtuvo foto", Toast.LENGTH_LONG).show();

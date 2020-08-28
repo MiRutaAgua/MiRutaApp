@@ -101,7 +101,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
     private ArrayList<String> tareas_to_upload;
     private static ProgressDialog progressDialog;
 
-    private JSONObject jsonObjectSalvaLite = null;
+    private JSONObject jsonObjectItacSalvaLite = null, jsonObjectSalvaLite = null;
     private boolean subiendo_fotos = false;
     private boolean sync_pressed=false;
     private int cantidad_tareas_offline = 0;
@@ -299,7 +299,6 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
         button_tarea_personal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 if (team_or_personal_task_selection_screen_Activity.dBtareasController != null) {
                     if (team_or_personal_task_selection_screen_Activity.dBtareasController.databasefileExists(team_or_personal_task_selection_screen_Activity.this)) {
                         if (team_or_personal_task_selection_screen_Activity.dBtareasController.checkForTableExists()) {
@@ -329,11 +328,18 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                                     }
                                 });
                                 button_tarea_personal.startAnimation(myAnim);
-
-                            }}}}
-
-                    Toast.makeText(team_or_personal_task_selection_screen_Activity.this,"Cargue Tareas", Toast.LENGTH_LONG).show();
-
+                            }else{
+                                Toast.makeText(team_or_personal_task_selection_screen_Activity.this,"No hay Tareas", Toast.LENGTH_LONG).show();
+                            }
+                        }else{
+                            Toast.makeText(team_or_personal_task_selection_screen_Activity.this,"No hay Tareas", Toast.LENGTH_LONG).show();
+                        }
+                    }else{
+                        Toast.makeText(team_or_personal_task_selection_screen_Activity.this,"No hay Tareas", Toast.LENGTH_LONG).show();
+                    }
+                }else{
+                    Toast.makeText(team_or_personal_task_selection_screen_Activity.this,"No hay Tareas", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
@@ -632,12 +638,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
             contadores_to_update.remove(contadores_to_update.size() - 1);
             Toast.makeText(this, "Actualizando Contador: "+ jsonObject_Lite_counter.getString(DBcontadoresController.serie_contador), Toast.LENGTH_SHORT).show();
             Log.e("Actualiza Contador:", jsonObject_Lite_counter.getString(DBcontadoresController.serie_contador));
-//            if(checkIfIsToUpdateOrUpLoad(contadores_to_update)){
-//                String status = jsonObject_Lite_counter.getString(DBtareasController.status_tarea);
-//                status = status.replace("TO_UPDATE","").replace(",","");
-//                jsonObject_Lite.put(DBtareasController.status_tarea, status);
-//                jsonObjectSalvaLite = jsonObject_Lite;
-//            }
+
             String empresa = Screen_Login_Activity.current_empresa;
             String type_script = "update_contador";
             BackgroundWorker backgroundWorker = new BackgroundWorker(this);
@@ -915,6 +916,12 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
             itacs_to_update.remove(itacs_to_update.size() - 1);
             Log.e("Actualizando Itac: ", jsonObject_Lite.getString(DBitacsController.principal_variable));
 
+            if(checkIfItacIsToUpdateOrUpLoad(jsonObject_Lite)){
+                String status = jsonObject_Lite.getString(DBitacsController.status_itac);
+                status = status.replace("TO_UPDATE","").replace(",","").trim();
+                jsonObject_Lite.put(DBitacsController.status_itac, status);
+                jsonObjectItacSalvaLite = jsonObject_Lite;
+            }
             String empresa = Screen_Login_Activity.current_empresa;
             String type_script = "update_itac";
             BackgroundWorker backgroundWorker = new BackgroundWorker(this);
@@ -1215,12 +1222,30 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
         spinner_filtro_gestor_screen_team_or_personal.setAdapter(gestores_adapter);
     }
 
+    public static boolean checkIfItacIsToUpdateOrUpLoad(JSONObject jsonObject){
+        String status = "null", principal_variable = "null";
+        try {
+            principal_variable = jsonObject.getString(DBitacsController.principal_variable).trim();
+            status = jsonObject.getString(DBitacsController.status_itac).trim();
+            if(Screen_Login_Activity.checkStringVariable(status)) {
+                if(status.contains("TO_UPLOAD") || status.contains("TO_UPDATE")){
+                    return true;
+                }
+            }
+            return false;
+        } catch (JSONException e) {
+            Log.e("Excepcion", "Error obteniendo status de itac " +principal_variable+"  " + e.toString());
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public static boolean checkIfIsToUpdateOrUpLoad(JSONObject jsonObject){
         String status = "null", principal_variable = "null";
         try {
             principal_variable = jsonObject.getString(DBtareasController.principal_variable).trim();
             status = jsonObject.getString(DBtareasController.status_tarea).trim();
-            if(!status.isEmpty() && status!=null && !status.equals("NULL") && !status.equals("null")) {
+            if(Screen_Login_Activity.checkStringVariable(status)) {
                 if(status.contains("TO_UPLOAD") || status.contains("TO_UPDATE")){
                     return true;
                 }
@@ -1399,7 +1424,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
         int lite_count = -10;
         int lite_count_counters = -10, lite_count_piezas=-10, lite_count_causas=-10, lite_count_gestores=-10;
         sync_pressed = false;
-        if(type == "save_work") {
+        if(type.equals("save_work")) {
             if (result == null) {
                 Toast.makeText(this, "No se puede acceder al hosting," +
                         " no se pudo salvar trabajo.", Toast.LENGTH_LONG).show();
@@ -1417,7 +1442,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                 Log.e("result", "upload success");
                 openMessage("Salvado", "Trabajo salvado correctamente");
             }
-        }if(type == "load_work") {
+        }if(type.equals("load_work")) {
             if (result == null) {
                 Log.e("result", "nulo");
                 Toast.makeText(this, "No se puede acceder al hosting," +
@@ -1457,7 +1482,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                 }
             }
         }
-        else if(type == "get_piezas") {
+        else if(type.equals("get_piezas")) {
             if (result == null) {
                 hideRingDialog();
                 Toast.makeText(this, "No se pudo establecer conexión con el servidor", Toast.LENGTH_LONG).show();
@@ -1511,7 +1536,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                 getCausasDeServidor();
             }
         }
-        else if(type == "get_gestores") {
+        else if(type.equals("get_gestores")) {
             if (result == null) {
                 hideRingDialog();
                 Toast.makeText(this, "No se pudo establecer conexión con el servidor", Toast.LENGTH_LONG).show();
@@ -1568,7 +1593,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                 getPiezasDeServidor();
             }
         }
-        else if(type == "get_causas") {
+        else if(type.equals("get_causas")) {
             if (result == null) {
                 hideRingDialog();
                 Toast.makeText(this, "No se pudo establecer conexión con el servidor", Toast.LENGTH_LONG).show();
@@ -1621,7 +1646,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                 getContadoresDeServidor();
             }
         }
-        else if(type == "get_contadores_with_limit") {
+        else if(type.equals("get_contadores_with_limit")) {
             if (result == null) {
                 hideRingDialog();
                 Toast.makeText(this, "No se pudo establecer conexión con el servidor", Toast.LENGTH_LONG).show();
@@ -1665,7 +1690,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                                 } else if (lite_count_counters != -10) {
                                     if (!team_or_personal_task_selection_screen_Activity.dBcontadoresController.
                                             checkIfContadorExists(jsonObject.getString(DBcontadoresController.serie_contador))) {
-                                        Toast.makeText(this, "MySQL contador: " + jsonObject.getString(DBcontadoresController.serie_contador) + " insertado", Toast.LENGTH_LONG).show();
+//                                        Toast.makeText(this, "MySQL contador: " + jsonObject.getString(DBcontadoresController.serie_contador) + " insertado", Toast.LENGTH_LONG).show();
                                         team_or_personal_task_selection_screen_Activity.dBcontadoresController.insertContador(jsonObject);
                                     } else {
 
@@ -1747,7 +1772,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                 }
             }
         }
-        else if(type == "get_contadores_amount"){
+        else if(type.equals("get_contadores_amount")){
             if(result == null){
                 hideRingDialog();
                 Toast.makeText(this, "No se pudo establecer conexión con el servidor", Toast.LENGTH_LONG).show();
@@ -1776,7 +1801,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                 }
             }
         }
-        else if(type == "get_itacs"){
+        else if(type.equals("get_itacs")){
             if(result == null){
                 hideRingDialog();
                 Toast.makeText(this, "No se pudo establecer conexión con el servidor", Toast.LENGTH_LONG).show();
@@ -1891,7 +1916,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                 }
             }
         }
-        else if(type == "update_itac"){
+        else if(type.equals("update_itac")){
             if (!checkConection()) {
                 Toast.makeText(this, "No hay conexion a Internet, no se pudo guardar itac. Intente de nuevo con conexion", Toast.LENGTH_LONG).show();
             }else {
@@ -1901,6 +1926,9 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                     if (result.contains("not success")) {
                         Toast.makeText(this, "No se pudo insertar correctamente, problemas con el servidor de la base de datos", Toast.LENGTH_SHORT).show();
                     } else {
+                        if(jsonObjectItacSalvaLite!=null) {
+                            dBitacsController.updateItac(jsonObjectItacSalvaLite);
+                        }
                         String principal_variable = Screen_Login_Activity.itac_JSON.getString(DBitacsController.principal_variable);
                         if(Screen_Login_Activity.checkStringVariable(principal_variable)) {
                             updatePhotosItacInMySQL(); //updatePhotosInMySQL
@@ -1910,7 +1938,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                 }
             }
         }
-        else if(type == "upload_itac_image"){
+        else if(type.equals("upload_itac_image")){
             if(result == null){
                 Toast.makeText(this,"No se puede acceder al servidor, no se subio imagen," +
                         "Intente luego la sincronización", Toast.LENGTH_LONG).show();
@@ -1923,7 +1951,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                 //showRingDialog("Validando registro...");
             }
         }
-        else if(type == "get_tareas_amount"){
+        else if(type.equals("get_tareas_amount")){
             if(result == null){
                 hideRingDialog();
                 Toast.makeText(this, "No se pudo establecer conexión con el servidor", Toast.LENGTH_LONG).show();
@@ -1952,7 +1980,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                 }
             }
         }
-        else if(type == "get_tareas_with_limit"){
+        else if(type.equals("get_tareas_with_limit")){
             if(result == null){
                 hideRingDialog();
                 Toast.makeText(this, "No se pudo establecer conexión con el servidor", Toast.LENGTH_LONG).show();
@@ -2090,7 +2118,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                 }
             }
         }
-        else if(type == "update_tarea"){
+        else if(type.equals("update_tarea")){
             if (!checkConection()) {
                 Toast.makeText(this, "No hay conexion a Internet, no se pudo guardar tarea. Intente de nuevo con conexion", Toast.LENGTH_LONG).show();
             }else {
@@ -2111,7 +2139,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                     }
                 }
             }
-        }else if(type == "update_contador"){
+        }else if(type.equals("update_contador")){
             if (!checkConection()) {
                 Toast.makeText(this, "No hay conexion a Internet, no se pudo guardar contador. Intente de nuevo con conexion", Toast.LENGTH_LONG).show();
             }else {
@@ -2126,7 +2154,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                     }
                 }
             }
-        }else if(type == "upload_image"){
+        }else if(type.equals("upload_image")){
             if(result == null){
                 Toast.makeText(this,"No se puede acceder al servidor, no se subio imagen", Toast.LENGTH_LONG).show();
             }
@@ -2140,7 +2168,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                 //showRingDialog("Validando registro...");
             }
         }
-        else if(type == "create_tarea"){
+        else if(type.equals("create_tarea")){
             hideRingDialog();
             if(result == null){
                 Toast.makeText(this,"No se pudo establecer conexión con el servidor", Toast.LENGTH_LONG).show();

@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="40dp">
+
+        <include
+            android:id="@+id/my_toolbar"
+            layout="@layout/toolbar" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="1dp">
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="20dp"
+                android:layout_gravity="center"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_span="2"
+                android:text="ESTADO DE CONSERVACIÓN
+Y DISEÑO DE ZONA DE TRABAJO"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Espacio Para Trabajar"
+                android:textSize="15dp"
+                android:layout_gravity="center"
+                android:textColor="@color/colorBlueAppRuta"
+                android:textStyle="bold"
+                android:layout_marginTop="20dp"
+                />
+            <Spinner
+                android:id="@+id/spinner_espacio_para_trabajar_seccion3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="center"
+                />
+        </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="DESAGUE"
+            android:textSize="15dp"
+            android:layout_gravity="center"
+            android:textColor="@color/colorBlueAppRuta"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            />
+        <RadioGroup
+            android:id="@+id/radioGroup_desague_seccion3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="150dp"
+            android:gravity="left">
+            <RadioButton
+                android:id="@+id/radioButton_si_seccion3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Si"
+                android:textSize="17dp"/>
+            <RadioButton
+                android:layout_marginTop="5dp"
+                android:id="@+id/radioButton_no_seccion3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No"
+                android:textSize="17dp"/>
+
+
+        </RadioGroup>
+
+        <LinearLayout
+            android:id="@+id/linearLayout_desague_si_seccion3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_marginTop="30dp"
+            android:visibility="gone"
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Estado de Desague"
+                android:textSize="15dp"
+                android:layout_gravity="center"
+                android:textColor="@color/colorBlueAppRuta"
+                android:textStyle="bold"
+                />
+            <Spinner
+                android:id="@+id/spinner_desague_si_seccion3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="center"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_marginTop="30dp"
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="ILUMINACIÓN"
+                android:textSize="15dp"
+                android:layout_gravity="center"
+                android:textColor="@color/colorBlueAppRuta"
+                android:textStyle="bold"
+                android:layout_margin="10dp"
+                />
+            <RadioGroup
+                android:id="@+id/radioGroup_iluminacion"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_marginLeft="90dp"
+                android:gravity="left">
+
+                <RadioButton
+                    android:id="@+id/radioButton_Natural_seccion3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Natural"
+                    android:textSize="17dp"/>
+                <RadioButton
+                    android:id="@+id/radioButton_Suficiente_seccion3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Suficiente"
+                    android:textSize="17dp" />
+                <RadioButton
+                    android:id="@+id/radioButton_Poca_seccion3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Poca"
+                    android:textSize="17dp" />
+                <RadioButton
+                    android:id="@+id/radioButton_Nula_seccion3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nula"
+                    android:textSize="17dp" />
+            </RadioGroup>
+            <LinearLayout
+                android:id="@+id/linearLayout_iluminacion_seccion3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="gone"
+                >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Iluminación Adicional"
+                android:textSize="15dp"
+                android:layout_gravity="center"
+                android:textColor="@color/colorBlueAppRuta"
+                android:textStyle="bold"
+                android:layout_marginTop="20dp"
+                />
+            <Spinner
+                android:id="@+id/spinner_accion_iluminacion_seccion3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="center"
+                />
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            >
+            <EditText
+                android:id="@+id/editText_nota_screen_seccion3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:gravity="center"
+                android:hint="Nota"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dip"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="5dp">
+            <Button
+                android:id="@+id/button_guardar_datos_screen_seccion3"
+                android:layout_width="266dp"
+                android:layout_height="40dp"
+                android:text="GUARDAR DATOS"
+
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:background="@drawable/fondo_boton_azul"
+                />
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

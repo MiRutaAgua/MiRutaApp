@@ -1143,7 +1143,12 @@ public class Screen_Edit_ITAC extends AppCompatActivity implements Dialog.Dialog
         String gestor = null;
         gestor = Screen_Login_Activity.itac_JSON.getString(DBitacsController.GESTOR).trim();
         if(!Screen_Login_Activity.checkStringVariable(gestor)){
-            gestor = "Sin_Gestor";
+            if(Screen_Login_Activity.itac_JSON.getInt(DBitacsController.id) < 0){
+                gestor = spinner_gestor_screen_edit_itac.getSelectedItem().toString();
+                Screen_Login_Activity.itac_JSON.put(DBitacsController.GESTOR, gestor);
+            }else {
+                gestor = "Sin_Gestor";
+            }
         }
         File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" +
                 Screen_Login_Activity.current_empresa + "/fotos_ITACs/" + gestor + "/"+ cod_emplazamiento+"/");
@@ -1272,6 +1277,15 @@ public class Screen_Edit_ITAC extends AppCompatActivity implements Dialog.Dialog
 
             int id =Screen_Login_Activity.itac_JSON.getInt(DBitacsController.id);
             if (id > 0) {
+                String status = Screen_Login_Activity.itac_JSON.getString(
+                        DBitacsController.status_itac).trim();
+                if(!Screen_Login_Activity.checkStringVariable(status)){
+                    status = "IDLE, TO_UPDATE";
+                }else if(!status.contains("TO_UPDATE")){
+                    status+=", TO_UPDATE";
+                }
+                Screen_Login_Activity.itac_JSON.put(
+                        DBitacsController.status_itac, status);
                 team_or_personal_task_selection_screen_Activity.
                         dBitacsController.updateItac(Screen_Login_Activity.itac_JSON);
             }else {

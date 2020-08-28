@@ -402,86 +402,86 @@ public class Tabla_de_Codigos {
         String tipo_t = getTipoTareaByAnomaly(anomalia).trim();
         calibre = calibre.trim();
 
-        if(tipo_t == "NCI")
+        if(tipo_t.equals("NCI"))
         {
             return "NCI " + calibre + "mm";
         }
-        else if(tipo_t == "NCI + RC")
+        else if(tipo_t.equals("NCI + RC"))
         {
             return "NCI " + calibre + "mm " + "+ RC";
         }
-        else if(tipo_t == "LFTD")
+        else if(tipo_t.equals("LFTD"))
         {
             return "LFTD " + calibre + "mm";
         }
-        else if(tipo_t == "S.I.")
+        else if(tipo_t.equals("S.I."))
         {
             return "S.I. " + calibre + "mm";
         }
-        else if(tipo_t == "U")
+        else if(tipo_t.equals("U"))
         {
             return "U " + calibre + "mm";
         }
-        else if(tipo_t == "TD")
+        else if(tipo_t.equals("TD"))
         {
             return "TD";
         }
-        else if(tipo_t == "TD")
+        else if(tipo_t.equals("TD"))
         {
             if(marca.toLowerCase().contains("Sappel")){
                 return "TD";
             }
             return "TD/NCI " + calibre + "mm";
         }
-        else if(tipo_t == "I+")
+        else if(tipo_t.equals("I+"))
         {
             return "I+";
         }
-        else if(tipo_t == "I+/NCI")
+        else if(tipo_t.equals("I+/NCI"))
         {
             if(marca.toLowerCase().contains("sappel")){
                 return "I+";
             }
             return "I+/NCI " + calibre + "mm";
         }
-        else if(tipo_t == "LECT.R o RC")
+        else if(tipo_t.equals("LECT.R o RC"))
         {
             return "LECT.R o RC";
         }
-        else if(tipo_t == "RC")
+        else if(tipo_t.equals("RC"))
         {
             return "RC";
         }
-        else if(tipo_t == "RC NCI")
+        else if(tipo_t.equals("RC NCI"))
         {
             return "RC NCI " + calibre + "mm";
         }
-        else if(tipo_t == "RCN")
+        else if(tipo_t.equals("RCN"))
         {
             return "RCN";
         }
-        else if(tipo_t == "C. H. W4")
+        else if(tipo_t.equals("C. H. W4"))
         {
             return "C. H. W4";
         }
-        else if(tipo_t == "T"){
+        else if(tipo_t.equals("T")){
             String pre;
-            if(calibre == "15")
+            if(calibre.equals("15"))
                 pre = "T3/4\" ";
 
-            else if(calibre == "13")
+            else if(calibre.equals("13"))
                 pre =  "T7/8\" ";
 
-            else if(calibre == "20")
+            else if(calibre.equals("20"))
                 pre =  "T1\" ";
 
-            else if(calibre == "25")
+            else if(calibre.equals("25"))
                 pre =  "T11/4\" ";
 
-            else if(calibre == "30")
+            else if(calibre.equals("30"))
                 pre =  "T11/2\" ";
 
-            else if(calibre == "40")
+            else if(calibre.equals("40"))
                 pre =  "T2\" ";
 
             else{
@@ -489,24 +489,24 @@ public class Tabla_de_Codigos {
             }
             return pre + calibre + "mm";
         }
-        else if(tipo_t == "T + NCI"){
+        else if(tipo_t.equals("T + NCI")){
             String pre;
-            if(calibre == "15")
+            if(calibre.equals("15"))
                 pre = "T3/4\" ";
 
-            else if(calibre == "13")
+            else if(calibre.equals("13"))
                 pre =  "T7/8\" ";
 
-            else if(calibre == "20")
+            else if(calibre.equals("20"))
                 pre =  "T1\" ";
 
-            else if(calibre == "25")
+            else if(calibre.equals("25"))
                 pre =  "T11/4\" ";
 
-            else if(calibre == "30")
+            else if(calibre.equals("30"))
                 pre =  "T11/2\" ";
 
-            else if(calibre == "40")
+            else if(calibre.equals("40"))
                 pre =  "T2\" ";
 
             else{

@@ -315,7 +315,6 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="horizontal"
-
             >
 
             <LinearLayout
@@ -505,8 +504,26 @@
                 android:layout_gravity="center"
                 android:background="@drawable/ic_edit_blue_24dp"
                 />
-        </LinearLayout>
 
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dip"
+            android:gravity="center"
+            android:orientation="horizontal"
+            >
+            <Button
+                android:id="@+id/imageView_itac_screen_exec_task"
+                android:layout_marginLeft="10dp"
+                android:layout_width="120dp"
+                android:layout_height="40dp"
+                android:text="ITAC"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:background="@drawable/fondo_boton_azul"
+                />
+        </LinearLayout>
         <LinearLayout
 
             android:layout_width="match_parent"

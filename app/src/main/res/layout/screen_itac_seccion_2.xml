@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="40dp">
+
+        <include
+            android:id="@+id/my_toolbar"
+            layout="@layout/toolbar" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="1dp">
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="20dp"
+                android:layout_gravity="center"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_span="2"
+                android:text="LLAVES DE PUERTAS"/>
+        </LinearLayout>
+
+        <RadioButton
+            android:id="@+id/radioButton_siempre_abierto_seccion2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Siempre Abierto"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="90dp"
+            android:textSize="17dp" />
+
+        <RadioGroup
+            android:id="@+id/radioGroup_tipo_llaves_seccion2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="100dp"
+            android:gravity="left">
+
+            <RadioButton
+                android:id="@+id/radioButton_llaves_de_exterior_seccion2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Llaves de exterior"
+                android:textSize="17dp" />
+
+            <RadioButton
+                android:id="@+id/radioButton_llaves_maestras_seccion2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Llaves maestras"
+                android:textSize="17dp" />
+
+            <RadioButton
+                android:id="@+id/radioButton_llave_especifica_seccion2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Llave específica"
+                android:textSize="17dp" />
+        </RadioGroup>
+
+        <LinearLayout
+            android:id="@+id/linearLayout_llaves_de_exterior_seccion2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_marginTop="30dp"
+            android:visibility="gone"
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Llaves de Exterior"
+                android:textSize="15dp"
+                android:layout_gravity="center"
+                android:textColor="@color/colorBlueAppRuta"
+                android:textStyle="bold"
+                />
+            <Spinner
+                android:id="@+id/spinner_llaves_de_exterior_seccion2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="center"
+                android:hint="Nota"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/linearLayout_llaves_maestras_seccion2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_marginTop="30dp"
+            android:visibility="gone"
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Llaves Maestras"
+                android:textSize="15dp"
+                android:layout_gravity="center"
+                android:textColor="@color/colorBlueAppRuta"
+                android:textStyle="bold"
+                />
+            <Spinner
+                android:id="@+id/spinner_llaves_maestras_seccion2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:gravity="center"
+                android:hint="Nota"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Utilidad de Llaves Maestras"
+                android:textSize="15dp"
+                android:layout_gravity="center"
+                android:textColor="@color/colorBlueAppRuta"
+                android:textStyle="bold"
+                android:layout_marginTop="10dp"
+                />
+            <Spinner
+                android:id="@+id/spinner_utilidad_llaves_maestras_seccion2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:gravity="center"
+                android:hint="Nota"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout_llave_especifica_seccion2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:orientation="vertical"
+            android:layout_marginLeft="70dp"
+            android:layout_marginTop="30dp"
+            android:visibility="gone"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Llave Específica"
+                android:textSize="15dp"
+                android:layout_gravity="left"
+                android:textColor="@color/colorBlueAppRuta"
+                android:textStyle="bold"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="70dp"
+                />
+
+            <CheckBox
+                android:id="@+id/cb_Tienen_todos_los_vecinos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tienen todos los vecinos"
+                android:textSize="17dp" />
+
+            <CheckBox
+                android:id="@+id/cb_Tiene_algun_vecino"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Tiene algun vecino"
+                android:textSize="17dp" />
+
+            <CheckBox
+                android:id="@+id/cb_Presidente"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Presidente"
+                android:textSize="17dp" />
+            <CheckBox
+                android:id="@+id/cb_Administracion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Administracion"
+                android:textSize="17dp" />
+
+            <CheckBox
+                android:id="@+id/cb_Conserje"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Conserje"
+                android:textSize="17dp" />
+            <CheckBox
+                android:id="@+id/cb_Copia_en_gestor_aguas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Copia en gestor aguas"
+                android:textSize="17dp" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            >
+            <EditText
+                android:id="@+id/editText_nota_screen_seccion2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:gravity="center"
+                android:hint="Nota"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dip"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="5dp">
+            <Button
+                android:id="@+id/button_guardar_datos_screen_seccion2"
+                android:layout_width="266dp"
+                android:layout_height="40dp"
+                android:text="GUARDAR DATOS"
+
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:background="@drawable/fondo_boton_azul"
+                />
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

@@ -76,7 +76,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
     private Button button_scan_serial_number_screen_exec_task;
 
     private Button button_scan_module_screen_exec_task,
-    anomaly_button,
+    anomaly_button, imageView_itac_screen_exec_task,
             button_guardar_datos;
 
     private Button button_validate_screen_exec_task,
@@ -185,6 +185,7 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         after_instalation_photo_screen_exec_task = (ImageView)findViewById(R.id.final_instalation_photo_screen_exec_task);
         button_codigo_geolocalization_screen_exec_task = (ImageView)findViewById(R.id.button_codigo_geolocalization_screen_exec_task);
 
+        imageView_itac_screen_exec_task = (Button)findViewById(R.id.imageView_itac_screen_exec_task);
         button_scan_serial_number_screen_exec_task= (Button)findViewById(R.id.button_scan_serial_number_screen_exec_task);
         button_scan_module_screen_exec_task= (Button)findViewById(R.id.button_scan_module_screen_exec_task);
         button_validate_screen_exec_task          = (Button)findViewById(R.id.button_validate_screen_exec_task);
@@ -378,6 +379,36 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
             }
             @Override
             public void afterTextChanged(Editable editable) {
+            }
+        });
+        imageView_itac_screen_exec_task.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Execute_Task.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        String cod_emplazamiento = textView_codigo_geolocalization_screen_exec_task.
+                                getText().toString();
+                        if(!cod_emplazamiento.isEmpty()) {
+                            onButtonITAC(cod_emplazamiento);
+                        }
+                    }
+                });
+                imageView_itac_screen_exec_task.startAnimation(myAnim);
             }
         });
         imageView_call_phone2_exec_task.setOnClickListener(new View.OnClickListener() {
@@ -938,6 +969,82 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         }
         llenarInformacionDeEmplazamiento();
 
+    }
+
+    private void onButtonITAC(String cod_emplazamiento) {
+        if (team_or_personal_task_selection_screen_Activity.dBitacsController != null) {
+            if (team_or_personal_task_selection_screen_Activity.dBitacsController.databasefileExists(this)) {
+                if (team_or_personal_task_selection_screen_Activity.dBitacsController.checkForTableExists()) {
+                    if (team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas() > 0) {
+                        ArrayList<String> itacs = new ArrayList<>();
+                        try {
+                            itacs = team_or_personal_task_selection_screen_Activity.
+                                    dBitacsController.get_all_itacs_from_Database();
+                            for (int i = 0; i < itacs.size(); i++) {
+                                JSONObject jsonObject = null;
+                                try {
+                                    jsonObject = new JSONObject(itacs.get(i));
+                                    if (!team_or_personal_task_selection_screen_Activity.checkGestor(jsonObject)) {
+                                        continue;
+                                    }
+                                    String c_emplazamiento = jsonObject.getString(
+                                            DBitacsController.codigo_itac).trim();
+
+                                    if(c_emplazamiento.equals(cod_emplazamiento)){
+                                        if (jsonObject != null) {
+                                            Screen_Login_Activity.itac_JSON = jsonObject;
+                                            try {
+                                                if(Screen_Login_Activity.itac_JSON!=null) {
+                                                    Intent intent = new Intent(this, Screen_Itac.class);
+                                                    startActivity(intent);
+                                                    return;
+                                                }else{
+                                                    Toast.makeText(this, "Itac nula", Toast.LENGTH_SHORT).show();
+                                                }
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                                Toast.makeText(this, "No pudo acceder a itac Error -> "+e.toString(), Toast.LENGTH_SHORT).show();
+                                            }
+                                        }else{
+                                            Toast.makeText(this, "JSON nulo, se delvio de la tabla elemento nulo", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        } catch(JSONException e){
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                new AlertDialog.Builder(this)
+                        .setTitle("No exite ITAC")
+                        .setMessage("¿Desea crear un nuevo itac?")
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                JSONObject jsonObject = new JSONObject();
+                                Screen_Login_Activity.itac_JSON = DBitacsController.setEmptyJSON(jsonObject);
+                                try {
+                                    Screen_Login_Activity.itac_JSON.put(
+                                            DBitacsController.codigo_itac, cod_emplazamiento);
+                                    Intent intent_open_screen_edit_itac = new Intent(
+                                            Screen_Execute_Task.this, Screen_Edit_ITAC.class);
+                                    startActivity(intent_open_screen_edit_itac);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                            }
+                        }).show();
+            }
+        }
     }
 
     private void llenarInformacionDeEmplazamiento() {

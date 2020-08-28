@@ -390,23 +390,4 @@ public class Menu_Options extends AppCompatDialogFragment{
         messageDialog.setTitleAndHint(title, hint);
         messageDialog.show(Menu_Options.this.getFragmentManager(), title);
     }
-
-//    @Override
-//    public void onTaskComplete(String type, String result) throws JSONException {
-////        if(type == "save_work") {
-////            if (result == null) {
-////                Log.e("result", "nulo");
-////            }
-////            else if(result.isEmpty()){
-////                Log.e("result", "vacio");
-////            }
-////            else if (result.equals("upload not success")) {
-////                Log.e("result", "upload not success");
-////            }else{
-////                Log.e("result", "upload success");
-////            }
-////        }else{
-////            Log.e("type", type);
-////        }
-//    }
 }

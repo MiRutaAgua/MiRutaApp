@@ -489,11 +489,11 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
     public void pasarTexto(String telefono) throws JSONException {
 
         if(!(TextUtils.isEmpty(telefono))){
-            if(Dialog.getTitle() == "telefono1"){
+            if(Dialog.getTitle().equals("telefono1")){
                 telefono1.setText((CharSequence) telefono);
                 Screen_Login_Activity.tarea_JSON.put(DBtareasController.telefono1, telefono1.getText().toString());
 //                Screen_Login_Activity.tarea_JSON.put(DBtareasController.MENSAJE_LIBRE, "#"+telefono+"#");
-            }else if(Dialog.getTitle() == "telefono2"){
+            }else if(Dialog.getTitle().equals("telefono2")){
                 telefono2.setText((CharSequence) telefono);
                 Screen_Login_Activity.tarea_JSON.put(DBtareasController.telefono2, telefono2.getText().toString());
 //                Screen_Login_Activity.tarea_JSON.put(DBtareasController.MENSAJE_LIBRE, "#"+telefono+"#");

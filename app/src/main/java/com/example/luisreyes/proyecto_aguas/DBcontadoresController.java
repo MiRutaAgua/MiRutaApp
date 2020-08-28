@@ -40,8 +40,10 @@ public class DBcontadoresController extends SQLiteOpenHelper {
     public static final String tipo_radio = "tipo_radio";
     public static final String ruedas = "ruedas";
     public static final String lectura_inicial = "lectura_inicial";
-    public static final String status_contador = "status_contador";
     public static final String encargado_contador = "encargado";
+    public static final String equipo_encargado = "equipo_encargado";
+    public static final String gestor = "gestor";
+    public static final String status_contador = "status_contador";
     public static final String date_time_modified_contador = "date_time_modified";
     private String empresa = "";
 
@@ -64,8 +66,10 @@ public class DBcontadoresController extends SQLiteOpenHelper {
             jsonContadorType.put(tipo_radio, "");
             jsonContadorType.put(ruedas, "");
             jsonContadorType.put(lectura_inicial, "");
-            jsonContadorType.put(status_contador, "");
             jsonContadorType.put(encargado_contador, "");
+            jsonContadorType.put(equipo_encargado, "");
+            jsonContadorType.put(gestor, "");
+            jsonContadorType.put(status_contador, "");
             jsonContadorType.put(date_time_modified_contador, "");
 
         } catch (JSONException e) {
@@ -91,8 +95,10 @@ public class DBcontadoresController extends SQLiteOpenHelper {
                         tipo_radio+"  TEXT, " +
                         ruedas+"  TEXT, " +
                         lectura_inicial+"  TEXT, " +
-                        status_contador+"  TEXT, " +
                         encargado_contador+"  TEXT, " +
+                        equipo_encargado+"  TEXT, " +
+                        gestor+"  TEXT, " +
+                        status_contador+"  TEXT, " +
                         date_time_modified_contador+"  TEXT" +
                         ")");
             } catch (SQLException e) {

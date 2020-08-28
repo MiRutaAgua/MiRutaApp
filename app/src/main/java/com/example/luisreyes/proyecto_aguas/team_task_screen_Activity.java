@@ -130,8 +130,6 @@ public class team_task_screen_Activity extends AppCompatActivity {
         button_tareas_cercanas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
                 if (team_or_personal_task_selection_screen_Activity.dBtareasController != null) {
                     if (team_or_personal_task_selection_screen_Activity.dBtareasController.databasefileExists(team_task_screen_Activity.this)) {
                         if (team_or_personal_task_selection_screen_Activity.dBtareasController.checkForTableExists()) {
@@ -163,13 +161,19 @@ public class team_task_screen_Activity extends AppCompatActivity {
                                     }
                                 });
                                 button_tareas_cercanas.startAnimation(myAnim);
-
-
-                            }}}}
-                    //button_tareas_cercanas.setEnabled(false);
-                    Toast.makeText(team_task_screen_Activity.this,"Cargue Tareas", Toast.LENGTH_LONG).show();
-
-                 }
+                            }else{
+                                Toast.makeText(team_task_screen_Activity.this,"No hay Tareas", Toast.LENGTH_LONG).show();
+                            }
+                        }else{
+                            Toast.makeText(team_task_screen_Activity.this,"No hay Tareas", Toast.LENGTH_LONG).show();
+                        }
+                    }else{
+                        Toast.makeText(team_task_screen_Activity.this,"No hay Tareas", Toast.LENGTH_LONG).show();
+                    }
+                }else{
+                    Toast.makeText(team_task_screen_Activity.this,"No hay Tareas", Toast.LENGTH_LONG).show();
+                }
+            }
         });
 
         button_tabla_tareas_equipo.setOnClickListener(new View.OnClickListener() {

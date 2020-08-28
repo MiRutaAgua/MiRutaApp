@@ -29,6 +29,7 @@ public class DBEmpresasController extends SQLiteOpenHelper {
     public static final String id = "id";
     public static final String codigo_empresa = "codigo_empresa";
     public static final String empresa = "empresa";
+    public static final String nombre_empresa = "nombre_empresa";
     public static final String geolocalizacion = "geolocalizacion";
     public static final String descripcion = "descripcion";
     public static final String permisos = "permisos";
@@ -43,6 +44,7 @@ public class DBEmpresasController extends SQLiteOpenHelper {
             jsonEmpresaType.put(id, 1);
             jsonEmpresaType.put(codigo_empresa, "");
             jsonEmpresaType.put(empresa, "");
+            jsonEmpresaType.put(nombre_empresa, "");
             jsonEmpresaType.put(geolocalizacion, "");
             jsonEmpresaType.put(descripcion, "");
             jsonEmpresaType.put(permisos, "");
@@ -63,6 +65,7 @@ public class DBEmpresasController extends SQLiteOpenHelper {
                 sqLiteDatabase.execSQL("Create table if not exists " + table_name + " (id integer primary key autoincrement, " +
                         codigo_empresa+"  TEXT, " +
                         empresa+"  TEXT, " +
+                        nombre_empresa+"  TEXT, " +
                         geolocalizacion+"  TEXT, " +
                         descripcion+"  TEXT, " +
                         permisos+"  TEXT, " +

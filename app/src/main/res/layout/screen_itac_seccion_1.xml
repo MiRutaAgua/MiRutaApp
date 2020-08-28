@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="40dp">
+
+        <include
+            android:id="@+id/my_toolbar"
+            layout="@layout/toolbar" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="1dp">
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="20dp"
+                android:layout_gravity="center"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_span="2"
+                android:text="ACCESO Y UBICACIÓN"/>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="UBICACIÓN"
+            android:textSize="15dp"
+            android:layout_gravity="center"
+            android:textColor="@color/colorBlueAppRuta"
+            android:textStyle="bold"
+            android:layout_margin="10dp"
+            />
+        <RadioGroup
+            android:id="@+id/radioGroup_seccion1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="80dp"
+            android:gravity="left">
+            <RadioButton
+                android:id="@+id/radioButton_dentro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dentro de Edificio"
+                android:textSize="17dp"/>
+            <RadioButton
+                android:layout_marginTop="5dp"
+                android:id="@+id/radioButton_exterior"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Exterior"
+                android:textSize="17dp"/>
+
+
+        </RadioGroup>
+
+        <LinearLayout
+            android:id="@+id/linearLayout_dentro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_marginTop="30dp"
+            android:visibility="gone"
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Ubicación Dentro del Edificio"
+                android:textSize="15dp"
+                android:layout_gravity="center"
+                android:textColor="@color/colorBlueAppRuta"
+                android:textStyle="bold"
+                />
+            <Spinner
+                android:id="@+id/spinner_dentro_screen_seccion1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="center"
+                android:hint="Nota"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout_exterior"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_marginTop="30dp"
+            android:visibility="gone"
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="ACCESO"
+                android:textSize="15dp"
+                android:layout_gravity="center"
+                android:textColor="@color/colorBlueAppRuta"
+                android:textStyle="bold"
+                android:layout_margin="10dp"
+                />
+            <RadioGroup
+                android:id="@+id/radioGroup_exterior"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_marginLeft="40dp"
+                android:gravity="left">
+
+                <RadioButton
+                    android:id="@+id/radioButton_libre_acceso"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Libre Acceso"
+                    android:textSize="17dp"/>
+                <RadioButton
+                    android:id="@+id/radioButton_dentro_de_recinto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Dentro de Recinto Cerrado"
+                    android:textSize="17dp" />
+            </RadioGroup>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Ubicación en Exterior"
+                android:textSize="15dp"
+                android:layout_gravity="center"
+                android:textColor="@color/colorBlueAppRuta"
+                android:textStyle="bold"
+                android:layout_marginTop="30dp"
+                />
+            <Spinner
+                android:id="@+id/spinner_exterior_screen_seccion1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="center"
+                android:hint="Nota"/>
+
+        </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        >
+        <EditText
+            android:id="@+id/editText_nota_screen_seccion1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+           android:layout_margin="20dp"
+            android:gravity="center"
+            android:hint="Nota"/>
+
+    </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dip"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="5dp">
+            <Button
+                android:id="@+id/button_guardar_datos_screen_seccion1"
+                android:layout_width="266dp"
+                android:layout_height="40dp"
+                android:text="GUARDAR DATOS"
+
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:background="@drawable/fondo_boton_azul"
+                />
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>
