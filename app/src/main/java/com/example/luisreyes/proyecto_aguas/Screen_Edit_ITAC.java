@@ -1272,37 +1272,17 @@ public class Screen_Edit_ITAC extends AppCompatActivity implements Dialog.Dialog
             Screen_Login_Activity.itac_JSON.put(DBitacsController.descripcion_foto_7, editText_descripcion_photo_7_screen_edit_itac.getText().toString());
             Screen_Login_Activity.itac_JSON.put(DBitacsController.descripcion_foto_8, editText_descripcion_photo_8_screen_edit_itac.getText().toString());
 
-//            Screen_Login_Activity.itac_JSON.put(DBitacsController.status_itac, "?");//luego de aclar la duda de estados de los ITACs
-            Screen_Login_Activity.itac_JSON.put(DBitacsController.date_time_modified, DBtareasController.getStringFromFechaHora(new Date()));
-
             int id =Screen_Login_Activity.itac_JSON.getInt(DBitacsController.id);
             if (id > 0) {
-                String status = Screen_Login_Activity.itac_JSON.getString(
-                        DBitacsController.status_itac).trim();
-                if(!Screen_Login_Activity.checkStringVariable(status)){
-                    status = "IDLE, TO_UPDATE";
-                }else if(!status.contains("TO_UPDATE")){
-                    status+=", TO_UPDATE";
+                if(!updateItac()){
+                    openMessage("Error actualizando", "No se pudo actualiza ITAC");
+                    return false;
                 }
-                Screen_Login_Activity.itac_JSON.put(
-                        DBitacsController.status_itac, status);
-                team_or_personal_task_selection_screen_Activity.
-                        dBitacsController.updateItac(Screen_Login_Activity.itac_JSON);
             }else {
                 String cod = textView_cod_emplazamiento_screen_edit_itac.getText().toString();
+                String gestor = spinner_gestor_screen_edit_itac.getSelectedItem().toString();
                 if(!cod.isEmpty()) {
-                    if(!team_or_personal_task_selection_screen_Activity.
-                            dBitacsController.checkIfItacExists(cod)) {
-                        Screen_Login_Activity.itac_JSON.put(DBitacsController.codigo_itac, cod);
-                        Screen_Login_Activity.itac_JSON.put(DBitacsController.GESTOR, spinner_gestor_screen_edit_itac.getSelectedItem().toString());
-
-                        team_or_personal_task_selection_screen_Activity.
-                                dBitacsController.insertItac(Screen_Login_Activity.itac_JSON);
-                        JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.
-                                dBitacsController.get_one_itac_from_Database(cod));
-                        Screen_Login_Activity.itac_JSON.put(DBitacsController.id,
-                                jsonObject.getInt(DBitacsController.id));
-                    }else {
+                    if(!createItac(cod, gestor)) {
                         openMessage("C.Emplazamiento Registrado", "No se pudo insertar. El Código de Emplazamiento ya existe");
                         return false;
                     }
@@ -1316,6 +1296,62 @@ public class Screen_Edit_ITAC extends AppCompatActivity implements Dialog.Dialog
             return false;
         }
         return true;
+
+    }
+    public static boolean updateItac(){
+        try {
+            Screen_Login_Activity.itac_JSON.put(DBitacsController.date_time_modified, DBtareasController.getStringFromFechaHora(new Date()));
+
+            String status = Screen_Login_Activity.itac_JSON.getString(
+                    DBitacsController.status_itac).trim();
+            if(!Screen_Login_Activity.checkStringVariable(status)){
+                status = "IDLE, TO_UPDATE";
+            }else if(!status.contains("TO_UPDATE")){
+                status+=", TO_UPDATE";
+            }
+            Screen_Login_Activity.itac_JSON.put(
+                    DBitacsController.status_itac, status);
+            team_or_personal_task_selection_screen_Activity.
+                    dBitacsController.updateItac(Screen_Login_Activity.itac_JSON);
+            return true;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    public static boolean createItac(String cod , String gestor){
+        try {
+            if(!team_or_personal_task_selection_screen_Activity.
+                    dBitacsController.checkIfItacExists(cod)) {
+
+                Screen_Login_Activity.itac_JSON.put(DBitacsController.codigo_itac, cod);
+
+                Screen_Login_Activity.itac_JSON.put(DBitacsController.GESTOR, gestor);
+                Screen_Login_Activity.itac_JSON.put(DBitacsController.equipo,
+                        Screen_Login_Activity.equipo_JSON.getString(DBequipo_operariosController.equipo_operario));
+
+                String status = "IDLE, TO_UPDATE";
+                Screen_Login_Activity.itac_JSON.put(DBitacsController.status_itac, status);
+                Screen_Login_Activity.itac_JSON.put(DBitacsController.date_time_modified,
+                        DBtareasController.getStringFromFechaHora(new Date()));
+
+                team_or_personal_task_selection_screen_Activity.
+                        dBitacsController.insertItac(Screen_Login_Activity.itac_JSON);
+                JSONObject jsonObject = new JSONObject(team_or_personal_task_selection_screen_Activity.
+                        dBitacsController.get_one_itac_from_Database(cod));
+                Screen_Login_Activity.itac_JSON.put(DBitacsController.id,
+                        jsonObject.getInt(DBitacsController.id));
+                return true;
+            }else {
+                return false;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
     public void openMessage(String title, String hint){
         MessageDialog messageDialog = null;
@@ -1336,7 +1372,16 @@ public class Screen_Edit_ITAC extends AppCompatActivity implements Dialog.Dialog
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        finishThisClass();
+                        try {
+                            int id = Screen_Login_Activity.itac_JSON.getInt(DBitacsController.id);
+                            if (id > 0) {
+                                finishThisClass();
+                                return;
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        Screen_Edit_ITAC.this.finish();
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {

@@ -1403,6 +1403,12 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
         if(progressDialog==null) {
             progressDialog = ProgressDialog.show(this, "Espere", text, true);
             progressDialog.setCancelable(false);
+        }else{
+            try {
+                progressDialog.setMessage(text);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
     public static void hideRingDialog(){
@@ -2106,7 +2112,6 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
 
                     count_tareas_descargadas += PEDAZOS_A_DESCARGAR;
                     if(count_tareas_descargadas >= cantidad_total_de_tareas_en_servidor) {
-                        hideRingDialog();
                         showRingDialog("Actualizando en internet");
                         Toast.makeText(this, "Tareas descargadas correctamente", Toast.LENGTH_LONG).show();
                         checkTareasMissinInServer(tareas_en_servidor);

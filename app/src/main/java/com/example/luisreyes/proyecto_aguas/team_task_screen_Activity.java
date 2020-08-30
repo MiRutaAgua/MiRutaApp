@@ -155,8 +155,8 @@ public class team_task_screen_Activity extends AppCompatActivity {
                                     @Override
                                     public void onAnimationEnd(Animation arg0) {
                                         showRingDialog("Buscando Tareas");
-                                        Intent intent_open_table_team = new Intent(getApplicationContext(), permission_cercania.class);
-                                        startActivity(intent_open_table_team);
+                                        Intent intent_open_mapas = new Intent(getApplicationContext(), permission_cercania.class);
+                                        startActivity(intent_open_mapas);
                                         team_task_screen_Activity.this.finish();
                                     }
                                 });

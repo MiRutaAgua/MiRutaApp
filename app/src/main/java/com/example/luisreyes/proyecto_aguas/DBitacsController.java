@@ -30,7 +30,7 @@ public class DBitacsController extends SQLiteOpenHelper {
 
     public static final String id = "id";
     public static final String codigo_itac = "codigo_itac"; //codigo de emplazamiento
-    public static final String itac = "itac";
+    public static final String itac = "itac"; //Direccion del ITAC
 
     public static final String geolocalizacion = "geolocalizacion";
     public static final String acceso = "acceso";
@@ -107,13 +107,20 @@ public class DBitacsController extends SQLiteOpenHelper {
     public static final String equipo = "equipo";
     public static final String operario = "operario";
 
+    public static final String fecha_hora_cita = "fecha_hora_cita";
+    public static final String nuevo_citas = "nuevo_citas";
+    public static final String telefonos_status = "telefonos_status";
+
     public static final String gestor_itac = "gestor";
+    public static final String zona = "zona";
+    public static final String tipo = "tipo";
     public static final String status_itac = "status_itac";
 
     public static final String date_time_modified = "date_time_modified";
 
     public static final String principal_variable  = codigo_itac;
     public static String GESTOR = gestor_itac;
+    public static String sectop_p = zona;
     public static String direccion = itac;
 
     public DBitacsController(Context applicationContext, String empresa){
@@ -194,7 +201,14 @@ public class DBitacsController extends SQLiteOpenHelper {
             jsonItacType.put(foto_8, "");
             jsonItacType.put(equipo, "");
             jsonItacType.put(operario, "");
+
+            jsonItacType.put(fecha_hora_cita, "");
+            jsonItacType.put(nuevo_citas, "");
+            jsonItacType.put(telefonos_status, "");
+
             jsonItacType.put(gestor_itac, "");
+            jsonItacType.put(zona, "");
+            jsonItacType.put(tipo, "");
             jsonItacType.put(status_itac, "");
             jsonItacType.put(date_time_modified, "");
 
@@ -280,7 +294,14 @@ public class DBitacsController extends SQLiteOpenHelper {
                         foto_8+"  TEXT, " +
                         equipo+"  TEXT, " +
                         operario+"  TEXT, " +
+
+                        fecha_hora_cita+"  TEXT, " +
+                        nuevo_citas+"  TEXT, " +
+                        telefonos_status+"  TEXT, " +
+
                         gestor_itac+"  TEXT, " +
+                        zona+"  TEXT, " +
+                        tipo+"  TEXT, " +
                         status_itac+"  TEXT, " +
                         date_time_modified+"  TEXT" +
                         ")");
@@ -365,7 +386,14 @@ public class DBitacsController extends SQLiteOpenHelper {
             jsonItacType.put(foto_8, "");
             jsonItacType.put(equipo, "");
             jsonItacType.put(operario, "");
+
+            jsonItacType.put(fecha_hora_cita, "");
+            jsonItacType.put(nuevo_citas, "");
+            jsonItacType.put(telefonos_status, "");
+
             jsonItacType.put(gestor_itac, "");
+            jsonItacType.put(zona, "");
+            jsonItacType.put(tipo, "");
             jsonItacType.put(status_itac, "");
             jsonItacType.put(date_time_modified, "");
 
@@ -563,7 +591,19 @@ public class DBitacsController extends SQLiteOpenHelper {
             keys.add("null");
             return keys;
         }
-        Cursor c = database.rawQuery("SELECT * FROM "+table_name+";", null);
+        String equipo_del_operario ="", where_clause="";
+        try {
+            if(Screen_Login_Activity.equipo_JSON!=null) {
+                equipo_del_operario = Screen_Login_Activity.equipo_JSON
+                        .getString(DBequipo_operariosController.equipo_operario).trim();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        if(Screen_Login_Activity.checkStringVariable(equipo_del_operario)){
+            where_clause=" where "+equipo+"='"+equipo_del_operario+"'";
+        }
+        Cursor c = database.rawQuery("SELECT * FROM "+table_name+ where_clause+";", null);
 
         Iterator<String> keys_it = jsonItacType.keys();
         while (keys_it.hasNext()) {

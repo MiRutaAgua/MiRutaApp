@@ -311,6 +311,14 @@ public class Screen_Itac extends AppCompatActivity implements TaskCompleted{
                 button_seccion5.startAnimation(myAnim);
             }
         });
+
+        try {
+            Screen_Login_Activity.itac_JSON.put(DBitacsController.operario,
+                    Screen_Login_Activity.operario_JSON.getString(DBoperariosController.usuario));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         buscarFotosOffline();
 
         if (checkConection()){

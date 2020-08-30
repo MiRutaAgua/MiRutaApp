@@ -147,7 +147,6 @@ public class Screen_Tabla_Itacs extends AppCompatActivity {
                 button_add_itac_screen_table_itacs.startAnimation(myAnim);
             }
         });
-        descargarItacs();
 
         if (lista_de_itacs_screen_table_itac.getAdapter() != null) {
             if (lista_de_itacs_screen_table_itac.getAdapter().isEmpty()) {
@@ -186,6 +185,7 @@ public class Screen_Tabla_Itacs extends AppCompatActivity {
                         try {
                             itacs = team_or_personal_task_selection_screen_Activity.
                                     dBitacsController.get_all_itacs_from_Database();
+                            lista_ordenada_de_itas.clear();
                             for (int i = 0; i < itacs.size(); i++) {
                                 JSONObject jsonObject = null;
                                 try {
@@ -208,7 +208,6 @@ public class Screen_Tabla_Itacs extends AppCompatActivity {
                     orderItacsToArrayAdapter();
                 }
             }
-
         }
     }
     public static String orderItacForListView(MyItac itac){
@@ -235,6 +234,7 @@ public class Screen_Tabla_Itacs extends AppCompatActivity {
     public void orderItacsToArrayAdapter(){
         Collections.sort(lista_ordenada_de_itas);
         String string_view = "";
+        lista_itas.clear();
         for(int i=0; i < lista_ordenada_de_itas.size(); i++){
             string_view = orderItacForListView(lista_ordenada_de_itas.get(i));
             if(!lista_itas.contains(string_view)) {

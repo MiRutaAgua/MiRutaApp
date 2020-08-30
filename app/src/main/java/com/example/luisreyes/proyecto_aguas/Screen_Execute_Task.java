@@ -1025,10 +1025,18 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 JSONObject jsonObject = new JSONObject();
+
+                                String dir = Screen_Filter_Tareas.
+                                        getDirOfTaskWithCodEmplazamiento(cod_emplazamiento);
+
                                 Screen_Login_Activity.itac_JSON = DBitacsController.setEmptyJSON(jsonObject);
                                 try {
                                     Screen_Login_Activity.itac_JSON.put(
                                             DBitacsController.codigo_itac, cod_emplazamiento);
+                                    if(Screen_Login_Activity.checkStringVariable(dir)){
+                                        Screen_Login_Activity.itac_JSON.put(
+                                                DBitacsController.itac, dir);
+                                    }
                                     Intent intent_open_screen_edit_itac = new Intent(
                                             Screen_Execute_Task.this, Screen_Edit_ITAC.class);
                                     startActivity(intent_open_screen_edit_itac);

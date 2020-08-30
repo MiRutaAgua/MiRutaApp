@@ -663,10 +663,16 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 JSONObject jsonObject = new JSONObject();
+
+                                String dir = getDirOfTaskWithCodEmplazamiento(cod_emplazamiento);
                                 Screen_Login_Activity.itac_JSON = DBitacsController.setEmptyJSON(jsonObject);
                                 try {
                                     Screen_Login_Activity.itac_JSON.put(
                                             DBitacsController.codigo_itac, cod_emplazamiento);
+                                    if(Screen_Login_Activity.checkStringVariable(dir)){
+                                        Screen_Login_Activity.itac_JSON.put(
+                                                DBitacsController.itac, dir);
+                                    }
                                     Intent intent_open_screen_edit_itac = new Intent(
                                             Screen_Filter_Tareas.this, Screen_Edit_ITAC.class);
                                     startActivity(intent_open_screen_edit_itac);
@@ -684,6 +690,33 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
 
             }
         }
+    }
+
+    public static String getDirOfTaskWithCodEmplazamiento(String cod_emplazamiento) {
+        String dir = "";
+        try {
+            String tarea = team_or_personal_task_selection_screen_Activity.
+                    dBtareasController.get_one_tarea_from_Database(
+                    DBtareasController.codigo_de_geolocalizacion, cod_emplazamiento);
+            JSONObject jsonObjectTarea = new JSONObject(tarea);
+
+            String poblacion = jsonObjectTarea.getString(DBtareasController.poblacion);
+            String calle = jsonObjectTarea.getString(DBtareasController.calle);
+            String portal = jsonObjectTarea.getString(DBtareasController.numero);
+
+            if(Screen_Login_Activity.checkStringVariable(poblacion)){
+                dir += poblacion + "  ";
+            }
+            if(Screen_Login_Activity.checkStringVariable(poblacion)){
+                dir += calle + "  ";
+            }
+            if(Screen_Login_Activity.checkStringVariable(poblacion)){
+                dir += portal + "  ";
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return dir;
     }
 
     @Override

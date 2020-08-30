@@ -710,6 +710,8 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
                                     if (!dBempresasController.checkIfEmpresaExists(
                                             jsonObject.getString(DBEmpresasController.principal_variable))) {
                                         dBempresasController.insertEmpresa(jsonObject);
+                                    }else{
+                                        dBempresasController.updateEmpresa(jsonObject);
                                     }
                                 }
                             }
@@ -719,6 +721,7 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
                             Log.e("Excepción -> ", lista_empresas.toString());
                         }
                     }
+                    removeEmpresasDeleted();
                     hideRingDialog();
                     ArrayAdapter empresas_adapter = new ArrayAdapter(this, R.layout.spinner_text_view, lista_empresas_for_spinner);
                     spinner_filtro_empresa_screen_login.setAdapter(empresas_adapter);
@@ -815,6 +818,44 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
             }
             else {
                 updateOperarioInMySQL();
+            }
+        }
+    }
+
+    private void removeEmpresasDeleted() {
+        if(dBempresasController!=null) {
+            if (dBempresasController.databasefileExists(this)) {
+                if (dBempresasController.checkForTableExists()) {
+                    if (dBempresasController.countTableEmpresas() > 0) {
+                        ArrayList<String> empresas = new ArrayList<>();
+                        try {
+                            empresas = dBempresasController.get_all_empresas_from_Database();
+                            for (int i = 0; i < empresas.size(); i++) {
+                                try {
+                                    JSONObject jsonObject = new JSONObject(empresas.get(i));
+                                    String empresa = "";
+                                    try {
+                                        empresa = jsonObject.getString(DBEmpresasController.nombre_empresa).trim();
+                                        if (Screen_Login_Activity.checkStringVariable(empresa)) {
+                                            if (!lista_empresas_for_spinner.contains(empresa)) {
+                                                dBempresasController.deleteEmpresa(jsonObject);
+                                            }
+                                        }
+                                    }catch (JSONException e) {
+                                        Log.e("Excepcion empresa", "No se pudo obtener gestor\n" + e.toString());
+                                        e.printStackTrace();
+                                    }
+                                }catch (JSONException e) {
+                                    Log.e("Excepcion empresa", "No se pudo obtener gestor\n" + e.toString());
+                                    e.printStackTrace();
+                                }
+                            }
+                        }catch (Exception e) {
+                            Log.e("Excepcion empresas", "No se pudo obtener empresa\n" + e.toString());
+                            e.printStackTrace();
+                        }
+                    }
+                }
             }
         }
     }

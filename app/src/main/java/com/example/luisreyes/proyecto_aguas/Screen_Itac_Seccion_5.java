@@ -1,5 +1,7 @@
 package com.example.luisreyes.proyecto_aguas;
 
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -75,6 +77,7 @@ public class Screen_Itac_Seccion_5 extends AppCompatActivity {
                     public void onAnimationRepeat(Animation arg0) {
                         // TODO Auto-generated method stub
                     }
+                    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
                     @Override
                     public void onAnimationEnd(Animation arg0) {
                         guardarDatos();
@@ -140,6 +143,7 @@ public class Screen_Itac_Seccion_5 extends AppCompatActivity {
         populateView();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void guardarDatos() {
 
         for (int i=0; i < radioGroup_general_seccion5.getChildCount(); i++) {
@@ -217,21 +221,8 @@ public class Screen_Itac_Seccion_5 extends AppCompatActivity {
             }
         }
         try {
-            Screen_Login_Activity.itac_JSON.put(
-                    DBitacsController.date_time_modified,
-                    DBtareasController.getStringFromFechaHora(new Date()));
-            String status = Screen_Login_Activity.itac_JSON.getString(
-                    DBitacsController.status_itac).trim();
-            if(!Screen_Login_Activity.checkStringVariable(status)){
-                status = "IDLE, TO_UPDATE";
-            }else if(!status.contains("TO_UPDATE")){
-                status+=", TO_UPDATE";
-            }
-            Screen_Login_Activity.itac_JSON.put(
-                    DBitacsController.status_itac, status);
-            team_or_personal_task_selection_screen_Activity.dBitacsController.
-                    updateItac(Screen_Login_Activity.itac_JSON);
-        } catch (JSONException e) {
+            Screen_Edit_ITAC.updateItac();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

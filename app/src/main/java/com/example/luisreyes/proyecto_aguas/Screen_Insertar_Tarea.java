@@ -432,6 +432,9 @@ public class Screen_Insertar_Tarea extends AppCompatActivity implements TaskComp
             if(!(TextUtils.isEmpty(editText_ultima_lectura_screen_insertar_tarea.getText().toString())))
                 Screen_Login_Activity.tarea_JSON.put(DBtareasController.lectura_actual, editText_ultima_lectura_screen_insertar_tarea.getText().toString());
 
+            Screen_Login_Activity.tarea_JSON.put(DBtareasController.equipo,
+                    Screen_Login_Activity.equipo_JSON.getString(DBequipo_operariosController.equipo_operario));
+
             Screen_Login_Activity.tarea_JSON.put(DBtareasController.date_time_modified, DBtareasController.getStringFromFechaHora(new Date()));
             Screen_Login_Activity.tarea_JSON.put(DBtareasController.FechImportacion, DBtareasController.getStringFromFechaHora(new Date()));
             Screen_Login_Activity.tarea_JSON.put(DBtareasController.status_tarea, "IDLE");
