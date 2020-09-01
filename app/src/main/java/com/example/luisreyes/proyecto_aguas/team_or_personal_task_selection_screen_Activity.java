@@ -1532,6 +1532,9 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                                         Toast.makeText(this, "MySQL pieza: " + jsonObject.getString(DBPiezasController.principal_variable) + " insertado", Toast.LENGTH_LONG).show();
                                         team_or_personal_task_selection_screen_Activity.dBpiezasController.insertPieza(jsonObject);
                                     }
+                                    else{
+                                        team_or_personal_task_selection_screen_Activity.dBpiezasController.updatePieza(jsonObject, DBPiezasController.principal_variable);
+                                    }
                                 }
                             }
                         }catch (JSONException e){
@@ -1589,6 +1592,10 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                                                 " insertado", Toast.LENGTH_LONG).show();
                                         team_or_personal_task_selection_screen_Activity.dBgestoresController.insertGestor(jsonObject);
                                     }
+                                    else{
+                                        team_or_personal_task_selection_screen_Activity.dBgestoresController.
+                                                updateGestor(jsonObject, DBgestoresController.principal_variable);
+                                    }
                                 }
                             }
                         }catch (JSONException e){
@@ -1641,6 +1648,9 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                                             checkIfCausaExists(jsonObject.getString(DBCausasController.principal_variable))) {
                                         Toast.makeText(this, "MySQL causas: " + jsonObject.getString(DBCausasController.principal_variable) + " insertado", Toast.LENGTH_LONG).show();
                                         team_or_personal_task_selection_screen_Activity.dBcausasController.insertCausa(jsonObject);
+                                    }
+                                    else{
+                                        team_or_personal_task_selection_screen_Activity.dBcausasController.updateCausa(jsonObject, DBCausasController.principal_variable);
                                     }
                                 }
                             }
@@ -1708,8 +1718,8 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                                             if (!TextUtils.isEmpty(date_MySQL_string)) {
                                                 date_MySQL = team_or_personal_task_selection_screen_Activity.dBtareasController.getFechaHoraFromString(date_MySQL_string);
                                             }
-                                            JSONObject jsonObject_Lite = new JSONObject(team_or_personal_task_selection_screen_Activity.dBcontadoresController.get_one_contador_from_Database(
-                                                    jsonObject.getString(DBcontadoresController.serie_contador).trim()));
+                                            JSONObject jsonObject_Lite = new JSONObject(team_or_personal_task_selection_screen_Activity.dBcontadoresController.
+                                                    get_one_contador_from_Database(jsonObject.getString(DBcontadoresController.serie_contador).trim()));
                                             String date_SQLite_string = jsonObject_Lite.getString(DBcontadoresController.date_time_modified_contador).trim();
                                             Date date_SQLite = null;
 //                                    Toast.makeText(Screen_Table_Team.this, date_SQLite_string, Toast.LENGTH_LONG).show();

@@ -45,8 +45,12 @@
             android:value="@string/google_maps_key" />
 
         <activity
+            android:name=".MapsActivityItac"
+            android:label="@string/title_activity_maps_itac"></activity>
+        <activity android:name=".permission_itac" />
+        <activity
             android:name=".MapsActivityTareas"
-            android:label="@string/title_activity_maps_tareas"></activity>
+            android:label="@string/title_activity_maps_tareas" />
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
@@ -211,15 +215,14 @@
             android:name=".Screen_Filter_Results"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".permission_cercania"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
 
         <service android:name=".Notification_Service" />
-		
-		<activity
+
+        <activity
             android:name=".Screen_Tabla_Itacs"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
@@ -227,32 +230,30 @@
             android:name=".Screen_Itac"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".Screen_Edit_ITAC"
             android:configChanges="orientation"
-            android:screenOrientation="portrait" ></activity>
-
-            <activity android:name=".Screen_Itac_Seccion_1"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Screen_Itac_Seccion_1"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".Screen_Itac_Seccion_2"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Screen_Itac_Seccion_2"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".Screen_Itac_Seccion_3"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Screen_Itac_Seccion_3"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".Screen_Itac_Seccion_4"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Screen_Itac_Seccion_4"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".Screen_Itac_Seccion_5"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Screen_Itac_Seccion_5"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"
-            />
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

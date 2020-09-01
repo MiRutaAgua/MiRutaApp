@@ -34,6 +34,7 @@ import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.Size;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -79,6 +80,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
     private ImageView foto_numero_de_serie_screen_exec_task;
     private ImageView imageView_foto_lectura_screen_validate;
     private ImageView imageButton_firma_cliente_screen_validate,
+            imageView_logo_screen_validate,
             imageView_edit_serial_number_screen_validate,
             imageView_edit_calibre_screen_validate,
             imageView_edit_nombre_firmante_screen_validate,
@@ -117,6 +119,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
             textView_despues_cambio,textView_Lectura;
     private ArrayList<String> images_files;
     private ArrayList<String> images_files_names;
+    private String image_name_gestor = "";
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -161,6 +164,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
         foto_final_instalacion_screen_exec_task   = (ImageView)findViewById(R.id.imageView_foto_final_instalacion_screen_validate);
         foto_numero_de_serie_screen_exec_task     = (ImageView)findViewById(R.id.imageView_foto_numero_serie_screen_validate);
         imageView_foto_lectura_screen_validate    = (ImageView)findViewById(R.id.imageView_foto_lectura_screen_validate);
+        imageView_logo_screen_validate = (ImageView)findViewById(R.id.imageView_logo_screen_validate);
 
         imageView_edit_lectura_contador_nuevo_screen_validate = (ImageView)findViewById(R.id.imageView_edit_lectura_contador_nuevo_screen_validate);
         imageView_edit_numero_carnet_firmante_screen_validate = (ImageView)findViewById(R.id.imageView_edit_numero_carnet_firmante_screen_validate);
@@ -380,21 +384,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                     }
                     @Override
                     public void onAnimationEnd(Animation arg0) {
-                        showRingDialog("Creando PDF...");
-
-//                        textView_info.setVisibility(View.VISIBLE);
-
-                        bitmap = loadBitmapFromView(llScroll_info, llScroll_info.getWidth(), llScroll_info.getHeight());
-
-                        if(bitmap_antes_no_nulo)
-                            bitmap2 = loadBitmapFromView(llScroll_antes, llScroll_antes.getWidth(), llScroll_antes.getHeight());
-                        if(bitmap_despues_no_nulo)
-                            bitmap3 = loadBitmapFromView(llScroll_final, llScroll_final.getWidth(), llScroll_final.getHeight());
-                        if(bitmap_lectura_no_nulo)
-                            bitmap4 = loadBitmapFromView(llScroll_lectura, llScroll_lectura.getWidth(), llScroll_lectura.getHeight());
-                        if(bitmap_firma_no_nulo)
-                            bitmap5 = loadBitmapFromView(llScroll_firma, llScroll_firma.getWidth(), llScroll_firma.getHeight());
-                        createPdf();
+                        compartirPdf();
                     }
                 });
                 button_compartir_screen_validate.startAnimation(myAnim);
@@ -853,8 +843,8 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
         paint.setColor(Color.BLUE);
         int w_foto = (int)w*4/11;
         int h_foto = (int)(w_foto * 1.34);
-        bitmap = Bitmap.createScaledBitmap(bitmap, (int)(w*2/3), (int)h/12, true);
-        canvas.drawBitmap(bitmap, (int)w/10, h/24, null);
+        bitmap = Bitmap.createScaledBitmap(bitmap, (int)(w*2/3), (int)h/7, true);
+        canvas.drawBitmap(bitmap, (int)w/10, h/50, null);
 
         if (bitmap_antes_no_nulo) {
             bitmap2 = Bitmap.createScaledBitmap(bitmap2, w_foto, h_foto, true);
@@ -869,7 +859,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
             canvas.drawBitmap(bitmap4, (int)w/10, (int)((h*3/5)), null);
         }
         if(bitmap_firma_no_nulo){
-            bitmap5 = Bitmap.createScaledBitmap(bitmap5, w_foto, (int)(h_foto*2/3), true);
+            bitmap5 = Bitmap.createScaledBitmap(bitmap5, w_foto, (int)(h_foto*4/5), true);
             canvas.drawBitmap(bitmap5, (int)w/2, (int)((h*3/5)) , null);
         }
 
@@ -1046,17 +1036,8 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                     if(bitmap_firma_cliente!=null) {
                         imageButton_firma_cliente_screen_validate.setImageBitmap(bitmap_firma_cliente);
                         imageButton_firma_cliente_screen_validate.getLayoutParams().height = bitmap_firma_cliente.getHeight() + 300;
-//                        try {
-//                            String nombre_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.nombre_cliente).trim().replace(" ", "_");
-//                            Screen_Login_Activity.tarea_JSON.put(DBtareasController.firma_cliente, nombre_abonado + "_firma.jpg");
-//                            saveBitmapImageFirma(bitmap_firma_cliente, nombre_abonado + "_firma");
-////                        Toast.makeText(Screen_Validate.this, "Resultado ok: " + nombre_abonado+"_firma", Toast.LENGTH_LONG).show();
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                        }
                     }
                 }
-                //Toast.makeText(Screen_Validate.this, "Resultado ok: " + res, Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -1066,117 +1047,126 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
         Bitmap decodeImage = BitmapFactory.decodeByteArray(decodeString, 0, decodeString.length);
         return decodeImage;
     }
+    private void compartirPdf() {
+        if(checkConection()) {
+            showRingDialog("Descargando imagen de gestor...");
+            String empresa = Screen_Login_Activity.current_empresa;
+            try {
 
+                String gestor = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.GESTOR);
+                if (Screen_Login_Activity.checkStringVariable(gestor)) {
+                    if (team_or_personal_task_selection_screen_Activity.
+                            dBgestoresController.canLookInsideTable(this)) {
+                        String gestor_json = team_or_personal_task_selection_screen_Activity.
+                                dBgestoresController.get_one_gestor_from_Database(DBgestoresController.gestor, gestor);
+                        JSONObject jsonObject = new JSONObject(gestor_json);
+                        image_name_gestor = jsonObject.getString(DBgestoresController.foto);
+                        if (Screen_Login_Activity.checkStringVariable(image_name_gestor)) {
+                            String type_script = "download_gestor_image";
+                            BackgroundWorker backgroundWorker = new BackgroundWorker(this);
+                            backgroundWorker.execute(type_script, gestor, image_name_gestor, empresa);
+                            return;
+                        }
+                    }
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            hideRingDialog();
+            openMessage("Error", "No se pudo crear PDF no existe imagen de gestor");
+        }else{
+            openMessage("Error", "No hay conexión a internet");
+        }
+    }
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public static Bitmap scaleBitmap(Bitmap bitmap){
+        Size size = new Size(bitmap.getWidth(), bitmap.getHeight());
+        double max_height = 200;
+        double max_width = 200;
+        double ratio;
+        if(size.getWidth() > size.getHeight()){
+            ratio = (double)(size.getHeight())/ (double)(size.getWidth());
+            max_height = max_width * ratio;
+        }else{
+            ratio = (double)(size.getWidth())/ (double)(size.getHeight());
+            max_width = max_height * ratio;
+        }
+        bitmap = Bitmap.createScaledBitmap(bitmap, (int)max_width, (int)max_height, true);
+        return bitmap;
+    }
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onTaskComplete(String type, String result) throws JSONException {
-        if(type == "update_tarea"){
+        if(type == "download_gestor_image") {
             hideRingDialog();
-            if(result == null){
-                Toast.makeText(this,"No hay conexion a Internet, no se pudo guardar tarea. Intente de nuevo con conexion", Toast.LENGTH_LONG).show();
+            if (result == null) {
+                hideRingDialog();
+                Toast.makeText(this, "No se puede acceder al servidor, no se obtuvo foto", Toast.LENGTH_LONG).show();
+            }
+            else if(result.contains("not success")){
+                hideRingDialog();
+                Toast.makeText(this,"Error de script, no se pudo obtener foto "+result, Toast.LENGTH_LONG).show();
             }
             else {
-                if (result.contains("not success")) {
-                    Toast.makeText(this, "No se pudo insertar correctamente, problemas con el servidor", Toast.LENGTH_LONG).show();
+                Bitmap bmp = null;
+                bmp = Screen_Register_Operario.getImageFromString(result);
+                if(bmp != null){
+                    showRingDialog("Creando PDF...");
+                    bmp = scaleBitmap(bmp);
+                    imageView_logo_screen_validate.setImageBitmap(bmp);
+                    saveBitmapImage(bmp, image_name_gestor);
 
-                }else {
-                    if(result.contains("success ok")) {
-                        Toast.makeText(this, "Datos guardados correctamente en el servidor", Toast.LENGTH_LONG).show();
-                    }
-                    images_files.clear();
-                    images_files_names.clear();
+                    bitmap = loadBitmapFromView(llScroll_info, llScroll_info.getWidth(), llScroll_info.getHeight());
 
-                    String contador=null;
-                    String firma="";
-                    Screen_Execute_Task.lectura_introducida="";
-                    try {
-                        contador = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador_devuelto)
-                                .trim().replace(" ", "");
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    try {
-                        firma = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.firma_cliente);
-//                        Toast.makeText(this, "firma -> " + firma, Toast.LENGTH_LONG).show();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-//                        Toast.makeText(this, "No se pudo obtener firma", Toast.LENGTH_LONG).show();
-                    }
+                    if(bitmap_antes_no_nulo)
+                        bitmap2 = loadBitmapFromView(llScroll_antes, llScroll_antes.getWidth(), llScroll_antes.getHeight());
+                    if(bitmap_despues_no_nulo)
+                        bitmap3 = loadBitmapFromView(llScroll_final, llScroll_final.getWidth(), llScroll_final.getHeight());
+                    if(bitmap_lectura_no_nulo)
+                        bitmap4 = loadBitmapFromView(llScroll_lectura, llScroll_lectura.getWidth(), llScroll_lectura.getHeight());
+                    if(bitmap_firma_no_nulo)
+                        bitmap5 = loadBitmapFromView(llScroll_firma, llScroll_firma.getWidth(), llScroll_firma.getHeight());
+                    createPdf();
+                }
+                hideRingDialog();
+            }
 
-
-                    if(!TextUtils.isEmpty(firma)
-                            && ((new File(getCompleteFileDir(firma))).exists())) {
-                        images_files.add(getCompleteFileDir(firma));
-                        images_files_names.add(firma);
-                        Log.v("mCurrent_foto_antes", images_files_names.toString());
-                    }else{
-//                        openMessage("No existe", getCompleteFileDir(firma));
-//                        Toast.makeText(this, "No existe" + getCompleteFileDir(firma), Toast.LENGTH_LONG).show();
-                    }
-                    if(!TextUtils.isEmpty(Screen_Execute_Task.mCurrentPhotoPath_foto_antes)
-                            && ((new File(Screen_Execute_Task.mCurrentPhotoPath_foto_antes)).exists())) {
-                        if(Screen_Execute_Task.numero_serie_viejo!=null && !TextUtils.isEmpty(Screen_Execute_Task.numero_serie_viejo)){
-                            images_files.add(Screen_Execute_Task.mCurrentPhotoPath_foto_antes);
-                            images_files_names.add(Screen_Execute_Task.numero_serie_viejo.trim().replace(" ", "")+"_foto_antes_instalacion.jpg");
-                            Log.v("mCurrent_foto_antes", images_files_names.toString());
-                        }
-                    }
-                    if(!TextUtils.isEmpty(Screen_Execute_Task.mCurrentPhotoPath_foto_lectura)
-                            && ((new File(Screen_Execute_Task.mCurrentPhotoPath_foto_lectura)).exists())) {
-                        if(Screen_Execute_Task.numero_serie_viejo!=null && !TextUtils.isEmpty(Screen_Execute_Task.numero_serie_viejo)){
-                            images_files.add(Screen_Execute_Task.mCurrentPhotoPath_foto_lectura);
-                            images_files_names.add(Screen_Execute_Task.numero_serie_viejo.trim().replace(" ", "")+"_foto_numero_serie.jpg");
-                            Log.v("mCurren_foto_lectura", images_files_names.toString());
-                        }
-                    }
-                    if(!TextUtils.isEmpty(Screen_Execute_Task.mCurrentPhotoPath_foto_serie)
-                            && ((new File(Screen_Execute_Task.mCurrentPhotoPath_foto_serie)).exists())) {
-                        if(Screen_Execute_Task.numero_serie_viejo!=null && !TextUtils.isEmpty(Screen_Execute_Task.numero_serie_viejo)){
-                            images_files.add(Screen_Execute_Task.mCurrentPhotoPath_foto_serie);
-                            images_files_names.add(Screen_Execute_Task.numero_serie_viejo.trim().replace(" ", "")+"_foto_lectura.jpg");
-                            Log.v("mCurrent_foto_serie", images_files_names.toString());
-                        }
-                    }
-                    if(!TextUtils.isEmpty(Screen_Execute_Task.mCurrentPhotoPath_foto_despues)
-                            && ((new File(Screen_Execute_Task.mCurrentPhotoPath_foto_despues)).exists())) {
-                       if(contador!=null && !TextUtils.isEmpty(contador)){
-                           images_files.add(Screen_Execute_Task.mCurrentPhotoPath_foto_despues);
-                           images_files_names.add(contador+"_foto_despues_instalacion.jpg");
-                            Log.v("mCurrent_foto_despues", images_files_names.toString());
-                        }
-                    }
-                    if(!images_files_names.isEmpty() && !images_files.isEmpty()) {
-                        showRingDialog("Subiedo fotos");
-                        uploadPhotos();
-                    }
-                    else{
-                        if(team_or_personal_task_selection_screen_Activity.dBtareasController != null) {
-                            try {
-                                team_or_personal_task_selection_screen_Activity.dBtareasController.deleteTarea(Screen_Login_Activity.tarea_JSON);
-                            } catch (JSONException e) {
-                                Toast.makeText(Screen_Validate.this, "No se pudo borrar tarea local " + e.toString(), Toast.LENGTH_LONG).show();
-                                e.printStackTrace();
-                            }
-                        }else{
-                            Toast.makeText(this, "No hay tabla donde borrar", Toast.LENGTH_LONG).show();
-                        }
-                        finishThisClass();
+        }
+    }
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    private void saveBitmapImage(Bitmap bitmap, String file_name){
+//        file_name = "operario_"+file_name;
+        //Toast.makeText(Screen_Battery_counter.this,file_name, Toast.LENGTH_LONG).show();
+        try {
+            File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" + Screen_Login_Activity.current_empresa + "/fotos_gestores/");
+            if (!myDir.exists()) {
+                myDir.mkdirs();
+            }
+            else{
+                File[] files = myDir.listFiles();
+                for(int i=0; i< files.length; i++){
+                    if(files[i].getName().contains(file_name)){
+                        files[i].delete();
                     }
                 }
             }
-        }else if(type == "upload_image"){
-            if(result == null){
-                hideRingDialog();
-                Toast.makeText(this,"No se puede acceder al servidor, no se subio imagen", Toast.LENGTH_LONG).show();
+            File file = new File(myDir, file_name);
+            if (file.exists())
+                file.delete();
+            try {
+                FileOutputStream out = new FileOutputStream(file);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, MainActivity.COMPRESS_QUALITY, out);
+                out.flush();
+                out.close();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            else {
-//                openMessage("Result", result);
-                Toast.makeText(Screen_Validate.this, "Imagen subida" + result, Toast.LENGTH_LONG).show();
-                uploadPhotos();
-                //showRingDialog("Validando registro...");
-            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
-
     private String getCompleteFileDir(String filename){
 
         String numero_abonado = null;

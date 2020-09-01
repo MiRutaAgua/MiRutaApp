@@ -24,6 +24,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -113,6 +114,10 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
         button_incidence_screen_battery_counter = (Button)findViewById(R.id.button_incidencia_screen_battery_counter);
         button_trazar_ruta_screen_battery_counter= (Button)findViewById(R.id.button_trazar_ruta_screen_battery_counter);
         button_abandonado_ausente_screen_battery_counter= (Button)findViewById(R.id.button_abandonado_ausente_screen_battery_counter);
+
+        direccion.setMovementMethod(new ScrollingMovementMethod());
+        datosEspecificos.setMovementMethod(new ScrollingMovementMethod());
+        tipo_tarea.setMovementMethod(new ScrollingMovementMethod());
 
         button_abandonado_ausente_screen_battery_counter.setOnClickListener(new View.OnClickListener() {
             @Override

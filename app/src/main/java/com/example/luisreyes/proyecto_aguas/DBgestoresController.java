@@ -79,6 +79,17 @@ public class DBgestoresController extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
+    public boolean canLookInsideTable(Context context){
+        if(databasefileExists(context)){
+            if(checkForTableExists()){
+                if(countTableGestores() > 0){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public void insertGestor(JSONObject json) throws JSONException {
         SQLiteDatabase database = this.getWritableDatabase();
 

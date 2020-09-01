@@ -443,7 +443,16 @@ public class DBtareasController extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS "+ table_name);
         onCreate(sqLiteDatabase);
     }
-
+    public boolean canLookInsideTable(Context context){
+        if(databasefileExists(context)){
+            if(checkForTableExists()){
+                if(countTableTareas() > 0){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
     public static JSONObject setEmptyJSON(JSONObject jsonTareaType){
         try {
             jsonTareaType.put(id, 1);
@@ -900,6 +909,51 @@ public class DBtareasController extends SQLiteOpenHelper {
         }
         if(Screen_Login_Activity.checkStringVariable(equipo_del_operario)){
             where_clause=" where "+equipo+"='"+equipo_del_operario+"'";
+        }
+        Cursor c = database.rawQuery("SELECT * FROM "+table_name+ where_clause+";", null);
+
+        Iterator<String> keys_it = jsonTareaType.keys();
+        while (keys_it.hasNext()) {
+            keys.add(keys_it.next());
+        }
+        for(int i=0; c.moveToPosition(i); i++){
+
+            for (int n=0; n < keys.size(); n++){
+                jsonTareaType.put(keys.get(n),  c.getString(n));
+            }
+
+            rows.add(jsonTareaType.toString());
+        }
+        c.close();
+        return rows;
+    }
+    public ArrayList<String> get_all_tareas_from_Database(String key_where, String value_where) throws JSONException {
+
+        ArrayList<String> rows = new ArrayList<String>();
+        ArrayList<String> keys = new ArrayList<String>();
+        int temp;
+        String data= "";
+
+        SQLiteDatabase database = this.getReadableDatabase();
+        if(database == null){
+            keys.add("null");
+            return keys;
+        }
+        //TODO
+        String equipo_del_operario ="", where_clause="";
+        try {
+            if(Screen_Login_Activity.equipo_JSON!=null) {
+                equipo_del_operario = Screen_Login_Activity.equipo_JSON
+                        .getString(DBequipo_operariosController.equipo_operario).trim();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        if(Screen_Login_Activity.checkStringVariable(equipo_del_operario)){
+            where_clause=" where "+equipo+"='"+equipo_del_operario+"'";
+        }
+        if(Screen_Login_Activity.checkStringVariable(key_where) && Screen_Login_Activity.checkStringVariable(value_where)){
+            where_clause += " AND "+key_where+"='"+value_where+"'";
         }
         Cursor c = database.rawQuery("SELECT * FROM "+table_name+ where_clause+";", null);
 

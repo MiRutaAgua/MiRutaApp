@@ -18,6 +18,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.text.method.ScrollingMovementMethod;
 import android.transition.Scene;
 import android.util.Log;
 import android.view.View;
@@ -47,7 +48,7 @@ public class Screen_Itac extends AppCompatActivity implements TaskCompleted{
             button_seccion3,
             button_seccion4,
             button_seccion5,
-            button_edit_itac_screen_itac;
+            button_edit_itac_screen_itac,button_geolocalizacion_screen_itac;
     private ImageView imageView_atras_screen_itac,
             imageView_menu_screen_itac;
 
@@ -79,13 +80,17 @@ public class Screen_Itac extends AppCompatActivity implements TaskCompleted{
         button_seccion3=(Button) findViewById(R.id.button_seccion3);
         button_seccion4=(Button) findViewById(R.id.button_seccion4);
         button_seccion5=(Button) findViewById(R.id.button_seccion5);
-
+        button_geolocalizacion_screen_itac=(Button) findViewById(R.id.button_geolocalizacion_screen_itac);
         acceso = (TextView) findViewById(R.id.textView_acceso_screen_itac);
         direccion = (TextView) findViewById(R.id.textView_direccion_screen_itac);
         descripcion = (TextView) findViewById(R.id.textView_descripcion_screen_itac);
         codigo_emplazamiento = (TextView) findViewById(R.id.textView_codigo_emplazamiento_screen_itac);
         empresa = (TextView)findViewById(R.id.textView_empresa_screen_itac);
         telefono = (TextView)findViewById(R.id.textView_telefono_screen_itac);
+
+        direccion.setMovementMethod(new ScrollingMovementMethod());
+        acceso.setMovementMethod(new ScrollingMovementMethod());
+        descripcion.setMovementMethod(new ScrollingMovementMethod());
 
         try {
             String dir = Screen_Login_Activity.itac_JSON.getString(DBitacsController.itac).trim();
@@ -116,7 +121,51 @@ public class Screen_Itac extends AppCompatActivity implements TaskCompleted{
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
+        descripcion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openMessage("Descripción", descripcion.getText().toString());
+            }
+        });
+        acceso.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openMessage("Acceso", acceso.getText().toString());
+            }
+        });
+        direccion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openMessage("Direccion", direccion.getText().toString());
+            }
+        });
+        button_geolocalizacion_screen_itac.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Itac.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                Toast.makeText(context,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        Intent intent_open_screen_mapa= new Intent(Screen_Itac.this, permission_itac.class);
+                        startActivity(intent_open_screen_mapa);
+                    }
+                });
+                button_geolocalizacion_screen_itac.startAnimation(myAnim);
+            }
+        });
         imageView_atras_screen_itac.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -354,6 +403,11 @@ public class Screen_Itac extends AppCompatActivity implements TaskCompleted{
                 e.printStackTrace();
             }
         }
+    }
+    public void openMessage(String title, String hint){
+        MessageDialog messageDialog = new MessageDialog();
+        messageDialog.setTitleAndHint(title, hint);
+        messageDialog.show(getSupportFragmentManager(), title);
     }
     public void buscarFotosOffline(){
         try {

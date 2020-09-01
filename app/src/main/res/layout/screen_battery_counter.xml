@@ -156,14 +156,18 @@
                 android:textStyle="bold"
                 android:textColor="@color/colorBlueAppRuta"
                 />
-            <TextView
-                android:layout_marginRight="20dp"
-                android:layout_marginLeft="20dp"
-                android:id="@+id/textView_direccion_screen_battery_counter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:text="..." />
+
+
+                <TextView
+                    android:id="@+id/textView_direccion_screen_battery_counter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="..."
+                    android:textSize="14sp"
+                    android:scrollbars = "vertical"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"/>
+
         </LinearLayout>
 
         <LinearLayout
@@ -191,8 +195,9 @@
                     android:textStyle="bold" />
                 <TextView
 
-                    android:layout_marginLeft="13dp"
-                    android:layout_marginRight="13dp"
+                    android:scrollbars = "vertical"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
                     android:id="@+id/textView_tipo_tarea_screen_battery_counter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -249,15 +254,19 @@
                 android:textStyle="bold"
                 android:textColor="@color/colorBlueAppRuta"
                 />
-            <TextView
-                android:id="@+id/textView_datos_especificos_screen_battery_counter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:textSize="15sp"
-                android:maxHeight="66dp"
-                android:text="..." />
+
+                <TextView
+                    android:id="@+id/textView_datos_especificos_screen_battery_counter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:maxHeight="66dp"
+                    android:text="..."
+                    android:scrollbars = "vertical"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"/>
+
+
         </LinearLayout>
 
         <LinearLayout

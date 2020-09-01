@@ -93,6 +93,7 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
         String load_work_url;
         String get_piezas_url;
         String get_gestores_url;
+        String download_gestor_image_url;
         String get_causas_url;
         String get_tareas_amout_url;
         String get_tareas_with_limit_url;
@@ -128,6 +129,7 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
             upload_image_url = server+"upload_image.php";
             download_image_url = server+"download_image.php";
             download_user_image_url = server+"download_user_image.php";
+            download_gestor_image_url = server+"download_gestor_image.php";
             upload_user_image_url = server+"upload_user_image.php";
             save_work_url = server+"save_work.php";
             load_work_url = server+"load_work.php";
@@ -167,6 +169,7 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
             upload_image_url = prestring + "upload_image.php";
             download_image_url = prestring + "download_image.php";
             download_user_image_url = prestring + "download_user_image.php";
+            download_gestor_image_url = prestring+"download_gestor_image.php";
             upload_user_image_url = prestring + "upload_user_image.php";
             save_work_url = prestring + "save_work.php";
             load_work_url = prestring + "load_work.php";
@@ -318,6 +321,33 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
                     return "";
                 }
 
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            catch (ProtocolException e) {
+                e.printStackTrace();
+            }catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        else if(type.equals("download_gestor_image")){
+            try {
+                return_image = false;
+                ArrayList<String> keys = new ArrayList<String>();
+                keys.add("gestor");
+                keys.add("image_name");
+                keys.add("empresa");
+                ArrayList<String> values = new ArrayList<String>();
+                for (int i = 0; i < keys.size(); i++) {
+                    values.add(params[i+1]);
+                }
+                ArrayList<String> result = post_Output_Info(keys, values, download_gestor_image_url,true, true);
+                if(result.size() >1){
+                    return result.get(1);
+                }
+                else{
+                    return "";
+                }
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }

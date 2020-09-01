@@ -166,6 +166,23 @@
                 android:background="@drawable/fondo_boton_azul"
                 />
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="5dp"
+            >
+            <Button
+                android:id="@+id/button_geolocalizacion_screen_itac"
+                android:layout_width="280dp"
+                android:layout_height="40dp"
+                android:text="GEOLOCALIZACIÓN"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:background="@drawable/fondo_boton_azul"
+                />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="270dp"
@@ -185,14 +202,18 @@
                 android:textSize="14sp"
                 android:textStyle="bold"
                 />
-            <TextView
-                android:layout_marginRight="20dp"
-                android:layout_marginLeft="20dp"
-                android:id="@+id/textView_direccion_screen_itac"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:text="..." />
+
+                <TextView
+                    android:layout_marginRight="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:id="@+id/textView_direccion_screen_itac"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textSize="14sp"
+                    android:text="..."
+                    android:scrollbars = "vertical"/>
+
+
         </LinearLayout>
 
         <LinearLayout
@@ -248,15 +269,19 @@
                     android:text="ACCESO"
                     android:textSize="14sp"
                     android:textStyle="bold" />
-                <TextView
-                    android:layout_marginLeft="13dp"
-                    android:layout_marginRight="13dp"
-                    android:id="@+id/textView_acceso_screen_itac"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:maxHeight="80dp"
-                    android:text="..."
-                    android:textSize="14sp" />
+
+                        <TextView
+                            android:layout_marginLeft="13dp"
+                            android:layout_marginRight="13dp"
+                            android:id="@+id/textView_acceso_screen_itac"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:maxHeight="80dp"
+                            android:text="..."
+                            android:textSize="14sp"
+                            android:scrollbars = "vertical"/>
+
+
                 </LinearLayout>
             </LinearLayout>
             <LinearLayout
@@ -335,16 +360,18 @@
                 android:layout_marginLeft="20dp"
                 android:textStyle="bold"
                 />
+                <TextView
+                    android:id="@+id/textView_descripcion_screen_itac"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:textSize="14sp"
+                    android:maxHeight="66dp"
+                    android:text="..."
+                    android:scrollbars = "vertical"/>
 
-            <TextView
-                android:id="@+id/textView_descripcion_screen_itac"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:textSize="15sp"
-                android:maxHeight="66dp"
-                android:text="..." />
+
         </LinearLayout>
 
         <LinearLayout

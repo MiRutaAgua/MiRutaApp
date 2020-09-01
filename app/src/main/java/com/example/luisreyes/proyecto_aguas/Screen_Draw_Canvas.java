@@ -5,10 +5,13 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.annotation.RequiresApi;
 import android.util.Base64;
 import android.util.Log;
+import android.util.Size;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -113,8 +116,25 @@ public class Screen_Draw_Canvas extends Activity {
         String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
         return encodedImage;
     }
-
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public static Bitmap scaleBitmap(Bitmap bitmap){
+        Size size = new Size(bitmap.getWidth(), bitmap.getHeight());
+        double max_height = 1280;
+        double max_width = 1280;
+        double ratio;
+        if(size.getWidth() > size.getHeight()){
+            ratio = (double)(size.getHeight())/ (double)(size.getWidth());
+            max_height = max_width * ratio;
+        }else{
+            ratio = (double)(size.getWidth())/ (double)(size.getHeight());
+            max_width = max_height * ratio;
+        }
+        bitmap = Bitmap.createScaledBitmap(bitmap, (int)max_width, (int)max_height, true);
+        return bitmap;
+    }
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private String saveBitmapImageFirma(Bitmap bitmap, String file_name){
+        bitmap = scaleBitmap(bitmap);
         String numero_abonado = "";
         File myDir = null;
         try {

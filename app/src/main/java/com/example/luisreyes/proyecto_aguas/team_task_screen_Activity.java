@@ -340,8 +340,13 @@ public class team_task_screen_Activity extends AppCompatActivity {
     }
 
     private void showRingDialog(String text){
-        progressDialog = ProgressDialog.show(team_task_screen_Activity.this, "Espere", text, true);
-        progressDialog.setCancelable(true);
+        try {
+            progressDialog = ProgressDialog.show(team_task_screen_Activity.this, "Espere", text, true);
+            progressDialog.setCancelable(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("showRingDialog", e.toString());
+        }
     }
     public static void hideRingDialog(){
         try {

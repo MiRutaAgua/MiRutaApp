@@ -193,8 +193,8 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
 //        descargarOperarios();
         descargarEmpresas();
 
-        if(!BackgroundWorker.server_online_or_wamp){
-            lineEdit_nombre_de_operario.setText("Michel");//MICHEL MORALES
+        if(BackgroundWorker.server_online_or_wamp){
+            lineEdit_nombre_de_operario.setText("MICHEL MORALES");//MICHEL MORALES
             lineEdit_clave_de_acceso.setText("123456");
         }
 

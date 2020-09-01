@@ -735,11 +735,11 @@ public class MapActivity extends AppCompatActivity implements TaskCompleted, OnM
         //no obligamos al usuario a pulsar los botones para cerrarlo
         customDialog.setCancelable(true);
         //establecemos el contenido de nuestro dialog
-        customDialog.setContentView(R.layout.dialog_signin);
+        customDialog.setContentView(R.layout.dialog_marker_options);
 
 
 
-        ((Button) customDialog.findViewById(R.id.button2)).setOnClickListener(new View.OnClickListener() {
+        ((Button) customDialog.findViewById(R.id.button_marker_location)).setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view)
@@ -779,7 +779,7 @@ public class MapActivity extends AppCompatActivity implements TaskCompleted, OnM
             }
         });
 
-        ((Button) customDialog.findViewById(R.id.button3)).setOnClickListener(new View.OnClickListener() {
+        ((Button) customDialog.findViewById(R.id.button_current_location)).setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view)

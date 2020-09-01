@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".MapsActivityItac"
+    tools:showIn="@layout/activity_maps_itac">
+
+
+    <fragment
+        android:id="@+id/map_itac"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <Button android:id="@+id/btnlocalizacion_mapa_itac"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/ubicacion_tarea"
+        android:layout_below="@+id/btnhand"
+        android:layout_marginTop="10dp"
+
+        />
+
+
+
+
+</RelativeLayout>

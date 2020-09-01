@@ -48,6 +48,8 @@ import java.util.HashMap;
 public class Screen_Edit_ITAC extends AppCompatActivity implements Dialog.DialogListener{
 
     private Button button_guardar_datos_screen_edit_itac,
+            button_geolocalization_screen_edit_itac,
+
             button_photo_1_screen_edit_itac,
             button_photo_2_screen_edit_itac,
             button_photo_3_screen_edit_itac,
@@ -177,6 +179,7 @@ public class Screen_Edit_ITAC extends AppCompatActivity implements Dialog.Dialog
         button_photo_6_screen_edit_itac = (Button) findViewById(R.id.button_photo_6_screen_edit_itac);
         button_photo_7_screen_edit_itac = (Button) findViewById(R.id.button_photo_7_screen_edit_itac);
         button_photo_8_screen_edit_itac = (Button) findViewById(R.id.button_photo_8_screen_edit_itac);
+        button_geolocalization_screen_edit_itac = (Button) findViewById(R.id.button_geolocalization_screen_edit_itac);
 
         editText_descripcion_photo_1_screen_edit_itac = (EditText) findViewById(R.id.editText_descripcion_photo_1_screen_edit_itac);
         editText_descripcion_photo_2_screen_edit_itac = (EditText) findViewById(R.id.editText_descripcion_photo_2_screen_edit_itac);
@@ -238,6 +241,33 @@ public class Screen_Edit_ITAC extends AppCompatActivity implements Dialog.Dialog
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
+        button_geolocalization_screen_edit_itac.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
+                final Animation myAnim = AnimationUtils.loadAnimation(Screen_Edit_ITAC.this, R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                Toast.makeText(context,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        Intent intent_open_screen_mapa= new Intent(Screen_Edit_ITAC.this, permission_itac.class);
+                        startActivity(intent_open_screen_mapa);
+                    }
+                });
+                button_geolocalization_screen_edit_itac.startAnimation(myAnim);
             }
         });
         button_guardar_datos_screen_edit_itac.setOnClickListener(new View.OnClickListener() {
