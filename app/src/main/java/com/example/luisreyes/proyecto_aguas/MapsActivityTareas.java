@@ -66,6 +66,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -119,6 +121,9 @@ public class MapsActivityTareas extends AppCompatActivity implements TaskComplet
 
     Button btnlocalizacion, btn_abrir_tarea, btn_resumen_tareas;
     private ArrayList<String> lista_desplegable_zonas = new ArrayList<>();
+
+    private Circle circle;
+    private static final double RADIUS_OF_EARTH_METERS = 6371009;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -263,7 +268,32 @@ public class MapsActivityTareas extends AppCompatActivity implements TaskComplet
     }
 
     @Override
-    public void onMapLongClick(LatLng latLng) {
+    public void onMapLongClick(LatLng center) {
+
+        double radiusMeters = toRadiusMeters(center,new LatLng(23.1313892,-82.4065511));
+
+
+
+
+        circle = mMap.addCircle(new CircleOptions()
+                .center(center)
+                .radius(radiusMeters)
+                .strokeWidth(0x7f070085)
+                .strokeColor(1358976511)
+                .fillColor(1191195647));////////Si quieres hacerle el circulo exterior aqui es varia un poco para q sea mas diferente el color
+    }
+
+    private static LatLng toRadiusLatLng(LatLng center, double radiusMeters) {
+        double radiusAngle = Math.toDegrees(radiusMeters / RADIUS_OF_EARTH_METERS) /
+                Math.cos(Math.toRadians(center.latitude));
+        return new LatLng(center.latitude, center.longitude + radiusAngle);
+    }
+
+    private static double toRadiusMeters(LatLng center, LatLng radius) {
+        float[] result = new float[1];
+        Location.distanceBetween(center.latitude, center.longitude,
+                radius.latitude, radius.longitude, result);
+        return result[0];
     }
 
     @Override
