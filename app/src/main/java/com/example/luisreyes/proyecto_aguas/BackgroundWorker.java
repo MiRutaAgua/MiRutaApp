@@ -95,9 +95,11 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
         String get_gestores_url;
         String download_gestor_image_url;
         String get_causas_url;
-        String get_tareas_amout_url;
+        String get_tareas_amount_url;
+        String get_itacs_amount_url;
         String get_tareas_with_limit_url;
-        String get_contadores_amout_url;
+        String get_itacs_with_limit_url;
+        String get_contadores_amount_url;
         String get_contadores_with_limit_url;
 
 //        String server =  "https://server26194.000webhostapp.com/php/";
@@ -136,9 +138,11 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
             get_piezas_url = server+"get_piezas.php";
             get_gestores_url= server+"get_gestores.php";
             get_causas_url = server+"get_causas.php";
-            get_tareas_amout_url = server+"get_tareas_amount.php";
+            get_tareas_amount_url = server+"get_tareas_amount.php";
+            get_itacs_amount_url = server + "get_itacs_amount.php";
             get_tareas_with_limit_url = server+"get_tareas_with_limit.php";
-            get_contadores_amout_url = server+"get_contadores_amount.php";
+            get_itacs_with_limit_url = server+"get_itacs_with_limit.php";
+            get_contadores_amount_url = server+"get_contadores_amount.php";
             get_contadores_with_limit_url = server+"get_contadores_with_limit.php";
             get_itacs_url = server+"get_itacs.php";
             create_itac_url = server+"create_itac.php";
@@ -176,9 +180,11 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
             get_piezas_url = prestring + "get_piezas.php";
             get_gestores_url = prestring + "get_gestores.php";
             get_causas_url = prestring + "get_causas.php";
-            get_tareas_amout_url = prestring + "get_tareas_amount.php";
+            get_tareas_amount_url = prestring + "get_tareas_amount.php";
+            get_itacs_amount_url = prestring + "get_itacs_amount.php";
             get_tareas_with_limit_url = prestring + "get_tareas_with_limit.php";
-            get_contadores_amout_url = prestring + "get_contadores_amount.php";
+            get_itacs_with_limit_url = prestring+"get_itacs_with_limit.php";
+            get_contadores_amount_url = prestring + "get_contadores_amount.php";
             get_contadores_with_limit_url = prestring + "get_contadores_with_limit.php";
             get_itacs_url = prestring + "get_itacs.php";
             create_itac_url = prestring + "create_itac.php";
@@ -602,7 +608,7 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
                     values.add(params[i+1]);
                 }
 
-                ArrayList<String> answer = post_Output_Info(keys, values, get_contadores_amout_url, true, true);
+                ArrayList<String> answer = post_Output_Info(keys, values, get_contadores_amount_url, true, true);
 
                 String return_string = answer.toString();
 
@@ -657,6 +663,71 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
                 e.printStackTrace();
             }
         }
+        else if (type.equals("get_itacs_amount")){
+            try{
+                return_image = false;
+                ArrayList<String> keys = new ArrayList<String>();
+                keys.add("empresa");
+                ArrayList<String> values = new ArrayList<String>();
+                for (int i = 0; i < keys.size(); i++) {
+                    values.add(params[i+1]);
+                }
+
+                ArrayList<String> answer = post_Output_Info(keys, values, get_itacs_amount_url, true, true);
+
+                String return_string = answer.toString();
+
+                return return_string;
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (ProtocolException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        else if (type.equals("get_itacs_with_limit")){
+            try{
+                return_image = false;
+                ArrayList<String> keys = new ArrayList<String>();
+                ArrayList<String> values = new ArrayList<String>();
+                keys.add("LIMIT");
+                keys.add("OFFSET");
+                keys.add("empresa");
+                for (int i = 0; i < keys.size(); i++) {
+                    values.add(params[i+1]);
+                }
+                Screen_Table_Team.lista_itacs_servidor = post_Output_Info(keys, values, get_itacs_with_limit_url, true, true);
+
+                String return_string = "";
+                for(int n =1 ; n < Screen_Table_Team.lista_itacs_servidor.size() ; n++) { //el elemento n 0 esta vacio
+                    try {
+                        JSONArray jsonArray = new JSONArray(Screen_Table_Team.lista_itacs_servidor.get(n));
+                        if(jsonArray != null){
+                            return_string = "download success";
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if(Screen_Table_Team.lista_tareas.size() > 1){
+                    String retorno = Screen_Table_Team.lista_tareas.get(1);
+                    if(retorno.contains("<b>Warning</b>:  mysqli_connect():")
+                            && retorno.contains("Too many connections")){
+                        return "Servidor caido, ahora no se puede sincronizar";
+                    }
+                }
+                return return_string;
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (ProtocolException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         else if (type.equals("get_tareas_amount")){
             try{
                 return_image = false;
@@ -667,7 +738,7 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
                     values.add(params[i+1]);
                 }
 
-                ArrayList<String> answer = post_Output_Info(keys, values, get_tareas_amout_url, true, true);
+                ArrayList<String> answer = post_Output_Info(keys, values, get_tareas_amount_url, true, true);
 
                 String return_string = answer.toString();
 

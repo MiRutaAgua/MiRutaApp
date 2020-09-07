@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -59,7 +60,7 @@ public class Screen_Filter_Results extends AppCompatActivity {
 
     private ArrayList<String> calles_filtradas_en_tipo_tarea;
 
-    private static String tipo_filtro ="", tipo_tarea="", calibre="", poblacion="", calle="", geolocalizacion="", portales_string="";
+    private static String tipo_filtro ="", tipo_tarea="", calibre="", poblacion="", calle="", geolocalizacion="", coordenadas = "", portales_string="";
     private ArrayList<String> portales, calibres_list;
 
     private TextView textView_listView_type_screen_filter_results;
@@ -103,6 +104,8 @@ public class Screen_Filter_Results extends AppCompatActivity {
                 portales_string = getIntent().getStringExtra("portales");
                 geolocalizacion = getIntent().getStringExtra("geolocalizacion");
                 limitar_a_operario = getIntent().getBooleanExtra("limitar_a_operario", false);
+
+                coordenadas = getIntent().getStringExtra("coordenadas");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -204,7 +207,7 @@ public class Screen_Filter_Results extends AppCompatActivity {
                                     try {
                                         int size =0;
                                         String principal_variable_local="";
-                                        if(tipo_filtro.equals("GEOLOCALIZACION")){
+                                        if(tipo_filtro.equals("GEOLOCALIZACION") || tipo_filtro.equals("MAPAS_GEOLOCALIZACION")){
                                             size = lista_ordenada_de_tareas_en_bateria.size();
                                             Log.e("Cantidad de tareas", String.valueOf(size));
                                             principal_variable_local = lista_ordenada_de_tareas_en_bateria.get(n).getPrincipal_variable();
@@ -290,19 +293,6 @@ public class Screen_Filter_Results extends AppCompatActivity {
                 }
             }
         });
-
-        applyFilter();
-//        if(listView_contadores_screen_advance_results != null && selected_item != -1 && listView_contadores_screen_advance_results.getAdapter().getCount()> selected_item){
-//            listView_contadores_screen_advance_results.setSelection(selected_item);
-//            Log.e("Seleccionado", String.valueOf(selected_item));
-//            listView_contadores_screen_advance_results.clearFocus();
-//            listView_contadores_screen_advance_results.post(new Runnable() {
-//                @Override
-//                public void run() {
-//                    listView_contadores_screen_advance_results.setSelection(selected_item);
-//                }
-//            });
-//        }
     }
 
     void applyFilter(){
@@ -332,11 +322,18 @@ public class Screen_Filter_Results extends AppCompatActivity {
                 }
             }
         }
-        else if(tipo_filtro.equals("GEOLOCALIZACION")) {
+        else if(tipo_filtro.equals("GEOLOCALIZACION")) { //codigo de emplazamiento desde filtros
             layout_filtro_direccion_screen_filter_tareas.setVisibility(View.GONE);
             layout_filtro_tipo_tareas_screen_filter_results.setVisibility(View.VISIBLE);
             Log.e("ejecutando", "filtro GEOLOCALIZACION");
             fillListViewWithGeolocalizacionResults();
+        }
+        else if(tipo_filtro.equals("MAPAS_GEOLOCALIZACION")) {
+            layout_filtro_direccion_screen_filter_tareas.setVisibility(View.GONE);
+            layout_filtro_tipo_tareas_screen_filter_results.setVisibility(View.VISIBLE);
+            Log.e("ejecutando", "filtro MAPAS_GEOLOCALIZACION");
+            fillListViewWithCoordenadasResults();
+            MapsActivityTareas.hideRingDialog();
         }
         else if(tipo_filtro.equals("CITAS_VENCIDAS")) {
             layout_filtro_direccion_screen_filter_tareas.setVisibility(View.VISIBLE);
@@ -371,27 +368,47 @@ public class Screen_Filter_Results extends AppCompatActivity {
                     Log.e("Selected Item", String.valueOf(selected_item));
                     if (selected_item != -1 && listView_contadores_screen_advance_results.getAdapter().getCount() > selected_item) {
                         listView_contadores_screen_advance_results.setSelection(selected_item);
-//            lista_de_contadores_screen_table_team.setItemChecked(selected_item, true);
                     }
                 }
                 textView_listView_type_screen_filter_results.setText("RESULTADOS: "
                         + String.valueOf(listView_contadores_screen_advance_results.getAdapter().getCount()));
             }
+        }else {
+            applyFilter();
+            if (listView_contadores_screen_advance_results != null && listView_contadores_screen_advance_results.getAdapter()!=null) {
+                Log.e("Selected Item", String.valueOf(selected_item));
+                if (selected_item != -1 && listView_contadores_screen_advance_results.getAdapter().getCount() > selected_item) {
+                    listView_contadores_screen_advance_results.setSelection(selected_item);
+                }
+            }
+            textView_listView_type_screen_filter_results.setText("RESULTADOS: "
+                    + String.valueOf(listView_contadores_screen_advance_results.getAdapter().getCount()));
         }
     }
 
-    private void fillListViewWithGeolocalizacionResults() {
-        Log.e("ejecutando", "fillListViewWithGeolocalizacionResults");
+    private void fillListViewWithCoordenadasResults() {
+        Log.e("ejecutando", "fillListViewWithCoordenadasResults");
         ArrayList<String> tipos_tareas_selected = new ArrayList<String>();
         tipos_tareas_selected.add("TODAS");
         ArrayList<String> calibres_selected = new ArrayList<String>();
         calibres_selected.add("TODOS");
         lista_ordenada_de_tareas_en_bateria.clear();
+
+        if(Screen_Login_Activity.checkStringVariable(coordenadas)) {
+            Pair<Double, Double> coord = MapsActivityTareas.convertFromGeoField(coordenadas);
+            double latitud = coord.first;
+            double longitud = coord.second;
+
+            coordenadas = MapsActivityTareas.convertToGeoField(latitud, longitud);
+        }
+
+
         if (team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas() > 0) {
             ArrayList<String> tareas = new ArrayList<>();
             try {
                 tareas = team_or_personal_task_selection_screen_Activity.
-                        dBtareasController.get_all_tareas_from_Database();
+                        dBtareasController.get_all_tareas_from_Database_Valid_Coords();
+
                 for (int i = 0; i < tareas.size(); i++) {
                     JSONObject jsonObject = null;
                     try {
@@ -407,20 +424,93 @@ public class Screen_Filter_Results extends AppCompatActivity {
                                 }
                             }
                             if (!Screen_Filter_Tareas.checkIfIsDone(jsonObject)) {
-                                if (jsonObject.getString(DBtareasController.codigo_de_geolocalizacion).trim().equals(geolocalizacion)) {
-                                    lista_ordenada_de_tareas_en_bateria.add(Screen_Table_Team.orderTareaInBatteryFromJSON(jsonObject));
-                                    String cal =jsonObject.getString(DBtareasController.calibre_toma).trim();
-                                    if(!Screen_Login_Activity.checkStringVariable(cal)){
-                                        cal = "?";
-                                    }
-                                    if (!calibres_selected.contains(cal)) {
-                                        calibres_selected.add(cal);
-                                    }
-                                    String accion_ordenada = jsonObject.getString(DBtareasController.accion_ordenada);
-                                    if(Screen_Login_Activity.checkStringVariable(accion_ordenada)) {
-                                        if (!tipos_tareas_selected.contains(accion_ordenada)) {
-                                            tipos_tareas_selected.add(accion_ordenada);
+                                String geolocalizacion = MapsActivityTareas.getValidCoords(jsonObject);
+                                if(Screen_Login_Activity.checkStringVariable(geolocalizacion)) {
+                                    Pair<Double, Double> coords = MapsActivityTareas.convertFromGeoField(geolocalizacion);
+                                    double latitud_h = coords.first;
+                                    double longitud_h = coords.second;
+
+                                    geolocalizacion = MapsActivityTareas.convertToGeoField(latitud_h, longitud_h);
+
+                                    if (coordenadas.equals(geolocalizacion) &&
+                                            !lista_ordenada_de_tareas_en_bateria.contains(Screen_Table_Team.orderTareaInBatteryFromJSON(jsonObject))) {
+                                        lista_ordenada_de_tareas_en_bateria.add(Screen_Table_Team.orderTareaInBatteryFromJSON(jsonObject));
+                                        String cal = jsonObject.getString(DBtareasController.calibre_toma).trim();
+                                        if (!Screen_Login_Activity.checkStringVariable(cal)) {
+                                            cal = "?";
                                         }
+                                        if (!calibres_selected.contains(cal)) {
+                                            calibres_selected.add(cal);
+                                        }
+                                        String accion_ordenada = jsonObject.getString(DBtareasController.accion_ordenada);
+                                        if (Screen_Login_Activity.checkStringVariable(accion_ordenada)) {
+                                            if (!tipos_tareas_selected.contains(accion_ordenada)) {
+                                                tipos_tareas_selected.add(accion_ordenada);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        } catch (JSONException e) {
+                            Toast.makeText(getApplicationContext(), "No se pudo obtener estado se tarea\n" + e.toString(), Toast.LENGTH_LONG).show();
+                            e.printStackTrace();
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        ArrayAdapter arrayAdapter = new ArrayAdapter(this, R.layout.spinner_text_view,tipos_tareas_selected);
+        ArrayAdapter arrayAdapter2 = new ArrayAdapter(this, R.layout.spinner_text_view,calibres_selected);
+        spinner_filtro_tipo_tarea_screen_filter_results.setAdapter(arrayAdapter);
+        spinner_filtro_calibre_screen_filter_results.setAdapter(arrayAdapter2);
+        orderTareasInBatteryToArrayAdapter();
+        arrayAdapter_salva_calibreAndTareas = (ArrayAdapter) listView_contadores_screen_advance_results.getAdapter();
+    }
+
+    private void fillListViewWithGeolocalizacionResults() {
+        Log.e("ejecutando", "fillListViewWithGeolocalizacionResults");
+        ArrayList<String> tipos_tareas_selected = new ArrayList<String>();
+        tipos_tareas_selected.add("TODAS");
+        ArrayList<String> calibres_selected = new ArrayList<String>();
+        calibres_selected.add("TODOS");
+        lista_ordenada_de_tareas_en_bateria.clear();
+        if (team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas() > 0) {
+            ArrayList<String> tareas = new ArrayList<>();
+            try {
+                tareas = team_or_personal_task_selection_screen_Activity.
+                        dBtareasController.get_all_tareas_from_Database(DBtareasController.codigo_de_geolocalizacion, geolocalizacion);
+                for (int i = 0; i < tareas.size(); i++) {
+                    JSONObject jsonObject = null;
+                    try {
+                        jsonObject = new JSONObject(tareas.get(i));
+                        if (!team_or_personal_task_selection_screen_Activity.checkGestor(jsonObject)) {
+                            continue;
+                        }
+                        String status = "";
+                        try {
+                            if (limitar_a_operario) {
+                                if (!Screen_Filter_Tareas.checkIfOperarioTask(jsonObject)) {
+                                    continue;
+                                }
+                            }
+                            if (!Screen_Filter_Tareas.checkIfIsDone(jsonObject)) {
+                                lista_ordenada_de_tareas_en_bateria.add(Screen_Table_Team.orderTareaInBatteryFromJSON(jsonObject));
+                                String cal =jsonObject.getString(DBtareasController.calibre_toma).trim();
+                                if(!Screen_Login_Activity.checkStringVariable(cal)){
+                                    cal = "?";
+                                }
+                                if (!calibres_selected.contains(cal)) {
+                                    calibres_selected.add(cal);
+                                }
+                                String accion_ordenada = jsonObject.getString(DBtareasController.accion_ordenada);
+                                if(Screen_Login_Activity.checkStringVariable(accion_ordenada)) {
+                                    if (!tipos_tareas_selected.contains(accion_ordenada)) {
+                                        tipos_tareas_selected.add(accion_ordenada);
                                     }
                                 }
                             }
@@ -481,7 +571,7 @@ public class Screen_Filter_Results extends AppCompatActivity {
                 ArrayList<String> tareas = new ArrayList<>();
                 try {
                     tareas = team_or_personal_task_selection_screen_Activity.
-                            dBtareasController.get_all_tareas_from_Database();
+                            dBtareasController.get_all_tareas_from_Database(DBtareasController.poblacion, selected_poblacion);
                     for (int i = 0; i < tareas.size(); i++) {
                         JSONObject jsonObject = null;
                         try {
@@ -498,11 +588,9 @@ public class Screen_Filter_Results extends AppCompatActivity {
                                 continue;
                             }
                             String calle = jsonObject.getString(DBtareasController.calle).trim();
-                            if (selected_poblacion.equals(jsonObject.getString(DBtareasController.poblacion).trim())) {
-                                if (calles_filtradas_en_tipo_tarea.contains(calle)) {
-                                    if (!calles.contains(calle)) {
-                                        calles.add(calle); ///Añadir calles de tareas filtrdas por tipo de tarea
-                                    }
+                            if (calles_filtradas_en_tipo_tarea.contains(calle)) {
+                                if (!calles.contains(calle)) {
+                                    calles.add(calle); ///Añadir calles de tareas filtrdas por tipo de tarea
                                 }
                             }
                         } catch (JSONException e) {
@@ -649,7 +737,7 @@ public class Screen_Filter_Results extends AppCompatActivity {
             ArrayList<String> tareas = new ArrayList<>();
             try {
                 tareas = team_or_personal_task_selection_screen_Activity.
-                        dBtareasController.get_all_tareas_from_Database();
+                        dBtareasController.get_all_tareas_from_Database(DBtareasController.fecha_hora_cita);
                 for (int i = 0; i < tareas.size(); i++) {
                     JSONObject jsonObject = null;
                     try {
@@ -664,7 +752,7 @@ public class Screen_Filter_Results extends AppCompatActivity {
                         }
                         if (!Screen_Filter_Tareas.checkIfIsDone(jsonObject)) {
                             String principal_variable = jsonObject.getString(DBtareasController.principal_variable).trim();
-                            if (!principal_variable.equals("null") && !principal_variable.equals("NULL") && !principal_variable.isEmpty()) {
+                            if (Screen_Login_Activity.checkStringVariable(principal_variable)) {
                                 if (team_or_personal_task_selection_screen_Activity.
                                         tareas_con_citas_obsoletas.contains(principal_variable)) {
                                     if (Screen_Table_Team.checkIfDateisDeprecated(jsonObject)) {
@@ -704,9 +792,15 @@ public class Screen_Filter_Results extends AppCompatActivity {
         lista_ordenada_de_tareas_portales.clear();
         if (team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas() > 0) {
             ArrayList<String> tareas = new ArrayList<>();
+            ArrayList<String> keys = new ArrayList<>();
+            ArrayList<String> values = new ArrayList<>();
+            keys.add(DBtareasController.poblacion);
+            keys.add(DBtareasController.calle);
+            values.add(poblacion.trim());
+            values.add(calle.trim());
             try {
                 tareas = team_or_personal_task_selection_screen_Activity.
-                        dBtareasController.get_all_tareas_from_Database();
+                        dBtareasController.get_all_tareas_from_Database(keys, values);
                 for (int i = 0; i < tareas.size(); i++) {
                     JSONObject jsonObject = null;
                     try {
@@ -723,14 +817,12 @@ public class Screen_Filter_Results extends AppCompatActivity {
                                 }
                             }
                             if (!Screen_Filter_Tareas.checkIfIsDone(jsonObject)) {
-                                String pob = jsonObject.getString(DBtareasController.poblacion).trim();
-                                String call = jsonObject.getString(DBtareasController.calle).trim();
+//                                String pob = jsonObject.getString(DBtareasController.poblacion).trim();
+//                                String call = jsonObject.getString(DBtareasController.calle).trim();
                                 String por = jsonObject.getString(DBtareasController.numero).trim();
                                 por = por.replaceFirst("^0+(?!$)", "");
 
-                                if (pob.equals(poblacion.trim())
-                                        && call.equals(calle.trim())
-                                        && portales.contains(por)) {
+                                if (portales.contains(por)) {
                                     lista_ordenada_de_tareas_portales.add(Screen_Table_Team.orderTareaFromJSONPortales(jsonObject));
                                     String cal =jsonObject.getString(DBtareasController.calibre_toma).trim();
                                     if(cal.isEmpty()){
@@ -917,6 +1009,10 @@ public class Screen_Filter_Results extends AppCompatActivity {
         if(tipo_filtro.equals("CITAS_VENCIDAS")) {
             Intent open_screen_team_or_task= new Intent(this, team_or_personal_task_selection_screen_Activity.class);
             startActivity(open_screen_team_or_task);
+        }
+        if(tipo_filtro.equals("MAPAS_GEOLOCALIZACION")) {
+            Intent open_screen_mapas= new Intent(this, permission_cercania.class);
+            startActivity(open_screen_mapas);
         }
         else if(tipo_filtro.equals("DIRECCION") || tipo_filtro.equals("GEOLOCALIZACION")) {
             Intent open_screen= new Intent(this, Screen_Filter_Tareas.class);

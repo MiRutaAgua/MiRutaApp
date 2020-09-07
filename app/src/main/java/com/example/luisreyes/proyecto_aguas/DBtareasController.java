@@ -12,6 +12,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.lang.reflect.Array;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -910,6 +911,9 @@ public class DBtareasController extends SQLiteOpenHelper {
         if(Screen_Login_Activity.checkStringVariable(equipo_del_operario)){
             where_clause=" where "+equipo+"='"+equipo_del_operario+"'";
         }
+        else{
+            return rows;
+        }
         Cursor c = database.rawQuery("SELECT * FROM "+table_name+ where_clause+";", null);
 
         Iterator<String> keys_it = jsonTareaType.keys();
@@ -951,10 +955,169 @@ public class DBtareasController extends SQLiteOpenHelper {
         }
         if(Screen_Login_Activity.checkStringVariable(equipo_del_operario)){
             where_clause=" where "+equipo+"='"+equipo_del_operario+"'";
+
+            if(Screen_Login_Activity.checkStringVariable(key_where)
+                    && Screen_Login_Activity.checkStringVariable(value_where)){
+                where_clause += " AND "+key_where+"='"+value_where+"'";
+            }
         }
-        if(Screen_Login_Activity.checkStringVariable(key_where) && Screen_Login_Activity.checkStringVariable(value_where)){
-            where_clause += " AND "+key_where+"='"+value_where+"'";
+        else{
+            return rows;
         }
+
+        Cursor c = database.rawQuery("SELECT * FROM "+table_name+ where_clause+";", null);
+
+        Iterator<String> keys_it = jsonTareaType.keys();
+        while (keys_it.hasNext()) {
+            keys.add(keys_it.next());
+        }
+        for(int i=0; c.moveToPosition(i); i++){
+
+            for (int n=0; n < keys.size(); n++){
+                jsonTareaType.put(keys.get(n),  c.getString(n));
+            }
+
+            rows.add(jsonTareaType.toString());
+        }
+        c.close();
+        return rows;
+    }
+    public ArrayList<String> get_all_tareas_from_Database(String key_where_not_null) throws JSONException {
+
+        ArrayList<String> rows = new ArrayList<String>();
+        ArrayList<String> keys = new ArrayList<String>();
+        int temp;
+        String data= "";
+
+        SQLiteDatabase database = this.getReadableDatabase();
+        if(database == null){
+            keys.add("null");
+            return keys;
+        }
+        //TODO
+        String equipo_del_operario ="", where_clause="";
+        try {
+            if(Screen_Login_Activity.equipo_JSON!=null) {
+                equipo_del_operario = Screen_Login_Activity.equipo_JSON
+                        .getString(DBequipo_operariosController.equipo_operario).trim();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        if(Screen_Login_Activity.checkStringVariable(equipo_del_operario)){
+            where_clause=" where "+equipo+"='"+equipo_del_operario+"'";
+
+            if(Screen_Login_Activity.checkStringVariable(key_where_not_null)){
+                where_clause += " AND "+key_where_not_null+" <> '' AND "+key_where_not_null+" <> 'null'";// AND "+key_where_not_null+" IS NOT NULL AND "+key_where_not_null+" <> 'null'";
+            }
+        }
+        else{
+            return rows;
+        }
+
+        Cursor c = database.rawQuery("SELECT * FROM "+table_name+ where_clause+";", null);
+
+        Iterator<String> keys_it = jsonTareaType.keys();
+        while (keys_it.hasNext()) {
+            keys.add(keys_it.next());
+        }
+        for(int i=0; c.moveToPosition(i); i++){
+
+            for (int n=0; n < keys.size(); n++){
+                jsonTareaType.put(keys.get(n),  c.getString(n));
+            }
+
+            rows.add(jsonTareaType.toString());
+        }
+        c.close();
+        return rows;
+    }
+    public ArrayList<String> get_all_tareas_from_Database_Valid_Coords() throws JSONException {
+
+        ArrayList<String> rows = new ArrayList<String>();
+        ArrayList<String> keys = new ArrayList<String>();
+        int temp;
+        String data= "";
+
+        SQLiteDatabase database = this.getReadableDatabase();
+        if(database == null){
+            keys.add("null");
+            return keys;
+        }
+        //TODO
+        String equipo_del_operario ="", where_clause="";
+        try {
+            if(Screen_Login_Activity.equipo_JSON!=null) {
+                equipo_del_operario = Screen_Login_Activity.equipo_JSON
+                        .getString(DBequipo_operariosController.equipo_operario).trim();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        if(Screen_Login_Activity.checkStringVariable(equipo_del_operario)){
+            where_clause=" where "+equipo+"='"+equipo_del_operario+"'";
+
+            where_clause += " AND  ( ("+codigo_de_localizacion+" <> '' AND "+codigo_de_localizacion+" <> 'null') " +
+                    "OR ("+geolocalizacion+" <> '' AND "+geolocalizacion+" <> 'null') )";// AND "+key_where_not_null+" IS NOT NULL AND "+key_where_not_null+" <> 'null'";
+        }
+        else{
+            return rows;
+        }
+
+        Cursor c = database.rawQuery("SELECT * FROM "+table_name+ where_clause+";", null);
+
+        Iterator<String> keys_it = jsonTareaType.keys();
+        while (keys_it.hasNext()) {
+            keys.add(keys_it.next());
+        }
+        for(int i=0; c.moveToPosition(i); i++){
+
+            for (int n=0; n < keys.size(); n++){
+                jsonTareaType.put(keys.get(n),  c.getString(n));
+            }
+
+            rows.add(jsonTareaType.toString());
+        }
+        c.close();
+        return rows;
+    }
+
+    public ArrayList<String> get_all_tareas_from_Database(ArrayList<String> keys_where, ArrayList<String> values_where) throws JSONException {
+
+        ArrayList<String> rows = new ArrayList<String>();
+        ArrayList<String> keys = new ArrayList<String>();
+        int temp;
+        String data= "";
+
+        SQLiteDatabase database = this.getReadableDatabase();
+        if(database == null){
+            keys.add("null");
+            return keys;
+        }
+        //TODO
+        String equipo_del_operario ="", where_clause="";
+        try {
+            if(Screen_Login_Activity.equipo_JSON!=null) {
+                equipo_del_operario = Screen_Login_Activity.equipo_JSON
+                        .getString(DBequipo_operariosController.equipo_operario).trim();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        if(Screen_Login_Activity.checkStringVariable(equipo_del_operario)){
+            where_clause=" where "+equipo+"='"+equipo_del_operario+"'";
+
+            for(int i = 0; i < keys_where.size(); i++){
+                if(Screen_Login_Activity.checkStringVariable(keys_where.get(i))
+                        && Screen_Login_Activity.checkStringVariable(values_where.get(i))){
+                    where_clause += " AND "+keys_where.get(i)+"='"+values_where.get(i)+"'";
+                }
+            }
+        }
+        else{
+            return rows;
+        }
+
         Cursor c = database.rawQuery("SELECT * FROM "+table_name+ where_clause+";", null);
 
         Iterator<String> keys_it = jsonTareaType.keys();

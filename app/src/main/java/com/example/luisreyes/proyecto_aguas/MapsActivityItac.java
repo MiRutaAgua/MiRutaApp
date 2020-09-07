@@ -377,7 +377,7 @@ public class MapsActivityItac extends AppCompatActivity implements OnMapReadyCal
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(coordenates, DEFAULT_ZOOM));
                 Toast.makeText(this, "Cargando Marcador", Toast.LENGTH_SHORT).show();
             }
-        }        
+        }
     }
 
 

@@ -617,35 +617,32 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
                         ArrayList<String> itacs = new ArrayList<>();
                         try {
                             itacs = team_or_personal_task_selection_screen_Activity.
-                                    dBitacsController.get_all_itacs_from_Database();
+                                    dBitacsController.get_all_itacs_from_Database(
+                                            DBitacsController.codigo_itac, cod_emplazamiento);
                             for (int i = 0; i < itacs.size(); i++) {
                                 JSONObject jsonObject = null;
                                 try {
                                     jsonObject = new JSONObject(itacs.get(i));
-                                    if (!team_or_personal_task_selection_screen_Activity.checkGestor(jsonObject)) {
+                                    if (!team_or_personal_task_selection_screen_Activity.checkItacGestor(jsonObject)) {
                                         continue;
                                     }
-                                    String c_emplazamiento = jsonObject.getString(
-                                            DBitacsController.codigo_itac).trim();
 
-                                    if(c_emplazamiento.equals(cod_emplazamiento)){
-                                        if (jsonObject != null) {
-                                            Screen_Login_Activity.itac_JSON = jsonObject;
-                                            try {
-                                                if(Screen_Login_Activity.itac_JSON!=null) {
-                                                    Intent intent = new Intent(this, Screen_Itac.class);
-                                                    startActivity(intent);
-                                                    return;
-                                                }else{
-                                                    Toast.makeText(this, "Itac nula", Toast.LENGTH_SHORT).show();
-                                                }
-                                            } catch (Exception e) {
-                                                e.printStackTrace();
-                                                Toast.makeText(this, "No pudo acceder a itac Error -> "+e.toString(), Toast.LENGTH_SHORT).show();
+                                    if (jsonObject != null) {
+                                        Screen_Login_Activity.itac_JSON = jsonObject;
+                                        try {
+                                            if(Screen_Login_Activity.itac_JSON!=null) {
+                                                Intent intent = new Intent(this, Screen_Itac.class);
+                                                startActivity(intent);
+                                                return;
+                                            }else{
+                                                Toast.makeText(this, "Itac nula", Toast.LENGTH_SHORT).show();
                                             }
-                                        }else{
-                                            Toast.makeText(this, "JSON nulo, se delvio de la tabla elemento nulo", Toast.LENGTH_SHORT).show();
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                            Toast.makeText(this, "No pudo acceder a itac Error -> "+e.toString(), Toast.LENGTH_SHORT).show();
                                         }
+                                    }else{
+                                        Toast.makeText(this, "JSON nulo, se delvio de la tabla elemento nulo", Toast.LENGTH_SHORT).show();
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -665,13 +662,26 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
                                 JSONObject jsonObject = new JSONObject();
 
                                 String dir = getDirOfTaskWithCodEmplazamiento(cod_emplazamiento);
+                                String zona = getZonaOfTaskWithCodEmplazamiento(cod_emplazamiento);
                                 Screen_Login_Activity.itac_JSON = DBitacsController.setEmptyJSON(jsonObject);
                                 try {
+                                    Screen_Login_Activity.itac_JSON.put(
+                                            DBitacsController.equipo,
+                                            Screen_Login_Activity.equipo_JSON.getString(
+                                                    DBequipo_operariosController.equipo_operario));
+                                    Screen_Login_Activity.itac_JSON.put(
+                                            DBitacsController.operario,
+                                            Screen_Login_Activity.operario_JSON.getString(
+                                                    DBoperariosController.usuario));
                                     Screen_Login_Activity.itac_JSON.put(
                                             DBitacsController.codigo_itac, cod_emplazamiento);
                                     if(Screen_Login_Activity.checkStringVariable(dir)){
                                         Screen_Login_Activity.itac_JSON.put(
                                                 DBitacsController.itac, dir);
+                                    }
+                                    if(Screen_Login_Activity.checkStringVariable(zona)){
+                                        Screen_Login_Activity.itac_JSON.put(
+                                                DBitacsController.zona, zona);
                                     }
                                     Intent intent_open_screen_edit_itac = new Intent(
                                             Screen_Filter_Tareas.this, Screen_Edit_ITAC.class);
@@ -690,6 +700,22 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
 
             }
         }
+    }
+
+    private String getZonaOfTaskWithCodEmplazamiento(String cod_emplazamiento) {
+        String zona = "";
+        try {
+            String tarea = team_or_personal_task_selection_screen_Activity.
+                    dBtareasController.get_one_tarea_from_Database(
+                    DBtareasController.codigo_de_geolocalizacion, cod_emplazamiento);
+            JSONObject jsonObjectTarea = new JSONObject(tarea);
+
+            zona = jsonObjectTarea.getString(DBtareasController.zona);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return zona;
     }
 
     public static String getDirOfTaskWithCodEmplazamiento(String cod_emplazamiento) {
@@ -770,7 +796,7 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
                         }
                         if (!checkIfIsDone(jsonObject)) {
                             String geolocalizacion = jsonObject.getString(DBtareasController.codigo_de_geolocalizacion).trim();
-                            if (!geolocalizacion.equals("null") && !geolocalizacion.equals("NULL") && !geolocalizacion.isEmpty()) {
+                            if (Screen_Login_Activity.checkStringVariable(geolocalizacion)) {
                                 if (!lista_desplegable.contains(geolocalizacion)) {
                                     lista_desplegable.add(geolocalizacion);
                                 }
@@ -875,7 +901,7 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
                 ArrayList<String> tareas = new ArrayList<>();
                 try {
                     tareas = team_or_personal_task_selection_screen_Activity.
-                            dBtareasController.get_all_tareas_from_Database();
+                            dBtareasController.get_all_tareas_from_Database(DBtareasController.poblacion, selected_poblacion);
                     for (int i = 0; i < tareas.size(); i++) {
                         JSONObject jsonObject = null;
                         try {
@@ -884,11 +910,9 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
                                 continue;
                             }
                             String calle = jsonObject.getString(DBtareasController.calle).trim();
-                            if (selected_poblacion.equals(jsonObject.getString(DBtareasController.poblacion).trim())) {
-                                if (calles_filtradas_en_tipo_tarea.contains(calle)) {
-                                    if (!calles.contains(calle)) {
-                                        calles.add(calle); ///Añadir calles de tareas filtrdas por tipo de tarea
-                                    }
+                            if (calles_filtradas_en_tipo_tarea.contains(calle)) {
+                                if (!calles.contains(calle)) {
+                                    calles.add(calle); ///Añadir calles de tareas filtrdas por tipo de tarea
                                 }
                             }
                         } catch (JSONException e) {
@@ -1334,8 +1358,8 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
                                 status = jsonObject.getString(DBtareasController.status_tarea);
                                 if (!Screen_Filter_Tareas.checkIfIsDone(jsonObject)) {
 
-                                    String telefono1 = jsonObject.getString(DBtareasController.telefono1).replace("\n", "").replace(" ", "");
-                                    String telefono2 = jsonObject.getString(DBtareasController.telefono2).replace("\n", "").replace(" ", "");
+                                    String telefono1 = jsonObject.getString(DBtareasController.telefono1).trim();
+                                    String telefono2 = jsonObject.getString(DBtareasController.telefono2).trim();
                                     String telefonos = "";
                                     if (!telefono1.equals("null") && !telefono1.equals("NULL") && !telefono1.isEmpty()) {
                                         telefonos = "Tel1: " + telefono1 + "   ";
@@ -1810,7 +1834,7 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
             ArrayList<String> tareas = new ArrayList<>();
             try {
                 tareas = team_or_personal_task_selection_screen_Activity.
-                        dBtareasController.get_all_tareas_from_Database();
+                        dBtareasController.get_all_tareas_from_Database(DBtareasController.accion_ordenada, tipo_tarea_item);
                 for (int i = 0; i < tareas.size(); i++) {
                     JSONObject jsonObject = null;
                     try {
@@ -1824,23 +1848,20 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
                             }
                         }
                         if (!checkIfIsDone(jsonObject)) {
-                            String accion_ordenada = jsonObject.getString(DBtareasController.accion_ordenada).trim();
+//                            String accion_ordenada = jsonObject.getString(DBtareasController.accion_ordenada).trim();
                             String calibre = jsonObject.getString(DBtareasController.calibre_toma).trim();
-                            if (Screen_Login_Activity.checkStringVariable(accion_ordenada)
-                                    && Screen_Login_Activity.checkStringVariable(calibre)) {
-                                if (accion_ordenada.equals(tipo_tarea_item)) {
-                                    Integer integer= null;
-                                    try {
-                                        integer = Integer.parseInt(calibre);
-                                        if (!lista_desplegable.contains(integer)) {
-                                            lista_desplegable.add(Integer.parseInt(calibre));
-                                        }
-                                    } catch (NumberFormatException e) {
-                                        if (!lista_desplegable.contains(0)) {
-                                            lista_desplegable.add(0);
-                                        }
-                                        e.printStackTrace();
+                            if (Screen_Login_Activity.checkStringVariable(calibre)) {
+                                Integer integer= null;
+                                try {
+                                    integer = Integer.parseInt(calibre);
+                                    if (!lista_desplegable.contains(integer)) {
+                                        lista_desplegable.add(Integer.parseInt(calibre));
                                     }
+                                } catch (NumberFormatException e) {
+                                    if (!lista_desplegable.contains(0)) {
+                                        lista_desplegable.add(0);
+                                    }
+                                    e.printStackTrace();
                                 }
                             }
                         }
@@ -1935,7 +1956,7 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
                         }
                         if (!checkIfIsDone(jsonObject)) {
                             String poblacion = jsonObject.getString(DBtareasController.poblacion).trim();
-                            if (!poblacion.equals("null") && !poblacion.isEmpty()) {
+                            if (Screen_Login_Activity.checkStringVariable(poblacion)) {
                                 if (!lista_desplegable.contains(poblacion)) {
                                     lista_desplegable.add(poblacion);
                                 }
@@ -1964,7 +1985,7 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
             ArrayList<String> tareas = new ArrayList<>();
             try {
                 tareas = team_or_personal_task_selection_screen_Activity.
-                        dBtareasController.get_all_tareas_from_Database();
+                        dBtareasController.get_all_tareas_from_Database(DBtareasController.poblacion, poblacion_item.trim());
                 for (int i = 0; i < tareas.size(); i++) {
                     JSONObject jsonObject = null;
                     try {
@@ -1978,16 +1999,11 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
                             }
                         }
                         if (!checkIfIsDone(jsonObject)) {
-                            String poblacion = jsonObject.getString(DBtareasController.poblacion).trim();
-                            if (!poblacion.equals("null") && !poblacion.isEmpty()) {
-                                if (poblacion.equals(poblacion_item.trim())) {
-                                    String calle = jsonObject.getString(DBtareasController.calle).trim();
-                                    if (!calle.equals("null") && !calle.isEmpty()) {
-                                        if (!lista_desplegable.contains(calle)) {
-                                            lista_desplegable.add(calle);
-                                        }
-//                            lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
-                                    }
+//                            String poblacion = jsonObject.getString(DBtareasController.poblacion).trim();
+                            String calle = jsonObject.getString(DBtareasController.calle).trim();
+                            if (Screen_Login_Activity.checkStringVariable(calle)) {
+                                if (!lista_desplegable.contains(calle)) {
+                                    lista_desplegable.add(calle);
                                 }
                             }
                         }
@@ -2018,9 +2034,15 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
 
         if (team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas() > 0) {
             ArrayList<String> tareas = new ArrayList<>();
+            ArrayList<String> keys = new ArrayList<>();
+            ArrayList<String> values = new ArrayList<>();
+            keys.add(DBtareasController.poblacion);
+            keys.add(DBtareasController.calle);
+            values.add(poblacion_item.trim());
+            values.add(calle_item.trim());
             try {
                 tareas = team_or_personal_task_selection_screen_Activity.
-                        dBtareasController.get_all_tareas_from_Database();
+                        dBtareasController.get_all_tareas_from_Database(keys, values);
                 for (int i = 0; i < tareas.size(); i++) {
                     JSONObject jsonObject = null;
                     try {
@@ -2034,24 +2056,19 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
                             }
                         }
                         if (!checkIfIsDone(jsonObject)) {
-                            String poblacion = jsonObject.getString(DBtareasController.poblacion).trim();
-                            String calle = jsonObject.getString(DBtareasController.calle).trim();
-
-                            if (!poblacion.equals("null") && !poblacion.isEmpty() && !calle.equals("null") && !calle.isEmpty()) {
-                                if (poblacion.equals(poblacion_item.trim()) && calle.equals(calle_item.trim())) {
-                                    String numero_portal = jsonObject.getString(DBtareasController.numero).trim();
-                                    if (!lista_portales.contains(numero_portal)) {
-                                        lista_portales.add(numero_portal);
-                                        if(Screen_Absent.checkOnlyNumbers(numero_portal)) {
-                                            try {
-                                                portales_int.add(Integer.parseInt(numero_portal));
-                                            } catch (NumberFormatException e) {
-                                                e.printStackTrace();
-                                            }
-                                        }
-//                            lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
+//                            String poblacion = jsonObject.getString(DBtareasController.poblacion).trim();
+//                            String calle = jsonObject.getString(DBtareasController.calle).trim();
+                            String numero_portal = jsonObject.getString(DBtareasController.numero).trim();
+                            if (!lista_portales.contains(numero_portal)) {
+                                lista_portales.add(numero_portal);
+                                if(Screen_Absent.checkOnlyNumbers(numero_portal)) {
+                                    try {
+                                        portales_int.add(Integer.parseInt(numero_portal));
+                                    } catch (NumberFormatException e) {
+                                        e.printStackTrace();
                                     }
                                 }
+//                            lista_ordenada_de_tareas.add(Screen_Table_Team.orderTareaFromJSON(jsonObject));
                             }
                         }
                     } catch (JSONException e) {

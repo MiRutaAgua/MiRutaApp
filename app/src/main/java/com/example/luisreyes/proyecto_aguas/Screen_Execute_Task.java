@@ -979,36 +979,34 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                         ArrayList<String> itacs = new ArrayList<>();
                         try {
                             itacs = team_or_personal_task_selection_screen_Activity.
-                                    dBitacsController.get_all_itacs_from_Database();
+                                    dBitacsController.get_all_itacs_from_Database(
+                                            DBitacsController.codigo_itac, cod_emplazamiento);
                             for (int i = 0; i < itacs.size(); i++) {
                                 JSONObject jsonObject = null;
                                 try {
                                     jsonObject = new JSONObject(itacs.get(i));
-                                    if (!team_or_personal_task_selection_screen_Activity.checkGestor(jsonObject)) {
+                                    if (!team_or_personal_task_selection_screen_Activity.checkItacGestor(jsonObject)) {
                                         continue;
                                     }
-                                    String c_emplazamiento = jsonObject.getString(
-                                            DBitacsController.codigo_itac).trim();
 
-                                    if(c_emplazamiento.equals(cod_emplazamiento)){
-                                        if (jsonObject != null) {
-                                            Screen_Login_Activity.itac_JSON = jsonObject;
-                                            try {
-                                                if(Screen_Login_Activity.itac_JSON!=null) {
-                                                    Intent intent = new Intent(this, Screen_Itac.class);
-                                                    startActivity(intent);
-                                                    return;
-                                                }else{
-                                                    Toast.makeText(this, "Itac nula", Toast.LENGTH_SHORT).show();
-                                                }
-                                            } catch (Exception e) {
-                                                e.printStackTrace();
-                                                Toast.makeText(this, "No pudo acceder a itac Error -> "+e.toString(), Toast.LENGTH_SHORT).show();
+                                    if (jsonObject != null) {
+                                        Screen_Login_Activity.itac_JSON = jsonObject;
+                                        try {
+                                            if(Screen_Login_Activity.itac_JSON!=null) {
+                                                Intent intent = new Intent(this, Screen_Itac.class);
+                                                startActivity(intent);
+                                                return;
+                                            }else{
+                                                Toast.makeText(this, "Itac nula", Toast.LENGTH_SHORT).show();
                                             }
-                                        }else{
-                                            Toast.makeText(this, "JSON nulo, se delvio de la tabla elemento nulo", Toast.LENGTH_SHORT).show();
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                            Toast.makeText(this, "No pudo acceder a itac Error -> "+e.toString(), Toast.LENGTH_SHORT).show();
                                         }
+                                    }else{
+                                        Toast.makeText(this, "JSON nulo, se delvio de la tabla elemento nulo", Toast.LENGTH_SHORT).show();
                                     }
+
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -1024,24 +1022,12 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                JSONObject jsonObject = new JSONObject();
-
-                                String dir = Screen_Filter_Tareas.
-                                        getDirOfTaskWithCodEmplazamiento(cod_emplazamiento);
-
-                                Screen_Login_Activity.itac_JSON = DBitacsController.setEmptyJSON(jsonObject);
-                                try {
-                                    Screen_Login_Activity.itac_JSON.put(
-                                            DBitacsController.codigo_itac, cod_emplazamiento);
-                                    if(Screen_Login_Activity.checkStringVariable(dir)){
-                                        Screen_Login_Activity.itac_JSON.put(
-                                                DBitacsController.itac, dir);
-                                    }
+                                if(fillNewItacDataWithTarea(cod_emplazamiento)) {
                                     Intent intent_open_screen_edit_itac = new Intent(
                                             Screen_Execute_Task.this, Screen_Edit_ITAC.class);
                                     startActivity(intent_open_screen_edit_itac);
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
+                                }else{
+                                    openMessage("Error", "No se pudo crear nuevo ITAC");
                                 }
                             }
                         })
@@ -1055,6 +1041,63 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         }
     }
 
+    public boolean fillNewItacDataWithTarea(String cod_emplazamiento){
+        JSONObject jsonObject = new JSONObject();
+
+        String geocode = null;
+        String zona = null;
+        String equipo = null;
+        String operario = null;
+        try {
+            operario = Screen_Login_Activity.tarea_JSON.
+                    getString(DBtareasController.operario);
+            equipo = Screen_Login_Activity.tarea_JSON.
+                    getString(DBtareasController.equipo);
+            zona = Screen_Login_Activity.tarea_JSON.
+                    getString(DBtareasController.zona);
+            geocode = Screen_Login_Activity.tarea_JSON.
+                    getString(DBtareasController.codigo_de_localizacion);
+            if(!Screen_Login_Activity.checkStringVariable(geocode)){
+                geocode = Screen_Login_Activity.tarea_JSON.
+                        getString(DBtareasController.geolocalizacion);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        String dir = Screen_Filter_Tareas.
+                getDirOfTaskWithCodEmplazamiento(cod_emplazamiento);
+
+        Screen_Login_Activity.itac_JSON = DBitacsController.setEmptyJSON(jsonObject);
+        try {
+            Screen_Login_Activity.itac_JSON.put(
+                    DBitacsController.codigo_itac, cod_emplazamiento);
+            if(Screen_Login_Activity.checkStringVariable(dir)){
+                Screen_Login_Activity.itac_JSON.put(
+                        DBitacsController.itac, dir);
+            }
+            if(Screen_Login_Activity.checkStringVariable(zona)){
+                Screen_Login_Activity.itac_JSON.put(
+                        DBitacsController.zona, zona);
+            }
+            if(Screen_Login_Activity.checkStringVariable(geocode)){
+                Screen_Login_Activity.itac_JSON.put(
+                        DBitacsController.geolocalizacion, geocode);
+            }
+            if(Screen_Login_Activity.checkStringVariable(equipo)){
+                Screen_Login_Activity.itac_JSON.put(
+                        DBitacsController.equipo, equipo);
+            }
+            if(Screen_Login_Activity.checkStringVariable(operario)){
+                Screen_Login_Activity.itac_JSON.put(
+                        DBitacsController.operario, operario);
+            }
+            return true;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
     private void llenarInformacionDeEmplazamiento() {
         String emplazamiento="";
         try {

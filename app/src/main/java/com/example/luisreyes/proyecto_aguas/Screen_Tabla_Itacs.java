@@ -10,7 +10,9 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -148,6 +150,33 @@ public class Screen_Tabla_Itacs extends AppCompatActivity {
             }
         });
 
+        editText_filter.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if(charSequence.toString().isEmpty()){
+                    lista_de_itacs_screen_table_itac.setAdapter(arrayAdapter);
+                }else{
+                    ArrayList<String> listView_lista = new ArrayList<>();
+                    for(int c=0; c< arrayAdapter.getCount(); c++){
+                        if(arrayAdapter.
+                                getItem(c).toString().toUpperCase().
+                                contains(charSequence.toString().toUpperCase())){
+                            listView_lista.add(arrayAdapter.
+                                    getItem(c).toString());
+                        }
+                    }
+                    lista_de_itacs_screen_table_itac.setAdapter(new ArrayAdapter(
+                            Screen_Tabla_Itacs.this, R.layout.list_text_view, listView_lista));
+                }
+//                (Screen_Table_Team.this).arrayAdapter.getFilter().filter(charSequence);
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
         if (lista_de_itacs_screen_table_itac.getAdapter() != null) {
             if (lista_de_itacs_screen_table_itac.getAdapter().isEmpty()) {
                 openMessage("Información", "No hay  para mostrar");
@@ -177,37 +206,34 @@ public class Screen_Tabla_Itacs extends AppCompatActivity {
 
     private void descargarItacs() {
         if (team_or_personal_task_selection_screen_Activity.dBitacsController != null) {
-            if (team_or_personal_task_selection_screen_Activity.dBitacsController.databasefileExists(this)) {
-                if (team_or_personal_task_selection_screen_Activity.dBitacsController.checkForTableExists()) {
+            if (team_or_personal_task_selection_screen_Activity.dBitacsController.canLookInsideTable(this)) {
+                lista_ordenada_de_itas.clear();
+                ArrayList<String> itacs = new ArrayList<>();
+                try {
+                    itacs = team_or_personal_task_selection_screen_Activity.
+                            dBitacsController.get_all_itacs_from_Database();
                     lista_ordenada_de_itas.clear();
-                    if (team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas() > 0) {
-                        ArrayList<String> itacs = new ArrayList<>();
+                    for (int i = 0; i < itacs.size(); i++) {
+                        JSONObject jsonObject = null;
                         try {
-                            itacs = team_or_personal_task_selection_screen_Activity.
-                                    dBitacsController.get_all_itacs_from_Database();
-                            lista_ordenada_de_itas.clear();
-                            for (int i = 0; i < itacs.size(); i++) {
-                                JSONObject jsonObject = null;
-                                try {
-                                    jsonObject = new JSONObject(itacs.get(i));
-                                    if (!team_or_personal_task_selection_screen_Activity.checkGestor(jsonObject)) {
-                                        continue;
-                                    }
-                                    lista_ordenada_de_itas.add(orderItacFromJSON(jsonObject));
-
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
+                            jsonObject = new JSONObject(itacs.get(i));
+                            if (!team_or_personal_task_selection_screen_Activity.checkItacGestor(jsonObject)) {
+                                continue;
                             }
+                            lista_ordenada_de_itas.add(orderItacFromJSON(jsonObject));
 
-                        } catch(JSONException e){
+                        } catch (JSONException e) {
                             e.printStackTrace();
                         }
-
                     }
-                    orderItacsToArrayAdapter();
+
+                } catch(JSONException e){
+                    e.printStackTrace();
                 }
             }
+            orderItacsToArrayAdapter();
+            openMessage("Información", "Existen " + String.valueOf(lista_ordenada_de_itas.size())
+                    + " itacs disponibles");
         }
     }
     public static String orderItacForListView(MyItac itac){

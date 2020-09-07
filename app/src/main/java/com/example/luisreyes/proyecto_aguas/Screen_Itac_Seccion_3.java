@@ -261,7 +261,7 @@ public class Screen_Itac_Seccion_3 extends AppCompatActivity {
                                 rb.setChecked(true);
                                 if (iluminacion.equals("Poca") || iluminacion.equals("Nula")) {
                                     if (lista_accion_iluminacion.contains(iluminacion_extra)) {
-                                        int index = lista_desague_si.indexOf(iluminacion_extra);
+                                        int index = lista_accion_iluminacion.indexOf(iluminacion_extra);
                                         spinner_accion_iluminacion_seccion3.setSelection(index);
                                     }
                                 }

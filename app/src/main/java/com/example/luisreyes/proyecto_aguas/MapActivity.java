@@ -577,12 +577,9 @@ public class MapActivity extends AppCompatActivity implements TaskCompleted, OnM
 
         try {
             String coor = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.geolocalizacion).trim();
-            //Toast.makeText(MapsActivity.this, coor, Toast.LENGTH_LONG).show();
+            String coor1 = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.codigo_de_localizacion).trim();
 
-            Log.e(coor, "basedatos");
-
-            if (coor.contains(",") && (!coor.contains("null")) && (!coor.contains("NULL"))){
-
+            if (coor.contains(",") && Screen_Login_Activity.checkStringVariable(coor)){
                 String[] parts = coor.split(",");
                 String part1 = parts[0]; //obtiene: latitud
                 String part2 = parts[1]; //obtiene: longitud
@@ -597,7 +594,6 @@ public class MapActivity extends AppCompatActivity implements TaskCompleted, OnM
                     if(markerPump.getPosition() != null){
                         mMap.addMarker(markerPump);}
                 }
-
                 String icon = "casa";
                 markerHome.position(coordenates).draggable(true).title("Marcador de casa").snippet("Posicion de casa").icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons(icon, 84, 100)));
 //                markerHome.position(coordenates).draggable(true).title("Marcador de casa").snippet("Posicion de casa").icon(bitmapDescriptorFromVector(this, R.drawable.ic_home_black_24dp));
@@ -606,13 +602,7 @@ public class MapActivity extends AppCompatActivity implements TaskCompleted, OnM
                 marker =true;
                 //Toast.makeText(MapActivity.this, "Cargando Marcadores", Toast.LENGTH_SHORT).show();
             }
-
-
-            String coor1 = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.codigo_de_localizacion).trim();
-            //Toast.makeText(MapsActivity.this, coor1, Toast.LENGTH_LONG).show();
-            Log.e(coor1, "basedatos");
-
-            if (coor1.contains(",") && (!coor1.contains("null")) && (!coor1.contains("NULL")))  {
+            if (coor1.contains(",") && Screen_Login_Activity.checkStringVariable(coor1))  {
                 String[] parts = coor1.split(",");
                 String part3 = parts[0]; //obtiene: latitud
                 String part4 = parts[1]; //obtiene: longitud
@@ -634,13 +624,11 @@ public class MapActivity extends AppCompatActivity implements TaskCompleted, OnM
                 mMap.addMarker(markerPump);
                 marker =true;
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(coordenates_pump, DEFAULT_ZOOM));
-                Toast.makeText(MapActivity.this, "Cargando Marcador", Toast.LENGTH_SHORT).show();}
-
-            else{
-
+                Toast.makeText(MapActivity.this, "Cargando Marcador", Toast.LENGTH_SHORT).show();
+            }
+            if(Screen_Login_Activity.checkStringVariable(coor) && Screen_Login_Activity.checkStringVariable(coor1)){
                 marker = false;
                 getDeviceLocation();
-
             }
 
         } catch (JSONException e) {
@@ -690,8 +678,8 @@ public class MapActivity extends AppCompatActivity implements TaskCompleted, OnM
                                         }
                                         mLastKnownLocation = locationResult.getLastLocation();
                                         if (!marker){
-                                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude()), DEFAULT_ZOOM)); }
-                                        //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                                        }
                                         mFusedLocationProviderClient.removeLocationUpdates(locationCallback);
 //
                                     }
@@ -871,7 +859,7 @@ public class MapActivity extends AppCompatActivity implements TaskCompleted, OnM
                 finish();
             }
             else if (ventana == 1){
-                finish();
+                finishThisClass();
             }
         }
     }

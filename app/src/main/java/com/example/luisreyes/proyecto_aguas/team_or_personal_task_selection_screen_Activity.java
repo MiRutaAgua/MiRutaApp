@@ -125,6 +125,8 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
     private static final int PEDAZOS_A_DESCARGAR = 500;
     private int count_tareas_descargadas = 0;
     private int cantidad_total_de_tareas_en_servidor = 0;
+    private int count_itacs_descargadas = 0;
+    private int cantidad_total_de_itacs_en_servidor = 0;
     private int count_contadores_descargadas = 0;
     private int cantidad_total_de_contadores_en_servidor = 0;
 
@@ -561,18 +563,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
     }
 
     public void getItacsDeServidor() throws JSONException {
-        String empresa = Screen_Login_Activity.current_empresa;
-        if(checkConection()){
-            Log.e("getItacsDeServidor", "Hay conexion");
-            Screen_Login_Activity.isOnline = true;
-            String type_script = "get_itacs";
-            BackgroundWorker backgroundWorker = new BackgroundWorker(this);
-            backgroundWorker.execute(type_script, empresa.toLowerCase());
-        }
-        else{
-            Toast.makeText(this, "No hay conexion a Internet," +
-                    "Intente sincronizar con conexión", Toast.LENGTH_LONG).show();
-        }
+        descargarItacs();
     }
     public void getGestoresDeServidor() throws JSONException {
         String empresa = Screen_Login_Activity.current_empresa;
@@ -1073,7 +1064,21 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
             backgroundWorker.execute(type_script, empresa.toLowerCase());
         }
     }
-
+    private void descargarCantidadItacs() {
+        String empresa = Screen_Login_Activity.current_empresa;
+        if(checkConection()){
+            Log.e("descargarCantidadItacs", "Hay conexion");
+            Screen_Login_Activity.isOnline = true;
+            showRingDialog("Sincronizando Itacs");
+            String type_script = "get_itacs_amount";
+            BackgroundWorker backgroundWorker = new BackgroundWorker(this);
+            backgroundWorker.execute(type_script, empresa.toLowerCase());
+        }
+    }
+    private void descargarItacs() {
+        count_itacs_descargadas = 0;
+        descargarCantidadItacs();
+    }
     private void descargarTareas() {
         count_tareas_descargadas = 0;
         descargarCantidadTareas();
@@ -1108,6 +1113,19 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
             backgroundWorker.execute(type_script, amount, offset, empresa.toLowerCase());
         }
     }
+    private void descargarXItacs(int cantidad, int count_itacs_descargadas){
+        String empresa = Screen_Login_Activity.current_empresa;
+        if(checkConection()){
+            Log.e("descargarXItacs", "Hay conexion");
+            Screen_Login_Activity.isOnline = true;
+            String type_script = "get_itacs_with_limit";
+            String amount = String.valueOf(cantidad);
+            String offset = String.valueOf(count_itacs_descargadas);
+            BackgroundWorker backgroundWorker = new BackgroundWorker(this);
+            backgroundWorker.execute(type_script, amount, offset, empresa.toLowerCase());
+        }
+    }
+
 
     public boolean checkConection(){
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE)
@@ -1123,14 +1141,38 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
         else
             return false;
     }
+    public static boolean checkItacGestor(JSONObject jsonObject){
+        if(gestor_seleccionado.equals("TODOS")){
+            return true;
+        }
+        try {
+            String gestor_de_tarea = jsonObject.getString(DBitacsController.GESTOR).trim();
+            if(Screen_Login_Activity.checkStringVariable(gestor_de_tarea)) {
+                if (gestor_seleccionado.equals(gestor_de_tarea)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }else{
+                if(gestor_seleccionado.equals("SIN GESTOR")){
+                    return true;
+                }else {
+                    return false;
+                }
+            }
+        } catch (JSONException e) {
+            Log.e("Excepcion", "No se pudo ontener gestor");
+            e.printStackTrace();
+            return false;
+        }
+    }
     public static boolean checkGestor(JSONObject jsonObject){
         if(gestor_seleccionado.equals("TODOS")){
             return true;
         }
         try {
             String gestor_de_tarea = jsonObject.getString(DBtareasController.GESTOR).trim();
-            if(!gestor_de_tarea.isEmpty() && !gestor_de_tarea.equals("NULL")
-                    && !gestor_de_tarea.equals("null")) {
+            if(Screen_Login_Activity.checkStringVariable(gestor_de_tarea)) {
                 if (gestor_seleccionado.equals(gestor_de_tarea)) {
                     return true;
                 } else {
@@ -1279,7 +1321,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                                     String gestor = "";
                                     try {
                                         gestor = jsonObject.getString(DBtareasController.GESTOR).trim();
-                                        if (!gestor.equals("NULL") && !gestor.equals("null") && !gestor.isEmpty()) {
+                                        if (Screen_Login_Activity.checkStringVariable(gestor)) {
                                             if (!gestores.contains(gestor)) {
                                                 gestores.add(gestor);
                                             }
@@ -1297,11 +1339,9 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                                         count_sync++;
                                     }
                                     if (Screen_Table_Team.checkIfDateisDeprecated(jsonObject)) {
-                                            if (!Screen_Filter_Tareas.checkIfIsDone(jsonObject)) {
-                                                tareas_con_citas_obsoletas.add(jsonObject.getString(DBtareasController.principal_variable));
-                                            }
-
-//                                            Log.e("Cita Obsoleta", jsonObject.getString(DBtareasController.nuevo_citas));
+                                        if (!Screen_Filter_Tareas.checkIfIsDone(jsonObject)) {
+                                            tareas_con_citas_obsoletas.add(jsonObject.getString(DBtareasController.principal_variable));
+                                        }
                                     }
                                 }  catch (JSONException e) {
                                     Log.e("Excp setNotificati...", "Elemento i = "+ String.valueOf(i));
@@ -1817,15 +1857,15 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                 }
             }
         }
-        else if(type.equals("get_itacs")){
+        else if(type.equals("get_itacs_with_limit")){
             if(result == null){
                 hideRingDialog();
                 Toast.makeText(this, "No se pudo establecer conexión con el servidor", Toast.LENGTH_LONG).show();
             }
             else {
-                Log.e("get_itacs", "-----------------------------------------");
+                Log.e("get_itacs_with_limit", "-----------------------------------------");
                 if(result.isEmpty()) {
-                    Log.e("get_itacs", "Vacio");
+                    Log.e("get_itacs_with_limit", "Vacio");
                     Toast.makeText(this,"Tabla de itacs en internet vacia", Toast.LENGTH_LONG).show();
                     hideRingDialog();
                     checkItacsMissinInServer(itacs_en_servidor);
@@ -1925,10 +1965,46 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                             //Toast.makeText(Screen_Table_Team.this,e.toString(), Toast.LENGTH_LONG).show();
                         }
                     }
-                    Toast.makeText(this, "Itacs descargadas correctamente", Toast.LENGTH_LONG).show();
-                    checkItacsMissinInServer(itacs_en_servidor);
-                    updateItacsInMySQL();
-                    itacs_en_servidor.clear();
+
+                    count_itacs_descargadas += PEDAZOS_A_DESCARGAR;
+                    if(count_itacs_descargadas >= cantidad_total_de_itacs_en_servidor) {
+                        showRingDialog("Actualizando en internet");
+                        Toast.makeText(this, "Itacs descargadas correctamente", Toast.LENGTH_LONG).show();
+                        checkItacsMissinInServer(itacs_en_servidor);
+                        updateItacsInMySQL();
+                        itacs_en_servidor.clear();
+                    }else{
+                        descargarXItacs(PEDAZOS_A_DESCARGAR, count_itacs_descargadas);
+                    }
+                }
+            }
+        }
+        else if(type.equals("get_itacs_amount")){
+            if(result == null){
+                hideRingDialog();
+                Toast.makeText(this, "No se pudo establecer conexión con el servidor", Toast.LENGTH_LONG).show();
+            }
+            else {
+                Log.e("get_itacs_amount", result + "-----------------------------------------");
+                if(result.contains("not success get_itacs_amount")){
+                    Toast.makeText(this,"Error al obtener la cantidad de itacs", Toast.LENGTH_LONG).show();
+                }else{
+                    if(result.contains("Cantidad de itacs:")){
+                        try {
+                            String [] split = result.split("Cantidad de itacs:");
+                            if(split.length >= 2){
+                                result = split[1].replace("]", "").trim();
+                                Integer integer = Integer.parseInt(result);
+                                if(integer!= null){
+                                    cantidad_total_de_itacs_en_servidor = integer;
+                                    descargarXItacs(PEDAZOS_A_DESCARGAR, count_itacs_descargadas);
+                                }
+                            }
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
             }
         }

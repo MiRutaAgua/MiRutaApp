@@ -734,16 +734,18 @@ public class Screen_Unity_Counter extends AppCompatActivity implements TaskCompl
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         Intent openTableActivity = null;
-//                        if(team_or_personal_task_selection_screen_Activity.from_team_or_personal == team_or_personal_task_selection_screen_Activity.FROM_TEAM) {
-//                            openTableActivity = new Intent(Screen_Battery_counter.this, Screen_Table_Team.class);
-//                        }else if(team_or_personal_task_selection_screen_Activity.from_team_or_personal == team_or_personal_task_selection_screen_Activity.FROM_PERSONAL){
-//                            openTableActivity = new Intent(Screen_Battery_counter.this, Screen_Table_Personal.class);
-//                        }else if(team_or_personal_task_selection_screen_Activity.from_team_or_personal == team_or_personal_task_selection_screen_Activity.FROM_FILTER_RESULT){
-//                            openTableActivity = new Intent(Screen_Battery_counter.this, Screen_Filter_Results.class);
-//                        }else if(team_or_personal_task_selection_screen_Activity.from_team_or_personal == team_or_personal_task_selection_screen_Activity.FROM_FILTER_TAREAS){
-//                            openTableActivity = new Intent(Screen_Battery_counter.this, Screen_Filter_Tareas.class);
-                        //                       }
-                        if(team_or_personal_task_selection_screen_Activity.from_team_or_personal == team_or_personal_task_selection_screen_Activity.FROM_MAP_CERCANIA){
+
+                        if(team_or_personal_task_selection_screen_Activity.from_team_or_personal == team_or_personal_task_selection_screen_Activity.FROM_TEAM) {
+                            openTableActivity = new Intent(Screen_Unity_Counter.this, Screen_Table_Team.class);
+                        }else if(team_or_personal_task_selection_screen_Activity.from_team_or_personal == team_or_personal_task_selection_screen_Activity.FROM_PERSONAL){
+                            openTableActivity = new Intent(Screen_Unity_Counter.this, Screen_Table_Personal.class);
+                        }else
+                        if(team_or_personal_task_selection_screen_Activity.from_team_or_personal == team_or_personal_task_selection_screen_Activity.FROM_FILTER_RESULT){
+                            openTableActivity = new Intent(Screen_Unity_Counter.this, Screen_Filter_Results.class);
+                        }else if(team_or_personal_task_selection_screen_Activity.from_team_or_personal == team_or_personal_task_selection_screen_Activity.FROM_FILTER_TAREAS){
+                            openTableActivity = new Intent(Screen_Unity_Counter.this, Screen_Filter_Tareas.class);
+                        }
+                        else if(team_or_personal_task_selection_screen_Activity.from_team_or_personal == team_or_personal_task_selection_screen_Activity.FROM_MAP_CERCANIA){
                             openTableActivity = new Intent(Screen_Unity_Counter.this, permission_cercania.class);
                         }
                         if(openTableActivity!= null) {

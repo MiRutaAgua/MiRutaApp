@@ -188,16 +188,16 @@ public class Screen_Itac_Seccion_1 extends AppCompatActivity {
                     DBitacsController.acceso_ubicacion_acceso).toString().trim();
             String extra = Screen_Login_Activity.itac_JSON.getString(
                     DBitacsController.extra_acceso_ubicacion).toString().trim();
-            if(ubicacion.equals("Dentro de edificio")){
+            if(ubicacion.toLowerCase().equals("dentro de edificio")){
                 radioButton_dentro.setChecked(true);
                 linearLayout_dentro.setVisibility(View.VISIBLE);
-            }else if(ubicacion.equals("Exterior")){
+            }else if(ubicacion.toLowerCase().equals("exterior")){
                 radioButton_exterior.setChecked(true);
                 linearLayout_exterior.setVisibility(View.VISIBLE);
             }
-            if(acceso.equals("Dentro de Recinto Cerrado")){
+            if(acceso.toLowerCase().equals("dentro de recinto cerrado")){
                 radioButton_dentro_de_recinto.setChecked(true);
-            }else if(acceso.equals("Libre Acceso")){
+            }else if(acceso.toLowerCase().equals("libre acceso")){
                 radioButton_libre_acceso.setChecked(true);
             }
             if(lista_dentro.contains(extra)){

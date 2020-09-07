@@ -15,11 +15,13 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PersistableBundle;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -27,15 +29,19 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 
 
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.Toast;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -59,6 +65,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -83,27 +90,35 @@ import com.mancj.materialsearchbar.adapter.SuggestionsAdapter;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class MapsActivityTareas extends AppCompatActivity implements TaskCompleted, OnMapReadyCallback, GoogleMap.OnMapLongClickListener,
         GoogleMap.OnMarkerDragListener, GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener {
 
+    private static ProgressDialog progressDialog;
     private GoogleMap mMap;
+    private static CameraPosition lastCameraPosition = null;
     private FusedLocationProviderClient mFusedLocationProviderClient;
-
+    private Spinner spinner_filtro_zonas_screen_mapas_cercania;
+    private static String lastZonaFiltered = "";
     private Location mLastKnownLocation;
     private LocationCallback locationCallback;
     private final float DEFAULT_ZOOM = 18;
     private View mapView;
     private HashMap<String, Marker> tabla_marcadores = new HashMap<>();
-    private HashMap<String, String> tabla_principal_variable = new HashMap<>();
+    private HashMap<String, String> tabla_prioridades = new HashMap<>();
+    private HashMap<String, Integer> tabla_tipos_tareas_resumen = new HashMap<>();
     LatLng lastClickedMarker =null;
+    boolean first_time_spinner_fill = true; //cuando relleno el spinner se activa el evento de cambio de texto y quiero que lo haga cuando interactue con el spinner nadamas
 
-
-    Button btnlocalizacion, btn_abrir_tarea;
+    Button btnlocalizacion, btn_abrir_tarea, btn_resumen_tareas;
+    private ArrayList<String> lista_desplegable_zonas = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,96 +133,82 @@ public class MapsActivityTareas extends AppCompatActivity implements TaskComplet
 
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(MapsActivityTareas.this);
 
+        spinner_filtro_zonas_screen_mapas_cercania = (Spinner)findViewById(R.id.spinner_filtro_zonas_screen_mapas_cercania);
         btnlocalizacion = (Button) findViewById(R.id.btnlocalizacion);
         btn_abrir_tarea = (Button) findViewById(R.id.btn_abrir_tarea);
+        btn_resumen_tareas = (Button) findViewById(R.id.btn_resumen_tareas);
 
+        spinner_filtro_zonas_screen_mapas_cercania.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if(!first_time_spinner_fill) {
+                    String zona_selected = spinner_filtro_zonas_screen_mapas_cercania
+                            .getSelectedItem().toString();
+                    if (Screen_Login_Activity.checkStringVariable(zona_selected)) {
+                        fillFilterGeolocalizacion(zona_selected, (lastCameraPosition == null));
+                    }
+                }
+                first_time_spinner_fill= false;
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
         btnlocalizacion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-               getDeviceLocation();
+                getDeviceLocation();
 
 
-            }});
+            }
+        });
+
+        btn_resumen_tareas.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showResumen();
+            }
+        });
 
         btn_abrir_tarea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                showRingDialog("Abriendo Tareas...");
                 String coords = lastClickedMarker.toString().replace("lat/lng: (","").replace(")", "");
                 String latLang = lastClickedMarker.toString();
 
                 Log.e("Marker", coords);
-                if(tabla_principal_variable.containsKey(coords)) {
-                    try {
-                        String princ_var = tabla_principal_variable.get(coords);
-                        if (team_or_personal_task_selection_screen_Activity.dBtareasController.checkForTableExists() && coords != null) {
-                            if (team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas() > 0) {
-                                String tarea = team_or_personal_task_selection_screen_Activity.
-                                        dBtareasController.get_one_tarea_from_Database(princ_var);
-                                if (Screen_Login_Activity.checkStringVariable(tarea)) {
-                                    JSONObject jsonObject = new JSONObject(tarea);
-                                    if (jsonObject != null) {
-                                        openTarea(jsonObject);
-                                    }
-                                }
-                            }
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                if(tabla_marcadores.containsKey(coords)) {
+                    openTareas(coords);
                 }
-
             }
         });
 
         team_or_personal_task_selection_screen_Activity.from_team_or_personal = team_or_personal_task_selection_screen_Activity.FROM_MAP_CERCANIA;
 
         btn_abrir_tarea.setVisibility(View.INVISIBLE);
+
+        showRingDialog("Cargando Tareas...");
     }
 
 
-
-    public void openTarea(JSONObject jsonObject){
-        Screen_Login_Activity.tarea_JSON = jsonObject;
-        try {
-            if (Screen_Login_Activity.tarea_JSON != null) {
-                if (Screen_Login_Activity.tarea_JSON.getString(DBtareasController.operario).trim().contains(
-                        Screen_Login_Activity.operario_JSON.getString(DBoperariosController.usuario).trim())) {
-                    Screen_Table_Team.acceder_a_Tarea(MapsActivityTareas.this, team_or_personal_task_selection_screen_Activity.FROM_MAP_CERCANIA);//revisar esto
-                    MapsActivityTareas.this.finish();
-                } else {
-                    new AlertDialog.Builder(MapsActivityTareas.this)
-                            .setTitle("Cambiar Operario")
-                            .setMessage("Esta tarea corresponde a otro operario\n¿Desea asignarse esta tarea?")
-                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    try {
-                                        Screen_Login_Activity.tarea_JSON.put(DBtareasController.operario,
-                                                Screen_Login_Activity.operario_JSON.getString(DBoperariosController.usuario).trim());
-                                    } catch (JSONException e) {
-                                        Toast.makeText(MapsActivityTareas.this, "Error -> No pudo asignarse tarea a este operario", Toast.LENGTH_SHORT).show();
-                                        e.printStackTrace();
-                                        return;
-                                    }
-                                    Screen_Table_Team.acceder_a_Tarea(MapsActivityTareas.this, team_or_personal_task_selection_screen_Activity.FROM_MAP_CERCANIA);
-                                    MapsActivityTareas.this.finish();
-                                }
-                            })
-                            .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-
-                                }
-                            }).show();
-                }
-            } else {
-                Toast.makeText(MapsActivityTareas.this, "Tarea nula", Toast.LENGTH_SHORT).show();
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-            Toast.makeText(MapsActivityTareas.this, "No pudo acceder a tarea Error -> " + e.toString(), Toast.LENGTH_SHORT).show();
-        }
+    public void openTareas(String coordenadas){
+        Intent open_Filter_Results = new Intent(this, Screen_Filter_Results.class);
+        open_Filter_Results.putExtra("from", "FILTER_MAPAS");
+        open_Filter_Results.putExtra("filter_type", "MAPAS_GEOLOCALIZACION");
+        open_Filter_Results.putExtra("tipo_tarea", "");
+        open_Filter_Results.putExtra("calibre", "");
+        open_Filter_Results.putExtra("poblacion", "");
+        open_Filter_Results.putExtra("calle", "");
+        open_Filter_Results.putExtra("portales", "");
+        open_Filter_Results.putExtra("geolocalizacion", "");
+        open_Filter_Results.putExtra("limitar_a_operario", false);
+        open_Filter_Results.putExtra("coordenadas", coordenadas);
+        startActivity(open_Filter_Results);
+        lastCameraPosition = mMap.getCameraPosition();
+        lastZonaFiltered = spinner_filtro_zonas_screen_mapas_cercania.getSelectedItem().toString();
+        this.finish();
     }
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -254,7 +255,7 @@ public class MapsActivityTareas extends AppCompatActivity implements TaskComplet
         googleMap.setOnMapClickListener(this);
         mMap.getUiSettings().setZoomControlsEnabled(true);
 //        insertarMarcador("viva",43.2708400000000,-2.9437300000000);
-     }
+    }
 
     @Override
     public void onTaskComplete(String type, String result) throws JSONException {
@@ -328,16 +329,287 @@ public class MapsActivityTareas extends AppCompatActivity implements TaskComplet
                     }
                 });
     }
+    private void showRingDialog(String text){
+        if(progressDialog==null) {
+            progressDialog = ProgressDialog.show(this, "Espere", text, true);
+            progressDialog.setCancelable(false);
+        }else{
+            try {
+                progressDialog.setMessage(text);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    public static void hideRingDialog(){
+        try {
+            if(progressDialog!=null) {
+                if(progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                    progressDialog = null;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("hideRingDialog", e.toString());
+        }
+    }
+    public static String getValidCoords(JSONObject jsonObject){
+        try {
+            String geolocalizacion = jsonObject.getString(DBtareasController.codigo_de_localizacion).trim();
+            if(!Screen_Login_Activity.checkStringVariable(geolocalizacion)){
+                geolocalizacion = jsonObject.getString(DBtareasController.geolocalizacion).trim();
+            }
+            return geolocalizacion;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
 
     private void fillFilterGeolocalizacion() {
-       ArrayList<String> tareas;
-        double minimun_distance = 999999;
+        ArrayList<String> tareas;
+        double minimun_distance = 80000;
         String minimun_coords = "";
+        tabla_marcadores.clear();
+        tabla_prioridades.clear();
+        lista_desplegable_zonas.clear();
+        tabla_tipos_tareas_resumen.clear();
+
         if (team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas() > 0) {
 
             try {
                 tareas = team_or_personal_task_selection_screen_Activity.
-                        dBtareasController.get_all_tareas_from_Database();
+                        dBtareasController.get_all_tareas_from_Database_Valid_Coords();
+                for (int i = 0; i < tareas.size(); i++) {
+                    JSONObject jsonObject ;
+                    try {
+                        jsonObject = new JSONObject(tareas.get(i));
+                        if (!team_or_personal_task_selection_screen_Activity.checkGestor(jsonObject)) {
+                            continue;
+                        }
+
+                        if (team_or_personal_task_selection_screen_Activity.from_team_or_personal
+                                ==team_or_personal_task_selection_screen_Activity.FROM_PERSONAL) {
+                            if (!Screen_Filter_Tareas.checkIfOperarioTask(jsonObject)) {
+                                continue;
+                            }
+                        }
+                        if (!Screen_Filter_Tareas.checkIfIsDone(jsonObject)) {
+                            String geolocalizacion = getValidCoords(jsonObject);
+                            if(Screen_Login_Activity.checkStringVariable(geolocalizacion))
+                            {
+                                String principal_var = jsonObject.getString(DBtareasController.principal_variable).trim();
+                                String tipo_tarea = jsonObject.getString(DBtareasController.tipo_tarea).trim();
+                                if(tabla_tipos_tareas_resumen.containsKey(tipo_tarea)){
+                                    int cant = tabla_tipos_tareas_resumen.get(tipo_tarea);
+                                    cant++;
+                                    tabla_tipos_tareas_resumen.put(tipo_tarea, cant);
+                                }else{
+                                    tabla_tipos_tareas_resumen.put(tipo_tarea, 1);
+                                }
+                                String prioridad_l = jsonObject.getString(DBtareasController.prioridad).trim();
+                                if(!Screen_Login_Activity.checkStringVariable(prioridad_l)){
+                                    prioridad_l = "MEDIA";
+                                }
+                                String zona = null;
+                                try {
+                                    zona = jsonObject.getString(DBtareasController.zona).trim();
+                                    if(!lista_desplegable_zonas.contains(zona) && Screen_Login_Activity.checkStringVariable(zona)){
+                                        lista_desplegable_zonas.add(zona);
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+                                double currentLatitud, currentLongitud;
+                                currentLatitud = mLastKnownLocation.getLatitude();
+                                currentLongitud = mLastKnownLocation.getLongitude();
+
+                                Pair<Double, Double> coords = convertFromGeoField(geolocalizacion);
+                                double latitud_h = coords.first;
+                                double longitud_h = coords.second;
+
+                                geolocalizacion = convertToGeoField(latitud_h, longitud_h);
+
+                                if(!tabla_marcadores.containsKey(geolocalizacion)) {
+
+                                    double current_distance = distanceInKmBetweenEarthCoordinates(latitud_h, longitud_h, currentLatitud, currentLongitud);
+                                    if(current_distance < minimun_distance) {
+                                        minimun_distance = current_distance;
+                                        minimun_coords = geolocalizacion;
+                                    }
+                                    String dist = getDistanceString(latitud_h, longitud_h, currentLatitud, currentLongitud);
+
+                                    Marker marker =  insertarMarcador(prioridad_l, tipo_tarea, dist,latitud_h,longitud_h);
+                                    tabla_marcadores.put(geolocalizacion, marker);
+                                    tabla_prioridades.put(geolocalizacion, prioridad_l);
+
+                                }else{
+                                    Marker marker = tabla_marcadores.get(geolocalizacion);
+                                    String old_priority = tabla_prioridades.get(geolocalizacion);
+                                    if(comparePriorities(old_priority, prioridad_l)){
+                                        marker.setIcon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons(
+                                                prioridad_l+"_priority_marker"/*"mano"*/, 80, 100)));
+                                    }
+                                    String[] title_split = marker.getTitle().split(",");
+                                    if(title_split.length > 1){
+                                        for(int n= 0; n < title_split.length; n++){
+                                            String tipo_completo = title_split[n].trim();
+                                            if(tipo_completo.contains("->")) {
+                                                String tipo = tipo_completo.split("->")[1].trim();
+                                                String number = tipo_completo.split("->")[0].trim();
+                                                if (Screen_Absent.checkOnlyNumbers(number)) {
+                                                    if (tipo.trim().equals(tipo_tarea)) {
+                                                        Integer integer = Integer.parseInt(number);
+                                                        if (integer != null) {
+                                                            integer++;
+                                                            String cant = integer.toString();
+                                                            String tittle = cant + " -> " + tipo.trim();
+                                                            title_split[n] = tittle;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            else {
+                                                if(tipo_completo.trim().equals(tipo_tarea)) {
+                                                    String tittle = "2 -> " + tipo_completo;
+                                                    title_split[n] = tittle;
+                                                }
+                                            }
+                                        }
+                                        String tittle = TextUtils.join(", ", title_split);
+                                        marker.setTitle(tittle);
+                                        tabla_marcadores.put(geolocalizacion, marker);
+                                    }
+                                    else{
+                                        String tipo_completo = title_split[0];
+                                        String tittle = "";
+                                        if(tipo_completo.contains("->")) {
+                                            String tipo = title_split[0].split("->")[1].trim();
+                                            String number = title_split[0].split("->")[0].trim();
+                                            if (Screen_Absent.checkOnlyNumbers(number)) {
+                                                if (tipo.trim().equals(tipo_tarea)) {
+                                                    Integer integer = Integer.parseInt(number);
+                                                    if (integer != null) {
+                                                        integer++;
+                                                        String cant = integer.toString();
+                                                        tittle = cant + " -> " + tipo.trim();
+                                                    }
+                                                } else {
+                                                    tittle = tipo_completo + ", " + tipo_tarea;
+                                                }
+                                            }
+                                        }else {
+                                            if(tipo_completo.trim().equals(tipo_tarea)) {
+                                                tittle = "2 -> " + tipo_completo;
+                                            }else{
+                                                tittle = tipo_completo + ", " + tipo_tarea;
+                                            }
+                                        }
+                                        marker.setTitle(tittle);
+                                        tabla_marcadores.put(geolocalizacion, marker);
+                                    }
+                                }
+                            }
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                Collections.sort(lista_desplegable_zonas);
+                lista_desplegable_zonas.add(0,"TODAS");
+                ArrayAdapter arrayAdapter_spinner = new ArrayAdapter(this, R.layout.spinner_text_view, lista_desplegable_zonas);
+                spinner_filtro_zonas_screen_mapas_cercania.setAdapter(arrayAdapter_spinner);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        Log.e("Minimun dist", String.valueOf(minimun_distance));
+        Log.e("Minimun coords", minimun_coords);
+
+        double zoom_d = log2((int)(40000 / (minimun_distance / 2)));
+        int zoom_l = (int)(Math.floor(zoom_d));
+        Log.e("zoom_d", String.valueOf(zoom_l));
+        if(lastCameraPosition != null){
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lastCameraPosition.target,  lastCameraPosition.zoom));
+            if(!lastZonaFiltered.isEmpty()){
+                int index = lista_desplegable_zonas.indexOf(lastZonaFiltered);
+                first_time_spinner_fill= false;
+                spinner_filtro_zonas_screen_mapas_cercania.setSelection(index);
+            }
+        }else {
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                    new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude()), zoom_l - 1));
+        }
+        hideRingDialog();
+    }
+
+    public static String convertToGeoField(double latitud, double longitud){
+        return String.valueOf(latitud) + "," + String.valueOf(longitud);
+    }
+    public static Pair<Double, Double> convertFromGeoField(String geolocalizacion){ //first latitud, second longitud
+        double latitud = -1000, longitud = -1000;
+        String[] parts = geolocalizacion.split(",");
+        if(parts.length > 1) {
+            String part1 = parts[0].trim(); //obtiene: latitud
+            String part2 = parts[1].trim(); //obtiene: longitud
+            latitud = Double.parseDouble(part1);
+            longitud = Double.parseDouble(part2);
+        }
+        Pair<Double, Double> coords = new Pair<>(latitud, longitud);
+        return coords;
+    }
+    public static boolean comparePriorities(String old_priority , String new_priority){ //true si la nueva es mas prioritaria
+        HashMap<String, Integer> prioridades = new HashMap<>();
+        prioridades.put("HIBERNAR", 1);
+        prioridades.put("BAJA", 2);
+        prioridades.put("MEDIA", 3);
+        prioridades.put("ALTA", 4);
+        if(prioridades.containsKey(old_priority) && prioridades.containsKey(new_priority)) {
+            if (prioridades.get(old_priority) < prioridades.get(new_priority)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public void openMessage(String title, String hint){
+        MessageDialog messageDialog = new MessageDialog();
+        messageDialog.setTitleAndHint(title, hint);
+        messageDialog.show(getSupportFragmentManager(), title);
+    }
+
+    private void showResumen(){
+        String resumen = "";
+        Iterator it = tabla_tipos_tareas_resumen.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            //System.out.println(pair.getKey() + " = " + pair.getValue());
+            resumen+= (pair.getValue().toString() + " -> " + pair.getKey().toString()) + "\n";
+        }
+        openMessage("Resumen",resumen);
+    }
+    private void fillFilterGeolocalizacion(String zona, boolean moveCamera) {
+        mMap.clear();
+        ArrayList<String> tareas;
+        double minimun_distance = 80000;
+        String minimun_coords = "";
+        tabla_marcadores.clear();
+        tabla_prioridades.clear();
+        tabla_tipos_tareas_resumen.clear();
+
+        if (team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas() > 0) {
+
+            try {
+                if(zona.equals("TODAS")){
+                    tareas = team_or_personal_task_selection_screen_Activity.
+                            dBtareasController.get_all_tareas_from_Database_Valid_Coords();
+                }else{
+                    tareas = team_or_personal_task_selection_screen_Activity.
+                            dBtareasController.get_all_tareas_from_Database(DBtareasController.zona, zona);
+                }
                 for (int i = 0; i < tareas.size(); i++) {
                     JSONObject jsonObject ;
                     try {
@@ -353,35 +625,33 @@ public class MapsActivityTareas extends AppCompatActivity implements TaskComplet
                             }
                         }
 
-                        else if (team_or_personal_task_selection_screen_Activity.from_team_or_personal
-                                ==team_or_personal_task_selection_screen_Activity.FROM_TEAM) {
-                            if (!Screen_Filter_Tareas.checkTeam(jsonObject)) {
-                                continue;
-                            }
-                        }
-//
-
-
                         if (!Screen_Filter_Tareas.checkIfIsDone(jsonObject)) {
-                            String geolocalizacion = jsonObject.getString(DBtareasController.geolocalizacion).trim();
-                            String principal_var = jsonObject.getString(DBtareasController.principal_variable).trim();
-                            String tipo_tarea = jsonObject.getString(DBtareasController.tipo_tarea).trim();
-                            double currentLatitud, currentLongitud;
-                            currentLatitud = mLastKnownLocation.getLatitude();
-                            currentLongitud = mLastKnownLocation.getLongitude();
-                            if (!Screen_Login_Activity.checkStringVariable(geolocalizacion)) {
-                                geolocalizacion = jsonObject.getString(DBtareasController.codigo_de_localizacion).trim();
-                            }
+                            String geolocalizacion = getValidCoords(jsonObject);
                             if(Screen_Login_Activity.checkStringVariable(geolocalizacion))
                             {
-                                String[] parts = geolocalizacion.split(",");
-                                String part1 = parts[0].trim(); //obtiene: latitud
-                                String part2 = parts[1].trim(); //obtiene: longitud
-                                double latitud_h, longitud_h;
-                                latitud_h = Double.parseDouble(part1);
-                                longitud_h = Double.parseDouble(part2);
+                                String principal_var = jsonObject.getString(DBtareasController.principal_variable).trim();
+                                String tipo_tarea = jsonObject.getString(DBtareasController.tipo_tarea).trim();
+                                if(tabla_tipos_tareas_resumen.containsKey(tipo_tarea)){
+                                    int cant = tabla_tipos_tareas_resumen.get(tipo_tarea);
+                                    cant++;
+                                    tabla_tipos_tareas_resumen.put(tipo_tarea, cant);
+                                }else{
+                                    tabla_tipos_tareas_resumen.put(tipo_tarea, 1);
+                                }
+                                String prioridad_l = jsonObject.getString(DBtareasController.prioridad).trim();
+                                if(!Screen_Login_Activity.checkStringVariable(prioridad_l)){
+                                    prioridad_l = "MEDIA";
+                                }
 
-                                geolocalizacion = String.valueOf(latitud_h) + "," + String.valueOf(longitud_h);
+                                double currentLatitud, currentLongitud;
+                                currentLatitud = mLastKnownLocation.getLatitude();
+                                currentLongitud = mLastKnownLocation.getLongitude();
+
+                                Pair<Double, Double> coords = convertFromGeoField(geolocalizacion);
+                                double latitud_h = coords.first;
+                                double longitud_h = coords.second;
+
+                                geolocalizacion = convertToGeoField(latitud_h, longitud_h);
 
                                 if(!tabla_marcadores.containsKey(geolocalizacion)) {
 
@@ -392,30 +662,78 @@ public class MapsActivityTareas extends AppCompatActivity implements TaskComplet
                                     }
                                     String dist = getDistanceString(latitud_h, longitud_h, currentLatitud, currentLongitud);
 
-                                    Marker marker =  insertarMarcador(tipo_tarea, dist,latitud_h,longitud_h);
+                                    Marker marker =  insertarMarcador(prioridad_l, tipo_tarea, dist,latitud_h,longitud_h);
                                     tabla_marcadores.put(geolocalizacion, marker);
-                                    tabla_principal_variable.put(geolocalizacion, principal_var);
+                                    tabla_prioridades.put(geolocalizacion, prioridad_l);
 
                                 }else{
-                                    Marker marker = tabla_marcadores.get(geolocalizacion);
-                                    String title_split = marker.getTitle().substring(0,1);
 
-                                    if(Screen_Absent.checkOnlyNumbers(title_split)){
-                                        Integer integer = Integer.parseInt(title_split);
-                                        if(integer != null){
-                                            integer++;
-                                            String cant = integer.toString();
-                                            String tittle =  cant + marker.getTitle().substring(1, marker.getTitle().length());
-                                            marker.setTitle(tittle);
-                                            tabla_marcadores.put(geolocalizacion, marker);
+                                    Marker marker = tabla_marcadores.get(geolocalizacion);
+                                    String old_priority = tabla_prioridades.get(geolocalizacion);
+                                    if(comparePriorities(old_priority, prioridad_l)){
+                                        marker.setIcon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons(
+                                                prioridad_l+"_priority_marker"/*"mano"*/, 80, 100)));
+                                    }
+                                    String[] title_split = marker.getTitle().split(",");
+                                    if(title_split.length > 1){
+                                        for(int n= 0; n < title_split.length; n++){
+                                            String tipo_completo = title_split[n].trim();
+                                            if(tipo_completo.contains("->")) {
+                                                String tipo = tipo_completo.split("->")[1].trim();
+                                                String number = tipo_completo.split("->")[0].trim();
+                                                if (Screen_Absent.checkOnlyNumbers(number)) {
+                                                    if (tipo.trim().equals(tipo_tarea)) {
+                                                        Integer integer = Integer.parseInt(number);
+                                                        if (integer != null) {
+                                                            integer++;
+                                                            String cant = integer.toString();
+                                                            String tittle = cant + " -> " + tipo.trim();
+                                                            title_split[n] = tittle;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            else {
+                                                if(tipo_completo.trim().equals(tipo_tarea)) {
+                                                    String tittle = "2 -> " + tipo_completo;
+                                                    title_split[n] = tittle;
+                                                }
+                                            }
                                         }
-                                    }else{
-                                        String tittle =  "2 " + marker.getTitle();
+                                        String tittle = TextUtils.join(", ", title_split);
+                                        marker.setTitle(tittle);
+
+                                        tabla_marcadores.put(geolocalizacion, marker);
+                                    }
+                                    else{
+                                        String tipo_completo = title_split[0];
+                                        String tittle = "";
+                                        if(tipo_completo.contains("->")) {
+                                            String tipo = title_split[0].split("->")[1].trim();
+                                            String number = title_split[0].split("->")[0].trim();
+                                            if (Screen_Absent.checkOnlyNumbers(number)) {
+                                                if (tipo.trim().equals(tipo_tarea)) {
+                                                    Integer integer = Integer.parseInt(number);
+                                                    if (integer != null) {
+                                                        integer++;
+                                                        String cant = integer.toString();
+                                                        tittle = cant + " -> " + tipo.trim();
+                                                    }
+                                                } else {
+                                                    tittle = tipo_completo + ", " + tipo_tarea;
+                                                }
+                                            }
+                                        }else {
+                                            if(tipo_completo.trim().equals(tipo_tarea)) {
+                                                tittle = "2 -> " + tipo_completo;
+                                            }else{
+                                                tittle = tipo_completo + ", " + tipo_tarea;
+                                            }
+                                        }
                                         marker.setTitle(tittle);
                                         tabla_marcadores.put(geolocalizacion, marker);
                                     }
                                 }
-
                             }
                         }
                     } catch (JSONException e) {
@@ -426,13 +744,19 @@ public class MapsActivityTareas extends AppCompatActivity implements TaskComplet
                 e.printStackTrace();
             }
         }
-        Log.e("Minimun dist", String.valueOf(minimun_distance));
-        Log.e("Minimun coords", minimun_coords);
 
-        double zoom_d = log2((int)(40000 / (minimun_distance / 2)));
-        int zoom_l = (int)(Math.floor(zoom_d));
-        Log.e("zoom_d", String.valueOf(zoom_l));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude()), zoom_l-1));
+        if(moveCamera) {
+            Log.e("Minimun dist", String.valueOf(minimun_distance));
+            Log.e("Minimun coords", minimun_coords);
+
+            double zoom_d = log2((int) (40000 / (minimun_distance / 2)));
+            int zoom_l = (int) (Math.floor(zoom_d));
+            Log.e("zoom_d", String.valueOf(zoom_l));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude()), zoom_l - 1));
+        }else{
+            lastCameraPosition = null;
+            lastZonaFiltered = "";
+        }
     }
 
     public static int log2(int n){
@@ -467,11 +791,12 @@ public class MapsActivityTareas extends AppCompatActivity implements TaskComplet
         }
         return dist;
     }
-    private Marker insertarMarcador(String titulo, String snippet_parameter, double latitud, double longitud) {
+    private Marker insertarMarcador(String priority, String titulo, String snippet_parameter, double latitud, double longitud) {
+        priority = priority.toLowerCase();
         Marker marker = mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(latitud, longitud))
                 .title(titulo)
-                .icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("mano", 80, 100)))
+                .icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons(priority+"_priority_marker"/*"mano"*/, 80, 100)))
                 .snippet(snippet_parameter));
         return marker;
     }
@@ -479,8 +804,14 @@ public class MapsActivityTareas extends AppCompatActivity implements TaskComplet
 
     private Bitmap resizeMapIcons(String iconName, int width, int height){
         Bitmap imageBitmap = BitmapFactory.decodeResource(getResources(),getResources().getIdentifier(iconName, "drawable", getPackageName()));
-        Bitmap resizedBitmap = Bitmap.createScaledBitmap(imageBitmap, width, height, false);
-        return resizedBitmap;}
+        Bitmap resizedBitmap = null;
+        try {
+            resizedBitmap = Bitmap.createScaledBitmap(imageBitmap, width, height, false);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return resizedBitmap;
+    }
 
     @Override
     public boolean onMarkerClick(Marker marker) {
@@ -501,6 +832,7 @@ public class MapsActivityTareas extends AppCompatActivity implements TaskComplet
         if(intent != null) {
             startActivity(intent);
         }
+        lastCameraPosition = null;
         finish();
     }
 

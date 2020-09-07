@@ -88,9 +88,6 @@ public class Screen_Itac extends AppCompatActivity implements TaskCompleted{
         empresa = (TextView)findViewById(R.id.textView_empresa_screen_itac);
         telefono = (TextView)findViewById(R.id.textView_telefono_screen_itac);
 
-        direccion.setMovementMethod(new ScrollingMovementMethod());
-        acceso.setMovementMethod(new ScrollingMovementMethod());
-        descripcion.setMovementMethod(new ScrollingMovementMethod());
 
         try {
             String dir = Screen_Login_Activity.itac_JSON.getString(DBitacsController.itac).trim();
@@ -121,6 +118,12 @@ public class Screen_Itac extends AppCompatActivity implements TaskCompleted{
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        empresa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openMessage("Empresa", empresa.getText().toString());
+            }
+        });
         descripcion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -370,14 +373,31 @@ public class Screen_Itac extends AppCompatActivity implements TaskCompleted{
 
         buscarFotosOffline();
 
+        buscarFotosOnline();
+
+    }
+    public void buscarFotosOnline(){
         if (checkConection()){
             try {
-                for (int i=1; i<= 8; i++){
-                    foto =  Screen_Login_Activity.itac_JSON.getString("foto_"+String.valueOf(i).trim());
-                    if(Screen_Login_Activity.checkStringVariable(foto)){
+                int init = 1;
+                if(!foto.isEmpty()) {
+                    try {
+                        String numString = foto.replace(".jpg", "");
+                        numString = numString.substring(numString.length()-1, numString.length());
+                        init = Integer.parseInt(numString) + 1;
+                    } catch (NumberFormatException e) {
+                        init = 9;
+                        e.printStackTrace();
+                        return;
+                    }
+                }
+                for (int i = init; i <= 8; i++) {
+                    foto = Screen_Login_Activity.itac_JSON.getString("foto_" + String.valueOf(i).trim());
+                    if (Screen_Login_Activity.checkStringVariable(foto)) {
                         break;
                     }
                 }
+
                 if(Screen_Login_Activity.checkStringVariable(foto)) {
                     String cod_emplazamiento="";
                     String gestor = "";
@@ -413,7 +433,7 @@ public class Screen_Itac extends AppCompatActivity implements TaskCompleted{
         try {
             String  cod_emplazamiento = "";
             cod_emplazamiento = Screen_Login_Activity.itac_JSON.getString(DBitacsController.codigo_itac).trim();
-            for (int i=1; i<= 8; i++){
+            for (int i=8; i > 0; i--){
                 foto =  Screen_Login_Activity.itac_JSON.getString("foto_"+String.valueOf(i).trim());
                 if(Screen_Login_Activity.checkStringVariable(foto)){
                     break;
@@ -443,7 +463,12 @@ public class Screen_Itac extends AppCompatActivity implements TaskCompleted{
                     }
                 }
             }
-//                Toast.makeText(this, image, Toast.LENGTH_LONG).show();
+            for (int i=1; i <= 8; i++){
+                foto =  Screen_Login_Activity.itac_JSON.getString("foto_"+String.valueOf(i).trim());
+                if(Screen_Login_Activity.checkStringVariable(foto)){
+                    break;
+                }
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -505,6 +530,8 @@ public class Screen_Itac extends AppCompatActivity implements TaskCompleted{
                         imageView_imagen_itac.getLayoutParams().height = bitmap.getHeight() + 300;
                         saveBitmapImage(bitmap, foto);
                     }
+
+                    buscarFotosOnline();
                 }
             }
         }
