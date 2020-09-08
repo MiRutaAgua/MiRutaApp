@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.media.ExifInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -34,6 +35,7 @@ public class Screen_Draw_Canvas extends Activity {
 
     private static final int CANVAS_REQUEST_INC_SUMMARY = 3331;
     private static final int CANVAS_REQUEST_VALIDATE = 3333;
+    private static final int CANVAS_REQUEST_EDIT_ITAC = 3339;
     private int caller;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,34 +54,44 @@ public class Screen_Draw_Canvas extends Activity {
                 .setTitle("Salvar")
                 .setMessage("Desea Salvar Firma")
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         Intent resultIntent = new Intent();
-                        if(caller==CANVAS_REQUEST_VALIDATE) {
-                            resultIntent = new Intent(Screen_Draw_Canvas.this, Screen_Validate.class);
-                        }else if(caller==CANVAS_REQUEST_INC_SUMMARY) {
-                            resultIntent = new Intent(Screen_Draw_Canvas.this, Screen_Incidence_Summary.class);
-                        }
-//                        int result = 3;
-                        bitmap_firma = (Bitmap)canvas.getDrawingCache();
-                        String img_compress="null";
-                        if(bitmap_firma!=null) {
-//                            img_compress = getStringImage(bitmap_firma);
-                            String nombre_abonado = null;
-                            try {
-                                nombre_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.nombre_cliente).trim().replace(" ", "_");
-                                Screen_Login_Activity.tarea_JSON.put(DBtareasController.firma_cliente,nombre_abonado+"_firma.jpg");
-                                String path = saveBitmapImageFirma(bitmap_firma, nombre_abonado+"_firma");
+                        if(caller==CANVAS_REQUEST_EDIT_ITAC) {
+                            resultIntent = new Intent(Screen_Draw_Canvas.this, Screen_Edit_ITAC.class);
+                            bitmap_firma = (Bitmap) canvas.getDrawingCache();
+                            if(bitmap_firma!= null) {
+                                String path = saveBitmapImageFirmaItac(bitmap_firma, DBitacsController.foto_9);
                                 resultIntent.putExtra("firma_cliente", path);
-                            } catch (JSONException e) {
-                                Log.e("Excepcion", "Error obteniedo nombre_cliente");
+                            }else{
+                                Log.e("Excepcion", "Error obteniedo firma_cliente");
                                 resultIntent.putExtra("firma_cliente", "null");
-                                e.printStackTrace();
                             }
                         }
                         else{
-                            Log.e("Error", "Error obteniedo firma_cliente null");
-                            resultIntent.putExtra("firma_cliente", "null");
+                            if (caller == CANVAS_REQUEST_VALIDATE) {
+                                resultIntent = new Intent(Screen_Draw_Canvas.this, Screen_Validate.class);
+                            } else if (caller == CANVAS_REQUEST_INC_SUMMARY) {
+                                resultIntent = new Intent(Screen_Draw_Canvas.this, Screen_Incidence_Summary.class);
+                            }
+                            bitmap_firma = (Bitmap) canvas.getDrawingCache();
+                            if (bitmap_firma != null) {
+                                String nombre_abonado = null;
+                                try {
+                                    nombre_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.nombre_cliente).trim().replace(" ", "_");
+                                    Screen_Login_Activity.tarea_JSON.put(DBtareasController.firma_cliente, nombre_abonado + "_firma.jpg");
+                                    String path = saveBitmapImageFirma(bitmap_firma, nombre_abonado + "_firma");
+                                    resultIntent.putExtra("firma_cliente", path);
+                                } catch (JSONException e) {
+                                    Log.e("Excepcion", "Error obteniedo nombre_cliente");
+                                    resultIntent.putExtra("firma_cliente", "null");
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                Log.e("Error", "Error obteniedo firma_cliente null");
+                                resultIntent.putExtra("firma_cliente", "null");
+                            }
                         }
 
                         //resultIntent.putExtra("result", result);
@@ -92,9 +104,13 @@ public class Screen_Draw_Canvas extends Activity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         Intent resultIntent = new Intent();
-                        if(caller==CANVAS_REQUEST_VALIDATE) {
+                        if(caller==CANVAS_REQUEST_EDIT_ITAC) {
+                            resultIntent = new Intent(Screen_Draw_Canvas.this, Screen_Edit_ITAC.class);
+                        }
+                        else if(caller==CANVAS_REQUEST_VALIDATE) {
                             resultIntent = new Intent(Screen_Draw_Canvas.this, Screen_Validate.class);
-                        }else if(caller==CANVAS_REQUEST_INC_SUMMARY) {
+                        }
+                        else if(caller==CANVAS_REQUEST_INC_SUMMARY) {
                             resultIntent = new Intent(Screen_Draw_Canvas.this, Screen_Incidence_Summary.class);
                         }
                         int result = 3;
@@ -133,11 +149,61 @@ public class Screen_Draw_Canvas extends Activity {
         return bitmap;
     }
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    private String saveBitmapImageFirmaItac(Bitmap bitmap, String key){
+        bitmap = Screen_Login_Activity.scaleBitmap(bitmap);
+        try {
+            String cod_emplazamiento = null;
+            cod_emplazamiento = Screen_Login_Activity.itac_JSON.getString(DBitacsController.codigo_itac).trim();
+            String file_full_name = cod_emplazamiento+"_"+key;
+            String gestor = null;
+            gestor = Screen_Login_Activity.itac_JSON.getString(DBitacsController.GESTOR).trim();
+            if(!Screen_Login_Activity.checkStringVariable(gestor)){
+                gestor = "Sin_Gestor";
+            }
+            File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/"+
+                    Screen_Login_Activity.current_empresa + "/fotos_ITACs/" + gestor + "/"+ cod_emplazamiento+"/");
+            if (!myDir.exists()) {
+                myDir.mkdirs();
+            }
+            else{
+                File[] files = myDir.listFiles();
+                for(int i=0; i< files.length; i++){
+                    if(files[i].getName().contains(file_full_name)){
+                        files[i].delete();
+                    }
+                }
+            }
+            file_full_name+=".jpg";
+            File file = new File(myDir, file_full_name);
+            if (file.exists())
+                file.delete();
+            try {
+                FileOutputStream out = new FileOutputStream(file);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, MainActivity.COMPRESS_QUALITY, out);
+
+                out.flush();
+                out.close();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            Screen_Login_Activity.itac_JSON.put(key, file_full_name);
+
+            return file.getAbsolutePath();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private String saveBitmapImageFirma(Bitmap bitmap, String file_name){
         bitmap = scaleBitmap(bitmap);
         String numero_abonado = "";
         File myDir = null;
+        String anomalia = "";
         try {
+            anomalia = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.ANOMALIA).trim();
             numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado);
             String gestor = null;
             gestor = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.GESTOR).trim();
@@ -145,17 +211,19 @@ public class Screen_Draw_Canvas extends Activity {
                 gestor = "Sin_Gestor";
             }
 
-            if(!numero_abonado.isEmpty() && numero_abonado!=null
-                    && !numero_abonado.equals("NULL") && !numero_abonado.equals("null")){
+            if(Screen_Login_Activity.checkStringVariable(numero_abonado)){
 
-                myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" + Screen_Login_Activity.current_empresa + "/fotos_tareas/"
-                        + gestor + "/" + numero_abonado);
+                myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" +
+                        Screen_Login_Activity.current_empresa +
+                        "/fotos_tareas/" + gestor + "/" + numero_abonado + "/" + anomalia);
 
 
                 if(myDir!=null) {
                     if (!myDir.exists()) {
                         myDir.mkdirs();
-                        File storageDir2 =  new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" + Screen_Login_Activity.current_empresa + "/fotos_tareas/"+ gestor + "/" +numero_abonado);
+                        File storageDir2 =  new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" +
+                                Screen_Login_Activity.current_empresa +
+                                "/fotos_tareas/" + gestor + "/" + numero_abonado + "/" + anomalia);
                         if (!storageDir2.exists()) {
                             storageDir2.mkdirs();
                         }

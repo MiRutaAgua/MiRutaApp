@@ -376,6 +376,11 @@ public class Screen_Itac extends AppCompatActivity implements TaskCompleted{
         buscarFotosOnline();
 
     }
+    public void openMessage(String title, String hint){
+        MessageDialog messageDialog = new MessageDialog();
+        messageDialog.setTitleAndHint(title, hint);
+        messageDialog.show(getSupportFragmentManager(), title);
+    }
     public void buscarFotosOnline(){
         if (checkConection()){
             try {
@@ -386,16 +391,23 @@ public class Screen_Itac extends AppCompatActivity implements TaskCompleted{
                         numString = numString.substring(numString.length()-1, numString.length());
                         init = Integer.parseInt(numString) + 1;
                     } catch (NumberFormatException e) {
-                        init = 9;
+                        init = 10;
                         e.printStackTrace();
+                        hideRingDialog();
                         return;
                     }
                 }
-                for (int i = init; i <= 8; i++) {
+                for (int i = init; i <= 9; i++) {
                     foto = Screen_Login_Activity.itac_JSON.getString("foto_" + String.valueOf(i).trim());
                     if (Screen_Login_Activity.checkStringVariable(foto)) {
-                        break;
+                        if(!checkIfFotoExistLocal(foto)) {
+                            break;
+                        }
                     }
+                }
+                if(init >= 10){
+                    hideRingDialog();
+                    return;
                 }
 
                 if(Screen_Login_Activity.checkStringVariable(foto)) {
@@ -418,17 +430,15 @@ public class Screen_Itac extends AppCompatActivity implements TaskCompleted{
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                }else {
+                    hideRingDialog();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
     }
-    public void openMessage(String title, String hint){
-        MessageDialog messageDialog = new MessageDialog();
-        messageDialog.setTitleAndHint(title, hint);
-        messageDialog.show(getSupportFragmentManager(), title);
-    }
+
     public void buscarFotosOffline(){
         try {
             String  cod_emplazamiento = "";
@@ -463,12 +473,8 @@ public class Screen_Itac extends AppCompatActivity implements TaskCompleted{
                     }
                 }
             }
-            for (int i=1; i <= 8; i++){
-                foto =  Screen_Login_Activity.itac_JSON.getString("foto_"+String.valueOf(i).trim());
-                if(Screen_Login_Activity.checkStringVariable(foto)){
-                    break;
-                }
-            }
+            foto =  "";
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -511,7 +517,6 @@ public class Screen_Itac extends AppCompatActivity implements TaskCompleted{
     @Override
     public void onTaskComplete(String type, String result) throws JSONException {
         if(type.equals("download_itac_image")) {
-            hideRingDialog();
             Log.e("download_itac_image", result);
             if (result == null) {
                 Toast.makeText(this, "No se puede acceder al servidor, no se obtuvo foto itac", Toast.LENGTH_LONG).show();
@@ -525,17 +530,44 @@ public class Screen_Itac extends AppCompatActivity implements TaskCompleted{
                     Bitmap bitmap = null;
                     bitmap = Screen_Register_Operario.getImageFromString(result);
                     if (bitmap != null) {
-                        imageView_imagen_itac.setVisibility(View.VISIBLE);
-                        imageView_imagen_itac.setImageBitmap(bitmap);
-                        imageView_imagen_itac.getLayoutParams().height = bitmap.getHeight() + 300;
+                        if(!foto.contains(DBitacsController.foto_9)) {
+                            imageView_imagen_itac.setVisibility(View.VISIBLE);
+                            imageView_imagen_itac.setImageBitmap(bitmap);
+                            imageView_imagen_itac.getLayoutParams().height = bitmap.getHeight() + 300;
+                        }
                         saveBitmapImage(bitmap, foto);
                     }
-
-                    buscarFotosOnline();
                 }
+                buscarFotosOnline();
             }
         }
     }
+    private boolean checkIfFotoExistLocal(String file_name) {
+        String  cod_emplazamiento = "";
+
+        try {
+            cod_emplazamiento = Screen_Login_Activity.itac_JSON.getString(DBitacsController.codigo_itac).trim();
+
+            String gestor = "";
+            gestor = Screen_Login_Activity.itac_JSON.getString(DBitacsController.GESTOR).trim();
+            if(!Screen_Login_Activity.checkStringVariable(gestor)){
+                gestor = "Sin_Gestor";
+            }
+            File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" +
+                    Screen_Login_Activity.current_empresa + "/fotos_ITACs/" + gestor + "/"+ cod_emplazamiento+"/");
+            if (!myDir.exists()) {
+                myDir.mkdirs();
+            }
+            File file = new File(myDir, file_name);
+            if (file.exists()) {
+                return true;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     private void saveBitmapImage(Bitmap bitmap, String file_name){
         String  cod_emplazamiento = "";
         try {
@@ -581,8 +613,16 @@ public class Screen_Itac extends AppCompatActivity implements TaskCompleted{
     }
 
     private void showRingDialog(String text){
-        progressDialog = ProgressDialog.show(this, "Espere", text, true);
-        progressDialog.setCancelable(true);
+        if(progressDialog==null) {
+            progressDialog = ProgressDialog.show(this, "Espere", text, true);
+            progressDialog.setCancelable(true);
+        }else{
+            try {
+                progressDialog.setMessage(text);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
     private void hideRingDialog(){
         try {
@@ -597,4 +637,5 @@ public class Screen_Itac extends AppCompatActivity implements TaskCompleted{
             Log.e("hideRingDialog", e.toString());
         }
     }
+
 }

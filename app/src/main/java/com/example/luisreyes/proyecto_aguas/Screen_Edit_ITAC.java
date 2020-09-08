@@ -47,9 +47,11 @@ import java.util.HashMap;
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class Screen_Edit_ITAC extends AppCompatActivity implements Dialog.DialogListener{
 
+    private static final int CANVAS_REQUEST_EDIT_ITAC = 3339;
+
     private Button button_guardar_datos_screen_edit_itac,
             button_geolocalization_screen_edit_itac,
-
+            button_editar_firma_cliente_screen_edit_itac,
             button_photo_1_screen_edit_itac,
             button_photo_2_screen_edit_itac,
             button_photo_3_screen_edit_itac,
@@ -78,7 +80,10 @@ public class Screen_Edit_ITAC extends AppCompatActivity implements Dialog.Dialog
                     button_direccion_screen_edit_itac,
                     button_acceso_screen_edit_itac,
                     button_descripcion_screen_edit_itac,
-            button_cod_emplazamiento_screen_edit_itac;
+            imageView_firma_screen_edit_itac,
+            button_cod_emplazamiento_screen_edit_itac,
+            imageView_edit_nombre_firmante_screen_edit_itac,
+            imageView_edit_numero_carnet_firmante_screen_edit_itac;
 
     private EditText editText_descripcion_photo_1_screen_edit_itac,
             editText_descripcion_photo_2_screen_edit_itac,
@@ -107,7 +112,9 @@ public class Screen_Edit_ITAC extends AppCompatActivity implements Dialog.Dialog
     private TextView textView_acceso_screen_edit_itac,
             textView_descripcion_screen_edit_itac,
             textView_direccion_screen_edit_itac,
-            textView_cod_emplazamiento_screen_edit_itac;
+            textView_cod_emplazamiento_screen_edit_itac,
+            textView_nombre_firmante_screen_edit_itac,
+            textView_numero_carnet_firmante_screen_edit_itac;
 
     private static final int CAM_REQUEST_PHOTO_1 = 1311;
     private static final int CAM_REQUEST_PHOTO_2 = 1312;
@@ -137,6 +144,12 @@ public class Screen_Edit_ITAC extends AppCompatActivity implements Dialog.Dialog
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CALL_PHONE}, 1);
         }
+        imageView_edit_nombre_firmante_screen_edit_itac = (ImageView) findViewById(R.id.imageView_edit_nombre_firmante_screen_edit_itac);
+        imageView_edit_numero_carnet_firmante_screen_edit_itac = (ImageView) findViewById(R.id.imageView_edit_numero_carnet_firmante_screen_edit_itac);
+
+        textView_nombre_firmante_screen_edit_itac= (TextView) findViewById(R.id.textView_nombre_firmante_screen_edit_itac);
+        textView_numero_carnet_firmante_screen_edit_itac= (TextView) findViewById(R.id.textView_numero_carnet_firmante_screen_edit_itac);
+
         textView_acceso_screen_edit_itac = (TextView) findViewById(R.id.textView_acceso_screen_edit_itac);
         textView_descripcion_screen_edit_itac = (TextView) findViewById(R.id.textView_descripcion_screen_edit_itac);
         textView_direccion_screen_edit_itac = (TextView) findViewById(R.id.textView_direccion_screen_edit_itac);
@@ -170,7 +183,9 @@ public class Screen_Edit_ITAC extends AppCompatActivity implements Dialog.Dialog
         imageView_photo_6_screen_edit_itac = (ImageView) findViewById(R.id.imageView_photo_6_screen_edit_itac);
         imageView_photo_7_screen_edit_itac = (ImageView) findViewById(R.id.imageView_photo_7_screen_edit_itac);
         imageView_photo_8_screen_edit_itac = (ImageView) findViewById(R.id.imageView_photo_8_screen_edit_itac);
+        imageView_firma_screen_edit_itac = (ImageView) findViewById(R.id.imageView_firma_screen_edit_itac);
 
+        button_editar_firma_cliente_screen_edit_itac = (Button) findViewById(R.id.button_editar_firma_cliente_screen_edit_itac);
         button_photo_1_screen_edit_itac = (Button) findViewById(R.id.button_photo_1_screen_edit_itac);
         button_photo_2_screen_edit_itac = (Button) findViewById(R.id.button_photo_2_screen_edit_itac);
         button_photo_3_screen_edit_itac = (Button) findViewById(R.id.button_photo_3_screen_edit_itac);
@@ -229,6 +244,58 @@ public class Screen_Edit_ITAC extends AppCompatActivity implements Dialog.Dialog
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        imageView_edit_numero_carnet_firmante_screen_edit_itac.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
+                final Animation myAnim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        openDialog("Identificación Firmante", "...");
+                    }
+                });
+                imageView_edit_numero_carnet_firmante_screen_edit_itac.startAnimation(myAnim);
+            }
+        });
+        imageView_edit_nombre_firmante_screen_edit_itac.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
+                final Animation myAnim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        openDialog("Nombre Firmante", "...");
+                    }
+                });
+                imageView_edit_nombre_firmante_screen_edit_itac.startAnimation(myAnim);
+            }
+        });
         spinner_tipo_contacto.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -241,6 +308,35 @@ public class Screen_Edit_ITAC extends AppCompatActivity implements Dialog.Dialog
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
+
+        button_editar_firma_cliente_screen_edit_itac.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Screen_Login_Activity.playOnOffSound(getApplicationContext());
+                final Animation myAnim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bounce);
+                // Use bounce interpolator with amplitude 0.2 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(MainActivity.AMPLITUD_BOUNCE, MainActivity.FRECUENCY_BOUNCE);
+                myAnim.setInterpolator(interpolator);
+                myAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation arg0) {
+                        // TODO Auto-generated method stub
+//                        Toast.makeText(Screen_Login_Activity.this,"Animacion iniciada", Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation arg0) {
+                        Intent intent_open_screen_client_sign = new Intent(Screen_Edit_ITAC.this, Screen_Draw_Canvas.class);
+                        intent_open_screen_client_sign.putExtra("class_caller", CANVAS_REQUEST_EDIT_ITAC);
+                        startActivityForResult(intent_open_screen_client_sign, CANVAS_REQUEST_EDIT_ITAC);
+                    }
+                });
+                button_editar_firma_cliente_screen_edit_itac.startAnimation(myAnim);
             }
         });
         button_geolocalization_screen_edit_itac.setOnClickListener(new View.OnClickListener() {
@@ -503,6 +599,7 @@ public class Screen_Edit_ITAC extends AppCompatActivity implements Dialog.Dialog
         addPhotoLocal();
     }
 
+
     private void setGestores() {
         if(team_or_personal_task_selection_screen_Activity.dBgestoresController!=null) {
             if (team_or_personal_task_selection_screen_Activity.dBgestoresController.databasefileExists(this)) {
@@ -574,6 +671,16 @@ public class Screen_Edit_ITAC extends AppCompatActivity implements Dialog.Dialog
                 Screen_Login_Activity.itac_JSON.put(DBitacsController.codigo_itac, wrote_text);
                 textView_cod_emplazamiento_screen_edit_itac.setText(wrote_text);
             }
+        }else if (tag.contains("Identificación Firmante")) {
+            if (!(TextUtils.isEmpty(wrote_text))) {
+                Screen_Login_Activity.itac_JSON.put(DBitacsController.carnet_firmante, wrote_text);
+                textView_numero_carnet_firmante_screen_edit_itac.setText(wrote_text);
+            }
+        }else if (tag.contains("Nombre Firmante")) {
+            if (!(TextUtils.isEmpty(wrote_text))) {
+                Screen_Login_Activity.itac_JSON.put(DBitacsController.nombre_firmante, wrote_text);
+                textView_nombre_firmante_screen_edit_itac.setText(wrote_text);
+            }
         }
     }
     public String lookForAllreadyTakenPhotos(String photo_name) throws JSONException {
@@ -603,6 +710,24 @@ public class Screen_Edit_ITAC extends AppCompatActivity implements Dialog.Dialog
     }
     private void addPhotoLocal() {
         try {
+            String photo = Screen_Login_Activity.itac_JSON.getString(DBitacsController.foto_9).trim();//firma del cliente
+            if(Screen_Login_Activity.checkStringVariable(photo)){
+                String bitmap_dir = lookForAllreadyTakenPhotos(photo);
+                if(!bitmap_dir.isEmpty()){
+                    Log.e("Existe: ", bitmap_dir);
+
+                    Bitmap bitmap = getPhotoUserLocal(bitmap_dir);
+                    if(bitmap != null) {
+                        imageView_firma_screen_edit_itac.setImageBitmap(bitmap);
+                    }
+                }else{
+                    Log.e("no Existe: ", "foto firma");
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
             String photo = Screen_Login_Activity.itac_JSON.getString(DBitacsController.foto_1).trim();
             if(Screen_Login_Activity.checkStringVariable(photo)){
                 String bitmap_dir = lookForAllreadyTakenPhotos(photo);
@@ -621,7 +746,7 @@ public class Screen_Edit_ITAC extends AppCompatActivity implements Dialog.Dialog
                         imageView_photo_1_screen_edit_itac.getLayoutParams().height = bitmap.getHeight() + 300;
                     }
                 }else{
-                    Log.e("no Existe: ", "foto_numero_serie");
+                    Log.e("no Existe: ", "foto 1");
                 }
             }
         } catch (JSONException e) {
@@ -912,6 +1037,19 @@ public class Screen_Edit_ITAC extends AppCompatActivity implements Dialog.Dialog
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        if(resultCode == RESULT_OK) {
+            if (requestCode == CANVAS_REQUEST_EDIT_ITAC) {
+                String firma = data.getStringExtra("firma_cliente");
+                if (Screen_Login_Activity.checkStringVariable(firma)) {
+                    Bitmap bitmap = getPhotoUserLocal(firma);
+                    if(bitmap!=null) {
+                        imageView_firma_screen_edit_itac.setImageBitmap(bitmap);
+                        saveBitmapImage(bitmap, DBitacsController.foto_9);
+//                        imageView_firma_screen_edit_itac.getLayoutParams().height = bitmap_firma_cliente.getHeight() + 300;
+                    }
+                }
+            }
+        }
         if (requestCode == CAM_REQUEST_PHOTO_1) {
             Bitmap bitmap = null;
             try {
@@ -1266,6 +1404,9 @@ public class Screen_Edit_ITAC extends AppCompatActivity implements Dialog.Dialog
             editText_descripcion_photo_7_screen_edit_itac.setText(fieldData(Screen_Login_Activity.itac_JSON.getString(DBitacsController.descripcion_foto_7)));
             editText_descripcion_photo_8_screen_edit_itac.setText(fieldData(Screen_Login_Activity.itac_JSON.getString(DBitacsController.descripcion_foto_8)));
 
+            textView_numero_carnet_firmante_screen_edit_itac.setText(fieldData(Screen_Login_Activity.itac_JSON.getString(DBitacsController.carnet_firmante)));
+            textView_nombre_firmante_screen_edit_itac.setText(fieldData(Screen_Login_Activity.itac_JSON.getString(DBitacsController.nombre_firmante)));
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -1302,6 +1443,9 @@ public class Screen_Edit_ITAC extends AppCompatActivity implements Dialog.Dialog
             Screen_Login_Activity.itac_JSON.put(DBitacsController.descripcion_foto_7, editText_descripcion_photo_7_screen_edit_itac.getText().toString());
             Screen_Login_Activity.itac_JSON.put(DBitacsController.descripcion_foto_8, editText_descripcion_photo_8_screen_edit_itac.getText().toString());
 
+            Screen_Login_Activity.itac_JSON.put(DBitacsController.nombre_firmante, textView_nombre_firmante_screen_edit_itac.getText().toString());
+            Screen_Login_Activity.itac_JSON.put(DBitacsController.carnet_firmante, textView_numero_carnet_firmante_screen_edit_itac.getText().toString());
+
             int id =Screen_Login_Activity.itac_JSON.getInt(DBitacsController.id);
             if (id > 0) {
                 if(!updateItac()){
@@ -1313,7 +1457,7 @@ public class Screen_Edit_ITAC extends AppCompatActivity implements Dialog.Dialog
                 String gestor = spinner_gestor_screen_edit_itac.getSelectedItem().toString();
                 if(!cod.isEmpty()) {
                     if(!createItac(cod, gestor)) {
-                        openMessage("C.Emplazamiento Registrado", "No se pudo insertar. El Código de Emplazamiento ya existe");
+                        openMessage("C.Emplazamiento Registrado", "No se pudo insertar. El Código de Emplazamiento ya existe. Puede que haya sido creado por otro equipo");
                         return false;
                     }
                 }else {

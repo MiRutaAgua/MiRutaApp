@@ -448,36 +448,105 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
 
         buscarFotosOffline();
 
-        if (checkConection()){ //buscar fotos online
+        buscarFotosOnline();
+//            imagen_contador.setImageBitmap(Screen_Register_Operario.getImageFromString(Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_antes_instalacion)));
+    }
+
+    public HashMap<Integer,String> getHashMapFotos(){
+        HashMap<Integer,String> mapa_fotos = new HashMap<>();
+        mapa_fotos.put(1, DBtareasController.foto_despues_instalacion);
+        mapa_fotos.put(2, DBtareasController.foto_lectura);
+        mapa_fotos.put(3, DBtareasController.foto_numero_serie);
+        mapa_fotos.put(4, DBtareasController.foto_antes_instalacion);
+        mapa_fotos.put(5, DBtareasController.foto_incidencia_1);
+        mapa_fotos.put(6, DBtareasController.foto_incidencia_2);
+        mapa_fotos.put(7, DBtareasController.foto_incidencia_3);
+        mapa_fotos.put(8, DBtareasController.firma_cliente);
+
+        return mapa_fotos;
+    }
+    public HashMap<Integer,String> getHashMapFotosChangeOrder(){
+        HashMap<Integer,String> mapa_fotos = new HashMap<>();
+        mapa_fotos.put(8, DBtareasController.foto_despues_instalacion);
+        mapa_fotos.put(7, DBtareasController.foto_lectura);
+        mapa_fotos.put(6, DBtareasController.foto_numero_serie);
+        mapa_fotos.put(5, DBtareasController.foto_antes_instalacion);
+        mapa_fotos.put(4, DBtareasController.foto_incidencia_1);
+        mapa_fotos.put(3, DBtareasController.foto_incidencia_2);
+        mapa_fotos.put(2, DBtareasController.foto_incidencia_3);
+        mapa_fotos.put(1, DBtareasController.firma_cliente);
+
+        return mapa_fotos;
+    }
+    public HashMap<String,Integer> getHashMapFotosReverse(){
+        HashMap<String, Integer> mapa_fotos_reverse = new HashMap<>();
+        mapa_fotos_reverse.put(DBtareasController.foto_despues_instalacion, 1);
+        mapa_fotos_reverse.put(DBtareasController.foto_lectura, 2);
+        mapa_fotos_reverse.put(DBtareasController.foto_numero_serie, 3);
+        mapa_fotos_reverse.put(DBtareasController.foto_antes_instalacion, 4);
+        mapa_fotos_reverse.put(DBtareasController.foto_incidencia_1, 5);
+        mapa_fotos_reverse.put(DBtareasController.foto_incidencia_2, 6);
+        mapa_fotos_reverse.put(DBtareasController.foto_incidencia_3, 7);
+        mapa_fotos_reverse.put(DBtareasController.firma_cliente, 8);
+        return mapa_fotos_reverse;
+    }
+    public void buscarFotosOnline(){
+        if (checkConection()){
+            HashMap<Integer, String> mapa_fotos = getHashMapFotosChangeOrder();
             try {
-                foto =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_despues_instalacion);
-                //Toast.makeText(this, foto_instalacion, Toast.LENGTH_LONG).show();
-                if(foto.isEmpty() || foto.contains("null") || foto.contains("NULL") || foto == null){
-                    foto =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_antes_instalacion);
-                    if(foto.isEmpty() || foto.contains("null") || foto.contains("NULL") || foto == null){
-                        foto =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_lectura);
-                        if(foto.isEmpty() || foto.contains("null") || foto.contains("NULL") || foto == null){
-                            foto =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_numero_serie);
+                int init = 1;
+                if(!foto.isEmpty()) {
+                    try {
+                        for (int i = 1; i <= 8; i++) {
+                            if (foto.contains(mapa_fotos.get(i))) {
+                                init = i + 1;
+                                break;
+                            }
                         }
+                        if(init >= 9){
+                            hideRingDialog();
+                            return;
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        hideRingDialog();
+                        return;
                     }
                 }
-                if(!foto.isEmpty() && !foto.equals("null") && !foto.equals("NULL") && foto != null){
+                for (int i = init; i <= 8; i++) {
+                    foto = Screen_Login_Activity.tarea_JSON.getString(mapa_fotos.get(i));
+                    if (Screen_Login_Activity.checkStringVariable(foto)) {
+                        if(!checkIfFotoExistLocal(foto)){ //descargarla si no existe en local
+                            break;
+                        }
+                    }
+                    if(i==8){
+                        foto = "";
+                        hideRingDialog();
+                        return;
+                    }
+                }
 
+                if(Screen_Login_Activity.checkStringVariable(foto)) {
                     String numero_abonado="";
+                    String anomalia="";
                     String gestor = null;
+
                     try {
+                        anomalia = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.ANOMALIA).trim();
+                        numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
                         gestor = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.GESTOR).trim();
                         if(!Screen_Login_Activity.checkStringVariable(gestor)){
                             gestor = "Sin_Gestor";
                         }
-                        numero_abonado=Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado);
-                        if(!numero_abonado.isEmpty() && numero_abonado!=null
-                                && !numero_abonado.equals("null") && !numero_abonado.equals("NULL")){
+                        if(Screen_Login_Activity.checkStringVariable(numero_abonado)
+                                && Screen_Login_Activity.checkStringVariable(anomalia)){
                             String empresa = Screen_Login_Activity.current_empresa;
-                            showRingDialog("Obteniendo foto de instalación");
+                            Log.e("Buscando", foto);
+                            showRingDialog("Obteniendo fotos de tarea");
                             String type_script = "download_image";
-                            BackgroundWorker backgroundWorker = new BackgroundWorker(Screen_Battery_counter.this);
-                            backgroundWorker.execute(type_script, foto, gestor, numero_abonado, empresa);
+                            BackgroundWorker backgroundWorker = new BackgroundWorker(this);
+                            backgroundWorker.execute(type_script, foto, gestor, anomalia, numero_abonado, empresa);
                             Log.e("Buscando", gestor);
                         }
                     } catch (JSONException e) {
@@ -488,56 +557,60 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
                 e.printStackTrace();
             }
         }
-//            imagen_contador.setImageBitmap(Screen_Register_Operario.getImageFromString(Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_antes_instalacion)));
     }
 
     public void buscarFotosOffline(){
+        HashMap<Integer,String> mapa_fotos = getHashMapFotosChangeOrder();
         try {
-            //String foto_instalacion =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_antes_instalacion);
-            String image = null, numero_abonado = null;
+            String anomalia = "";
+            anomalia = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.ANOMALIA).trim();
+            String  numero_abonado = null;
             numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
-            image =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_despues_instalacion);
-            //Toast.makeText(this, foto_instalacion, Toast.LENGTH_LONG).show();
-            if(image.isEmpty() || image.contains("null") || image.contains("NULL") || image == null){
-                image =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_antes_instalacion);
-                if(image.isEmpty() || image.contains("null") || image.contains("NULL") || image == null){
-                    image =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_lectura);
-                    if(image.isEmpty() || image.contains("null") || image.contains("NULL") || image == null){
-                        image =  Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_numero_serie);
-                    }
-                }
-            }
-            if(numero_abonado!=null && !numero_abonado.equals("null")
-                    && !numero_abonado.equals("NULL") && !TextUtils.isEmpty(numero_abonado)) {
-                if(image!=null && !image.equals("null")
-                        && !image.equals("NULL") && !TextUtils.isEmpty(image)) {
-                    String gestor = null;
-                    gestor = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.GESTOR).trim();
-                    if(!Screen_Login_Activity.checkStringVariable(gestor)){
-                        gestor = "Sin_Gestor";
-                    }
-                    File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" +
-                            Screen_Login_Activity.current_empresa + "/fotos_tareas/"+ gestor + "/" +numero_abonado);
-                    if (!storageDir.exists()) {
-                        storageDir.mkdirs();
-                    }
-                    File[] files = storageDir.listFiles();
-                    for (int i = 0; i < files.length; i++) {
-                        if (files[i].getName().contains(image)) {
-                            //Toast.makeText(this, storageDir +"/" + files[i].getName(), Toast.LENGTH_LONG).show();
-                            Bitmap bitmap = getPhotoUserLocal(storageDir + "/" + files[i].getName());
-                            imagen_contador.setVisibility(View.VISIBLE);
-                            imagen_contador.setImageBitmap(bitmap);
-                            imagen_contador.getLayoutParams().height = bitmap.getHeight() + 300;
+
+            for (int n=1; n <= 8; n++){
+                foto =  Screen_Login_Activity.tarea_JSON.getString(mapa_fotos.get(n));
+                if(Screen_Login_Activity.checkStringVariable(foto)){
+                    if(Screen_Login_Activity.checkStringVariable(numero_abonado)) {
+                        if (Screen_Login_Activity.checkStringVariable(foto)) {
+                            String gestor = null;
+                            gestor = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.GESTOR).trim();
+                            if(!Screen_Login_Activity.checkStringVariable(gestor)){
+                                gestor = "Sin_Gestor";
+                            }
+                            File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" +
+                                    Screen_Login_Activity.current_empresa +
+                                    "/fotos_tareas/" + gestor + "/" + numero_abonado + "/" + anomalia);
+                            if (!storageDir.exists()) {
+                                storageDir.mkdirs();
+                            }
+                            File[] files = storageDir.listFiles();
+                            for (int i = 0; i < files.length; i++) {
+                                if (files[i].getName().contains(foto)) {
+                                    //Toast.makeText(this, storageDir +"/" + files[i].getName(), Toast.LENGTH_LONG).show();
+                                    Bitmap bitmap = getPhotoUserLocal(storageDir + "/" + files[i].getName());
+
+                                    if(bitmap!=null) {
+                                        Log.e("Imagen encontrada", storageDir.getAbsolutePath());
+                                        imagen_contador.setVisibility(View.VISIBLE);
+                                        imagen_contador.setImageBitmap(bitmap);
+                                        imagen_contador.getLayoutParams().height = bitmap.getHeight() + 300;
+                                        imagen_contador.requestLayout();
+
+                                        break;
+                                    }
+                                }
+                            }
                         }
                     }
                 }
             }
+            foto = "";
 //                Toast.makeText(this, image, Toast.LENGTH_LONG).show();
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
+
     public boolean checkConection(){
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -555,9 +628,8 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
     @Override
     public void onTaskComplete(String type, String result) throws JSONException {
         if(type == "download_image") {
-            Log.e("hideRingDialog", "fffffffffff");
-            hideRingDialog();
             if (result == null) {
+                hideRingDialog();
                 Toast.makeText(this, "No se puede acceder al servidor, "+ ", buscando fotos en el teléfono", Toast.LENGTH_SHORT).show();
                 Log.e("result", "null");
             }
@@ -571,19 +643,47 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
                         Toast.makeText(this, "No hay foto de contador en servidor"+ ", buscando fotos en el teléfono", Toast.LENGTH_SHORT).show();
                         Log.e("result", "no existe imagen");
                     }
+                    buscarFotosOnline();
                 }else{
                     Bitmap bitmap = null;
                     bitmap = Screen_Register_Operario.getImageFromString(result);
-                    Log.e("foto", "ffffffffffffffffffff");
                     if(bitmap!= null) {
                         imagen_contador.setVisibility(View.VISIBLE);
                         imagen_contador.setImageBitmap(bitmap);
                         saveBitmapImage(bitmap, foto);
                         Toast.makeText(Screen_Battery_counter.this, "Imagen descargada", Toast.LENGTH_SHORT).show();
                     }
+                    buscarFotosOnline();
                 }
             }
         }
+    }
+    private boolean checkIfFotoExistLocal(String file_name) {
+        String numero_abonado = null;
+
+        try {
+            String anomalia = "";
+            anomalia = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.ANOMALIA).trim();
+            numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
+            String gestor = null;
+            gestor = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.GESTOR).trim();
+            if (!Screen_Login_Activity.checkStringVariable(gestor)) {
+                gestor = "Sin_Gestor";
+            }
+            File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/" +
+                    Screen_Login_Activity.current_empresa +
+                    "/fotos_tareas/" + gestor + "/" + numero_abonado + "/" + anomalia);
+            if (!myDir.exists()) {
+                myDir.mkdirs();
+            }
+            File file = new File(myDir, file_name);
+            if (file.exists()) {
+                return true;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     private void saveBitmapImage(Bitmap bitmap, String file_name){
@@ -591,14 +691,18 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
         //Toast.makeText(Screen_Battery_counter.this,file_name, Toast.LENGTH_LONG).show();
 
         String numero_abonado = null;
+        String anomalia = "";
         try {
+            anomalia = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.ANOMALIA).trim();
             numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
             String gestor = null;
             gestor = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.GESTOR).trim();
             if(!Screen_Login_Activity.checkStringVariable(gestor)){
                 gestor = "Sin_Gestor";
             }
-            File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" + Screen_Login_Activity.current_empresa + "/fotos_tareas/"+ gestor + "/" +numero_abonado);
+            File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/"
+                    + Screen_Login_Activity.current_empresa +
+                    "/fotos_tareas/" + gestor + "/" + numero_abonado + "/" + anomalia);
             if (!myDir.exists()) {
                 myDir.mkdirs();
             }
@@ -647,8 +751,16 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
         }
     }
     private void showRingDialog(String text){
-        progressDialog = ProgressDialog.show(Screen_Battery_counter.this, "Espere", text, true);
-        progressDialog.setCancelable(true);
+        if(progressDialog==null) {
+            progressDialog = ProgressDialog.show(this, "Espere", text, true);
+            progressDialog.setCancelable(true);
+        }else{
+            try {
+                progressDialog.setMessage(text);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
     private void hideRingDialog(){
         try {
@@ -663,6 +775,7 @@ public class Screen_Battery_counter extends AppCompatActivity implements TaskCom
             Log.e("hideRingDialog", e.toString());
         }
     }
+
 
 //    @Override
 //    public boolean onCreateOptionsMenu(Menu menu) {

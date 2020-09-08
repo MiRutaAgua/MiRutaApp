@@ -177,14 +177,7 @@ public class Screen_Tabla_Itacs extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
             }
         });
-        if (lista_de_itacs_screen_table_itac.getAdapter() != null) {
-            if (lista_de_itacs_screen_table_itac.getAdapter().isEmpty()) {
-                openMessage("Información", "No hay  para mostrar");
-            } else {
-                openMessage("Información", "Existen " + String.valueOf(lista_de_itacs_screen_table_itac.getAdapter().getCount())
-                        + " itacs");
-            }
-        }
+
     }
 
     @Override

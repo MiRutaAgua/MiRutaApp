@@ -1,5 +1,6 @@
 package com.example.luisreyes.proyecto_aguas;
 
+import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
@@ -293,7 +294,10 @@ public class Screen_Itac_Seccion_2 extends AppCompatActivity {
         }
     }
 
+
     public void finishThisClass(){
+        Intent openItac = new Intent(this, Screen_Itac.class);
+        startActivity(openItac);
         this.finish();
     }
     @Override

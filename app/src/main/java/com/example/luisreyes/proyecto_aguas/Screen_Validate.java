@@ -525,6 +525,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                     @Override
                     public void onAnimationEnd(Animation arg0) {
                         Intent intent_open_screen_client_sign = new Intent(Screen_Validate.this, Screen_Draw_Canvas.class);
+                        intent_open_screen_client_sign.putExtra("class_caller", CANVAS_REQUEST_VALIDATE);
                         startActivityForResult(intent_open_screen_client_sign, CANVAS_REQUEST_VALIDATE);
                     }
                 });
@@ -906,6 +907,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
              try{
                 try {
                     String numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado);
+                    String anomalia = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.ANOMALIA);
                     String gestor = null;
                     gestor = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.GESTOR).trim();
                     if(!Screen_Login_Activity.checkStringVariable(gestor)){
@@ -913,7 +915,8 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                     }
                     InputStream in = new FileInputStream(filePath);
                     OutputStream out = new FileOutputStream(getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-                            + "/" + Screen_Login_Activity.current_empresa + "/fotos_tareas/"+ gestor + "/" + numero_abonado+"/"+pdfName+".pdf");
+                            + "/" + Screen_Login_Activity.current_empresa
+                            + "/fotos_tareas/"+ gestor + "/" + numero_abonado+"/"+ anomalia+"/"+pdfName+".pdf");
                     // Copy the bits from instream to outstream
                     byte[] buf = new byte[1024];
                     int len;
@@ -933,6 +936,8 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
             }
             String numero_abonado = null;
             try {
+                String anomalia = "";
+                anomalia = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.ANOMALIA).trim();
                 numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado);
                 String gestor = null;
                 gestor = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.GESTOR).trim();
@@ -947,7 +952,8 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
                 i.putExtra(Intent.EXTRA_TEXT, "Instalación realizada");
                 Uri uri = FileProvider.getUriForFile(this, "com.example.luisreyes.proyecto_aguas.fileprovider",
                         new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-                                + "/" + Screen_Login_Activity.current_empresa + "/fotos_tareas/" + gestor + "/" + numero_abonado+"/"+pdfName+".pdf"));
+                                + "/" + Screen_Login_Activity.current_empresa +
+                                "/fotos_tareas/" + gestor + "/" + numero_abonado + "/" + anomalia + "/" + pdfName+".pdf"));
                 i.putExtra(Intent.EXTRA_STREAM, uri);
                 i.setType("application/pdf");
                 startActivity(i);
@@ -981,46 +987,7 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
             }
         }
     }
-    public void uploadPhotos(){
-        if(images_files.isEmpty()){
-            hideRingDialog();
-            if(team_or_personal_task_selection_screen_Activity.dBtareasController != null) {
-                try {
-                    team_or_personal_task_selection_screen_Activity.dBtareasController.deleteTarea(Screen_Login_Activity.tarea_JSON);
-                } catch (JSONException e) {
-                    Toast.makeText(Screen_Validate.this, "No se pudo borrar tarea local " + e.toString(), Toast.LENGTH_LONG).show();
-                    e.printStackTrace();
-                }
-            }else{
-                Toast.makeText(this, "No hay tabla donde borrar", Toast.LENGTH_LONG).show();
-            }
-            Toast.makeText(Screen_Validate.this, "Actualizada tarea correctamente", Toast.LENGTH_LONG).show();
-            finishThisClass();
-            return;
-        }
-        else {
-            String numero_abonado = "";
-            try {
-                numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
 
-                String file_name = null, image_file;
-
-                file_name = images_files_names.get(images_files.size() - 1);
-                images_files_names.remove(images_files.size() - 1);
-                image_file = images_files.get(images_files.size() - 1);
-                images_files.remove(images_files.size() - 1);
-                String type = "upload_image";
-                BackgroundWorker backgroundWorker = new BackgroundWorker(this);
-                backgroundWorker.execute(type, Screen_Register_Operario.getStringImage(getPhotoUserLocal(image_file)), file_name, numero_abonado);
-
-            } catch (JSONException e) {
-                images_files.clear();
-                e.printStackTrace();
-                Toast.makeText(this, "Error obteniendo numero_abonado\n"+ e.toString(), Toast.LENGTH_LONG).show();
-                return;
-            }
-        }
-    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -1171,14 +1138,17 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
 
         String numero_abonado = null;
         try {
+            String anomalia = "";
+            anomalia = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.ANOMALIA).trim();
             numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado);
             String gestor = null;
             gestor = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.GESTOR).trim();
             if(!Screen_Login_Activity.checkStringVariable(gestor)){
                 gestor = "Sin_Gestor";
             }
-            String fullDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" + Screen_Login_Activity.current_empresa + "/fotos_tareas/"
-                    + gestor + "/" + numero_abonado+"/"+filename;
+            String fullDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" +
+                    Screen_Login_Activity.current_empresa +
+                    "/fotos_tareas/" + gestor + "/" + numero_abonado + "/" + anomalia + "/" + filename;
             return fullDir;
         } catch (JSONException e) {
             e.printStackTrace();
@@ -1189,22 +1159,26 @@ public class Screen_Validate extends AppCompatActivity implements Dialog.DialogL
         String numero_abonado = "";
         File myDir = null;
         try {
+            String anomalia = "";
+            anomalia = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.ANOMALIA).trim();
             numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado);
             String gestor = null;
             gestor = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.GESTOR).trim();
             if(!Screen_Login_Activity.checkStringVariable(gestor)){
                 gestor = "Sin_Gestor";
             }
-            if(!numero_abonado.isEmpty() && numero_abonado!=null
-                    && !numero_abonado.equals("NULL") && !numero_abonado.equals("null")){
+            if(Screen_Login_Activity.checkStringVariable(numero_abonado)){
 
-                myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" + Screen_Login_Activity.current_empresa + "/fotos_tareas/"
-                        + gestor + "/" + numero_abonado);
+                myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" +
+                        Screen_Login_Activity.current_empresa +
+                        "/fotos_tareas/" + gestor + "/" + numero_abonado + "/" + anomalia);
 
                 if(myDir!=null) {
                     if (!myDir.exists()) {
                         myDir.mkdirs();
-                        File storageDir2 = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/" + Screen_Login_Activity.current_empresa + "/fotos_tareas/" + gestor + "/" + numero_abonado);
+                        File storageDir2 = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/" +
+                                Screen_Login_Activity.current_empresa +
+                                "/fotos_tareas/" + gestor + "/" + numero_abonado + "/" + anomalia);
                         if (!storageDir2.exists()) {
                             storageDir2.mkdirs();
                         }

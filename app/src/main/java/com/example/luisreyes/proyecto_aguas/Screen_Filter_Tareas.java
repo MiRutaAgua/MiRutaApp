@@ -213,6 +213,8 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
                                 getText().toString();
                         if(!cod_emplazamiento.isEmpty()) {
                             onButtonITAC(cod_emplazamiento);
+                        }else{
+                            openMessage("Sin código", "Inserte código de emplazamiento");
                         }
                     }
                 });
@@ -613,12 +615,16 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
         if (team_or_personal_task_selection_screen_Activity.dBitacsController != null) {
             if (team_or_personal_task_selection_screen_Activity.dBitacsController.databasefileExists(this)) {
                 if (team_or_personal_task_selection_screen_Activity.dBitacsController.checkForTableExists()) {
-                    if (team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas() > 0) {
+                    if (team_or_personal_task_selection_screen_Activity.dBitacsController.checkIfItacExists(cod_emplazamiento)) {
                         ArrayList<String> itacs = new ArrayList<>();
                         try {
                             itacs = team_or_personal_task_selection_screen_Activity.
                                     dBitacsController.get_all_itacs_from_Database(
                                             DBitacsController.codigo_itac, cod_emplazamiento);
+                            if(itacs.isEmpty()){
+                                openMessage("Sin acceso", "Este ITAC esta asignado a otro equipo. No se puede acceder");
+                                return;
+                            }
                             for (int i = 0; i < itacs.size(); i++) {
                                 JSONObject jsonObject = null;
                                 try {
@@ -651,53 +657,53 @@ public class Screen_Filter_Tareas extends AppCompatActivity{
                         } catch(JSONException e){
                             e.printStackTrace();
                         }
+                    }else{
+                        new AlertDialog.Builder(this)
+                                .setTitle("No exite ITAC")
+                                .setMessage("¿Desea crear un nuevo itac?")
+                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        JSONObject jsonObject = new JSONObject();
+
+                                        String dir = getDirOfTaskWithCodEmplazamiento(cod_emplazamiento);
+                                        String zona = getZonaOfTaskWithCodEmplazamiento(cod_emplazamiento);
+                                        Screen_Login_Activity.itac_JSON = DBitacsController.setEmptyJSON(jsonObject);
+                                        try {
+                                            Screen_Login_Activity.itac_JSON.put(
+                                                    DBitacsController.equipo,
+                                                    Screen_Login_Activity.equipo_JSON.getString(
+                                                            DBequipo_operariosController.equipo_operario));
+                                            Screen_Login_Activity.itac_JSON.put(
+                                                    DBitacsController.operario,
+                                                    Screen_Login_Activity.operario_JSON.getString(
+                                                            DBoperariosController.usuario));
+                                            Screen_Login_Activity.itac_JSON.put(
+                                                    DBitacsController.codigo_itac, cod_emplazamiento);
+                                            if(Screen_Login_Activity.checkStringVariable(dir)){
+                                                Screen_Login_Activity.itac_JSON.put(
+                                                        DBitacsController.itac, dir);
+                                            }
+                                            if(Screen_Login_Activity.checkStringVariable(zona)){
+                                                Screen_Login_Activity.itac_JSON.put(
+                                                        DBitacsController.zona, zona);
+                                            }
+                                            Intent intent_open_screen_edit_itac = new Intent(
+                                                    Screen_Filter_Tareas.this, Screen_Edit_ITAC.class);
+                                            startActivity(intent_open_screen_edit_itac);
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                })
+                                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                                    }
+                                }).show();
                     }
                 }
-                new AlertDialog.Builder(this)
-                        .setTitle("No exite ITAC")
-                        .setMessage("¿Desea crear un nuevo itac?")
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                JSONObject jsonObject = new JSONObject();
-
-                                String dir = getDirOfTaskWithCodEmplazamiento(cod_emplazamiento);
-                                String zona = getZonaOfTaskWithCodEmplazamiento(cod_emplazamiento);
-                                Screen_Login_Activity.itac_JSON = DBitacsController.setEmptyJSON(jsonObject);
-                                try {
-                                    Screen_Login_Activity.itac_JSON.put(
-                                            DBitacsController.equipo,
-                                            Screen_Login_Activity.equipo_JSON.getString(
-                                                    DBequipo_operariosController.equipo_operario));
-                                    Screen_Login_Activity.itac_JSON.put(
-                                            DBitacsController.operario,
-                                            Screen_Login_Activity.operario_JSON.getString(
-                                                    DBoperariosController.usuario));
-                                    Screen_Login_Activity.itac_JSON.put(
-                                            DBitacsController.codigo_itac, cod_emplazamiento);
-                                    if(Screen_Login_Activity.checkStringVariable(dir)){
-                                        Screen_Login_Activity.itac_JSON.put(
-                                                DBitacsController.itac, dir);
-                                    }
-                                    if(Screen_Login_Activity.checkStringVariable(zona)){
-                                        Screen_Login_Activity.itac_JSON.put(
-                                                DBitacsController.zona, zona);
-                                    }
-                                    Intent intent_open_screen_edit_itac = new Intent(
-                                            Screen_Filter_Tareas.this, Screen_Edit_ITAC.class);
-                                    startActivity(intent_open_screen_edit_itac);
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        })
-                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-
-                            }
-                        }).show();
-
             }
         }
     }

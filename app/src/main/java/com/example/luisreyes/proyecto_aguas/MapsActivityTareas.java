@@ -38,6 +38,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
@@ -119,11 +121,15 @@ public class MapsActivityTareas extends AppCompatActivity implements TaskComplet
     LatLng lastClickedMarker =null;
     boolean first_time_spinner_fill = true; //cuando relleno el spinner se activa el evento de cambio de texto y quiero que lo haga cuando interactue con el spinner nadamas
 
-    Button btnlocalizacion, btn_abrir_tarea, btn_resumen_tareas;
+    Button btnlocalizacion, btn_abrir_tarea, btn_resumen_tareas, btnfiltrar_mapas_cercania;
+    EditText editText_radius_screen_mapas_cercania;
+    LinearLayout linearLayout_perimeter_mapas_cercania;
     private ArrayList<String> lista_desplegable_zonas = new ArrayList<>();
 
-    private Circle circle;
+    private static Circle circle = null;
+    static boolean last_perimeter_filtering = false;
     private static final double RADIUS_OF_EARTH_METERS = 6371009;
+    private boolean perimeter_filtering = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,10 +144,13 @@ public class MapsActivityTareas extends AppCompatActivity implements TaskComplet
 
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(MapsActivityTareas.this);
 
+        linearLayout_perimeter_mapas_cercania = (LinearLayout) findViewById(R.id.linearLayout_perimeter_mapas_cercania);
+        editText_radius_screen_mapas_cercania = (EditText) findViewById(R.id.editText_radius_screen_mapas_cercania);
         spinner_filtro_zonas_screen_mapas_cercania = (Spinner)findViewById(R.id.spinner_filtro_zonas_screen_mapas_cercania);
         btnlocalizacion = (Button) findViewById(R.id.btnlocalizacion);
         btn_abrir_tarea = (Button) findViewById(R.id.btn_abrir_tarea);
         btn_resumen_tareas = (Button) findViewById(R.id.btn_resumen_tareas);
+        btnfiltrar_mapas_cercania = (Button) findViewById(R.id.btnfiltrar_mapas_cercania);
 
         spinner_filtro_zonas_screen_mapas_cercania.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -150,13 +159,26 @@ public class MapsActivityTareas extends AppCompatActivity implements TaskComplet
                     String zona_selected = spinner_filtro_zonas_screen_mapas_cercania
                             .getSelectedItem().toString();
                     if (Screen_Login_Activity.checkStringVariable(zona_selected)) {
-                        fillFilterGeolocalizacion(zona_selected, (lastCameraPosition == null));
+                        if(last_perimeter_filtering && circle != null){
+                            fillFilterGeolocalizacion(circle.getCenter(), circle.getRadius(), zona_selected, (lastCameraPosition == null));
+                            last_perimeter_filtering = false;
+                        }else {
+                            fillFilterGeolocalizacion(zona_selected, (lastCameraPosition == null));
+                        }
                     }
                 }
                 first_time_spinner_fill= false;
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
+        btnfiltrar_mapas_cercania.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fillFilterGeolocalizacion(circle.getCenter(), circle.getRadius(),
+                        spinner_filtro_zonas_screen_mapas_cercania.getSelectedItem().toString(), true);
+                linearLayout_perimeter_mapas_cercania.setVisibility(View.GONE);
             }
         });
         btnlocalizacion.setOnClickListener(new View.OnClickListener() {
@@ -213,6 +235,7 @@ public class MapsActivityTareas extends AppCompatActivity implements TaskComplet
         startActivity(open_Filter_Results);
         lastCameraPosition = mMap.getCameraPosition();
         lastZonaFiltered = spinner_filtro_zonas_screen_mapas_cercania.getSelectedItem().toString();
+        last_perimeter_filtering = perimeter_filtering;
         this.finish();
     }
     @Override
@@ -255,7 +278,36 @@ public class MapsActivityTareas extends AppCompatActivity implements TaskComplet
                 }
             }
         });
+        editText_radius_screen_mapas_cercania.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
+            }
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if(!charSequence.toString().isEmpty()) {
+                    String text = null;
+                    try {
+                        text = charSequence.toString();
+                        Integer radius = Integer.parseInt(text);
+                        if(radius <= 3000000) {
+                            if (radius != null) {
+                                if (circle != null) {
+                                    circle.setRadius(radius);
+                                }
+                            }
+                        }else{
+                            editText_radius_screen_mapas_cercania.setText("3000000");
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
         googleMap.setOnMarkerClickListener(this);
         googleMap.setOnMapClickListener(this);
         mMap.getUiSettings().setZoomControlsEnabled(true);
@@ -270,17 +322,19 @@ public class MapsActivityTareas extends AppCompatActivity implements TaskComplet
     @Override
     public void onMapLongClick(LatLng center) {
 
-        double radiusMeters = toRadiusMeters(center,new LatLng(23.1313892,-82.4065511));
+        linearLayout_perimeter_mapas_cercania.setVisibility(View.VISIBLE);
 
-
-
+        if(circle!=null){
+            circle.remove();
+        }
+        double radiusMeters = 1000;
 
         circle = mMap.addCircle(new CircleOptions()
                 .center(center)
                 .radius(radiusMeters)
-                .strokeWidth(0x7f070085)
-                .strokeColor(1358976511)
-                .fillColor(1191195647));////////Si quieres hacerle el circulo exterior aqui es varia un poco para q sea mas diferente el color
+                .strokeWidth((int)(radiusMeters / 100))//ancho borde
+                .strokeColor(0xffffffff) //color borde
+                .fillColor(0x47368dcE));//color de circulo
     }
 
     private static LatLng toRadiusLatLng(LatLng center, double radiusMeters) {
@@ -295,23 +349,19 @@ public class MapsActivityTareas extends AppCompatActivity implements TaskComplet
                 radius.latitude, radius.longitude, result);
         return result[0];
     }
-
     @Override
     public void onMarkerDragStart(Marker marker) {
 
 
     }
-
     @Override
     public void onMarkerDrag(Marker marker) {
 
     }
-
     @Override
     public void onMarkerDragEnd(Marker marker) {
 
     }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -321,7 +371,6 @@ public class MapsActivityTareas extends AppCompatActivity implements TaskComplet
             }
         }
     }
-
     @SuppressLint("MissingPermission")
     private void getDeviceLocation() {
         mFusedLocationProviderClient.getLastLocation()
@@ -398,9 +447,10 @@ public class MapsActivityTareas extends AppCompatActivity implements TaskComplet
     }
 
     private void fillFilterGeolocalizacion() {
+        perimeter_filtering = false;
         ArrayList<String> tareas;
-        double minimun_distance = 80000;
-        String minimun_coords = "";
+        double max_distance = 0;
+        String max_coords = "";
         tabla_marcadores.clear();
         tabla_prioridades.clear();
         lista_desplegable_zonas.clear();
@@ -465,9 +515,9 @@ public class MapsActivityTareas extends AppCompatActivity implements TaskComplet
                                 if(!tabla_marcadores.containsKey(geolocalizacion)) {
 
                                     double current_distance = distanceInKmBetweenEarthCoordinates(latitud_h, longitud_h, currentLatitud, currentLongitud);
-                                    if(current_distance < minimun_distance) {
-                                        minimun_distance = current_distance;
-                                        minimun_coords = geolocalizacion;
+                                    if(current_distance > max_distance) {
+                                        max_distance = current_distance;
+                                        max_coords = geolocalizacion;
                                     }
                                     String dist = getDistanceString(latitud_h, longitud_h, currentLatitud, currentLongitud);
 
@@ -557,10 +607,10 @@ public class MapsActivityTareas extends AppCompatActivity implements TaskComplet
                 e.printStackTrace();
             }
         }
-        Log.e("Minimun dist", String.valueOf(minimun_distance));
-        Log.e("Minimun coords", minimun_coords);
+        Log.e("Minimun dist", String.valueOf(max_distance));
+        Log.e("Minimun coords", max_coords);
 
-        double zoom_d = log2((int)(40000 / (minimun_distance / 2)));
+        double zoom_d = log2((int)(40000 / (max_distance / 2)));
         int zoom_l = (int)(Math.floor(zoom_d));
         Log.e("zoom_d", String.valueOf(zoom_l));
         if(lastCameraPosition != null){
@@ -576,56 +626,12 @@ public class MapsActivityTareas extends AppCompatActivity implements TaskComplet
         }
         hideRingDialog();
     }
-
-    public static String convertToGeoField(double latitud, double longitud){
-        return String.valueOf(latitud) + "," + String.valueOf(longitud);
-    }
-    public static Pair<Double, Double> convertFromGeoField(String geolocalizacion){ //first latitud, second longitud
-        double latitud = -1000, longitud = -1000;
-        String[] parts = geolocalizacion.split(",");
-        if(parts.length > 1) {
-            String part1 = parts[0].trim(); //obtiene: latitud
-            String part2 = parts[1].trim(); //obtiene: longitud
-            latitud = Double.parseDouble(part1);
-            longitud = Double.parseDouble(part2);
-        }
-        Pair<Double, Double> coords = new Pair<>(latitud, longitud);
-        return coords;
-    }
-    public static boolean comparePriorities(String old_priority , String new_priority){ //true si la nueva es mas prioritaria
-        HashMap<String, Integer> prioridades = new HashMap<>();
-        prioridades.put("HIBERNAR", 1);
-        prioridades.put("BAJA", 2);
-        prioridades.put("MEDIA", 3);
-        prioridades.put("ALTA", 4);
-        if(prioridades.containsKey(old_priority) && prioridades.containsKey(new_priority)) {
-            if (prioridades.get(old_priority) < prioridades.get(new_priority)) {
-                return true;
-            }
-        }
-        return false;
-    }
-    public void openMessage(String title, String hint){
-        MessageDialog messageDialog = new MessageDialog();
-        messageDialog.setTitleAndHint(title, hint);
-        messageDialog.show(getSupportFragmentManager(), title);
-    }
-
-    private void showResumen(){
-        String resumen = "";
-        Iterator it = tabla_tipos_tareas_resumen.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry)it.next();
-            //System.out.println(pair.getKey() + " = " + pair.getValue());
-            resumen+= (pair.getValue().toString() + " -> " + pair.getKey().toString()) + "\n";
-        }
-        openMessage("Resumen",resumen);
-    }
     private void fillFilterGeolocalizacion(String zona, boolean moveCamera) {
+        perimeter_filtering = false;
         mMap.clear();
         ArrayList<String> tareas;
-        double minimun_distance = 80000;
-        String minimun_coords = "";
+        double max_distance = 80000;
+        String max_coords = "";
         tabla_marcadores.clear();
         tabla_prioridades.clear();
         tabla_tipos_tareas_resumen.clear();
@@ -686,9 +692,9 @@ public class MapsActivityTareas extends AppCompatActivity implements TaskComplet
                                 if(!tabla_marcadores.containsKey(geolocalizacion)) {
 
                                     double current_distance = distanceInKmBetweenEarthCoordinates(latitud_h, longitud_h, currentLatitud, currentLongitud);
-                                    if(current_distance < minimun_distance) {
-                                        minimun_distance = current_distance;
-                                        minimun_coords = geolocalizacion;
+                                    if(current_distance > max_distance) {
+                                        max_distance = current_distance;
+                                        max_coords = geolocalizacion;
                                     }
                                     String dist = getDistanceString(latitud_h, longitud_h, currentLatitud, currentLongitud);
 
@@ -776,10 +782,10 @@ public class MapsActivityTareas extends AppCompatActivity implements TaskComplet
         }
 
         if(moveCamera) {
-            Log.e("Minimun dist", String.valueOf(minimun_distance));
-            Log.e("Minimun coords", minimun_coords);
+            Log.e("Minimun dist", String.valueOf(max_distance));
+            Log.e("Minimun coords", max_coords);
 
-            double zoom_d = log2((int) (40000 / (minimun_distance / 2)));
+            double zoom_d = log2((int) (40000 / (max_distance / 2)));
             int zoom_l = (int) (Math.floor(zoom_d));
             Log.e("zoom_d", String.valueOf(zoom_l));
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude()), zoom_l - 1));
@@ -787,6 +793,228 @@ public class MapsActivityTareas extends AppCompatActivity implements TaskComplet
             lastCameraPosition = null;
             lastZonaFiltered = "";
         }
+    }
+
+    private void fillFilterGeolocalizacion(LatLng center, double radius, String zona, boolean moveCamera) {
+        perimeter_filtering = true;
+        mMap.clear();
+        ArrayList<String> tareas;
+        double max_distance = 0;
+        String max_coords = "";
+        tabla_marcadores.clear();
+        tabla_prioridades.clear();
+        tabla_tipos_tareas_resumen.clear();
+
+        if (team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas() > 0) {
+
+            try {
+                if(zona.equals("TODAS")){
+                    tareas = team_or_personal_task_selection_screen_Activity.
+                            dBtareasController.get_all_tareas_from_Database_Valid_Coords();
+                }else{
+                    tareas = team_or_personal_task_selection_screen_Activity.
+                            dBtareasController.get_all_tareas_from_Database(DBtareasController.zona, zona);
+                }
+                for (int i = 0; i < tareas.size(); i++) {
+                    JSONObject jsonObject ;
+                    try {
+                        jsonObject = new JSONObject(tareas.get(i));
+                        if (!team_or_personal_task_selection_screen_Activity.checkGestor(jsonObject)) {
+                            continue;
+                        }
+
+                        if (team_or_personal_task_selection_screen_Activity.from_team_or_personal
+                                ==team_or_personal_task_selection_screen_Activity.FROM_PERSONAL) {
+                            if (!Screen_Filter_Tareas.checkIfOperarioTask(jsonObject)) {
+                                continue;
+                            }
+                        }
+
+                        if (!Screen_Filter_Tareas.checkIfIsDone(jsonObject)) {
+                            String geolocalizacion = getValidCoords(jsonObject);
+                            if(Screen_Login_Activity.checkStringVariable(geolocalizacion))
+                            {
+                                double currentLatitud, currentLongitud;
+                                currentLatitud = mLastKnownLocation.getLatitude();
+                                currentLongitud = mLastKnownLocation.getLongitude();
+
+                                Pair<Double, Double> coords = convertFromGeoField(geolocalizacion);
+                                double latitud_h = coords.first;
+                                double longitud_h = coords.second;
+
+                                geolocalizacion = convertToGeoField(latitud_h, longitud_h);
+
+                                double radius_geoCode = toRadiusMeters(center, new LatLng(latitud_h, longitud_h));
+
+                                if(radius_geoCode > radius){
+                                    continue;
+                                }
+
+                                String principal_var = jsonObject.getString(DBtareasController.principal_variable).trim();
+                                String tipo_tarea = jsonObject.getString(DBtareasController.tipo_tarea).trim();
+                                if(tabla_tipos_tareas_resumen.containsKey(tipo_tarea)){
+                                    int cant = tabla_tipos_tareas_resumen.get(tipo_tarea);
+                                    cant++;
+                                    tabla_tipos_tareas_resumen.put(tipo_tarea, cant);
+                                }else{
+                                    tabla_tipos_tareas_resumen.put(tipo_tarea, 1);
+                                }
+                                String prioridad_l = jsonObject.getString(DBtareasController.prioridad).trim();
+                                if(!Screen_Login_Activity.checkStringVariable(prioridad_l)){
+                                    prioridad_l = "MEDIA";
+                                }
+
+
+
+                                if(!tabla_marcadores.containsKey(geolocalizacion)) {
+
+                                    double current_distance = distanceInKmBetweenEarthCoordinates(latitud_h, longitud_h, currentLatitud, currentLongitud);
+                                    if(current_distance > max_distance) {
+                                        max_distance = current_distance;
+                                        max_coords = geolocalizacion;
+                                    }
+                                    String dist = getDistanceString(latitud_h, longitud_h, currentLatitud, currentLongitud);
+
+                                    Marker marker =  insertarMarcador(prioridad_l, tipo_tarea, dist,latitud_h,longitud_h);
+                                    tabla_marcadores.put(geolocalizacion, marker);
+                                    tabla_prioridades.put(geolocalizacion, prioridad_l);
+
+                                }else{
+
+                                    Marker marker = tabla_marcadores.get(geolocalizacion);
+                                    String old_priority = tabla_prioridades.get(geolocalizacion);
+                                    if(comparePriorities(old_priority, prioridad_l)){
+                                        marker.setIcon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons(
+                                                prioridad_l+"_priority_marker"/*"mano"*/, 80, 100)));
+                                    }
+                                    String[] title_split = marker.getTitle().split(",");
+                                    if(title_split.length > 1){
+                                        for(int n= 0; n < title_split.length; n++){
+                                            String tipo_completo = title_split[n].trim();
+                                            if(tipo_completo.contains("->")) {
+                                                String tipo = tipo_completo.split("->")[1].trim();
+                                                String number = tipo_completo.split("->")[0].trim();
+                                                if (Screen_Absent.checkOnlyNumbers(number)) {
+                                                    if (tipo.trim().equals(tipo_tarea)) {
+                                                        Integer integer = Integer.parseInt(number);
+                                                        if (integer != null) {
+                                                            integer++;
+                                                            String cant = integer.toString();
+                                                            String tittle = cant + " -> " + tipo.trim();
+                                                            title_split[n] = tittle;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            else {
+                                                if(tipo_completo.trim().equals(tipo_tarea)) {
+                                                    String tittle = "2 -> " + tipo_completo;
+                                                    title_split[n] = tittle;
+                                                }
+                                            }
+                                        }
+                                        String tittle = TextUtils.join(", ", title_split);
+                                        marker.setTitle(tittle);
+
+                                        tabla_marcadores.put(geolocalizacion, marker);
+                                    }
+                                    else{
+                                        String tipo_completo = title_split[0];
+                                        String tittle = "";
+                                        if(tipo_completo.contains("->")) {
+                                            String tipo = title_split[0].split("->")[1].trim();
+                                            String number = title_split[0].split("->")[0].trim();
+                                            if (Screen_Absent.checkOnlyNumbers(number)) {
+                                                if (tipo.trim().equals(tipo_tarea)) {
+                                                    Integer integer = Integer.parseInt(number);
+                                                    if (integer != null) {
+                                                        integer++;
+                                                        String cant = integer.toString();
+                                                        tittle = cant + " -> " + tipo.trim();
+                                                    }
+                                                } else {
+                                                    tittle = tipo_completo + ", " + tipo_tarea;
+                                                }
+                                            }
+                                        }else {
+                                            if(tipo_completo.trim().equals(tipo_tarea)) {
+                                                tittle = "2 -> " + tipo_completo;
+                                            }else{
+                                                tittle = tipo_completo + ", " + tipo_tarea;
+                                            }
+                                        }
+                                        marker.setTitle(tittle);
+                                        tabla_marcadores.put(geolocalizacion, marker);
+                                    }
+                                }
+                            }
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if(moveCamera) {
+            Log.e("Minimun dist", String.valueOf(max_distance));
+            Log.e("Minimun coords", max_coords);
+
+            double zoom_d = log2((int) (40000 / (max_distance / 2)));
+            int zoom_l = (int) (Math.floor(zoom_d));
+            Log.e("zoom_d", String.valueOf(zoom_l));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude()), zoom_l - 1));
+        }else{
+            lastCameraPosition = null;
+            lastZonaFiltered = "";
+        }
+    }
+
+    public static String convertToGeoField(double latitud, double longitud){
+        return String.valueOf(latitud) + "," + String.valueOf(longitud);
+    }
+    public static Pair<Double, Double> convertFromGeoField(String geolocalizacion){ //first latitud, second longitud
+        double latitud = -1000, longitud = -1000;
+        String[] parts = geolocalizacion.split(",");
+        if(parts.length > 1) {
+            String part1 = parts[0].trim(); //obtiene: latitud
+            String part2 = parts[1].trim(); //obtiene: longitud
+            latitud = Double.parseDouble(part1);
+            longitud = Double.parseDouble(part2);
+        }
+        Pair<Double, Double> coords = new Pair<>(latitud, longitud);
+        return coords;
+    }
+    public static boolean comparePriorities(String old_priority , String new_priority){ //true si la nueva es mas prioritaria
+        HashMap<String, Integer> prioridades = new HashMap<>();
+        prioridades.put("HIBERNAR", 1);
+        prioridades.put("BAJA", 2);
+        prioridades.put("MEDIA", 3);
+        prioridades.put("ALTA", 4);
+        if(prioridades.containsKey(old_priority) && prioridades.containsKey(new_priority)) {
+            if (prioridades.get(old_priority) < prioridades.get(new_priority)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public void openMessage(String title, String hint){
+        MessageDialog messageDialog = new MessageDialog();
+        messageDialog.setTitleAndHint(title, hint);
+        messageDialog.show(getSupportFragmentManager(), title);
+    }
+
+    private void showResumen(){
+        String resumen = "";
+        Iterator it = tabla_tipos_tareas_resumen.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            //System.out.println(pair.getKey() + " = " + pair.getValue());
+            resumen+= (pair.getValue().toString() + " -> " + pair.getKey().toString()) + "\n";
+        }
+        openMessage("Resumen",resumen);
     }
 
     public static int log2(int n){

@@ -194,7 +194,10 @@ public class Screen_Camera extends Activity {
         setContentView(R.layout.screen_camera);
 
         String numero_abonado = "", gestor = "";
+        String anomalia = "";
         try {
+
+            anomalia = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.ANOMALIA).trim();
             numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
             gestor = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.GESTOR).trim();
             if(!Screen_Login_Activity.checkStringVariable(gestor)){
@@ -204,7 +207,7 @@ public class Screen_Camera extends Activity {
             e.printStackTrace();
         }
         photo_name = getIntent().getStringExtra("photo_name");
-        photo_folder = getIntent().getStringExtra("photo_folder")+"/" + gestor + "/" +numero_abonado;
+        photo_folder = getIntent().getStringExtra("photo_folder")+"/" + gestor + "/" +numero_abonado + "/" + anomalia;
         contador = getIntent().getStringExtra("contador").trim().replace(" ","");
 
 

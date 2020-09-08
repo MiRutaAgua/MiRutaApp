@@ -457,13 +457,16 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
     public String lookForAllreadyTakenPhotos(String photo_name) throws JSONException {
         String numero_abonado = null;
         String gestor = null;
+        String anomalia ="";
         try {
+            anomalia = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.ANOMALIA).trim();
             numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
             gestor = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.GESTOR).trim();
             if(!Screen_Login_Activity.checkStringVariable(gestor)){
                 gestor = "Sin_Gestor";
             }
-            String dir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" + Screen_Login_Activity.current_empresa + "/fotos_tareas/" + gestor + "/" +numero_abonado;
+            String dir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" + Screen_Login_Activity.current_empresa
+                    + "/fotos_tareas/" + gestor + "/" + numero_abonado + "/" + anomalia;
             File myDir = new File(dir);
             if(myDir.exists()){
                 String file_full_name = dir+"/"+photo_name;
@@ -646,6 +649,8 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
         String image = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_serie_contador)
                 .trim().replace(" ", "")+"_"+incidencia_X;
 
+        String anomalia = "";
+        anomalia = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.ANOMALIA).trim();
         String numero_abonado = null;
         numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
 
@@ -655,7 +660,9 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
         if(!Screen_Login_Activity.checkStringVariable(gestor)){
             gestor = "Sin_Gestor";
         }
-        File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" + Screen_Login_Activity.current_empresa + "/fotos_tareas/"+ gestor + "/" +numero_abonado);
+        File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" +
+                Screen_Login_Activity.current_empresa +
+                "/fotos_tareas/" + gestor + "/" + numero_abonado + "/" + anomalia);
         if (!storageDir.exists()) {
             storageDir.mkdirs();
         }
@@ -717,8 +724,9 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
             String file_full_name = numero_serie+"_"+key;
             //Toast.makeText(Screen_Incidence.this,"archivo: "+file_full_name, Toast.LENGTH_LONG).show();
 
+            String anomalia = "";
+            anomalia = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.ANOMALIA).trim();
             String numero_abonado = null;
-
             numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
 
             String gestor = null;
@@ -726,7 +734,9 @@ public class Screen_Incidence extends AppCompatActivity implements Dialog.Dialog
             if(!Screen_Login_Activity.checkStringVariable(gestor)){
                 gestor = "Sin_Gestor";
             }
-            File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" + Screen_Login_Activity.current_empresa + "/fotos_tareas/"+ gestor + "/" +numero_abonado);
+            File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" +
+                    Screen_Login_Activity.current_empresa +
+                    "/fotos_tareas/" + gestor + "/" + numero_abonado + "/" + anomalia);
             if (!myDir.exists()) {
                 myDir.mkdirs();
             }

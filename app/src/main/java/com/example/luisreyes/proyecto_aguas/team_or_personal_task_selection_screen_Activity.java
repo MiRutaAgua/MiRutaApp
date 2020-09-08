@@ -724,9 +724,10 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
         else {
 
             Log.e("uploadPhotosInMySQL", "subiendo Fotos");
-            String numero_abonado = "", gestor = "";
+            String numero_abonado = "", gestor = "", anomalia="";
             try {
                 String empresa = Screen_Login_Activity.current_empresa;
+                anomalia = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.ANOMALIA).trim();
                 numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
                 gestor = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.GESTOR).trim();
                 if(!Screen_Login_Activity.checkStringVariable(gestor)){
@@ -742,7 +743,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                 if(bitmap!=null) {
                     String type = "upload_image";
                     BackgroundWorker backgroundWorker = new BackgroundWorker(this);
-                    backgroundWorker.execute(type, Screen_Register_Operario.getStringImage(bitmap), file_name, gestor, numero_abonado, empresa);
+                    backgroundWorker.execute(type, Screen_Register_Operario.getStringImage(bitmap), file_name, gestor, anomalia, numero_abonado, empresa);
                 }else{
                     uploadPhotosInMySQL();
                 }
@@ -795,6 +796,9 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
 
         foto = Screen_Login_Activity.itac_JSON.getString(DBitacsController.foto_8);
         addPhotosItac_names_and_files(path, foto);
+
+        foto = Screen_Login_Activity.itac_JSON.getString(DBitacsController.foto_9);
+        addPhotosItac_names_and_files(path, foto);
     }
 
     public void addPhotos_toUpload() throws JSONException { //luego rellenar en campo de incidencia algo para saber que tiene incidencias
@@ -803,7 +807,9 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
 
         Log.e("Entrando a funcion", "addPhotos_toUpload");
         String gestor = null;
+        String anomalia = "";
         try {
+            anomalia = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.ANOMALIA).trim();
             numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
             gestor = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.GESTOR).trim();
             if(!Screen_Login_Activity.checkStringVariable(gestor)){
@@ -812,7 +818,9 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        String path = getExternalFilesDir(Environment.DIRECTORY_PICTURES)+"/" + Screen_Login_Activity.current_empresa + "/fotos_tareas/" + gestor + "/"+ numero_abonado+"/";
+        String path = getExternalFilesDir(Environment.DIRECTORY_PICTURES)+"/"
+                + Screen_Login_Activity.current_empresa +
+                "/fotos_tareas/" + gestor + "/" + numero_abonado + "/" + anomalia + "/";
 
         foto = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.foto_antes_instalacion);
         addPhotos_names_and_files(path, foto);
@@ -840,7 +848,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
     }
     public void addPhotosItac_names_and_files(String path, String foto){
         if(new File(path+foto).exists()) {
-            if (foto != null && !foto.isEmpty() && !foto.equals("null") && !foto.equals("NULL")) {
+            if (Screen_Login_Activity.checkStringVariable(foto)) {
                 images_files_itacs.add(path + foto);
                 images_files_names_itacs.add(foto);
                 Log.e("Añadiendo Itac foto", path+ foto);
@@ -851,7 +859,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
     }
     public void addPhotos_names_and_files(String path, String foto){
         if(new File(path+foto).exists()) {
-            if (foto != null && !foto.isEmpty() && !foto.equals("null") && !foto.equals("NULL")) {
+            if (Screen_Login_Activity.checkStringVariable(foto)) {
                 images_files.add(path + foto);
                 images_files_names.add(foto);
                 Log.e("Añadiendo", foto);
@@ -1013,9 +1021,10 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
         }
         else {
             Log.e("updatePhotosInMySQL", "actualizando fotos en internet");
-            String numero_abonado = "", gestor = "";
+            String numero_abonado = "", gestor = "", anomalia="";
             try {
                 String empresa = Screen_Login_Activity.current_empresa;
+                anomalia = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.ANOMALIA).trim();
                 numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
                 gestor = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.GESTOR).trim();
                 if(!Screen_Login_Activity.checkStringVariable(gestor)){
@@ -1031,7 +1040,7 @@ public class team_or_personal_task_selection_screen_Activity extends AppCompatAc
                 if(bitmap!=null) {
                     String type = "upload_image";
                     BackgroundWorker backgroundWorker = new BackgroundWorker(this);
-                    backgroundWorker.execute(type, Screen_Register_Operario.getStringImage(bitmap), file_name, gestor, numero_abonado, empresa);
+                    backgroundWorker.execute(type, Screen_Register_Operario.getStringImage(bitmap), file_name, gestor, anomalia, numero_abonado, empresa);
                 }else{
                     updatePhotosInMySQL();
                 }

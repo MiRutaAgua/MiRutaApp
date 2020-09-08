@@ -22,13 +22,13 @@ public class MainActivity extends AppCompatActivity /*implements LifecycleObserv
 
     private long delay_in_Millis = START_TIME_IN_MILLIS;
 
-    public static int DB_VERSION = 151;
+    public static int DB_VERSION = 154;
     public static int COMPRESS_QUALITY = 50;
 
     public static double AMPLITUD_BOUNCE = 0.005;
     public static int FRECUENCY_BOUNCE = 500;
 
-    public static boolean sounds_on=true;
+    public static boolean sounds_on = true;
 
     public static boolean minimize = false;
 

@@ -402,9 +402,11 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                     @Override
                     public void onAnimationEnd(Animation arg0) {
                         String cod_emplazamiento = textView_codigo_geolocalization_screen_exec_task.
-                                getText().toString();
+                                getText().toString().trim();
                         if(!cod_emplazamiento.isEmpty()) {
                             onButtonITAC(cod_emplazamiento);
+                        }else{
+                            openMessage("Sin código", "Inserte código de emplazamiento");
                         }
                     }
                 });
@@ -975,12 +977,16 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         if (team_or_personal_task_selection_screen_Activity.dBitacsController != null) {
             if (team_or_personal_task_selection_screen_Activity.dBitacsController.databasefileExists(this)) {
                 if (team_or_personal_task_selection_screen_Activity.dBitacsController.checkForTableExists()) {
-                    if (team_or_personal_task_selection_screen_Activity.dBtareasController.countTableTareas() > 0) {
+                    if (team_or_personal_task_selection_screen_Activity.dBitacsController.checkIfItacExists(cod_emplazamiento)) {
                         ArrayList<String> itacs = new ArrayList<>();
                         try {
                             itacs = team_or_personal_task_selection_screen_Activity.
                                     dBitacsController.get_all_itacs_from_Database(
                                             DBitacsController.codigo_itac, cod_emplazamiento);
+                            if(itacs.isEmpty()){
+                                openMessage("Sin acceso", "Este ITAC esta asignado a otro equipo. No se puede acceder");
+                                return;
+                            }
                             for (int i = 0; i < itacs.size(); i++) {
                                 JSONObject jsonObject = null;
                                 try {
@@ -1015,28 +1021,30 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                             e.printStackTrace();
                         }
                     }
-                }
-                new AlertDialog.Builder(this)
-                        .setTitle("No exite ITAC")
-                        .setMessage("¿Desea crear un nuevo itac?")
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                if(fillNewItacDataWithTarea(cod_emplazamiento)) {
-                                    Intent intent_open_screen_edit_itac = new Intent(
-                                            Screen_Execute_Task.this, Screen_Edit_ITAC.class);
-                                    startActivity(intent_open_screen_edit_itac);
-                                }else{
-                                    openMessage("Error", "No se pudo crear nuevo ITAC");
-                                }
-                            }
-                        })
-                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
+                    else {
+                        new AlertDialog.Builder(this)
+                                .setTitle("No exite ITAC")
+                                .setMessage("¿Desea crear un nuevo itac?")
+                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        if (fillNewItacDataWithTarea(cod_emplazamiento)) {
+                                            Intent intent_open_screen_edit_itac = new Intent(
+                                                    Screen_Execute_Task.this, Screen_Edit_ITAC.class);
+                                            startActivity(intent_open_screen_edit_itac);
+                                        } else {
+                                            openMessage("Error", "No se pudo crear nuevo ITAC");
+                                        }
+                                    }
+                                })
+                                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
 
-                            }
-                        }).show();
+                                    }
+                                }).show();
+                    }
+                }
             }
         }
     }
@@ -1148,13 +1156,16 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
     public String lookForAllreadyTakenPhotos(String photo_name) throws JSONException {
         String numero_abonado = null;
         String gestor = null;
+        String anomalia = "";
         try {
+            anomalia = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.ANOMALIA).trim();
             numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
             gestor = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.GESTOR).trim();
             if(!Screen_Login_Activity.checkStringVariable(gestor)){
                 gestor = "Sin_Gestor";
             }
-            String dir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" + Screen_Login_Activity.current_empresa + "/fotos_tareas/" + gestor + "/" +numero_abonado;
+            String dir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" + Screen_Login_Activity.current_empresa
+                    + "/fotos_tareas/" + gestor + "/" + numero_abonado + "/" + anomalia;
             File myDir = new File(dir);
             if(myDir.exists()){
                 String file_full_name = dir+"/"+photo_name;
@@ -1669,6 +1680,8 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
             String file_full_name = numero_serie+"_"+key;
             //Toast.makeText(Screen_Incidence.this,"archivo: "+file_full_name, Toast.LENGTH_LONG).show();
 
+            String anomalia = "";
+                anomalia = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.ANOMALIA).trim();
             String numero_abonado = null;
 
             numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
@@ -1678,7 +1691,9 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
             if(!Screen_Login_Activity.checkStringVariable(gestor)){
                 gestor = "Sin_Gestor";
             }
-            File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" + Screen_Login_Activity.current_empresa + "/fotos_tareas/"+ gestor + "/" +numero_abonado);
+            File myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" +
+                    Screen_Login_Activity.current_empresa +
+                    "/fotos_tareas/" + gestor + "/" + numero_abonado + "/" + anomalia);
             if (!myDir.exists()) {
                 myDir.mkdirs();
             }
@@ -2013,6 +2028,8 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
                     .trim().replace(" ", "") + "_" + foto_x;
         }
 
+        String anomalia = "";
+        anomalia = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.ANOMALIA).trim();
         String numero_abonado = null;
         numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
 
@@ -2022,7 +2039,9 @@ public class Screen_Execute_Task extends AppCompatActivity implements Dialog.Dia
         if(!Screen_Login_Activity.checkStringVariable(gestor)){
             gestor = "Sin_Gestor";
         }
-        File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" + Screen_Login_Activity.current_empresa + "/fotos_tareas/"+ gestor + "/" +numero_abonado);
+        File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" +
+                Screen_Login_Activity.current_empresa +
+                "/fotos_tareas/" + gestor + "/" + numero_abonado + "/" + anomalia);
         if (!storageDir.exists()) {
             storageDir.mkdirs();
         }

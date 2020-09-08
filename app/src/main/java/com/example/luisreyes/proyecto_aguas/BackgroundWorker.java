@@ -227,6 +227,7 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
                 keys.add("foto");
                 keys.add("nombre");
                 keys.add("gestor");
+                keys.add("anomalia");
                 keys.add("numero_abonado");
                 keys.add("empresa");
                 ArrayList<String> values = new ArrayList<String>();
@@ -284,6 +285,7 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
                 ArrayList<String> keys = new ArrayList<String>();
                 keys.add("nombre");
                 keys.add("gestor");
+                keys.add("anomalia");
                 keys.add("numero_abonado");
                 keys.add("empresa");
                 ArrayList<String> values = new ArrayList<String>();

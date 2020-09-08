@@ -330,14 +330,19 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
         }
         try {
             String firma = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.firma_cliente).trim();
+            String anomalia = "";
+            anomalia = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.ANOMALIA).trim();
+            String numero_abonado = "";
+            numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim();
             String gestor = null;
             gestor = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.GESTOR).trim();
             if(!Screen_Login_Activity.checkStringVariable(gestor)){
                 gestor = "Sin_Gestor";
             }
-            if(!firma.isEmpty() && !firma.equals("null")&&  !firma.equals("NULL"))  {
-                bitmap_firma_cliente = getPhotoUserLocal(  getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" + Screen_Login_Activity.current_empresa + "/fotos_tareas/"+
-                        gestor + "/" + Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado).trim()  + "/" + firma);
+            if(Screen_Login_Activity.checkStringVariable(firma))  {
+                bitmap_firma_cliente = getPhotoUserLocal(  getExternalFilesDir(Environment.DIRECTORY_PICTURES)+
+                        "/" + Screen_Login_Activity.current_empresa +
+                        "/fotos_tareas/" + gestor + "/" + numero_abonado  + "/" + anomalia + "/" + firma);
                 if (bitmap_firma_cliente != null) {
                     bitmap5_no_nulo=true;
                     firma_cliente.setImageBitmap(bitmap_firma_cliente);
@@ -915,6 +920,7 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
         if(filePath.exists()) {
             try{
                 try {
+                    String anomalia = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.ANOMALIA);
                     String numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado);
                     String gestor = null;
                     gestor = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.GESTOR).trim();
@@ -923,7 +929,8 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
                     }
                     InputStream in = new FileInputStream(filePath);
                     OutputStream out = new FileOutputStream(getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-                            + "/" + Screen_Login_Activity.current_empresa + "/fotos_tareas/" + gestor + "/" + numero_abonado+"/"+pdfName+".pdf");
+                            + "/" + Screen_Login_Activity.current_empresa +
+                            "/fotos_tareas/" + gestor + "/" + numero_abonado + "/" + anomalia + "/" +pdfName+".pdf");
                     // Copy the bits from instream to outstream
                     byte[] buf = new byte[1024];
                     int len;
@@ -942,7 +949,8 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
                 e.printStackTrace();
             }
             try {
-//                textView_info.setVisibility(View.GONE);
+                String anomalia = "";
+                anomalia = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.ANOMALIA).trim();
                 String numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado);
                 String gestor = null;
                 gestor = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.GESTOR).trim();
@@ -957,7 +965,8 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
                 i.putExtra(Intent.EXTRA_TEXT, "Incidencias de Trabajo");
                 Uri uri = FileProvider.getUriForFile(Screen_Incidence_Summary.this, "com.example.luisreyes.proyecto_aguas.fileprovider",
                         new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-                        + "/" + Screen_Login_Activity.current_empresa + "/fotos_tareas/" + gestor+ "/"+ numero_abonado+"/"+pdfName+".pdf"));
+                        + "/" + Screen_Login_Activity.current_empresa +
+                                "/fotos_tareas/" + gestor+ "/" + numero_abonado + "/" + anomalia + "/" + pdfName+".pdf"));
                 i.putExtra(Intent.EXTRA_STREAM, uri);
                 i.setType("application/pdf");
 
@@ -1092,14 +1101,17 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
 
         String numero_abonado = null;
         try {
+            String anomalia = "";
+            anomalia = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.ANOMALIA).trim();
             numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado);
             String gestor = null;
             gestor = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.GESTOR).trim();
             if(!Screen_Login_Activity.checkStringVariable(gestor)){
                 gestor = "Sin_Gestor";
             }
-            String fullDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" + Screen_Login_Activity.current_empresa + "/fotos_tareas/"
-                    + gestor + "/" + numero_abonado+"/"+filename;
+            String fullDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" +
+                    Screen_Login_Activity.current_empresa +
+                    "/fotos_tareas/" + gestor + "/" + numero_abonado + "/" + anomalia + "/" + filename;
             return fullDir;
         } catch (JSONException e) {
             e.printStackTrace();
@@ -1111,6 +1123,8 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
         String numero_abonado = "";
         File myDir = null;
         try {
+            String anomalia = "";
+            anomalia = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.ANOMALIA).trim();
             numero_abonado = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.numero_abonado);
             String gestor = null;
             gestor = Screen_Login_Activity.tarea_JSON.getString(DBtareasController.GESTOR).trim();
@@ -1120,8 +1134,9 @@ public class Screen_Incidence_Summary extends AppCompatActivity implements TaskC
             if(!numero_abonado.isEmpty() && numero_abonado!=null
                     && !numero_abonado.equals("NULL") && !numero_abonado.equals("null")){
 
-                myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" + Screen_Login_Activity.current_empresa + "/fotos_tareas/"
-                        + gestor + "/" + numero_abonado);
+                myDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" +
+                        Screen_Login_Activity.current_empresa +
+                        "/fotos_tareas/" + gestor + "/" + numero_abonado + "/" + anomalia);
 
                 if(myDir!=null) {
                     if (!myDir.exists()) {

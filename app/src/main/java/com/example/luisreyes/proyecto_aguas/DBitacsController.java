@@ -104,6 +104,10 @@ public class DBitacsController extends SQLiteOpenHelper {
     public static final String foto_7 = "foto_7";
     public static final String foto_8 = "foto_8";
 
+    public static final String foto_9 = "foto_9";
+    public static final String nombre_firmante  = "nombre_firmante";
+    public static final String carnet_firmante = "carnet_firmante";
+
     public static final String equipo = "equipo";
     public static final String operario = "operario";
 
@@ -199,6 +203,11 @@ public class DBitacsController extends SQLiteOpenHelper {
             jsonItacType.put(foto_6, "");
             jsonItacType.put(foto_7, "");
             jsonItacType.put(foto_8, "");
+
+            jsonItacType.put(foto_9, "");
+            jsonItacType.put(nombre_firmante, "");
+            jsonItacType.put(carnet_firmante, "");
+
             jsonItacType.put(equipo, "");
             jsonItacType.put(operario, "");
 
@@ -292,6 +301,11 @@ public class DBitacsController extends SQLiteOpenHelper {
                         foto_6+"  TEXT, " +
                         foto_7+"  TEXT, " +
                         foto_8+"  TEXT, " +
+
+                        foto_9+"  TEXT, " +
+                        nombre_firmante+"  TEXT, " +
+                        carnet_firmante+"  TEXT, " +
+
                         equipo+"  TEXT, " +
                         operario+"  TEXT, " +
 
@@ -396,6 +410,11 @@ public class DBitacsController extends SQLiteOpenHelper {
             jsonItacType.put(foto_6, "");
             jsonItacType.put(foto_7, "");
             jsonItacType.put(foto_8, "");
+
+            jsonItacType.put(foto_9, "");
+            jsonItacType.put(nombre_firmante, "");
+            jsonItacType.put(carnet_firmante, "");
+
             jsonItacType.put(equipo, "");
             jsonItacType.put(operario, "");
 

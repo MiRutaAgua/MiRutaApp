@@ -190,11 +190,10 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
             lineEdit_nombre_de_operario.setTypeface(typeface, Typeface.NORMAL);
         }
 
-//        descargarOperarios();
         descargarEmpresas();
 
         if(!BackgroundWorker.server_online_or_wamp){
-            lineEdit_nombre_de_operario.setText("MICHEL MORALES");//MICHEL MORALES
+            lineEdit_nombre_de_operario.setText("Alejandro");//MICHEL MORALES //Alejandro //Michel
             lineEdit_clave_de_acceso.setText("123456");
         }
 
@@ -415,9 +414,10 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
                 JSONObject jsonObject = new JSONObject(empresa);
                 current_empresa = jsonObject.getString(DBEmpresasController.empresa);
 
-                if (login_press) {
-                } else {
-                    if (!(TextUtils.isEmpty(lineEdit_nombre_de_operario.getText())) && !(TextUtils.isEmpty(lineEdit_clave_de_acceso.getText()))) {
+                if (!login_press) {
+                    String usuario_fontanero = lineEdit_nombre_de_operario.getText().toString().trim();
+                    String clave = lineEdit_clave_de_acceso.getText().toString();
+                    if (checkStringVariable(usuario_fontanero) && checkStringVariable(clave)) {
                         isOnline = checkConection();
                         login_press = true;
                         if (isOnline) {
@@ -441,7 +441,7 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
                                 }
                                 if (dBoperariosController.checkForTableExists()) {
                                     if (dBoperariosController.countTableOperarios() > 0) {
-                                        String json_user = dBoperariosController.get_one_operario_from_Database(lineEdit_nombre_de_operario.getText().toString());
+                                        String json_user = dBoperariosController.get_one_operario_from_Database(lineEdit_nombre_de_operario.getText().toString().trim());
                                         if (!json_user.equals("no existe")) {
                                             operario_JSON = new JSONObject(json_user);
                                             if (operario_JSON.getString("clave").equals(lineEdit_clave_de_acceso.getText().toString())) {
@@ -463,12 +463,21 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
                                             } else if (dBoperariosController.countTableOperarios() < 1) {
                                                 Toast.makeText(Screen_Login_Activity.this, "Está vacia la tabla SQLite: " + DBoperariosController.table_name + "\nConéctese a Internet para descargarlos", Toast.LENGTH_SHORT).show();
                                             } else {
-                                                Toast.makeText(Screen_Login_Activity.this, "No existe usuario " + lineEdit_nombre_de_operario.getText().toString(), Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(Screen_Login_Activity.this, "No existe usuario " + lineEdit_nombre_de_operario.getText().toString().trim(), Toast.LENGTH_SHORT).show();
                                             }
                                         }
                                     }
+                                    else{
+                                        dBoperariosController = null;
+                                        Toast.makeText(Screen_Login_Activity.this, "No existe usuario " + usuario_fontanero +" en la empresa " + current_empresa, Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                                else{
+                                    dBoperariosController = null;
+                                    Toast.makeText(Screen_Login_Activity.this, "No hay fontaneros en la empresa " + current_empresa + " conéctese a internet y descárguelos", Toast.LENGTH_SHORT).show();
                                 }
                             } catch (JSONException e) {
+                                dBoperariosController = null;
                                 e.printStackTrace();
                                 Toast.makeText(Screen_Login_Activity.this, "Error accediendo a base de datos SQLite.\nError -> " + e.toString(), Toast.LENGTH_SHORT).show();
                             }
@@ -483,7 +492,6 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
             }
         }else{
             Toast.makeText(Screen_Login_Activity.this, "No se ha encontrado su empresa", Toast.LENGTH_SHORT).show();
-
         }
     }
 
@@ -592,7 +600,7 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
 
     private void loginOperario(){
         login_pendent = false;
-        String username = lineEdit_nombre_de_operario.getText().toString();
+        String username = lineEdit_nombre_de_operario.getText().toString().trim();
         String password = lineEdit_clave_de_acceso.getText().toString();
         String empresa = "", nombre_empresa = spinner_filtro_empresa_screen_login.getSelectedItem().toString();
         try {
@@ -645,7 +653,7 @@ public class Screen_Login_Activity extends AppCompatActivity implements TaskComp
                 } else {
                     Toast.makeText(Screen_Login_Activity.this, "Bienvenido", Toast.LENGTH_SHORT).show();
 
-                    String username = lineEdit_nombre_de_operario.getText().toString();
+                    String username = lineEdit_nombre_de_operario.getText().toString().trim();
                     String empresa="", nombre_empresa = spinner_filtro_empresa_screen_login.getSelectedItem().toString();
                     try {
                         String empresa_json = dBempresasController.get_one_empresa_from_Database(
